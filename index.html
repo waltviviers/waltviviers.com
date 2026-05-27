@@ -652,56 +652,11 @@
     })();
   </script>
 
-  <!-- Config: Behold feed ID + manual overrides -->
-  <script src="artworks.js"></script>
-
   <!-- Gallery -->
   <script>
     (function () {
       let works   = [];
       let current = 0;
-
-      /* ── Parse caption for structured metadata ── */
-      function parseCaption(caption) {
-        const meta = { title: null, medium: null, dimensions: null, available: null };
-        if (!caption) return meta;
-        const lines = caption.split('\n');
-        for (const line of lines) {
-          const m = line.match(/^(title|medium|dimensions|available)\s*:\s*(.+)/i);
-          if (!m) continue;
-          const key = m[1].toLowerCase(), val = m[2].trim();
-          if (key === 'available') {
-            meta.available = /^(yes|true|1)$/i.test(val) ? true
-                           : /^(no|false|0|sold)$/i.test(val) ? false
-                           : null;
-          } else {
-            meta[key] = val;
-          }
-        }
-        return meta;
-      }
-
-      /* ── Map a Behold post → artwork object ── */
-      function postToWork(post) {
-        const caption  = post.caption || '';
-        const parsed   = parseCaption(caption);
-        const override = (typeof OVERRIDES !== 'undefined' && OVERRIDES[post.id]) || {};
-        const year     = (post.timestamp || '').slice(0, 4) || '—';
-
-        console.log('Instagram post ID:', post.id); // handy for setting overrides
-
-        return {
-          id:           post.id,
-          image:        post.sizes?.large?.mediaUrl || post.thumbnailUrl || post.mediaUrl,
-          title:        override.title      ?? parsed.title      ?? `Work (${year})`,
-          year:         override.year       ?? year,
-          medium:       override.medium     ?? parsed.medium     ?? '',
-          dimensions:   override.dimensions ?? parsed.dimensions ?? '',
-          available:    override.available  ?? parsed.available  ?? null,
-          featured:     override.featured   ?? false,
-          permalink:    post.permalink      || '',
-        };
-      }
 
       /* ── Availability badge ── */
       function availLabel(w) {
@@ -794,37 +749,28 @@
         renderHero(current);
       });
 
-      /* ── Init: fetch from Behold ── */
-      const feedId = typeof BEHOLD_FEED_ID !== 'undefined' ? BEHOLD_FEED_ID : '';
-
-      if (!feedId || feedId === 'YOUR_FEED_ID_HERE') {
-        setHeroState('Add your Behold Feed ID to artworks.js to load works');
-        return;
-      }
-
+      /* ── Init: load artworks from CMS data ── */
       setHeroState('Loading…');
 
-      fetch(`https://feeds.behold.so/${feedId}`)
+      fetch('data/artworks.json')
         .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(data => {
-          const posts = Array.isArray(data) ? data : (data.posts || []);
-          // Filter to images only, map to work objects
-          const allowed = (typeof FEATURED_POSTS !== 'undefined' && FEATURED_POSTS.length)
-            ? FEATURED_POSTS : null;
-          const tag = (typeof HASHTAG_FILTER !== 'undefined' && HASHTAG_FILTER.trim())
-            ? HASHTAG_FILTER.trim().toLowerCase() : null;
+          works = (data.artworks || []).map(w => ({
+            id:         w.title + w.year,
+            image:      w.image,
+            title:      w.title      || '—',
+            year:       w.year       || '—',
+            medium:     w.medium     || '',
+            dimensions: w.dimensions || '',
+            available:  w.available === 'available' ? true
+                      : w.available === 'sold'      ? false
+                      : null,
+            featured:   w.featured   || false,
+            permalink:  w.instagram  || '',
+          }));
 
-          works = posts
-            .filter(p => p.mediaType === 'IMAGE' || p.mediaType === 'CAROUSEL_ALBUM' || p.mediaType === 'VIDEO')
-            .filter(p => !tag || (p.caption || '').toLowerCase().includes(tag))
-            .filter(p => !allowed || allowed.includes(p.id))
-            .map(postToWork);
+          if (!works.length) { setHeroState('No artworks yet — add some in the CMS'); return; }
 
-          if (allowed) works.sort((a, b) => allowed.indexOf(a.id) - allowed.indexOf(b.id));
-
-          if (!works.length) { setHeroState('No images found in feed'); return; }
-
-          // Featured work first, otherwise keep Instagram order
           const fi = works.findIndex(w => w.featured);
           current  = fi >= 0 ? fi : 0;
 
@@ -832,13 +778,7 @@
           buildGrid();
           renderHero(current);
         })
-        .catch(err => {
-          console.error('Behold fetch failed:', err);
-          const isFile = location.protocol === 'file:';
-          setHeroState(isFile
-            ? 'Open via a local server or GitHub Pages to load works (file:// blocks external requests)'
-            : 'Could not load feed — check your Feed ID in artworks.js');
-        });
+        .catch(() => setHeroState('Could not load artworks'));
 
     })();
   </script>
