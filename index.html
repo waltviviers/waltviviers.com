@@ -800,9 +800,16 @@
         .then(data => {
           const posts = Array.isArray(data) ? data : (data.posts || []);
           // Filter to images only, map to work objects
+          const allowed = (typeof FEATURED_POSTS !== 'undefined' && FEATURED_POSTS.length)
+            ? FEATURED_POSTS
+            : null;
+
           works = posts
             .filter(p => p.mediaType === 'IMAGE' || p.mediaType === 'CAROUSEL_ALBUM' || p.mediaType === 'VIDEO')
+            .filter(p => !allowed || allowed.includes(p.id))
             .map(postToWork);
+
+          if (allowed) works.sort((a, b) => allowed.indexOf(a.id) - allowed.indexOf(b.id));
 
           if (!works.length) { setHeroState('No images found in feed'); return; }
 
