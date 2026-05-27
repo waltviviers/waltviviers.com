@@ -19,18 +19,18 @@
 const BEHOLD_FEED_ID = "XF2qeG8FeoVkeUAOOjI1";
 
 /**
- * Which posts to show on the site.
+ * Hashtag filter — only posts whose caption contains this tag will appear.
+ * Leave empty to show all posts.
+ *
+ * Example: const HASHTAG_FILTER = "#waltviviersgallery";
+ * Then add that hashtag to any Instagram post you want on the site.
+ */
+const HASHTAG_FILTER = "";
+
+/**
+ * Which posts to show on the site (alternative to HASHTAG_FILTER).
  * Add Instagram post IDs here to show only those posts (in that order).
  * Leave the array empty to show all posts from your feed.
- *
- * Find IDs in the browser console after loading the page —
- * each post logs: "Instagram post ID: 18089666612607170"
- *
- * Example:
- * const FEATURED_POSTS = [
- *   "18089666612607170",
- *   "18097241498136915",
- * ];
  */
 const FEATURED_POSTS = [];
 

@@ -801,11 +801,13 @@
           const posts = Array.isArray(data) ? data : (data.posts || []);
           // Filter to images only, map to work objects
           const allowed = (typeof FEATURED_POSTS !== 'undefined' && FEATURED_POSTS.length)
-            ? FEATURED_POSTS
-            : null;
+            ? FEATURED_POSTS : null;
+          const tag = (typeof HASHTAG_FILTER !== 'undefined' && HASHTAG_FILTER.trim())
+            ? HASHTAG_FILTER.trim().toLowerCase() : null;
 
           works = posts
             .filter(p => p.mediaType === 'IMAGE' || p.mediaType === 'CAROUSEL_ALBUM' || p.mediaType === 'VIDEO')
+            .filter(p => !tag || (p.caption || '').toLowerCase().includes(tag))
             .filter(p => !allowed || allowed.includes(p.id))
             .map(postToWork);
 
