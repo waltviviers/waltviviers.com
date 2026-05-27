@@ -25,7 +25,7 @@ const BEHOLD_FEED_ID = "XF2qeG8FeoVkeUAOOjI1";
  * Example: const HASHTAG_FILTER = "#waltviviersgallery";
  * Then add that hashtag to any Instagram post you want on the site.
  */
-const HASHTAG_FILTER = "";
+const HASHTAG_FILTER = "#waltviviersgallery";
 
 /**
  * Which posts to show on the site (alternative to HASHTAG_FILTER).
