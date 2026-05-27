@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walt Viviers — Fine Art</title>
+  <meta name="description" content="Walt Viviers — Fine art available for acquisition and commission. Represented works, studio enquiries, and gallery representation welcome." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+
+    /* ── Reset ───────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ── Tokens ──────────────────────────────────── */
+    :root {
+      --black:  #0C0C0B;
+      --white:  #FAF9F7;
+      --ink:    #FAF9F7;        /* text is light on dark bg */
+      --stone:  #7A7872;
+      --rule:   #2A2826;
+      --bg:     #000000;        /* primary dark background — matches logo */
+      --bg2:    #0D0D0D;        /* slightly lighter surface */
+      --serif:  'EB Garamond', Georgia, serif;
+      --sans:   'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Nav ─────────────────────────────────────── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 100px;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+      transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    nav.scrolled { height: 50px; }
+
+    .nav-logo img {
+      height: 98px;
+      width: auto;
+      transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    nav.scrolled .nav-logo img { height: 48px; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--stone);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      font-size: 12px !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.08em !important;
+      color: var(--white) !important;
+      padding: 7px 18px;
+      border: 1px solid #4A4844;
+      transition: background 0.2s, color 0.2s, border-color 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--white) !important;
+      color: var(--black) !important;
+      border-color: var(--white) !important;
+    }
+
+    /* ── Hero / Featured Work ────────────────────── */
+    .hero {
+      padding-top: 100px; /* nav height */
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      min-height: 100vh;
+    }
+
+    .hero-image-wrap {
+      position: relative;
+      overflow: hidden;
+      background: #0D0D0D;
+    }
+
+    .hero-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: opacity 0.6s;
+    }
+
+    .hero-image-wrap .placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 14px;
+      color: var(--stone);
+      letter-spacing: 0.05em;
+    }
+
+    .hero-detail {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 56px 40px;
+      border-left: 1px solid var(--rule);
+      background: var(--bg);
+    }
+
+    .hero-work-info {}
+
+    .hero-work-number {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 32px;
+    }
+
+    .hero-work-title {
+      font-family: var(--serif);
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+
+    .hero-work-year {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-style: italic;
+      color: var(--stone);
+      margin-bottom: 40px;
+    }
+
+    .work-meta-table {
+      display: grid;
+      gap: 0;
+    }
+
+    .work-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+      padding: 10px 0;
+      border-top: 1px solid var(--rule);
+      font-size: 13px;
+    }
+
+    .work-meta-row:last-child { border-bottom: 1px solid var(--rule); }
+
+    .work-meta-label { color: var(--stone); }
+
+    .work-meta-value { font-weight: 500; }
+
+    .availability-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+
+    .available   { background: #1A2E1B; color: #6AAE70; }
+    .sold        { background: #2E1A1A; color: #AE6A6A; }
+    .enquire     { background: #28251E; color: #AE9E6A; }
+
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-primary {
+      display: block;
+      text-align: center;
+      padding: 14px 24px;
+      background: var(--white);
+      color: var(--black);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.85; }
+
+    .btn-secondary {
+      display: block;
+      text-align: center;
+      padding: 13px 24px;
+      border: 1px solid var(--rule);
+      color: var(--stone);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-secondary:hover { border-color: var(--white); color: var(--white); }
+
+    /* ── Works Index ─────────────────────────────── */
+    #works {
+      padding: 80px 48px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 56px;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .section-count {
+      font-size: 12px;
+      color: var(--stone);
+      letter-spacing: 0.06em;
+    }
+
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--rule);
+    }
+
+    .work-thumb {
+      background: var(--bg2);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .work-thumb:hover { background: #222120; }
+
+    .work-thumb-img {
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      background: #0D0D0D;
+      position: relative;
+    }
+
+    .work-thumb-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s;
+    }
+
+    .work-thumb:hover .work-thumb-img img { transform: scale(1.03); }
+
+    .work-thumb-img .placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 13px;
+      color: var(--stone);
+    }
+
+    .work-thumb-info {
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .work-thumb-title {
+      font-family: var(--serif);
+      font-size: 17px;
+    }
+
+    .work-thumb-year {
+      font-size: 12px;
+      color: var(--stone);
+    }
+
+    /* ── About ───────────────────────────────────── */
+    #about {
+      padding: 100px 48px;
+      border-top: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-title {
+      font-family: var(--serif);
+      font-size: clamp(32px, 3.5vw, 52px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+
+    .about-title em {
+      font-style: italic;
+      color: var(--stone);
+    }
+
+    .about-body {
+      font-size: 16px;
+      line-height: 1.85;
+      color: var(--stone);
+    }
+
+    .about-body p + p { margin-top: 20px; }
+
+    /* ── Enquiry sections ────────────────────────── */
+    .enquiry-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .enquiry-panel {
+      padding: 80px 56px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .enquiry-panel:first-child {
+      border-right: 1px solid var(--rule);
+    }
+
+    .enquiry-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 24px;
+    }
+
+    .enquiry-title {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3vw, 44px);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .enquiry-desc {
+      font-size: 15px;
+      color: var(--stone);
+      line-height: 1.75;
+      max-width: 400px;
+      margin-bottom: 40px;
+    }
+
+    /* ── Footer ──────────────────────────────────── */
+    footer {
+      padding: 32px 48px;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--stone);
+      letter-spacing: 0.04em;
+    }
+
+    footer img {
+      height: 18px;
+      width: auto;
+      opacity: 0.25;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-links a {
+      color: var(--stone);
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    /* ── Gallery nav (prev/next) ─────────────────── */
+    .gallery-nav {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-top: 40px;
+    }
+
+    .gn-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--stone);
+      font-size: 16px;
+      transition: border-color 0.2s, color 0.2s;
+      background: transparent;
+    }
+
+    .gn-btn:hover { border-color: var(--white); color: var(--white); }
+
+    .gn-dots {
+      display: flex;
+      gap: 6px;
+      padding: 0 16px;
+    }
+
+    .gn-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--rule);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .gn-dot.active { background: var(--white); }
+
+    /* ── Responsive ──────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; height: 100px; }
+
+      .hero {
+        padding-top: 100px;
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .hero-image-wrap { min-height: 60vw; }
+
+      .hero-detail {
+        border-left: none;
+        border-top: 1px solid var(--rule);
+        padding: 40px 24px;
+        background: var(--bg);
+      }
+
+      #works, #about { padding: 64px 24px; }
+
+      .works-grid { grid-template-columns: repeat(2, 1fr); }
+
+      #about {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .enquiry-grid { grid-template-columns: 1fr; }
+
+      .enquiry-panel:first-child {
+        border-right: none;
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .enquiry-panel { padding: 56px 24px; }
+
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+    }
+
+    @media (max-width: 560px) {
+      .works-grid { grid-template-columns: 1fr; }
+      .nav-links .nav-link-hide { display: none; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <a href="#" class="nav-logo" aria-label="Home">
+      <img src="975e264d425aae5ae7a33cb486752df9.png" alt="Walt Viviers" />
+    </a>
+    <ul class="nav-links">
+      <li class="nav-link-hide"><a href="#works">Works</a></li>
+      <li class="nav-link-hide"><a href="#about">About</a></li>
+      <li><a href="#commission" class="nav-cta">Enquire</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero: Featured Work -->
+  <section class="hero" id="hero">
+    <div class="hero-image-wrap" id="hero-image">
+      <div class="placeholder">Add your image to images/work-01.jpg</div>
+    </div>
+    <div class="hero-detail">
+      <div class="hero-work-info">
+        <p class="hero-work-number" id="hero-number">Featured work</p>
+        <h1 class="hero-work-title" id="hero-title">—</h1>
+        <p class="hero-work-year"  id="hero-year"></p>
+        <div class="work-meta-table" id="hero-meta"></div>
+      </div>
+
+      <div>
+        <div class="gallery-nav">
+          <button class="gn-btn" id="gn-prev" aria-label="Previous work">&#8592;</button>
+          <div class="gn-dots" id="gn-dots"></div>
+          <button class="gn-btn" id="gn-next" aria-label="Next work">&#8594;</button>
+        </div>
+
+        <div class="hero-actions" style="margin-top: 32px;">
+          <a href="#commission" class="btn-primary">Inquire about this work</a>
+          <a href="#gallery-rep" class="btn-secondary">Gallery representation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Works Index -->
+  <section id="works">
+    <div class="section-head">
+      <h2 class="section-title">Selected Works</h2>
+      <span class="section-count" id="works-count"></span>
+    </div>
+    <div class="works-grid" id="works-grid"></div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <h2 class="about-title">
+      Work that holds<br/><em>its own silence</em>
+    </h2>
+    <div class="about-body">
+      <p>
+        Walt Viviers is a South African fine artist working in oil and mixed
+        media. His practice explores the tension between mark and restraint —
+        images that resist immediate resolution and reward sustained looking.
+      </p>
+      <p>
+        Works are held in private collections internationally. Commissions,
+        studio visits, and gallery enquiries are welcome.
+      </p>
+    </div>
+  </section>
+
+  <!-- Enquiry panels -->
+  <div class="enquiry-grid">
+
+    <div class="enquiry-panel" id="commission">
+      <p class="enquiry-tag">For collectors</p>
+      <h2 class="enquiry-title">Commission<br/>a new work</h2>
+      <p class="enquiry-desc">
+        Each commission is developed in close dialogue with the collector.
+        Discussions cover scale, palette, and context. Lead time is typically
+        8–16 weeks depending on complexity.
+      </p>
+      <a href="mailto:walt.viviers@gmail.com?subject=Commission%20Enquiry" class="btn-primary">
+        Start a conversation
+      </a>
+    </div>
+
+    <div class="enquiry-panel" id="gallery-rep">
+      <p class="enquiry-tag">For galleries</p>
+      <h2 class="enquiry-title">Gallery<br/>representation</h2>
+      <p class="enquiry-desc">
+        Interested in representing Walt Viviers or proposing an exhibition?
+        Please get in touch with a brief introduction, your programme, and
+        any relevant context.
+      </p>
+      <a href="mailto:walt.viviers@gmail.com?subject=Gallery%20Representation%20Enquiry" class="btn-primary">
+        Get in touch
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <img src="975e264d425aae5ae7a33cb486752df9.png" alt="Walt Viviers" />
+    <div class="footer-links">
+      <a href="https://instagram.com/waltviviers" target="_blank">Instagram</a>
+      <a href="mailto:walt.viviers@gmail.com">Email</a>
+    </div>
+    <span>© 2026 Walt Viviers</span>
+  </footer>
+
+  <!-- Nav shrink on scroll -->
+  <script>
+    (function () {
+      const nav = document.querySelector('nav');
+      let ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(function () {
+            nav.classList.toggle('scrolled', window.scrollY > 40);
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    })();
+  </script>
+
+  <!-- Config: Behold feed ID + manual overrides -->
+  <script src="artworks.js"></script>
+
+  <!-- Gallery -->
+  <script>
+    (function () {
+      let works   = [];
+      let current = 0;
+
+      /* ── Parse caption for structured metadata ── */
+      function parseCaption(caption) {
+        const meta = { title: null, medium: null, dimensions: null, available: null };
+        if (!caption) return meta;
+        const lines = caption.split('\n');
+        for (const line of lines) {
+          const m = line.match(/^(title|medium|dimensions|available)\s*:\s*(.+)/i);
+          if (!m) continue;
+          const key = m[1].toLowerCase(), val = m[2].trim();
+          if (key === 'available') {
+            meta.available = /^(yes|true|1)$/i.test(val) ? true
+                           : /^(no|false|0|sold)$/i.test(val) ? false
+                           : null;
+          } else {
+            meta[key] = val;
+          }
+        }
+        return meta;
+      }
+
+      /* ── Map a Behold post → artwork object ── */
+      function postToWork(post) {
+        const caption  = post.caption || '';
+        const parsed   = parseCaption(caption);
+        const override = (typeof OVERRIDES !== 'undefined' && OVERRIDES[post.id]) || {};
+        const year     = (post.timestamp || '').slice(0, 4) || '—';
+
+        console.log('Instagram post ID:', post.id); // handy for setting overrides
+
+        return {
+          id:           post.id,
+          image:        post.mediaUrl,
+          title:        override.title      ?? parsed.title      ?? `Work (${year})`,
+          year:         override.year       ?? year,
+          medium:       override.medium     ?? parsed.medium     ?? '',
+          dimensions:   override.dimensions ?? parsed.dimensions ?? '',
+          available:    override.available  ?? parsed.available  ?? null,
+          featured:     override.featured   ?? false,
+          permalink:    post.permalink      || '',
+        };
+      }
+
+      /* ── Availability badge ── */
+      function availLabel(w) {
+        if (w.available === true)  return '<span class="availability-badge available">Available</span>';
+        if (w.available === false) return '<span class="availability-badge sold">Sold</span>';
+        return '<span class="availability-badge enquire">Enquire</span>';
+      }
+
+      /* ── Render hero panel ── */
+      function renderHero(index) {
+        const w = works[index];
+        if (!w) return;
+
+        const imgWrap  = document.getElementById('hero-image');
+        const existing = imgWrap.querySelector('img');
+
+        if (existing) {
+          existing.style.opacity = '0';
+          setTimeout(() => { existing.src = w.image; existing.alt = w.title; existing.style.opacity = '1'; }, 150);
+        } else {
+          imgWrap.innerHTML = `<img src="${w.image}" alt="${w.title}" />`;
+        }
+
+        document.getElementById('hero-number').textContent =
+          `Work ${String(index + 1).padStart(2,'0')} / ${String(works.length).padStart(2,'0')}`;
+        document.getElementById('hero-title').textContent = w.title;
+        document.getElementById('hero-year').textContent  = w.year;
+        document.getElementById('hero-meta').innerHTML = `
+          ${w.medium     ? `<div class="work-meta-row"><span class="work-meta-label">Medium</span><span class="work-meta-value">${w.medium}</span></div>` : ''}
+          ${w.dimensions ? `<div class="work-meta-row"><span class="work-meta-label">Dimensions</span><span class="work-meta-value">${w.dimensions}</span></div>` : ''}
+          <div class="work-meta-row"><span class="work-meta-label">Status</span><span class="work-meta-value">${availLabel(w)}</span></div>
+          ${w.permalink  ? `<div class="work-meta-row"><span class="work-meta-label">Instagram</span><span class="work-meta-value"><a href="${w.permalink}" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">View post ↗</a></span></div>` : ''}
+        `;
+
+        document.querySelectorAll('.gn-dot').forEach((d, i) =>
+          d.classList.toggle('active', i === index));
+      }
+
+      /* ── Build dot indicators ── */
+      function buildDots() {
+        const container = document.getElementById('gn-dots');
+        container.innerHTML = works.map((_, i) =>
+          `<div class="gn-dot${i === 0 ? ' active' : ''}" data-index="${i}"></div>`
+        ).join('');
+        container.querySelectorAll('.gn-dot').forEach(d =>
+          d.addEventListener('click', () => { current = +d.dataset.index; renderHero(current); }));
+      }
+
+      /* ── Build thumbnail grid ── */
+      function buildGrid() {
+        const grid = document.getElementById('works-grid');
+        document.getElementById('works-count').textContent = `${works.length} works`;
+        grid.innerHTML = works.map((w, i) => `
+          <div class="work-thumb" data-index="${i}" role="button" tabindex="0" aria-label="${w.title}">
+            <div class="work-thumb-img">
+              <img src="${w.image}" alt="${w.title}"
+                   onerror="this.parentElement.innerHTML='<div class=\\'placeholder\\'>${w.title}</div>'" />
+            </div>
+            <div class="work-thumb-info">
+              <span class="work-thumb-title">${w.title}</span>
+              <span class="work-thumb-year">${w.year}</span>
+            </div>
+          </div>`).join('');
+
+        grid.querySelectorAll('.work-thumb').forEach(card => {
+          card.addEventListener('click', () => {
+            current = +card.dataset.index;
+            renderHero(current);
+            document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+          });
+          card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') card.click(); });
+        });
+      }
+
+      /* ── Show loading / error state ── */
+      function setHeroState(msg) {
+        document.getElementById('hero-image').innerHTML =
+          `<div class="placeholder">${msg}</div>`;
+        document.getElementById('hero-title').textContent = '';
+        document.getElementById('hero-number').textContent = '';
+      }
+
+      /* ── Prev / Next ── */
+      document.getElementById('gn-prev').addEventListener('click', () => {
+        current = (current - 1 + works.length) % works.length;
+        renderHero(current);
+      });
+      document.getElementById('gn-next').addEventListener('click', () => {
+        current = (current + 1) % works.length;
+        renderHero(current);
+      });
+
+      /* ── Init: fetch from Behold ── */
+      const feedId = typeof BEHOLD_FEED_ID !== 'undefined' ? BEHOLD_FEED_ID : '';
+
+      if (!feedId || feedId === 'YOUR_FEED_ID_HERE') {
+        setHeroState('Add your Behold Feed ID to artworks.js to load works');
+        return;
+      }
+
+      setHeroState('Loading…');
+
+      fetch(`https://feeds.behold.so/${feedId}`)
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(posts => {
+          // Filter to images only, map to work objects
+          works = posts
+            .filter(p => p.mediaType === 'IMAGE' || p.mediaType === 'CAROUSEL_ALBUM')
+            .map(postToWork);
+
+          if (!works.length) { setHeroState('No images found in feed'); return; }
+
+          // Featured work first, otherwise keep Instagram order
+          const fi = works.findIndex(w => w.featured);
+          current  = fi >= 0 ? fi : 0;
+
+          buildDots();
+          buildGrid();
+          renderHero(current);
+        })
+        .catch(err => {
+          console.error('Behold fetch failed:', err);
+          const isFile = location.protocol === 'file:';
+          setHeroState(isFile
+            ? 'Open via a local server or GitHub Pages to load works (file:// blocks external requests)'
+            : 'Could not load feed — check your Feed ID in artworks.js');
+        });
+
+    })();
+  </script>
+
+</body>
+</html>
