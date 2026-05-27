@@ -683,7 +683,7 @@
 
         return {
           id:           post.id,
-          image:        post.mediaUrl,
+          image:        post.sizes?.large?.mediaUrl || post.thumbnailUrl || post.mediaUrl,
           title:        override.title      ?? parsed.title      ?? `Work (${year})`,
           year:         override.year       ?? year,
           medium:       override.medium     ?? parsed.medium     ?? '',
@@ -801,7 +801,7 @@
           const posts = Array.isArray(data) ? data : (data.posts || []);
           // Filter to images only, map to work objects
           works = posts
-            .filter(p => p.mediaType === 'IMAGE' || p.mediaType === 'CAROUSEL_ALBUM')
+            .filter(p => p.mediaType === 'IMAGE' || p.mediaType === 'CAROUSEL_ALBUM' || p.mediaType === 'VIDEO')
             .map(postToWork);
 
           if (!works.length) { setHeroState('No images found in feed'); return; }
