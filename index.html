@@ -797,7 +797,8 @@
 
       fetch(`https://feeds.behold.so/${feedId}`)
         .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-        .then(posts => {
+        .then(data => {
+          const posts = Array.isArray(data) ? data : (data.posts || []);
           // Filter to images only, map to work objects
           works = posts
             .filter(p => p.mediaType === 'IMAGE' || p.mediaType === 'CAROUSEL_ALBUM')
