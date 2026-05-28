@@ -469,6 +469,26 @@
 
     .gn-dot.active { background: var(--white); }
 
+    /* ── Brush divider ──────────────────────────── */
+    .brush-divider {
+      width: 100%;
+      overflow: hidden;
+      line-height: 0;
+      height: 200px;
+      background: var(--bg);
+    }
+
+    .brush-divider img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 40%;
+      filter: invert(1);
+      mix-blend-mode: screen;
+      opacity: 0.55;
+      display: block;
+    }
+
     /* ── Responsive ──────────────────────────────── */
     @media (max-width: 1200px) {
       .works-grid { grid-template-columns: repeat(3, 1fr); }
@@ -575,6 +595,11 @@
     </div>
     <div class="works-grid" id="works-grid"></div>
   </section>
+
+  <!-- Brush divider -->
+  <div class="brush-divider" aria-hidden="true">
+    <img src="57deae2dcac5953d10cc7f89844a38ee.jpg" alt="" />
+  </div>
 
   <!-- About -->
   <section id="about">
