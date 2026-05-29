@@ -1,6 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: waltviviers/waltviviers.com
   branch: main
+  auth_type: pkce
+  app_id: Ov23liftA5BwWxORy9ui
 
 media_folder: images
 public_folder: images
