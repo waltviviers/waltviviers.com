@@ -1256,7 +1256,7 @@
 
   <!-- Hero: Featured Work -->
   <main id="main">
-  <section class="hero" id="hero">
+    <section class="hero" id="hero">
     <div class="hero-image-wrap" id="hero-image">
       <div class="placeholder">Add your image to images/work-01.jpg</div>
     </div>
@@ -1434,6 +1434,8 @@
     </div>
   </div>
 
+  </main>
+
   <!-- Footer -->
   <footer>
     <button class="footer-admin" id="admin-btn">Admin</button>
@@ -1455,7 +1457,6 @@
       <img src="images/walt-viviers-mark.webp" alt="Walt Viviers" />
     </div>
   </footer>
-  </main>
 
   <!-- Theme toggle -->
   <script>
@@ -1924,7 +1925,7 @@
           grid.innerHTML = posts.map(function (p) {
             var img = p.mediaType === 'VIDEO' ? p.thumbnailUrl : p.mediaUrl;
             return '<a class="ig-thumb" href="' + p.permalink + '" target="_blank" rel="noopener noreferrer">'
-              + '<img src="' + img + '" alt="" loading="lazy" />'
+              + '<img src="' + img + '" alt="' + (p.caption ? p.caption.substring(0, 80).replace(/"/g, '&quot;') : 'Walt Viviers on Instagram') + '" loading="lazy" />'
               + '</a>';
           }).join('');
         })
