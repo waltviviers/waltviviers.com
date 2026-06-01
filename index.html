@@ -708,9 +708,9 @@
           <a href="https://instagram.com/waltviviers" target="_blank" aria-label="Instagram">
             <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
           </a>
-          <a href="mailto:walt.viviers@gmail.com" aria-label="Email">
-            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
-          </a>
+          <button class="email-icon-btn" aria-label="Email" style="background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;color:var(--stone);transition:color 0.2s;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+          </button>
         </div>
       </li>
       <li><a href="#commission" class="nav-cta">Enquire</a></li>
@@ -829,6 +829,30 @@
           <textarea id="f-message" rows="4" placeholder="I'm interested in this work…"></textarea>
         </div>
         <button type="submit" class="btn-primary">Send enquiry</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Contact Modal -->
+  <div class="modal-backdrop" id="contact-modal" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" data-modal="contact-modal" aria-label="Close">&times;</button>
+      <p class="modal-tag">Get in touch</p>
+      <h2 class="modal-title">Send a<br/><em>message</em></h2>
+      <form id="contact-form">
+        <div class="form-group">
+          <label for="ct-name">Name</label>
+          <input type="text" id="ct-name" required placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label for="ct-email">Email</label>
+          <input type="email" id="ct-email" required placeholder="your@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="ct-message">Message</label>
+          <textarea id="ct-message" rows="4" placeholder="What's on your mind…"></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Send message</button>
       </form>
     </div>
   </div>
@@ -1118,6 +1142,23 @@
         const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
         window.location.href = `mailto:walt.viviers@gmail.com?subject=${subject}&body=${body}`;
         closeModal('commission-modal');
+      });
+
+      // ── Contact (email icon) modal ──
+      document.querySelectorAll('.email-icon-btn').forEach(btn => {
+        btn.addEventListener('click', function () { openModal('contact-modal'); });
+        btn.addEventListener('mouseover', function () { btn.style.color = 'var(--white)'; });
+        btn.addEventListener('mouseout',  function () { btn.style.color = 'var(--stone)'; });
+      });
+      document.getElementById('contact-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = document.getElementById('ct-name').value;
+        const email = document.getElementById('ct-email').value;
+        const msg = document.getElementById('ct-message').value;
+        const subject = encodeURIComponent('Message from ' + name);
+        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
+        window.location.href = `mailto:walt.viviers@gmail.com?subject=${subject}&body=${body}`;
+        closeModal('contact-modal');
       });
 
       // ── Gallery modal ──
