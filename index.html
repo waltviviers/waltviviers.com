@@ -568,12 +568,105 @@
 
     .footer-admin {
       font-size: 11px;
-      color: var(--rule);
-      letter-spacing: 0.06em;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--stone);
+      padding: 7px 16px;
+      border: 1px solid var(--rule);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .footer-admin:hover { border-color: var(--stone); color: var(--white); }
+
+    /* ── Theme toggle ────────────────────────────── */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--stone);
+      padding: 4px;
       transition: color 0.2s;
     }
 
-    .footer-admin:hover { color: var(--stone); }
+    .theme-toggle:hover { color: var(--white); }
+
+    .theme-toggle svg {
+      width: 17px;
+      height: 17px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .theme-toggle .icon-moon { display: block; }
+    .theme-toggle .icon-sun  { display: none; }
+
+    /* ── Light mode ──────────────────────────────── */
+    [data-theme="light"] {
+      --ink:   #0C0C0B;
+      --stone: #6B6560;
+      --rule:  #D5D1CB;
+      --bg:    #F5F3EF;
+      --bg2:   #EDEAE5;
+    }
+
+    [data-theme="light"] body { background: #F5F3EF; }
+
+    [data-theme="light"] nav {
+      background: rgba(245,243,239,0.95);
+    }
+
+    [data-theme="light"] .nav-logo img,
+    [data-theme="light"] .footer-logo img { filter: invert(1); opacity: 0.6; }
+
+    [data-theme="light"] .hero-image-wrap { background: #EDEAE5; }
+    [data-theme="light"] .hero-detail     { background: #F5F3EF; }
+
+    [data-theme="light"] .work-thumb         { background: #EDEAE5; }
+    [data-theme="light"] .work-thumb:hover   { background: #E0DDD8; }
+    [data-theme="light"] .work-thumb-img     { background: #DDD9D4; }
+
+    [data-theme="light"] .gn-btn {
+      border-color: #D5D1CB;
+      color: #6B6560;
+    }
+
+    [data-theme="light"] .gn-dot       { background: #D5D1CB; }
+    [data-theme="light"] .gn-dot.active { background: #0C0C0B; }
+
+    [data-theme="light"] .btn-primary { background: #0C0C0B; color: #FAF9F7; }
+    [data-theme="light"] .btn-secondary { border-color: #D5D1CB; color: #6B6560; }
+    [data-theme="light"] .btn-secondary:hover { border-color: #0C0C0B; color: #0C0C0B; }
+
+    [data-theme="light"] .nav-cta { color: #0C0C0B !important; border-color: #D5D1CB !important; }
+    [data-theme="light"] .nav-cta:hover { background: #0C0C0B !important; color: #FAF9F7 !important; border-color: #0C0C0B !important; }
+
+    [data-theme="light"] .theme-toggle:hover { color: #0C0C0B; }
+    [data-theme="light"] .theme-toggle .icon-moon { display: none; }
+    [data-theme="light"] .theme-toggle .icon-sun  { display: block; }
+
+    [data-theme="light"] .modal { background: #F5F3EF; }
+    [data-theme="light"] .form-group input,
+    [data-theme="light"] .form-group textarea {
+      background: #FAF9F7;
+      border-color: #D5D1CB;
+      color: #0C0C0B;
+    }
+
+    [data-theme="light"] .brush-divider img {
+      filter: none;
+      mix-blend-mode: multiply;
+      opacity: 0.4;
+    }
+
+    [data-theme="light"] .available { background: #D4EDD5; color: #2D6B31; }
+    [data-theme="light"] .sold      { background: #EDD4D4; color: #6B2D2D; }
+    [data-theme="light"] .enquire   { background: #EDE8D4; color: #6B5F2D; }
+
+    [data-theme="light"] .footer-admin:hover { color: #0C0C0B; border-color: #0C0C0B; }
 
     /* ── Gallery nav (prev/next) ─────────────────── */
     .gallery-nav {
@@ -712,6 +805,12 @@
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
           </button>
         </div>
+      </li>
+      <li>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
+          <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
       </li>
       <li><a href="#commission" class="nav-cta">Enquire</a></li>
     </ul>
@@ -925,6 +1024,21 @@
       <a href="https://waltvivierscms.vercel.app/admin/#/collections/artworks/entries/artworks" target="_blank" class="footer-admin">Admin</a>
     </div>
   </footer>
+
+  <!-- Theme toggle -->
+  <script>
+    (function () {
+      const html   = document.documentElement;
+      const toggle = document.getElementById('theme-toggle');
+      const saved  = localStorage.getItem('wv-theme');
+      if (saved) html.dataset.theme = saved;
+      toggle.addEventListener('click', function () {
+        const next = html.dataset.theme === 'light' ? 'dark' : 'light';
+        html.dataset.theme = next;
+        localStorage.setItem('wv-theme', next);
+      });
+    })();
+  </script>
 
   <!-- Nav shrink on scroll -->
   <script>
