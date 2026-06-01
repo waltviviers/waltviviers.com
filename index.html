@@ -816,7 +816,7 @@
 
     .instagram-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 2px;
       background: var(--rule);
     }
@@ -852,7 +852,7 @@
     /* ── Responsive ──────────────────────────────── */
     @media (max-width: 1200px) {
       .works-grid { grid-template-columns: repeat(3, 1fr); }
-      .instagram-grid { grid-template-columns: repeat(4, 1fr); }
+      .instagram-grid { grid-template-columns: repeat(6, 1fr); }
     }
 
     @media (max-width: 900px) {
@@ -880,7 +880,7 @@
 
       #works, #about { padding: 64px 24px; }
       .instagram-head { padding: 48px 24px 32px; }
-      .instagram-grid { grid-template-columns: repeat(2, 1fr); }
+      .instagram-grid { grid-template-columns: repeat(3, 1fr); }
 
       .works-grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -1460,7 +1460,7 @@
       fetch('https://feeds.behold.so/XF2qeG8FeoVkeUAOOjI1')
         .then(function (r) { return r.json(); })
         .then(function (data) {
-          var posts = Array.isArray(data) ? data : (data.posts || []);
+          var posts = (Array.isArray(data) ? data : (data.posts || [])).slice(0, 6);
           grid.innerHTML = posts.map(function (p) {
             var img = p.mediaType === 'VIDEO' ? p.thumbnailUrl : p.mediaUrl;
             return '<a class="ig-thumb" href="' + p.permalink + '" target="_blank" rel="noopener noreferrer">'
