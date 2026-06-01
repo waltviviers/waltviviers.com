@@ -366,7 +366,11 @@
     .enquiry-panel {
       padding: 80px 56px;
       border-top: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
     }
+
+    .enquiry-panel .btn-primary { margin-top: auto; }
 
     .enquiry-panel:first-child {
       border-right: 1px solid var(--rule);
@@ -787,13 +791,10 @@
       <p class="enquiry-tag">For collectors</p>
       <h2 class="enquiry-title">Commission<br/>a new work</h2>
       <p class="enquiry-desc">
-        Each commission is developed in close dialogue with the collector.
-        Discussions cover scale, palette, and context. Lead time is typically
-        8–16 weeks depending on complexity.
+        Each commission begins with a conversation. Discussions cover scale,
+        subject, palette, and context. Lead time is typically 8–16 weeks.
       </p>
-      <a href="mailto:walt.viviers@gmail.com?subject=Commission%20Enquiry" class="btn-primary">
-        Start a conversation
-      </a>
+      <button class="btn-primary" id="commission-btn">Start a conversation</button>
     </div>
 
     <div class="enquiry-panel" id="gallery-rep">
@@ -801,12 +802,9 @@
       <h2 class="enquiry-title">Gallery<br/>representation</h2>
       <p class="enquiry-desc">
         Interested in representing Walt Viviers or proposing an exhibition?
-        Please get in touch with a brief introduction, your programme, and
-        any relevant context.
+        Get in touch with a brief introduction and your programme.
       </p>
-      <a href="mailto:walt.viviers@gmail.com?subject=Gallery%20Representation%20Enquiry" class="btn-primary">
-        Get in touch
-      </a>
+      <button class="btn-primary" id="gallery-btn">Get in touch</button>
     </div>
 
   </div>
@@ -829,6 +827,54 @@
         <div class="form-group">
           <label for="f-message">Message</label>
           <textarea id="f-message" rows="4" placeholder="I'm interested in this work…"></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Send enquiry</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Commission Modal -->
+  <div class="modal-backdrop" id="commission-modal" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" data-modal="commission-modal" aria-label="Close">&times;</button>
+      <p class="modal-tag">For collectors</p>
+      <h2 class="modal-title">Commission<br/><em>a new work</em></h2>
+      <form id="commission-form">
+        <div class="form-group">
+          <label for="c-name">Name</label>
+          <input type="text" id="c-name" required placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label for="c-email">Email</label>
+          <input type="email" id="c-email" required placeholder="your@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="c-message">Tell me about the work you have in mind</label>
+          <textarea id="c-message" rows="4" placeholder="Scale, subject, palette, where it will live…"></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Send enquiry</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Gallery Modal -->
+  <div class="modal-backdrop" id="gallery-modal" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" data-modal="gallery-modal" aria-label="Close">&times;</button>
+      <p class="modal-tag">For galleries</p>
+      <h2 class="modal-title">Gallery<br/><em>representation</em></h2>
+      <form id="gallery-form">
+        <div class="form-group">
+          <label for="g-name">Name &amp; gallery</label>
+          <input type="text" id="g-name" required placeholder="Your name and gallery name" />
+        </div>
+        <div class="form-group">
+          <label for="g-email">Email</label>
+          <input type="email" id="g-email" required placeholder="your@gallery.com" />
+        </div>
+        <div class="form-group">
+          <label for="g-message">Introduction &amp; programme</label>
+          <textarea id="g-message" rows="4" placeholder="Tell me about your gallery and what you have in mind…"></textarea>
         </div>
         <button type="submit" class="btn-primary">Send enquiry</button>
       </form>
@@ -1004,41 +1050,91 @@
     })();
   </script>
 
-  <!-- Enquiry modal logic -->
+  <!-- Modal logic -->
   <script>
     (function () {
-      const modal    = document.getElementById('enquiry-modal');
-      const workName = document.getElementById('modal-work-name');
-      const form     = document.getElementById('enquiry-form');
-
-      function openModal() {
-        const title = document.getElementById('hero-title').textContent;
-        workName.textContent = title;
-        modal.classList.add('open');
+      function openModal(id) {
+        document.getElementById(id).classList.add('open');
         document.body.style.overflow = 'hidden';
       }
 
-      function closeModal() {
-        modal.classList.remove('open');
+      function closeModal(id) {
+        const m = document.getElementById(id);
+        m.classList.remove('open');
         document.body.style.overflow = '';
-        form.reset();
+        m.querySelectorAll('form').forEach(f => f.reset());
       }
 
-      document.getElementById('inquire-btn').addEventListener('click', openModal);
-      document.getElementById('modal-close').addEventListener('click', closeModal);
-      modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+      function closeAll() {
+        document.querySelectorAll('.modal-backdrop.open').forEach(m => {
+          m.classList.remove('open');
+        });
+        document.body.style.overflow = '';
+      }
 
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const name    = document.getElementById('f-name').value;
-        const email   = document.getElementById('f-email').value;
-        const message = document.getElementById('f-message').value;
-        const subject = encodeURIComponent('Enquiry: ' + workName.textContent);
-        const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
-        window.location.href = `mailto:walt.viviers@gmail.com?subject=${subject}&body=${body}`;
-        closeModal();
+      // Close on backdrop click
+      document.querySelectorAll('.modal-backdrop').forEach(m => {
+        m.addEventListener('click', function (e) { if (e.target === m) closeAll(); });
       });
+
+      // Close on Escape
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(); });
+
+      // Close buttons (data-modal or id="modal-close")
+      document.querySelectorAll('.modal-close').forEach(btn => {
+        btn.addEventListener('click', function () {
+          const target = btn.dataset.modal || 'enquiry-modal';
+          closeModal(target);
+        });
+      });
+
+      // ── Artwork enquiry modal ──
+      const workName = document.getElementById('modal-work-name');
+      document.getElementById('inquire-btn').addEventListener('click', function () {
+        workName.textContent = document.getElementById('hero-title').textContent;
+        openModal('enquiry-modal');
+      });
+      document.getElementById('enquiry-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = document.getElementById('f-name').value;
+        const email = document.getElementById('f-email').value;
+        const msg = document.getElementById('f-message').value;
+        const subject = encodeURIComponent('Enquiry: ' + workName.textContent);
+        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
+        window.location.href = `mailto:walt.viviers@gmail.com?subject=${subject}&body=${body}`;
+        closeModal('enquiry-modal');
+      });
+
+      // ── Commission modal ──
+      document.getElementById('commission-btn').addEventListener('click', function () {
+        openModal('commission-modal');
+      });
+      document.getElementById('commission-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = document.getElementById('c-name').value;
+        const email = document.getElementById('c-email').value;
+        const msg = document.getElementById('c-message').value;
+        const subject = encodeURIComponent('Commission Enquiry');
+        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
+        window.location.href = `mailto:walt.viviers@gmail.com?subject=${subject}&body=${body}`;
+        closeModal('commission-modal');
+      });
+
+      // ── Gallery modal ──
+      document.getElementById('gallery-btn').addEventListener('click', function () {
+        openModal('gallery-modal');
+      });
+      document.getElementById('gallery-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name = document.getElementById('g-name').value;
+        const email = document.getElementById('g-email').value;
+        const msg = document.getElementById('g-message').value;
+        const subject = encodeURIComponent('Gallery Representation Enquiry');
+        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
+        window.location.href = `mailto:walt.viviers@gmail.com?subject=${subject}&body=${body}`;
+        closeModal('gallery-modal');
+      });
+
     })();
   </script>
 
