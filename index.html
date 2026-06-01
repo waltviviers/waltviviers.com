@@ -785,9 +785,74 @@
       filter: none;
     }
 
+    /* ── Instagram feed ─────────────────────────── */
+    #instagram {
+      border-top: 1px solid var(--rule);
+    }
+
+    .instagram-head {
+      padding: 64px 48px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .instagram-handle {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .instagram-handle svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      color: var(--stone);
+    }
+
+    .instagram-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      background: var(--rule);
+    }
+
+    .ig-thumb {
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: var(--bg2);
+      display: block;
+      position: relative;
+    }
+
+    .ig-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s;
+      display: block;
+    }
+
+    .ig-thumb:hover img { transform: scale(1.05); }
+
+    .ig-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: transparent;
+      transition: background 0.3s;
+    }
+
+    .ig-thumb:hover::after { background: rgba(0,0,0,0.2); }
+
     /* ── Responsive ──────────────────────────────── */
     @media (max-width: 1200px) {
       .works-grid { grid-template-columns: repeat(3, 1fr); }
+      .instagram-grid { grid-template-columns: repeat(4, 1fr); }
     }
 
     @media (max-width: 900px) {
@@ -814,6 +879,8 @@
       }
 
       #works, #about { padding: 64px 24px; }
+      .instagram-head { padding: 48px 24px 32px; }
+      .instagram-grid { grid-template-columns: repeat(2, 1fr); }
 
       .works-grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -939,6 +1006,18 @@
         enquiries are welcome.
       </p>
     </div>
+  </section>
+
+  <!-- Instagram feed -->
+  <section id="instagram">
+    <div class="instagram-head">
+      <div class="instagram-handle">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+        <h2 class="section-title">@waltviviers</h2>
+      </div>
+      <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="section-count" style="text-decoration:underline;text-underline-offset:3px;">Follow on Instagram ↗</a>
+    </div>
+    <div class="instagram-grid" id="instagram-grid"></div>
   </section>
 
   <!-- Enquiry panels -->
@@ -1196,6 +1275,17 @@
         });
       }
 
+      /* ── Build Instagram grid ── */
+      function buildInstagram() {
+        const grid = document.getElementById('instagram-grid');
+        if (!grid) return;
+        const posts = works.filter(w => w.image);
+        grid.innerHTML = posts.map(w => `
+          <a class="ig-thumb" href="${w.instagram || 'https://instagram.com/waltviviers'}" target="_blank" rel="noopener" aria-label="${w.title}">
+            <img src="${w.image}" alt="${w.title}" loading="lazy" />
+          </a>`).join('');
+      }
+
       /* ── Show loading / error state ── */
       function setHeroState(msg) {
         document.getElementById('hero-image').innerHTML =
@@ -1241,6 +1331,7 @@
 
           buildDots();
           buildGrid();
+          buildInstagram();
           renderHero(current);
         })
         .catch(() => setHeroState('Could not load artworks'));
