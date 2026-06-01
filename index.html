@@ -1278,17 +1278,6 @@
         });
       }
 
-      /* ── Build Instagram grid ── */
-      function buildInstagram() {
-        const grid = document.getElementById('instagram-grid');
-        if (!grid) return;
-        const posts = works.filter(w => w.image);
-        grid.innerHTML = posts.map(w => `
-          <a class="ig-thumb" href="${w.instagram || 'https://instagram.com/waltviviers'}" target="_blank" rel="noopener" aria-label="${w.title}">
-            <img src="${w.image}" alt="${w.title}" loading="lazy" />
-          </a>`).join('');
-      }
-
       /* ── Show loading / error state ── */
       function setHeroState(msg) {
         document.getElementById('hero-image').innerHTML =
@@ -1334,7 +1323,6 @@
 
           buildDots();
           buildGrid();
-          buildInstagram();
           renderHero(current);
         })
         .catch(() => setHeroState('Could not load artworks'));
@@ -1461,6 +1449,26 @@
       }
       window.addEventListener('scroll', update, { passive: true });
       update();
+    })();
+  </script>
+
+  <!-- Instagram feed (Behold) -->
+  <script>
+    (function () {
+      const grid = document.getElementById('instagram-grid');
+      if (!grid) return;
+      fetch('https://feeds.behold.so/XF2qeG8FeoVkeUAOOjI1')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var posts = Array.isArray(data) ? data : (data.posts || []);
+          grid.innerHTML = posts.map(function (p) {
+            var img = p.mediaType === 'VIDEO' ? p.thumbnailUrl : p.mediaUrl;
+            return '<a class="ig-thumb" href="' + p.permalink + '" target="_blank" rel="noopener noreferrer">'
+              + '<img src="' + img + '" alt="" loading="lazy" />'
+              + '</a>';
+          }).join('');
+        })
+        .catch(function () {});
     })();
   </script>
 
