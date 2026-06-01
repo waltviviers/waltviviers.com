@@ -165,6 +165,43 @@
 
     nav.scrolled { height: 50px; }
 
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+    }
+
+    .lang-btn {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
+      background: none;
+      border: none;
+      padding: 3px 5px;
+      cursor: pointer;
+      font-family: var(--sans);
+      transition: color 0.2s;
+      line-height: 1;
+    }
+
+    .lang-btn:hover  { color: var(--ink); }
+    .lang-btn.active { color: var(--ink); }
+
+    .lang-sep {
+      color: var(--rule);
+      font-size: 11px;
+      line-height: 1;
+      user-select: none;
+      pointer-events: none;
+    }
+
     .nav-logo img {
       height: 36px;
       width: auto;
@@ -1125,12 +1162,19 @@
 
   <!-- Nav -->
   <nav>
-    <a href="#" class="nav-logo" aria-label="Home">
-      <img src="logo.svg" alt="Walt Viviers" />
-    </a>
+    <div class="nav-left">
+      <a href="#" class="nav-logo" aria-label="Home">
+        <img src="logo.svg" alt="Walt Viviers" />
+      </a>
+      <div class="lang-toggle" id="lang-toggle">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <span class="lang-sep">/</span>
+        <button class="lang-btn" data-lang="af">AF</button>
+      </div>
+    </div>
     <ul class="nav-links">
-      <li class="nav-link-hide"><a href="#works">Works</a></li>
-      <li class="nav-link-hide"><a href="#about">About</a></li>
+      <li class="nav-link-hide"><a href="#works" data-i18n="nav-works">Works</a></li>
+      <li class="nav-link-hide"><a href="#about" data-i18n="nav-about">About</a></li>
       <li>
         <div class="social-icons">
           <a href="https://instagram.com/waltviviers" target="_blank" aria-label="Instagram">
@@ -1152,7 +1196,7 @@
           </span>
         </button>
       </li>
-      <li><a href="#commission" class="nav-cta">Enquire</a></li>
+      <li><a href="#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
     </ul>
   </nav>
 
@@ -1175,8 +1219,8 @@
       </div>
 
       <div class="hero-actions">
-        <button class="btn-primary" id="inquire-btn">Inquire about this work</button>
-        <a href="#gallery-rep" class="btn-secondary">Gallery representation</a>
+        <button class="btn-primary" id="inquire-btn" data-i18n="hero-inquire">Enquire about this work</button>
+        <a href="#gallery-rep" class="btn-secondary" data-i18n="hero-gallery-rep">Gallery representation</a>
       </div>
     </div>
   </section>
@@ -1184,7 +1228,7 @@
   <!-- Works Index -->
   <section id="works">
     <div class="section-head">
-      <h2 class="section-title">Selected Works</h2>
+      <h2 class="section-title" data-i18n="section-works">Selected Works</h2>
       <span class="section-count" id="works-count"></span>
     </div>
     <div class="works-grid" id="works-grid"></div>
@@ -1197,32 +1241,14 @@
 
   <!-- About -->
   <section id="about">
-    <h2 class="about-title">
+    <h2 class="about-title" data-i18n-html="about-title-html">
       Created in South Africa<br/><em>Available to the World</em>
     </h2>
     <div class="about-body">
-      <p>
-        Walt Viviers is a South African fine artist and lifelong creative working
-        in acrylic and mixed media. A soul shaped by art, design, and technology,
-        his practice explores the tension between the poetry and music of the
-        artwork: images that read with clarity and confidence from a distance, yet
-        reveal bold, expressive brushstrokes and the artist's unmistakable touch
-        up close.
-      </p>
-      <p>
-        Drawing on subjects that range from the iconic to the unexpected, Viviers
-        bridges the worlds of fine art and popular culture, rendered with energy,
-        intention, and a distinctly South African perspective.
-      </p>
-      <p>
-        For Viviers, making art is therapy: a way of expressing yourself to find
-        yourself. Faith, family, and creativity sit at the core of everything he
-        makes.
-      </p>
-      <p>
-        Works are held in private collections. Commissions and gallery
-        enquiries are welcome.
-      </p>
+      <p data-i18n="about-p1">Walt Viviers is a South African fine artist and lifelong creative working in acrylic and mixed media. A soul shaped by art, design, and technology, his practice explores the tension between the poetry and music of the artwork: images that read with clarity and confidence from a distance, yet reveal bold, expressive brushstrokes and the artist's unmistakable touch up close.</p>
+      <p data-i18n="about-p2">Drawing on subjects that range from the iconic to the unexpected, Walt bridges the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.</p>
+      <p data-i18n="about-p3">For Walt, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything he makes.</p>
+      <p data-i18n="about-p4">Works are held in private collections. Commissions and gallery enquiries are welcome.</p>
     </div>
   </section>
 
@@ -1233,7 +1259,7 @@
         <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
         <h2 class="section-title">@waltviviers</h2>
       </div>
-      <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="section-count" style="text-decoration:underline;text-underline-offset:3px;">Follow on Instagram ↗</a>
+      <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="section-count" style="text-decoration:underline;text-underline-offset:3px;" data-i18n="ig-follow">Follow on Instagram ↗</a>
     </div>
     <div class="instagram-grid" id="instagram-grid"></div>
   </section>
@@ -1242,23 +1268,17 @@
   <div class="enquiry-grid">
 
     <div class="enquiry-panel" id="commission">
-      <p class="enquiry-tag">For collectors</p>
-      <h2 class="enquiry-title">Commission<br/>a new work</h2>
-      <p class="enquiry-desc">
-        Each commission begins with a conversation. Discussions cover scale,
-        subject, palette, and context. Lead time is typically 8–16 weeks.
-      </p>
-      <button class="btn-primary" id="commission-btn">Start a conversation</button>
+      <p class="enquiry-tag" data-i18n="commission-tag">For collectors</p>
+      <h2 class="enquiry-title" data-i18n-html="commission-title-html">Commission<br/>a new work</h2>
+      <p class="enquiry-desc" data-i18n="commission-desc">Each commission begins with a conversation. Discussions cover scale, subject, palette, and context. Lead time is typically 8–16 weeks.</p>
+      <button class="btn-primary" id="commission-btn" data-i18n="commission-btn">Start a conversation</button>
     </div>
 
     <div class="enquiry-panel" id="gallery-rep">
-      <p class="enquiry-tag">For galleries</p>
-      <h2 class="enquiry-title">Gallery<br/>representation</h2>
-      <p class="enquiry-desc">
-        Interested in representing Walt Viviers or proposing an exhibition?
-        Get in touch with a brief introduction and your programme.
-      </p>
-      <button class="btn-primary" id="gallery-btn">Get in touch</button>
+      <p class="enquiry-tag" data-i18n="gallery-tag">For galleries</p>
+      <h2 class="enquiry-title" data-i18n-html="gallery-title-html">Gallery<br/>representation</h2>
+      <p class="enquiry-desc" data-i18n="gallery-desc">Interested in representing Walt or proposing an exhibition? Get in touch with a brief introduction and your programme.</p>
+      <button class="btn-primary" id="gallery-btn" data-i18n="gallery-btn">Get in touch</button>
     </div>
 
   </div>
@@ -1267,22 +1287,22 @@
   <div class="modal-backdrop" id="enquiry-modal" role="dialog" aria-modal="true">
     <div class="modal">
       <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
-      <p class="modal-tag">Enquiry</p>
-      <h2 class="modal-title" id="modal-title">Inquire about<br/><em id="modal-work-name"></em></h2>
+      <p class="modal-tag" data-i18n="modal-enquiry-tag">Enquiry</p>
+      <h2 class="modal-title" id="modal-title"><span data-i18n="modal-enquiry-prefix">Enquire about</span><br/><em id="modal-work-name"></em></h2>
       <form id="enquiry-form">
         <div class="form-group">
-          <label for="f-name">Name</label>
-          <input type="text" id="f-name" required placeholder="Your name" />
+          <label for="f-name" data-i18n="form-name">Name</label>
+          <input type="text" id="f-name" required placeholder="Your name" data-i18n-placeholder="form-placeholder-name" />
         </div>
         <div class="form-group">
-          <label for="f-email">Email</label>
-          <input type="email" id="f-email" required placeholder="your@email.com" />
+          <label for="f-email" data-i18n="form-email">Email</label>
+          <input type="email" id="f-email" required placeholder="your@email.com" data-i18n-placeholder="form-placeholder-email" />
         </div>
         <div class="form-group">
-          <label for="f-message">Message</label>
-          <textarea id="f-message" rows="4" placeholder="I'm interested in this work…"></textarea>
+          <label for="f-message" data-i18n="form-message">Message</label>
+          <textarea id="f-message" rows="4" placeholder="I'm interested in this work…" data-i18n-placeholder="form-placeholder-enquiry"></textarea>
         </div>
-        <button type="submit" class="btn-primary">Send enquiry</button>
+        <button type="submit" class="btn-primary" data-i18n="form-send-enquiry">Send enquiry</button>
       </form>
     </div>
   </div>
@@ -1291,22 +1311,22 @@
   <div class="modal-backdrop" id="contact-modal" role="dialog" aria-modal="true">
     <div class="modal">
       <button class="modal-close" data-modal="contact-modal" aria-label="Close">&times;</button>
-      <p class="modal-tag">Get in touch</p>
-      <h2 class="modal-title">Send a<br/><em>message</em></h2>
+      <p class="modal-tag" data-i18n="modal-contact-tag">Get in touch</p>
+      <h2 class="modal-title" data-i18n-html="modal-contact-title-html">Send a<br/><em>message</em></h2>
       <form id="contact-form">
         <div class="form-group">
-          <label for="ct-name">Name</label>
-          <input type="text" id="ct-name" required placeholder="Your name" />
+          <label for="ct-name" data-i18n="form-name">Name</label>
+          <input type="text" id="ct-name" required placeholder="Your name" data-i18n-placeholder="form-placeholder-name" />
         </div>
         <div class="form-group">
-          <label for="ct-email">Email</label>
-          <input type="email" id="ct-email" required placeholder="your@email.com" />
+          <label for="ct-email" data-i18n="form-email">Email</label>
+          <input type="email" id="ct-email" required placeholder="your@email.com" data-i18n-placeholder="form-placeholder-email" />
         </div>
         <div class="form-group">
-          <label for="ct-message">Message</label>
-          <textarea id="ct-message" rows="4" placeholder="What's on your mind…"></textarea>
+          <label for="ct-message" data-i18n="form-message">Message</label>
+          <textarea id="ct-message" rows="4" placeholder="What's on your mind…" data-i18n-placeholder="form-placeholder-contact"></textarea>
         </div>
-        <button type="submit" class="btn-primary">Send message</button>
+        <button type="submit" class="btn-primary" data-i18n="modal-contact-send">Send message</button>
       </form>
     </div>
   </div>
@@ -1315,22 +1335,22 @@
   <div class="modal-backdrop" id="commission-modal" role="dialog" aria-modal="true">
     <div class="modal">
       <button class="modal-close" data-modal="commission-modal" aria-label="Close">&times;</button>
-      <p class="modal-tag">For collectors</p>
-      <h2 class="modal-title">Commission<br/><em>a new work</em></h2>
+      <p class="modal-tag" data-i18n="modal-commission-tag">For collectors</p>
+      <h2 class="modal-title" data-i18n-html="modal-commission-title-html">Commission<br/><em>a new work</em></h2>
       <form id="commission-form">
         <div class="form-group">
-          <label for="c-name">Name</label>
-          <input type="text" id="c-name" required placeholder="Your name" />
+          <label for="c-name" data-i18n="form-name">Name</label>
+          <input type="text" id="c-name" required placeholder="Your name" data-i18n-placeholder="form-placeholder-name" />
         </div>
         <div class="form-group">
-          <label for="c-email">Email</label>
-          <input type="email" id="c-email" required placeholder="your@email.com" />
+          <label for="c-email" data-i18n="form-email">Email</label>
+          <input type="email" id="c-email" required placeholder="your@email.com" data-i18n-placeholder="form-placeholder-email" />
         </div>
         <div class="form-group">
-          <label for="c-message">Tell me about the work you have in mind</label>
-          <textarea id="c-message" rows="4" placeholder="Scale, subject, palette, where it will live…"></textarea>
+          <label for="c-message" data-i18n="modal-commission-label">Tell me about the work you have in mind</label>
+          <textarea id="c-message" rows="4" placeholder="Scale, subject, palette, where it will live…" data-i18n-placeholder="modal-commission-placeholder"></textarea>
         </div>
-        <button type="submit" class="btn-primary">Send enquiry</button>
+        <button type="submit" class="btn-primary" data-i18n="form-send-enquiry">Send enquiry</button>
       </form>
     </div>
   </div>
@@ -1339,22 +1359,22 @@
   <div class="modal-backdrop" id="gallery-modal" role="dialog" aria-modal="true">
     <div class="modal">
       <button class="modal-close" data-modal="gallery-modal" aria-label="Close">&times;</button>
-      <p class="modal-tag">For galleries</p>
-      <h2 class="modal-title">Gallery<br/><em>representation</em></h2>
+      <p class="modal-tag" data-i18n="modal-gallery-tag">For galleries</p>
+      <h2 class="modal-title" data-i18n-html="modal-gallery-title-html">Gallery<br/><em>representation</em></h2>
       <form id="gallery-form">
         <div class="form-group">
-          <label for="g-name">Name &amp; gallery</label>
-          <input type="text" id="g-name" required placeholder="Your name and gallery name" />
+          <label for="g-name" data-i18n="modal-gallery-label-name">Name &amp; gallery</label>
+          <input type="text" id="g-name" required placeholder="Your name and gallery name" data-i18n-placeholder="modal-gallery-placeholder-name" />
         </div>
         <div class="form-group">
-          <label for="g-email">Email</label>
-          <input type="email" id="g-email" required placeholder="your@gallery.com" />
+          <label for="g-email" data-i18n="form-email">Email</label>
+          <input type="email" id="g-email" required placeholder="your@gallery.com" data-i18n-placeholder="form-placeholder-email" />
         </div>
         <div class="form-group">
-          <label for="g-message">Introduction &amp; programme</label>
-          <textarea id="g-message" rows="4" placeholder="Tell me about your gallery and what you have in mind…"></textarea>
+          <label for="g-message" data-i18n="modal-gallery-label-msg">Introduction &amp; programme</label>
+          <textarea id="g-message" rows="4" placeholder="Tell me about your gallery and what you have in mind…" data-i18n-placeholder="modal-gallery-placeholder-msg"></textarea>
         </div>
-        <button type="submit" class="btn-primary">Send enquiry</button>
+        <button type="submit" class="btn-primary" data-i18n="form-send-enquiry">Send enquiry</button>
       </form>
     </div>
   </div>
@@ -1374,7 +1394,7 @@
           <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
         </a>
       </div>
-      <p class="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
+      <p class="footer-copy" data-i18n="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
     </div>
     <div class="footer-mark">
       <img src="images/width_150.webp" alt="" />
@@ -1423,6 +1443,109 @@
     })();
   </script>
 
+  <!-- Language toggle -->
+  <script>
+  (function () {
+    var T = {
+      en: {
+        'nav-works': 'Works', 'nav-about': 'About', 'nav-enquire': 'Enquire',
+        'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
+        'section-works': 'Selected Works',
+        'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
+        'about-p1': 'Walt Viviers is a South African fine artist and lifelong creative working in acrylic and mixed media. A soul shaped by art, design, and technology, his practice explores the tension between the poetry and music of the artwork: images that read with clarity and confidence from a distance, yet reveal bold, expressive brushstrokes and the artist’s unmistakable touch up close.',
+        'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, Walt bridges the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
+        'about-p3': 'For Walt, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything he makes.',
+        'about-p4': 'Works are held in private collections. Commissions and gallery enquiries are welcome.',
+        'ig-follow': 'Follow on Instagram ↗',
+        'commission-tag': 'For collectors', 'commission-title-html': 'Commission<br/>a new work',
+        'commission-desc': 'Each commission begins with a conversation. Discussions cover scale, subject, palette, and context. Lead time is typically 8–16 weeks.',
+        'commission-btn': 'Start a conversation',
+        'gallery-tag': 'For galleries', 'gallery-title-html': 'Gallery<br/>representation',
+        'gallery-desc': 'Interested in representing Walt or proposing an exhibition? Get in touch with a brief introduction and your programme.',
+        'gallery-btn': 'Get in touch',
+        'modal-enquiry-tag': 'Enquiry', 'modal-enquiry-prefix': 'Enquire about',
+        'modal-contact-tag': 'Get in touch', 'modal-contact-title-html': 'Send a<br/><em>message</em>', 'modal-contact-send': 'Send message',
+        'modal-commission-tag': 'For collectors', 'modal-commission-title-html': 'Commission<br/><em>a new work</em>',
+        'modal-commission-label': 'Tell me about the work you have in mind', 'modal-commission-placeholder': 'Scale, subject, palette, where it will live…',
+        'modal-gallery-tag': 'For galleries', 'modal-gallery-title-html': 'Gallery<br/><em>representation</em>',
+        'modal-gallery-label-name': 'Name & gallery', 'modal-gallery-label-msg': 'Introduction & programme',
+        'modal-gallery-placeholder-name': 'Your name and gallery name', 'modal-gallery-placeholder-msg': 'Tell me about your gallery and what you have in mind…',
+        'form-name': 'Name', 'form-email': 'Email', 'form-message': 'Message',
+        'form-send-enquiry': 'Send enquiry',
+        'form-placeholder-name': 'Your name', 'form-placeholder-email': 'your@email.com',
+        'form-placeholder-enquiry': 'I’m interested in this work…', 'form-placeholder-contact': 'What’s on your mind…',
+        'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗',
+        'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire',
+        'work-label': 'Work', 'works-suffix': 'works',
+        'footer-copy': '© 2026 Walt Viviers. All rights reserved.'
+      },
+      af: {
+        'nav-works': 'Werke', 'nav-about': 'Oor', 'nav-enquire': 'Navraag',
+        'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
+        'section-works': 'Geselekteerde Werke',
+        'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
+        'about-p1': 'Walt Viviers is ‘n Suid-Afrikaanse kunstenaar en lewenslange kreatiewe gees wat in akriel en gemengde media werk. ‘n Siel gevorm deur kuns, ontwerp en tegnologie: sy werk verken die spanning tussen die poësie en musiek van die kunswerk. Beelde wat van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en die kunstenaar se onmiskenbare aanslag onthul.',
+        'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug Walt die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
+        'about-p3': 'Vir Walt is kunsmaak terapie: ‘n manier om jouself uit te druk om jouself te vind. Geloof, familie en kreatiwiteit lê aan die hart van alles wat hy maak.',
+        'about-p4': 'Werke word in privaat versamelings gehou. Opdragte en galery-navrae is welkom.',
+        'ig-follow': 'Volg op Instagram ↗',
+        'commission-tag': 'Vir versamelaars', 'commission-title-html': 'Bestel<br/>‘n nuwe werk',
+        'commission-desc': 'Elke opdrag begin met ‘n gesprek. Besprekings dek skaal, onderwerp, palet en konteks. Lewertyd is gewoonlik 8–16 weke.',
+        'commission-btn': 'Begin ‘n gesprek',
+        'gallery-tag': 'Vir galerye', 'gallery-title-html': 'Galery-<br/>verteenwoordiging',
+        'gallery-desc': 'Stel jy belang om Walt Viviers te verteenwoordig of ‘n uitstalling voor te stel? Kontak my met ‘n kort inleiding en jou program.',
+        'gallery-btn': 'Kontak my',
+        'modal-enquiry-tag': 'Navraag', 'modal-enquiry-prefix': 'Doen navraag oor',
+        'modal-contact-tag': 'Kontak my', 'modal-contact-title-html': 'Stuur ‘n<br/><em>boodskap</em>', 'modal-contact-send': 'Stuur boodskap',
+        'modal-commission-tag': 'Vir versamelaars', 'modal-commission-title-html': 'Bestel<br/><em>‘n nuwe werk</em>',
+        'modal-commission-label': 'Vertel my van die werk wat jy in gedagte het', 'modal-commission-placeholder': 'Skaal, onderwerp, palet, waar dit gaan hang…',
+        'modal-gallery-tag': 'Vir galerye', 'modal-gallery-title-html': 'Galery-<br/><em>verteenwoordiging</em>',
+        'modal-gallery-label-name': 'Naam & galery', 'modal-gallery-label-msg': 'Inleiding & program',
+        'modal-gallery-placeholder-name': 'Jou naam en galery se naam', 'modal-gallery-placeholder-msg': 'Vertel my van jou galery en wat jy in gedagte het…',
+        'form-name': 'Naam', 'form-email': 'E-pos', 'form-message': 'Boodskap',
+        'form-send-enquiry': 'Stuur navraag',
+        'form-placeholder-name': 'Jou naam', 'form-placeholder-email': 'jou@epos.com',
+        'form-placeholder-enquiry': 'Ek stel belang in hierdie werk…', 'form-placeholder-contact': 'Wat’s op jou hart…',
+        'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗',
+        'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag',
+        'work-label': 'Werk', 'works-suffix': 'werke',
+        'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.'
+      }
+    };
+
+    var lang = localStorage.getItem('wv-lang') || 'en';
+
+    window._t = function (key) { return (T[lang] || T.en)[key] || key; };
+
+    function apply() {
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        el.textContent = window._t(el.dataset.i18n);
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+        el.innerHTML = window._t(el.dataset.i18nHtml);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
+        el.placeholder = window._t(el.dataset.i18nPlaceholder);
+      });
+      document.querySelectorAll('.lang-btn').forEach(function (btn) {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      if (window._gallery && window._gallery.refresh) window._gallery.refresh();
+    }
+
+    apply();
+
+    document.getElementById('lang-toggle').addEventListener('click', function (e) {
+      var btn = e.target.closest('.lang-btn');
+      if (!btn) return;
+      lang = btn.dataset.lang;
+      localStorage.setItem('wv-lang', lang);
+      apply();
+    });
+  })();
+  </script>
+
   <!-- Gallery -->
   <script>
     (function () {
@@ -1431,9 +1554,10 @@
 
       /* ── Availability badge ── */
       function availLabel(w) {
-        if (w.available === true)  return '<span class="availability-badge available">Available</span>';
-        if (w.available === false) return '<span class="availability-badge sold">Sold</span>';
-        return '<span class="availability-badge enquire">Enquire</span>';
+        var _t = window._t || function(k){return k;};
+        if (w.available === true)  return '<span class="availability-badge available">' + _t('avail-available') + '</span>';
+        if (w.available === false) return '<span class="availability-badge sold">'      + _t('avail-sold')      + '</span>';
+        return '<span class="availability-badge enquire">' + _t('avail-enquire') + '</span>';
       }
 
       /* ── Render hero panel ── */
@@ -1451,16 +1575,17 @@
           imgWrap.innerHTML = `<img src="${w.image}" alt="Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}" fetchpriority="high" />`;
         }
 
+        var _t = window._t || function(k){return k;};
         document.getElementById('hero-number').textContent =
-          `Work ${String(index + 1).padStart(2,'0')} / ${String(works.length).padStart(2,'0')}`;
+          _t('work-label') + ' ' + String(index + 1).padStart(2,'0') + ' / ' + String(works.length).padStart(2,'0');
         document.getElementById('hero-title').textContent = w.title;
         document.getElementById('hero-year').textContent  = w.year;
-        document.getElementById('hero-meta').innerHTML = `
-          ${w.medium     ? `<div class="work-meta-row"><span class="work-meta-label">Medium</span><span class="work-meta-value">${w.medium}</span></div>` : ''}
-          ${w.dimensions ? `<div class="work-meta-row"><span class="work-meta-label">Dimensions</span><span class="work-meta-value">${w.dimensions}</span></div>` : ''}
-          <div class="work-meta-row"><span class="work-meta-label">Status</span><span class="work-meta-value">${availLabel(w)}</span></div>
-          ${w.permalink  ? `<div class="work-meta-row"><span class="work-meta-label">Instagram</span><span class="work-meta-value"><a href="${w.permalink}" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">View post ↗</a></span></div>` : ''}
-        `;
+        var _t = window._t || function(k){return k;};
+        document.getElementById('hero-meta').innerHTML =
+          (w.medium     ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-medium')     + '</span><span class="work-meta-value">' + w.medium     + '</span></div>' : '') +
+          (w.dimensions ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-dimensions') + '</span><span class="work-meta-value">' + w.dimensions + '</span></div>' : '') +
+          '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-status') + '</span><span class="work-meta-value">' + availLabel(w) + '</span></div>' +
+          (w.permalink  ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-instagram') + '</span><span class="work-meta-value"><a href="' + w.permalink + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-post') + '</a></span></div>' : '');
 
         document.querySelectorAll('.gn-dot').forEach((d, i) =>
           d.classList.toggle('active', i === index));
@@ -1479,7 +1604,8 @@
       /* ── Build thumbnail grid ── */
       function buildGrid() {
         const grid = document.getElementById('works-grid');
-        document.getElementById('works-count').textContent = `${works.length} works`;
+        var _t = window._t || function(k){return k;};
+        document.getElementById('works-count').textContent = works.length + ' ' + _t('works-suffix');
         grid.innerHTML = works.map((w, i) => {
           const thumb = w.image.replace('images/', 'images/thumbs/');
           return `
@@ -1589,6 +1715,14 @@
           buildGrid();
           renderHero(current);
           injectArtworkSchema();
+
+          window._gallery = {
+            refresh: function() {
+              var _t = window._t || function(k){return k;};
+              document.getElementById('works-count').textContent = works.length + ' ' + _t('works-suffix');
+              renderHero(current);
+            }
+          };
         })
         .catch(() => setHeroState('Could not load artworks'));
 
