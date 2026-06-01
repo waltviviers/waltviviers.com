@@ -6,7 +6,7 @@
       "medium": "Acrylic on Canvas",
       "dimensions": "",
       "year": "2025",
-      "image": "images/img_8798.jpg",
+      "image": "images/img_8798.webp",
       "title": "Dragon Kitties",
       "instagram": "https://www.instagram.com/p/DSNWdKzDYrC/"
     },
@@ -15,7 +15,7 @@
       "featured": false,
       "dimensions": "",
       "year": "2026",
-      "image": "images/img_8795.jpg",
+      "image": "images/img_8795.webp",
       "title": "Deadpool",
       "medium": "Acrylic on Canvas"
     },
@@ -25,7 +25,7 @@
       "title": "Duckbill",
       "year": "2025",
       "medium": "Acrylic on Canvas",
-      "image": "images/img_8799.jpg",
+      "image": "images/img_8799.webp",
       "instagram": "https://www.instagram.com/stories/highlights/18013867952702432/"
     },
     {
@@ -34,13 +34,13 @@
       "title": "Rat",
       "year": "2025",
       "medium": "Acrylic on Canvas",
-      "image": "images/img_8802.jpg",
+      "image": "images/img_8802.webp",
       "instagram": "https://www.instagram.com/stories/highlights/18103422559977709/"
     },
     {
       "available": "available",
       "featured": false,
-      "image": "images/img_8801.jpg",
+      "image": "images/img_8801.webp",
       "title": "Sabretooth",
       "year": "2025",
       "medium": "Acrylic on Canvas",
@@ -54,7 +54,7 @@
       "year": "2025",
       "medium": "Acrylic on Canvas",
       "instagram": "https://www.instagram.com/stories/highlights/17862344784587481/",
-      "image": "images/img_8805.jpg"
+      "image": "images/img_8805.webp"
     },
     {
       "available": "available",
@@ -62,7 +62,7 @@
       "title": "Rex",
       "year": "2025",
       "medium": "Acrylic on Canvas",
-      "image": "images/img_8804.jpg",
+      "image": "images/img_8804.webp",
       "instagram": "https://www.instagram.com/stories/highlights/17991499985793578/"
     },
     {
@@ -72,7 +72,7 @@
       "year": "2020",
       "medium": "Acrylic on Canvas",
       "dimensions": "",
-      "image": "images/img_8800.jpg",
+      "image": "images/img_8800.webp",
       "instagram": "https://www.instagram.com/p/CHf2wkajhs6/"
     },
     {
@@ -80,7 +80,7 @@
       "featured": false,
       "dimensions": "",
       "medium": "Acrylic on Canvas",
-      "image": "images/img_8797.jpg",
+      "image": "images/img_8797.webp",
       "title": "Venom Cat",
       "year": "2019",
       "instagram": "https://www.instagram.com/p/BvqxL0pBgg0/"
@@ -92,7 +92,7 @@
       "year": "2017",
       "medium": "Ink & Pencils on Paper",
       "instagram": "https://www.instagram.com/p/BRf7eU0h764/",
-      "image": "images/img_8807.jpg"
+      "image": "images/img_8807.webp"
     }
   ]
 }
