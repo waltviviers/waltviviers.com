@@ -748,10 +748,11 @@
 
     /* ── Theme toggle ────────────────────────────── */
     .theme-toggle {
-      width: 38px;
-      height: 24px;
-      border-radius: 99px;
-      border: 1px solid var(--rule);
+      position: relative;
+      width: 60px;
+      height: 32px;
+      border-radius: 16px;
+      border: 1.5px solid #4A4844;
       background: transparent;
       cursor: pointer;
       padding: 0;
@@ -761,26 +762,59 @@
       justify-content: center;
     }
 
+    nav.scrolled .theme-toggle {
+      width: auto;
+      height: auto;
+      border: none;
+      padding: 4px;
+    }
+
+    nav.scrolled .toggle-thumb {
+      position: static;
+      width: auto;
+      height: auto;
+      background: none;
+      border-radius: 0;
+      transform: none !important;
+    }
+
+    nav.scrolled .toggle-thumb .icon-moon,
+    nav.scrolled .toggle-thumb .icon-sun {
+      width: 17px;
+      height: 17px;
+      stroke: var(--stone);
+    }
+
+    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-moon,
+    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-sun {
+      stroke: var(--ink);
+    }
+
     .toggle-thumb {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--ink);
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
+    [data-theme="light"] .toggle-thumb { transform: translateX(28px); }
 
     .toggle-thumb .icon-moon,
     .toggle-thumb .icon-sun {
-      width: 13px;
-      height: 13px;
+      width: 12px;
+      height: 12px;
       fill: none;
-      stroke: var(--stone);
+      stroke: var(--bg);
       stroke-width: 1.5;
       stroke-linecap: round;
       stroke-linejoin: round;
-    }
-
-    .theme-toggle:hover .toggle-thumb .icon-moon,
-    .theme-toggle:hover .toggle-thumb .icon-sun {
-      stroke: var(--ink);
     }
 
     .toggle-thumb .icon-moon { display: block; }
@@ -1023,6 +1057,13 @@
       .nav-links { gap: 20px; }
       .nav-link-hide { display: none; }
       .lang-label, .lang-pipe { display: none; }
+
+      .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
+      .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
+      .toggle-thumb .icon-moon,
+      .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
+      .theme-toggle:hover .toggle-thumb .icon-moon,
+      .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
 
       .hero {
         padding-top: 50px;
