@@ -1,53 +1,62 @@
 {
   "artworks": [
     {
-      "available": "enquire",
+      "available": "available",
       "featured": false,
       "medium": "Acrylic on Canvas",
-      "dimensions": "100cm x 100cm",
+      "dimensions": "",
       "year": "2025",
-      "image": "images/img_8794.webp",
+      "image": "images/img_8798.jpg",
       "title": "Dragon Kitties",
       "instagram": "https://www.instagram.com/p/DSNWdKzDYrC/"
     },
     {
       "available": "enquire",
       "featured": false,
-      "dimensions": "100cm x 100cm",
-      "medium": "Acrylic on Canvas",
-      "image": "images/img_8793.webp",
-      "title": "Venom Cat",
-      "year": "2019",
-      "instagram": "https://www.instagram.com/p/BvqxL0pBgg0/"
+      "dimensions": "",
+      "year": "2026",
+      "image": "images/img_8795.jpg",
+      "title": "Deadpool",
+      "medium": "Acrylic on Canvas"
     },
     {
-      "available": "enquire",
-      "featured": true,
-      "title": "Rex",
-      "year": "2020",
-      "medium": "Acrylic on Canvas",
-      "dimensions": "100cm x 100cm",
-      "image": "images/img_8788.webp",
-      "instagram": "https://www.instagram.com/p/CHf2wkajhs6/"
-    },
-    {
-      "available": "enquire",
+      "available": "available",
       "featured": false,
-      "image": "images/img_8785.webp",
+      "title": "Rex",
+      "year": "2025",
+      "medium": "Acrylic on Canvas",
+      "image": "images/img_8804.jpg",
+      "instagram": "https://www.instagram.com/stories/highlights/17991499985793578/"
+    },
+    {
+      "available": "available",
+      "featured": false,
+      "image": "images/img_8801.jpg",
       "title": "Sabretooth",
       "year": "2025",
       "medium": "Acrylic on Canvas",
-      "dimensions": "100cm x 100cm",
+      "dimensions": "",
       "instagram": "https://www.instagram.com/stories/highlights/18014195621699159/"
     },
     {
-      "available": "enquire",
+      "available": "available",
+      "featured": true,
+      "title": "T-Rex",
+      "year": "2020",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "",
+      "image": "images/img_8800.jpg",
+      "instagram": "https://www.instagram.com/p/CHf2wkajhs6/"
+    },
+    {
+      "available": "available",
       "featured": false,
-      "dimensions": "100cm x 100cm",
-      "year": "Acrylic on Canvas",
-      "image": "images/img_8791.webp",
-      "title": "Deadpool",
-      "medium": "Acrylic on Canvas"
+      "dimensions": "",
+      "medium": "Acrylic on Canvas",
+      "image": "images/img_8797.jpg",
+      "title": "Venom Cat",
+      "year": "2019",
+      "instagram": "https://www.instagram.com/p/BvqxL0pBgg0/"
     }
   ]
 }
