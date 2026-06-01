@@ -1,0 +1,22 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+# AI crawlers — welcome
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: GoogleExtended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+Sitemap: https://waltviviers.com/sitemap.xml
