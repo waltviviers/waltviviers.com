@@ -485,35 +485,91 @@
 
     .modal form .btn-primary { width: 100%; margin-top: 8px; }
 
-    /* ── Footer ──────────────────────────────────── */
-    footer {
-      padding: 32px 48px;
-      border-top: 1px solid var(--rule);
+    /* ── Social icons (nav + footer) ────────────── */
+    .social-icons {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      font-size: 12px;
-      color: var(--stone);
-      letter-spacing: 0.04em;
+      gap: 16px;
     }
 
-    footer img {
-      height: 18px;
-      width: auto;
-      opacity: 0.25;
-    }
-
-    .footer-links {
+    .social-icons a {
       display: flex;
-      gap: 32px;
-    }
-
-    .footer-links a {
+      align-items: center;
+      justify-content: center;
       color: var(--stone);
       transition: color 0.2s;
     }
 
-    .footer-links a:hover { color: var(--white); }
+    .social-icons a:hover { color: var(--white); }
+
+    .social-icons svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── Footer ──────────────────────────────────── */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .footer-logo img {
+      height: 28px;
+      width: auto;
+      opacity: 0.35;
+    }
+
+    .footer-social {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .footer-social .social-icons {
+      gap: 24px;
+    }
+
+    .footer-social .social-icons a {
+      color: var(--stone);
+    }
+
+    .footer-social .social-icons svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .footer-social .social-icons a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-size: 11px;
+      color: var(--stone);
+      letter-spacing: 0.06em;
+      text-align: center;
+    }
+
+    .footer-right {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .footer-admin {
+      font-size: 11px;
+      color: var(--rule);
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+
+    .footer-admin:hover { color: var(--stone); }
 
     /* ── Gallery nav (prev/next) ─────────────────── */
     .gallery-nav {
@@ -622,7 +678,8 @@
 
       .enquiry-panel { padding: 56px 24px; }
 
-      footer { flex-direction: column; gap: 16px; text-align: center; }
+      footer { grid-template-columns: 1fr; justify-items: center; gap: 28px; padding: 40px 24px; }
+      .footer-right { justify-content: center; }
     }
 
     @media (max-width: 560px) {
@@ -642,6 +699,16 @@
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="#works">Works</a></li>
       <li class="nav-link-hide"><a href="#about">About</a></li>
+      <li class="nav-link-hide">
+        <div class="social-icons">
+          <a href="https://instagram.com/waltviviers" target="_blank" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="mailto:walt.viviers@gmail.com" aria-label="Email">
+            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+          </a>
+        </div>
+      </li>
       <li><a href="#commission" class="nav-cta">Enquire</a></li>
     </ul>
   </nav>
@@ -763,13 +830,23 @@
 
   <!-- Footer -->
   <footer>
-    <img src="975e264d425aae5ae7a33cb486752df9.png" alt="Walt Viviers" />
-    <div class="footer-links">
-      <a href="https://instagram.com/waltviviers" target="_blank">Instagram</a>
-      <a href="https://waltvivierscms.vercel.app/admin/#/collections/artworks/entries/artworks" target="_blank">Admin</a>
-      <a href="mailto:walt.viviers@gmail.com">Email</a>
+    <div class="footer-logo">
+      <img src="975e264d425aae5ae7a33cb486752df9.png" alt="Walt Viviers" />
     </div>
-    <span>© 2026 Walt Viviers</span>
+    <div class="footer-social">
+      <div class="social-icons">
+        <a href="https://instagram.com/waltviviers" target="_blank" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="mailto:walt.viviers@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
+    </div>
+    <div class="footer-right">
+      <a href="https://waltvivierscms.vercel.app/admin/#/collections/artworks/entries/artworks" target="_blank" class="footer-admin">Admin</a>
+    </div>
   </footer>
 
   <!-- Nav shrink on scroll -->
