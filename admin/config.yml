@@ -2,8 +2,8 @@ backend:
   name: github
   repo: waltviviers/waltviviers.com
   branch: main
-  base_url: https://waltvivierscms.vercel.app
-  auth_endpoint: /api/auth
+  auth_type: pkce
+  app_id: Ov23liftA5BwWxORy9ui
 
 media_folder: images
 public_folder: images

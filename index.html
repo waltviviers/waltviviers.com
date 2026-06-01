@@ -55,6 +55,10 @@
   <link rel="dns-prefetch" href="https://feeds.behold.so" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preload" href="/data/artworks.json" as="fetch" crossorigin />
+  <link rel="preload" as="image" href="/images/img_8800.webp" fetchpriority="high" type="image/webp" />
+
+  <!-- Prevent theme FOUC: set data-theme before any CSS paints -->
+  <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
 
   <!-- Schema markup -->
   <script type="application/ld+json">
@@ -241,13 +245,16 @@
     .hero-detail {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
       padding: 56px 40px;
       border-left: 1px solid var(--rule);
       background: var(--bg);
     }
 
-    .hero-work-info {}
+    .hero-work-info {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
 
     .hero-work-number {
       font-size: 11px;
@@ -313,6 +320,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      margin-top: 24px;
     }
 
     .btn-primary {
@@ -829,7 +837,8 @@
       display: flex;
       align-items: center;
       gap: 2px;
-      margin-top: 40px;
+      margin-top: auto;
+      padding-top: 40px;
     }
 
     .gn-btn {
@@ -1002,8 +1011,9 @@
       }
 
       .hero-image-wrap {
-        padding: 32px 24px;
+        padding: 24px;
         min-height: 0;
+        aspect-ratio: 4 / 5;
       }
 
       .hero-image-wrap img { max-height: 80vw; }
@@ -1011,9 +1021,33 @@
       .hero-detail {
         border-left: none;
         border-top: 1px solid var(--rule);
-        padding: 40px 24px;
+        padding: 24px 24px 32px;
         background: var(--bg);
       }
+
+      .hero-work-info {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        flex: unset;
+      }
+
+      .hero-work-number {
+        flex: 1;
+        order: 1;
+        margin-bottom: 0;
+      }
+
+      .hero-work-info .gallery-nav {
+        order: 2;
+        margin-top: 0;
+        padding-top: 0;
+      }
+
+      .hero-work-title  { flex: 0 0 100%; order: 3; margin-top: 24px; }
+      .hero-work-year   { flex: 0 0 100%; order: 4; }
+      .work-meta-table  { flex: 0 0 100%; order: 5; }
+      .hero-actions     { margin-top: 24px; }
 
       #works, #about { padding: 64px 24px; }
       .instagram-head { padding: 48px 24px 32px; }
@@ -1107,19 +1141,16 @@
         <h1 class="hero-work-title" id="hero-title">—</h1>
         <p class="hero-work-year"  id="hero-year"></p>
         <div class="work-meta-table" id="hero-meta"></div>
-      </div>
-
-      <div>
         <div class="gallery-nav">
           <button class="gn-btn" id="gn-prev" aria-label="Previous work">&#8592;</button>
           <div class="gn-dots" id="gn-dots"></div>
           <button class="gn-btn" id="gn-next" aria-label="Next work">&#8594;</button>
         </div>
+      </div>
 
-        <div class="hero-actions" style="margin-top: 32px;">
-          <button class="btn-primary" id="inquire-btn">Inquire about this work</button>
-          <a href="#gallery-rep" class="btn-secondary">Gallery representation</a>
-        </div>
+      <div class="hero-actions">
+        <button class="btn-primary" id="inquire-btn">Inquire about this work</button>
+        <a href="#gallery-rep" class="btn-secondary">Gallery representation</a>
       </div>
     </div>
   </section>
@@ -1321,15 +1352,8 @@
   <!-- Theme toggle -->
   <script>
     (function () {
-      const html   = document.documentElement;
-      const toggle = document.getElementById('theme-toggle');
-      const saved  = localStorage.getItem('wv-theme');
-      if (saved) {
-        html.dataset.theme = saved;
-      } else {
-        html.dataset.theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-      }
-      toggle.addEventListener('click', function () {
+      const html = document.documentElement;
+      document.getElementById('theme-toggle').addEventListener('click', function () {
         const next = html.dataset.theme === 'light' ? 'dark' : 'light';
         html.dataset.theme = next;
         localStorage.setItem('wv-theme', next);
