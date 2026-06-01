@@ -265,18 +265,18 @@
     .hero-image-wrap {
       position: relative;
       background: #0D0D0D;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 48px 56px;
+      overflow: hidden;
       min-height: calc(100vh - 100px);
     }
 
     .hero-image-wrap img {
-      max-height: calc(100vh - 196px);
-      width: auto;
-      max-width: 100%;
-      object-fit: contain;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
       transition: opacity 0.6s;
       display: block;
     }
@@ -1072,12 +1072,11 @@
       }
 
       .hero-image-wrap {
-        padding: 24px;
         min-height: 0;
         aspect-ratio: 4 / 5;
       }
 
-      .hero-image-wrap img { max-height: 80vw; }
+      .hero-image-wrap img { object-position: center top; }
 
       .hero-detail {
         border-left: none;
