@@ -1002,8 +1002,19 @@
 
       .enquiry-panel { padding: 56px 24px; }
 
-      footer { padding: 40px 24px; }
-      .footer-right { justify-content: center; }
+      footer {
+        padding: 40px 24px 32px;
+        flex-direction: column;
+        gap: 28px;
+      }
+      .footer-admin {
+        position: static;
+        transform: none;
+      }
+      .footer-mark {
+        position: static;
+        transform: none;
+      }
     }
 
     @media (max-width: 560px) {
@@ -1027,7 +1038,7 @@
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="#works">Works</a></li>
       <li class="nav-link-hide"><a href="#about">About</a></li>
-      <li class="nav-link-hide">
+      <li>
         <div class="social-icons">
           <a href="https://instagram.com/waltviviers" target="_blank" aria-label="Instagram">
             <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
