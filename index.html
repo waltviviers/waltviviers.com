@@ -431,14 +431,26 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 2px;
       background-color: #0D0D0D;
+      position: relative;
+    }
+
+    .works-grid::before {
+      content: '';
+      position: absolute;
+      inset: 0;
       background-image: url('images/pattern.jpg');
       background-size: 300px auto;
+      filter: invert(1);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .work-thumb {
       background: var(--bg2);
       cursor: pointer;
       transition: background 0.15s;
+      position: relative;
+      z-index: 1;
     }
 
     .work-thumb:hover { background: #222120; }
@@ -850,6 +862,7 @@
     [data-theme="light"] .works-grid {
       background-color: #F5F3EF;
     }
+    [data-theme="light"] .works-grid::before { filter: none; }
     [data-theme="light"] .work-thumb         { background: #EDEAE5; }
     [data-theme="light"] .work-thumb:hover   { background: #E0DDD8; }
     [data-theme="light"] .work-thumb-img     { background: #DDD9D4; }
