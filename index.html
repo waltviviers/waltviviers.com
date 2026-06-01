@@ -953,6 +953,39 @@
 
     .ig-thumb:hover::after { background: rgba(0,0,0,0.2); }
 
+    /* ── Back to top ────────────────────────────── */
+    .back-to-top {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 150;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--rule);
+      background: var(--bg);
+      color: var(--stone);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, border-color 0.2s, color 0.2s;
+    }
+
+    .back-to-top.visible { opacity: 1; pointer-events: auto; }
+    .back-to-top:hover { border-color: var(--stone); color: var(--ink); }
+
+    .back-to-top svg {
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
     /* ── Responsive ──────────────────────────────── */
     @media (max-width: 1200px) {
       .works-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1304,6 +1337,19 @@
     })();
   </script>
 
+  <!-- Back to top -->
+  <script>
+    (function () {
+      const btn = document.getElementById('back-to-top');
+      window.addEventListener('scroll', function () {
+        btn.classList.toggle('visible', window.scrollY > 400);
+      }, { passive: true });
+      btn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    })();
+  </script>
+
   <!-- Nav shrink on scroll -->
   <script>
     (function () {
@@ -1597,6 +1643,11 @@
 
     })();
   </script>
+
+  <!-- Back to top -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
 
   <!-- Brush divider parallax -->
   <script>
