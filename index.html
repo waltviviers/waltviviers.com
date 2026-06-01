@@ -521,10 +521,14 @@
       padding: 40px 48px;
       border-top: 1px solid var(--rule);
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: 1fr auto auto;
       align-items: center;
       gap: 24px;
     }
+
+    .footer-mark { display: flex; align-items: flex-end; }
+    .footer-mark img { display: block; }
+    [data-theme="light"] .footer-mark img { filter: invert(1); }
 
     .footer-logo img {
       height: 28px;
@@ -601,23 +605,8 @@
 
     .fixed-admin:hover { color: var(--white); border-color: var(--stone); }
 
-    .fixed-mark {
-      position: fixed;
-      bottom: 0;
-      right: 0;
-      z-index: 150;
-      line-height: 0;
-    }
-
-    .fixed-mark img {
-      display: block;
-      height: 80px;
-      width: auto;
-    }
-
     [data-theme="light"] .fixed-admin { background: var(--bg); }
     [data-theme="light"] .fixed-admin:hover { color: #0C0C0B; border-color: #6B6560; }
-    [data-theme="light"] .fixed-mark img { filter: invert(1); }
 
     /* ── Theme toggle ────────────────────────────── */
     .theme-toggle {
@@ -1060,13 +1049,13 @@
       </div>
       <p class="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
     </div>
+    <div class="footer-mark">
+      <img src="images/width_150.webp" alt="" />
+    </div>
   </footer>
 
   <!-- Fixed edge elements -->
   <a href="https://waltvivierscms.vercel.app/admin/#/collections/artworks/entries/artworks" target="_blank" class="fixed-admin">Admin</a>
-  <div class="fixed-mark" id="fixed-mark">
-    <img src="images/width_150.webp" alt="" />
-  </div>
 
   <!-- Theme toggle -->
   <script>
