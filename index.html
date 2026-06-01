@@ -1373,8 +1373,18 @@
   <!-- Admin button -->
   <script>
     document.getElementById('admin-btn').addEventListener('click', function () {
-      window.open('https://waltvivierscms.vercel.app/admin/#/collections/artworks/entries/artworks', '_blank');
-      window.open('https://github.com/waltviviers/waltviviers.com/tree/main/images', '_blank');
+      [
+        'https://waltvivierscms.vercel.app/admin/#/collections/artworks/entries/artworks',
+        'https://github.com/waltviviers/waltviviers.com/tree/main/images'
+      ].forEach(function (url) {
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      });
     });
   </script>
 
