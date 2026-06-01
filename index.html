@@ -713,13 +713,7 @@
       color: #0C0C0B;
     }
 
-    [data-theme="light"] .brush-divider img {
-      filter: none;
-      mix-blend-mode: multiply;
-      opacity: 0.4;
-    }
-
-    [data-theme="light"] .available { background: #D4EDD5; color: #2D6B31; }
+[data-theme="light"] .available { background: #D4EDD5; color: #2D6B31; }
     [data-theme="light"] .sold      { background: #EDD4D4; color: #6B2D2D; }
     [data-theme="light"] .enquire   { background: #EDE8D4; color: #6B5F2D; }
 
@@ -770,20 +764,24 @@
     .brush-divider {
       width: 100%;
       overflow: hidden;
-      line-height: 0;
-      height: 200px;
+      height: 260px;
       background: var(--bg);
+      border-top: 1px solid var(--rule);
+      position: relative;
     }
 
     .brush-divider img {
       width: 100%;
-      height: 100%;
+      height: calc(100% + 100px);
       object-fit: cover;
-      object-position: left 15%;
+      object-position: left 50%;
       filter: invert(1);
-      mix-blend-mode: screen;
-      opacity: 0.55;
       display: block;
+      will-change: transform;
+    }
+
+    [data-theme="light"] .brush-divider img {
+      filter: none;
     }
 
     /* ── Responsive ──────────────────────────────── */
@@ -914,7 +912,7 @@
 
   <!-- Brush divider -->
   <div class="brush-divider" aria-hidden="true">
-    <img src="images/waltviviers%20banner.jpg" alt="" />
+    <img src="images/waltviviers%20banner.webp" alt="" />
   </div>
 
   <!-- About -->
@@ -1351,6 +1349,23 @@
         closeModal('gallery-modal');
       });
 
+    })();
+  </script>
+
+  <!-- Brush divider parallax -->
+  <script>
+    (function () {
+      const divider = document.querySelector('.brush-divider');
+      const img = divider && divider.querySelector('img');
+      if (!img) return;
+      img.style.marginTop = '-50px';
+      function update() {
+        const rect = divider.getBoundingClientRect();
+        const mid  = rect.top + rect.height / 2 - window.innerHeight / 2;
+        img.style.transform = 'translateY(' + (-mid * 0.25) + 'px)';
+      }
+      window.addEventListener('scroll', update, { passive: true });
+      update();
     })();
   </script>
 
