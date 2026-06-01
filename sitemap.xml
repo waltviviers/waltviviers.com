@@ -7,8 +7,48 @@
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://waltviviers.com/images/waltviviers%20banner.webp</image:loc>
-      <image:title>Walt Viviers — Fine Art</image:title>
+      <image:loc>https://waltviviers.com/images/walt-viviers-fine-art-banner.webp</image:loc>
+      <image:title>Walt Viviers — South African Fine Artist</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waltviviers.com/images/dragon-kitties-acrylic-canvas-walt-viviers-2025.webp</image:loc>
+      <image:title>Dragon Kitties — Acrylic on Canvas, 2025 — Walt Viviers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waltviviers.com/images/deadpool-acrylic-canvas-walt-viviers-2026.webp</image:loc>
+      <image:title>Deadpool — Acrylic on Canvas, 2026 — Walt Viviers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waltviviers.com/images/duckbill-acrylic-canvas-walt-viviers-2025.webp</image:loc>
+      <image:title>Duckbill — Acrylic on Canvas, 2025 — Walt Viviers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waltviviers.com/images/rat-acrylic-canvas-walt-viviers-2025.webp</image:loc>
+      <image:title>Rat — Acrylic on Canvas, 2025 — Walt Viviers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waltviviers.com/images/sabretooth-acrylic-canvas-walt-viviers-2025.webp</image:loc>
+      <image:title>Sabretooth — Acrylic on Canvas, 2025 — Walt Viviers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waltviviers.com/images/crow-acrylic-canvas-walt-viviers-2025.webp</image:loc>
+      <image:title>Crow — Acrylic on Canvas, 2025 — Walt Viviers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waltviviers.com/images/rex-acrylic-canvas-walt-viviers-2025.webp</image:loc>
+      <image:title>Rex — Acrylic on Canvas, 2025 — Walt Viviers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waltviviers.com/images/t-rex-acrylic-canvas-walt-viviers-2020.webp</image:loc>
+      <image:title>T-Rex — Acrylic on Canvas, 2020 — Walt Viviers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waltviviers.com/images/venom-cat-acrylic-canvas-walt-viviers-2019.webp</image:loc>
+      <image:title>Venom Cat — Acrylic on Canvas, 2019 — Walt Viviers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://waltviviers.com/images/zombie-vs-cat-ink-pencils-paper-walt-viviers-2017.webp</image:loc>
+      <image:title>Zombie vs Cat — Ink &amp; Pencils on Paper, 2017 — Walt Viviers</image:title>
     </image:image>
   </url>
 </urlset>

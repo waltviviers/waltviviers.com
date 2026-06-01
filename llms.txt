@@ -8,9 +8,20 @@ Walt Viviers is a South African fine artist whose practice explores the tension 
 
 Drawing on subjects that range from the iconic to the unexpected, Viviers bridges fine art and popular culture — rendered with energy, intention, and a distinctly South African perspective. Works are held in private collections internationally.
 
-## Works
+## Current Works
 
-Original paintings primarily in acrylic on canvas. Subjects include wildlife, portraiture, and character studies. Works are available for acquisition, subject to enquiry.
+| Title | Year | Medium | Status |
+|-------|------|--------|--------|
+| Dragon Kitties | 2025 | Acrylic on Canvas | Available |
+| Deadpool | 2026 | Acrylic on Canvas | Enquire |
+| Duckbill | 2025 | Acrylic on Canvas | Enquire |
+| Rat | 2025 | Acrylic on Canvas | Enquire |
+| Sabretooth | 2025 | Acrylic on Canvas | Available |
+| Crow | 2025 | Acrylic on Canvas | Available |
+| Rex | 2025 | Acrylic on Canvas | Available |
+| T-Rex | 2020 | Acrylic on Canvas | Available |
+| Venom Cat | 2019 | Acrylic on Canvas | Available |
+| Zombie vs Cat | 2017 | Ink & Pencils on Paper | Enquire |
 
 ## Commissions
 
@@ -30,5 +41,6 @@ Walt Viviers is open to gallery representation and exhibition proposals. Get in 
 ## Links
 
 - [Portfolio](https://waltviviers.com)
+- [Artworks JSON](https://waltviviers.com/data/artworks.json)
 - [Instagram](https://www.instagram.com/waltviviers)
 - [LinkedIn](https://www.linkedin.com/in/waltviviers)
