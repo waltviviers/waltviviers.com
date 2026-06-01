@@ -598,6 +598,38 @@
       cursor: pointer;
       padding: 0;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Scrolled: revert to simple icon */
+    nav.scrolled .theme-toggle {
+      width: auto;
+      height: auto;
+      border: none;
+      padding: 4px;
+    }
+
+    nav.scrolled .toggle-thumb {
+      position: static;
+      width: auto;
+      height: auto;
+      background: none;
+      border-radius: 0;
+      transform: none !important;
+    }
+
+    nav.scrolled .toggle-thumb .icon-moon,
+    nav.scrolled .toggle-thumb .icon-sun {
+      width: 17px;
+      height: 17px;
+      stroke: var(--stone);
+    }
+
+    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-moon,
+    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-sun {
+      stroke: var(--ink);
     }
 
     .toggle-thumb {
