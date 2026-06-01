@@ -1002,10 +1002,34 @@
     }
 
     @media (max-width: 900px) {
-      nav { padding: 0 24px; height: 100px; }
+      nav {
+        padding: 0 24px;
+        height: 50px;
+      }
+
+      .nav-logo img { height: 28px; }
+
+      .theme-toggle {
+        width: auto; height: auto; border: none; padding: 4px;
+      }
+
+      .toggle-thumb {
+        position: static; width: auto; height: auto;
+        background: none; border-radius: 0; transform: none !important;
+      }
+
+      .toggle-thumb .icon-moon,
+      .toggle-thumb .icon-sun {
+        width: 17px; height: 17px; stroke: var(--stone);
+      }
+
+      .theme-toggle:hover .toggle-thumb .icon-moon,
+      .theme-toggle:hover .toggle-thumb .icon-sun {
+        stroke: var(--ink);
+      }
 
       .hero {
-        padding-top: 100px;
+        padding-top: 50px;
         grid-template-columns: 1fr;
         min-height: auto;
       }
