@@ -174,7 +174,35 @@
     .lang-toggle {
       display: flex;
       align-items: center;
+      gap: 14px;
     }
+
+    .lang-group {
+      display: flex;
+      align-items: center;
+    }
+
+    .lang-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
+      font-family: var(--sans);
+      user-select: none;
+    }
+
+    .lang-group:has(.lang-btn.active) .lang-label { color: var(--ink); }
+
+    .lang-pipe {
+      font-size: 11px;
+      color: var(--rule);
+      padding: 0 4px;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .lang-group:has(.lang-btn.active) .lang-pipe { color: var(--stone); }
 
     .lang-btn {
       font-size: 11px;
@@ -193,14 +221,6 @@
 
     .lang-btn:hover  { color: var(--ink); }
     .lang-btn.active { color: var(--ink); }
-
-    .lang-sep {
-      color: var(--rule);
-      font-size: 11px;
-      line-height: 1;
-      user-select: none;
-      pointer-events: none;
-    }
 
     .nav-logo img {
       height: 36px;
@@ -739,11 +759,10 @@
 
     /* ── Theme toggle ────────────────────────────── */
     .theme-toggle {
-      position: relative;
-      width: 60px;
-      height: 32px;
-      border-radius: 16px;
-      border: 1.5px solid #4A4844;
+      width: 38px;
+      height: 24px;
+      border-radius: 99px;
+      border: 1px solid var(--rule);
       background: transparent;
       cursor: pointer;
       padding: 0;
@@ -753,60 +772,26 @@
       justify-content: center;
     }
 
-    /* Scrolled: revert to simple icon */
-    nav.scrolled .theme-toggle {
-      width: auto;
-      height: auto;
-      border: none;
-      padding: 4px;
-    }
-
-    nav.scrolled .toggle-thumb {
-      position: static;
-      width: auto;
-      height: auto;
-      background: none;
-      border-radius: 0;
-      transform: none !important;
-    }
-
-    nav.scrolled .toggle-thumb .icon-moon,
-    nav.scrolled .toggle-thumb .icon-sun {
-      width: 17px;
-      height: 17px;
-      stroke: var(--stone);
-    }
-
-    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-moon,
-    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-sun {
-      stroke: var(--ink);
-    }
-
     .toggle-thumb {
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--ink);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    [data-theme="light"] .toggle-thumb { transform: translateX(28px); }
 
     .toggle-thumb .icon-moon,
     .toggle-thumb .icon-sun {
-      width: 12px;
-      height: 12px;
+      width: 13px;
+      height: 13px;
       fill: none;
-      stroke: var(--bg);
+      stroke: var(--stone);
       stroke-width: 1.5;
       stroke-linecap: round;
       stroke-linejoin: round;
+    }
+
+    .theme-toggle:hover .toggle-thumb .icon-moon,
+    .theme-toggle:hover .toggle-thumb .icon-sun {
+      stroke: var(--ink);
     }
 
     .toggle-thumb .icon-moon { display: block; }
@@ -1046,26 +1031,9 @@
 
       .nav-logo img { height: 28px; }
 
-      .theme-toggle {
-        width: auto; height: auto; border: none; padding: 4px;
-      }
-
-      .toggle-thumb {
-        position: static; width: auto; height: auto;
-        background: none; border-radius: 0; transform: none !important;
-      }
-
-      .toggle-thumb .icon-moon,
-      .toggle-thumb .icon-sun {
-        width: 17px; height: 17px; stroke: var(--stone);
-      }
-
-      .theme-toggle:hover .toggle-thumb .icon-moon,
-      .theme-toggle:hover .toggle-thumb .icon-sun {
-        stroke: var(--ink);
-      }
-
       .nav-links { gap: 20px; }
+      .nav-link-hide { display: none; }
+      .lang-label, .lang-pipe { display: none; }
 
       .hero {
         padding-top: 50px;
@@ -1149,7 +1117,6 @@
 
     @media (max-width: 560px) {
       .works-grid { grid-template-columns: repeat(2, 1fr); }
-      .nav-links .nav-link-hide { display: none; }
     }
 
   </style>
@@ -1167,13 +1134,16 @@
         <img src="logo.svg" alt="Walt Viviers" />
       </a>
       <div class="lang-toggle" id="lang-toggle">
-        <button class="lang-btn active" data-lang="en">EN</button>
-        <span class="lang-sep">/</span>
-        <button class="lang-btn" data-lang="af">AF</button>
+        <div class="lang-group">
+          <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><button class="lang-btn active" data-lang="en">EN</button>
+        </div>
+        <div class="lang-group">
+          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><button class="lang-btn" data-lang="af">AF</button>
+        </div>
       </div>
     </div>
     <ul class="nav-links">
-      <li class="nav-link-hide"><a href="#works" data-i18n="nav-works">Works</a></li>
+      <li class="nav-link-hide"><a href="#works" data-i18n="nav-works">Artworks</a></li>
       <li class="nav-link-hide"><a href="#about" data-i18n="nav-about">About</a></li>
       <li>
         <div class="social-icons">
@@ -1188,6 +1158,7 @@
           </button>
         </div>
       </li>
+      <li class="nav-link-hide"><a href="#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
           <span class="toggle-thumb">
@@ -1196,7 +1167,6 @@
           </span>
         </button>
       </li>
-      <li><a href="#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
     </ul>
   </nav>
 
@@ -1228,7 +1198,7 @@
   <!-- Works Index -->
   <section id="works">
     <div class="section-head">
-      <h2 class="section-title" data-i18n="section-works">Selected Works</h2>
+      <h2 class="section-title" data-i18n="section-works">Selected Artworks</h2>
       <span class="section-count" id="works-count"></span>
     </div>
     <div class="works-grid" id="works-grid"></div>
@@ -1245,10 +1215,10 @@
       Created in South Africa<br/><em>Available to the World</em>
     </h2>
     <div class="about-body">
-      <p data-i18n="about-p1">Walt Viviers is a South African fine artist and lifelong creative working in acrylic and mixed media. A soul shaped by art, design, and technology, his practice explores the tension between the poetry and music of the artwork: images that read with clarity and confidence from a distance, yet reveal bold, expressive brushstrokes and the artist's unmistakable touch up close.</p>
-      <p data-i18n="about-p2">Drawing on subjects that range from the iconic to the unexpected, Walt bridges the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.</p>
-      <p data-i18n="about-p3">For Walt, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything he makes.</p>
-      <p data-i18n="about-p4">Works are held in private collections. Commissions and gallery enquiries are welcome.</p>
+      <p data-i18n="about-p1">I am a South African fine artist and lifelong creative working in acrylic and mixed media. A soul shaped by art, design, and technology, my practice explores the tension between the poetry and music of the artwork: images that read with clarity and confidence from a distance, yet reveal bold, expressive brushstrokes and my unmistakable touch up close.</p>
+      <p data-i18n="about-p2">Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.</p>
+      <p data-i18n="about-p3">For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.</p>
+      <p data-i18n="about-p4">My works are held in private collections. Commissions and gallery enquiries are welcome.</p>
     </div>
   </section>
 
@@ -1277,7 +1247,7 @@
     <div class="enquiry-panel" id="gallery-rep">
       <p class="enquiry-tag" data-i18n="gallery-tag">For galleries</p>
       <h2 class="enquiry-title" data-i18n-html="gallery-title-html">Gallery<br/>representation</h2>
-      <p class="enquiry-desc" data-i18n="gallery-desc">Interested in representing Walt or proposing an exhibition? Get in touch with a brief introduction and your programme.</p>
+      <p class="enquiry-desc" data-i18n="gallery-desc">Interested in representing me or proposing an exhibition? Get in touch with a brief introduction and your programme.</p>
       <button class="btn-primary" id="gallery-btn" data-i18n="gallery-btn">Get in touch</button>
     </div>
 
@@ -1448,20 +1418,20 @@
   (function () {
     var T = {
       en: {
-        'nav-works': 'Works', 'nav-about': 'About', 'nav-enquire': 'Enquire',
+        'nav-works': 'Artworks', 'nav-about': 'About', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
-        'section-works': 'Selected Works',
-        'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
-        'about-p1': 'Walt Viviers is a South African fine artist and lifelong creative working in acrylic and mixed media. A soul shaped by art, design, and technology, his practice explores the tension between the poetry and music of the artwork: images that read with clarity and confidence from a distance, yet reveal bold, expressive brushstrokes and the artist’s unmistakable touch up close.',
-        'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, Walt bridges the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
-        'about-p3': 'For Walt, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything he makes.',
-        'about-p4': 'Works are held in private collections. Commissions and gallery enquiries are welcome.',
+        ‘section-works’: ‘Selected Artworks’,
+        ‘about-title-html’: ‘Created in South Africa<br/><em>Available to the World</em>’,
+        ‘about-p1’: ‘I am a South African fine artist and lifelong creative working in acrylic and mixed media. A soul shaped by art, design, and technology, my practice explores the tension between the poetry and music of the artwork: images that read with clarity and confidence from a distance, yet reveal bold, expressive brushstrokes and my unmistakable touch up close.’,
+        ‘about-p2’: ‘Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.’,
+        ‘about-p3’: ‘For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.’,
+        ‘about-p4’: ‘My works are held in private collections. Commissions and gallery enquiries are welcome.’,
         'ig-follow': 'Follow on Instagram ↗',
         'commission-tag': 'For collectors', 'commission-title-html': 'Commission<br/>a new work',
         'commission-desc': 'Each commission begins with a conversation. Discussions cover scale, subject, palette, and context. Lead time is typically 8–16 weeks.',
         'commission-btn': 'Start a conversation',
         'gallery-tag': 'For galleries', 'gallery-title-html': 'Gallery<br/>representation',
-        'gallery-desc': 'Interested in representing Walt or proposing an exhibition? Get in touch with a brief introduction and your programme.',
+        'gallery-desc': 'Interested in representing me or proposing an exhibition? Get in touch with a brief introduction and your programme.',
         'gallery-btn': 'Get in touch',
         'modal-enquiry-tag': 'Enquiry', 'modal-enquiry-prefix': 'Enquire about',
         'modal-contact-tag': 'Get in touch', 'modal-contact-title-html': 'Send a<br/><em>message</em>', 'modal-contact-send': 'Send message',
@@ -1476,24 +1446,24 @@
         'form-placeholder-enquiry': 'I’m interested in this work…', 'form-placeholder-contact': 'What’s on your mind…',
         'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗',
         'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire',
-        'work-label': 'Work', 'works-suffix': 'works',
+        'work-label': 'Work', 'works-suffix': 'artworks',
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.'
       },
       af: {
-        'nav-works': 'Werke', 'nav-about': 'Oor', 'nav-enquire': 'Navraag',
+        'nav-works': 'Kunswerke', 'nav-about': 'Omheen', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
-        'section-works': 'Geselekteerde Werke',
-        'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
-        'about-p1': 'Walt Viviers is ‘n Suid-Afrikaanse kunstenaar en lewenslange kreatiewe gees wat in akriel en gemengde media werk. ‘n Siel gevorm deur kuns, ontwerp en tegnologie: sy werk verken die spanning tussen die poësie en musiek van die kunswerk. Beelde wat van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en die kunstenaar se onmiskenbare aanslag onthul.',
-        'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug Walt die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
-        'about-p3': 'Vir Walt is kunsmaak terapie: ‘n manier om jouself uit te druk om jouself te vind. Geloof, familie en kreatiwiteit lê aan die hart van alles wat hy maak.',
-        'about-p4': 'Werke word in privaat versamelings gehou. Opdragte en galery-navrae is welkom.',
+        ‘section-works’: ‘Geselekteerde Kunswerke’,
+        ‘about-title-html’: ‘Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>’,
+        ‘about-p1’: ‘Ek is ‘n Suid-Afrikaanse kunstenaar en lewenslange kreatiewe gees wat in akriel en gemengde media werk. ‘n Siel gevorm deur kuns, ontwerp en tegnologie: my werk verken die spanning tussen die poësie en musiek van die kunswerk. Beelde wat van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.’,
+        ‘about-p2’: ‘Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.’,
+        ‘about-p3’: ‘Vir my is kunsmaak terapie: ‘n manier om jouself uit te druk om jouself te vind. Geloof, familie en kreatiwiteit lê aan die hart van alles wat ek maak.’,
+        ‘about-p4’: ‘My werke word in privaat versamelings gehou. Opdragte en galery-navrae is welkom.’,
         'ig-follow': 'Volg op Instagram ↗',
         'commission-tag': 'Vir versamelaars', 'commission-title-html': 'Bestel<br/>‘n nuwe werk',
         'commission-desc': 'Elke opdrag begin met ‘n gesprek. Besprekings dek skaal, onderwerp, palet en konteks. Lewertyd is gewoonlik 8–16 weke.',
         'commission-btn': 'Begin ‘n gesprek',
         'gallery-tag': 'Vir galerye', 'gallery-title-html': 'Galery-<br/>verteenwoordiging',
-        'gallery-desc': 'Stel jy belang om Walt Viviers te verteenwoordig of ‘n uitstalling voor te stel? Kontak my met ‘n kort inleiding en jou program.',
+        ‘gallery-desc’: ‘Stel jy belang om my te verteenwoordig of ‘n uitstalling voor te stel? Kontak my met ‘n kort inleiding en jou program.’,
         'gallery-btn': 'Kontak my',
         'modal-enquiry-tag': 'Navraag', 'modal-enquiry-prefix': 'Doen navraag oor',
         'modal-contact-tag': 'Kontak my', 'modal-contact-title-html': 'Stuur ‘n<br/><em>boodskap</em>', 'modal-contact-send': 'Stuur boodskap',
@@ -1508,7 +1478,7 @@
         'form-placeholder-enquiry': 'Ek stel belang in hierdie werk…', 'form-placeholder-contact': 'Wat’s op jou hart…',
         'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗',
         'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag',
-        'work-label': 'Werk', 'works-suffix': 'werke',
+        'work-label': 'Werk', 'works-suffix': 'kunswerke',
         'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.'
       }
     };
