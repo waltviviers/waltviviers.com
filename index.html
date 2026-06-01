@@ -398,6 +398,93 @@
       margin-bottom: 40px;
     }
 
+    /* ── Enquiry Modal ───────────────────────────── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: #141412;
+      border: 1px solid var(--rule);
+      width: 100%;
+      max-width: 480px;
+      padding: 48px;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-size: 22px;
+      color: var(--stone);
+      cursor: pointer;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+
+    .modal-close:hover { color: var(--white); }
+
+    .modal-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 12px;
+    }
+
+    .modal-title {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 14px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--stone); }
+
+    .modal form .btn-primary { width: 100%; margin-top: 8px; }
+
     /* ── Footer ──────────────────────────────────── */
     footer {
       padding: 32px 48px;
@@ -580,7 +667,7 @@
         </div>
 
         <div class="hero-actions" style="margin-top: 32px;">
-          <a href="#commission" class="btn-primary">Inquire about this work</a>
+          <button class="btn-primary" id="inquire-btn">Inquire about this work</button>
           <a href="#gallery-rep" class="btn-secondary">Gallery representation</a>
         </div>
       </div>
@@ -648,6 +735,30 @@
       </a>
     </div>
 
+  </div>
+
+  <!-- Enquiry Modal -->
+  <div class="modal-backdrop" id="enquiry-modal" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
+      <p class="modal-tag">Enquiry</p>
+      <h2 class="modal-title" id="modal-title">Inquire about<br/><em id="modal-work-name"></em></h2>
+      <form id="enquiry-form">
+        <div class="form-group">
+          <label for="f-name">Name</label>
+          <input type="text" id="f-name" required placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label for="f-email">Email</label>
+          <input type="email" id="f-email" required placeholder="your@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="f-message">Message</label>
+          <textarea id="f-message" rows="4" placeholder="I'm interested in this work…"></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Send enquiry</button>
+      </form>
+    </div>
   </div>
 
   <!-- Footer -->
@@ -806,6 +917,44 @@
         })
         .catch(() => setHeroState('Could not load artworks'));
 
+    })();
+  </script>
+
+  <!-- Enquiry modal logic -->
+  <script>
+    (function () {
+      const modal    = document.getElementById('enquiry-modal');
+      const workName = document.getElementById('modal-work-name');
+      const form     = document.getElementById('enquiry-form');
+
+      function openModal() {
+        const title = document.getElementById('hero-title').textContent;
+        workName.textContent = title;
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeModal() {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+        form.reset();
+      }
+
+      document.getElementById('inquire-btn').addEventListener('click', openModal);
+      document.getElementById('modal-close').addEventListener('click', closeModal);
+      modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const name    = document.getElementById('f-name').value;
+        const email   = document.getElementById('f-email').value;
+        const message = document.getElementById('f-message').value;
+        const subject = encodeURIComponent('Enquiry: ' + workName.textContent);
+        const body    = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${message}`);
+        window.location.href = `mailto:walt.viviers@gmail.com?subject=${subject}&body=${body}`;
+        closeModal();
+      });
     })();
   </script>
 
