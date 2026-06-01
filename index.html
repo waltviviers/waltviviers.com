@@ -611,9 +611,9 @@
     /* ── Theme toggle ────────────────────────────── */
     .theme-toggle {
       position: relative;
-      width: 50px;
-      height: 26px;
-      border-radius: 13px;
+      width: 60px;
+      height: 32px;
+      border-radius: 16px;
       border: 1.5px solid #4A4844;
       background: transparent;
       cursor: pointer;
@@ -623,10 +623,10 @@
 
     .toggle-thumb {
       position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 18px;
-      height: 18px;
+      top: 4px;
+      left: 4px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
       background: var(--ink);
       display: flex;
@@ -635,12 +635,12 @@
       transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    [data-theme="light"] .toggle-thumb { transform: translateX(24px); }
+    [data-theme="light"] .toggle-thumb { transform: translateX(28px); }
 
     .toggle-thumb .icon-moon,
     .toggle-thumb .icon-sun {
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       fill: none;
       stroke: var(--bg);
       stroke-width: 1.5;
@@ -666,8 +666,7 @@
       background: rgba(245,243,239,0.95);
     }
 
-    [data-theme="light"] .nav-logo img,
-    [data-theme="light"] .footer-logo img { filter: invert(1); opacity: 0.6; }
+    [data-theme="light"] .nav-logo img { filter: invert(1); opacity: 1; }
 
     [data-theme="light"] .hero-image-wrap { background: #EDEAE5; }
     [data-theme="light"] .hero-detail     { background: #F5F3EF; }
@@ -1080,7 +1079,11 @@
       const html   = document.documentElement;
       const toggle = document.getElementById('theme-toggle');
       const saved  = localStorage.getItem('wv-theme');
-      if (saved) html.dataset.theme = saved;
+      if (saved) {
+        html.dataset.theme = saved;
+      } else {
+        html.dataset.theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      }
       toggle.addEventListener('click', function () {
         const next = html.dataset.theme === 'light' ? 'dark' : 'light';
         html.dataset.theme = next;
