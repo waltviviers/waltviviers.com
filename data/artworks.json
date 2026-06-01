@@ -1,3 +1,53 @@
 {
-  "artworks": []
+  "artworks": [
+    {
+      "available": "enquire",
+      "featured": false,
+      "medium": "Acrylic on Canvas",
+      "dimensions": "100cm x 100cm",
+      "year": "2025",
+      "image": "images/img_8794.jpg",
+      "title": "Dragon Kitties",
+      "instagram": "https://www.instagram.com/p/DSNWdKzDYrC/"
+    },
+    {
+      "available": "enquire",
+      "featured": false,
+      "dimensions": "100cm x 100cm",
+      "medium": "Acrylic on Canvas",
+      "image": "images/img_8793.jpg",
+      "title": "Venom Cat",
+      "year": "2019",
+      "instagram": "https://www.instagram.com/p/BvqxL0pBgg0/"
+    },
+    {
+      "available": "enquire",
+      "featured": true,
+      "title": "Rex",
+      "year": "2020",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "100cm x 100cm",
+      "image": "images/img_8788.jpg",
+      "instagram": "https://www.instagram.com/p/CHf2wkajhs6/"
+    },
+    {
+      "available": "enquire",
+      "featured": false,
+      "image": "images/img_8785.jpg",
+      "title": "Sabretooth",
+      "year": "2025",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "100cm x 100cm",
+      "instagram": "https://www.instagram.com/stories/highlights/18014195621699159/"
+    },
+    {
+      "available": "enquire",
+      "featured": false,
+      "dimensions": "100cm x 100cm",
+      "year": "Acrylic on Canvas",
+      "image": "images/img_8791.jpg",
+      "title": "Deadpool",
+      "medium": "Acrylic on Canvas"
+    }
+  ]
 }
