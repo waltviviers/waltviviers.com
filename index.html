@@ -180,47 +180,36 @@
     .lang-group {
       display: flex;
       align-items: center;
-    }
-
-    .lang-label {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--stone);
-      font-family: var(--sans);
-      user-select: none;
-    }
-
-    .lang-group:has(.lang-btn.active) .lang-label { color: var(--ink); }
-
-    .lang-pipe {
-      font-size: 11px;
-      color: var(--rule);
-      padding: 0 4px;
-      user-select: none;
-      pointer-events: none;
-    }
-
-    .lang-group:has(.lang-btn.active) .lang-pipe { color: var(--stone); }
-
-    .lang-btn {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--stone);
-      background: none;
-      border: none;
-      padding: 3px 5px;
       cursor: pointer;
+      user-select: none;
+    }
+
+    .lang-label,
+    .lang-code {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
       font-family: var(--sans);
       transition: color 0.2s;
       line-height: 1;
     }
 
-    .lang-btn:hover  { color: var(--ink); }
-    .lang-btn.active { color: var(--ink); }
+    .lang-pipe {
+      font-size: 11px;
+      color: var(--rule);
+      padding: 0 4px;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+
+    .lang-group.active .lang-label,
+    .lang-group.active .lang-code  { color: var(--ink); }
+    .lang-group.active .lang-pipe  { color: var(--stone); }
+
+    .lang-group:not(.active):hover .lang-label,
+    .lang-group:not(.active):hover .lang-code { color: var(--ink); }
 
     .nav-logo img {
       height: 36px;
@@ -1134,11 +1123,11 @@
         <img src="logo.svg" alt="Walt Viviers" />
       </a>
       <div class="lang-toggle" id="lang-toggle">
-        <div class="lang-group">
-          <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><button class="lang-btn active" data-lang="en">EN</button>
+        <div class="lang-group active" data-lang="en">
+          <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
         </div>
-        <div class="lang-group">
-          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><button class="lang-btn" data-lang="af">AF</button>
+        <div class="lang-group" data-lang="af">
+          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
         </div>
       </div>
     </div>
@@ -1498,8 +1487,8 @@
       document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
         el.placeholder = window._t(el.dataset.i18nPlaceholder);
       });
-      document.querySelectorAll('.lang-btn').forEach(function (btn) {
-        btn.classList.toggle('active', btn.dataset.lang === lang);
+      document.querySelectorAll('.lang-group[data-lang]').forEach(function (group) {
+        group.classList.toggle('active', group.dataset.lang === lang);
       });
       if (window._gallery && window._gallery.refresh) window._gallery.refresh();
     }
@@ -1507,9 +1496,9 @@
     apply();
 
     document.getElementById('lang-toggle').addEventListener('click', function (e) {
-      var btn = e.target.closest('.lang-btn');
-      if (!btn) return;
-      lang = btn.dataset.lang;
+      var group = e.target.closest('.lang-group[data-lang]');
+      if (!group) return;
+      lang = group.dataset.lang;
       localStorage.setItem('wv-lang', lang);
       apply();
     });
