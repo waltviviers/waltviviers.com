@@ -1096,10 +1096,15 @@
 
       .hero-image-wrap {
         min-height: 0;
-        aspect-ratio: 4 / 5;
+        aspect-ratio: unset;
       }
 
-      .hero-image-wrap img { object-position: center top; }
+      .hero-image-wrap img {
+        position: static;
+        width: 100%;
+        height: auto;
+        object-fit: initial;
+      }
 
       .hero-detail {
         border-left: none;
