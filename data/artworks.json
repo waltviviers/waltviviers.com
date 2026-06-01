@@ -20,13 +20,22 @@
       "medium": "Acrylic on Canvas"
     },
     {
-      "available": "available",
+      "available": "enquire",
       "featured": false,
-      "title": "Rex",
+      "title": "Duckbill",
       "year": "2025",
       "medium": "Acrylic on Canvas",
-      "image": "images/img_8804.jpg",
-      "instagram": "https://www.instagram.com/stories/highlights/17991499985793578/"
+      "image": "images/img_8799.jpg",
+      "instagram": "https://www.instagram.com/stories/highlights/18013867952702432/"
+    },
+    {
+      "available": "enquire",
+      "featured": false,
+      "title": "Rat",
+      "year": "2025",
+      "medium": "Acrylic on Canvas",
+      "image": "images/img_8802.jpg",
+      "instagram": "https://www.instagram.com/stories/highlights/18103422559977709/"
     },
     {
       "available": "available",
@@ -37,6 +46,24 @@
       "medium": "Acrylic on Canvas",
       "dimensions": "",
       "instagram": "https://www.instagram.com/stories/highlights/18014195621699159/"
+    },
+    {
+      "available": "available",
+      "featured": false,
+      "title": "Crow",
+      "year": "2025",
+      "medium": "Acrylic on Canvas",
+      "instagram": "https://www.instagram.com/stories/highlights/17862344784587481/",
+      "image": "images/img_8805.jpg"
+    },
+    {
+      "available": "available",
+      "featured": false,
+      "title": "Rex",
+      "year": "2025",
+      "medium": "Acrylic on Canvas",
+      "image": "images/img_8804.jpg",
+      "instagram": "https://www.instagram.com/stories/highlights/17991499985793578/"
     },
     {
       "available": "available",
@@ -57,6 +84,15 @@
       "title": "Venom Cat",
       "year": "2019",
       "instagram": "https://www.instagram.com/p/BvqxL0pBgg0/"
+    },
+    {
+      "available": "enquire",
+      "featured": false,
+      "title": "Zombie vs Cat",
+      "year": "2017",
+      "medium": "Ink & Pencils on Paper",
+      "instagram": "https://www.instagram.com/p/BRf7eU0h764/",
+      "image": "images/img_8807.jpg"
     }
   ]
 }
