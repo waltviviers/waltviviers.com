@@ -55,3 +55,8 @@ collections:
                 widget: string
                 required: false
                 hint: "e.g. https://www.instagram.com/p/ABC123/"
+              - name: article
+                label: "Article link (optional)"
+                widget: string
+                required: false
+                hint: "e.g. https://example.com/interviews/walt-viviers/"

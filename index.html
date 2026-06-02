@@ -136,7 +136,8 @@
   }
   </script>
 
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" /></noscript>
   <style>
 
     /* ── Skip nav ───────────────────────────────── */
@@ -1215,7 +1216,7 @@
   <nav>
     <div class="nav-left">
       <a href="#" class="nav-logo" aria-label="Home">
-        <img src="logo.svg" alt="Walt Viviers" />
+        <img src="logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
       <div class="lang-toggle" id="lang-toggle">
         <div class="lang-group active" data-lang="en">
@@ -1258,7 +1259,10 @@
   <main id="main">
     <section class="hero" id="hero">
     <div class="hero-image-wrap" id="hero-image">
-      <div class="placeholder">Add your image to images/work-01.jpg</div>
+      <img src="images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
+           alt="Walt Viviers, T-Rex, 2020, Acrylic on Canvas"
+           fetchpriority="high"
+           width="1600" height="1067" />
     </div>
     <div class="hero-detail">
       <div class="hero-work-info">
@@ -1291,7 +1295,7 @@
 
   <!-- Brush divider -->
   <div class="brush-divider" aria-hidden="true">
-    <img src="images/walt-viviers-fine-art-banner.webp" alt="Walt Viviers — South African fine artist, acrylic and mixed media" loading="lazy" />
+    <img src="images/walt-viviers-fine-art-banner.webp" alt="Walt Viviers — South African fine artist, acrylic and mixed media" loading="lazy" width="2360" height="590" />
   </div>
 
   <!-- About -->
@@ -1447,6 +1451,15 @@
         <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
           <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
         </a>
+        <a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+        </a>
+        <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" aria-label="Behance">
+          <svg viewBox="0 0 24 24"><path d="M3 4v16M3 4h5a3 3 0 0 1 0 6H3m0 0h5.5a3.5 3.5 0 0 1 0 7H3"/><line x1="14" y1="7" x2="20" y2="7"/><line x1="13.5" y1="13.5" x2="22" y2="13.5"/><path d="M21 12a3.5 3.5 0 1 0 0 3"/></svg>
+        </a>
+        <a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
         <a href="mailto:waltviviers.art@gmail.com" aria-label="Email">
           <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
         </a>
@@ -1454,7 +1467,7 @@
       <p class="footer-copy" data-i18n="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
     </div>
     <div class="footer-mark">
-      <img src="images/walt-viviers-mark.webp" alt="Walt Viviers" />
+      <img src="images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
     </div>
   </footer>
 
@@ -1531,7 +1544,7 @@
         'form-send-enquiry': 'Send enquiry',
         'form-placeholder-name': 'Your name', 'form-placeholder-email': 'your@email.com',
         'form-placeholder-enquiry': 'I’m interested in this work…', 'form-placeholder-contact': 'What’s on your mind…',
-        'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗',
+        'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗', 'meta-article': 'Article', 'meta-read-article': 'Read article ↗',
         'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire',
         'work-label': 'Work', 'works-suffix': 'artworks',
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.'
@@ -1563,7 +1576,7 @@
         'form-send-enquiry': 'Stuur navraag',
         'form-placeholder-name': 'Jou naam', 'form-placeholder-email': 'jou@epos.com',
         'form-placeholder-enquiry': 'Ek stel belang in hierdie werk…', 'form-placeholder-contact': 'Wat’s op jou hart…',
-        'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗',
+        'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗',
         'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag',
         'work-label': 'Werk', 'works-suffix': 'kunswerke',
         'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.'
@@ -1625,11 +1638,16 @@
         const imgWrap  = document.getElementById('hero-image');
         const existing = imgWrap.querySelector('img');
 
+        const newAlt = `Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}`;
         if (existing) {
-          existing.style.opacity = '0';
-          setTimeout(() => { existing.src = w.image; existing.alt = w.title; existing.style.opacity = '1'; }, 150);
+          if (existing.src.endsWith(w.image)) {
+            existing.alt = newAlt;
+          } else {
+            existing.style.opacity = '0';
+            setTimeout(() => { existing.src = w.image; existing.alt = newAlt; existing.style.opacity = '1'; }, 150);
+          }
         } else {
-          imgWrap.innerHTML = `<img src="${w.image}" alt="Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}" fetchpriority="high" />`;
+          imgWrap.innerHTML = `<img src="${w.image}" alt="${newAlt}" fetchpriority="high" />`;
         }
 
         var _t = window._t || function(k){return k;};
@@ -1642,7 +1660,8 @@
           (w.medium     ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-medium')     + '</span><span class="work-meta-value">' + w.medium     + '</span></div>' : '') +
           (w.dimensions ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-dimensions') + '</span><span class="work-meta-value">' + w.dimensions + '</span></div>' : '') +
           '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-status') + '</span><span class="work-meta-value">' + availLabel(w) + '</span></div>' +
-          (w.permalink  ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-instagram') + '</span><span class="work-meta-value"><a href="' + w.permalink + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-post') + '</a></span></div>' : '');
+          (w.permalink  ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-instagram') + '</span><span class="work-meta-value"><a href="' + w.permalink + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-post') + '</a></span></div>' : '') +
+          (w.article    ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-article')   + '</span><span class="work-meta-value"><a href="' + w.article  + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-read-article') + '</a></span></div>' : '');
 
         document.querySelectorAll('.gn-dot').forEach((d, i) =>
           d.classList.toggle('active', i === index));
@@ -1761,6 +1780,7 @@
                       : null,
             featured:   w.featured   || false,
             permalink:  w.instagram  || '',
+            article:    w.article    || '',
           }));
 
           if (!works.length) { setHeroState('No artworks yet — add some in the CMS'); return; }
