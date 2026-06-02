@@ -4,28 +4,36 @@
 
 ## About
 
-Walt Viviers is a South African fine artist whose practice explores the tension between bold visual impact and expressive painterly process. Works read with clarity and confidence from a distance, yet reveal dynamic brushstrokes and an unmistakable personal touch up close.
+Walt Viviers is a South African fine artist and lifelong creative whose practice explores the tension between bold visual impact and expressive painterly process. Works read with clarity and confidence from a distance, yet reveal dynamic brushstrokes and an unmistakable personal touch up close.
 
 Drawing on subjects that range from the iconic to the unexpected, Viviers bridges fine art and popular culture — rendered with energy, intention, and a distinctly South African perspective. Works are held in private collections internationally.
 
+Faith, family, and creativity sit at the core of everything he makes. Making art is therapy: a way of expressing yourself to find yourself.
+
 ## Current Works
 
-| Title | Year | Medium | Status |
-|-------|------|--------|--------|
-| Dragon Kitties | 2025 | Acrylic on Canvas | Available |
-| Deadpool | 2026 | Acrylic on Canvas | Enquire |
-| Duckbill | 2025 | Acrylic on Canvas | Enquire |
-| Rat | 2025 | Acrylic on Canvas | Enquire |
-| Sabretooth | 2025 | Acrylic on Canvas | Available |
-| Crow | 2025 | Acrylic on Canvas | Available |
-| Rex | 2025 | Acrylic on Canvas | Available |
-| T-Rex | 2020 | Acrylic on Canvas | Available |
-| Venom Cat | 2019 | Acrylic on Canvas | Available |
-| Zombie vs Cat | 2017 | Ink & Pencils on Paper | Enquire |
+| Title | Year | Medium | Dimensions | Status |
+|-------|------|--------|------------|--------|
+| Dragon Kitties | 2025 | Acrylic on Canvas | 15 × 15 cm | Available |
+| Deadpool | 2026 | Acrylic on Canvas | 20 × 20 cm | Enquire |
+| Duckbill | 2025 | Acrylic on Canvas | 61 × 46 cm | Enquire |
+| Rat | 2025 | Acrylic on Canvas | 51 × 40 cm | Enquire |
+| Sabretooth | 2025 | Acrylic on Canvas | — | Available |
+| Crow | 2025 | Acrylic on Canvas | 30 × 24 cm | Available |
+| Rex | 2025 | Acrylic on Canvas | 40 × 40 cm | Available |
+| T-Rex | 2020 | Acrylic on Canvas | 78 × 38 cm | Available |
+| Venom Cat | 2019 | Acrylic on Canvas | 20 × 20 cm | Available |
+| Apocalypse Meow! | 2017 | Ink & Pencils on Paper | 26 × 21 cm (framed) | Enquire |
+
+Full machine-readable artwork data: https://waltviviers.com/data/artworks.json
+
+## Press
+
+- [Walt Viviers — Local Illustrator (Pixelsmith Studios, 2014)](https://pixelsmithstudios.com/interviews/walt-viviers-local-illustrator/)
 
 ## Commissions
 
-Custom commissions are available. Each commission begins with a conversation covering scale, subject, palette, and placement. Lead time is typically 8–16 weeks.
+Custom commissions are available. Each commission begins with a conversation covering scale, subject, palette, and placement. Lead time is typically 8–16 weeks. Worldwide shipping available.
 
 ## Gallery Representation
 
@@ -35,12 +43,18 @@ Walt Viviers is open to gallery representation and exhibition proposals. Get in 
 
 - Email: waltviviers.art@gmail.com
 - Website: https://waltviviers.com
+
+## Social Profiles
+
 - Instagram: https://www.instagram.com/waltviviers
 - LinkedIn: https://www.linkedin.com/in/waltviviers
+- Dribbble: https://dribbble.com/waltviviers
+- Behance: https://www.behance.net/waltviviers
+- GitHub: https://github.com/waltviviers
 
 ## Links
 
 - [Portfolio](https://waltviviers.com)
 - [Artworks JSON](https://waltviviers.com/data/artworks.json)
-- [Instagram](https://www.instagram.com/waltviviers)
-- [LinkedIn](https://www.linkedin.com/in/waltviviers)
+- [Full LLM Reference](https://waltviviers.com/llms-full.txt)
+- [Sitemap](https://waltviviers.com/sitemap.xml)

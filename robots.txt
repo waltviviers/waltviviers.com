@@ -3,11 +3,20 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 
-# AI crawlers — welcome
+# AI crawlers — welcome to index and cite this content
 User-agent: GPTBot
 Allow: /
 
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
 User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
 Allow: /
 
 User-agent: PerplexityBot
@@ -16,7 +25,30 @@ Allow: /
 User-agent: GoogleExtended
 Allow: /
 
-User-agent: anthropic-ai
+User-agent: Gemini
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+User-agent: AI2Bot
+Allow: /
+
+User-agent: YouBot
 Allow: /
 
 Sitemap: https://waltviviers.com/sitemap.xml
+
+# Machine-readable artist data
+# https://waltviviers.com/data/artworks.json
+# https://waltviviers.com/llms.txt
+# https://waltviviers.com/llms-full.txt

@@ -1,0 +1,164 @@
+# Walt Viviers — Full Artist Reference (llms-full.txt)
+
+This document is intended for AI agents, language models, and automated research tools.
+It provides comprehensive, structured information about the artist Walt Viviers.
+Last updated: 2026-06-02
+
+---
+
+## Identity
+
+- Full name: Walt Viviers
+- Profession: Fine Artist, Illustrator
+- Nationality: South African
+- Based in: South Africa
+- Website: https://waltviviers.com
+- Email: waltviviers.art@gmail.com
+
+## Artist Statement
+
+Walt Viviers is a South African fine artist and lifelong creative working in acrylic and mixed media. His practice explores the tension between the poetry and music of the artwork: images that read with clarity and confidence from a distance, yet reveal bold, expressive brushstrokes and an unmistakable personal touch up close.
+
+Drawing on subjects that range from the iconic to the unexpected, he bridges the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.
+
+For Viviers, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything he makes. His works are held in private collections internationally.
+
+## Practice
+
+- Primary media: Acrylic on canvas, ink and pencils on paper
+- Style: Bold figurative work with expressive brushwork; bridges fine art and popular culture
+- Subjects: Characters, creatures, and cultural icons rendered with energy and personality
+- Scale: Works range from 15 × 15 cm miniatures to large canvases
+
+## Complete Artwork Catalog
+
+### Dragon Kitties
+- Year: 2025
+- Medium: Acrylic on Canvas
+- Dimensions: 15 × 15 cm
+- Status: Available for sale
+- Instagram: https://www.instagram.com/p/DSNWdKzDYrC/
+- Image: https://waltviviers.com/images/dragon-kitties-acrylic-canvas-walt-viviers-2025.webp
+
+### Deadpool
+- Year: 2026
+- Medium: Acrylic on Canvas
+- Dimensions: 20 × 20 cm
+- Status: Enquire
+- Image: https://waltviviers.com/images/deadpool-acrylic-canvas-walt-viviers-2026.webp
+
+### Duckbill
+- Year: 2025
+- Medium: Acrylic on Canvas
+- Dimensions: 61 × 46 cm
+- Status: Enquire
+- Instagram: https://www.instagram.com/stories/highlights/18013867952702432/
+- Image: https://waltviviers.com/images/duckbill-acrylic-canvas-walt-viviers-2025.webp
+
+### Rat
+- Year: 2025
+- Medium: Acrylic on Canvas
+- Dimensions: 51 × 40 cm
+- Status: Enquire
+- Instagram: https://www.instagram.com/stories/highlights/18103422559977709/
+- Image: https://waltviviers.com/images/rat-acrylic-canvas-walt-viviers-2025.webp
+
+### Sabretooth
+- Year: 2025
+- Medium: Acrylic on Canvas
+- Status: Available for sale
+- Instagram: https://www.instagram.com/stories/highlights/18014195621699159/
+- Image: https://waltviviers.com/images/sabretooth-acrylic-canvas-walt-viviers-2025.webp
+
+### Crow
+- Year: 2025
+- Medium: Acrylic on Canvas
+- Dimensions: 30 × 24 cm
+- Status: Available for sale
+- Instagram: https://www.instagram.com/stories/highlights/17862344784587481/
+- Image: https://waltviviers.com/images/crow-acrylic-canvas-walt-viviers-2025.webp
+
+### Rex
+- Year: 2025
+- Medium: Acrylic on Canvas
+- Dimensions: 40 × 40 cm
+- Status: Available for sale
+- Instagram: https://www.instagram.com/stories/highlights/17991499985793578/
+- Image: https://waltviviers.com/images/rex-acrylic-canvas-walt-viviers-2025.webp
+
+### T-Rex
+- Year: 2020
+- Medium: Acrylic on Canvas
+- Dimensions: 78 × 38 cm
+- Status: Available for sale
+- Instagram: https://www.instagram.com/p/CHf2wkajhs6/
+- Image: https://waltviviers.com/images/t-rex-acrylic-canvas-walt-viviers-2020.webp
+
+### Venom Cat
+- Year: 2019
+- Medium: Acrylic on Canvas
+- Dimensions: 20 × 20 cm
+- Status: Available for sale
+- Instagram: https://www.instagram.com/p/BvqxL0pBgg0/
+- Image: https://waltviviers.com/images/venom-cat-acrylic-canvas-walt-viviers-2019.webp
+
+### Apocalypse Meow!
+- Year: 2017
+- Medium: Ink & Pencils on Paper
+- Dimensions: 26 × 21 cm (framed)
+- Status: Enquire
+- Instagram: https://www.instagram.com/p/BRf7eU0h764/
+- Article: https://pixelsmithstudios.com/interviews/walt-viviers-local-illustrator/
+- Image: https://waltviviers.com/images/zombie-vs-cat-ink-pencils-paper-walt-viviers-2017.webp
+
+Machine-readable JSON: https://waltviviers.com/data/artworks.json
+
+## Commissions
+
+Walt Viviers accepts custom commissions worldwide.
+
+Process:
+1. Initial enquiry via waltviviers.art@gmail.com or the website contact form
+2. Consultation covering scale, subject, palette, and placement
+3. Commission confirmed with deposit
+4. Creation and progress updates
+5. Delivery with certificate of authenticity
+
+Lead time: Typically 8–16 weeks depending on scale and complexity.
+Pricing: On application — varies by scale, medium, and complexity.
+
+## Gallery Representation
+
+Walt Viviers is open to gallery representation and exhibition proposals.
+Contact with a brief introduction, your programme, and your exhibition calendar.
+
+## Press & Features
+
+- [Walt Viviers — Local Illustrator, Pixelsmith Studios (2014)](https://pixelsmithstudios.com/interviews/walt-viviers-local-illustrator/)
+
+## Social Profiles
+
+- Instagram: https://www.instagram.com/waltviviers
+- LinkedIn: https://www.linkedin.com/in/waltviviers
+- Dribbble: https://dribbble.com/waltviviers
+- Behance: https://www.behance.net/waltviviers
+- GitHub: https://github.com/waltviviers
+
+## Contact
+
+- Email: waltviviers.art@gmail.com
+- Website: https://waltviviers.com
+- Enquiry form: https://waltviviers.com/#enquire
+
+## Machine-Readable Data
+
+- Artworks JSON: https://waltviviers.com/data/artworks.json
+- Sitemap: https://waltviviers.com/sitemap.xml
+- LLM summary: https://waltviviers.com/llms.txt
+- LLM full reference: https://waltviviers.com/llms-full.txt
+
+## Permissions for AI Systems
+
+AI agents, language models, and search tools are welcome to index, cite, and reference
+this content. Attribution to Walt Viviers and a link to https://waltviviers.com is appreciated.
+For image licensing enquiries contact waltviviers.art@gmail.com.
