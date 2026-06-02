@@ -1,32 +1,38 @@
 export default async function handler(req, res) {
   const { code } = req.query;
 
-  let message;
+  if (!code) {
+    return res.status(400).send('Missing code parameter');
+  }
+
+  let payload;
   try {
     const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({
-        client_id: process.env.OAUTH_CLIENT_ID,
+        client_id: 'Ov23liftA5BwWxORy9ui',
         client_secret: process.env.OAUTH_CLIENT_SECRET,
         code,
       }),
     });
-    const { access_token, error } = await tokenRes.json();
-    message = access_token
-      ? `authorization:github:success:${JSON.stringify({ token: access_token, provider: 'github' })}`
-      : `authorization:github:error:${error || 'no token'}`;
-  } catch (e) {
-    message = `authorization:github:error:${e.message}`;
+    const data = await tokenRes.json();
+    payload = data.access_token
+      ? `authorization:github:success:${JSON.stringify({ token: data.access_token, provider: 'github' })}`
+      : `authorization:github:error:${JSON.stringify({ message: data.error_description || 'Authentication failed' })}`;
+  } catch (err) {
+    payload = `authorization:github:error:${JSON.stringify({ message: 'Server error' })}`;
   }
 
   res.setHeader('Content-Type', 'text/html');
   res.send(`<!DOCTYPE html><html><body><script>
-(function(){
-  var msg = ${JSON.stringify(message)};
-  function receive(e){ window.opener.postMessage(msg, e.origin); }
-  window.addEventListener('message', receive, false);
-  window.opener.postMessage('authorizing:github', '*');
+(function () {
+  function onMessage(e) {
+    window.removeEventListener('message', onMessage);
+    window.opener.postMessage(${JSON.stringify(payload)}, e.origin);
+  }
+  window.addEventListener('message', onMessage);
+  window.opener && window.opener.postMessage('authorizing:github', '*');
 })();
 </script></body></html>`);
 }
