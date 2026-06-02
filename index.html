@@ -1936,18 +1936,7 @@
   <!-- Admin button -->
   <script>
     document.getElementById('admin-btn').addEventListener('click', function () {
-      [
-        'https://waltvivierscms.vercel.app/admin/#/collections/artworks/entries/artworks',
-        'https://github.com/waltviviers/waltviviers.com/tree/main/images'
-      ].forEach(function (url) {
-        const a = document.createElement('a');
-        a.href = url;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      });
+      window.open('https://waltviviers.com/admin', '_blank', 'noopener,noreferrer');
     });
   </script>
 
