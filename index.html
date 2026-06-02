@@ -222,12 +222,22 @@
       line-height: 1;
     }
 
+    .lang-label {
+      max-width: 80px;
+      overflow: hidden;
+      white-space: nowrap;
+      transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
+    }
+
     .lang-pipe {
       font-size: 11px;
       color: var(--rule);
       padding: 0 4px;
       pointer-events: none;
-      transition: color 0.2s;
+      max-width: 20px;
+      overflow: hidden;
+      white-space: nowrap;
+      transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
     }
 
     .lang-group.active .lang-label,
@@ -804,7 +814,7 @@
     }
 
     nav.scrolled .lang-label,
-    nav.scrolled .lang-pipe { display: none; }
+    nav.scrolled .lang-pipe { max-width: 0; opacity: 0; padding: 0; }
 
     nav.scrolled .theme-toggle {
       width: auto;
@@ -1256,7 +1266,7 @@
   </nav>
 
   <!-- Hero: Featured Work -->
-  <main id="main">
+  <main id="main" role="main">
     <section class="hero" id="hero">
     <div class="hero-image-wrap" id="hero-image">
       <img src="images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
@@ -1343,11 +1353,11 @@
   </div>
 
   <!-- Enquiry Modal -->
-  <div class="modal-backdrop" id="enquiry-modal" role="dialog" aria-modal="true">
+  <div class="modal-backdrop" id="enquiry-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="enquiry-modal-title">
     <div class="modal">
       <button class="modal-close" id="modal-close" aria-label="Close">&times;</button>
       <p class="modal-tag" data-i18n="modal-enquiry-tag">Enquiry</p>
-      <h2 class="modal-title" id="modal-title"><span data-i18n="modal-enquiry-prefix">Enquire about</span><br/><em id="modal-work-name"></em></h2>
+      <h2 class="modal-title" id="enquiry-modal-title"><span data-i18n="modal-enquiry-prefix">Enquire about</span><br/><em id="modal-work-name"></em></h2>
       <form id="enquiry-form">
         <div class="form-group">
           <label for="f-name" data-i18n="form-name">Name</label>
@@ -1367,11 +1377,11 @@
   </div>
 
   <!-- Contact Modal -->
-  <div class="modal-backdrop" id="contact-modal" role="dialog" aria-modal="true">
+  <div class="modal-backdrop" id="contact-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="contact-modal-title">
     <div class="modal">
       <button class="modal-close" data-modal="contact-modal" aria-label="Close">&times;</button>
       <p class="modal-tag" data-i18n="modal-contact-tag">Get in touch</p>
-      <h2 class="modal-title" data-i18n-html="modal-contact-title-html">Send a<br/><em>message</em></h2>
+      <h2 class="modal-title" id="contact-modal-title" data-i18n-html="modal-contact-title-html">Send a<br/><em>message</em></h2>
       <form id="contact-form">
         <div class="form-group">
           <label for="ct-name" data-i18n="form-name">Name</label>
@@ -1391,11 +1401,11 @@
   </div>
 
   <!-- Commission Modal -->
-  <div class="modal-backdrop" id="commission-modal" role="dialog" aria-modal="true">
+  <div class="modal-backdrop" id="commission-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="commission-modal-title">
     <div class="modal">
       <button class="modal-close" data-modal="commission-modal" aria-label="Close">&times;</button>
       <p class="modal-tag" data-i18n="modal-commission-tag">For collectors</p>
-      <h2 class="modal-title" data-i18n-html="modal-commission-title-html">Commission<br/><em>a new work</em></h2>
+      <h2 class="modal-title" id="commission-modal-title" data-i18n-html="modal-commission-title-html">Commission<br/><em>a new work</em></h2>
       <form id="commission-form">
         <div class="form-group">
           <label for="c-name" data-i18n="form-name">Name</label>
@@ -1415,11 +1425,11 @@
   </div>
 
   <!-- Gallery Modal -->
-  <div class="modal-backdrop" id="gallery-modal" role="dialog" aria-modal="true">
+  <div class="modal-backdrop" id="gallery-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="gallery-modal-title">
     <div class="modal">
       <button class="modal-close" data-modal="gallery-modal" aria-label="Close">&times;</button>
       <p class="modal-tag" data-i18n="modal-gallery-tag">For galleries</p>
-      <h2 class="modal-title" data-i18n-html="modal-gallery-title-html">Gallery<br/><em>representation</em></h2>
+      <h2 class="modal-title" id="gallery-modal-title" data-i18n-html="modal-gallery-title-html">Gallery<br/><em>representation</em></h2>
       <form id="gallery-form">
         <div class="form-group">
           <label for="g-name" data-i18n="modal-gallery-label-name">Name &amp; gallery</label>
@@ -1810,13 +1820,16 @@
   <script>
     (function () {
       function openModal(id) {
-        document.getElementById(id).classList.add('open');
+        const m = document.getElementById(id);
+        m.classList.add('open');
+        m.removeAttribute('aria-hidden');
         document.body.style.overflow = 'hidden';
       }
 
       function closeModal(id) {
         const m = document.getElementById(id);
         m.classList.remove('open');
+        m.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
         m.querySelectorAll('form').forEach(f => f.reset());
       }
@@ -1824,6 +1837,7 @@
       function closeAll() {
         document.querySelectorAll('.modal-backdrop.open').forEach(m => {
           m.classList.remove('open');
+          m.setAttribute('aria-hidden', 'true');
         });
         document.body.style.overflow = '';
       }
