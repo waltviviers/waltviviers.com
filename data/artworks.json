@@ -1,6 +1,16 @@
 {
   "artworks": [
     {
+      "available": "enquire",
+      "featured": false,
+      "medium": "Acrylic on Canvas",
+      "dimensions": "",
+      "year": "2014",
+      "image": "",
+      "title": "Apocalypse Meow!",
+      "article": "https://pixelsmithstudios.com/interviews/walt-viviers-local-illustrator/"
+    },
+    {
       "available": "available",
       "featured": false,
       "medium": "Acrylic on Canvas",
