@@ -1201,11 +1201,10 @@
       .footer-admin {
         position: static;
         transform: none;
+        order: 1;
       }
-      .footer-mark {
-        position: static;
-        transform: none;
-      }
+      .footer-social { order: 0; }
+      .footer-mark { position: static; transform: none; order: 2; }
     }
 
     @media (max-width: 560px) {
