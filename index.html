@@ -136,7 +136,8 @@
   }
   </script>
 
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" /></noscript>
   <style>
 
     /* ── Skip nav ───────────────────────────────── */
@@ -1215,7 +1216,7 @@
   <nav>
     <div class="nav-left">
       <a href="#" class="nav-logo" aria-label="Home">
-        <img src="logo.svg" alt="Walt Viviers" />
+        <img src="logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
       <div class="lang-toggle" id="lang-toggle">
         <div class="lang-group active" data-lang="en">
@@ -1258,7 +1259,10 @@
   <main id="main">
     <section class="hero" id="hero">
     <div class="hero-image-wrap" id="hero-image">
-      <div class="placeholder">Add your image to images/work-01.jpg</div>
+      <img src="images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
+           alt="Walt Viviers, T-Rex, 2020, Acrylic on Canvas"
+           fetchpriority="high"
+           width="1600" height="1067" />
     </div>
     <div class="hero-detail">
       <div class="hero-work-info">
@@ -1291,7 +1295,7 @@
 
   <!-- Brush divider -->
   <div class="brush-divider" aria-hidden="true">
-    <img src="images/walt-viviers-fine-art-banner.webp" alt="Walt Viviers — South African fine artist, acrylic and mixed media" loading="lazy" />
+    <img src="images/walt-viviers-fine-art-banner.webp" alt="Walt Viviers — South African fine artist, acrylic and mixed media" loading="lazy" width="2360" height="590" />
   </div>
 
   <!-- About -->
@@ -1454,7 +1458,7 @@
       <p class="footer-copy" data-i18n="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
     </div>
     <div class="footer-mark">
-      <img src="images/walt-viviers-mark.webp" alt="Walt Viviers" />
+      <img src="images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
     </div>
   </footer>
 
@@ -1625,11 +1629,16 @@
         const imgWrap  = document.getElementById('hero-image');
         const existing = imgWrap.querySelector('img');
 
+        const newAlt = `Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}`;
         if (existing) {
-          existing.style.opacity = '0';
-          setTimeout(() => { existing.src = w.image; existing.alt = w.title; existing.style.opacity = '1'; }, 150);
+          if (existing.src.endsWith(w.image)) {
+            existing.alt = newAlt;
+          } else {
+            existing.style.opacity = '0';
+            setTimeout(() => { existing.src = w.image; existing.alt = newAlt; existing.style.opacity = '1'; }, 150);
+          }
         } else {
-          imgWrap.innerHTML = `<img src="${w.image}" alt="Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}" fetchpriority="high" />`;
+          imgWrap.innerHTML = `<img src="${w.image}" alt="${newAlt}" fetchpriority="high" />`;
         }
 
         var _t = window._t || function(k){return k;};
