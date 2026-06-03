@@ -1921,7 +1921,11 @@
         m.classList.remove('open');
         m.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
-        m.querySelectorAll('form').forEach(f => { f.reset(); f.hidden = false; });
+        m.querySelectorAll('form').forEach(f => {
+          f.reset(); f.hidden = false;
+          const btn = f.querySelector('[type="submit"]');
+          if (btn) { btn.disabled = false; btn.textContent = btn.dataset.origText || btn.textContent; }
+        });
         m.querySelectorAll('.form-success').forEach(s => { s.hidden = true; });
         m.querySelectorAll('.form-error').forEach(e => { e.hidden = true; e.textContent = ''; });
       }
@@ -1930,7 +1934,11 @@
         document.querySelectorAll('.modal-backdrop.open').forEach(m => {
           m.classList.remove('open');
           m.setAttribute('aria-hidden', 'true');
-          m.querySelectorAll('form').forEach(f => { f.reset(); f.hidden = false; });
+          m.querySelectorAll('form').forEach(f => {
+            f.reset(); f.hidden = false;
+            const btn = f.querySelector('[type="submit"]');
+            if (btn) { btn.disabled = false; btn.textContent = btn.dataset.origText || btn.textContent; }
+          });
           m.querySelectorAll('.form-success').forEach(s => { s.hidden = true; });
           m.querySelectorAll('.form-error').forEach(e => { e.hidden = true; e.textContent = ''; });
         });
@@ -1955,12 +1963,13 @@
 
       // ── Shared Formspree submit handler ──
       function wireForm(formId, modalId) {
-        document.getElementById(formId).addEventListener('submit', async function (e) {
+        var form = document.getElementById(formId);
+        var btn = form.querySelector('[type="submit"]');
+        btn.dataset.origText = btn.textContent; // stash for reset
+        form.addEventListener('submit', async function (e) {
           e.preventDefault();
-          var form = e.target;
-          var btn = form.querySelector('[type="submit"]');
           var errEl = form.querySelector('.form-error');
-          var origText = btn.textContent;
+          var origText = btn.dataset.origText;
           btn.disabled = true;
           btn.textContent = '…';
           errEl.hidden = true;
@@ -2026,10 +2035,14 @@
       window.closeAll  = closeAll;
 
       // Item 9: #enquire hash → open contact modal (email signature link)
-      if (location.hash === '#enquire') {
-        openModal('contact-modal');
-        history.replaceState(null, '', location.pathname);
+      function checkEnquireHash() {
+        if (location.hash === '#enquire') {
+          openModal('contact-modal');
+          history.replaceState(null, '', location.pathname);
+        }
       }
+      checkEnquireHash();
+      window.addEventListener('hashchange', checkEnquireHash);
 
     })();
   </script>
