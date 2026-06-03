@@ -723,6 +723,10 @@
     .form-group textarea:focus { border-color: var(--stone); }
 
     .modal form .btn-primary { width: 100%; margin-top: 8px; }
+    .form-success { text-align: center; padding: 16px 0 8px; }
+    .form-success p { margin-bottom: 20px; opacity: 0.8; }
+    .form-success .btn-primary { width: 100%; }
+    .form-error { font-size: 0.82rem; color: #c0392b; margin-top: 8px; text-align: center; }
 
     /* ── Social icons (nav + footer) ────────────── */
     .social-icons {
@@ -1394,20 +1398,27 @@
       <p class="modal-tag" data-i18n="modal-enquiry-tag">Enquiry</p>
       <h2 class="modal-title" id="enquiry-modal-title"><span data-i18n="modal-enquiry-prefix">Enquire about</span><br/><em id="modal-work-name"></em></h2>
       <form id="enquiry-form">
+        <input type="hidden" name="_subject" value="Artwork Enquiry" />
+        <input type="hidden" name="artwork" value="" />
         <div class="form-group">
           <label for="f-name" data-i18n="form-name">Name</label>
-          <input type="text" id="f-name" required placeholder="Your name" data-i18n-placeholder="form-placeholder-name" />
+          <input type="text" id="f-name" name="name" required placeholder="Your name" data-i18n-placeholder="form-placeholder-name" />
         </div>
         <div class="form-group">
           <label for="f-email" data-i18n="form-email">Email</label>
-          <input type="email" id="f-email" required placeholder="your@email.com" data-i18n-placeholder="form-placeholder-email" />
+          <input type="email" id="f-email" name="email" required placeholder="your@email.com" data-i18n-placeholder="form-placeholder-email" />
         </div>
         <div class="form-group">
           <label for="f-message" data-i18n="form-message">Message</label>
-          <textarea id="f-message" rows="4" placeholder="I'm interested in this work…" data-i18n-placeholder="form-placeholder-enquiry"></textarea>
+          <textarea id="f-message" name="message" rows="4" placeholder="I'm interested in this work…" data-i18n-placeholder="form-placeholder-enquiry"></textarea>
         </div>
+        <p class="form-error" hidden></p>
         <button type="submit" class="btn-primary" data-i18n="form-send-enquiry">Send enquiry</button>
       </form>
+      <div class="form-success" hidden>
+        <p data-i18n="form-success-msg">Thank you — your message has been sent. Walt will be in touch shortly.</p>
+        <button class="btn-primary" onclick="closeAll()" data-i18n="form-success-close">Close</button>
+      </div>
     </div>
   </div>
 
@@ -1418,20 +1429,26 @@
       <p class="modal-tag" data-i18n="modal-contact-tag">Get in touch</p>
       <h2 class="modal-title" id="contact-modal-title" data-i18n-html="modal-contact-title-html">Send a<br/><em>message</em></h2>
       <form id="contact-form">
+        <input type="hidden" name="_subject" value="New Message" />
         <div class="form-group">
           <label for="ct-name" data-i18n="form-name">Name</label>
-          <input type="text" id="ct-name" required placeholder="Your name" data-i18n-placeholder="form-placeholder-name" />
+          <input type="text" id="ct-name" name="name" required placeholder="Your name" data-i18n-placeholder="form-placeholder-name" />
         </div>
         <div class="form-group">
           <label for="ct-email" data-i18n="form-email">Email</label>
-          <input type="email" id="ct-email" required placeholder="your@email.com" data-i18n-placeholder="form-placeholder-email" />
+          <input type="email" id="ct-email" name="email" required placeholder="your@email.com" data-i18n-placeholder="form-placeholder-email" />
         </div>
         <div class="form-group">
           <label for="ct-message" data-i18n="form-message">Message</label>
-          <textarea id="ct-message" rows="4" placeholder="What's on your mind…" data-i18n-placeholder="form-placeholder-contact"></textarea>
+          <textarea id="ct-message" name="message" rows="4" placeholder="What's on your mind…" data-i18n-placeholder="form-placeholder-contact"></textarea>
         </div>
+        <p class="form-error" hidden></p>
         <button type="submit" class="btn-primary" data-i18n="modal-contact-send">Send message</button>
       </form>
+      <div class="form-success" hidden>
+        <p data-i18n="form-success-msg">Thank you — your message has been sent. Walt will be in touch shortly.</p>
+        <button class="btn-primary" onclick="closeAll()" data-i18n="form-success-close">Close</button>
+      </div>
     </div>
   </div>
 
@@ -1442,20 +1459,26 @@
       <p class="modal-tag" data-i18n="modal-commission-tag">For collectors</p>
       <h2 class="modal-title" id="commission-modal-title" data-i18n-html="modal-commission-title-html">Commission<br/><em>a new work</em></h2>
       <form id="commission-form">
+        <input type="hidden" name="_subject" value="Commission Enquiry" />
         <div class="form-group">
           <label for="c-name" data-i18n="form-name">Name</label>
-          <input type="text" id="c-name" required placeholder="Your name" data-i18n-placeholder="form-placeholder-name" />
+          <input type="text" id="c-name" name="name" required placeholder="Your name" data-i18n-placeholder="form-placeholder-name" />
         </div>
         <div class="form-group">
           <label for="c-email" data-i18n="form-email">Email</label>
-          <input type="email" id="c-email" required placeholder="your@email.com" data-i18n-placeholder="form-placeholder-email" />
+          <input type="email" id="c-email" name="email" required placeholder="your@email.com" data-i18n-placeholder="form-placeholder-email" />
         </div>
         <div class="form-group">
           <label for="c-message" data-i18n="modal-commission-label">Tell me about the work you have in mind</label>
-          <textarea id="c-message" rows="4" placeholder="Scale, subject, palette, where it will live…" data-i18n-placeholder="modal-commission-placeholder"></textarea>
+          <textarea id="c-message" name="message" rows="4" placeholder="Scale, subject, palette, where it will live…" data-i18n-placeholder="modal-commission-placeholder"></textarea>
         </div>
+        <p class="form-error" hidden></p>
         <button type="submit" class="btn-primary" data-i18n="form-send-enquiry">Send enquiry</button>
       </form>
+      <div class="form-success" hidden>
+        <p data-i18n="form-success-msg">Thank you — your message has been sent. Walt will be in touch shortly.</p>
+        <button class="btn-primary" onclick="closeAll()" data-i18n="form-success-close">Close</button>
+      </div>
     </div>
   </div>
 
@@ -1466,20 +1489,26 @@
       <p class="modal-tag" data-i18n="modal-gallery-tag">For galleries</p>
       <h2 class="modal-title" id="gallery-modal-title" data-i18n-html="modal-gallery-title-html">Gallery<br/><em>representation</em></h2>
       <form id="gallery-form">
+        <input type="hidden" name="_subject" value="Gallery Representation Enquiry" />
         <div class="form-group">
           <label for="g-name" data-i18n="modal-gallery-label-name">Name &amp; gallery</label>
-          <input type="text" id="g-name" required placeholder="Your name and gallery name" data-i18n-placeholder="modal-gallery-placeholder-name" />
+          <input type="text" id="g-name" name="name" required placeholder="Your name and gallery name" data-i18n-placeholder="modal-gallery-placeholder-name" />
         </div>
         <div class="form-group">
           <label for="g-email" data-i18n="form-email">Email</label>
-          <input type="email" id="g-email" required placeholder="your@gallery.com" data-i18n-placeholder="form-placeholder-email" />
+          <input type="email" id="g-email" name="email" required placeholder="your@gallery.com" data-i18n-placeholder="form-placeholder-email" />
         </div>
         <div class="form-group">
           <label for="g-message" data-i18n="modal-gallery-label-msg">Introduction &amp; programme</label>
-          <textarea id="g-message" rows="4" placeholder="Tell me about your gallery and what you have in mind…" data-i18n-placeholder="modal-gallery-placeholder-msg"></textarea>
+          <textarea id="g-message" name="message" rows="4" placeholder="Tell me about your gallery and what you have in mind…" data-i18n-placeholder="modal-gallery-placeholder-msg"></textarea>
         </div>
+        <p class="form-error" hidden></p>
         <button type="submit" class="btn-primary" data-i18n="form-send-enquiry">Send enquiry</button>
       </form>
+      <div class="form-success" hidden>
+        <p data-i18n="form-success-msg">Thank you — your message has been sent. Walt will be in touch shortly.</p>
+        <button class="btn-primary" onclick="closeAll()" data-i18n="form-success-close">Close</button>
+      </div>
     </div>
   </div>
 
@@ -1586,9 +1615,11 @@
         'modal-gallery-label-name': 'Name & gallery', 'modal-gallery-label-msg': 'Introduction & programme',
         'modal-gallery-placeholder-name': 'Your name and gallery name', 'modal-gallery-placeholder-msg': 'Tell me about your gallery and what you have in mind…',
         'form-name': 'Name', 'form-email': 'Email', 'form-message': 'Message',
-        'form-send-enquiry': 'Send enquiry',
-        'form-placeholder-name': 'Your name', 'form-placeholder-email': 'your@email.com',
-        'form-placeholder-enquiry': 'I’m interested in this work…', 'form-placeholder-contact': 'What’s on your mind…',
+        ‘form-send-enquiry’: ‘Send enquiry’,
+        ‘form-placeholder-name’: ‘Your name’, ‘form-placeholder-email’: ‘your@email.com’,
+        ‘form-placeholder-enquiry’: ‘I’m interested in this work…’, ‘form-placeholder-contact’: ‘What’s on your mind…’,
+        ‘form-success-msg’: ‘Thank you — your message has been sent. Walt will be in touch shortly.’,
+        ‘form-success-close’: ‘Close’,
         'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗', 'meta-article': 'Article', 'meta-read-article': 'Read article ↗',
         'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire',
         'work-label': 'Work', 'works-suffix': 'artworks',
@@ -1618,9 +1649,11 @@
         'modal-gallery-label-name': 'Naam & galery', 'modal-gallery-label-msg': 'Inleiding & program',
         'modal-gallery-placeholder-name': 'Jou naam en galery se naam', 'modal-gallery-placeholder-msg': 'Vertel my van jou galery en wat jy in gedagte het…',
         'form-name': 'Naam', 'form-email': 'E-pos', 'form-message': 'Boodskap',
-        'form-send-enquiry': 'Stuur navraag',
-        'form-placeholder-name': 'Jou naam', 'form-placeholder-email': 'jou@epos.com',
-        'form-placeholder-enquiry': 'Ek stel belang in hierdie werk…', 'form-placeholder-contact': 'Wat’s op jou hart…',
+        ‘form-send-enquiry’: ‘Stuur navraag’,
+        ‘form-placeholder-name’: ‘Jou naam’, ‘form-placeholder-email’: ‘jou@epos.com’,
+        ‘form-placeholder-enquiry’: ‘Ek stel belang in hierdie werk…’, ‘form-placeholder-contact’: ‘Wat’s op jou hart…’,
+        ‘form-success-msg’: ‘Dankie — jou boodskap is gestuur. Walt sal gou kontak maak.’,
+        ‘form-success-close’: ‘Sluit’,
         'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗',
         'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag',
         'work-label': 'Werk', 'works-suffix': 'kunswerke',
@@ -1867,13 +1900,18 @@
         m.classList.remove('open');
         m.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
-        m.querySelectorAll('form').forEach(f => f.reset());
+        m.querySelectorAll('form').forEach(f => { f.reset(); f.hidden = false; });
+        m.querySelectorAll('.form-success').forEach(s => { s.hidden = true; });
+        m.querySelectorAll('.form-error').forEach(e => { e.hidden = true; e.textContent = ''; });
       }
 
       function closeAll() {
         document.querySelectorAll('.modal-backdrop.open').forEach(m => {
           m.classList.remove('open');
           m.setAttribute('aria-hidden', 'true');
+          m.querySelectorAll('form').forEach(f => { f.reset(); f.hidden = false; });
+          m.querySelectorAll('.form-success').forEach(s => { s.hidden = true; });
+          m.querySelectorAll('.form-error').forEach(e => { e.hidden = true; e.textContent = ''; });
         });
         document.body.style.overflow = '';
       }
@@ -1894,37 +1932,59 @@
         });
       });
 
+      // ── Shared Formspree submit handler ──
+      function wireForm(formId, modalId) {
+        document.getElementById(formId).addEventListener('submit', async function (e) {
+          e.preventDefault();
+          var form = e.target;
+          var btn = form.querySelector('[type="submit"]');
+          var errEl = form.querySelector('.form-error');
+          var origText = btn.textContent;
+          btn.disabled = true;
+          btn.textContent = '…';
+          errEl.hidden = true;
+          errEl.textContent = '';
+          try {
+            var res = await fetch('https://formspree.io/f/mrevzark', {
+              method: 'POST',
+              body: new FormData(form),
+              headers: { 'Accept': 'application/json' }
+            });
+            if (res.ok) {
+              form.hidden = true;
+              document.querySelector('#' + modalId + ' .form-success').hidden = false;
+            } else {
+              var data = await res.json();
+              errEl.textContent = (data.errors || []).map(function(x){return x.message;}).join(', ') || 'Something went wrong. Please try again.';
+              errEl.hidden = false;
+              btn.disabled = false;
+              btn.textContent = origText;
+            }
+          } catch (_) {
+            errEl.textContent = 'Could not send. Please email waltviviers.art@gmail.com directly.';
+            errEl.hidden = false;
+            btn.disabled = false;
+            btn.textContent = origText;
+          }
+        });
+      }
+
       // ── Artwork enquiry modal ──
       const workName = document.getElementById('modal-work-name');
       document.getElementById('inquire-btn').addEventListener('click', function () {
-        workName.textContent = document.getElementById('hero-title').textContent;
+        var title = document.getElementById('hero-title').textContent;
+        workName.textContent = title;
+        document.querySelector('#enquiry-form [name="artwork"]').value = title;
+        document.querySelector('#enquiry-form [name="_subject"]').value = 'Artwork Enquiry — ' + title;
         openModal('enquiry-modal');
       });
-      document.getElementById('enquiry-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const name = document.getElementById('f-name').value;
-        const email = document.getElementById('f-email').value;
-        const msg = document.getElementById('f-message').value;
-        const subject = encodeURIComponent('Enquiry: ' + workName.textContent);
-        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
-        window.location.href = `mailto:waltviviers.art@gmail.com?subject=${subject}&body=${body}`;
-        closeModal('enquiry-modal');
-      });
+      wireForm('enquiry-form', 'enquiry-modal');
 
       // ── Commission modal ──
       document.getElementById('commission-btn').addEventListener('click', function () {
         openModal('commission-modal');
       });
-      document.getElementById('commission-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const name = document.getElementById('c-name').value;
-        const email = document.getElementById('c-email').value;
-        const msg = document.getElementById('c-message').value;
-        const subject = encodeURIComponent('Commission Enquiry');
-        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
-        window.location.href = `mailto:waltviviers.art@gmail.com?subject=${subject}&body=${body}`;
-        closeModal('commission-modal');
-      });
+      wireForm('commission-form', 'commission-modal');
 
       // ── Contact (email icon) modal ──
       document.querySelectorAll('.email-icon-btn').forEach(btn => {
@@ -1932,31 +1992,13 @@
         btn.addEventListener('mouseover', function () { btn.style.color = 'var(--white)'; });
         btn.addEventListener('mouseout',  function () { btn.style.color = 'var(--stone)'; });
       });
-      document.getElementById('contact-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const name = document.getElementById('ct-name').value;
-        const email = document.getElementById('ct-email').value;
-        const msg = document.getElementById('ct-message').value;
-        const subject = encodeURIComponent('Message from ' + name);
-        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
-        window.location.href = `mailto:waltviviers.art@gmail.com?subject=${subject}&body=${body}`;
-        closeModal('contact-modal');
-      });
+      wireForm('contact-form', 'contact-modal');
 
       // ── Gallery modal ──
       document.getElementById('gallery-btn').addEventListener('click', function () {
         openModal('gallery-modal');
       });
-      document.getElementById('gallery-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const name = document.getElementById('g-name').value;
-        const email = document.getElementById('g-email').value;
-        const msg = document.getElementById('g-message').value;
-        const subject = encodeURIComponent('Gallery Representation Enquiry');
-        const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
-        window.location.href = `mailto:waltviviers.art@gmail.com?subject=${subject}&body=${body}`;
-        closeModal('gallery-modal');
-      });
+      wireForm('gallery-form', 'gallery-modal');
 
     })();
   </script>
