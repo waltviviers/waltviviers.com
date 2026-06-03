@@ -50,6 +50,11 @@ collections:
               - name: image
                 label: Image
                 widget: image
+              - name: price
+                label: "Price (optional)"
+                widget: string
+                required: false
+                hint: "e.g. R4 500 or POA — leave blank to hide"
               - name: instagram
                 label: "Instagram link (optional)"
                 widget: string

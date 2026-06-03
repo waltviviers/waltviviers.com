@@ -533,6 +533,15 @@
 
     .work-thumb:hover .work-thumb-img img { transform: scale(1.03); }
 
+    .status-badge {
+      position: absolute; bottom: 8px; left: 8px;
+      font-family: var(--font-sans); font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 2px; line-height: 1.5; pointer-events: none; z-index: 2;
+    }
+    .status-badge.status-available { background: rgba(28, 90, 45, 0.88); color: #fff; }
+    .status-badge.status-enquire   { background: rgba(0,   0,  0, 0.60); color: #fff; }
+    .status-badge.status-sold      { background: rgba(90, 25, 25, 0.88); color: #fff; }
+
     .work-thumb-img .placeholder {
       position: absolute;
       inset: 0;
@@ -1309,6 +1318,8 @@
     <section class="hero" id="hero">
     <div class="hero-image-wrap" id="hero-image">
       <img src="images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
+           srcset="images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
+           sizes="100vw"
            alt="Walt Viviers, T-Rex, 2020, Acrylic on Canvas"
            fetchpriority="high"
            width="1600" height="1067" />
@@ -1620,7 +1631,7 @@
         ‘form-placeholder-enquiry’: ‘I’m interested in this work…’, ‘form-placeholder-contact’: ‘What’s on your mind…’,
         ‘form-success-msg’: ‘Thank you — your message has been sent. Walt will be in touch shortly.’,
         ‘form-success-close’: ‘Close’,
-        'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗', 'meta-article': 'Article', 'meta-read-article': 'Read article ↗',
+        'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-price': 'Price', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗', 'meta-article': 'Article', 'meta-read-article': 'Read article ↗',
         'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire',
         'work-label': 'Work', 'works-suffix': 'artworks',
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.'
@@ -1654,7 +1665,7 @@
         ‘form-placeholder-enquiry’: ‘Ek stel belang in hierdie werk…’, ‘form-placeholder-contact’: ‘Wat’s op jou hart…’,
         ‘form-success-msg’: ‘Dankie — jou boodskap is gestuur. Walt sal gou kontak maak.’,
         ‘form-success-close’: ‘Sluit’,
-        'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗',
+        'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-price': 'Prys', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗',
         'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag',
         'work-label': 'Werk', 'works-suffix': 'kunswerke',
         'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.'
@@ -1717,15 +1728,23 @@
         const existing = imgWrap.querySelector('img');
 
         const newAlt = `Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}`;
+        const img800 = w.image.replace('images/', 'images/800/');
+        const srcset = `${img800} 800w, ${w.image} 1600w`;
         if (existing) {
-          if (existing.src.endsWith(w.image)) {
+          if (existing.getAttribute('src') === w.image) {
             existing.alt = newAlt;
           } else {
             existing.style.opacity = '0';
-            setTimeout(() => { existing.src = w.image; existing.alt = newAlt; existing.style.opacity = '1'; }, 150);
+            setTimeout(() => {
+              existing.src = w.image;
+              existing.srcset = srcset;
+              existing.sizes = '100vw';
+              existing.alt = newAlt;
+              existing.style.opacity = '1';
+            }, 150);
           }
         } else {
-          imgWrap.innerHTML = `<img src="${w.image}" alt="${newAlt}" fetchpriority="high" />`;
+          imgWrap.innerHTML = `<img src="${w.image}" srcset="${srcset}" sizes="100vw" alt="${newAlt}" fetchpriority="high" />`;
         }
 
         var _t = window._t || function(k){return k;};
@@ -1737,6 +1756,7 @@
         document.getElementById('hero-meta').innerHTML =
           (w.medium     ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-medium')     + '</span><span class="work-meta-value">' + w.medium     + '</span></div>' : '') +
           (w.dimensions ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-dimensions') + '</span><span class="work-meta-value">' + w.dimensions + '</span></div>' : '') +
+          (w.price      ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-price')      + '</span><span class="work-meta-value">' + w.price      + '</span></div>' : '') +
           '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-status') + '</span><span class="work-meta-value">' + availLabel(w) + '</span></div>' +
           (w.permalink  ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-instagram') + '</span><span class="work-meta-value"><a href="' + w.permalink + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-post') + '</a></span></div>' : '') +
           (w.article    ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-article')   + '</span><span class="work-meta-value"><a href="' + w.article  + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-read-article') + '</a></span></div>' : '');
@@ -1768,6 +1788,7 @@
               <img src="${thumb}" alt="Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}" loading="lazy"
                    width="600" height="400"
                    onerror="this.src='${w.image}'" />
+              <span class="status-badge status-${w.available}">${_t('avail-' + w.available)}</span>
             </div>
             <div class="work-thumb-info">
               <span class="work-thumb-title">${w.title}</span>
@@ -1999,6 +2020,16 @@
         openModal('gallery-modal');
       });
       wireForm('gallery-form', 'gallery-modal');
+
+      // Expose for inline onclick and external callers
+      window.openModal = openModal;
+      window.closeAll  = closeAll;
+
+      // Item 9: #enquire hash → open contact modal (email signature link)
+      if (location.hash === '#enquire') {
+        openModal('contact-modal');
+        history.replaceState(null, '', location.pathname);
+      }
 
     })();
   </script>

@@ -1,0 +1,57 @@
+name: Generate image variants
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'images/*.webp'
+      - 'images/*.jpg'
+      - 'images/*.jpeg'
+      - 'images/*.png'
+
+jobs:
+  thumbs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Install cwebp / ImageMagick
+        run: sudo apt-get install -y webp imagemagick
+
+      - name: Find new or changed artwork images
+        id: changed
+        run: |
+          git diff --name-only HEAD~1 HEAD -- 'images/*.webp' 'images/*.jpg' 'images/*.jpeg' 'images/*.png' \
+            | grep -v 'images/thumbs/' \
+            | grep -v 'images/800/' \
+            | grep -v 'images/brushstroke' \
+            | grep -v 'images/walt-viviers' \
+            | grep -v 'images/img_' \
+            > changed_images.txt
+          cat changed_images.txt
+
+      - name: Generate thumbnails (600px) and hero variants (800px)
+        run: |
+          mkdir -p images/thumbs images/800
+          while IFS= read -r src; do
+            [ -f "$src" ] || continue
+            base=$(basename "$src")
+            echo "Processing: $base"
+            # 600px thumb
+            convert "$src" -resize 600x -quality 80 "images/thumbs/$base"
+            # 800px hero variant
+            convert "$src" -resize 800x -quality 82 "images/800/$base"
+          done < changed_images.txt
+
+      - name: Commit generated variants
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add images/thumbs/ images/800/
+          git diff --cached --quiet || git commit -m "chore: generate image variants [skip ci]"
+          git push
