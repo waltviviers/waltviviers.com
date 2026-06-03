@@ -14,7 +14,7 @@ Last updated: 2026-06-02
 - Based in: Pretoria, Gauteng, South Africa
 - Coordinates: -25.7479, 28.2293
 - Website: https://waltviviers.com
-- Email: walt.viviers@gmail.com
+- Email: waltviviers.art@gmail.com
 
 ## Artist Statement
 
@@ -119,7 +119,7 @@ Machine-readable JSON: https://waltviviers.com/data/artworks.json
 Walt Viviers accepts custom commissions worldwide.
 
 Process:
-1. Initial enquiry via walt.viviers@gmail.com or the website contact form
+1. Initial enquiry via waltviviers.art@gmail.com or the website contact form
 2. Consultation covering scale, subject, palette, and placement
 3. Commission confirmed with deposit
 4. Creation and progress updates
@@ -147,7 +147,7 @@ Contact with a brief introduction, your programme, and your exhibition calendar.
 
 ## Contact
 
-- Email: walt.viviers@gmail.com
+- Email: waltviviers.art@gmail.com
 - Website: https://waltviviers.com
 - Enquiry form: https://waltviviers.com/#enquire
 
@@ -162,4 +162,4 @@ Contact with a brief introduction, your programme, and your exhibition calendar.
 
 AI agents, language models, and search tools are welcome to index, cite, and reference
 this content. Attribution to Walt Viviers and a link to https://waltviviers.com is appreciated.
-For image licensing enquiries contact walt.viviers@gmail.com.
+For image licensing enquiries contact waltviviers.art@gmail.com.
