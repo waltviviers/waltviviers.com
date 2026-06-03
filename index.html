@@ -1775,7 +1775,7 @@
           `<div class="gn-dot${i === 0 ? ' active' : ''}" data-index="${i}"></div>`
         ).join('');
         container.querySelectorAll('.gn-dot').forEach(d =>
-          d.addEventListener('click', () => { current = +d.dataset.index; renderHero(current); }));
+          d.addEventListener('click', () => { current = +d.dataset.index; renderHero(current); pauseAutoplay(); }));
       }
 
       /* ── Build thumbnail grid ── */
@@ -1856,14 +1856,49 @@
         document.getElementById('hero-number').textContent = '';
       }
 
+      /* ── Autoplay ── */
+      var autoplayTimer = null;
+      var resumeTimer   = null;
+      var AUTOPLAY_MS   = 5000;
+      var RESUME_MS     = 8000;
+
+      function startAutoplay() {
+        stopAutoplay();
+        autoplayTimer = setInterval(function () {
+          current = (current + 1) % works.length;
+          renderHero(current);
+        }, AUTOPLAY_MS);
+      }
+
+      function stopAutoplay() {
+        clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+
+      function pauseAutoplay() {
+        stopAutoplay();
+        clearTimeout(resumeTimer);
+        resumeTimer = setTimeout(startAutoplay, RESUME_MS);
+      }
+
+      var heroEl = document.getElementById('hero');
+      heroEl.addEventListener('mouseenter', stopAutoplay);
+      heroEl.addEventListener('mouseleave', function () {
+        clearTimeout(resumeTimer);
+        startAutoplay();
+      });
+      heroEl.addEventListener('touchstart', pauseAutoplay, { passive: true });
+
       /* ── Prev / Next ── */
       document.getElementById('gn-prev').addEventListener('click', () => {
         current = (current - 1 + works.length) % works.length;
         renderHero(current);
+        pauseAutoplay();
       });
       document.getElementById('gn-next').addEventListener('click', () => {
         current = (current + 1) % works.length;
         renderHero(current);
+        pauseAutoplay();
       });
 
       /* ── Init: load artworks from CMS data ── */
@@ -1897,6 +1932,7 @@
           buildGrid();
           renderHero(current);
           injectArtworkSchema();
+          startAutoplay();
 
           window._gallery = {
             refresh: function() {
