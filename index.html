@@ -1626,11 +1626,11 @@
         'modal-gallery-label-name': 'Name & gallery', 'modal-gallery-label-msg': 'Introduction & programme',
         'modal-gallery-placeholder-name': 'Your name and gallery name', 'modal-gallery-placeholder-msg': 'Tell me about your gallery and what you have in mind…',
         'form-name': 'Name', 'form-email': 'Email', 'form-message': 'Message',
-        ‘form-send-enquiry’: ‘Send enquiry’,
-        ‘form-placeholder-name’: ‘Your name’, ‘form-placeholder-email’: ‘your@email.com’,
-        ‘form-placeholder-enquiry’: ‘I’m interested in this work…’, ‘form-placeholder-contact’: ‘What’s on your mind…’,
-        ‘form-success-msg’: ‘Thank you — your message has been sent. Walt will be in touch shortly.’,
-        ‘form-success-close’: ‘Close’,
+        'form-send-enquiry': 'Send enquiry',
+        'form-placeholder-name': 'Your name', 'form-placeholder-email': 'your@email.com',
+        "form-placeholder-enquiry": "I'm interested in this work…", "form-placeholder-contact": "What's on your mind…",
+        'form-success-msg': 'Thank you — your message has been sent. Walt will be in touch shortly.',
+        'form-success-close': 'Close',
         'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-price': 'Price', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗', 'meta-article': 'Article', 'meta-read-article': 'Read article ↗',
         'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire',
         'work-label': 'Work', 'works-suffix': 'artworks',
@@ -1660,11 +1660,11 @@
         'modal-gallery-label-name': 'Naam & galery', 'modal-gallery-label-msg': 'Inleiding & program',
         'modal-gallery-placeholder-name': 'Jou naam en galery se naam', 'modal-gallery-placeholder-msg': 'Vertel my van jou galery en wat jy in gedagte het…',
         'form-name': 'Naam', 'form-email': 'E-pos', 'form-message': 'Boodskap',
-        ‘form-send-enquiry’: ‘Stuur navraag’,
-        ‘form-placeholder-name’: ‘Jou naam’, ‘form-placeholder-email’: ‘jou@epos.com’,
-        ‘form-placeholder-enquiry’: ‘Ek stel belang in hierdie werk…’, ‘form-placeholder-contact’: ‘Wat’s op jou hart…’,
-        ‘form-success-msg’: ‘Dankie — jou boodskap is gestuur. Walt sal gou kontak maak.’,
-        ‘form-success-close’: ‘Sluit’,
+        'form-send-enquiry': 'Stuur navraag',
+        'form-placeholder-name': 'Jou naam', 'form-placeholder-email': 'jou@epos.com',
+        "form-placeholder-enquiry": "Ek stel belang in hierdie werk…", "form-placeholder-contact": "Wat's op jou hart…",
+        'form-success-msg': 'Dankie — jou boodskap is gestuur. Walt sal gou kontak maak.',
+        'form-success-close': 'Sluit',
         'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-price': 'Prys', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗',
         'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag',
         'work-label': 'Werk', 'works-suffix': 'kunswerke',
@@ -1728,7 +1728,7 @@
         const existing = imgWrap.querySelector('img');
 
         const newAlt = `Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}`;
-        const img800 = w.image.replace('images/', 'images/800/');
+        const img800 = w.image.startsWith('images/') ? w.image.replace('images/', 'images/800/') : w.image;
         const srcset = `${img800} 800w, ${w.image} 1600w`;
         if (existing) {
           if (existing.getAttribute('src') === w.image) {
@@ -1782,13 +1782,14 @@
         document.getElementById('works-count').textContent = works.length + ' ' + _t('works-suffix');
         grid.innerHTML = works.map((w, i) => {
           const thumb = w.image.replace('images/', 'images/thumbs/');
+          const statusKey = w.available === true ? 'available' : w.available === false ? 'sold' : 'enquire';
           return `
           <div class="work-thumb" data-index="${i}" role="button" tabindex="0" aria-label="${w.title}">
             <div class="work-thumb-img">
               <img src="${thumb}" alt="Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}" loading="lazy"
                    width="600" height="400"
                    onerror="this.src='${w.image}'" />
-              <span class="status-badge status-${w.available}">${_t('avail-' + w.available)}</span>
+              <span class="status-badge status-${statusKey}">${_t('avail-' + statusKey)}</span>
             </div>
             <div class="work-thumb-info">
               <span class="work-thumb-title">${w.title}</span>
@@ -1881,6 +1882,7 @@
             featured:   w.featured   || false,
             permalink:  w.instagram  || '',
             article:    w.article    || '',
+            price:      w.price      || '',
           }));
 
           if (!works.length) { setHeroState('No artworks yet — add some in the CMS'); return; }

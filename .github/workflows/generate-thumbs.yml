@@ -26,12 +26,16 @@ jobs:
       - name: Find new or changed artwork images
         id: changed
         run: |
-          git diff --name-only HEAD~1 HEAD -- 'images/*.webp' 'images/*.jpg' 'images/*.jpeg' 'images/*.png' \
+          BASE=$(git rev-parse HEAD~1 2>/dev/null || git rev-parse --root-rev 2>/dev/null || echo "")
+          if [ -n "$BASE" ]; then
+            git diff --name-only "$BASE" HEAD -- 'images/*.webp' 'images/*.jpg' 'images/*.jpeg' 'images/*.png'
+          else
+            git show --name-only --pretty="" HEAD -- 'images/*.webp' 'images/*.jpg' 'images/*.jpeg' 'images/*.png'
+          fi \
             | grep -v 'images/thumbs/' \
             | grep -v 'images/800/' \
             | grep -v 'images/brushstroke' \
             | grep -v 'images/walt-viviers' \
-            | grep -v 'images/img_' \
             > changed_images.txt
           cat changed_images.txt
 
