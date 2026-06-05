@@ -99,7 +99,7 @@ function sharedCSS() {
     }
 
     .lang-label {
-      max-width: 80px; overflow: hidden; white-space: nowrap;
+      max-width: 100px; overflow: hidden; white-space: nowrap;
       transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
     }
 
