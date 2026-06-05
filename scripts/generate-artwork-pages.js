@@ -378,14 +378,16 @@ function generatePage(w) {
   const ogImage    = `https://waltviviers.com/${w.image}`;
   const image800   = w.image.startsWith('images/') ? w.image.replace('images/', 'images/800/') : w.image;
   const altText    = `Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}`;
-  const metaDesc   = [
-    `${w.title} by Walt Viviers.`,
-    `${w.year}.`,
-    w.medium ? `${w.medium}.` : '',
-    w.dimensions ? `${w.dimensions}.` : '',
-    w.available === 'available' ? 'Original available for acquisition.' : '',
-    'Fine art by South African artist Walt Viviers, based in Pretoria.',
-  ].filter(Boolean).join(' ');
+  const metaDesc = w.description
+    ? w.description.slice(0, 160)
+    : [
+        `${w.title} by Walt Viviers.`,
+        `${w.year}.`,
+        w.medium ? `${w.medium}.` : '',
+        w.dimensions ? `${w.dimensions}.` : '',
+        w.available === 'available' ? 'Original available for acquisition.' : '',
+        'Fine art by South African artist Walt Viviers, based in Pretoria.',
+      ].filter(Boolean).join(' ');
 
   const schema = {
     '@context': 'https://schema.org',
@@ -622,6 +624,18 @@ function generatePage(w) {
     .form-success { text-align: center; padding: 24px 0; }
     .form-success p { margin-bottom: 16px; opacity: 0.8; font-size: 0.9rem; }
 
+    .artwork-desc {
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid var(--rule);
+    }
+
+    .artwork-desc p {
+      font-size: 0.95rem;
+      line-height: 1.85;
+      color: var(--stone);
+    }
+
     @media (max-width: 900px) {
       .artwork-wrap { padding: calc(50px + 24px) 24px 60px; }
     }
@@ -657,8 +671,9 @@ ${sharedNavHTML()}
 
     <div class="artwork-actions">
       ${enquireBtn}
-      <a href="/" class="btn btn-secondary">View all works</a>
+      <a href="/works/" class="btn btn-secondary">View all works</a>
     </div>
+    ${w.description ? `\n    <div class="artwork-desc">\n      <p>${escapeHtml(w.description)}</p>\n    </div>` : ''}
     ${enquiryForm}${instagramLink}
   </main>
 
