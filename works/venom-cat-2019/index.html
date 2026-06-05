@@ -400,15 +400,18 @@
         <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
       <div class="lang-toggle">
-        <div class="lang-group active">
+        <div class="lang-group active" id="lang-en">
           <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
+        </div>
+        <div class="lang-group" id="lang-af">
+          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
         </div>
       </div>
     </div>
     <ul class="nav-links">
-      <li class="nav-link-hide"><a href="/#works">Artworks</a></li>
-      <li class="nav-link-hide"><a href="/#about">About</a></li>
-      <li class="nav-link-hide"><a href="/#commission" class="nav-cta">Enquire</a></li>
+      <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
+      <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
           <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
@@ -446,18 +449,18 @@
         <h1>Venom Cat</h1>
         <div class="artwork-year">2019</div>
       </div>
-      <span class="status-badge available">Available</span>
+      <span class="status-badge available" data-i18n="status-available">Available</span>
     </div>
 
     <div class="artwork-meta">
-      <div class="meta-row"><span class="meta-label">Medium</span><span class="meta-value">Acrylic on Canvas</span></div>
-      <div class="meta-row"><span class="meta-label">Dimensions</span><span class="meta-value">20 x 20 cm</span></div>
-      <div class="meta-row"><span class="meta-label">Status</span><span class="meta-value">Available</span></div>
+      <div class="meta-row"><span class="meta-label" data-i18n="meta-medium">Medium</span><span class="meta-value">Acrylic on Canvas</span></div>
+      <div class="meta-row"><span class="meta-label" data-i18n="meta-dimensions">Dimensions</span><span class="meta-value">20 x 20 cm</span></div>
+      <div class="meta-row"><span class="meta-label" data-i18n="meta-status">Status</span><span class="meta-value"><span data-i18n="status-available">Available</span></span></div>
     </div>
 
     <div class="artwork-actions">
-      <button class="btn btn-primary" onclick="toggleForm()">Enquire about this work</button>
-      <a href="/works/" class="btn btn-secondary">View all works</a>
+      <button class="btn btn-primary" onclick="toggleForm()" data-i18n="btn-enquire">Enquire about this work</button>
+      <a href="/works/" class="btn btn-secondary" data-i18n="btn-all-works">View all works</a>
     </div>
     
     
@@ -485,7 +488,7 @@
       <a href="/" class="btn btn-secondary">Back to gallery</a>
     </div>
   </div>
-  <div style="margin-top:24px;text-align:center"><a href="https://www.instagram.com/p/BvqxL0pBgg0/" target="_blank" rel="noopener" style="font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5">View on Instagram ↗</a></div>
+  <div style="margin-top:24px;text-align:center"><a href="https://www.instagram.com/p/BvqxL0pBgg0/" target="_blank" rel="noopener" style="font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5" data-i18n="btn-instagram">View on Instagram ↗</a></div>
   </main>
 
 
@@ -549,6 +552,27 @@
     document.getElementById('admin-btn').addEventListener('click', function () {
       window.open('https://waltviviers.com/admin#/collections/artworks/entries/artworks', '_blank', 'noopener,noreferrer');
     });
+  </script>
+  <script>
+    (function() {
+      var LANG = {
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+      };
+      var lang = localStorage.getItem('wv-lang') || 'en';
+      function applyLang(l) {
+        lang = l; localStorage.setItem('wv-lang', l);
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          var k = el.dataset.i18n;
+          if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
+        });
+        document.getElementById('lang-en').classList.toggle('active', l === 'en');
+        document.getElementById('lang-af').classList.toggle('active', l === 'af');
+      }
+      document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
+      document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
+      applyLang(lang);
+    })();
   </script>
 
   <script>
