@@ -1,6 +1,18 @@
 {
   "artworks": [
     {
+      "title": "Classic Beauty",
+      "year": "2010",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "50 x 76 cm",
+      "available": "available",
+      "featured": false,
+      "image": "/images/IMG_8953.jpg",
+      "price": "",
+      "instagram": "https://www.instagram.com/p/BRauzGnBdwA/",
+      "article": ""
+    },
+    {
       "title": "Dragon Kitties",
       "year": "2025",
       "medium": "Acrylic on Canvas",
@@ -8,8 +20,7 @@
       "available": "available",
       "featured": false,
       "image": "images/dragon-kitties-acrylic-canvas-walt-viviers-2025.webp",
-      "instagram": "https://www.instagram.com/p/DSNWdKzDYrC/",
-      "description": "A small but spirited acrylic that blends the playful and the mythological — cats recast as fierce little dragons. Despite its compact 15×15 cm format, the piece carries an outsized sense of personality and energy. Viviers' confident brushwork gives each creature its own distinct expression, finding humour and warmth in an unexpected subject."
+      "instagram": "https://www.instagram.com/p/DSNWdKzDYrC/"
     },
     {
       "title": "Deadpool",
@@ -19,8 +30,7 @@
       "available": "enquire",
       "featured": false,
       "image": "images/deadpool-acrylic-canvas-walt-viviers-2026.webp",
-      "instagram": "",
-      "description": "A tightly composed acrylic portrait of Marvel's most irreverent anti-hero. Painted on a 20×20 cm canvas, this square-format work captures the chaos and confidence that defines the character — bold, expressive brushwork holding the tension between mask and madness. A strong example of Viviers' ability to translate pop-culture iconography into fine art."
+      "instagram": ""
     },
     {
       "title": "Duckbill",
@@ -30,8 +40,7 @@
       "available": "enquire",
       "featured": false,
       "image": "images/duckbill-acrylic-canvas-walt-viviers-2025.webp",
-      "instagram": "https://www.instagram.com/stories/highlights/18013867952702432/",
-      "description": "One of Viviers' larger 2025 canvases at 61×46 cm, Duckbill brings an unusual and overlooked subject into the spotlight. Painted with the loose, expressive energy that defines his practice, the work rewards close inspection — broad strokes from a distance giving way to intricate detail and texture. A study in finding beauty in the overlooked."
+      "instagram": "https://www.instagram.com/stories/highlights/18013867952702432/"
     },
     {
       "title": "Rat",
@@ -41,8 +50,7 @@
       "available": "enquire",
       "featured": false,
       "image": "images/rat-acrylic-canvas-walt-viviers-2025.webp",
-      "instagram": "https://www.instagram.com/stories/highlights/18103422559977709/",
-      "description": "A striking 51×40 cm portrait that elevates its subject — the humble rat — into something unexpectedly noble. Viviers' loose, confident brushwork finds dignity in the overlooked, turning an animal most would dismiss into the commanding centrepiece of a canvas. Bold tonal contrasts and a sure compositional instinct make this one of his most memorable 2025 works."
+      "instagram": "https://www.instagram.com/stories/highlights/18103422559977709/"
     },
     {
       "title": "Sabretooth",
@@ -52,8 +60,7 @@
       "available": "available",
       "featured": false,
       "image": "images/sabretooth-acrylic-canvas-walt-viviers-2025.webp",
-      "instagram": "https://www.instagram.com/stories/highlights/18014195621699159/",
-      "description": "An intense acrylic portrait of Marvel's Sabretooth — part predator, part icon. Viviers channels the raw ferocity of the character through expressive mark-making and sharp tonal contrast, creating an image that reads with immediate power from across the room yet reveals layers of texture and detail up close. Characteristic of his broader body of work: bold, immediate, unmistakable."
+      "instagram": "https://www.instagram.com/stories/highlights/18014195621699159/"
     },
     {
       "title": "Crow",
@@ -63,8 +70,7 @@
       "available": "available",
       "featured": false,
       "image": "images/crow-acrylic-canvas-walt-viviers-2025.webp",
-      "instagram": "https://www.instagram.com/stories/highlights/17862344784587481/",
-      "description": "A 30×24 cm acrylic study of the crow — a bird long associated with intelligence, mystery, and the edge between worlds. Dark, atmospheric, and alive with gestural energy, this work showcases Viviers' ability to imbue a single subject with mood and narrative weight. The restricted palette amplifies the intensity, making the bird feel both immediate and timeless."
+      "instagram": "https://www.instagram.com/stories/highlights/17862344784587481/"
     },
     {
       "title": "Rex",
@@ -74,8 +80,7 @@
       "available": "available",
       "featured": false,
       "image": "images/rex-acrylic-canvas-walt-viviers-2025.webp",
-      "instagram": "https://www.instagram.com/stories/highlights/17991499985793578/",
-      "description": "Painted on a 40×40 cm square canvas, Rex brings ancient power to a format that demands balance and control. The symmetry of the square format mirrors the commanding presence of its subject, while Viviers' signature brushwork — broad and expressive at distance, intricate up close — ensures the piece holds its own at any scale. Available for acquisition."
+      "instagram": "https://www.instagram.com/stories/highlights/17991499985793578/"
     },
     {
       "title": "T-Rex",
@@ -85,8 +90,7 @@
       "available": "available",
       "featured": true,
       "image": "images/t-rex-acrylic-canvas-walt-viviers-2020.webp",
-      "instagram": "https://www.instagram.com/p/CHf2wkajhs6/",
-      "description": "The T-Rex is one of Viviers' most recognised works — a 78×38 cm acrylic that captures the primal force of the Tyrannosaurus rex with commanding scale and bold, expressive brushwork. Painted in 2020, it exemplifies his core practice: images that read with clarity and confidence from a distance, yet reveal an unmistakable gestural quality up close. A centrepiece work, held in private collections and available for acquisition."
+      "instagram": "https://www.instagram.com/p/CHf2wkajhs6/"
     },
     {
       "title": "Venom Cat",
@@ -97,7 +101,7 @@
       "featured": false,
       "image": "images/venom-cat-acrylic-canvas-walt-viviers-2019.webp",
       "instagram": "https://www.instagram.com/p/BvqxL0pBgg0/",
-      "description": "A 20×20 cm acrylic that fuses feline grace with the symbiotic dread of Marvel's Venom — darkly playful and sharply executed. Painted in 2019, this small-format work demonstrates Viviers' early command of the pop-culture / fine-art crossover that has come to define his practice. Despite its compact scale, the piece carries an outsized presence: intricate detail embedded within bold, gestural marks."
+      "article": "https://pixelsmithstudios.com/interviews/walt-viviers-local-illustrator/"
     },
     {
       "title": "Apocalypse Meow!",
@@ -108,8 +112,7 @@
       "featured": false,
       "image": "images/zombie-vs-cat-ink-pencils-paper-walt-viviers-2017.webp",
       "instagram": "https://www.instagram.com/p/BRf7eU0h764/",
-      "article": "https://pixelsmithstudios.com/interviews/walt-viviers-local-illustrator/",
-      "description": "Created in 2017 in ink and pencils on paper, Apocalypse Meow! is an early and enduring example of Viviers' signature wit: a cat confronting the zombie apocalypse with absolute indifference. Intricate, hand-drawn linework fills the 26×21 cm composition with dark humour and narrative detail — each mark deliberate, the whole image immediately legible. Featured in a 2017 interview with Pixelsmith Studios, it remains one of his most beloved and widely shared works."
+      "article": "https://pixelsmithstudios.com/interviews/walt-viviers-local-illustrator/"
     }
   ]
 }
