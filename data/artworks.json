@@ -1,42 +1,6 @@
 {
   "artworks": [
     {
-      "title": "Fish Vortex",
-      "year": "2010",
-      "medium": "Mixed Media on Boaord",
-      "dimensions": "30 x 21 cm",
-      "available": "available",
-      "featured": false,
-      "image": "/images/IMG_8962.jpg",
-      "price": "",
-      "instagram": "",
-      "article": ""
-    },
-    {
-      "title": "The Wind",
-      "year": "2010",
-      "medium": "Acrylic on Canvas",
-      "dimensions": "",
-      "available": "available",
-      "featured": false,
-      "image": "/images/IMG_8956.jpg",
-      "price": "",
-      "instagram": "",
-      "article": ""
-    },
-    {
-      "title": "Capsaicin",
-      "year": "2010",
-      "medium": "Acrylic on Canvas",
-      "dimensions": "50 x 41 cm",
-      "available": "available",
-      "featured": false,
-      "image": "/images/IMG_8955.jpg",
-      "price": "",
-      "instagram": "",
-      "article": ""
-    },
-    {
       "title": "Dragon Kitties",
       "year": "2025",
       "medium": "Acrylic on Canvas",
@@ -154,6 +118,18 @@
       "description": "Apocalypse Meow! is a 26 × 21 cm ink and pencils on paper work from 2017, presented framed. One of Viviers' most recognisable earlier pieces, the work depicts a cat in an apocalyptic encounter — carrying the dark humour and raw energy that would come to define his reputation. Ink and pencil on paper allows for a level of immediacy distinct from his acrylic practice: gestural, spontaneous, and full of expressive line quality. Featured in a Pixelsmith Studios interview alongside Venom Cat, Apocalypse Meow! is among the works that first brought Walt Viviers wider attention as a Pretoria-based South African artist navigating the space between fine art and popular culture. Enquire for acquisition details."
     },
     {
+      "title": "Fish Vortex",
+      "year": "2010",
+      "medium": "Mixed Media on Boaord",
+      "dimensions": "30 x 21 cm",
+      "available": "available",
+      "featured": false,
+      "image": "/images/IMG_8962.jpg",
+      "price": "",
+      "instagram": "",
+      "article": ""
+    },
+    {
       "title": "Classic Beauty",
       "year": "2010",
       "medium": "Acrylic on Canvas",
@@ -165,6 +141,30 @@
       "instagram": "https://www.instagram.com/p/BRauzGnBdwA/",
       "article": "",
       "description": "Classic Beauty is an acrylic on canvas measuring 50 × 76 cm, painted in 2010 — one of the earlier works in Walt Viviers' portfolio. The title and vertical format suggest a figurative subject approached with classical intent, rendered in Viviers' characteristically direct and confident style. At a stage when the Pretoria-based South African artist was developing the bold brushwork and clear-eyed observation that would come to define his mature practice, Classic Beauty reads as a thoughtful study in portraiture — grounded in tradition but with a contemporary sensibility. The generous scale gives the subject room to breathe and rewards close inspection. The original is available for acquisition."
+    },
+    {
+      "title": "The Wind",
+      "year": "2010",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "",
+      "available": "available",
+      "featured": false,
+      "image": "/images/IMG_8956.jpg",
+      "price": "",
+      "instagram": "",
+      "article": ""
+    },
+    {
+      "title": "Capsaicin",
+      "year": "2010",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "50 x 41 cm",
+      "available": "available",
+      "featured": false,
+      "image": "/images/IMG_8955.jpg",
+      "price": "",
+      "instagram": "",
+      "article": ""
     }
   ]
 }
