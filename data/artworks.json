@@ -1,6 +1,18 @@
 {
   "artworks": [
     {
+      "title": "Capsaicin",
+      "year": "2010",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "50 x 41 cm",
+      "available": "available",
+      "featured": false,
+      "image": "/images/IMG_8955.jpg",
+      "price": "",
+      "instagram": "",
+      "article": ""
+    },
+    {
       "title": "Dragon Kitties",
       "year": "2025",
       "medium": "Acrylic on Canvas",
