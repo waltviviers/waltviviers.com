@@ -1580,6 +1580,7 @@
   <script>
     (function () {
       const btn = document.getElementById('back-to-top');
+      if (!btn) return;
       window.addEventListener('scroll', function () {
         btn.classList.toggle('visible', window.scrollY > 400);
       }, { passive: true });
@@ -1740,15 +1741,15 @@
         const existing = imgWrap.querySelector('img');
 
         const newAlt = `Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}`;
-        const img800 = w.image.startsWith('images/') ? w.image.replace('images/', 'images/800/') : w.image;
-        const srcset = `${img800} 800w, ${w.image} 1600w`;
+        const img800 = w.image.startsWith('images/') ? w.image.replace('images/', '/images/800/') : w.image;
+        const srcset = `${img800} 800w, /${w.image} 1600w`;
         if (existing) {
-          if (existing.getAttribute('src') === w.image) {
+          if (existing.getAttribute('src') === '/' + w.image) {
             existing.alt = newAlt;
           } else {
             existing.style.opacity = '0';
             setTimeout(() => {
-              existing.src = w.image;
+              existing.src = '/' + w.image;
               existing.srcset = srcset;
               existing.sizes = '100vw';
               existing.alt = newAlt;
@@ -1756,7 +1757,7 @@
             }, 150);
           }
         } else {
-          imgWrap.innerHTML = `<img src="${w.image}" srcset="${srcset}" sizes="100vw" alt="${newAlt}" fetchpriority="high" />`;
+          imgWrap.innerHTML = `<img src="/${w.image}" srcset="${srcset}" sizes="100vw" alt="${newAlt}" fetchpriority="high" />`;
         }
 
         var _t = window._t || function(k){return k;};
@@ -1796,7 +1797,7 @@
         var _t = window._t || function(k){return k;};
         document.getElementById('works-count').textContent = works.length + ' ' + _t('works-suffix');
         grid.innerHTML = works.map((w, i) => {
-          const thumb     = w.image.replace('images/', 'images/thumbs/');
+          const thumb     = '/' + w.image.replace('images/', 'images/thumbs/');
           const statusKey = w.available === true ? 'available' : w.available === false ? 'sold' : 'enquire';
           const slug      = slugify(w.title, w.year);
           return `
@@ -1804,7 +1805,7 @@
             <div class="work-thumb-img">
               <img src="${thumb}" alt="Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}" loading="lazy"
                    width="600" height="400"
-                   onerror="this.src='${w.image}'" />
+                   onerror="this.src='/${w.image}'" />
               <span class="status-badge status-${statusKey}">${_t('avail-' + statusKey)}</span>
             </div>
             <div class="work-thumb-info">
