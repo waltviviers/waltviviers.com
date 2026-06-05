@@ -1772,7 +1772,8 @@
           (w.price      ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-price')      + '</span><span class="work-meta-value">' + w.price      + '</span></div>' : '') +
           '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-status') + '</span><span class="work-meta-value">' + availLabel(w) + '</span></div>' +
           (w.permalink  ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-instagram') + '</span><span class="work-meta-value"><a href="' + w.permalink + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-post') + '</a></span></div>' : '') +
-          (w.article    ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-article')   + '</span><span class="work-meta-value"><a href="' + w.article  + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-read-article') + '</a></span></div>' : '');
+          (w.article    ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-article')   + '</span><span class="work-meta-value"><a href="' + w.article  + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-read-article') + '</a></span></div>' : '') +
+          '<div class="work-meta-row"><span class="work-meta-label">Page</span><span class="work-meta-value"><a href="/works/' + slugify(w.title, w.year) + '/" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">View artwork page ↗</a></span></div>';
 
         document.querySelectorAll('.gn-dot').forEach((d, i) =>
           d.classList.toggle('active', i === index));
