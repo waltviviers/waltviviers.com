@@ -464,7 +464,7 @@
     </div>
     
     <div class="artwork-desc">
-      <p>Duckbill is one of Walt Viviers' larger 2025 canvases, measuring 61 × 46 cm in acrylic on canvas. The platypus — one of nature's more improbable creatures — makes for an unexpectedly compelling portrait subject, and Viviers renders it with the same direct, personality-led approach he applies to all his animal work. The generous canvas size allows for a presence and level of detail that rewards viewing up close; the animal's unusual anatomy translated into bold, confident form. Based in Pretoria, Viviers has built a reputation for finding authentic character in animal subjects that others might overlook. Duckbill is a standout piece in his 2025 collection. Enquire for acquisition details.</p>
+      <p id="artwork-description" data-en="Duckbill is one of Walt Viviers' larger 2025 canvases, measuring 61 × 46 cm in acrylic on canvas. The platypus — one of nature's more improbable creatures — makes for an unexpectedly compelling portrait subject, and Viviers renders it with the same direct, personality-led approach he applies to all his animal work. The generous canvas size allows for a presence and level of detail that rewards viewing up close; the animal's unusual anatomy translated into bold, confident form. Based in Pretoria, Viviers has built a reputation for finding authentic character in animal subjects that others might overlook. Duckbill is a standout piece in his 2025 collection. Enquire for acquisition details." data-af="Duckbill is een van Walt Viviers se groter 2025-doeke, 61 × 46 cm in akriel op doek. Die voëlbekdier — een van die natuur se mees onwaarskynlike wesens — is 'n onverwags boeiende portretonderwerp, en Viviers beeld dit uit met dieselfde direkte, persoonlikheidsgedrewe benadering wat hy op al sy dierwerk toepas. Die ruim doekgrootte laat 'n aanwesigheid en vlak van detail toe wat beloning bied wanneer dit van naby beskou word; die dier se ongewone anatomie vertaal in vrypostige, selfversekerde vorm. Navraag oor aankoopbesonderhede.">Duckbill is one of Walt Viviers' larger 2025 canvases, measuring 61 × 46 cm in acrylic on canvas. The platypus — one of nature's more improbable creatures — makes for an unexpectedly compelling portrait subject, and Viviers renders it with the same direct, personality-led approach he applies to all his animal work. The generous canvas size allows for a presence and level of detail that rewards viewing up close; the animal's unusual anatomy translated into bold, confident form. Based in Pretoria, Viviers has built a reputation for finding authentic character in animal subjects that others might overlook. Duckbill is a standout piece in his 2025 collection. Enquire for acquisition details.</p>
     </div>
     
   <div class="enquiry-section" id="enquiry-section" hidden>
@@ -569,6 +569,8 @@
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
         });
+        var descEl = document.getElementById('artwork-description');
+        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
         document.getElementById('lang-en').classList.toggle('active', l === 'en');
         document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }

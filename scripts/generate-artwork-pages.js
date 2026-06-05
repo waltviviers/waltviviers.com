@@ -384,6 +384,8 @@ function sharedScripts() {
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
         });
+        var descEl = document.getElementById('artwork-description');
+        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
         document.getElementById('lang-en').classList.toggle('active', l === 'en');
         document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }
@@ -697,7 +699,7 @@ ${sharedNavHTML()}
       ${enquireBtn}
       <a href="/works/" class="btn btn-secondary" data-i18n="btn-all-works">View all works</a>
     </div>
-    ${w.description ? `\n    <div class="artwork-desc">\n      <p>${escapeHtml(w.description)}</p>\n    </div>` : ''}
+    ${w.description ? `\n    <div class="artwork-desc">\n      <p id="artwork-description" data-en="${escapeHtml(w.description)}" data-af="${escapeHtml(w.description_af || w.description)}">${escapeHtml(w.description)}</p>\n    </div>` : ''}
     ${enquiryForm}${instagramLink}
   </main>
 
