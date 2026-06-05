@@ -238,8 +238,8 @@
       width: 96px;
       height: 96px;
       border-radius: 22px;
-      background: var(--bg2);
-      border: 1px solid var(--rule);
+      background: #1A1A1A;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -247,9 +247,9 @@
     }
 
     .app-icon svg {
-      width: 48px;
-      height: 48px;
-      stroke: var(--stone);
+      width: 52px;
+      height: 52px;
+      stroke: #FFFFFF;
       fill: none;
       stroke-width: 1.5;
       stroke-linecap: round;
@@ -470,7 +470,7 @@
     .cta-section h2 em { font-style: italic; color: var(--stone); }
 
     /* ── Light mode specifics ── */
-    [data-theme="light"] .app-icon { background: #EDEAE5; }
+    [data-theme="light"] .app-icon { background: #1A1A1A; }
     [data-theme="light"] .store-btn:hover { background: #EDEAE5; }
     [data-theme="light"] .feature { background: #F5F3EF; }
 
@@ -558,22 +558,15 @@
       <p class="app-eyebrow">By Walt Viviers</p>
       <div class="app-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-          <path d="M12 6v6l4 2"/>
-          <line x1="6" y1="17" x2="9" y2="17"/>
-          <line x1="12" y1="17" x2="18" y2="17"/>
+          <circle cx="12" cy="12" r="9"/>
+          <polyline points="12 7 12 12 15.5 14"/>
+          <line x1="7" y1="19.5" x2="9.5" y2="19.5"/>
+          <line x1="11" y1="19.5" x2="17" y2="19.5"/>
         </svg>
       </div>
       <h1>Bill Tipper</h1>
       <p class="hero-desc">Split bills and calculate tips in seconds. Clean, fast, and completely private — everything stays on your device.</p>
       <div class="download-row">
-        <a href="#" class="store-btn" id="appstore-btn" aria-label="Download on the App Store">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          <span class="store-btn-inner">
-            <span class="store-btn-sub">Download on the</span>
-            <span class="store-btn-name">App Store</span>
-          </span>
-        </a>
         <a href="#" class="store-btn" id="playstore-btn" aria-label="Get it on Google Play">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.18 23.76c.35.2.74.24 1.12.12l12.68-7.31-2.79-2.8-11.01 10zM.49 1.16C.18 1.53 0 2.08 0 2.79v18.42c0 .71.18 1.26.49 1.63l.09.08L10.29 13V12.79L.58 1.07l-.09.09zM19.84 10.08l-2.71-1.56-3.07 3.07 3.07 3.07 2.73-1.57c.78-.45.78-1.56-.02-2.01zM4.3.12L16.98 7.43l-2.79 2.79L3.18.22C3.53.1 3.93.14 4.3.12z"/></svg>
           <span class="store-btn-inner">
@@ -653,13 +646,6 @@
     <section class="cta-section">
       <h2>Leave a fair tip.<br/><em>Every time.</em></h2>
       <div class="download-row">
-        <a href="#" class="store-btn" aria-label="Download on the App Store">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          <span class="store-btn-inner">
-            <span class="store-btn-sub">Download on the</span>
-            <span class="store-btn-name">App Store</span>
-          </span>
-        </a>
         <a href="#" class="store-btn" aria-label="Get it on Google Play">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.18 23.76c.35.2.74.24 1.12.12l12.68-7.31-2.79-2.8-11.01 10zM.49 1.16C.18 1.53 0 2.08 0 2.79v18.42c0 .71.18 1.26.49 1.63l.09.08L10.29 13V12.79L.58 1.07l-.09.09zM19.84 10.08l-2.71-1.56-3.07 3.07 3.07 3.07 2.73-1.57c.78-.45.78-1.56-.02-2.01zM4.3.12L16.98 7.43l-2.79 2.79L3.18.22C3.53.1 3.93.14 4.3.12z"/></svg>
           <span class="store-btn-inner">
