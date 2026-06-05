@@ -411,6 +411,7 @@
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -464,7 +465,7 @@
     </div>
     
     <div class="artwork-desc">
-      <p>Crow is a 30 × 24 cm acrylic on canvas completed in 2025. The crow — a bird long associated with intelligence, mystery, and the darker edges of folklore — is a fitting subject for Viviers, who has consistently found genuine depth in the animal world. Painted in a compact format that concentrates the subject's presence, Crow is focused and atmospheric: the bird rendered with care and a sense of stillness that contrasts with the intensity of its gaze. Walt Viviers is a Pretoria-based South African fine artist whose animal paintings have been widely shared and are among his most collected works. This original acrylic on canvas is available for acquisition.</p>
+      <p id="artwork-description" data-en="Crow is a 30 × 24 cm acrylic on canvas completed in 2025. The crow — a bird long associated with intelligence, mystery, and the darker edges of folklore — is a fitting subject for Viviers, who has consistently found genuine depth in the animal world. Painted in a compact format that concentrates the subject's presence, Crow is focused and atmospheric: the bird rendered with care and a sense of stillness that contrasts with the intensity of its gaze. Walt Viviers is a Pretoria-based South African fine artist whose animal paintings have been widely shared and are among his most collected works. This original acrylic on canvas is available for acquisition." data-af="Kraai is 'n 30 × 24 cm akriel op doek voltooi in 2025. Die kraai — 'n voël wat lank met intelligensie, misterie en die donkerder kante van volksoorlewering geassosieer word — is 'n gepaste onderwerp vir Viviers, wat konsekwent ware diepte in die dierewêreld gevind het. Geskilder in 'n kompakte formaat wat die onderwerp se aanwesigheid konsentreer, is Kraai gefokus en atmosferies: die voël uitgebeeld met sorg en 'n gevoel van stilte wat kontrasteer met die intensiteit van sy blik. Die oorspronklike akriel op doek is beskikbaar vir aankoop.">Crow is a 30 × 24 cm acrylic on canvas completed in 2025. The crow — a bird long associated with intelligence, mystery, and the darker edges of folklore — is a fitting subject for Viviers, who has consistently found genuine depth in the animal world. Painted in a compact format that concentrates the subject's presence, Crow is focused and atmospheric: the bird rendered with care and a sense of stillness that contrasts with the intensity of its gaze. Walt Viviers is a Pretoria-based South African fine artist whose animal paintings have been widely shared and are among his most collected works. This original acrylic on canvas is available for acquisition.</p>
     </div>
     
   <div class="enquiry-section" id="enquiry-section" hidden>
@@ -559,8 +560,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
@@ -569,6 +570,8 @@
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
         });
+        var descEl = document.getElementById('artwork-description');
+        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
         document.getElementById('lang-en').classList.toggle('active', l === 'en');
         document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }

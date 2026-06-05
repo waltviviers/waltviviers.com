@@ -411,6 +411,7 @@
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -464,7 +465,7 @@
     </div>
     
     <div class="artwork-desc">
-      <p>Rat is a 51 × 40 cm acrylic on canvas from 2025. Walt Viviers approaches subjects that others might dismiss — the rat is a case in point, a creature more often associated with urban grime than gallery walls. But in Viviers' hands the animal is rendered with directness and a genuine sense of character: observed closely, executed with the assured brushwork that marks his mature style, and given the scale it deserves. The medium-large format ensures the subject has real presence. This is Viviers at his most straightforwardly honest — no irony, no distancing, just a Pretoria-based South African fine artist looking hard at a living thing and putting it on canvas. Enquire for acquisition details.</p>
+      <p id="artwork-description" data-en="Rat is a 51 × 40 cm acrylic on canvas from 2025. Walt Viviers approaches subjects that others might dismiss — the rat is a case in point, a creature more often associated with urban grime than gallery walls. But in Viviers' hands the animal is rendered with directness and a genuine sense of character: observed closely, executed with the assured brushwork that marks his mature style, and given the scale it deserves. The medium-large format ensures the subject has real presence. This is Viviers at his most straightforwardly honest — no irony, no distancing, just a Pretoria-based South African fine artist looking hard at a living thing and putting it on canvas. Enquire for acquisition details." data-af="Rot is 'n 51 × 40 cm akriel op doek uit 2025. Walt Viviers benader onderwerpe wat ander dalk sou verwerp — die rot is 'n geval van dien, 'n wese wat meer dikwels met stedelike vuil as galery-mure geassosieer word. Maar in Viviers se hande word die dier uitgebeeld met direktheid en 'n ware gevoel van karakter: van naby waargeneem, uitgevoer met die selfversekerde kwaswerk wat sy volwasse styl kenmerk, en die skaal gegun wat dit verdien. Navraag oor aankoopbesonderhede.">Rat is a 51 × 40 cm acrylic on canvas from 2025. Walt Viviers approaches subjects that others might dismiss — the rat is a case in point, a creature more often associated with urban grime than gallery walls. But in Viviers' hands the animal is rendered with directness and a genuine sense of character: observed closely, executed with the assured brushwork that marks his mature style, and given the scale it deserves. The medium-large format ensures the subject has real presence. This is Viviers at his most straightforwardly honest — no irony, no distancing, just a Pretoria-based South African fine artist looking hard at a living thing and putting it on canvas. Enquire for acquisition details.</p>
     </div>
     
   <div class="enquiry-section" id="enquiry-section" hidden>
@@ -559,8 +560,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
@@ -569,6 +570,8 @@
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
         });
+        var descEl = document.getElementById('artwork-description');
+        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
         document.getElementById('lang-en').classList.toggle('active', l === 'en');
         document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }

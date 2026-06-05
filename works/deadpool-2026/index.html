@@ -411,6 +411,7 @@
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -464,7 +465,7 @@
     </div>
     
     <div class="artwork-desc">
-      <p>Deadpool is a 20 × 20 cm acrylic on canvas completed in 2026. Walt Viviers has long drawn on comic book culture and popular iconography as raw material for his fine art practice, and this recent work channels the anarchic energy of Marvel's Deadpool into a concentrated, expressive painting. The square format suits the subject's punchy visual identity — Viviers' bold colour work and confident brushwork translate the character's graphic origins into something distinctly painterly, occupying the space where pop culture and fine art practice converge. One of Viviers' most recent works, Deadpool reflects the Pretoria-based South African artist's continued appetite for culturally charged subject matter. Enquire for acquisition details.</p>
+      <p id="artwork-description" data-en="Deadpool is a 20 × 20 cm acrylic on canvas completed in 2026. Walt Viviers has long drawn on comic book culture and popular iconography as raw material for his fine art practice, and this recent work channels the anarchic energy of Marvel's Deadpool into a concentrated, expressive painting. The square format suits the subject's punchy visual identity — Viviers' bold colour work and confident brushwork translate the character's graphic origins into something distinctly painterly, occupying the space where pop culture and fine art practice converge. One of Viviers' most recent works, Deadpool reflects the Pretoria-based South African artist's continued appetite for culturally charged subject matter. Enquire for acquisition details." data-af="Deadpool is 'n 20 × 20 cm akriel op doek voltooi in 2026. Walt Viviers put al lank uit stripboekultuur en populêre ikonografie as grondstof vir sy kunspraktyk, en hierdie onlangse werk kanaliseer die anarchiese energie van Marvel se Deadpool in 'n gekonsentreerde, ekspressiewe skildery. Die vierkantformaat pas by die onderwerp se kragtige visuele identiteit — Viviers se vrypostige kleurwerk en selfversekerde kwaswerk vertaal die karakter se grafiese oorsprong in iets besliste skilderagtig, wat die ruimte inneem waar popkultuur en kunspraktyk saamkom. Navraag oor aankoopbesonderhede.">Deadpool is a 20 × 20 cm acrylic on canvas completed in 2026. Walt Viviers has long drawn on comic book culture and popular iconography as raw material for his fine art practice, and this recent work channels the anarchic energy of Marvel's Deadpool into a concentrated, expressive painting. The square format suits the subject's punchy visual identity — Viviers' bold colour work and confident brushwork translate the character's graphic origins into something distinctly painterly, occupying the space where pop culture and fine art practice converge. One of Viviers' most recent works, Deadpool reflects the Pretoria-based South African artist's continued appetite for culturally charged subject matter. Enquire for acquisition details.</p>
     </div>
     
   <div class="enquiry-section" id="enquiry-section" hidden>
@@ -558,8 +559,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
@@ -568,6 +569,8 @@
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
         });
+        var descEl = document.getElementById('artwork-description');
+        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
         document.getElementById('lang-en').classList.toggle('active', l === 'en');
         document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }

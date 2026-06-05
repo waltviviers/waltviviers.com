@@ -411,6 +411,7 @@
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -464,7 +465,7 @@
     </div>
     
     <div class="artwork-desc">
-      <p>The T-Rex is one of Walt Viviers' most recognised works — a 78 × 38 cm acrylic on canvas that captures the primal force of the Tyrannosaurus rex with commanding scale and bold, expressive brushwork. Painted in 2020, it sits at the intersection of Viviers' interest in the animal world and his appetite for subjects that carry cultural weight. The unusually elongated horizontal format gives the predator a sweeping momentum, as if the canvas itself is barely containing the subject. Widely shared across social media since its release, T-Rex helped cement the Pretoria-based South African artist's reputation as a painter who brings genuine intensity to iconic subjects. It remains one of the signature pieces in Viviers' portfolio. The original is available for acquisition.</p>
+      <p id="artwork-description" data-en="The T-Rex is one of Walt Viviers' most recognised works — a 78 × 38 cm acrylic on canvas that captures the primal force of the Tyrannosaurus rex with commanding scale and bold, expressive brushwork. Painted in 2020, it sits at the intersection of Viviers' interest in the animal world and his appetite for subjects that carry cultural weight. The unusually elongated horizontal format gives the predator a sweeping momentum, as if the canvas itself is barely containing the subject. Widely shared across social media since its release, T-Rex helped cement the Pretoria-based South African artist's reputation as a painter who brings genuine intensity to iconic subjects. It remains one of the signature pieces in Viviers' portfolio. The original is available for acquisition." data-af="Die T-Rex is een van Walt Viviers se mees erkende werke — 'n 78 × 38 cm akriel op doek wat die oerkrag van die Tirannousaurus rex vasvang met bevelende skaal en vet, ekspressiewe kwaswerk. Geskilder in 2020, lê dit op die kruispunt van Viviers se belangstelling in die dierewêreld en sy eetlus vir onderwerpe wat kulturele gewig dra. Die ongewone verlengde horisontale formaat gee die roofdier 'n sweepende momentum, asof die doek self die onderwerp skaars kan inhou. Wyd gedeel oor sosiale media sedert sy vrystelling, bly T-Rex een van die handtekeningwerke in die Pretoriase kunstenaar se portefeulje. Die oorspronklike is beskikbaar vir aankoop.">The T-Rex is one of Walt Viviers' most recognised works — a 78 × 38 cm acrylic on canvas that captures the primal force of the Tyrannosaurus rex with commanding scale and bold, expressive brushwork. Painted in 2020, it sits at the intersection of Viviers' interest in the animal world and his appetite for subjects that carry cultural weight. The unusually elongated horizontal format gives the predator a sweeping momentum, as if the canvas itself is barely containing the subject. Widely shared across social media since its release, T-Rex helped cement the Pretoria-based South African artist's reputation as a painter who brings genuine intensity to iconic subjects. It remains one of the signature pieces in Viviers' portfolio. The original is available for acquisition.</p>
     </div>
     
   <div class="enquiry-section" id="enquiry-section" hidden>
@@ -559,8 +560,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
@@ -569,6 +570,8 @@
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
         });
+        var descEl = document.getElementById('artwork-description');
+        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
         document.getElementById('lang-en').classList.toggle('active', l === 'en');
         document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }

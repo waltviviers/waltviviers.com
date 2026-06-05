@@ -411,6 +411,7 @@
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -464,7 +465,7 @@
     </div>
     
     <div class="artwork-desc">
-      <p>Venom Cat is one of Walt Viviers' most popular works — a 20 × 20 cm acrylic on canvas completed in 2019. The painting merges the instantly recognisable aesthetic of Marvel's Venom with a cat, a combination that proved immediately compelling when first shared online. Featured in an interview with Pixelsmith Studios, Venom Cat helped establish Viviers as a South African fine artist with a distinctive voice: one that moves fluidly between painterly technique and popular culture without sacrificing either. The small square format packs considerable visual punch, the subject's high-contrast markings lending themselves naturally to Viviers' bold, confident brushwork. The original is available for acquisition.</p>
+      <p id="artwork-description" data-en="Venom Cat is one of Walt Viviers' most popular works — a 20 × 20 cm acrylic on canvas completed in 2019. The painting merges the instantly recognisable aesthetic of Marvel's Venom with a cat, a combination that proved immediately compelling when first shared online. Featured in an interview with Pixelsmith Studios, Venom Cat helped establish Viviers as a South African fine artist with a distinctive voice: one that moves fluidly between painterly technique and popular culture without sacrificing either. The small square format packs considerable visual punch, the subject's high-contrast markings lending themselves naturally to Viviers' bold, confident brushwork. The original is available for acquisition." data-af="Venom Cat is een van Walt Viviers se gewildste werke — 'n 20 × 20 cm akriel op doek voltooi in 2019. Die skildery smelt die onmiddellik herkenbare estetiek van Marvel se Venom saam met 'n kat, 'n kombinasie wat onmiddellik oortuigend was toe dit aanvanklik aanlyn gedeel is. Belig in 'n onderhoud met Pixelsmith Studios het Venom Cat gehelp om Viviers as 'n Suid-Afrikaanse kunskenaar met 'n onderskeidende stem te vestig: een wat vloeiend beweeg tussen skilderagtige tegniek en popkultuur sonder om enige een op te offer. Die oorspronklike is beskikbaar vir aankoop.">Venom Cat is one of Walt Viviers' most popular works — a 20 × 20 cm acrylic on canvas completed in 2019. The painting merges the instantly recognisable aesthetic of Marvel's Venom with a cat, a combination that proved immediately compelling when first shared online. Featured in an interview with Pixelsmith Studios, Venom Cat helped establish Viviers as a South African fine artist with a distinctive voice: one that moves fluidly between painterly technique and popular culture without sacrificing either. The small square format packs considerable visual punch, the subject's high-contrast markings lending themselves naturally to Viviers' bold, confident brushwork. The original is available for acquisition.</p>
     </div>
     
   <div class="enquiry-section" id="enquiry-section" hidden>
@@ -559,8 +560,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
@@ -569,6 +570,8 @@
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
         });
+        var descEl = document.getElementById('artwork-description');
+        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
         document.getElementById('lang-en').classList.toggle('active', l === 'en');
         document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }

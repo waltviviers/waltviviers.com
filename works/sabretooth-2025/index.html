@@ -411,6 +411,7 @@
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -463,7 +464,7 @@
     </div>
     
     <div class="artwork-desc">
-      <p>Sabretooth is a 2025 acrylic on canvas by Walt Viviers. The sabre-toothed predator — whether drawn from the prehistoric Smilodon or the iconic Marvel villain — carries a raw, dangerous energy that suits Viviers' bold, direct painting style. His approach to animal and character subjects relies on decisive mark-making, strong form, and expressive colour; Sabretooth brings all of those qualities to bear on a subject that is inherently powerful. A striking addition to Viviers' 2025 body of work, the painting demonstrates the Pretoria-based South African artist's ability to find the emotional core of a subject and transfer it directly to canvas. The original is available for acquisition.</p>
+      <p id="artwork-description" data-en="Sabretooth is a 2025 acrylic on canvas by Walt Viviers. The sabre-toothed predator — whether drawn from the prehistoric Smilodon or the iconic Marvel villain — carries a raw, dangerous energy that suits Viviers' bold, direct painting style. His approach to animal and character subjects relies on decisive mark-making, strong form, and expressive colour; Sabretooth brings all of those qualities to bear on a subject that is inherently powerful. A striking addition to Viviers' 2025 body of work, the painting demonstrates the Pretoria-based South African artist's ability to find the emotional core of a subject and transfer it directly to canvas. The original is available for acquisition." data-af="Sabretooth is 'n 2025-akriel op doek deur Walt Viviers. Die sabeltandse roofdier — of dit nou ontleen is aan die prehistoriese Smilodon of die ikoniese Marvel-skurk — dra 'n rou, gevaarlike energie wat by Viviers se vrypostige, direkte skilderstyl pas. Sy benadering tot dier- en karakteronderwerpe berus op besliste merk-making, sterk vorm en ekspressiewe kleur; Sabretooth bring al hierdie kwaliteite tot 'n onderwerp wat inherent kragtig is. 'n Opvallende toevoeging tot Viviers se 2025-liggaam van werk. Die oorspronklike is beskikbaar vir aankoop.">Sabretooth is a 2025 acrylic on canvas by Walt Viviers. The sabre-toothed predator — whether drawn from the prehistoric Smilodon or the iconic Marvel villain — carries a raw, dangerous energy that suits Viviers' bold, direct painting style. His approach to animal and character subjects relies on decisive mark-making, strong form, and expressive colour; Sabretooth brings all of those qualities to bear on a subject that is inherently powerful. A striking addition to Viviers' 2025 body of work, the painting demonstrates the Pretoria-based South African artist's ability to find the emotional core of a subject and transfer it directly to canvas. The original is available for acquisition.</p>
     </div>
     
   <div class="enquiry-section" id="enquiry-section" hidden>
@@ -558,8 +559,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
@@ -568,6 +569,8 @@
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
         });
+        var descEl = document.getElementById('artwork-description');
+        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
         document.getElementById('lang-en').classList.toggle('active', l === 'en');
         document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }

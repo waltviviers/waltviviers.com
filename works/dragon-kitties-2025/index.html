@@ -411,6 +411,7 @@
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -464,7 +465,7 @@
     </div>
     
     <div class="artwork-desc">
-      <p>Dragon Kitties is a small-format acrylic on canvas measuring 15 × 15 cm, completed in 2025. The piece brings together two of Walt Viviers' recurring interests — animals and the fantastical — in a compact, high-energy composition. Viviers has a gift for injecting outsized personality into modest canvases, and Dragon Kitties exemplifies that approach: the diminutive scale belies real warmth and detail, with the subject combination carrying the playful irreverence that runs through much of the Pretoria-based artist's recent work. Part of a productive 2025 body of work that sees Viviers pushing into new subject territory, this original acrylic is available for acquisition.</p>
+      <p id="artwork-description" data-en="Dragon Kitties is a small-format acrylic on canvas measuring 15 × 15 cm, completed in 2025. The piece brings together two of Walt Viviers' recurring interests — animals and the fantastical — in a compact, high-energy composition. Viviers has a gift for injecting outsized personality into modest canvases, and Dragon Kitties exemplifies that approach: the diminutive scale belies real warmth and detail, with the subject combination carrying the playful irreverence that runs through much of the Pretoria-based artist's recent work. Part of a productive 2025 body of work that sees Viviers pushing into new subject territory, this original acrylic is available for acquisition." data-af="Dragon Kitties is 'n kleinformaat akriel op doek van 15 × 15 cm, voltooi in 2025. Die stuk bring twee van Walt Viviers se herhalende belangstellings saam — diere en die fantastiese — in 'n kompakte, energieke komposisie. Viviers het die gawe om uitsonderlike persoonlikheid in beskei doeke in te bou, en Dragon Kitties is 'n voortreflike voorbeeld hiervan: die geringe skaal belieg ware warmte en detail, met die onderwerpkombinasie wat die speelse oneerbiedigheid dra wat deur baie van die Pretoriase kunstenaar se onlangse werk loop. Die oorspronklike akriel is beskikbaar vir aankoop.">Dragon Kitties is a small-format acrylic on canvas measuring 15 × 15 cm, completed in 2025. The piece brings together two of Walt Viviers' recurring interests — animals and the fantastical — in a compact, high-energy composition. Viviers has a gift for injecting outsized personality into modest canvases, and Dragon Kitties exemplifies that approach: the diminutive scale belies real warmth and detail, with the subject combination carrying the playful irreverence that runs through much of the Pretoria-based artist's recent work. Part of a productive 2025 body of work that sees Viviers pushing into new subject territory, this original acrylic is available for acquisition.</p>
     </div>
     
   <div class="enquiry-section" id="enquiry-section" hidden>
@@ -559,8 +560,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
@@ -569,6 +570,8 @@
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
         });
+        var descEl = document.getElementById('artwork-description');
+        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
         document.getElementById('lang-en').classList.toggle('active', l === 'en');
         document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }
