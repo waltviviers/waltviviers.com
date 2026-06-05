@@ -1777,9 +1777,6 @@
 
         document.querySelectorAll('.gn-dot').forEach((d, i) =>
           d.classList.toggle('active', i === index));
-
-        history.replaceState({ artworkSlug: slugify(w.title, w.year) }, '',
-          '/works/' + slugify(w.title, w.year) + '/');
       }
 
       /* ── Build dot indicators ── */
