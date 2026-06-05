@@ -265,7 +265,7 @@ function sharedNavHTML() {
   return `
   <nav>
     <div class="nav-left">
-      <a href="/" class="nav-logo" aria-label="Home">
+      <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
         <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
       <div class="lang-toggle">
