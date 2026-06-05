@@ -27,13 +27,13 @@ function statusInfo(available) {
 
 function buildMeta(w) {
   const rows = [];
-  if (w.medium)     rows.push(['Medium',     w.medium]);
-  if (w.dimensions) rows.push(['Dimensions', w.dimensions]);
-  if (w.price)      rows.push(['Price',      w.price]);
   const { text } = statusInfo(w.available);
-  rows.push(['Status', text]);
-  return rows.map(([label, value]) =>
-    `<div class="meta-row"><span class="meta-label">${escapeHtml(label)}</span><span class="meta-value">${escapeHtml(value)}</span></div>`
+  if (w.medium)     rows.push({ key: 'meta-medium',     label: 'Medium',     value: escapeHtml(w.medium) });
+  if (w.dimensions) rows.push({ key: 'meta-dimensions', label: 'Dimensions', value: escapeHtml(w.dimensions) });
+  if (w.price)      rows.push({ key: 'meta-price',      label: 'Price',      value: escapeHtml(w.price) });
+  rows.push({ key: 'meta-status', label: 'Status', value: `<span data-i18n="status-${w.available}">${escapeHtml(text)}</span>` });
+  return rows.map(r =>
+    `<div class="meta-row"><span class="meta-label" data-i18n="${r.key}">${escapeHtml(r.label)}</span><span class="meta-value">${r.value}</span></div>`
   ).join('\n      ');
 }
 
@@ -269,15 +269,18 @@ function sharedNavHTML() {
         <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
       <div class="lang-toggle">
-        <div class="lang-group active">
+        <div class="lang-group active" id="lang-en">
           <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
+        </div>
+        <div class="lang-group" id="lang-af">
+          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
         </div>
       </div>
     </div>
     <ul class="nav-links">
-      <li class="nav-link-hide"><a href="/#works">Artworks</a></li>
-      <li class="nav-link-hide"><a href="/#about">About</a></li>
-      <li class="nav-link-hide"><a href="/#commission" class="nav-cta">Enquire</a></li>
+      <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
+      <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
           <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
@@ -367,6 +370,27 @@ function sharedScripts() {
     document.getElementById('admin-btn').addEventListener('click', function () {
       window.open('https://waltviviers.com/admin#/collections/artworks/entries/artworks', '_blank', 'noopener,noreferrer');
     });
+  </script>
+  <script>
+    (function() {
+      var LANG = {
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+      };
+      var lang = localStorage.getItem('wv-lang') || 'en';
+      function applyLang(l) {
+        lang = l; localStorage.setItem('wv-lang', l);
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          var k = el.dataset.i18n;
+          if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
+        });
+        document.getElementById('lang-en').classList.toggle('active', l === 'en');
+        document.getElementById('lang-af').classList.toggle('active', l === 'af');
+      }
+      document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
+      document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
+      applyLang(lang);
+    })();
   </script>`;
 }
 
@@ -409,8 +433,8 @@ function generatePage(w) {
   }
 
   const enquireBtn = (w.available !== 'sold')
-    ? `<button class="btn btn-primary" onclick="toggleForm()">Enquire about this work</button>`
-    : `<span class="btn btn-secondary" style="pointer-events:none;opacity:0.5">Sold</span>`;
+    ? `<button class="btn btn-primary" onclick="toggleForm()" data-i18n="btn-enquire">Enquire about this work</button>`
+    : `<span class="btn btn-secondary" style="pointer-events:none;opacity:0.5" data-i18n="status-sold">Sold</span>`;
 
   const enquiryForm = (w.available !== 'sold') ? `
   <div class="enquiry-section" id="enquiry-section" hidden>
@@ -439,7 +463,7 @@ function generatePage(w) {
   </div>` : '';
 
   const instagramLink = w.instagram
-    ? `\n  <div style="margin-top:24px;text-align:center"><a href="${escapeHtml(w.instagram)}" target="_blank" rel="noopener" style="font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5">View on Instagram ↗</a></div>`
+    ? `\n  <div style="margin-top:24px;text-align:center"><a href="${escapeHtml(w.instagram)}" target="_blank" rel="noopener" style="font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5" data-i18n="btn-instagram">View on Instagram ↗</a></div>`
     : '';
 
   const formScript = (w.available !== 'sold') ? `
@@ -662,7 +686,7 @@ ${sharedNavHTML()}
         <h1>${escapeHtml(w.title)}</h1>
         <div class="artwork-year">${escapeHtml(String(w.year))}</div>
       </div>
-      <span class="status-badge ${cls}">${statusText}</span>
+      <span class="status-badge ${cls}" data-i18n="status-${w.available}">${statusText}</span>
     </div>
 
     <div class="artwork-meta">
@@ -671,7 +695,7 @@ ${sharedNavHTML()}
 
     <div class="artwork-actions">
       ${enquireBtn}
-      <a href="/works/" class="btn btn-secondary">View all works</a>
+      <a href="/works/" class="btn btn-secondary" data-i18n="btn-all-works">View all works</a>
     </div>
     ${w.description ? `\n    <div class="artwork-desc">\n      <p>${escapeHtml(w.description)}</p>\n    </div>` : ''}
     ${enquiryForm}${instagramLink}

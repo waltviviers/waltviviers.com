@@ -378,15 +378,18 @@
         <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
       <div class="lang-toggle">
-        <div class="lang-group active">
+        <div class="lang-group active" id="lang-en">
           <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
+        </div>
+        <div class="lang-group" id="lang-af">
+          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
         </div>
       </div>
     </div>
     <ul class="nav-links">
-      <li class="nav-link-hide"><a href="/#works">Artworks</a></li>
-      <li class="nav-link-hide"><a href="/#about">About</a></li>
-      <li class="nav-link-hide"><a href="/#commission" class="nav-cta">Enquire</a></li>
+      <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
+      <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
           <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
@@ -413,10 +416,9 @@
 
   <div class="page-wrap">
     <div class="page-head">
-      <h1>Selected Artworks</h1>
       <div class="page-head-meta">
         <span class="works-count" id="works-count"></span>
-        <a href="/" class="back-link">← Back to home</a>
+        <a href="/" class="back-link" data-i18n="back-home">← Back to home</a>
       </div>
     </div>
 
@@ -488,6 +490,27 @@
     document.getElementById('admin-btn').addEventListener('click', function () {
       window.open('https://waltviviers.com/admin#/collections/artworks/entries/artworks', '_blank', 'noopener,noreferrer');
     });
+  </script>
+  <script>
+    (function() {
+      var LANG = {
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','back-home':'← Back to home' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','back-home':'← Terug na tuis' }
+      };
+      var lang = localStorage.getItem('wv-lang') || 'en';
+      function applyLang(l) {
+        lang = l; localStorage.setItem('wv-lang', l);
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          var k = el.dataset.i18n;
+          if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
+        });
+        document.getElementById('lang-en').classList.toggle('active', l === 'en');
+        document.getElementById('lang-af').classList.toggle('active', l === 'af');
+      }
+      document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
+      document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
+      applyLang(lang);
+    })();
   </script>
   <script>
     (function () {
