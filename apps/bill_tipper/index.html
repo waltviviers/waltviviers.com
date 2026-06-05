@@ -240,6 +240,7 @@
       border-radius: 22px;
       background: #1A1A1A;
       box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -247,13 +248,9 @@
     }
 
     .app-icon svg {
-      width: 52px;
-      height: 52px;
-      stroke: #FFFFFF;
-      fill: none;
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      width: 100%;
+      height: 100%;
+      display: block;
     }
 
     .download-row {
@@ -518,15 +515,18 @@
         <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
       <div class="lang-toggle">
-        <div class="lang-group active">
+        <div class="lang-group active" id="lang-en">
           <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
+        </div>
+        <div class="lang-group" id="lang-af">
+          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
         </div>
       </div>
     </div>
     <ul class="nav-links">
-      <li class="nav-link-hide"><a href="/#works">Artworks</a></li>
-      <li class="nav-link-hide"><a href="/#about">About</a></li>
-      <li class="nav-link-hide"><a href="/#commission" class="nav-cta">Enquire</a></li>
+      <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
+      <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
           <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
@@ -555,13 +555,28 @@
 
     <!-- Hero -->
     <section class="hero">
-      <p class="app-eyebrow">By Walt Viviers</p>
+      <p class="app-eyebrow" data-i18n="app-eyebrow">By Walt Viviers</p>
       <div class="app-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="9"/>
-          <polyline points="12 7 12 12 15.5 14"/>
-          <line x1="7" y1="19.5" x2="9.5" y2="19.5"/>
-          <line x1="11" y1="19.5" x2="17" y2="19.5"/>
+        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <path d="M39 56 Q24 66 12 76" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <circle cx="10" cy="78" r="8" fill="white"/>
+          <circle cx="3" cy="71" r="4.5" fill="white"/>
+          <circle cx="1" cy="80" r="4" fill="white"/>
+          <circle cx="5" cy="88" r="4" fill="white"/>
+          <path d="M57 43 Q70 25 82 12" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <circle cx="83" cy="10" r="8" fill="white"/>
+          <circle cx="78" cy="3" r="4.5" fill="white"/>
+          <circle cx="87" cy="2" r="4" fill="white"/>
+          <circle cx="93" cy="7" r="4" fill="white"/>
+          <path d="M44 72 Q33 82 24 90" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <ellipse cx="19" cy="93" rx="11" ry="6" fill="white" transform="rotate(-30 19 93)"/>
+          <path d="M53 72 Q67 73 83 74" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
+          <ellipse cx="88" cy="75" rx="10" ry="6" fill="white" transform="rotate(5 88 75)"/>
+          <ellipse cx="47" cy="57" rx="11" ry="14" fill="white" transform="rotate(-12 47 57)"/>
+          <circle cx="62" cy="26" r="14" fill="white"/>
+          <circle cx="56.5" cy="22" r="2.8" fill="#1A1A1A"/>
+          <circle cx="65" cy="20" r="2.8" fill="#1A1A1A"/>
+          <path d="M55 29 Q62 37 69 29" stroke="#1A1A1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
         </svg>
       </div>
       <h1>Bill Tipper</h1>
@@ -587,21 +602,21 @@
         <div class="feature-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         </div>
-        <h2>Tip calculator</h2>
+        <h2 data-i18n="feat-tip">Tip calculator</h2>
         <p>Enter the bill total and choose a tip percentage. Bill Tipper instantly shows the tip amount and your final total — no manual arithmetic needed.</p>
       </div>
       <div class="feature">
         <div class="feature-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
-        <h2>Split between guests</h2>
+        <h2 data-i18n="feat-split">Split between guests</h2>
         <p>Dining with a group? Enter the number of people and see exactly what each person owes, tip included. Even splits made simple.</p>
       </div>
       <div class="feature">
         <div class="feature-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
-        <h2>Instant results</h2>
+        <h2 data-i18n="feat-instant">Instant results</h2>
         <p>Results update as you type — no submit button, no waiting. Bill Tipper is built to be fast, minimal, and completely frictionless.</p>
       </div>
     </section>
@@ -609,10 +624,10 @@
     <!-- Privacy -->
     <section class="privacy-strip">
       <div>
-        <p class="privacy-tag">Built with respect</p>
+        <p class="privacy-tag" data-i18n="privacy-tag">Built with respect</p>
         <h2>Zero data.<br/>Zero ads.<br/>Zero fuss.</h2>
         <p>Bill Tipper does not collect, store, or transmit any personal data. All calculations happen entirely on your device. No account required, no network needed.</p>
-        <a href="/apps/bill_tipper/privacy-policy/" class="privacy-link">Read the privacy policy ↗</a>
+        <a href="/apps/bill_tipper/privacy-policy/" class="privacy-link" data-i18n="privacy-link">Read the privacy policy ↗</a>
       </div>
       <ul class="privacy-checklist" aria-label="Privacy commitments">
         <li>
@@ -717,6 +732,27 @@
     document.getElementById('admin-btn').addEventListener('click', function () {
       window.open('https://waltviviers.com/admin#/collections/artworks/entries/artworks', '_blank', 'noopener,noreferrer');
     });
+  </script>
+  <script>
+    (function() {
+      var LANG = {
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','app-eyebrow':'By Walt Viviers','feat-tip':'Tip calculator','feat-split':'Split between guests','feat-instant':'Instant results','privacy-tag':'Built with respect','privacy-link':'Read the privacy policy ↗' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','app-eyebrow':'Deur Walt Viviers','feat-tip':'Fooiberekening','feat-split':'Verdeel tussen gaste','feat-instant':'Onmiddellike resultate','privacy-tag':'Gebou met respek','privacy-link':'Lees die privaatheidbeleid ↗' }
+      };
+      var lang = localStorage.getItem('wv-lang') || 'en';
+      function applyLang(l) {
+        lang = l; localStorage.setItem('wv-lang', l);
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          var k = el.dataset.i18n;
+          if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
+        });
+        document.getElementById('lang-en').classList.toggle('active', l === 'en');
+        document.getElementById('lang-af').classList.toggle('active', l === 'af');
+      }
+      document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
+      document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
+      applyLang(lang);
+    })();
   </script>
 </body>
 </html>
