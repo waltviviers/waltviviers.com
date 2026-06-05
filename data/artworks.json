@@ -1,6 +1,30 @@
 {
   "artworks": [
     {
+      "title": "Fish Vortex",
+      "year": "2010",
+      "medium": "Mixed Media on Boaord",
+      "dimensions": "30 x 21 cm",
+      "available": "available",
+      "featured": false,
+      "image": "/images/IMG_8962.jpg",
+      "price": "",
+      "instagram": "",
+      "article": ""
+    },
+    {
+      "title": "The Wind",
+      "year": "2010",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "",
+      "available": "available",
+      "featured": false,
+      "image": "/images/IMG_8956.jpg",
+      "price": "",
+      "instagram": "",
+      "article": ""
+    },
+    {
       "title": "Capsaicin",
       "year": "2010",
       "medium": "Acrylic on Canvas",
