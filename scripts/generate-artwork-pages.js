@@ -99,7 +99,7 @@ function sharedCSS() {
     }
 
     .lang-label {
-      max-width: 80px; overflow: hidden; white-space: nowrap;
+      max-width: 100px; overflow: hidden; white-space: nowrap;
       transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
     }
 
@@ -522,6 +522,7 @@ function generatePage(w) {
   <meta name="twitter:image"       content="${ogImage}" />
 
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="preload" as="image" href="/${image800}"${w.image.endsWith('.webp') ? ' type="image/webp"' : ''} fetchpriority="high" />
 
   <script type="application/ld+json">${JSON.stringify(schema)}<\/script>
 
