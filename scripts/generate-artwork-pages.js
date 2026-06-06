@@ -99,7 +99,7 @@ function sharedCSS() {
     }
 
     .lang-label {
-      max-width: 80px; overflow: hidden; white-space: nowrap;
+      max-width: 200px; overflow: hidden; white-space: nowrap;
       transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
     }
 
@@ -280,6 +280,7 @@ function sharedNavHTML() {
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -374,8 +375,8 @@ function sharedScripts() {
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
@@ -384,6 +385,8 @@ function sharedScripts() {
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
         });
+        var descEl = document.getElementById('artwork-description');
+        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
         document.getElementById('lang-en').classList.toggle('active', l === 'en');
         document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }
@@ -402,35 +405,54 @@ function generatePage(w) {
   const ogImage    = `https://waltviviers.com/${w.image}`;
   const image800   = w.image.startsWith('images/') ? w.image.replace('images/', 'images/800/') : w.image;
   const altText    = `Walt Viviers, ${w.title}, ${w.year}${w.medium ? ', ' + w.medium : ''}`;
-  const metaDesc = w.description
-    ? w.description.slice(0, 160)
-    : [
+  const rawDesc = w.description
+    ? (w.description.length > 160 ? w.description.slice(0, 157) + '…' : w.description)
+    : null;
+  const metaDesc = rawDesc || [
         `${w.title} by Walt Viviers.`,
         `${w.year}.`,
         w.medium ? `${w.medium}.` : '',
         w.dimensions ? `${w.dimensions}.` : '',
         w.available === 'available' ? 'Original available for acquisition.' : '',
         'Fine art by South African artist Walt Viviers, based in Pretoria.',
-      ].filter(Boolean).join(' ');
+      ].filter(Boolean).join(' ').slice(0, 160);
 
   const schema = {
     '@context': 'https://schema.org',
-    '@type': 'VisualArtwork',
-    name:        w.title,
-    dateCreated: w.year,
-    image:       ogImage,
-    url:         canonical,
-    creator: {
-      '@type': 'Person',
-      name:    'Walt Viviers',
-      url:     'https://waltviviers.com',
-    },
+    '@graph': [
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home',     item: 'https://waltviviers.com/' },
+          { '@type': 'ListItem', position: 2, name: 'Artworks', item: 'https://waltviviers.com/works/' },
+          { '@type': 'ListItem', position: 3, name: w.title,    item: canonical },
+        ],
+      },
+      Object.assign(
+        {
+          '@type': 'VisualArtwork',
+          name:        w.title,
+          dateCreated: w.year,
+          image:       ogImage,
+          url:         canonical,
+          description: w.description || metaDesc,
+          creator: {
+            '@type': 'Person',
+            name:    'Walt Viviers',
+            url:     'https://waltviviers.com',
+            address: { '@type': 'PostalAddress', addressLocality: 'Pretoria', addressRegion: 'Gauteng', addressCountry: 'ZA' },
+          },
+        },
+        w.medium     ? { artMedium: w.medium }     : {},
+        w.dimensions ? { size: w.dimensions }       : {},
+        w.available === 'available'
+          ? { offers: { '@type': 'Offer', availability: 'https://schema.org/InStock', url: canonical } }
+          : w.available === 'sold'
+          ? { offers: { '@type': 'Offer', availability: 'https://schema.org/SoldOut', url: canonical } }
+          : {},
+      ),
+    ],
   };
-  if (w.medium)     schema.artMedium = w.medium;
-  if (w.dimensions) schema.size      = w.dimensions;
-  if (w.available === 'available') {
-    schema.offers = { '@type': 'Offer', availability: 'https://schema.org/InStock', url: canonical };
-  }
 
   const enquireBtn = (w.available !== 'sold')
     ? `<button class="btn btn-primary" onclick="toggleForm()" data-i18n="btn-enquire">Enquire about this work</button>`
@@ -496,6 +518,8 @@ function generatePage(w) {
     });
   <\/script>` : '';
 
+  const ogImageType = w.image.endsWith('.webp') ? 'image/webp' : 'image/jpeg';
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -504,21 +528,40 @@ function generatePage(w) {
   <title>${escapeHtml(pageTitle)}</title>
   <meta name="description" content="${escapeHtml(metaDesc)}" />
   <meta name="author" content="Walt Viviers" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="${canonical}" />
 
-  <meta property="og:type"        content="website" />
+  <!-- Hreflang -->
+  <link rel="alternate" hreflang="en" href="${canonical}" />
+  <link rel="alternate" hreflang="af" href="${canonical}" />
+  <link rel="alternate" hreflang="x-default" href="${canonical}" />
+
+  <!-- Geo -->
+  <meta name="geo.region" content="ZA-GP" />
+  <meta name="geo.placename" content="Pretoria, Gauteng, South Africa" />
+  <meta name="geo.position" content="-25.7479;28.2293" />
+  <meta name="ICBM" content="-25.7479, 28.2293" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="article" />
   <meta property="og:url"         content="${canonical}" />
   <meta property="og:title"       content="${escapeHtml(pageTitle)}" />
   <meta property="og:description" content="${escapeHtml(metaDesc)}" />
   <meta property="og:image"       content="${ogImage}" />
+  <meta property="og:image:alt"   content="${escapeHtml(altText)}" />
+  <meta property="og:image:type"  content="${ogImageType}" />
+  <meta property="og:locale"      content="en_ZA" />
   <meta property="og:site_name"   content="Walt Viviers — Fine Art" />
 
+  <!-- Twitter / X -->
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="${escapeHtml(pageTitle)}" />
   <meta name="twitter:description" content="${escapeHtml(metaDesc)}" />
   <meta name="twitter:image"       content="${ogImage}" />
+  <meta name="twitter:image:alt"   content="${escapeHtml(altText)}" />
 
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="preload" as="image" href="/${image800}"${w.image.endsWith('.webp') ? ' type="image/webp"' : ''} fetchpriority="high" />
 
   <script type="application/ld+json">${JSON.stringify(schema)}<\/script>
 
@@ -697,7 +740,7 @@ ${sharedNavHTML()}
       ${enquireBtn}
       <a href="/works/" class="btn btn-secondary" data-i18n="btn-all-works">View all works</a>
     </div>
-    ${w.description ? `\n    <div class="artwork-desc">\n      <p>${escapeHtml(w.description)}</p>\n    </div>` : ''}
+    ${w.description ? `\n    <div class="artwork-desc">\n      <p id="artwork-description" data-en="${escapeHtml(w.description)}" data-af="${escapeHtml(w.description_af || w.description)}">${escapeHtml(w.description)}</p>\n    </div>` : ''}
     ${enquiryForm}${instagramLink}
   </main>
 
