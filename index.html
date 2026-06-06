@@ -1555,7 +1555,7 @@
         <a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub">
           <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
         </a>
-        <a href="mailto:waltviviers.art@gmail.com" aria-label="Email">
+        <a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">
           <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
         </a>
       </div>
@@ -1645,7 +1645,7 @@
         'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-price': 'Price', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗', 'meta-article': 'Article', 'meta-read-article': 'Read article ↗',
         'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire',
         'work-label': 'Work', 'works-suffix': 'artworks',
-        'footer-copy': '© 2026 Walt Viviers. All rights reserved.'
+        'footer-copy': '© 2026 Walt Viviers. All rights reserved.','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.'
       },
       af: {
         'nav-works': 'Kunswerke', 'nav-about': 'Omheen', 'nav-apps': 'Programme', 'nav-enquire': 'Navraag',
@@ -1679,7 +1679,7 @@
         'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-price': 'Prys', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗',
         'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag',
         'work-label': 'Werk', 'works-suffix': 'kunswerke',
-        'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.'
+        'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.'
       }
     };
 
@@ -1697,6 +1697,9 @@
       });
       document.querySelectorAll('[data-i18n-placeholder]').forEach(function (el) {
         el.placeholder = window._t(el.dataset.i18nPlaceholder);
+      });
+      document.querySelectorAll('[data-i18n-href]').forEach(function (el) {
+        el.href = window._t(el.dataset.i18nHref);
       });
       document.querySelectorAll('.lang-group[data-lang]').forEach(function (group) {
         group.classList.toggle('active', group.dataset.lang === lang);
@@ -2055,7 +2058,7 @@
               btn.textContent = origText;
             }
           } catch (_) {
-            errEl.textContent = 'Could not send. Please email waltviviers.art@gmail.com directly.';
+            errEl.textContent = (window._t && window._t('email-fallback')) || 'Could not send. Email artist@waltviviers.com directly.';
             errEl.hidden = false;
             btn.disabled = false;
             btn.textContent = origText;

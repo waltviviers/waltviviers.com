@@ -290,7 +290,7 @@ function sharedNavHTML() {
           <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
             <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
           </a>
-          <a href="mailto:waltviviers.art@gmail.com" aria-label="Email">
+          <a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
           </a>
         </div>
@@ -328,7 +328,7 @@ function sharedFooterHTML() {
         <a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub">
           <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
         </a>
-        <a href="mailto:waltviviers.art@gmail.com" aria-label="Email">
+        <a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">
           <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
         </a>
       </div>
@@ -375,8 +375,8 @@ function sharedScripts() {
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
@@ -384,6 +384,10 @@ function sharedScripts() {
         document.querySelectorAll('[data-i18n]').forEach(function(el) {
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
+        });
+        document.querySelectorAll('[data-i18n-href]').forEach(function(el) {
+          var k = el.dataset.i18nHref;
+          if (LANG[l] && LANG[l][k] !== undefined) el.href = LANG[l][k];
         });
         var descEl = document.getElementById('artwork-description');
         if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
@@ -512,7 +516,7 @@ function generatePage(w) {
           errEl.hidden = false; btn.disabled = false; btn.textContent = 'Send enquiry';
         }
       } catch(_) {
-        errEl.textContent = 'Could not send. Email waltviviers.art@gmail.com directly.';
+        errEl.textContent = (LANG[lang] && LANG[lang]['email-fallback']) || 'Could not send. Email artist@waltviviers.com directly.';
         errEl.hidden = false; btn.disabled = false; btn.textContent = 'Send enquiry';
       }
     });
