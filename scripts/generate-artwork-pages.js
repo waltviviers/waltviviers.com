@@ -280,7 +280,6 @@ function sharedNavHTML() {
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
-      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
