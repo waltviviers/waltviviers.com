@@ -1940,6 +1940,8 @@
             price:      w.price      || '',
           }));
 
+          works.sort((a, b) => Number(b.year) - Number(a.year));
+
           if (!works.length) { setHeroState('No artworks yet — add some in the CMS'); return; }
 
           const fi = works.findIndex(w => w.featured);
