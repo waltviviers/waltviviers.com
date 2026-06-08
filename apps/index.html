@@ -301,10 +301,12 @@
       flex-shrink: 0;
     }
 
-    .app-card-icon svg {
+    .app-card-icon svg,
+    .app-card-icon img {
       width: 100%;
       height: 100%;
       display: block;
+      object-fit: cover;
     }
 
     .app-card-body { flex: 1; min-width: 0; }
@@ -433,27 +435,7 @@
     <div class="apps-grid">
       <a href="/apps/bill_tipper/" class="app-card">
         <div class="app-card-icon" aria-hidden="true">
-          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <path d="M39 56 Q24 66 12 76" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-            <circle cx="10" cy="78" r="8" fill="white"/>
-            <circle cx="3" cy="71" r="4.5" fill="white"/>
-            <circle cx="1" cy="80" r="4" fill="white"/>
-            <circle cx="5" cy="88" r="4" fill="white"/>
-            <path d="M57 43 Q70 25 82 12" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-            <circle cx="83" cy="10" r="8" fill="white"/>
-            <circle cx="78" cy="3" r="4.5" fill="white"/>
-            <circle cx="87" cy="2" r="4" fill="white"/>
-            <circle cx="93" cy="7" r="4" fill="white"/>
-            <path d="M44 72 Q33 82 24 90" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-            <ellipse cx="19" cy="93" rx="11" ry="6" fill="white" transform="rotate(-30 19 93)"/>
-            <path d="M53 72 Q67 73 83 74" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-            <ellipse cx="88" cy="75" rx="10" ry="6" fill="white" transform="rotate(5 88 75)"/>
-            <ellipse cx="47" cy="57" rx="11" ry="14" fill="white" transform="rotate(-12 47 57)"/>
-            <circle cx="62" cy="26" r="14" fill="white"/>
-            <circle cx="56.5" cy="22" r="2.8" fill="#1A1A1A"/>
-            <circle cx="65" cy="20" r="2.8" fill="#1A1A1A"/>
-            <path d="M55 29 Q62 37 69 29" stroke="#1A1A1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          </svg>
+          <img src="/images/bill-tipper-icon.webp" alt="" width="64" height="64" />
         </div>
         <div class="app-card-body">
           <div class="app-card-name">Bill Tipper</div>
