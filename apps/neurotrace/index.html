@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Neurotracer — Single-player memory puzzle game</title>
-  <meta name="description" content="Neurotracer is a single-player memory puzzle game. No ads, no tracking, no account required. Your scores stay on your device." />
+  <title>Neurotracer — A cyberpunk memory puzzle for Android</title>
+  <meta name="description" content="A cyberpunk memory puzzle for Android. Tiles flash. You watch. Then you repeat. Free on Google Play — no ads, no subscriptions, no internet required." />
   <link rel="canonical" href="https://waltviviers.com/apps/neurotrace/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
 
@@ -13,14 +13,14 @@
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://waltviviers.com/apps/neurotrace/" />
-  <meta property="og:title"       content="Neurotracer — Single-player memory puzzle game" />
-  <meta property="og:description" content="A single-player memory puzzle game. No ads, no tracking, no account required." />
+  <meta property="og:title"       content="Neurotracer — A cyberpunk memory puzzle for Android" />
+  <meta property="og:description" content="Tiles flash. You watch. Then you repeat — faster, longer, deeper into the grid. Free on Google Play." />
   <meta property="og:site_name"   content="Walt Viviers" />
 
   <!-- Twitter / X -->
   <meta name="twitter:card"        content="summary" />
-  <meta name="twitter:title"       content="Neurotracer — Single-player memory puzzle game" />
-  <meta name="twitter:description" content="A single-player memory puzzle game. No ads, no tracking, no account required." />
+  <meta name="twitter:title"       content="Neurotracer — A cyberpunk memory puzzle for Android" />
+  <meta name="twitter:description" content="Tiles flash. You watch. Then you repeat — faster, longer, deeper into the grid. Free on Google Play." />
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -30,7 +30,7 @@
       {
         "@type": "SoftwareApplication",
         "name": "Neurotracer",
-        "description": "A single-player memory puzzle game. No ads, no tracking, no account required. Your scores stay on your device.",
+        "description": "A cyberpunk memory puzzle for Android. Tiles flash. You watch. Then you repeat — faster, longer, deeper into the grid. Free, no ads, no subscriptions.",
         "url": "https://waltviviers.com/apps/neurotrace/",
         "applicationCategory": "GameApplication",
         "operatingSystem": "Android",
@@ -249,12 +249,15 @@
       font-weight: 400;
       line-height: 1.05;
       letter-spacing: -0.02em;
-      margin-bottom: 28px;
+      margin-bottom: 20px;
     }
 
-    .hero h1 em {
+    .hero-tagline {
+      font-family: var(--serif);
       font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
       color: var(--stone);
+      margin-bottom: 28px;
     }
 
     .hero-desc {
@@ -357,41 +360,73 @@
       50%       { transform: translateY(4px); }
     }
 
-    /* ── Features ── */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+    /* ── How it works ── */
+    .how-it-works {
+      padding: 96px 48px;
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
       border-bottom: 1px solid var(--rule);
     }
 
-    .feature {
-      padding: 72px 56px;
+    .how-it-works h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 28px;
+    }
+
+    .how-it-works p {
+      font-size: clamp(15px, 1.8vw, 18px);
+      color: var(--stone);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .how-survive {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    /* ── Difficulty ── */
+    .difficulty-section {
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .difficulty-header {
+      padding: 64px 48px 0;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    .difficulty-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .difficulty-card {
+      padding: 48px 56px 64px;
       border-right: 1px solid var(--rule);
     }
 
-    .feature:last-child { border-right: none; }
+    .difficulty-card:last-child { border-right: none; }
 
-    .feature-icon {
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--rule);
-      margin-bottom: 32px;
+    .diff-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-bottom: 28px;
     }
 
-    .feature-icon svg {
-      width: 20px;
-      height: 20px;
-      stroke: var(--stone);
-      fill: none;
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .feature h2 {
+    .difficulty-card h3 {
       font-family: var(--serif);
       font-size: 22px;
       font-weight: 400;
@@ -399,7 +434,7 @@
       margin-bottom: 14px;
     }
 
-    .feature p {
+    .difficulty-card p {
       font-size: 14px;
       color: var(--stone);
       line-height: 1.75;
@@ -520,9 +555,11 @@
       .hero { padding-top: 50px; min-height: auto; padding-top: calc(50px + 80px); padding-bottom: 80px; }
       .hero-scroll { display: none; }
 
-      .features { grid-template-columns: 1fr; }
-      .feature { border-right: none; border-bottom: 1px solid var(--rule); padding: 48px 24px; }
-      .feature:last-child { border-bottom: none; }
+      .how-it-works { padding: 64px 24px; }
+      .difficulty-header { padding: 48px 24px 0; }
+      .difficulty-grid { grid-template-columns: 1fr; }
+      .difficulty-card { border-right: none; border-bottom: 1px solid var(--rule); padding: 40px 24px; }
+      .difficulty-card:last-child { border-bottom: none; }
 
       .privacy-strip { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
 
@@ -587,12 +624,13 @@
 
     <!-- Hero -->
     <section class="hero">
-      <p class="app-eyebrow" data-i18n="app-eyebrow">By Walt Viviers</p>
+      <p class="app-eyebrow" data-i18n="app-eyebrow">A cyberpunk memory puzzle for Android</p>
       <div class="app-icon" aria-hidden="true">
         <img src="/images/neurotrace-icon.webp" alt="Neurotracer" width="96" height="96" />
       </div>
       <h1>Neurotracer</h1>
-      <p class="hero-desc">A single-player memory puzzle game. No ads, no tracking, no account required — your high score stays on your device, where it belongs.</p>
+      <p class="hero-tagline" data-i18n="hero-tagline">Can you remember the sequence?</p>
+      <p class="hero-desc">Tiles flash. You watch. Then you repeat — faster, longer, deeper into the grid. One wrong tap and a life is gone. Stay sharp or get flatlined.</p>
       <div class="download-row">
         <a href="#" class="store-btn" id="playstore-btn" aria-label="Get it on Google Play">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.18 23.76c.35.2.74.24 1.12.12l12.68-7.31-2.79-2.8-11.01 10zM.49 1.16C.18 1.53 0 2.08 0 2.79v18.42c0 .71.18 1.26.49 1.63l.09.08L10.29 13V12.79L.58 1.07l-.09.09zM19.84 10.08l-2.71-1.56-3.07 3.07 3.07 3.07 2.73-1.57c.78-.45.78-1.56-.02-2.01zM4.3.12L16.98 7.43l-2.79 2.79L3.18.22C3.53.1 3.93.14 4.3.12z"/></svg>
@@ -608,37 +646,41 @@
       </div>
     </section>
 
-    <!-- Features -->
-    <section class="features">
-      <div class="feature">
-        <div class="feature-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 3a3 3 0 1 1-3 3 3 3 0 0 1 3-3zm0 14.2a7.2 7.2 0 0 1-6-3.22c.03-1.99 4-3.08 6-3.08s5.97 1.09 6 3.08a7.2 7.2 0 0 1-6 3.22z"/></svg>
+    <!-- How it works -->
+    <section class="how-it-works">
+      <h2 data-i18n="how-heading">How it works</h2>
+      <p>Each round, a sequence of tiles lights up across a glowing grid. Your job is to replay it — perfectly, from memory. The sequences grow longer. The grid grows taller. The margin for error shrinks.</p>
+      <p class="how-survive" data-i18n="how-survive">Choose your difficulty. Then survive it.</p>
+    </section>
+
+    <!-- Three ways to play -->
+    <section class="difficulty-section">
+      <p class="difficulty-header" data-i18n="diff-heading">Three ways to play</p>
+      <div class="difficulty-grid">
+        <div class="difficulty-card">
+          <div class="diff-dot" style="background:#4CAF50" aria-hidden="true"></div>
+          <h3 data-i18n="diff-easy">Easy</h3>
+          <p data-i18n="diff-easy-desc">Longer flashes, short sequences. Good for warming up your neurons.</p>
         </div>
-        <h2 data-i18n="feat-puzzle">Memory puzzle</h2>
-        <p>Test and train your memory with a progressively challenging single-player puzzle game. Each session sharpens your focus and pattern recognition.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        <div class="difficulty-card">
+          <div class="diff-dot" style="background:#2196F3" aria-hidden="true"></div>
+          <h3 data-i18n="diff-normal">Normal</h3>
+          <p data-i18n="diff-normal-desc">The intended experience. Sharp eyes, sharper memory.</p>
         </div>
-        <h2 data-i18n="feat-highscore">Beat your best</h2>
-        <p>Your all-time high score is saved locally on your device. No cloud account needed — just you, the game, and your personal best to chase.</p>
-      </div>
-      <div class="feature">
-        <div class="feature-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div class="difficulty-card">
+          <div class="diff-dot" style="background:#F44336" aria-hidden="true"></div>
+          <h3 data-i18n="diff-hard">Hard</h3>
+          <p data-i18n="diff-hard-desc">Brutal pacing. For the ones who think they're ready.</p>
         </div>
-        <h2 data-i18n="feat-private">Completely private</h2>
-        <p>No analytics, no ads, no tracking SDKs. The only data stored is your score, tutorial status, and sound preference — all on-device, never transmitted.</p>
       </div>
     </section>
 
     <!-- Privacy -->
     <section class="privacy-strip">
       <div>
-        <p class="privacy-tag" data-i18n="privacy-tag">Built with respect</p>
-        <h2>Zero data.<br/>Zero ads.<br/>Zero fuss.</h2>
-        <p>Neurotracer does not collect, store, or transmit any personal data. Your score and preferences live in your phone's local storage only. No account required, no network needed.</p>
+        <p class="privacy-tag" data-i18n="privacy-tag">Built for focus</p>
+        <h2>No ads.<br/>No subscriptions.<br/>No internet required.</h2>
+        <p>Just you, the grid, and your memory. Your high score is saved locally — nothing leaves your device.</p>
         <a href="/apps/neurotrace/privacy-policy/" class="privacy-link" data-i18n="privacy-link">Read the privacy policy ↗</a>
       </div>
       <ul class="privacy-checklist" aria-label="Privacy commitments">
@@ -671,7 +713,7 @@
 
     <!-- CTA -->
     <section class="cta-section">
-      <h2>Train your memory.<br/><em>Beat your best.</em></h2>
+      <h2 data-i18n="cta-heading">Free to download</h2>
       <div class="download-row">
         <a href="#" class="store-btn" aria-label="Get it on Google Play">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.18 23.76c.35.2.74.24 1.12.12l12.68-7.31-2.79-2.8-11.01 10zM.49 1.16C.18 1.53 0 2.08 0 2.79v18.42c0 .71.18 1.26.49 1.63l.09.08L10.29 13V12.79L.58 1.07l-.09.09zM19.84 10.08l-2.71-1.56-3.07 3.07 3.07 3.07 2.73-1.57c.78-.45.78-1.56-.02-2.01zM4.3.12L16.98 7.43l-2.79 2.79L3.18.22C3.53.1 3.93.14 4.3.12z"/></svg>
@@ -748,8 +790,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','app-eyebrow':'By Walt Viviers','feat-puzzle':'Memory puzzle','feat-highscore':'Beat your best','feat-private':'Completely private','privacy-tag':'Built with respect','privacy-link':'Read the privacy policy ↗' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','app-eyebrow':'Deur Walt Viviers','feat-puzzle':'Geheue-legkaart','feat-highscore':'Klop jou beste','feat-private':'Heeltemal privaat','privacy-tag':'Gebou met respek','privacy-link':'Lees die privaatheidbeleid ↗' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','app-eyebrow':'A cyberpunk memory puzzle for Android','hero-tagline':'Can you remember the sequence?','how-heading':'How it works','how-survive':'Choose your difficulty. Then survive it.','diff-heading':'Three ways to play','diff-easy':'Easy','diff-easy-desc':'Longer flashes, short sequences. Good for warming up your neurons.','diff-normal':'Normal','diff-normal-desc':'The intended experience. Sharp eyes, sharper memory.','diff-hard':'Hard','diff-hard-desc':'Brutal pacing. For the ones who think they\'re ready.','privacy-tag':'Built for focus','privacy-link':'Read the privacy policy ↗','cta-heading':'Free to download' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','app-eyebrow':'\'n Cyberpunk geheue-legkaart vir Android','hero-tagline':'Kan jy die volgorde onthou?','how-heading':'Hoe dit werk','how-survive':'Kies jou moeilikheidsgraad. Dan oorleef dit.','diff-heading':'Drie maniere om te speel','diff-easy':'Maklik','diff-easy-desc':'Langer flikkerings, kort reekse. Goed vir die opwarming van jou neurone.','diff-normal':'Normaal','diff-normal-desc':'Die beoogde ervaring. Skerp oë, skerper geheue.','diff-hard':'Moeilik','diff-hard-desc':'Genadelose tempo. Vir diegene wat dink hulle is gereed.','privacy-tag':'Gebou vir fokus','privacy-link':'Lees die privaatheidbeleid ↗','cta-heading':'Gratis om af te laai' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
