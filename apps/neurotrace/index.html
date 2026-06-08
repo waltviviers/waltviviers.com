@@ -3,43 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apps — Walt Viviers</title>
-  <meta name="description" content="Apps and tools by Walt Viviers — South African fine artist and developer, based in Pretoria." />
-  <link rel="canonical" href="https://waltviviers.com/apps/" />
+  <title>Neurotracer — Single-player memory puzzle game</title>
+  <meta name="description" content="Neurotracer is a single-player memory puzzle game. No ads, no tracking, no account required. Your scores stay on your device." />
+  <link rel="canonical" href="https://waltviviers.com/apps/neurotrace/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
 
-  <meta name="robots" content="index, follow, max-image-preview:large" />
-
-  <!-- Hreflang -->
-  <link rel="alternate" hreflang="en" href="https://waltviviers.com/apps/" />
-  <link rel="alternate" hreflang="af" href="https://waltviviers.com/apps/" />
-  <link rel="alternate" hreflang="x-default" href="https://waltviviers.com/apps/" />
-
-  <!-- Geo -->
-  <meta name="geo.region" content="ZA-GP" />
-  <meta name="geo.placename" content="Pretoria, Gauteng, South Africa" />
-  <meta name="geo.position" content="-25.7479;28.2293" />
-  <meta name="ICBM" content="-25.7479, 28.2293" />
+  <meta name="robots" content="index, follow" />
 
   <!-- Open Graph -->
-  <meta property="og:type"         content="website" />
-  <meta property="og:url"          content="https://waltviviers.com/apps/" />
-  <meta property="og:title"        content="Apps — Walt Viviers" />
-  <meta property="og:description"  content="Apps and tools by Walt Viviers — South African fine artist and developer." />
-  <meta property="og:image"        content="https://waltviviers.com/images/walt-viviers-fine-art-banner.webp" />
-  <meta property="og:image:alt"    content="Walt Viviers — fine artist and developer" />
-  <meta property="og:image:type"   content="image/webp" />
-  <meta property="og:image:width"  content="2360" />
-  <meta property="og:image:height" content="590" />
-  <meta property="og:locale"       content="en_ZA" />
-  <meta property="og:site_name"    content="Walt Viviers" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://waltviviers.com/apps/neurotrace/" />
+  <meta property="og:title"       content="Neurotracer — Single-player memory puzzle game" />
+  <meta property="og:description" content="A single-player memory puzzle game. No ads, no tracking, no account required." />
+  <meta property="og:site_name"   content="Walt Viviers" />
 
   <!-- Twitter / X -->
-  <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:title"       content="Apps — Walt Viviers" />
-  <meta name="twitter:description" content="Apps and tools by Walt Viviers — South African fine artist and developer." />
-  <meta name="twitter:image"       content="https://waltviviers.com/images/walt-viviers-fine-art-banner.webp" />
-  <meta name="twitter:image:alt"   content="Walt Viviers — fine artist and developer" />
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:title"       content="Neurotracer — Single-player memory puzzle game" />
+  <meta name="twitter:description" content="A single-player memory puzzle game. No ads, no tracking, no account required." />
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -47,22 +28,22 @@
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "CollectionPage",
-        "name": "Apps — Walt Viviers",
-        "description": "Apps and tools by Walt Viviers — South African fine artist and developer, based in Pretoria.",
-        "url": "https://waltviviers.com/apps/",
-        "author": {
-          "@type": "Person",
-          "name": "Walt Viviers",
-          "url": "https://waltviviers.com"
-        },
-        "breadcrumb": {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltviviers.com/" },
-            { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://waltviviers.com/apps/" }
-          ]
-        }
+        "@type": "SoftwareApplication",
+        "name": "Neurotracer",
+        "description": "A single-player memory puzzle game. No ads, no tracking, no account required. Your scores stay on your device.",
+        "url": "https://waltviviers.com/apps/neurotrace/",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Android",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Walt Viviers", "url": "https://waltviviers.com" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltviviers.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://waltviviers.com/apps/" },
+          { "@type": "ListItem", "position": 3, "name": "Neurotracer", "item": "https://waltviviers.com/apps/neurotrace/" }
+        ]
       }
     ]
   }
@@ -238,120 +219,289 @@
     [data-theme="light"] .footer-admin:hover { color: #0C0C0B; border-color: #6B6560; }
     [data-theme="light"] .footer-social .social-icons a:hover { color: var(--ink); }
 
-    /* ── Page ── */
-    .page-wrap {
-      padding: calc(100px + 64px) 48px 100px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .page-head {
-      margin-bottom: 64px;
-      padding-bottom: 32px;
-      border-bottom: 1px solid var(--rule);
+    /* ── Hero ── */
+    .hero {
+      padding-top: 100px;
+      min-height: 100vh;
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 16px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-left: 24px;
+      padding-right: 24px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
     }
 
-    .page-head h1 {
-      font-family: var(--serif);
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 400;
-      line-height: 1.1;
-    }
-
-    .back-link {
+    .app-eyebrow {
       font-size: 11px;
-      letter-spacing: 0.10em;
+      font-weight: 500;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--stone);
-      transition: color 0.2s;
-    }
-    .back-link:hover { color: var(--ink); }
-
-    /* ── App grid ── */
-    .apps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1px;
-      background: var(--rule);
-      border: 1px solid var(--rule);
+      margin-bottom: 28px;
     }
 
-    .app-card {
-      background: var(--bg);
-      display: flex;
-      align-items: flex-start;
-      gap: 24px;
-      padding: 40px;
-      text-decoration: none;
-      transition: background 0.2s;
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 28px;
     }
-    .app-card:hover { background: var(--bg2); }
 
-    .app-card-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 16px;
+    .hero h1 em {
+      font-style: italic;
+      color: var(--stone);
+    }
+
+    .hero-desc {
+      font-size: clamp(15px, 2vw, 18px);
+      color: var(--stone);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 52px;
+    }
+
+    .app-icon {
+      width: 96px;
+      height: 96px;
+      border-radius: 22px;
       background: #1A1A1A;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
       overflow: hidden;
-      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 40px;
     }
 
-    .app-card-icon svg {
+    .app-icon img {
       width: 100%;
       height: 100%;
       display: block;
+      object-fit: cover;
     }
 
-    .app-card-body { flex: 1; min-width: 0; }
-
-    .app-card-name {
-      font-family: var(--serif);
-      font-size: 1.4rem;
-      font-weight: 400;
-      line-height: 1.2;
-      margin-bottom: 8px;
-    }
-
-    .app-card-desc {
-      font-size: 13px;
-      color: var(--stone);
-      line-height: 1.65;
-      margin-bottom: 16px;
-    }
-
-    .app-card-meta {
+    .download-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: center;
+      gap: 16px;
       flex-wrap: wrap;
     }
 
-    .app-platform {
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+
+    .store-btn:hover {
+      border-color: var(--stone);
+      background: var(--bg2);
+    }
+
+    .store-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--stone);
+      flex-shrink: 0;
+    }
+
+    .store-btn-inner { display: flex; flex-direction: column; gap: 1px; text-align: left; }
+    .store-btn-sub { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); font-weight: 400; }
+    .store-btn-name { font-size: 15px; font-weight: 500; }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--stone);
       font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-scroll svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--stone);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(4px); }
+    }
+
+    /* ── Features ── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .feature {
+      padding: 72px 56px;
+      border-right: 1px solid var(--rule);
+    }
+
+    .feature:last-child { border-right: none; }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--rule);
+      margin-bottom: 32px;
+    }
+
+    .feature-icon svg {
+      width: 20px;
+      height: 20px;
+      stroke: var(--stone);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feature h2 {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .feature p {
+      font-size: 14px;
+      color: var(--stone);
+      line-height: 1.75;
+    }
+
+    /* ── Privacy strip ── */
+    .privacy-strip {
+      padding: 80px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .privacy-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 20px;
+    }
+
+    .privacy-strip h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3vw, 44px);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .privacy-strip p {
+      font-size: 15px;
+      color: var(--stone);
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+
+    .privacy-link {
+      font-size: 12px;
       letter-spacing: 0.10em;
       text-transform: uppercase;
       color: var(--stone);
-      padding: 3px 8px;
-      border: 1px solid var(--rule);
-    }
-
-    .app-card-link {
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--stone);
+      text-decoration: underline;
+      text-underline-offset: 4px;
       transition: color 0.2s;
     }
-    .app-card:hover .app-card-link { color: var(--ink); }
 
-    /* ── Light mode ── */
-    [data-theme="light"] .app-card { background: #F5F3EF; }
-    [data-theme="light"] .app-card:hover { background: #EDEAE5; }
+    .privacy-link:hover { color: var(--ink); }
+
+    .privacy-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .privacy-checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 14px;
+      color: var(--stone);
+      line-height: 1.5;
+    }
+
+    .privacy-checklist li svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      stroke: var(--stone);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin-top: 2px;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 120px 48px;
+      text-align: center;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .cta-section h2 {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 48px;
+    }
+
+    .cta-section h2 em { font-style: italic; color: var(--stone); }
+
+    /* ── Light mode specifics ── */
+    [data-theme="light"] .app-icon { background: #1A1A1A; }
+    [data-theme="light"] .store-btn:hover { background: #EDEAE5; }
+    [data-theme="light"] .feature { background: #F5F3EF; }
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
@@ -366,9 +516,18 @@
       .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
       .theme-toggle:hover .toggle-thumb .icon-moon,
       .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
-      .page-wrap { padding: calc(50px + 40px) 24px 80px; }
-      .apps-grid { grid-template-columns: 1fr; }
-      .app-card { padding: 28px 24px; }
+
+      .hero { padding-top: 50px; min-height: auto; padding-top: calc(50px + 80px); padding-bottom: 80px; }
+      .hero-scroll { display: none; }
+
+      .features { grid-template-columns: 1fr; }
+      .feature { border-right: none; border-bottom: 1px solid var(--rule); padding: 48px 24px; }
+      .feature:last-child { border-bottom: none; }
+
+      .privacy-strip { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
+
+      .cta-section { padding: 80px 24px; }
+
       footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
       .footer-admin { position: static; transform: none; order: 1; }
       .footer-social { order: 0; }
@@ -424,75 +583,107 @@
     </ul>
   </nav>
 
-  <div class="page-wrap">
-    <div class="page-head">
-      <h1 data-i18n="page-title">Apps</h1>
-      <a href="/" class="back-link" data-i18n="back-home">← Back to home</a>
-    </div>
+  <main>
 
-    <div class="apps-grid">
-      <a href="/apps/bill_tipper/" class="app-card">
-        <div class="app-card-icon" aria-hidden="true">
-          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <path d="M39 56 Q24 66 12 76" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-            <circle cx="10" cy="78" r="8" fill="white"/>
-            <circle cx="3" cy="71" r="4.5" fill="white"/>
-            <circle cx="1" cy="80" r="4" fill="white"/>
-            <circle cx="5" cy="88" r="4" fill="white"/>
-            <path d="M57 43 Q70 25 82 12" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-            <circle cx="83" cy="10" r="8" fill="white"/>
-            <circle cx="78" cy="3" r="4.5" fill="white"/>
-            <circle cx="87" cy="2" r="4" fill="white"/>
-            <circle cx="93" cy="7" r="4" fill="white"/>
-            <path d="M44 72 Q33 82 24 90" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-            <ellipse cx="19" cy="93" rx="11" ry="6" fill="white" transform="rotate(-30 19 93)"/>
-            <path d="M53 72 Q67 73 83 74" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-            <ellipse cx="88" cy="75" rx="10" ry="6" fill="white" transform="rotate(5 88 75)"/>
-            <ellipse cx="47" cy="57" rx="11" ry="14" fill="white" transform="rotate(-12 47 57)"/>
-            <circle cx="62" cy="26" r="14" fill="white"/>
-            <circle cx="56.5" cy="22" r="2.8" fill="#1A1A1A"/>
-            <circle cx="65" cy="20" r="2.8" fill="#1A1A1A"/>
-            <path d="M55 29 Q62 37 69 29" stroke="#1A1A1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          </svg>
+    <!-- Hero -->
+    <section class="hero">
+      <p class="app-eyebrow" data-i18n="app-eyebrow">By Walt Viviers</p>
+      <div class="app-icon" aria-hidden="true">
+        <img src="/images/neurotrace-icon.webp" alt="Neurotracer" width="96" height="96" />
+      </div>
+      <h1>Neurotracer</h1>
+      <p class="hero-desc">A single-player memory puzzle game. No ads, no tracking, no account required — your high score stays on your device, where it belongs.</p>
+      <div class="download-row">
+        <a href="#" class="store-btn" id="playstore-btn" aria-label="Get it on Google Play">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.18 23.76c.35.2.74.24 1.12.12l12.68-7.31-2.79-2.8-11.01 10zM.49 1.16C.18 1.53 0 2.08 0 2.79v18.42c0 .71.18 1.26.49 1.63l.09.08L10.29 13V12.79L.58 1.07l-.09.09zM19.84 10.08l-2.71-1.56-3.07 3.07 3.07 3.07 2.73-1.57c.78-.45.78-1.56-.02-2.01zM4.3.12L16.98 7.43l-2.79 2.79L3.18.22C3.53.1 3.93.14 4.3.12z"/></svg>
+          <span class="store-btn-inner">
+            <span class="store-btn-sub">Get it on</span>
+            <span class="store-btn-name">Google Play</span>
+          </span>
+        </a>
+      </div>
+      <div class="hero-scroll" aria-hidden="true">
+        <span>Scroll</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+      <div class="feature">
+        <div class="feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 3a3 3 0 1 1-3 3 3 3 0 0 1 3-3zm0 14.2a7.2 7.2 0 0 1-6-3.22c.03-1.99 4-3.08 6-3.08s5.97 1.09 6 3.08a7.2 7.2 0 0 1-6 3.22z"/></svg>
         </div>
-        <div class="app-card-body">
-          <div class="app-card-name">Bill Tipper</div>
-          <p class="app-card-desc" data-i18n="bt-desc">Split bills and calculate tips instantly. No ads, no tracking, works offline.</p>
-          <div class="app-card-meta">
-            <span class="app-platform" data-i18n="platform-android">Android</span>
-            <span class="app-card-link" data-i18n="view-app">View app →</span>
-          </div>
+        <h2 data-i18n="feat-puzzle">Memory puzzle</h2>
+        <p>Test and train your memory with a progressively challenging single-player puzzle game. Each session sharpens your focus and pattern recognition.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
         </div>
-      </a>
-      <a href="/apps/neurotrace/" class="app-card">
-        <div class="app-card-icon" aria-hidden="true">
-          <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="18" cy="25" r="6" fill="white"/>
-            <circle cx="18" cy="50" r="6" fill="white"/>
-            <circle cx="18" cy="75" r="6" fill="white"/>
-            <circle cx="50" cy="33" r="6" fill="white"/>
-            <circle cx="50" cy="67" r="6" fill="white"/>
-            <circle cx="82" cy="50" r="6" fill="white"/>
-            <line x1="24" y1="25" x2="44" y2="33" stroke="white" stroke-width="1.5" stroke-opacity="0.4"/>
-            <line x1="24" y1="25" x2="44" y2="67" stroke="white" stroke-width="1.5" stroke-opacity="0.4"/>
-            <line x1="24" y1="50" x2="44" y2="33" stroke="white" stroke-width="1.5" stroke-opacity="0.4"/>
-            <line x1="24" y1="50" x2="44" y2="67" stroke="white" stroke-width="1.5" stroke-opacity="0.4"/>
-            <line x1="24" y1="75" x2="44" y2="33" stroke="white" stroke-width="1.5" stroke-opacity="0.4"/>
-            <line x1="24" y1="75" x2="44" y2="67" stroke="white" stroke-width="1.5" stroke-opacity="0.4"/>
-            <line x1="56" y1="33" x2="76" y2="50" stroke="white" stroke-width="1.5" stroke-opacity="0.4"/>
-            <line x1="56" y1="67" x2="76" y2="50" stroke="white" stroke-width="1.5" stroke-opacity="0.4"/>
-          </svg>
+        <h2 data-i18n="feat-highscore">Beat your best</h2>
+        <p>Your all-time high score is saved locally on your device. No cloud account needed — just you, the game, and your personal best to chase.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         </div>
-        <div class="app-card-body">
-          <div class="app-card-name">Neurotrace</div>
-          <p class="app-card-desc" data-i18n="nt-desc">A privacy-first app. No data collected, no tracking, works offline.</p>
-          <div class="app-card-meta">
-            <span class="app-card-link" data-i18n="view-nt">Learn more →</span>
-          </div>
-        </div>
-      </a>
-    </div>
-  </div>
+        <h2 data-i18n="feat-private">Completely private</h2>
+        <p>No analytics, no ads, no tracking SDKs. The only data stored is your score, tutorial status, and sound preference — all on-device, never transmitted.</p>
+      </div>
+    </section>
+
+    <!-- Privacy -->
+    <section class="privacy-strip">
+      <div>
+        <p class="privacy-tag" data-i18n="privacy-tag">Built with respect</p>
+        <h2>Zero data.<br/>Zero ads.<br/>Zero fuss.</h2>
+        <p>Neurotracer does not collect, store, or transmit any personal data. Your score and preferences live in your phone's local storage only. No account required, no network needed.</p>
+        <a href="/apps/neurotrace/privacy-policy/" class="privacy-link" data-i18n="privacy-link">Read the privacy policy ↗</a>
+      </div>
+      <ul class="privacy-checklist" aria-label="Privacy commitments">
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          No personal data collected
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          No account or sign-in required
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Works fully offline
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          No ads or tracking SDKs
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          No device permissions requested
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          Safe for all ages
+        </li>
+      </ul>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <h2>Train your memory.<br/><em>Beat your best.</em></h2>
+      <div class="download-row">
+        <a href="#" class="store-btn" aria-label="Get it on Google Play">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.18 23.76c.35.2.74.24 1.12.12l12.68-7.31-2.79-2.8-11.01 10zM.49 1.16C.18 1.53 0 2.08 0 2.79v18.42c0 .71.18 1.26.49 1.63l.09.08L10.29 13V12.79L.58 1.07l-.09.09zM19.84 10.08l-2.71-1.56-3.07 3.07 3.07 3.07 2.73-1.57c.78-.45.78-1.56-.02-2.01zM4.3.12L16.98 7.43l-2.79 2.79L3.18.22C3.53.1 3.93.14 4.3.12z"/></svg>
+          <span class="store-btn-inner">
+            <span class="store-btn-sub">Get it on</span>
+            <span class="store-btn-name">Google Play</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+  </main>
 
   <footer>
     <button class="footer-admin" id="admin-btn">Admin</button>
@@ -557,8 +748,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','page-title':'Apps','back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','bt-desc':'Split bills and calculate tips instantly. No ads, no tracking, works offline.','platform-android':'Android','view-app':'View app →','nt-desc':'A privacy-first app. No data collected, no tracking, works offline.','view-nt':'Learn more →' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','page-title':'Programme','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','bt-desc':'Verdeel rekeninge en bereken fooie onmiddellik. Geen advertensies, geen opsporing, werk vanlyn.','platform-android':'Android','view-app':'Sien program →','nt-desc':"'n Privaatheid-eerste toepassing. Geen data ingesamel nie, geen opsporing nie, werk vanlyn.",'view-nt':'Meer inligting →' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','app-eyebrow':'By Walt Viviers','feat-puzzle':'Memory puzzle','feat-highscore':'Beat your best','feat-private':'Completely private','privacy-tag':'Built with respect','privacy-link':'Read the privacy policy ↗' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','app-eyebrow':'Deur Walt Viviers','feat-puzzle':'Geheue-legkaart','feat-highscore':'Klop jou beste','feat-private':'Heeltemal privaat','privacy-tag':'Gebou met respek','privacy-link':'Lees die privaatheidbeleid ↗' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
