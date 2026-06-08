@@ -1013,6 +1013,7 @@
       display: flex;
       gap: 6px;
       padding: 0 16px;
+      overflow: hidden;
     }
 
     .gn-dot {
@@ -1779,18 +1780,30 @@
           (w.article    ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-article')   + '</span><span class="work-meta-value"><a href="' + w.article  + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-read-article') + '</a></span></div>' : '') +
           '<div class="work-meta-row"><span class="work-meta-label">Page</span><span class="work-meta-value"><a href="/works/' + slugify(w.title, w.year) + '/" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">View artwork page ↗</a></span></div>';
 
-        document.querySelectorAll('.gn-dot').forEach((d, i) =>
-          d.classList.toggle('active', i === index));
+        updateDots(index);
+      }
+
+      /* ── Sliding window of dots (max 9 visible, centred on active) ── */
+      function updateDots(index) {
+        const total   = works.length;
+        const visible = Math.min(9, total);
+        const half    = Math.floor(visible / 2);
+        const start   = Math.max(0, Math.min(index - half, total - visible));
+        const container = document.getElementById('gn-dots');
+        container.innerHTML = '';
+        for (var i = start; i < start + visible; i++) {
+          const d   = document.createElement('div');
+          const idx = i;
+          d.className = 'gn-dot' + (i === index ? ' active' : '');
+          d.dataset.index = i;
+          d.addEventListener('click', () => { current = idx; renderHero(idx); pauseAutoplay(); });
+          container.appendChild(d);
+        }
       }
 
       /* ── Build dot indicators ── */
       function buildDots() {
-        const container = document.getElementById('gn-dots');
-        container.innerHTML = works.map((_, i) =>
-          `<div class="gn-dot${i === 0 ? ' active' : ''}" data-index="${i}"></div>`
-        ).join('');
-        container.querySelectorAll('.gn-dot').forEach(d =>
-          d.addEventListener('click', () => { current = +d.dataset.index; renderHero(current); pauseAutoplay(); }));
+        updateDots(0);
       }
 
       /* ── Build thumbnail grid ── */
