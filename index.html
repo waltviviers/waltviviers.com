@@ -492,6 +492,26 @@
       letter-spacing: 0.06em;
     }
 
+    .saatchi-available {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--stone);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: opacity 0.2s;
+    }
+    .saatchi-available:hover { opacity: 0.6; }
+    .saatchi-wordmark {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--ink);
+    }
+
     .works-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -1356,8 +1376,24 @@
 
   <!-- Works Index -->
   <section id="works">
-    <div class="section-head">
-      <h2 class="section-title" data-i18n="section-works">Selected Artworks</h2>
+    <div class="section-head" style="align-items:flex-start;">
+      <div>
+        <h2 class="section-title" data-i18n="section-works">Selected Artworks</h2>
+        <a href="https://www.saatchiart.com/en-za/studio/artworks" target="_blank" rel="noopener" class="saatchi-available">
+          <span data-i18n="available-on">Available on</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path fill="#E8524A" d="M12 1.5A10.5 10.5 0 0 1 19.03 4.2L16.01 7.54A6 6 0 0 0 12 6Z"/>
+            <path fill="#F07A38" d="M19.43 4.58A10.5 10.5 0 0 1 22.49 11.45L17.99 11.69A6 6 0 0 0 16.24 7.76Z"/>
+            <path fill="#F5C030" d="M22.5 12A10.5 10.5 0 0 1 19.8 19.03L16.46 16.01A6 6 0 0 0 18 12Z"/>
+            <path fill="#6BBD42" d="M19.43 19.43A10.5 10.5 0 0 1 12.55 22.49L12.31 17.99A6 6 0 0 0 16.24 16.24Z"/>
+            <path fill="#2BB38A" d="M12 22.5A10.5 10.5 0 0 1 4.97 19.8L7.99 16.46A6 6 0 0 0 12 18Z"/>
+            <path fill="#2E9FCC" d="M4.58 19.43A10.5 10.5 0 0 1 1.51 12.55L6.01 12.31A6 6 0 0 0 7.76 16.24Z"/>
+            <path fill="#4C6EC0" d="M1.5 12A10.5 10.5 0 0 1 4.2 4.97L7.54 7.99A6 6 0 0 0 6 12Z"/>
+            <path fill="#9B5CC0" d="M4.58 4.58A10.5 10.5 0 0 1 11.45 1.51L11.69 6.01A6 6 0 0 0 7.76 7.76Z"/>
+          </svg>
+          <span class="saatchi-wordmark">SAATCHI ART</span>
+        </a>
+      </div>
       <span class="section-count" id="works-count"></span>
     </div>
     <div class="works-grid" id="works-grid"></div>
@@ -1616,7 +1652,7 @@
       en: {
         'nav-works': 'Artworks', 'nav-about': 'About', 'nav-apps': 'Apps', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
-        'section-works': 'Selected Artworks',
+        'section-works': 'Selected Artworks', 'available-on': 'Available on',
         'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
         'about-p1': 'I am a South African fine artist and lifelong creative working in acrylic and mixed media. A soul shaped by art, design, and technology, my practice explores the tension between the poetry and music of the artwork: images that read with clarity and confidence from a distance, yet reveal bold, expressive brushstrokes and my unmistakable touch up close.',
         'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
@@ -1650,7 +1686,7 @@
       af: {
         'nav-works': 'Kunswerke', 'nav-about': 'Omheen', 'nav-apps': 'Programme', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
-        'section-works': 'Geselekteerde Kunswerke',
+        'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op',
         'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
         'about-p1': 'Ek is ‘n Suid-Afrikaanse kunstenaar en lewenslange kreatiewe gees wat in akriel en gemengde media werk. ‘n Siel gevorm deur kuns, ontwerp en tegnologie: my werk verken die spanning tussen die poësie en musiek van die kunswerk. Beelde wat van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.',
         'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
