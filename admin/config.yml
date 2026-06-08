@@ -65,3 +65,13 @@ collections:
                 widget: string
                 required: false
                 hint: "e.g. https://example.com/interviews/walt-viviers/"
+              - name: description
+                label: "Description (English)"
+                widget: text
+                required: false
+                hint: "Artwork description shown on the individual artwork page."
+              - name: description_af
+                label: "Description (Afrikaans)"
+                widget: text
+                required: false
+                hint: "Afrikaans translation of the artwork description."
