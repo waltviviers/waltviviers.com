@@ -78,7 +78,10 @@
   <link rel="dns-prefetch" href="https://feeds.behold.so" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preload" href="/data/artworks.json" as="fetch" crossorigin />
-  <link rel="preload" as="image" href="/images/t-rex-acrylic-canvas-walt-viviers-2020.webp" fetchpriority="high" type="image/webp" />
+  <link rel="preload" as="image"
+        imagesrcset="/images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, /images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
+        imagesizes="100vw"
+        fetchpriority="high" />
 
   <!-- Prevent theme FOUC: set data-theme before any CSS paints -->
   <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
@@ -2198,7 +2201,7 @@
           grid.innerHTML = posts.map(function (p) {
             var img = p.mediaType === 'VIDEO' ? p.thumbnailUrl : p.mediaUrl;
             return '<a class="ig-thumb" href="' + p.permalink + '" target="_blank" rel="noopener noreferrer">'
-              + '<img src="' + img + '" alt="' + (p.caption ? p.caption.substring(0, 80).replace(/"/g, '&quot;') : 'Walt Viviers on Instagram') + '" loading="lazy" />'
+              + '<img src="' + img + '" alt="' + (p.caption ? p.caption.substring(0, 80).replace(/"/g, '&quot;') : 'Walt Viviers on Instagram') + '" loading="lazy" width="1080" height="1080" decoding="async" />'
               + '</a>';
           }).join('');
         })
