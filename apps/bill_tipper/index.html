@@ -278,10 +278,11 @@
       margin: 0 auto 40px;
     }
 
-    .app-icon svg {
+    .app-icon svg, .app-icon img {
       width: 100%;
       height: 100%;
       display: block;
+      object-fit: cover;
     }
 
     .download-row {
@@ -317,7 +318,7 @@
     .store-btn svg {
       width: 20px;
       height: 20px;
-      fill: var(--stone);
+      fill: var(--ink);
       flex-shrink: 0;
     }
 
@@ -588,30 +589,10 @@
     <section class="hero">
       <p class="app-eyebrow" data-i18n="app-eyebrow">By Walt Viviers</p>
       <div class="app-icon" aria-hidden="true">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <path d="M39 56 Q24 66 12 76" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-          <circle cx="10" cy="78" r="8" fill="white"/>
-          <circle cx="3" cy="71" r="4.5" fill="white"/>
-          <circle cx="1" cy="80" r="4" fill="white"/>
-          <circle cx="5" cy="88" r="4" fill="white"/>
-          <path d="M57 43 Q70 25 82 12" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-          <circle cx="83" cy="10" r="8" fill="white"/>
-          <circle cx="78" cy="3" r="4.5" fill="white"/>
-          <circle cx="87" cy="2" r="4" fill="white"/>
-          <circle cx="93" cy="7" r="4" fill="white"/>
-          <path d="M44 72 Q33 82 24 90" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-          <ellipse cx="19" cy="93" rx="11" ry="6" fill="white" transform="rotate(-30 19 93)"/>
-          <path d="M53 72 Q67 73 83 74" stroke="white" stroke-width="9" fill="none" stroke-linecap="round"/>
-          <ellipse cx="88" cy="75" rx="10" ry="6" fill="white" transform="rotate(5 88 75)"/>
-          <ellipse cx="47" cy="57" rx="11" ry="14" fill="white" transform="rotate(-12 47 57)"/>
-          <circle cx="62" cy="26" r="14" fill="white"/>
-          <circle cx="56.5" cy="22" r="2.8" fill="#1A1A1A"/>
-          <circle cx="65" cy="20" r="2.8" fill="#1A1A1A"/>
-          <path d="M55 29 Q62 37 69 29" stroke="#1A1A1A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        </svg>
+        <img src="/images/bill-tipper-icon.webp" alt="Bill Tipper" width="96" height="96" />
       </div>
       <h1>Bill Tipper</h1>
-      <p class="hero-desc">Split bills and calculate tips in seconds. Clean, fast, and completely private — everything stays on your device.</p>
+      <p class="hero-desc" data-i18n="hero-desc">Split bills and calculate tips in seconds. Clean, fast, and completely private — everything stays on your device.</p>
       <div class="download-row">
         <a href="#" class="store-btn" id="playstore-btn" aria-label="Get it on Google Play">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.18 23.76c.35.2.74.24 1.12.12l12.68-7.31-2.79-2.8-11.01 10zM.49 1.16C.18 1.53 0 2.08 0 2.79v18.42c0 .71.18 1.26.49 1.63l.09.08L10.29 13V12.79L.58 1.07l-.09.09zM19.84 10.08l-2.71-1.56-3.07 3.07 3.07 3.07 2.73-1.57c.78-.45.78-1.56-.02-2.01zM4.3.12L16.98 7.43l-2.79 2.79L3.18.22C3.53.1 3.93.14 4.3.12z"/></svg>
@@ -634,21 +615,21 @@
           <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
         </div>
         <h2 data-i18n="feat-tip">Tip calculator</h2>
-        <p>Enter the bill total and choose a tip percentage. Bill Tipper instantly shows the tip amount and your final total — no manual arithmetic needed.</p>
+        <p data-i18n="feat-tip-desc">Enter the bill total and choose a tip percentage. Bill Tipper instantly shows the tip amount and your final total — no manual arithmetic needed.</p>
       </div>
       <div class="feature">
         <div class="feature-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
         <h2 data-i18n="feat-split">Split between guests</h2>
-        <p>Dining with a group? Enter the number of people and see exactly what each person owes, tip included. Even splits made simple.</p>
+        <p data-i18n="feat-split-desc">Dining with a group? Enter the number of people and see exactly what each person owes, tip included. Even splits made simple.</p>
       </div>
       <div class="feature">
         <div class="feature-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
         <h2 data-i18n="feat-instant">Instant results</h2>
-        <p>Results update as you type — no submit button, no waiting. Bill Tipper is built to be fast, minimal, and completely frictionless.</p>
+        <p data-i18n="feat-instant-desc">Results update as you type — no submit button, no waiting. Bill Tipper is built to be fast, minimal, and completely frictionless.</p>
       </div>
     </section>
 
@@ -656,41 +637,23 @@
     <section class="privacy-strip">
       <div>
         <p class="privacy-tag" data-i18n="privacy-tag">Built with respect</p>
-        <h2>Zero data.<br/>Zero ads.<br/>Zero fuss.</h2>
-        <p>Bill Tipper does not collect, store, or transmit any personal data. All calculations happen entirely on your device. No account required, no network needed.</p>
+        <h2><span data-i18n="priv-h1">Zero data.</span><br/><span data-i18n="priv-h2">Zero ads.</span><br/><span data-i18n="priv-h3">Zero fuss.</span></h2>
+        <p data-i18n="privacy-desc">Bill Tipper does not collect, store, or transmit any personal data. All calculations happen entirely on your device. No account required, no network needed.</p>
         <a href="/apps/bill_tipper/privacy-policy/" class="privacy-link" data-i18n="privacy-link">Read the privacy policy ↗</a>
       </div>
       <ul class="privacy-checklist" aria-label="Privacy commitments">
-        <li>
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          No personal data collected
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          No account or sign-in required
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          Works fully offline
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          No ads or tracking of any kind
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          No device permissions requested
-        </li>
-        <li>
-          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-          Safe for all ages
-        </li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-1">No personal data collected</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-2">No account or sign-in required</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-3">Works fully offline</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-4">No ads or tracking of any kind</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-5">No device permissions requested</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-6">Safe for all ages</span></li>
       </ul>
     </section>
 
     <!-- CTA -->
     <section class="cta-section">
-      <h2>Leave a fair tip.<br/><em>Every time.</em></h2>
+      <h2><span data-i18n="cta-line1">Leave a fair tip.</span><br/><em data-i18n="cta-line2">Every time.</em></h2>
       <div class="download-row">
         <a href="#" class="store-btn" aria-label="Get it on Google Play">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.18 23.76c.35.2.74.24 1.12.12l12.68-7.31-2.79-2.8-11.01 10zM.49 1.16C.18 1.53 0 2.08 0 2.79v18.42c0 .71.18 1.26.49 1.63l.09.08L10.29 13V12.79L.58 1.07l-.09.09zM19.84 10.08l-2.71-1.56-3.07 3.07 3.07 3.07 2.73-1.57c.78-.45.78-1.56-.02-2.01zM4.3.12L16.98 7.43l-2.79 2.79L3.18.22C3.53.1 3.93.14 4.3.12z"/></svg>
@@ -767,8 +730,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','app-eyebrow':'By Walt Viviers','feat-tip':'Tip calculator','feat-split':'Split between guests','feat-instant':'Instant results','privacy-tag':'Built with respect','privacy-link':'Read the privacy policy ↗' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','app-eyebrow':'Deur Walt Viviers','feat-tip':'Fooiberekening','feat-split':'Verdeel tussen gaste','feat-instant':'Onmiddellike resultate','privacy-tag':'Gebou met respek','privacy-link':'Lees die privaatheidbeleid ↗' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','app-eyebrow':'By Walt Viviers','hero-desc':'Split bills and calculate tips in seconds. Clean, fast, and completely private — everything stays on your device.','feat-tip':'Tip calculator','feat-tip-desc':'Enter the bill total and choose a tip percentage. Bill Tipper instantly shows the tip amount and your final total — no manual arithmetic needed.','feat-split':'Split between guests','feat-split-desc':'Dining with a group? Enter the number of people and see exactly what each person owes, tip included. Even splits made simple.','feat-instant':'Instant results','feat-instant-desc':'Results update as you type — no submit button, no waiting. Bill Tipper is built to be fast, minimal, and completely frictionless.','privacy-tag':'Built with respect','priv-h1':'Zero data.','priv-h2':'Zero ads.','priv-h3':'Zero fuss.','privacy-desc':'Bill Tipper does not collect, store, or transmit any personal data. All calculations happen entirely on your device. No account required, no network needed.','privacy-link':'Read the privacy policy ↗','check-1':'No personal data collected','check-2':'No account or sign-in required','check-3':'Works fully offline','check-4':'No ads or tracking of any kind','check-5':'No device permissions requested','check-6':'Safe for all ages','cta-line1':'Leave a fair tip.','cta-line2':'Every time.' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','app-eyebrow':'Deur Walt Viviers','hero-desc':'Verdeel rekeninge en bereken fooie in sekondes. Skoon, vinnig en heeltemal privaat — alles bly op jou toestel.','feat-tip':'Fooiberekening','feat-tip-desc':'Voer die rekening-totaal in en kies \'n fooipersentasie. Bill Tipper wys onmiddellik die fooibedrag en jou finale totaal — geen handmatige berekening nodig nie.','feat-split':'Verdeel tussen gaste','feat-split-desc':'Eet saam met \'n groep? Voer die aantal mense in en sien presies wat elke persoon skuld, fooie ingesluit. Gelyke verdeling eenvoudig gemaak.','feat-instant':'Onmiddellike resultate','feat-instant-desc':'Resultate word terwyl jy tik opgedateer — geen stuurknoppie, geen wag. Bill Tipper is gebou om vinnig, minimaal en heeltemal wrywingsloos te wees.','privacy-tag':'Gebou met respek','priv-h1':'Nul data.','priv-h2':'Nul advertensies.','priv-h3':'Nul moeite.','privacy-desc':'Bill Tipper versamel, stoor of stuur geen persoonlike data nie. Alle berekeninge vind heeltemal op jou toestel plaas. Geen rekening benodig, geen netwerk nodig nie.','privacy-link':'Lees die privaatheidbeleid ↗','check-1':'Geen persoonlike data ingesamel nie','check-2':'Geen rekening of aanmelding benodig nie','check-3':'Werk heeltemal vanlyn','check-4':'Geen advertensies of opsporing van enige aard nie','check-5':'Geen toesteltoestemmings benodig nie','check-6':'Veilig vir alle ouderdomme','cta-line1':'Los \'n billike fooi.','cta-line2':'Elke keer.' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
