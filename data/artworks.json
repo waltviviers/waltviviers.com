@@ -1,6 +1,34 @@
 {
   "artworks": [
     {
+      "title": "Books",
+      "year": "2010",
+      "medium": "Acrylic Pens and Letraset",
+      "dimensions": "",
+      "available": "sold",
+      "featured": false,
+      "image": "/images/1ad6bd14761993.56288b067354b.jpg",
+      "price": "",
+      "instagram": "",
+      "article": "",
+      "description": "",
+      "description_af": ""
+    },
+    {
+      "title": "Cracked",
+      "year": "2010",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "",
+      "available": "sold",
+      "featured": false,
+      "image": "/images/QVZnVUVCM24yVy04MHFGVjZubVh2RVdN.jpeg",
+      "price": "",
+      "instagram": "",
+      "article": "",
+      "description": "",
+      "description_af": ""
+    },
+    {
       "title": "Dragon Kitties",
       "year": "2025",
       "medium": "Acrylic on Canvas",
