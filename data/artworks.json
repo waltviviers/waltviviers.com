@@ -1,6 +1,34 @@
 {
   "artworks": [
     {
+      "title": "Pikachu",
+      "year": "2019",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "",
+      "available": "sold",
+      "featured": false,
+      "image": "/images/IMG_20190322_201754.jpg",
+      "price": "",
+      "instagram": "",
+      "article": "",
+      "description": "",
+      "description_af": ""
+    },
+    {
+      "title": "Aztek",
+      "year": "2009",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "",
+      "available": "sold",
+      "featured": false,
+      "image": "/images/IMG_20161020_082021.jpg",
+      "price": "",
+      "instagram": "",
+      "article": "",
+      "description": "",
+      "description_af": ""
+    },
+    {
       "title": "Books",
       "year": "2010",
       "medium": "Acrylic Pens and Letraset",
