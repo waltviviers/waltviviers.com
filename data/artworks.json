@@ -1,6 +1,20 @@
 {
   "artworks": [
     {
+      "title": "Mana",
+      "year": "2012",
+      "medium": "Acrylic on Canvas Baord",
+      "dimensions": "",
+      "available": "sold",
+      "featured": false,
+      "image": "/images/IMG_20170520_153314_672.jpg",
+      "price": "",
+      "instagram": "",
+      "article": "",
+      "description": "",
+      "description_af": ""
+    },
+    {
       "title": "Pikachu",
       "year": "2019",
       "medium": "Acrylic on Canvas",
