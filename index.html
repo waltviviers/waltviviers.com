@@ -15,6 +15,9 @@
   <!-- Vercel Speed Insights -->
   <script defer src="/_vercel/speed-insights/script.js"></script>
 
+  <!-- Currency conversion (USD → ZAR, cached 24h) -->
+  <script defer src="/js/currency.js"></script>
+
   <!-- Microsoft Clarity -->
   <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","x0prpd6frb");</script>
 
@@ -1813,7 +1816,7 @@
         document.getElementById('hero-meta').innerHTML =
           (w.medium     ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-medium')     + '</span><span class="work-meta-value">' + w.medium     + '</span></div>' : '') +
           (w.dimensions ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-dimensions') + '</span><span class="work-meta-value">' + w.dimensions + '</span></div>' : '') +
-          (w.price      ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-price')      + '</span><span class="work-meta-value">' + w.price      + '</span></div>' : '') +
+          (w.price      ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-price')      + '</span><span class="work-meta-value">' + (window.formatPrice ? window.formatPrice(w.price) : w.price) + '</span></div>' : '') +
           '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-status') + '</span><span class="work-meta-value">' + availLabel(w) + '</span></div>' +
           (w.permalink  ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-instagram') + '</span><span class="work-meta-value"><a href="' + w.permalink + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-post') + '</a></span></div>' : '') +
           (w.article    ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-article')   + '</span><span class="work-meta-value"><a href="' + w.article  + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-read-article') + '</a></span></div>' : '') +

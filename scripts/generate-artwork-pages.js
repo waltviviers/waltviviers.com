@@ -715,6 +715,7 @@ function generatePage(w) {
       .btn { width: auto; flex: 1; }
     }
   </style>
+  <script defer src="/js/currency.js"></script>
 </head>
 <body>
 ${sharedNavHTML()}
