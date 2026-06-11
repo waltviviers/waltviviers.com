@@ -1995,7 +1995,7 @@
             price:      w.price      || '',
           }));
 
-          works.sort((a, b) => Number(b.year) - Number(a.year));
+          works.sort((a, b) => Number(a.year) - Number(b.year));
 
           if (!works.length) { setHeroState('No artworks yet — add some in the CMS'); return; }
 
