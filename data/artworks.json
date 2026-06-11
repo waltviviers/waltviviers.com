@@ -1,20 +1,6 @@
 {
   "artworks": [
     {
-      "title": "Four Seasons",
-      "year": "2012",
-      "medium": "Acrylic on Canvas",
-      "dimensions": "",
-      "available": "sold",
-      "featured": false,
-      "image": "images/four-seasons-acrylic-canvas-walt-viviers-2012.webp",
-      "price": "",
-      "instagram": "",
-      "article": "",
-      "description": "",
-      "description_af": ""
-    },
-    {
       "title": "Mana",
       "year": "2012",
       "medium": "Acrylic on Canvas Baord",
@@ -43,6 +29,34 @@
       "description_af": ""
     },
     {
+      "title": "Four Seasons",
+      "year": "2012",
+      "medium": "Acrylic on Canvas",
+      "dimensions": "",
+      "available": "sold",
+      "featured": false,
+      "image": "images/four-seasons-acrylic-canvas-walt-viviers-2012.webp",
+      "price": "",
+      "instagram": "",
+      "article": "",
+      "description": "",
+      "description_af": ""
+    },
+    {
+      "title": "Kitten Sqaured",
+      "year": "2008",
+      "medium": "Acrylic on Board",
+      "dimensions": "61 x 81.5 x 0.5 CM",
+      "available": "enquire",
+      "featured": false,
+      "image": "/images/IMG_8997.jpg",
+      "price": "$100",
+      "instagram": "",
+      "article": "",
+      "description": "",
+      "description_af": ""
+    },
+    {
       "title": "Aztek",
       "year": "2009",
       "medium": "Acrylic on Canvas",
@@ -51,6 +65,20 @@
       "featured": false,
       "image": "images/aztek-acrylic-canvas-walt-viviers-2009.webp",
       "price": "",
+      "instagram": "",
+      "article": "",
+      "description": "",
+      "description_af": ""
+    },
+    {
+      "title": "Cheetah",
+      "year": "2008",
+      "medium": "Acrylic on Board",
+      "dimensions": "61 x 81.5 x 0.5 CM",
+      "available": "available",
+      "featured": false,
+      "image": "/images/IMG_8992.jpg",
+      "price": "$200",
       "instagram": "",
       "article": "",
       "description": "",
@@ -78,6 +106,20 @@
       "available": "sold",
       "featured": false,
       "image": "images/cracked-acrylic-canvas-walt-viviers-2010.webp",
+      "price": "",
+      "instagram": "",
+      "article": "",
+      "description": "",
+      "description_af": ""
+    },
+    {
+      "title": "Pondtificate",
+      "year": "2008",
+      "medium": "Acrylic on Board",
+      "dimensions": "61 x 81.5 x 0.5 CM",
+      "available": "enquire",
+      "featured": false,
+      "image": "/images/IMG_8993.jpg",
       "price": "",
       "instagram": "",
       "article": "",
