@@ -1995,12 +1995,12 @@
             price:      w.price      || '',
           }));
 
-          works.sort((a, b) => Number(a.year) - Number(b.year));
+          works.sort((a, b) => Number(b.year) - Number(a.year));
 
           if (!works.length) { setHeroState('No artworks yet — add some in the CMS'); return; }
 
           const fi = works.findIndex(w => w.featured);
-          current  = fi >= 0 ? fi : 0;
+          current  = fi >= 0 ? fi : Math.floor(Math.random() * works.length);
 
           // If URL is /works/{slug}/, pre-select that artwork
           var pathMatch = location.pathname.match(/^\/works\/([^/]+)\//);
