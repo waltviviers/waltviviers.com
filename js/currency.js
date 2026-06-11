@@ -19,10 +19,10 @@
     return usdStr + ' \xb7 R ' + zar.toLocaleString('en-ZA');
   };
 
-  // Patch static .meta-value elements that contain a dollar price
+  // Patch price elements on artwork pages (.meta-value) and homepage (.work-meta-value)
   function patchDom() {
     if (!window.wvUsdZar) return;
-    document.querySelectorAll('.meta-value').forEach(function (el) {
+    document.querySelectorAll('.meta-value, .work-meta-value').forEach(function (el) {
       var t = (el.dataset.usd || el.textContent).trim();
       if (!t.startsWith('$')) return;
       el.dataset.usd = t; // remember original so refresh doesn't double-convert
