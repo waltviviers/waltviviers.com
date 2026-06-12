@@ -43,11 +43,11 @@
       "description_af": ""
     },
     {
-      "title": "Kitten Sqaured",
+      "title": "Kitten Squared",
       "year": "2008",
       "medium": "Acrylic on Board",
       "dimensions": "61 x 81.5 x 0.5 CM",
-      "available": "enquire",
+      "available": "available",
       "featured": false,
       "image": "images/kitten-sqaured-acrylic-board-walt-viviers-2008.webp",
       "price": "$100",
@@ -120,8 +120,8 @@
       "available": "enquire",
       "featured": false,
       "image": "images/pondtificate-acrylic-board-walt-viviers-2008.webp",
-      "price": "",
-      "instagram": "",
+      "price": "$300",
+      "instagram": "https://www.instagram.com/p/DZegi9BN0Xk/",
       "article": "",
       "description": "Pondtificate is a 2008 acrylic on board, 61 × 81.5 cm, whose title is itself a piece of wordplay — a blend of 'pontificate' and 'pond' that signals Viviers' wit alongside his painterly skill. One of a series of animal works from this year, the piece captures a moment of contemplation, its subject rendered with the loose, assured brushwork that characterises Viviers' early board paintings. An original from a significant year in his development as an artist.",
       "description_af": "Pondtificate is 'n 2008 akriel op bord van 61 × 81,5 cm, waarvan die titel self 'n woordspeling is — 'n vermenging van 'pontificeer' en 'dam' wat Viviers se humor naas sy skilder-vaardigheid aandui. Een van 'n reeks dierewerke uit hierdie jaar, vang die stuk 'n oomblik van besinning, met die onderwerp weergegee in die los, selfversekerde kwaswerk wat Viviers se vroeë bordskildery kenmerk. 'n Oorspronklike uit 'n beduidende jaar in sy ontwikkeling as kunstenaar."
@@ -355,7 +355,7 @@
       "year": "2020",
       "medium": "Acrylic on Canvas",
       "dimensions": "78 x 38 x 3.5 cm",
-      "available": "available",
+      "available": "enquire",
       "featured": true,
       "image": "images/t-rex-acrylic-canvas-walt-viviers-2020.webp",
       "price": "$480",
