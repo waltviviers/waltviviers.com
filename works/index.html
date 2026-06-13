@@ -285,7 +285,7 @@
     /* ── Works grid ── */
     .works-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 2px;
       background-color: #0D0D0D;
     }
@@ -413,10 +413,6 @@
     .sort-btn.is-active { color: var(--ink); border-color: var(--stone); background: var(--bg2); }
 
     /* ── Responsive ── */
-    @media (max-width: 1200px) {
-      .works-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-
     @media (max-width: 900px) {
       nav { padding: 0 24px; height: 50px; }
       .nav-logo img { height: 28px; }
