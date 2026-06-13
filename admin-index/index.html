@@ -155,6 +155,29 @@
       transition: color 0.2s, border-color 0.2s; white-space: nowrap;
     }
     .github-link-btn:hover { color: var(--ink); border-color: var(--stone); }
+    .apply-btn {
+      font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase;
+      color: #6DBF95; padding: 5px 14px; border: 1px solid #3D7A55;
+      background: rgba(61,122,85,0.08); cursor: pointer; white-space: nowrap;
+      transition: background 0.2s;
+    }
+    .apply-btn:hover:not([disabled]) { background: rgba(61,122,85,0.2); }
+    .apply-btn[disabled] { opacity: 0.45; cursor: default; }
+    .token-row { display: none; align-items: center; gap: 10px; width: 100%; flex-wrap: wrap; padding-top: 2px; }
+    .token-input {
+      font-family: monospace; font-size: 11px; background: var(--bg);
+      border: 1px solid var(--rule); color: var(--ink); padding: 7px 12px;
+      flex: 1; min-width: 220px; outline: none;
+    }
+    .token-input:focus { border-color: var(--stone); }
+    .token-input::placeholder { color: var(--stone); opacity: 0.55; }
+    .token-save-btn {
+      font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase;
+      color: #6DBF95; padding: 7px 14px; border: 1px solid #3D7A55;
+      background: rgba(61,122,85,0.08); cursor: pointer; transition: background 0.2s; white-space: nowrap;
+    }
+    .token-save-btn:hover { background: rgba(61,122,85,0.2); }
+    .apply-status { display: none; font-size: 11px; color: var(--stone); padding-top: 2px; width: 100%; line-height: 1.6; }
 
     /* ── Section ── */
     .section { margin-bottom: 56px; }
@@ -329,9 +352,17 @@
     <!-- Changes banner -->
     <div class="changes-banner" id="changes-banner">
       <div class="changes-banner-header">
-        <span class="changes-banner-title">Pending changes — edit these files to apply</span>
-        <button class="changes-clear" id="changes-clear">Reset all</button>
+        <span class="changes-banner-title">Pending changes</span>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <button class="apply-btn" id="apply-btn">Apply edits</button>
+          <button class="changes-clear" id="changes-clear">Reset all</button>
+        </div>
       </div>
+      <div class="token-row" id="token-row">
+        <input type="password" class="token-input" id="gh-token-input" placeholder="GitHub Personal Access Token — repo write scope" autocomplete="off" />
+        <button class="token-save-btn" id="token-save-btn">Save &amp; Apply</button>
+      </div>
+      <div class="apply-status" id="apply-status"></div>
       <div class="change-list" id="change-list"></div>
     </div>
 
@@ -630,6 +661,135 @@
       saveOverrides();
       renderAll();
       renderChanges();
+    });
+
+    /* ── Apply Edits via GitHub Contents API ── */
+    var GH_API = 'https://api.github.com/repos/waltviviers/waltviviers.com/contents/';
+
+    function getToken() { return localStorage.getItem('wv-gh-token') || ''; }
+    function storeToken(t) { localStorage.setItem('wv-gh-token', t.trim()); }
+
+    function setStatus(msg, isError) {
+      var el = document.getElementById('apply-status');
+      el.style.display = 'block';
+      el.style.color = isError ? '#E07070' : 'var(--stone)';
+      el.textContent = msg;
+    }
+
+    function clearStatus() {
+      var el = document.getElementById('apply-status');
+      el.style.display = 'none';
+      el.textContent = '';
+    }
+
+    function replaceRobotsMeta(html, newValue) {
+      var tag = '<meta name="robots" content="' + newValue + '" />';
+      var r1 = /<meta\s+name=["']robots["']\s+content=["'][^"']*["']\s*\/?>/i;
+      var r2 = /<meta\s+content=["'][^"']*["']\s+name=["']robots["']\s*\/?>/i;
+      if (r1.test(html)) return html.replace(r1, tag);
+      if (r2.test(html)) return html.replace(r2, tag);
+      return html.replace('</head>', '  ' + tag + '\n</head>');
+    }
+
+    function b64decode(str) {
+      return decodeURIComponent(escape(atob(str.replace(/\n/g, ''))));
+    }
+
+    function b64encode(str) {
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    async function fetchFile(file, token) {
+      var res = await fetch(GH_API + file + '?ref=main', {
+        headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' }
+      });
+      if (res.status === 401) throw new Error('Invalid token — check it has repo write scope');
+      if (!res.ok) throw new Error('Could not fetch ' + file + ' (' + res.status + ')');
+      var data = await res.json();
+      return { sha: data.sha, content: b64decode(data.content) };
+    }
+
+    async function putFile(file, content, sha, message, token) {
+      var res = await fetch(GH_API + file, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: message, content: b64encode(content), sha: sha, branch: 'main' })
+      });
+      if (res.status === 422) throw new Error('Branch protected — check bypass permissions');
+      if (!res.ok) {
+        var err = await res.json().catch(function() { return {}; });
+        throw new Error(err.message || 'Failed to write ' + file + ' (' + res.status + ')');
+      }
+    }
+
+    async function runApplyEdits(token) {
+      var applyBtn = document.getElementById('apply-btn');
+      applyBtn.disabled = true;
+
+      var allPages = [].concat(pages.core, pages.docs, pages.apps, pages.works, pages.admin);
+      var pending = [];
+      allPages.forEach(function (p) {
+        var key = p.path;
+        if (!overrides.hasOwnProperty(key)) return;
+        if (overrides[key] === isBlocked(p.robots)) return;
+        pending.push({ page: p, newRobots: getNewRobots(p, overrides[key]) });
+      });
+
+      if (pending.length === 0) { applyBtn.disabled = false; return; }
+
+      var errors = [];
+      for (var i = 0; i < pending.length; i++) {
+        var item = pending[i];
+        setStatus('Updating ' + (i + 1) + ' / ' + pending.length + ' — ' + item.page.path);
+        try {
+          var f = await fetchFile(item.page.file, token);
+          var updated = replaceRobotsMeta(f.content, item.newRobots);
+          await putFile(item.page.file, updated, f.sha, 'chore: set robots ' + item.newRobots + ' for ' + item.page.path, token);
+          item.page.robots = item.newRobots;
+        } catch (e) {
+          errors.push(item.page.path + ': ' + e.message);
+        }
+      }
+
+      applyBtn.disabled = false;
+
+      if (errors.length === 0) {
+        overrides = {};
+        saveOverrides();
+        renderAll();
+        renderChanges();
+        setStatus('Done — ' + pending.length + ' file' + (pending.length !== 1 ? 's' : '') + ' updated on main.');
+      } else {
+        setStatus('Finished with errors:\n' + errors.join('\n'), true);
+      }
+    }
+
+    document.getElementById('apply-btn').addEventListener('click', function () {
+      clearStatus();
+      var token = getToken();
+      if (!token) {
+        document.getElementById('token-row').style.display = 'flex';
+        document.getElementById('gh-token-input').focus();
+        return;
+      }
+      runApplyEdits(token);
+    });
+
+    document.getElementById('token-save-btn').addEventListener('click', function () {
+      var t = document.getElementById('gh-token-input').value.trim();
+      if (!t) return;
+      storeToken(t);
+      document.getElementById('token-row').style.display = 'none';
+      document.getElementById('gh-token-input').value = '';
+      runApplyEdits(t);
+    });
+
+    document.getElementById('gh-token-input').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') document.getElementById('token-save-btn').click();
     });
 
     renderAll();
