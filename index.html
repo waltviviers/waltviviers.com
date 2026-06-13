@@ -1304,39 +1304,84 @@
       .footer-admin { display: none; }
     }
 
-    /* ── Floating mobile enquire button ── */
-    .mobile-enquire-fab {
+    /* ── Burger button ── */
+    .burger-btn {
       display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      cursor: pointer;
+      background: none; border: none; padding: 6px;
+      flex-shrink: 0;
     }
+    .burger-line {
+      display: block; width: 20px; height: 1.5px;
+      background: var(--stone);
+      transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.2s, background 0.2s;
+      transform-origin: center;
+    }
+    .burger-btn:hover .burger-line { background: var(--ink); }
+    .burger-btn.is-open .burger-line:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .burger-btn.is-open .burger-line:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .burger-btn.is-open .burger-line:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* ── Mobile menu overlay ── */
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 190;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      padding: 80px 32px 48px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1);
+      overflow-y: auto;
+    }
+    .mobile-menu.is-open { opacity: 1; pointer-events: auto; }
+    body.menu-open { overflow: hidden; }
+
+    .mobile-menu-links {
+      display: flex; flex-direction: column;
+      border-top: 1px solid var(--rule);
+      flex: 1;
+    }
+    .mobile-menu-link {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--rule);
+      font-family: var(--serif);
+      font-size: clamp(2rem, 9vw, 3.2rem);
+      font-weight: 400; line-height: 1;
+      color: var(--stone);
+      transition: color 0.2s;
+      text-decoration: none;
+    }
+    .mobile-menu-link:hover { color: var(--ink); }
+    .mobile-menu-link-cta {
+      color: var(--ink);
+      margin-top: 4px;
+    }
+    .mobile-menu-link-cta:hover { color: var(--stone); }
+    .mobile-menu-arrow { font-size: 1.4rem; opacity: 0.4; }
+
+    .mobile-menu-foot {
+      padding-top: 32px;
+      display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
+    }
+    .mobile-menu-foot a {
+      display: flex; align-items: center; color: var(--stone); transition: color 0.2s;
+    }
+    .mobile-menu-foot a:hover { color: var(--ink); }
+    .mobile-menu-foot svg {
+      width: 22px; height: 22px; fill: none;
+      stroke: currentColor; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    [data-theme="light"] .mobile-menu { background: #F5F3EF; }
+
     @media (max-width: 900px) {
-      .mobile-enquire-fab {
-        display: flex;
-        position: fixed;
-        bottom: 24px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 300;
-        align-items: center;
-        justify-content: center;
-        height: 48px;
-        padding: 0 32px;
-        background: var(--ink);
-        color: var(--bg);
-        font-family: var(--sans);
-        font-size: 11px;
-        font-weight: 500;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        white-space: nowrap;
-        text-decoration: none;
-        transition: opacity 0.25s, transform 0.25s;
-      }
-      .mobile-enquire-fab:hover { opacity: 0.85; }
-      .mobile-enquire-fab.is-hidden {
-        opacity: 0;
-        pointer-events: none;
-        transform: translateX(-50%) translateY(12px);
-      }
+      .burger-btn { display: flex; }
     }
 
   </style>
@@ -1367,6 +1412,7 @@
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="#works" data-i18n="nav-works">Artworks</a></li>
       <li class="nav-link-hide"><a href="#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>
       <li class="nav-link-hide"><a href="#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -1389,8 +1435,36 @@
           </span>
         </button>
       </li>
+      <li>
+        <button class="burger-btn" id="burger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+          <span class="burger-line"></span>
+        </button>
+      </li>
     </ul>
   </nav>
+
+  <!-- Mobile menu overlay -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Navigation menu">
+    <nav class="mobile-menu-links">
+      <a href="#works" class="mobile-menu-link" data-i18n="nav-works">Artworks <span class="mobile-menu-arrow">↗</span></a>
+      <a href="#about" class="mobile-menu-link" data-i18n="nav-about">About <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio &amp; Statement <span class="mobile-menu-arrow">↗</span></a>
+      <a href="#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>
+    </nav>
+    <div class="mobile-menu-foot">
+      <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+      </a>
+    </div>
+  </div>
 
   <!-- Hero: Featured Work -->
   <main id="main" role="main">
@@ -1731,7 +1805,7 @@
   (function () {
     var T = {
       en: {
-        'nav-works': 'Artworks', 'nav-about': 'About', 'nav-enquire': 'Enquire',
+        'nav-works': 'Artworks', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on',
         'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
@@ -1765,7 +1839,7 @@
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.'
       },
       af: {
-        'nav-works': 'Kunswerke', 'nav-about': 'Omheen', 'nav-enquire': 'Navraag',
+        'nav-works': 'Kunswerke', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op',
         'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
@@ -2287,24 +2361,43 @@
     })();
   </script>
 
-  <!-- Admin button -->
+  <!-- Admin + burger menu -->
   <script>
     document.getElementById('admin-btn').addEventListener('click', function () {
       window.open('https://waltviviers.com/admin#/collections/artworks/entries/artworks', '_blank', 'noopener,noreferrer');
     });
 
     (function () {
-      var fab = document.getElementById('mobile-enquire-fab');
-      var commission = document.getElementById('commission');
-      if (!fab || !commission) return;
-      var obs = new IntersectionObserver(function (entries) {
-        fab.classList.toggle('is-hidden', entries[0].isIntersecting);
-      }, { threshold: 0.15 });
-      obs.observe(commission);
+      var burger = document.getElementById('burger-btn');
+      var menu   = document.getElementById('mobile-menu');
+      if (!burger || !menu) return;
+
+      function openMenu() {
+        burger.classList.add('is-open');
+        burger.setAttribute('aria-expanded', 'true');
+        menu.classList.add('is-open');
+        document.body.classList.add('menu-open');
+      }
+      function closeMenu() {
+        burger.classList.remove('is-open');
+        burger.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('is-open');
+        document.body.classList.remove('menu-open');
+      }
+
+      burger.addEventListener('click', function () {
+        menu.classList.contains('is-open') ? closeMenu() : openMenu();
+      });
+
+      menu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', closeMenu);
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+      });
     })();
   </script>
-
-  <a href="#commission" class="mobile-enquire-fab" id="mobile-enquire-fab" data-i18n="nav-enquire">Enquire</a>
 
 </body>
 </html>
