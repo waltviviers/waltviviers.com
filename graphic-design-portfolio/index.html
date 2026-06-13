@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Graphic Design Portfolio — Walt Viviers</title>
-  <meta name="description" content="Graphic design portfolio of Walt Viviers — Creative Director based in Pretoria, South Africa. Twenty years of brand identity, web design, e-commerce, and digital marketing for major South African and international brands." />
+  <meta name="description" content="Graphic design portfolio of Walt Viviers — Creative Director based in Pretoria, South Africa. Twenty years of brand identity, web design, e-commerce, and digital marketing for major South African and international brands. MEA Business Award winner. 4,343% ROI for Kaizer Chiefs." />
   <meta name="author" content="Walt Viviers" />
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://waltviviers.com/graphic-design-portfolio/" />
@@ -14,7 +14,7 @@
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://waltviviers.com/graphic-design-portfolio/" />
   <meta property="og:title"       content="Graphic Design Portfolio — Walt Viviers" />
-  <meta property="og:description" content="Creative Director based in Pretoria. Twenty years of brand, web, and digital work for Kaizer Chiefs, Alpha Industries, Kappa, Sebago, Superga and more." />
+  <meta property="og:description" content="Creative Director based in Pretoria. Twenty years of brand, web, and digital work for Kaizer Chiefs, Alpha Industries, Kappa, Sebago, Superga and more. MEA Business Award winner." />
   <meta property="og:image"       content="https://waltviviers.com/images/walt-viviers-fine-art-banner.webp" />
   <meta property="og:image:type"  content="image/webp" />
   <meta property="og:locale"      content="en_ZA" />
@@ -210,11 +210,10 @@
 
     /* ── Page header ── */
     .page-head {
-      margin-bottom: 72px;
+      margin-bottom: 64px;
       padding-bottom: 40px;
       border-bottom: 1px solid var(--rule);
     }
-
     .page-head-top {
       display: flex;
       justify-content: space-between;
@@ -223,14 +222,12 @@
       gap: 16px;
       margin-bottom: 32px;
     }
-
     .page-head h1 {
       font-family: var(--serif);
       font-size: clamp(2.5rem, 6vw, 5rem);
       font-weight: 400;
       line-height: 1.05;
     }
-
     .back-link {
       font-size: 11px;
       letter-spacing: 0.10em;
@@ -240,19 +237,53 @@
       white-space: nowrap;
     }
     .back-link:hover { color: var(--ink); }
-
     .page-intro {
-      max-width: 640px;
+      max-width: 680px;
       font-size: 1.05rem;
       color: var(--stone);
       line-height: 1.75;
     }
 
-    /* ── Client strip ── */
-    .clients-section {
-      margin-bottom: 80px;
+    /* ── Results strip ── */
+    .results-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      background: var(--rule);
+      gap: 1px;
+      border: 1px solid var(--rule);
+      margin-bottom: 64px;
+    }
+    .result-item {
+      background: var(--bg);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .result-item:hover { background: var(--bg2); }
+    .result-roi {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 400;
+      line-height: 1;
+      color: var(--ink);
+    }
+    .result-client {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+    .result-scope {
+      font-size: 11px;
+      color: var(--stone);
+      opacity: 0.7;
+      line-height: 1.4;
+      margin-top: 2px;
     }
 
+    /* ── Section label ── */
     .section-label {
       font-size: 10px;
       letter-spacing: 0.14em;
@@ -261,6 +292,8 @@
       margin-bottom: 20px;
     }
 
+    /* ── Client strip ── */
+    .clients-section { margin-bottom: 80px; }
     .clients-list {
       display: flex;
       flex-wrap: wrap;
@@ -268,7 +301,6 @@
       border-top: 1px solid var(--rule);
       border-left: 1px solid var(--rule);
     }
-
     .client-chip {
       font-size: 12px;
       font-weight: 500;
@@ -283,10 +315,7 @@
     .client-chip:hover { color: var(--ink); background: var(--bg2); }
 
     /* ── Discipline sections ── */
-    .discipline-section {
-      margin-bottom: 80px;
-    }
-
+    .discipline-section { margin-bottom: 80px; }
     .discipline-header {
       display: flex;
       align-items: baseline;
@@ -295,21 +324,19 @@
       padding-bottom: 16px;
       border-bottom: 1px solid var(--rule);
     }
-
     .discipline-title {
       font-family: var(--serif);
       font-size: clamp(1.6rem, 3vw, 2.4rem);
       font-weight: 400;
       line-height: 1.1;
     }
-
     .discipline-count {
       font-size: 11px;
       letter-spacing: 0.10em;
       color: var(--stone);
     }
 
-    /* ── Shot grid ── */
+    /* ── Shot grid (Dribbble) ── */
     .shot-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -317,7 +344,6 @@
       background: var(--rule);
       border: 1px solid var(--rule);
     }
-
     .shot-card {
       background: var(--bg);
       display: flex;
@@ -325,7 +351,6 @@
       transition: background 0.2s;
     }
     .shot-card:hover { background: var(--bg2); }
-
     .shot-embed-wrap {
       position: relative;
       width: 100%;
@@ -333,14 +358,12 @@
       background: var(--bg2);
       overflow: hidden;
     }
-
     .shot-embed-wrap iframe {
       width: 100%;
       height: 100%;
       border: 0;
       display: block;
     }
-
     .shot-embed-placeholder {
       position: absolute;
       inset: 0;
@@ -352,40 +375,32 @@
       padding: 24px;
       text-align: center;
     }
-
     .shot-embed-placeholder svg {
-      width: 32px;
-      height: 32px;
-      fill: none;
-      stroke: var(--stone);
-      stroke-width: 1.2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      opacity: 0.5;
+      width: 32px; height: 32px; fill: none;
+      stroke: var(--stone); stroke-width: 1.2;
+      stroke-linecap: round; stroke-linejoin: round; opacity: 0.5;
     }
-
     .shot-embed-placeholder span {
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--stone);
-      opacity: 0.6;
+      font-size: 11px; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--stone); opacity: 0.6;
     }
-
     .shot-info {
       padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .shot-info-row {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       gap: 12px;
     }
-
     .shot-title {
       font-family: var(--serif);
       font-size: 1.15rem;
       font-weight: 400;
     }
-
     .shot-link {
       font-size: 10px;
       letter-spacing: 0.10em;
@@ -396,30 +411,190 @@
       transition: color 0.2s;
     }
     .shot-card:hover .shot-link { color: var(--ink); }
+    .shot-meta {
+      font-size: 11px;
+      color: var(--stone);
+      opacity: 0.7;
+    }
+
+    /* ── Case study grid (E-Commerce / Digital Marketing) ── */
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+    .case-card {
+      background: var(--bg);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition: background 0.2s;
+      position: relative;
+    }
+    .case-card:hover { background: var(--bg2); }
+    .case-tag {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 16px;
+    }
+    .case-client {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 20px;
+    }
+    .case-roi {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 4vw, 3.6rem);
+      font-weight: 400;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .case-roi-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 20px;
+    }
+    .case-desc {
+      font-size: 12px;
+      color: var(--stone);
+      line-height: 1.65;
+      flex: 1;
+      margin-bottom: 20px;
+    }
+    .case-link {
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--stone);
+      transition: color 0.2s;
+      align-self: flex-start;
+    }
+    .case-card:hover .case-link { color: var(--ink); }
+
+    /* ── App cards ── */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+    .app-card {
+      background: var(--bg);
+      padding: 40px 40px;
+      display: flex;
+      align-items: flex-start;
+      gap: 28px;
+      transition: background 0.2s;
+    }
+    .app-card:hover { background: var(--bg2); }
+    .app-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .app-icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .app-body { flex: 1; min-width: 0; }
+    .app-tag {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 8px;
+    }
+    .app-name {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .app-tagline {
+      font-size: 13px;
+      color: var(--stone);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .app-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .app-link {
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--stone);
+      padding: 7px 14px;
+      border: 1px solid var(--rule);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .app-card:hover .app-link { border-color: var(--stone); }
+    .app-link:hover { color: var(--ink) !important; border-color: var(--ink) !important; }
+
+    /* ── Awards strip ── */
+    .awards-section { margin-bottom: 80px; }
+    .awards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+    .award-item {
+      background: var(--bg);
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .award-item:hover { background: var(--bg2); }
+    .award-year {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+    .award-title {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 400;
+      line-height: 1.25;
+    }
+    .award-org {
+      font-size: 12px;
+      color: var(--stone);
+      margin-top: 4px;
+    }
 
     /* ── Profile CTAs ── */
     .profile-ctas {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 1px;
       background: var(--rule);
       border: 1px solid var(--rule);
       margin-top: 80px;
     }
-
     .profile-cta {
       background: var(--bg);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 40px 48px;
+      padding: 40px 40px;
       gap: 24px;
       transition: background 0.2s;
     }
     .profile-cta:hover { background: var(--bg2); }
-
     .profile-cta-body {}
-
     .profile-cta-label {
       font-size: 10px;
       letter-spacing: 0.14em;
@@ -427,22 +602,19 @@
       color: var(--stone);
       margin-bottom: 8px;
     }
-
     .profile-cta-name {
       font-family: var(--serif);
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 400;
       line-height: 1.1;
       margin-bottom: 10px;
     }
-
     .profile-cta-desc {
       font-size: 13px;
       color: var(--stone);
       line-height: 1.6;
-      max-width: 320px;
+      max-width: 280px;
     }
-
     .profile-cta-arrow {
       font-size: 2rem;
       color: var(--stone);
@@ -452,6 +624,11 @@
     .profile-cta:hover .profile-cta-arrow { color: var(--ink); transform: translate(4px, -4px); }
 
     /* ── Responsive ── */
+    @media (max-width: 1100px) {
+      .results-strip { grid-template-columns: repeat(3, 1fr); }
+      .profile-ctas { grid-template-columns: 1fr 1fr; }
+      .awards-grid { grid-template-columns: 1fr 1fr; }
+    }
     @media (max-width: 900px) {
       nav { padding: 0 24px; height: 50px; }
       .nav-logo img { height: 28px; }
@@ -465,17 +642,23 @@
       .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
       .page-wrap { padding: calc(50px + 40px) 24px 80px; }
       .shot-grid { grid-template-columns: 1fr; }
+      .results-strip { grid-template-columns: repeat(2, 1fr); }
+      .case-grid { grid-template-columns: 1fr 1fr; }
       .profile-ctas { grid-template-columns: 1fr; }
-      .profile-cta { padding: 32px 24px; }
+      .awards-grid { grid-template-columns: 1fr; }
+      .app-grid { grid-template-columns: 1fr; }
       footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
       .footer-admin { position: static; transform: none; order: 1; }
       .footer-social { order: 0; }
       .footer-mark { position: static; transform: none; order: 2; }
     }
-
-    @media (max-width: 560px) {
+    @media (max-width: 620px) {
+      .results-strip { grid-template-columns: 1fr 1fr; }
+      .case-grid { grid-template-columns: 1fr; }
+      .app-card { flex-direction: column; gap: 20px; }
+      .profile-cta { padding: 32px 24px; }
+      .profile-cta-name { font-size: 1.5rem; }
       .footer-admin { display: none; }
-      .profile-cta-name { font-size: 1.6rem; }
     }
   </style>
 </head>
@@ -524,13 +707,42 @@
         <a href="/" class="back-link">← Back to fine art</a>
       </div>
       <p class="page-intro">
-        Twenty years of creative practice — from Junior Designer to Creative Director at a leading South African digital agency. Brand identity, web design, e-commerce, motion graphics, and digital marketing for major SA and international brands. Shots sourced from Dribbble; full projects on Behance.
+        Twenty years of creative practice — from Junior Designer to Creative Director at a leading South African digital agency. Brand identity, web design, Shopify e-commerce, motion graphics, and performance digital marketing for major SA and international brands. MEA Business Award winner. Full project case studies on Behance; shots on Dribbble.
       </p>
+    </div>
+
+    <!-- Key results strip -->
+    <div class="results-strip" aria-label="Key campaign results 2024">
+      <div class="result-item">
+        <span class="result-roi">4,343%</span>
+        <span class="result-client">Kaizer Chiefs</span>
+        <span class="result-scope">UX/UI · Shopify · Google Ads</span>
+      </div>
+      <div class="result-item">
+        <span class="result-roi">944%</span>
+        <span class="result-client">Alpha Industries</span>
+        <span class="result-scope">E-Commerce · SEO · Google Ads</span>
+      </div>
+      <div class="result-item">
+        <span class="result-roi">822%</span>
+        <span class="result-client">Sebago</span>
+        <span class="result-scope">E-Commerce · SEO · Google Ads</span>
+      </div>
+      <div class="result-item">
+        <span class="result-roi">552%</span>
+        <span class="result-client">Superga</span>
+        <span class="result-scope">3,558 conversions · 7.5M+ impressions</span>
+      </div>
+      <div class="result-item">
+        <span class="result-roi">362%</span>
+        <span class="result-client">Kappa</span>
+        <span class="result-scope">E-Commerce · Google Ads funnel</span>
+      </div>
     </div>
 
     <!-- Client list -->
     <div class="clients-section">
-      <p class="section-label">Selected clients</p>
+      <p class="section-label">Selected clients — Menzies Media &amp; freelance</p>
       <div class="clients-list">
         <span class="client-chip">Kaizer Chiefs</span>
         <span class="client-chip">Alpha Industries</span>
@@ -546,6 +758,8 @@
         <span class="client-chip">1.618 Group</span>
         <span class="client-chip">Longhouse Brewery</span>
         <span class="client-chip">Villas in Cape Town</span>
+        <span class="client-chip">Digital Tequila</span>
+        <span class="client-chip">Connect Me Now</span>
       </div>
     </div>
 
@@ -553,7 +767,7 @@
     <div class="discipline-section">
       <div class="discipline-header">
         <h2 class="discipline-title">Web &amp; Digital</h2>
-        <span class="discipline-count">UX · UI · E-Commerce · Google Ads</span>
+        <span class="discipline-count">UX · UI · Shopify E-Commerce · SEO</span>
       </div>
       <div class="shot-grid">
 
@@ -573,8 +787,11 @@
             </div>
           </div>
           <div class="shot-info">
-            <span class="shot-title">Kaizer Chiefs — Website Update</span>
-            <a href="https://dribbble.com/shots/21909323-Kaizer-Chiefs-Website-Update" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            <div class="shot-info-row">
+              <span class="shot-title">Kaizer Chiefs — Website</span>
+              <a href="https://dribbble.com/shots/21909323-Kaizer-Chiefs-Website-Update" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            </div>
+            <span class="shot-meta">Full UX/UI overhaul · Shopify · 4,343% ROI · 2024</span>
           </div>
         </div>
 
@@ -594,8 +811,11 @@
             </div>
           </div>
           <div class="shot-info">
-            <span class="shot-title">Connect Me Now</span>
-            <a href="https://dribbble.com/shots/1709878-Connect-Me-Now" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            <div class="shot-info-row">
+              <span class="shot-title">Connect Me Now</span>
+              <a href="https://dribbble.com/shots/1709878-Connect-Me-Now" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            </div>
+            <span class="shot-meta">Web design · UI/UX · 2014</span>
           </div>
         </div>
 
@@ -606,7 +826,7 @@
     <div class="discipline-section">
       <div class="discipline-header">
         <h2 class="discipline-title">Brand &amp; Identity</h2>
-        <span class="discipline-count">Logo · Visual Identity · Typography</span>
+        <span class="discipline-count">Logo · Visual Identity · Typography · Print</span>
       </div>
       <div class="shot-grid">
 
@@ -626,8 +846,11 @@
             </div>
           </div>
           <div class="shot-info">
-            <span class="shot-title">Longhouse Brewery</span>
-            <a href="https://dribbble.com/shots/1772378-Longhouse-Brewery" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            <div class="shot-info-row">
+              <span class="shot-title">Longhouse Brewery</span>
+              <a href="https://dribbble.com/shots/1772378-Longhouse-Brewery" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            </div>
+            <span class="shot-meta">Brand identity · Logo · Packaging · 2015</span>
           </div>
         </div>
 
@@ -647,8 +870,11 @@
             </div>
           </div>
           <div class="shot-info">
-            <span class="shot-title">Digital Tequila</span>
-            <a href="https://dribbble.com/shots/1626862-Digital-Tequila" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            <div class="shot-info-row">
+              <span class="shot-title">Digital Tequila</span>
+              <a href="https://dribbble.com/shots/1626862-Digital-Tequila" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            </div>
+            <span class="shot-meta">Brand identity · Logo design · 2015</span>
           </div>
         </div>
 
@@ -668,8 +894,11 @@
             </div>
           </div>
           <div class="shot-info">
-            <span class="shot-title">Alchemy</span>
-            <a href="https://dribbble.com/shots/1644402-Alchemy-1b" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            <div class="shot-info-row">
+              <span class="shot-title">Alchemy</span>
+              <a href="https://dribbble.com/shots/1644402-Alchemy-1b" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            </div>
+            <span class="shot-meta">Brand identity · Logo design · 2015</span>
           </div>
         </div>
 
@@ -680,7 +909,7 @@
     <div class="discipline-section">
       <div class="discipline-header">
         <h2 class="discipline-title">Illustration &amp; Pixel Art</h2>
-        <span class="discipline-count">Character Design · Pixel Art · Digital</span>
+        <span class="discipline-count">Character Design · Pixel Art · Digital Illustration</span>
       </div>
       <div class="shot-grid">
 
@@ -700,8 +929,11 @@
             </div>
           </div>
           <div class="shot-info">
-            <span class="shot-title">Pixel Art MGS</span>
-            <a href="https://dribbble.com/shots/6745248-Pixel-Art-MGS" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            <div class="shot-info-row">
+              <span class="shot-title">Pixel Art — MGS</span>
+              <a href="https://dribbble.com/shots/6745248-Pixel-Art-MGS" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            </div>
+            <span class="shot-meta">Pixel art · Character design · 2019</span>
           </div>
         </div>
 
@@ -721,8 +953,11 @@
             </div>
           </div>
           <div class="shot-info">
-            <span class="shot-title">Pixel Walt RPG</span>
-            <a href="https://dribbble.com/shots/3848165-Pixel-Walt-RPG" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            <div class="shot-info-row">
+              <span class="shot-title">Pixel Walt — RPG</span>
+              <a href="https://dribbble.com/shots/3848165-Pixel-Walt-RPG" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            </div>
+            <span class="shot-meta">Pixel art · Self-portrait · 2017</span>
           </div>
         </div>
 
@@ -742,9 +977,133 @@
             </div>
           </div>
           <div class="shot-info">
-            <span class="shot-title">Pixel Walt's Shades</span>
-            <a href="https://dribbble.com/shots/3832151-Pixel-Walt-s-Shades" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            <div class="shot-info-row">
+              <span class="shot-title">Pixel Walt — Shades</span>
+              <a href="https://dribbble.com/shots/3832151-Pixel-Walt-s-Shades" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+            </div>
+            <span class="shot-meta">Pixel art · Self-portrait · 2017</span>
           </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Digital Marketing & E-Commerce case studies -->
+    <div class="discipline-section">
+      <div class="discipline-header">
+        <h2 class="discipline-title">Digital Marketing &amp; E-Commerce</h2>
+        <span class="discipline-count">Google Ads · Shopify · SEO/SEM · Analytics</span>
+      </div>
+      <div class="case-grid">
+
+        <div class="case-card">
+          <p class="case-tag">Website · E-Commerce · Google Ads</p>
+          <h3 class="case-client">Kaizer Chiefs</h3>
+          <p class="case-roi">4,343%</p>
+          <p class="case-roi-label">Return on investment</p>
+          <p class="case-desc">Full UX/UI overhaul of the Kaizer Chiefs website. Shopify e-commerce build-out and Google Ads strategy driving record-breaking sales ROI for South Africa's biggest football club.</p>
+          <a href="https://dribbble.com/shots/21909323-Kaizer-Chiefs-Website-Update" target="_blank" rel="noopener" class="case-link">Dribbble ↗</a>
+        </div>
+
+        <div class="case-card">
+          <p class="case-tag">E-Commerce · SEO · Google Ads</p>
+          <h3 class="case-client">Alpha Industries</h3>
+          <p class="case-roi">944%</p>
+          <p class="case-roi-label">Return on investment</p>
+          <p class="case-desc">E-commerce UX/UI redesign, SEO optimisation, and Google Ads campaigns for the iconic American apparel brand's South African operation.</p>
+          <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" class="case-link">Behance ↗</a>
+        </div>
+
+        <div class="case-card">
+          <p class="case-tag">E-Commerce · SEO · Google Ads</p>
+          <h3 class="case-client">Sebago</h3>
+          <p class="case-roi">822%</p>
+          <p class="case-roi-label">Return on investment</p>
+          <p class="case-desc">End-to-end e-commerce UX/UI, SEO strategy, and Google Ads sales campaigns for the American footwear brand's SA digital presence.</p>
+          <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" class="case-link">Behance ↗</a>
+        </div>
+
+        <div class="case-card">
+          <p class="case-tag">E-Commerce · Google Ads</p>
+          <h3 class="case-client">Superga</h3>
+          <p class="case-roi">552%</p>
+          <p class="case-roi-label">Return on investment</p>
+          <p class="case-desc">E-commerce strategy and Google Ads delivering 3,558 conversions and over 7.5 million campaign impressions for the Italian footwear brand.</p>
+          <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" class="case-link">Behance ↗</a>
+        </div>
+
+        <div class="case-card">
+          <p class="case-tag">E-Commerce · Google Ads</p>
+          <h3 class="case-client">Kappa</h3>
+          <p class="case-roi">362%</p>
+          <p class="case-roi-label">Return on investment</p>
+          <p class="case-desc">E-commerce design and full Google Ads sales funnel strategy for the Italian sportswear brand's South African e-commerce operation.</p>
+          <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" class="case-link">Behance ↗</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Apps & Side Projects -->
+    <div class="discipline-section">
+      <div class="discipline-header">
+        <h2 class="discipline-title">Apps &amp; Side Projects</h2>
+        <span class="discipline-count">UI Design · Android · Web Apps</span>
+      </div>
+      <div class="app-grid">
+
+        <a href="/apps/bill_tipper/" class="app-card">
+          <div class="app-icon">
+            <img src="/images/bill-tipper-icon.webp" alt="Bill Tipper icon" width="72" height="72" loading="lazy" />
+          </div>
+          <div class="app-body">
+            <p class="app-tag">Utility · Android &amp; Web</p>
+            <h3 class="app-name">Bill Tipper</h3>
+            <p class="app-tagline">Split bills and calculate tips instantly. No ads, no tracking, no account required — works entirely on device.</p>
+            <div class="app-links">
+              <span class="app-link">View app ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="/apps/neurotrace/" class="app-card">
+          <div class="app-icon">
+            <img src="/images/neurotrace-icon.webp" alt="Neurotrace icon" width="72" height="72" loading="lazy" />
+          </div>
+          <div class="app-body">
+            <p class="app-tag">Game · Android · Google Play</p>
+            <h3 class="app-name">Neurotrace</h3>
+            <p class="app-tagline">A cyberpunk memory puzzle for Android. Tiles flash. You watch. Then you repeat — faster, longer, deeper into the grid.</p>
+            <div class="app-links">
+              <span class="app-link">View app ↗</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- Awards -->
+    <div class="awards-section">
+      <p class="section-label">Awards &amp; recognition</p>
+      <div class="awards-grid">
+
+        <div class="award-item">
+          <span class="award-year">2021</span>
+          <p class="award-title">Leading Pioneers in Digital Marketing</p>
+          <p class="award-org">MEA Business Awards</p>
+        </div>
+
+        <div class="award-item">
+          <span class="award-year">2020</span>
+          <p class="award-title">Best Next-Gen Tech-Driven Marketing Company, Southern Africa</p>
+          <p class="award-org">MEA Business Awards</p>
+        </div>
+
+        <div class="award-item">
+          <span class="award-year">2004</span>
+          <p class="award-title">Best Art &amp; Design Student Floating Trophy</p>
+          <p class="award-org">Design School S.A.</p>
         </div>
 
       </div>
@@ -765,6 +1124,14 @@
           <p class="profile-cta-label">Full case studies</p>
           <p class="profile-cta-name">Behance</p>
           <p class="profile-cta-desc">Detailed project breakdowns, campaign work, and brand identity case studies.</p>
+        </div>
+        <span class="profile-cta-arrow">↗</span>
+      </a>
+      <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" class="profile-cta">
+        <div class="profile-cta-body">
+          <p class="profile-cta-label">Professional history</p>
+          <p class="profile-cta-name">LinkedIn</p>
+          <p class="profile-cta-desc">Twenty years of experience, client endorsements, and the full career timeline.</p>
         </div>
         <span class="profile-cta-arrow">↗</span>
       </a>
@@ -824,7 +1191,6 @@
         window.location.href = 'https://vercel.com/waltviviers';
       });
 
-      /* Hide placeholder overlay once iframe signals it loaded */
       document.querySelectorAll('.shot-embed-wrap iframe').forEach(function (iframe) {
         iframe.addEventListener('load', function () {
           const placeholder = iframe.parentElement.querySelector('.shot-embed-placeholder');
