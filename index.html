@@ -91,6 +91,17 @@
 
   <!-- Prevent theme FOUC: set data-theme before any CSS paints -->
   <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
+  <script>
+    (function () {
+      var HASH = '344ad576405826e01622c18d01dd680ac08d5f6b3b6ad614d0a0c09fa4672f14';
+      var KEY  = 'wv-site-auth';
+      if (localStorage.getItem(KEY) === HASH) return;
+      document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('auth-gate').style.display = 'flex';
+        document.getElementById('page-content').style.display = 'none';
+      });
+    })();
+  </script>
 
   <!-- Schema markup -->
   <script type="application/ld+json">
@@ -1386,9 +1397,48 @@
       .social-icons { display: none; } /* duplicated in burger menu foot */
     }
 
+    /* ── Auth gate ── */
+    #auth-gate {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: #000; align-items: center; justify-content: center;
+      flex-direction: column; gap: 24px; padding: 40px;
+    }
+    .gate-logo { height: 28px; width: auto; }
+    [data-theme="light"] #auth-gate { background: #F5F3EF; }
+    [data-theme="light"] .gate-logo { filter: invert(1); }
+    .gate-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: #9A9890; font-family: 'Inter', system-ui, sans-serif; }
+    .gate-input {
+      font-family: 'Inter', system-ui, sans-serif; font-size: 14px; background: #0D0D0D;
+      border: 1px solid #2A2826; color: #FAF9F7; padding: 10px 16px;
+      width: 100%; max-width: 320px; outline: none; text-align: center; letter-spacing: 0.1em;
+    }
+    [data-theme="light"] .gate-input { background: #EDEAE5; border-color: #D5D1CB; color: #0C0C0B; }
+    .gate-input:focus { border-color: #9A9890; }
+    .gate-btn {
+      font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; color: #FAF9F7;
+      padding: 9px 28px; border: 1px solid #2A2826; background: none;
+      cursor: pointer; transition: background 0.2s, border-color 0.2s;
+    }
+    [data-theme="light"] .gate-btn { color: #0C0C0B; border-color: #D5D1CB; }
+    .gate-btn:hover { background: #0D0D0D; border-color: #9A9890; }
+    [data-theme="light"] .gate-btn:hover { background: #EDEAE5; }
+    .gate-error { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: #E07070; letter-spacing: 0.06em; min-height: 16px; }
   </style>
 </head>
 <body>
+
+  <!-- Auth gate -->
+  <div id="auth-gate">
+    <img src="logo.svg" alt="Walt Viviers" class="gate-logo" width="379" height="185" />
+    <span class="gate-label">Private preview</span>
+    <input type="password" id="gate-input" class="gate-input" placeholder="Password" autocomplete="current-password" />
+    <button class="gate-btn" id="gate-submit">Enter</button>
+    <span class="gate-error" id="gate-error"></span>
+  </div>
+
+  <div id="page-content">
+
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P8DPSSC9"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -2399,6 +2449,49 @@
         if (e.key === 'Escape') closeMenu();
       });
     })();
+  </script>
+
+  </div><!-- /page-content -->
+
+  <script>
+  (function () {
+    var HASH = '344ad576405826e01622c18d01dd680ac08d5f6b3b6ad614d0a0c09fa4672f14';
+    var KEY  = 'wv-site-auth';
+
+    if (localStorage.getItem(KEY) === HASH) {
+      var pc = document.getElementById('page-content');
+      if (pc) pc.style.display = '';
+      return;
+    }
+
+    var gate  = document.getElementById('auth-gate');
+    var input = document.getElementById('gate-input');
+    var btn   = document.getElementById('gate-submit');
+    var err   = document.getElementById('gate-error');
+    gate.style.display = 'flex';
+    document.getElementById('page-content').style.display = 'none';
+    setTimeout(function () { input.focus(); }, 50);
+
+    async function attempt() {
+      var val = input.value;
+      if (!val) return;
+      var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(val));
+      var hex = Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+      if (hex === HASH) {
+        localStorage.setItem(KEY, HASH);
+        gate.style.display = 'none';
+        document.getElementById('page-content').style.display = '';
+        err.textContent = '';
+      } else {
+        err.textContent = 'Incorrect password.';
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    btn.addEventListener('click', attempt);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') attempt(); });
+  })();
   </script>
 
 </body>
