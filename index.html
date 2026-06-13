@@ -1335,7 +1335,7 @@
       padding: 80px 32px 48px;
       opacity: 0; pointer-events: none;
       transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1);
-      overflow-y: auto;
+      /* overflow stays on the links child, not here */
     }
     .mobile-menu.is-open { opacity: 1; pointer-events: auto; }
     body.menu-open { overflow: hidden; }
@@ -1343,7 +1343,9 @@
     .mobile-menu-links {
       display: flex; flex-direction: column;
       border-top: 1px solid var(--rule);
-      flex: 1;
+      flex: 1 1 0;   /* grow AND shrink from 0 basis */
+      min-height: 0; /* lets overflow work inside a flex child */
+      overflow-y: auto;
     }
     .mobile-menu-link {
       display: flex; align-items: center; justify-content: space-between;
@@ -1355,17 +1357,16 @@
       color: var(--stone);
       transition: color 0.2s;
       text-decoration: none;
+      flex-shrink: 0;
     }
     .mobile-menu-link:hover { color: var(--ink); }
-    .mobile-menu-link-cta {
-      color: var(--ink);
-      margin-top: 4px;
-    }
+    .mobile-menu-link-cta { color: var(--ink); margin-top: 4px; }
     .mobile-menu-link-cta:hover { color: var(--stone); }
     .mobile-menu-arrow { font-size: 1.4rem; opacity: 0.4; }
 
     .mobile-menu-foot {
       padding-top: 32px;
+      flex-shrink: 0;
       display: flex; gap: 24px; align-items: center; flex-wrap: wrap;
     }
     .mobile-menu-foot a {
@@ -1382,6 +1383,7 @@
 
     @media (max-width: 900px) {
       .burger-btn { display: flex; }
+      .social-icons { display: none; } /* duplicated in burger menu foot */
     }
 
   </style>
