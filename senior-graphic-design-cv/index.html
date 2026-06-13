@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Senior Graphic Designer CV — Walt Viviers</title>
+  <meta name="description" content="Senior Graphic Designer CV of Walt Viviers — Creative Director based in Pretoria, South Africa. Twenty years of brand identity, web design, and digital marketing." />
+  <meta name="author" content="Walt Viviers" />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://waltviviers.com/senior-graphic-design-cv/" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+
+  <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+
+    :root {
+      --black:  #0C0C0B;
+      --white:  #FAF9F7;
+      --ink:    #FAF9F7;
+      --stone:  #9A9890;
+      --rule:   #2A2826;
+      --bg:     #000000;
+      --bg2:    #0D0D0D;
+      --serif:  'EB Garamond', Georgia, serif;
+      --sans:   'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .nav-logo img { height: 28px; width: auto; }
+    .nav-right { display: flex; align-items: center; gap: 24px; }
+    .back-link {
+      font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--stone); transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--ink); }
+    .download-btn {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--white); padding: 7px 18px; border: 1px solid #4A4844;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .download-btn:hover { background: var(--white); color: var(--black); border-color: var(--white); }
+
+    .theme-toggle {
+      width: auto; height: auto; border: none; padding: 4px;
+      background: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .toggle-thumb { display: flex; align-items: center; justify-content: center; }
+    .toggle-thumb .icon-moon, .toggle-thumb .icon-sun {
+      width: 17px; height: 17px; fill: none; stroke: var(--stone);
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .toggle-thumb .icon-moon { display: block; }
+    .toggle-thumb .icon-sun  { display: none; }
+    .theme-toggle:hover .toggle-thumb .icon-moon,
+    .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
+
+    [data-theme="light"] {
+      --ink: #0C0C0B; --stone: #6B6560; --rule: #D5D1CB;
+      --bg: #F5F3EF; --bg2: #EDEAE5;
+    }
+    [data-theme="light"] body { background: #F5F3EF; }
+    [data-theme="light"] nav { background: rgba(245,243,239,0.95); }
+    [data-theme="light"] .nav-logo img { filter: invert(1); }
+    [data-theme="light"] .toggle-thumb .icon-moon { display: none; }
+    [data-theme="light"] .toggle-thumb .icon-sun  { display: block; }
+    [data-theme="light"] .download-btn { color: #0C0C0B; border-color: #D5D1CB; }
+    [data-theme="light"] .download-btn:hover { background: #0C0C0B; color: #FAF9F7; border-color: #0C0C0B; }
+
+    .page-wrap {
+      padding: calc(64px + 48px) 48px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-head {
+      margin-bottom: 40px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .page-head h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .page-head-meta {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--stone);
+    }
+
+    .pdf-frame-wrap {
+      width: 100%;
+      border: 1px solid var(--rule);
+      background: var(--bg2);
+    }
+    .pdf-frame-wrap iframe {
+      display: block;
+      width: 100%;
+      height: 85vh;
+      min-height: 600px;
+      border: none;
+    }
+
+    .pdf-fallback {
+      padding: 64px 48px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .pdf-fallback p { font-size: 13px; color: var(--stone); max-width: 380px; line-height: 1.7; }
+    .pdf-fallback a {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--white); padding: 10px 24px; border: 1px solid #4A4844;
+      display: inline-block; transition: background 0.2s, color 0.2s;
+    }
+    .pdf-fallback a:hover { background: var(--white); color: var(--black); }
+    [data-theme="light"] .pdf-fallback a { color: #0C0C0B; border-color: #D5D1CB; }
+    [data-theme="light"] .pdf-fallback a:hover { background: #0C0C0B; color: #FAF9F7; }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .page-wrap { padding: calc(64px + 32px) 24px 64px; }
+      .pdf-frame-wrap iframe { height: 75vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo" aria-label="Home">
+      <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+    </a>
+    <div class="nav-right">
+      <a href="/" class="back-link">← Home</a>
+      <a href="/senior-graphic-design-cv/walt-viviers-senior-graphic-designer-cv.pdf" download class="download-btn">Download PDF</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
+        <span class="toggle-thumb">
+          <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="page-head">
+      <h1>Senior Graphic Designer CV</h1>
+      <p class="page-head-meta">Walt Viviers · Creative Director &amp; Senior Graphic Designer · Pretoria, South Africa</p>
+    </div>
+
+    <div class="pdf-frame-wrap">
+      <iframe
+        src="/senior-graphic-design-cv/walt-viviers-senior-graphic-designer-cv.pdf"
+        title="Walt Viviers — Senior Graphic Designer CV"
+        loading="lazy"
+      >
+        <div class="pdf-fallback">
+          <p>Your browser does not support embedded PDFs.</p>
+          <a href="/senior-graphic-design-cv/walt-viviers-senior-graphic-designer-cv.pdf" download>Download CV (PDF)</a>
+        </div>
+      </iframe>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        var html = document.documentElement;
+        var next = html.dataset.theme === 'light' ? 'dark' : 'light';
+        html.dataset.theme = next;
+        localStorage.setItem('wv-theme', next);
+      });
+    })();
+  </script>
+
+</body>
+</html>
