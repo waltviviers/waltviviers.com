@@ -534,6 +534,17 @@
       position: relative;
     }
 
+    .view-gallery-btn {
+      display: none;
+      margin: 32px auto 0;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink); padding: 10px 28px; border: 1px solid var(--rule);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      align-items: center; gap: 6px;
+    }
+    .view-gallery-btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    [data-theme="light"] .view-gallery-btn:hover { background: #0C0C0B; color: #FAF9F7; border-color: #0C0C0B; }
+
     .works-grid::before {
       content: '';
       position: absolute;
@@ -1302,6 +1313,8 @@
     @media (max-width: 560px) {
       .works-grid { grid-template-columns: 1fr; }
       .footer-admin { display: none; }
+      .works-grid .work-thumb:nth-child(n+5) { display: none; }
+      .view-gallery-btn { display: flex; }
     }
 
     /* ── Burger button ── */
@@ -1519,6 +1532,7 @@
       <span class="section-count" id="works-count"></span>
     </div>
     <div class="works-grid" id="works-grid"></div>
+    <a href="/works/" class="view-gallery-btn" data-i18n="view-gallery">View Gallery ↗</a>
   </section>
 
   <!-- Brush divider -->
@@ -1806,7 +1820,7 @@
       en: {
         'nav-works': 'Artworks', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
-        'section-works': 'Selected Artworks', 'available-on': 'Available on',
+        'section-works': 'Selected Artworks', 'available-on': 'Available on', 'view-gallery': 'View Gallery ↗',
         'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
         'about-p1': 'I am a South African fine artist working in acrylic and mixed media. Twenty years of professional creative practice — across design, art direction, and brand — have sharpened a painter\'s eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.',
         'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
@@ -1840,7 +1854,7 @@
       af: {
         'nav-works': 'Kunswerke', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
-        'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op',
+        'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
         'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
         'about-p1': 'Ek is ‘n Suid-Afrikaanse kunstenaar wat in akriel en gemengde media werk. Twintig jaar se professionele kreatiewe praktyk — deur ontwerp, kunsdireksie en handelsmerk — het ‘n skilder se oog geslyp wat die spanning tussen die poësie en musiek van ‘n beeld vind: van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.',
         'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
