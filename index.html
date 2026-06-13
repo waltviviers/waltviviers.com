@@ -74,6 +74,10 @@
   <meta name="geo.position" content="-25.7479;28.2293" />
   <meta name="ICBM" content="-25.7479, 28.2293" />
 
+  <!-- Google Calendar Appointment Scheduling -->
+  <link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
+  <script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
+
   <!-- Performance hints -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1442,6 +1446,22 @@
       <h2 class="enquiry-title" data-i18n-html="commission-title-html">Commission<br/>a new work</h2>
       <p class="enquiry-desc" data-i18n="commission-desc">Each commission begins with a conversation. Discussions cover scale, subject, palette, and context. Lead time is typically 8–16 weeks.</p>
       <button class="btn-primary" id="commission-btn" data-i18n="commission-btn">Start a conversation</button>
+      <p style="margin:16px 0 8px;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;" data-i18n="commission-or">or</p>
+      <!-- Google Calendar Appointment Scheduling begin -->
+      <script>
+      (function() {
+        var target = document.currentScript;
+        window.addEventListener('load', function() {
+          calendar.schedulingButton.load({
+            url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0QO8CeUOV5-OresAPemXPfW4ZMFlLJ95FP1auhl6qK2kH7JD4jNheJqtYlEh5QyovDJQQ1LAKM?gv=true',
+            color: '#039BE5',
+            label: "Book a Consultation",
+            target,
+          });
+        });
+      })();
+      </script>
+      <!-- end Google Calendar Appointment Scheduling -->
     </div>
 
     <div class="enquiry-panel" id="gallery-rep">
@@ -1666,7 +1686,7 @@
         'ig-follow': 'Follow on Instagram ↗',
         'commission-tag': 'For collectors', 'commission-title-html': 'Commission<br/>a new work',
         'commission-desc': 'Each commission begins with a conversation. Discussions cover scale, subject, palette, and context. Lead time is typically 8–16 weeks.',
-        'commission-btn': 'Start a conversation',
+        'commission-btn': 'Start a conversation', 'commission-or': 'or',
         'gallery-tag': 'For galleries', 'gallery-title-html': 'Gallery<br/>representation',
         'gallery-desc': 'Interested in representing me or proposing an exhibition? Get in touch with a brief introduction and your programme.',
         'gallery-btn': 'Get in touch',
@@ -1700,7 +1720,7 @@
         'ig-follow': 'Volg op Instagram ↗',
         'commission-tag': 'Vir versamelaars', 'commission-title-html': 'Bestel<br/>‘n nuwe werk',
         'commission-desc': 'Elke opdrag begin met ‘n gesprek. Besprekings dek skaal, onderwerp, palet en konteks. Lewertyd is gewoonlik 8–16 weke.',
-        'commission-btn': 'Begin ‘n gesprek',
+        ‘commission-btn’: ‘Begin ‘n gesprek’, ‘commission-or’: ‘of’,
         'gallery-tag': 'Vir galerye', 'gallery-title-html': 'Galery-<br/>verteenwoordiging',
         'gallery-desc': 'Stel jy belang om my te verteenwoordig of ‘n uitstalling voor te stel? Kontak my met ‘n kort inleiding en jou program.',
         'gallery-btn': 'Kontak my',
