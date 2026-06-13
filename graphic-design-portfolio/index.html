@@ -244,45 +244,6 @@
       line-height: 1.75;
     }
 
-    /* ── Results strip ── */
-    .results-strip {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      background: var(--rule);
-      gap: 1px;
-      border: 1px solid var(--rule);
-      margin-bottom: 64px;
-    }
-    .result-item {
-      background: var(--bg);
-      padding: 28px 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      transition: background 0.2s;
-    }
-    .result-item:hover { background: var(--bg2); }
-    .result-roi {
-      font-family: var(--serif);
-      font-size: clamp(1.8rem, 3vw, 2.6rem);
-      font-weight: 400;
-      line-height: 1;
-      color: var(--ink);
-    }
-    .result-client {
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--stone);
-    }
-    .result-scope {
-      font-size: 11px;
-      color: var(--stone);
-      opacity: 0.7;
-      line-height: 1.4;
-      margin-top: 2px;
-    }
-
     /* ── Section label ── */
     .section-label {
       font-size: 10px;
@@ -637,7 +598,6 @@
 
     /* ── Responsive ── */
     @media (max-width: 1100px) {
-      .results-strip { grid-template-columns: repeat(3, 1fr); }
       .profile-ctas { grid-template-columns: 1fr 1fr; }
       .awards-grid { grid-template-columns: 1fr 1fr; }
     }
@@ -654,7 +614,6 @@
       .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
       .page-wrap { padding: calc(50px + 40px) 24px 80px; }
       .shot-grid { grid-template-columns: 1fr; }
-      .results-strip { grid-template-columns: repeat(2, 1fr); }
       .case-grid { grid-template-columns: 1fr 1fr; }
       .profile-ctas { grid-template-columns: 1fr; }
       .awards-grid { grid-template-columns: 1fr; }
@@ -665,7 +624,6 @@
       .footer-mark { position: static; transform: none; order: 2; }
     }
     @media (max-width: 620px) {
-      .results-strip { grid-template-columns: 1fr 1fr; }
       .case-grid { grid-template-columns: 1fr; }
       .app-card { flex-direction: column; gap: 20px; }
       .profile-cta { padding: 32px 24px; }
@@ -721,35 +679,6 @@
       <p class="page-intro">
         Twenty years of creative practice — from Junior Designer to Creative Director at a leading South African digital agency. Brand identity, web design, Shopify e-commerce, motion graphics, and performance digital marketing for major SA and international brands. MEA Business Award winner. Full project case studies on Behance; shots on Dribbble.
       </p>
-    </div>
-
-    <!-- Key results strip -->
-    <div class="results-strip" aria-label="Key campaign results 2024">
-      <div class="result-item">
-        <span class="result-roi">4,343%</span>
-        <span class="result-client">Kaizer Chiefs</span>
-        <span class="result-scope">UX/UI · Shopify · Google Ads</span>
-      </div>
-      <div class="result-item">
-        <span class="result-roi">944%</span>
-        <span class="result-client">Alpha Industries</span>
-        <span class="result-scope">E-Commerce · SEO · Google Ads</span>
-      </div>
-      <div class="result-item">
-        <span class="result-roi">822%</span>
-        <span class="result-client">Sebago</span>
-        <span class="result-scope">E-Commerce · SEO · Google Ads</span>
-      </div>
-      <div class="result-item">
-        <span class="result-roi">552%</span>
-        <span class="result-client">Superga</span>
-        <span class="result-scope">3,558 conversions · 7.5M+ impressions</span>
-      </div>
-      <div class="result-item">
-        <span class="result-roi">362%</span>
-        <span class="result-client">Kappa</span>
-        <span class="result-scope">E-Commerce · Google Ads funnel</span>
-      </div>
     </div>
 
     <!-- Client list -->
@@ -936,50 +865,71 @@
       </div>
       <div class="case-grid">
 
-        <div class="case-card">
+        <a href="https://www.kaizerchiefs.com/" target="_blank" rel="noopener" class="case-card">
           <p class="case-tag">Website · E-Commerce · Google Ads</p>
           <h3 class="case-client">Kaizer Chiefs</h3>
           <p class="case-roi">4,343%</p>
           <p class="case-roi-label">Return on investment</p>
           <p class="case-desc">Full UX/UI overhaul of the Kaizer Chiefs website. Shopify e-commerce build-out and Google Ads strategy driving record-breaking sales ROI for South Africa's biggest football club.</p>
-          <a href="https://dribbble.com/shots/21909323-Kaizer-Chiefs-Website-Update" target="_blank" rel="noopener" class="case-link">Dribbble ↗</a>
-        </div>
+          <span class="case-link">Visit site ↗</span>
+        </a>
 
-        <div class="case-card">
+        <a href="https://www.alphaindustries.com/" target="_blank" rel="noopener" class="case-card">
           <p class="case-tag">E-Commerce · SEO · Google Ads</p>
           <h3 class="case-client">Alpha Industries</h3>
           <p class="case-roi">944%</p>
           <p class="case-roi-label">Return on investment</p>
           <p class="case-desc">E-commerce UX/UI redesign, SEO optimisation, and Google Ads campaigns for the iconic American apparel brand's South African operation.</p>
-          <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" class="case-link">Behance ↗</a>
-        </div>
+          <span class="case-link">Visit site ↗</span>
+        </a>
 
-        <div class="case-card">
+        <a href="https://www.sebago.com/" target="_blank" rel="noopener" class="case-card">
           <p class="case-tag">E-Commerce · SEO · Google Ads</p>
           <h3 class="case-client">Sebago</h3>
           <p class="case-roi">822%</p>
           <p class="case-roi-label">Return on investment</p>
           <p class="case-desc">End-to-end e-commerce UX/UI, SEO strategy, and Google Ads sales campaigns for the American footwear brand's SA digital presence.</p>
-          <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" class="case-link">Behance ↗</a>
-        </div>
+          <span class="case-link">Visit site ↗</span>
+        </a>
 
-        <div class="case-card">
+        <a href="https://www.superga.com/" target="_blank" rel="noopener" class="case-card">
           <p class="case-tag">E-Commerce · Google Ads</p>
           <h3 class="case-client">Superga</h3>
           <p class="case-roi">552%</p>
           <p class="case-roi-label">Return on investment</p>
           <p class="case-desc">E-commerce strategy and Google Ads delivering 3,558 conversions and over 7.5 million campaign impressions for the Italian footwear brand.</p>
-          <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" class="case-link">Behance ↗</a>
-        </div>
+          <span class="case-link">Visit site ↗</span>
+        </a>
 
-        <div class="case-card">
+        <a href="https://www.kappa.com/" target="_blank" rel="noopener" class="case-card">
           <p class="case-tag">E-Commerce · Google Ads</p>
           <h3 class="case-client">Kappa</h3>
           <p class="case-roi">362%</p>
           <p class="case-roi-label">Return on investment</p>
           <p class="case-desc">E-commerce design and full Google Ads sales funnel strategy for the Italian sportswear brand's South African e-commerce operation.</p>
-          <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" class="case-link">Behance ↗</a>
-        </div>
+          <span class="case-link">Visit site ↗</span>
+        </a>
+
+        <a href="https://www.1618.co.za/" target="_blank" rel="noopener" class="case-card">
+          <p class="case-tag">Brand Identity · Website · Digital</p>
+          <h3 class="case-client">1618 Group</h3>
+          <p class="case-desc">Brand identity, website design, and digital strategy for the 1618 Group — a South African creative and digital agency.</p>
+          <span class="case-link">Visit site ↗</span>
+        </a>
+
+        <a href="https://www.1618sts.co.za/" target="_blank" rel="noopener" class="case-card">
+          <p class="case-tag">Brand Identity · Website · Hospitality</p>
+          <h3 class="case-client">1618 Short Stays</h3>
+          <p class="case-desc">Brand identity and website design for 1618 Short Stays — a curated short-term accommodation platform.</p>
+          <span class="case-link">Visit site ↗</span>
+        </a>
+
+        <a href="https://www.villasincapetown.com/" target="_blank" rel="noopener" class="case-card">
+          <p class="case-tag">Website · UX/UI · Hospitality</p>
+          <h3 class="case-client">Villas in Cape Town</h3>
+          <p class="case-desc">UX/UI design and web build for a premium villa rental platform showcasing Cape Town's finest private properties.</p>
+          <span class="case-link">Visit site ↗</span>
+        </a>
 
       </div>
     </div>
@@ -1016,6 +966,20 @@
             <p class="app-tagline">A cyberpunk memory puzzle for Android. Tiles flash. You watch. Then you repeat — faster, longer, deeper into the grid.</p>
             <div class="app-links">
               <span class="app-link">View app ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="https://waltviviers.com/" class="app-card">
+          <div class="app-icon" style="background: #0C0C0B; display: flex; align-items: center; justify-content: center; padding: 14px;">
+            <img src="/logo.svg" alt="waltviviers.com" width="44" height="21" />
+          </div>
+          <div class="app-body">
+            <p class="app-tag">Fine Art · Portfolio · Website</p>
+            <h3 class="app-name">waltviviers.com</h3>
+            <p class="app-tagline">Personal fine art portfolio built from scratch in HTML/CSS. Dark mode, bilingual (EN/AF), Saatchi Art integration, and a custom artwork gallery.</p>
+            <div class="app-links">
+              <span class="app-link">Visit site ↗</span>
             </div>
           </div>
         </a>

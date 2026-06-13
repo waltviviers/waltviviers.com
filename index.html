@@ -1304,6 +1304,41 @@
       .footer-admin { display: none; }
     }
 
+    /* ── Floating mobile enquire button ── */
+    .mobile-enquire-fab {
+      display: none;
+    }
+    @media (max-width: 900px) {
+      .mobile-enquire-fab {
+        display: flex;
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 300;
+        align-items: center;
+        justify-content: center;
+        height: 48px;
+        padding: 0 32px;
+        background: var(--ink);
+        color: var(--bg);
+        font-family: var(--sans);
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        text-decoration: none;
+        transition: opacity 0.25s, transform 0.25s;
+      }
+      .mobile-enquire-fab:hover { opacity: 0.85; }
+      .mobile-enquire-fab.is-hidden {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(-50%) translateY(12px);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1332,7 +1367,6 @@
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="#works" data-i18n="nav-works">Artworks</a></li>
       <li class="nav-link-hide"><a href="#about" data-i18n="nav-about">About</a></li>
-      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
       <li class="nav-link-hide"><a href="#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -1697,7 +1731,7 @@
   (function () {
     var T = {
       en: {
-        'nav-works': 'Artworks', 'nav-about': 'About', 'nav-apps': 'Apps', 'nav-enquire': 'Enquire',
+        'nav-works': 'Artworks', 'nav-about': 'About', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on',
         'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
@@ -1731,7 +1765,7 @@
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.'
       },
       af: {
-        'nav-works': 'Kunswerke', 'nav-about': 'Omheen', 'nav-apps': 'Programme', 'nav-enquire': 'Navraag',
+        'nav-works': 'Kunswerke', 'nav-about': 'Omheen', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op',
         'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
@@ -2258,7 +2292,19 @@
     document.getElementById('admin-btn').addEventListener('click', function () {
       window.open('https://waltviviers.com/admin#/collections/artworks/entries/artworks', '_blank', 'noopener,noreferrer');
     });
+
+    (function () {
+      var fab = document.getElementById('mobile-enquire-fab');
+      var commission = document.getElementById('commission');
+      if (!fab || !commission) return;
+      var obs = new IntersectionObserver(function (entries) {
+        fab.classList.toggle('is-hidden', entries[0].isIntersecting);
+      }, { threshold: 0.15 });
+      obs.observe(commission);
+    })();
   </script>
+
+  <a href="#commission" class="mobile-enquire-fab" id="mobile-enquire-fab" data-i18n="nav-enquire">Enquire</a>
 
 </body>
 </html>
