@@ -349,41 +349,53 @@
       display: flex;
       flex-direction: column;
       transition: background 0.2s;
+      cursor: pointer;
     }
     .shot-card:hover { background: var(--bg2); }
-    .shot-embed-wrap {
+
+    .shot-preview {
       position: relative;
       width: 100%;
       aspect-ratio: 4 / 3;
-      background: var(--bg2);
       overflow: hidden;
-    }
-    .shot-embed-wrap iframe {
-      width: 100%;
-      height: 100%;
-      border: 0;
-      display: block;
-    }
-    .shot-embed-placeholder {
-      position: absolute;
-      inset: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      padding: 24px;
+      gap: 20px;
+      padding: 40px 32px;
+    }
+    .shot-preview-bg {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(var(--rule) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+    .shot-preview-title {
+      font-family: var(--serif);
+      font-size: clamp(1.4rem, 2.2vw, 2rem);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--stone);
       text-align: center;
+      line-height: 1.25;
+      position: relative;
+      z-index: 1;
+      transition: color 0.25s;
     }
-    .shot-embed-placeholder svg {
-      width: 32px; height: 32px; fill: none;
-      stroke: var(--stone); stroke-width: 1.2;
-      stroke-linecap: round; stroke-linejoin: round; opacity: 0.5;
+    .shot-card:hover .shot-preview-title { color: var(--ink); }
+    .shot-preview-cta {
+      position: relative;
+      z-index: 1;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      opacity: 0.5;
+      transition: opacity 0.25s;
     }
-    .shot-embed-placeholder span {
-      font-size: 11px; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--stone); opacity: 0.6;
-    }
+    .shot-card:hover .shot-preview-cta { opacity: 1; }
+
     .shot-info {
       padding: 20px 24px;
       display: flex;
@@ -771,53 +783,35 @@
       </div>
       <div class="shot-grid">
 
-        <div class="shot-card">
-          <div class="shot-embed-wrap">
-            <iframe
-              src="https://dribbble.com/shots/21909323/embeds/original"
-              allowtransparency="true"
-              allowfullscreen="true"
-              scrolling="no"
-              loading="lazy"
-              title="Kaizer Chiefs Website Update"
-            ></iframe>
-            <div class="shot-embed-placeholder" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-              <span>View on Dribbble</span>
-            </div>
+        <a href="https://dribbble.com/shots/21909323-Kaizer-Chiefs-Website-Update" target="_blank" rel="noopener" class="shot-card">
+          <div class="shot-preview">
+            <div class="shot-preview-bg" aria-hidden="true"></div>
+            <span class="shot-preview-title">Kaizer Chiefs — Website</span>
+            <span class="shot-preview-cta">View on Dribbble ↗</span>
           </div>
           <div class="shot-info">
             <div class="shot-info-row">
               <span class="shot-title">Kaizer Chiefs — Website</span>
-              <a href="https://dribbble.com/shots/21909323-Kaizer-Chiefs-Website-Update" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+              <span class="shot-link">Dribbble ↗</span>
             </div>
             <span class="shot-meta">Full UX/UI overhaul · Shopify · 4,343% ROI · 2024</span>
           </div>
-        </div>
+        </a>
 
-        <div class="shot-card">
-          <div class="shot-embed-wrap">
-            <iframe
-              src="https://dribbble.com/shots/1709878/embeds/original"
-              allowtransparency="true"
-              allowfullscreen="true"
-              scrolling="no"
-              loading="lazy"
-              title="Connect Me Now"
-            ></iframe>
-            <div class="shot-embed-placeholder" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-              <span>View on Dribbble</span>
-            </div>
+        <a href="https://dribbble.com/shots/1709878-Connect-Me-Now" target="_blank" rel="noopener" class="shot-card">
+          <div class="shot-preview">
+            <div class="shot-preview-bg" aria-hidden="true"></div>
+            <span class="shot-preview-title">Connect Me Now</span>
+            <span class="shot-preview-cta">View on Dribbble ↗</span>
           </div>
           <div class="shot-info">
             <div class="shot-info-row">
               <span class="shot-title">Connect Me Now</span>
-              <a href="https://dribbble.com/shots/1709878-Connect-Me-Now" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+              <span class="shot-link">Dribbble ↗</span>
             </div>
             <span class="shot-meta">Web design · UI/UX · 2014</span>
           </div>
-        </div>
+        </a>
 
       </div>
     </div>
@@ -830,77 +824,50 @@
       </div>
       <div class="shot-grid">
 
-        <div class="shot-card">
-          <div class="shot-embed-wrap">
-            <iframe
-              src="https://dribbble.com/shots/1772378/embeds/original"
-              allowtransparency="true"
-              allowfullscreen="true"
-              scrolling="no"
-              loading="lazy"
-              title="Longhouse Brewery"
-            ></iframe>
-            <div class="shot-embed-placeholder" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72"/></svg>
-              <span>View on Dribbble</span>
-            </div>
+        <a href="https://dribbble.com/shots/1772378-Longhouse-Brewery" target="_blank" rel="noopener" class="shot-card">
+          <div class="shot-preview">
+            <div class="shot-preview-bg" aria-hidden="true"></div>
+            <span class="shot-preview-title">Longhouse Brewery</span>
+            <span class="shot-preview-cta">View on Dribbble ↗</span>
           </div>
           <div class="shot-info">
             <div class="shot-info-row">
               <span class="shot-title">Longhouse Brewery</span>
-              <a href="https://dribbble.com/shots/1772378-Longhouse-Brewery" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+              <span class="shot-link">Dribbble ↗</span>
             </div>
             <span class="shot-meta">Brand identity · Logo · Packaging · 2015</span>
           </div>
-        </div>
+        </a>
 
-        <div class="shot-card">
-          <div class="shot-embed-wrap">
-            <iframe
-              src="https://dribbble.com/shots/1626862/embeds/original"
-              allowtransparency="true"
-              allowfullscreen="true"
-              scrolling="no"
-              loading="lazy"
-              title="Digital Tequila"
-            ></iframe>
-            <div class="shot-embed-placeholder" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72"/></svg>
-              <span>View on Dribbble</span>
-            </div>
+        <a href="https://dribbble.com/shots/1626862-Digital-Tequila" target="_blank" rel="noopener" class="shot-card">
+          <div class="shot-preview">
+            <div class="shot-preview-bg" aria-hidden="true"></div>
+            <span class="shot-preview-title">Digital Tequila</span>
+            <span class="shot-preview-cta">View on Dribbble ↗</span>
           </div>
           <div class="shot-info">
             <div class="shot-info-row">
               <span class="shot-title">Digital Tequila</span>
-              <a href="https://dribbble.com/shots/1626862-Digital-Tequila" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+              <span class="shot-link">Dribbble ↗</span>
             </div>
             <span class="shot-meta">Brand identity · Logo design · 2015</span>
           </div>
-        </div>
+        </a>
 
-        <div class="shot-card">
-          <div class="shot-embed-wrap">
-            <iframe
-              src="https://dribbble.com/shots/1644402/embeds/original"
-              allowtransparency="true"
-              allowfullscreen="true"
-              scrolling="no"
-              loading="lazy"
-              title="Alchemy"
-            ></iframe>
-            <div class="shot-embed-placeholder" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72"/></svg>
-              <span>View on Dribbble</span>
-            </div>
+        <a href="https://dribbble.com/shots/1644402-Alchemy-1b" target="_blank" rel="noopener" class="shot-card">
+          <div class="shot-preview">
+            <div class="shot-preview-bg" aria-hidden="true"></div>
+            <span class="shot-preview-title">Alchemy</span>
+            <span class="shot-preview-cta">View on Dribbble ↗</span>
           </div>
           <div class="shot-info">
             <div class="shot-info-row">
               <span class="shot-title">Alchemy</span>
-              <a href="https://dribbble.com/shots/1644402-Alchemy-1b" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+              <span class="shot-link">Dribbble ↗</span>
             </div>
             <span class="shot-meta">Brand identity · Logo design · 2015</span>
           </div>
-        </div>
+        </a>
 
       </div>
     </div>
@@ -913,77 +880,50 @@
       </div>
       <div class="shot-grid">
 
-        <div class="shot-card">
-          <div class="shot-embed-wrap">
-            <iframe
-              src="https://dribbble.com/shots/6745248/embeds/original"
-              allowtransparency="true"
-              allowfullscreen="true"
-              scrolling="no"
-              loading="lazy"
-              title="Pixel Art MGS"
-            ></iframe>
-            <div class="shot-embed-placeholder" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/><path d="M8 17h8"/></svg>
-              <span>View on Dribbble</span>
-            </div>
+        <a href="https://dribbble.com/shots/6745248-Pixel-Art-MGS" target="_blank" rel="noopener" class="shot-card">
+          <div class="shot-preview">
+            <div class="shot-preview-bg" aria-hidden="true"></div>
+            <span class="shot-preview-title">Pixel Art — MGS</span>
+            <span class="shot-preview-cta">View on Dribbble ↗</span>
           </div>
           <div class="shot-info">
             <div class="shot-info-row">
               <span class="shot-title">Pixel Art — MGS</span>
-              <a href="https://dribbble.com/shots/6745248-Pixel-Art-MGS" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+              <span class="shot-link">Dribbble ↗</span>
             </div>
             <span class="shot-meta">Pixel art · Character design · 2019</span>
           </div>
-        </div>
+        </a>
 
-        <div class="shot-card">
-          <div class="shot-embed-wrap">
-            <iframe
-              src="https://dribbble.com/shots/3848165/embeds/original"
-              allowtransparency="true"
-              allowfullscreen="true"
-              scrolling="no"
-              loading="lazy"
-              title="Pixel Walt RPG"
-            ></iframe>
-            <div class="shot-embed-placeholder" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/><path d="M8 17h8"/></svg>
-              <span>View on Dribbble</span>
-            </div>
+        <a href="https://dribbble.com/shots/3848165-Pixel-Walt-RPG" target="_blank" rel="noopener" class="shot-card">
+          <div class="shot-preview">
+            <div class="shot-preview-bg" aria-hidden="true"></div>
+            <span class="shot-preview-title">Pixel Walt — RPG</span>
+            <span class="shot-preview-cta">View on Dribbble ↗</span>
           </div>
           <div class="shot-info">
             <div class="shot-info-row">
               <span class="shot-title">Pixel Walt — RPG</span>
-              <a href="https://dribbble.com/shots/3848165-Pixel-Walt-RPG" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+              <span class="shot-link">Dribbble ↗</span>
             </div>
             <span class="shot-meta">Pixel art · Self-portrait · 2017</span>
           </div>
-        </div>
+        </a>
 
-        <div class="shot-card">
-          <div class="shot-embed-wrap">
-            <iframe
-              src="https://dribbble.com/shots/3832151/embeds/original"
-              allowtransparency="true"
-              allowfullscreen="true"
-              scrolling="no"
-              loading="lazy"
-              title="Pixel Walt's Shades"
-            ></iframe>
-            <div class="shot-embed-placeholder" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/><path d="M8 17h8"/></svg>
-              <span>View on Dribbble</span>
-            </div>
+        <a href="https://dribbble.com/shots/3832151-Pixel-Walt-s-Shades" target="_blank" rel="noopener" class="shot-card">
+          <div class="shot-preview">
+            <div class="shot-preview-bg" aria-hidden="true"></div>
+            <span class="shot-preview-title">Pixel Walt — Shades</span>
+            <span class="shot-preview-cta">View on Dribbble ↗</span>
           </div>
           <div class="shot-info">
             <div class="shot-info-row">
               <span class="shot-title">Pixel Walt — Shades</span>
-              <a href="https://dribbble.com/shots/3832151-Pixel-Walt-s-Shades" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+              <span class="shot-link">Dribbble ↗</span>
             </div>
             <span class="shot-meta">Pixel art · Self-portrait · 2017</span>
           </div>
-        </div>
+        </a>
 
       </div>
     </div>
@@ -1191,12 +1131,6 @@
         window.location.href = 'https://vercel.com/waltviviers';
       });
 
-      document.querySelectorAll('.shot-embed-wrap iframe').forEach(function (iframe) {
-        iframe.addEventListener('load', function () {
-          const placeholder = iframe.parentElement.querySelector('.shot-embed-placeholder');
-          if (placeholder) placeholder.style.display = 'none';
-        });
-      });
     })();
   </script>
 
