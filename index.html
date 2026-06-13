@@ -1752,9 +1752,9 @@
       </div>
       <p class="footer-copy" data-i18n="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
     </div>
-    <a href="/admin-index/" class="footer-mark" aria-label="Admin">
+    <div class="footer-mark">
       <img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
-    </a>
+    </div>
   </footer>
 
   <!-- Theme toggle -->
@@ -2364,7 +2364,7 @@
   <!-- Admin + burger menu -->
   <script>
     document.getElementById('admin-btn').addEventListener('click', function () {
-      window.open('https://waltviviers.com/admin#/collections/artworks/entries/artworks', '_blank', 'noopener,noreferrer');
+      window.location.href = 'https://waltviviers.com/admin-index/';
     });
 
     (function () {
