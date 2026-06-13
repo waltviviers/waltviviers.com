@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Graphic Design Portfolio — Walt Viviers</title>
+  <meta name="description" content="Graphic design portfolio of Walt Viviers — Creative Director based in Pretoria, South Africa. Twenty years of brand identity, web design, e-commerce, and digital marketing for major South African and international brands." />
+  <meta name="author" content="Walt Viviers" />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://waltviviers.com/graphic-design-portfolio/" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://waltviviers.com/graphic-design-portfolio/" />
+  <meta property="og:title"       content="Graphic Design Portfolio — Walt Viviers" />
+  <meta property="og:description" content="Creative Director based in Pretoria. Twenty years of brand, web, and digital work for Kaizer Chiefs, Alpha Industries, Kappa, Sebago, Superga and more." />
+  <meta property="og:image"       content="https://waltviviers.com/images/walt-viviers-fine-art-banner.webp" />
+  <meta property="og:image:type"  content="image/webp" />
+  <meta property="og:locale"      content="en_ZA" />
+  <meta property="og:site_name"   content="Walt Viviers" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Graphic Design Portfolio — Walt Viviers" />
+  <meta name="twitter:description" content="Creative Director based in Pretoria. Twenty years of brand, web, and digital work." />
+  <meta name="twitter:image"       content="https://waltviviers.com/images/walt-viviers-fine-art-banner.webp" />
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "name": "Graphic Design Portfolio — Walt Viviers",
+        "description": "Creative Director and graphic design portfolio. Twenty years of brand identity, web design, e-commerce, and digital marketing.",
+        "url": "https://waltviviers.com/graphic-design-portfolio/",
+        "author": {
+          "@type": "Person",
+          "name": "Walt Viviers",
+          "url": "https://waltviviers.com"
+        },
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltviviers.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Graphic Design", "item": "https://waltviviers.com/graphic-design-portfolio/" }
+          ]
+        }
+      }
+    ]
+  }
+  </script>
+
+  <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+
+    :root {
+      --black:  #0C0C0B;
+      --white:  #FAF9F7;
+      --ink:    #FAF9F7;
+      --stone:  #9A9890;
+      --rule:   #2A2826;
+      --bg:     #000000;
+      --bg2:    #0D0D0D;
+      --serif:  'EB Garamond', Georgia, serif;
+      --sans:   'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 100px;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+      transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    nav.scrolled { height: 50px; }
+    .nav-left { display: flex; align-items: center; gap: 14px; }
+    .nav-logo img { height: 36px; width: auto; transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    nav.scrolled .nav-logo img { height: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-family: var(--sans); font-size: 12px; font-weight: 400;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--stone); transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      font-size: 12px !important; font-weight: 500 !important;
+      letter-spacing: 0.08em !important; color: var(--white) !important;
+      padding: 7px 18px; border: 1px solid #4A4844;
+      transition: background 0.2s, color 0.2s, border-color 0.2s !important;
+    }
+    .nav-cta:hover {
+      background: var(--white) !important; color: var(--black) !important;
+      border-color: var(--white) !important;
+    }
+    .social-icons { display: flex; align-items: center; gap: 16px; }
+    .social-icons a {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--stone); transition: color 0.2s;
+    }
+    .social-icons a:hover { color: var(--white); }
+    .social-icons svg {
+      width: 18px; height: 18px; fill: none;
+      stroke: currentColor; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .theme-toggle {
+      position: relative; width: 60px; height: 32px; border-radius: 16px;
+      border: 1.5px solid #4A4844; background: transparent;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .toggle-thumb {
+      position: absolute; top: 4px; left: 4px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    [data-theme="light"] .toggle-thumb { transform: translateX(28px); }
+    .toggle-thumb .icon-moon, .toggle-thumb .icon-sun {
+      width: 12px; height: 12px; fill: none; stroke: var(--bg);
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .toggle-thumb .icon-moon { display: block; }
+    .toggle-thumb .icon-sun  { display: none; }
+    nav.scrolled .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
+    nav.scrolled .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
+    nav.scrolled .toggle-thumb .icon-moon,
+    nav.scrolled .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
+    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-moon,
+    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 48px; border-top: 1px solid var(--rule);
+      display: flex; justify-content: center; align-items: center; position: relative;
+    }
+    .footer-mark { position: absolute; top: 50%; right: 0; transform: translateY(-50%); line-height: 0; }
+    .footer-mark img { display: block; }
+    [data-theme="light"] .footer-mark img { filter: invert(1); }
+    .footer-social { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .footer-social .social-icons { gap: 24px; }
+    .footer-social .social-icons a { color: var(--stone); }
+    .footer-social .social-icons svg { width: 22px; height: 22px; }
+    .footer-social .social-icons a:hover { color: var(--white); }
+    .footer-copy { font-size: 11px; color: var(--stone); letter-spacing: 0.06em; text-align: center; }
+    .footer-admin {
+      position: absolute; top: 50%; transform: translateY(-50%); left: 48px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--stone); padding: 7px 16px; border: 1px solid var(--rule);
+      transition: border-color 0.2s, color 0.2s; background: none;
+    }
+    .footer-admin:hover { border-color: var(--stone); color: var(--ink); }
+
+    /* ── Light mode ── */
+    [data-theme="light"] {
+      --ink: #0C0C0B; --stone: #6B6560; --rule: #D5D1CB;
+      --bg: #F5F3EF; --bg2: #EDEAE5;
+    }
+    [data-theme="light"] body { background: #F5F3EF; }
+    [data-theme="light"] nav { background: rgba(245,243,239,0.95); }
+    [data-theme="light"] .nav-logo img { filter: invert(1); opacity: 1; }
+    [data-theme="light"] .nav-links a:hover { color: var(--ink); }
+    [data-theme="light"] .theme-toggle { border-color: #D5D1CB; }
+    [data-theme="light"] .toggle-thumb .icon-moon { display: none; }
+    [data-theme="light"] .toggle-thumb .icon-sun  { display: block; }
+    [data-theme="light"] .nav-cta { color: #0C0C0B !important; border-color: #D5D1CB !important; }
+    [data-theme="light"] .nav-cta:hover { background: #0C0C0B !important; color: #FAF9F7 !important; border-color: #0C0C0B !important; }
+    [data-theme="light"] .footer-admin:hover { color: #0C0C0B; border-color: #6B6560; }
+    [data-theme="light"] .footer-social .social-icons a:hover { color: var(--ink); }
+
+    /* ── Page layout ── */
+    .page-wrap {
+      padding: calc(100px + 64px) 48px 100px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* ── Page header ── */
+    .page-head {
+      margin-bottom: 72px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .page-head-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .page-head h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 400;
+      line-height: 1.05;
+    }
+
+    .back-link {
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--stone);
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .back-link:hover { color: var(--ink); }
+
+    .page-intro {
+      max-width: 640px;
+      font-size: 1.05rem;
+      color: var(--stone);
+      line-height: 1.75;
+    }
+
+    /* ── Client strip ── */
+    .clients-section {
+      margin-bottom: 80px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 20px;
+    }
+
+    .clients-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      border-top: 1px solid var(--rule);
+      border-left: 1px solid var(--rule);
+    }
+
+    .client-chip {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
+      padding: 14px 24px;
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      transition: color 0.2s, background 0.2s;
+    }
+    .client-chip:hover { color: var(--ink); background: var(--bg2); }
+
+    /* ── Discipline sections ── */
+    .discipline-section {
+      margin-bottom: 80px;
+    }
+
+    .discipline-header {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      margin-bottom: 32px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .discipline-title {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.1;
+    }
+
+    .discipline-count {
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      color: var(--stone);
+    }
+
+    /* ── Shot grid ── */
+    .shot-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+    }
+
+    .shot-card {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      transition: background 0.2s;
+    }
+    .shot-card:hover { background: var(--bg2); }
+
+    .shot-embed-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: var(--bg2);
+      overflow: hidden;
+    }
+
+    .shot-embed-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .shot-embed-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .shot-embed-placeholder svg {
+      width: 32px;
+      height: 32px;
+      fill: none;
+      stroke: var(--stone);
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.5;
+    }
+
+    .shot-embed-placeholder span {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
+      opacity: 0.6;
+    }
+
+    .shot-info {
+      padding: 20px 24px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .shot-title {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 400;
+    }
+
+    .shot-link {
+      font-size: 10px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--stone);
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color 0.2s;
+    }
+    .shot-card:hover .shot-link { color: var(--ink); }
+
+    /* ── Profile CTAs ── */
+    .profile-ctas {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      margin-top: 80px;
+    }
+
+    .profile-cta {
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 40px 48px;
+      gap: 24px;
+      transition: background 0.2s;
+    }
+    .profile-cta:hover { background: var(--bg2); }
+
+    .profile-cta-body {}
+
+    .profile-cta-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 8px;
+    }
+
+    .profile-cta-name {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    .profile-cta-desc {
+      font-size: 13px;
+      color: var(--stone);
+      line-height: 1.6;
+      max-width: 320px;
+    }
+
+    .profile-cta-arrow {
+      font-size: 2rem;
+      color: var(--stone);
+      flex-shrink: 0;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .profile-cta:hover .profile-cta-arrow { color: var(--ink); transform: translate(4px, -4px); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; height: 50px; }
+      .nav-logo img { height: 28px; }
+      .nav-links { gap: 20px; }
+      .nav-link-hide { display: none; }
+      .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
+      .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
+      .toggle-thumb .icon-moon,
+      .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
+      .theme-toggle:hover .toggle-thumb .icon-moon,
+      .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
+      .page-wrap { padding: calc(50px + 40px) 24px 80px; }
+      .shot-grid { grid-template-columns: 1fr; }
+      .profile-ctas { grid-template-columns: 1fr; }
+      .profile-cta { padding: 32px 24px; }
+      footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
+      .footer-admin { position: static; transform: none; order: 1; }
+      .footer-social { order: 0; }
+      .footer-mark { position: static; transform: none; order: 2; }
+    }
+
+    @media (max-width: 560px) {
+      .footer-admin { display: none; }
+      .profile-cta-name { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
+        <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+      </a>
+    </div>
+    <ul class="nav-links">
+      <li class="nav-link-hide"><a href="/#works">Artworks</a></li>
+      <li class="nav-link-hide"><a href="/#about">About</a></li>
+      <li class="nav-link-hide"><a href="/#commission" class="nav-cta">Enquire</a></li>
+      <li>
+        <div class="social-icons">
+          <a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+          </a>
+          <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" aria-label="Behance">
+            <svg viewBox="0 0 24 24"><path d="M3 4v16M3 4h5a3 3 0 0 1 0 6H3m0 0h5.5a3.5 3.5 0 0 1 0 7H3"/><line x1="14" y1="7" x2="20" y2="7"/><line x1="13.5" y1="13.5" x2="22" y2="13.5"/><path d="M21 12a3.5 3.5 0 1 0 0 3"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </li>
+      <li>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
+          <span class="toggle-thumb">
+            <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- Page header -->
+    <div class="page-head">
+      <div class="page-head-top">
+        <h1>Graphic Design<br/>&amp; Creative Direction</h1>
+        <a href="/" class="back-link">← Back to fine art</a>
+      </div>
+      <p class="page-intro">
+        Twenty years of creative practice — from Junior Designer to Creative Director at a leading South African digital agency. Brand identity, web design, e-commerce, motion graphics, and digital marketing for major SA and international brands. Shots sourced from Dribbble; full projects on Behance.
+      </p>
+    </div>
+
+    <!-- Client list -->
+    <div class="clients-section">
+      <p class="section-label">Selected clients</p>
+      <div class="clients-list">
+        <span class="client-chip">Kaizer Chiefs</span>
+        <span class="client-chip">Alpha Industries</span>
+        <span class="client-chip">Sebago</span>
+        <span class="client-chip">Superga</span>
+        <span class="client-chip">Kappa</span>
+        <span class="client-chip">Broll Property Group</span>
+        <span class="client-chip">Eris Property Group</span>
+        <span class="client-chip">SAB</span>
+        <span class="client-chip">Mochachos</span>
+        <span class="client-chip">PrintingSA</span>
+        <span class="client-chip">Oaksure</span>
+        <span class="client-chip">1.618 Group</span>
+        <span class="client-chip">Longhouse Brewery</span>
+        <span class="client-chip">Villas in Cape Town</span>
+      </div>
+    </div>
+
+    <!-- Web & Digital -->
+    <div class="discipline-section">
+      <div class="discipline-header">
+        <h2 class="discipline-title">Web &amp; Digital</h2>
+        <span class="discipline-count">UX · UI · E-Commerce · Google Ads</span>
+      </div>
+      <div class="shot-grid">
+
+        <div class="shot-card">
+          <div class="shot-embed-wrap">
+            <iframe
+              src="https://dribbble.com/shots/21909323/embeds/original"
+              allowtransparency="true"
+              allowfullscreen="true"
+              scrolling="no"
+              loading="lazy"
+              title="Kaizer Chiefs Website Update"
+            ></iframe>
+            <div class="shot-embed-placeholder" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              <span>View on Dribbble</span>
+            </div>
+          </div>
+          <div class="shot-info">
+            <span class="shot-title">Kaizer Chiefs — Website Update</span>
+            <a href="https://dribbble.com/shots/21909323-Kaizer-Chiefs-Website-Update" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+          </div>
+        </div>
+
+        <div class="shot-card">
+          <div class="shot-embed-wrap">
+            <iframe
+              src="https://dribbble.com/shots/1709878/embeds/original"
+              allowtransparency="true"
+              allowfullscreen="true"
+              scrolling="no"
+              loading="lazy"
+              title="Connect Me Now"
+            ></iframe>
+            <div class="shot-embed-placeholder" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              <span>View on Dribbble</span>
+            </div>
+          </div>
+          <div class="shot-info">
+            <span class="shot-title">Connect Me Now</span>
+            <a href="https://dribbble.com/shots/1709878-Connect-Me-Now" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Brand & Identity -->
+    <div class="discipline-section">
+      <div class="discipline-header">
+        <h2 class="discipline-title">Brand &amp; Identity</h2>
+        <span class="discipline-count">Logo · Visual Identity · Typography</span>
+      </div>
+      <div class="shot-grid">
+
+        <div class="shot-card">
+          <div class="shot-embed-wrap">
+            <iframe
+              src="https://dribbble.com/shots/1772378/embeds/original"
+              allowtransparency="true"
+              allowfullscreen="true"
+              scrolling="no"
+              loading="lazy"
+              title="Longhouse Brewery"
+            ></iframe>
+            <div class="shot-embed-placeholder" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72"/></svg>
+              <span>View on Dribbble</span>
+            </div>
+          </div>
+          <div class="shot-info">
+            <span class="shot-title">Longhouse Brewery</span>
+            <a href="https://dribbble.com/shots/1772378-Longhouse-Brewery" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+          </div>
+        </div>
+
+        <div class="shot-card">
+          <div class="shot-embed-wrap">
+            <iframe
+              src="https://dribbble.com/shots/1626862/embeds/original"
+              allowtransparency="true"
+              allowfullscreen="true"
+              scrolling="no"
+              loading="lazy"
+              title="Digital Tequila"
+            ></iframe>
+            <div class="shot-embed-placeholder" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72"/></svg>
+              <span>View on Dribbble</span>
+            </div>
+          </div>
+          <div class="shot-info">
+            <span class="shot-title">Digital Tequila</span>
+            <a href="https://dribbble.com/shots/1626862-Digital-Tequila" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+          </div>
+        </div>
+
+        <div class="shot-card">
+          <div class="shot-embed-wrap">
+            <iframe
+              src="https://dribbble.com/shots/1644402/embeds/original"
+              allowtransparency="true"
+              allowfullscreen="true"
+              scrolling="no"
+              loading="lazy"
+              title="Alchemy"
+            ></iframe>
+            <div class="shot-embed-placeholder" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72"/></svg>
+              <span>View on Dribbble</span>
+            </div>
+          </div>
+          <div class="shot-info">
+            <span class="shot-title">Alchemy</span>
+            <a href="https://dribbble.com/shots/1644402-Alchemy-1b" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Illustration & Pixel Art -->
+    <div class="discipline-section">
+      <div class="discipline-header">
+        <h2 class="discipline-title">Illustration &amp; Pixel Art</h2>
+        <span class="discipline-count">Character Design · Pixel Art · Digital</span>
+      </div>
+      <div class="shot-grid">
+
+        <div class="shot-card">
+          <div class="shot-embed-wrap">
+            <iframe
+              src="https://dribbble.com/shots/6745248/embeds/original"
+              allowtransparency="true"
+              allowfullscreen="true"
+              scrolling="no"
+              loading="lazy"
+              title="Pixel Art MGS"
+            ></iframe>
+            <div class="shot-embed-placeholder" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/><path d="M8 17h8"/></svg>
+              <span>View on Dribbble</span>
+            </div>
+          </div>
+          <div class="shot-info">
+            <span class="shot-title">Pixel Art MGS</span>
+            <a href="https://dribbble.com/shots/6745248-Pixel-Art-MGS" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+          </div>
+        </div>
+
+        <div class="shot-card">
+          <div class="shot-embed-wrap">
+            <iframe
+              src="https://dribbble.com/shots/3848165/embeds/original"
+              allowtransparency="true"
+              allowfullscreen="true"
+              scrolling="no"
+              loading="lazy"
+              title="Pixel Walt RPG"
+            ></iframe>
+            <div class="shot-embed-placeholder" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/><path d="M8 17h8"/></svg>
+              <span>View on Dribbble</span>
+            </div>
+          </div>
+          <div class="shot-info">
+            <span class="shot-title">Pixel Walt RPG</span>
+            <a href="https://dribbble.com/shots/3848165-Pixel-Walt-RPG" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+          </div>
+        </div>
+
+        <div class="shot-card">
+          <div class="shot-embed-wrap">
+            <iframe
+              src="https://dribbble.com/shots/3832151/embeds/original"
+              allowtransparency="true"
+              allowfullscreen="true"
+              scrolling="no"
+              loading="lazy"
+              title="Pixel Walt's Shades"
+            ></iframe>
+            <div class="shot-embed-placeholder" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/><path d="M8 17h8"/></svg>
+              <span>View on Dribbble</span>
+            </div>
+          </div>
+          <div class="shot-info">
+            <span class="shot-title">Pixel Walt's Shades</span>
+            <a href="https://dribbble.com/shots/3832151-Pixel-Walt-s-Shades" target="_blank" rel="noopener" class="shot-link">Dribbble ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Profile CTAs -->
+    <div class="profile-ctas">
+      <a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" class="profile-cta">
+        <div class="profile-cta-body">
+          <p class="profile-cta-label">Shots &amp; process work</p>
+          <p class="profile-cta-name">Dribbble</p>
+          <p class="profile-cta-desc">Browse the full collection of design shots, logo explorations, and process work.</p>
+        </div>
+        <span class="profile-cta-arrow">↗</span>
+      </a>
+      <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" class="profile-cta">
+        <div class="profile-cta-body">
+          <p class="profile-cta-label">Full case studies</p>
+          <p class="profile-cta-name">Behance</p>
+          <p class="profile-cta-desc">Detailed project breakdowns, campaign work, and brand identity case studies.</p>
+        </div>
+        <span class="profile-cta-arrow">↗</span>
+      </a>
+    </div>
+
+  </div>
+
+  <footer>
+    <button class="footer-admin" id="admin-btn">Admin</button>
+    <div class="footer-social">
+      <div class="social-icons">
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+        </a>
+        <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" aria-label="Behance">
+          <svg viewBox="0 0 24 24"><path d="M3 4v16M3 4h5a3 3 0 0 1 0 6H3m0 0h5.5a3.5 3.5 0 0 1 0 7H3"/><line x1="14" y1="7" x2="20" y2="7"/><line x1="13.5" y1="13.5" x2="22" y2="13.5"/><path d="M21 12a3.5 3.5 0 1 0 0 3"/></svg>
+        </a>
+        <a href="mailto:walt.viviers@gmail.com" aria-label="Email">
+          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
+    </div>
+    <div class="footer-mark">
+      <img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const html = document.documentElement;
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        const next = html.dataset.theme === 'light' ? 'dark' : 'light';
+        html.dataset.theme = next;
+        localStorage.setItem('wv-theme', next);
+      });
+
+      const nav = document.querySelector('nav');
+      let ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(function () {
+            nav.classList.toggle('scrolled', window.scrollY > 40);
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      document.getElementById('admin-btn').addEventListener('click', function () {
+        window.location.href = 'https://vercel.com/waltviviers';
+      });
+
+      /* Hide placeholder overlay once iframe signals it loaded */
+      document.querySelectorAll('.shot-embed-wrap iframe').forEach(function (iframe) {
+        iframe.addEventListener('load', function () {
+          const placeholder = iframe.parentElement.querySelector('.shot-embed-placeholder');
+          if (placeholder) placeholder.style.display = 'none';
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
