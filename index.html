@@ -94,7 +94,7 @@
   <script>
     (function () {
       var HASH = '344ad576405826e01622c18d01dd680ac08d5f6b3b6ad614d0a0c09fa4672f14';
-      var KEY  = 'wv-site-auth';
+      var KEY  = 'wv-auth';
       if (localStorage.getItem(KEY) === HASH) return;
       document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('auth-gate').style.display = 'flex';
@@ -2456,7 +2456,7 @@
   <script>
   (function () {
     var HASH = '344ad576405826e01622c18d01dd680ac08d5f6b3b6ad614d0a0c09fa4672f14';
-    var KEY  = 'wv-site-auth';
+    var KEY  = 'wv-auth';
 
     if (localStorage.getItem(KEY) === HASH) {
       var pc = document.getElementById('page-content');
