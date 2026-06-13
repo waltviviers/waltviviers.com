@@ -655,6 +655,15 @@
 
     .about-body p + p { margin-top: 20px; }
 
+    .about-bio-btn {
+      display: inline-flex; margin-top: 36px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink); padding: 10px 28px; border: 1px solid var(--rule);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .about-bio-btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    [data-theme="light"] .about-bio-btn:hover { background: #0C0C0B; color: #FAF9F7; border-color: #0C0C0B; }
+
     /* ── Enquiry sections ────────────────────────── */
     .enquiry-grid {
       display: grid;
@@ -1541,6 +1550,7 @@
       <p data-i18n="about-p3">For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.</p>
       <p data-i18n="about-p4">My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.</p>
     </div>
+    <a href="/artist-bio/" class="about-bio-btn" data-i18n="about-bio-btn">Bio &amp; Statement ↗</a>
   </section>
 
   <!-- Instagram feed -->
@@ -1816,6 +1826,7 @@
         'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
         'about-p3': 'For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.',
         'about-p4': 'My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.',
+        'about-bio-btn': 'Bio & Statement ↗',
         'ig-follow': 'Follow on Instagram ↗',
         'commission-tag': 'For collectors', 'commission-title-html': 'Commission<br/>a new work',
         'commission-desc': 'Each commission begins with a conversation. Discussions cover scale, subject, palette, and context. Lead time is typically 8–16 weeks.',
@@ -1850,6 +1861,7 @@
         'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
         'about-p3': 'Vir my is kunsmaak terapie: ‘n manier om jouself uit te druk om jouself te vind. Geloof, familie en kreatiwiteit lê aan die hart van alles wat ek maak.',
         'about-p4': 'My werk word op Saatchi Art verteenwoordig en in privaat versamelings regoor Suid-Afrika en oorsee gehou. Opdragte en galery-navrae is welkom.',
+        'about-bio-btn': 'Bio & Verklaring ↗',
         'ig-follow': 'Volg op Instagram ↗',
         'commission-tag': 'Vir versamelaars', 'commission-title-html': 'Bestel<br/>‘n nuwe werk',
         'commission-desc': 'Elke opdrag begin met ‘n gesprek. Besprekings dek skaal, onderwerp, palet en konteks. Lewertyd is gewoonlik 8–16 weke.',
