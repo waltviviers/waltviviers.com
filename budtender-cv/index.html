@@ -47,29 +47,125 @@
     [data-theme="light"] .download-btn { color: #0C0C0B; border-color: #D5D1CB; }
     [data-theme="light"] .download-btn:hover { background: #0C0C0B; color: #FAF9F7; border-color: #0C0C0B; }
     .page-wrap { padding: calc(64px + 64px) 48px 100px; max-width: 1200px; margin: 0 auto; }
-    .page-head { padding-bottom: 48px; border-bottom: 1px solid var(--rule); margin-bottom: 56px; }
+    .page-head { padding-bottom: 48px; border-bottom: 1px solid var(--rule); margin-bottom: 72px; }
     .page-head-top { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; }
     .page-head h1 { font-family: var(--serif); font-size: clamp(3rem, 7vw, 6rem); font-weight: 400; line-height: 1.0; letter-spacing: -0.01em; }
     .page-head-sub { font-size: 12px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--stone); }
     .page-head-discipline { font-family: var(--serif); font-size: clamp(1.1rem, 2vw, 1.4rem); font-style: italic; color: var(--stone); line-height: 1.4; max-width: 560px; }
-    .pdf-wrap { border: 1px solid var(--rule); background: var(--bg2); }
-    .pdf-wrap iframe { display: block; width: 100%; height: 82vh; min-height: 560px; border: none; }
-    .pdf-footer { padding: 20px 28px; border-top: 1px solid var(--rule); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
-    .pdf-footer-label { font-size: 11px; letter-spacing: 0.08em; color: var(--stone); }
-    .pdf-dl { font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; color: var(--white); padding: 7px 18px; border: 1px solid #4A4844; transition: background 0.2s, color 0.2s; }
-    .pdf-dl:hover { background: var(--white); color: var(--black); }
-    [data-theme="light"] .pdf-dl { color: #0C0C0B; border-color: #D5D1CB; }
-    [data-theme="light"] .pdf-dl:hover { background: #0C0C0B; color: #FAF9F7; }
+
+    /* ── Two-column body ── */
+    .bio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      margin-bottom: 1px;
+    }
+    .bio-col {
+      background: var(--bg);
+      padding: 48px 48px 56px;
+    }
+    .col-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 28px;
+    }
+    .bio-text p {
+      font-family: var(--serif);
+      font-size: clamp(1.05rem, 1.5vw, 1.2rem);
+      line-height: 1.8;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+    .bio-text p:last-child { margin-bottom: 0; }
+
+    /* ── Pull quote ── */
+    .pull-quote {
+      background: var(--bg2);
+      border: 1px solid var(--rule);
+      border-top: none;
+      padding: 56px 48px;
+      display: flex;
+      align-items: flex-start;
+      gap: 32px;
+    }
+    .pull-quote-mark {
+      font-family: var(--serif);
+      font-size: 5rem;
+      line-height: 0.7;
+      color: var(--stone);
+      opacity: 0.4;
+      flex-shrink: 0;
+      margin-top: 8px;
+    }
+    .pull-quote-text {
+      font-family: var(--serif);
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      font-style: italic;
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    /* ── Contact strip ── */
+    .contact-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      border-top: none;
+      margin-top: 0;
+    }
+    .contact-item {
+      background: var(--bg);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .contact-item:hover { background: var(--bg2); }
+    .contact-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+    .contact-value {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 400;
+      line-height: 1.3;
+    }
+    a.contact-item .contact-value { transition: color 0.2s; }
+    a.contact-item:hover .contact-value { color: var(--stone); }
+
+    /* ── Footer ── */
     footer { padding: 40px 48px; border-top: 1px solid var(--rule); margin-top: 80px; display: flex; justify-content: center; align-items: center; position: relative; }
     .footer-copy { font-size: 11px; color: var(--stone); letter-spacing: 0.06em; }
     .footer-back { position: absolute; left: 48px; top: 50%; transform: translateY(-50%); font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; color: var(--stone); padding: 7px 16px; border: 1px solid var(--rule); transition: border-color 0.2s, color 0.2s; }
     .footer-back:hover { border-color: var(--stone); color: var(--ink); }
+
+    /* ── Responsive ── */
     @media (max-width: 900px) {
       nav { padding: 0 24px; }
       .page-wrap { padding: calc(64px + 40px) 24px 80px; }
-      .pdf-wrap iframe { height: 70vh; }
+      .bio-grid { grid-template-columns: 1fr; }
+      .bio-col { padding: 36px 28px 40px; }
+      .pull-quote { padding: 40px 28px; }
+      .contact-strip { grid-template-columns: 1fr 1fr; }
       footer { padding: 40px 24px 32px; flex-direction: column; gap: 20px; }
-      .footer-back { position: static; transform: none; }
+      .footer-back { position: static; transform: none; order: 1; }
+    }
+    @media (max-width: 560px) {
+      .pull-quote { flex-direction: column; gap: 12px; }
+      .pull-quote-mark { font-size: 3.5rem; }
+      .contact-strip { grid-template-columns: 1fr; }
+      .page-head-top { flex-direction: column; gap: 8px; }
     }
   </style>
 </head>
@@ -87,26 +183,79 @@
       </button>
     </div>
   </nav>
+
   <div class="page-wrap">
+
+    <!-- Page header -->
     <div class="page-head">
       <div class="page-head-top">
         <h1>Budtender CV</h1>
         <span class="page-head-sub">Pretoria, South Africa</span>
       </div>
-      <p class="page-head-discipline">Walt Viviers &nbsp;/&nbsp; Cannabis Dispensary &nbsp;/&nbsp; Fine Artist &nbsp;/&nbsp; Creative Director</p>
+      <p class="page-head-discipline">Walt Viviers &nbsp;/&nbsp; Cannabis Retail Specialist &nbsp;/&nbsp; Customer Service</p>
     </div>
-    <div class="pdf-wrap">
-      <iframe src="/budtender-cv/walt-viviers-budtender-cv.pdf" title="Walt Viviers — Budtender CV" loading="lazy"></iframe>
-      <div class="pdf-footer">
-        <span class="pdf-footer-label">Walt Viviers — Budtender CV</span>
-        <a href="/budtender-cv/walt-viviers-budtender-cv.pdf" download class="pdf-dl">Download PDF</a>
+
+    <!-- Profile + Skills columns -->
+    <div class="bio-grid">
+
+      <div class="bio-col">
+        <p class="col-label">Professional Profile</p>
+        <div class="bio-text">
+          <p>Walt Viviers is an experienced Budtender based in Pretoria, South Africa, with a passion for cannabis education, customer service, and retail excellence.</p>
+          <p>Combining a background in creative direction and brand communication with hands-on product knowledge, Walt brings a consultative approach to every customer interaction — helping clients navigate product selection, dosage, and consumption methods with confidence.</p>
+          <p>His communication skills, creative background, and attention to detail make him well suited to fast-paced dispensary environments where product knowledge and customer experience are paramount.</p>
+        </div>
+      </div>
+
+      <div class="bio-col">
+        <p class="col-label">Core Skills</p>
+        <div class="bio-text">
+          <p>Cannabis Product Knowledge</p>
+          <p>Terpene &amp; Cannabinoid Profiling</p>
+          <p>Customer Consultation &amp; Needs Assessment</p>
+          <p>POS Systems &amp; Inventory Management</p>
+          <p>Regulatory Compliance &amp; Record Keeping</p>
+          <p>Strain Identification &amp; Recommendation</p>
+          <p>Communication &amp; Client Relations</p>
+          <p>Visual Merchandising</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Pull quote -->
+    <div class="pull-quote">
+      <span class="pull-quote-mark">&ldquo;</span>
+      <p class="pull-quote-text">A consultative approach to every customer interaction — combining product expertise with genuine care for each person's needs.</p>
+    </div>
+
+    <!-- Contact strip -->
+    <div class="contact-strip">
+      <a href="https://waltviviers.com/" class="contact-item">
+        <span class="contact-label">Web</span>
+        <span class="contact-value">waltviviers.com</span>
+      </a>
+      <a href="mailto:artist@waltviviers.com" class="contact-item">
+        <span class="contact-label">Email</span>
+        <span class="contact-value">artist@waltviviers.com</span>
+      </a>
+      <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" class="contact-item">
+        <span class="contact-label">LinkedIn</span>
+        <span class="contact-value">waltviviers</span>
+      </a>
+      <div class="contact-item">
+        <span class="contact-label">Location</span>
+        <span class="contact-value">Pretoria, Gauteng<br/>South Africa</span>
       </div>
     </div>
+
   </div>
+
   <footer>
     <a href="/" class="footer-back">← Back to site</a>
     <p class="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
   </footer>
+
   <script>
     document.getElementById('theme-toggle').addEventListener('click', function () {
       var html = document.documentElement;
