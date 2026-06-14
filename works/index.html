@@ -241,9 +241,7 @@
     [data-theme="light"] .footer-social .social-icons a:hover { color: var(--ink); }
 
     /* ── Page layout ── */
-    .page-wrap {
-      padding-top: 100px;
-    }
+    .page-wrap { padding-top: 100px; }
 
     .page-head {
       padding: 64px 48px 48px;
@@ -285,7 +283,7 @@
     /* ── Works grid ── */
     .works-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 2px;
       background-color: #0D0D0D;
     }
@@ -384,11 +382,35 @@
     [data-theme="light"] .skeleton-line { background: #D5D1CB; }
     [data-theme="light"] .skeleton-img  { background: #D5D1CB; }
 
-    /* ── Responsive ── */
-    @media (max-width: 1200px) {
-      .works-grid { grid-template-columns: repeat(3, 1fr); }
+    /* ── Sort bar ── */
+    .sort-bar {
+      padding: 14px 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--rule);
     }
 
+    .sort-btn {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
+      padding: 6px 14px;
+      border: 1px solid var(--rule);
+      border-radius: 2px;
+      background: none;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      line-height: 1;
+    }
+
+    .sort-btn:hover { color: var(--ink); border-color: var(--stone); }
+    .sort-btn.is-active { color: var(--ink); border-color: var(--stone); background: var(--bg2); }
+
+    /* ── Responsive ── */
     @media (max-width: 900px) {
       nav { padding: 0 24px; height: 50px; }
       .nav-logo img { height: 28px; }
@@ -404,7 +426,7 @@
 
       .page-wrap { padding-top: 50px; }
       .page-head { padding: 40px 24px 32px; flex-direction: column; gap: 12px; }
-      .works-grid { grid-template-columns: repeat(2, 1fr); }
+      .sort-bar { padding: 12px 24px; gap: 6px; flex-wrap: wrap; }
 
       footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
       .footer-admin { position: static; transform: none; order: 1; }
@@ -413,7 +435,6 @@
     }
 
     @media (max-width: 560px) {
-      .works-grid { grid-template-columns: 1fr; }
       .footer-admin { display: none; }
     }
   </style>
@@ -468,6 +489,13 @@
         <span class="works-count" id="works-count"></span>
         <a href="/" class="back-link" data-i18n="back-home">← Back to home</a>
       </div>
+    </div>
+
+    <div class="sort-bar" id="sort-bar">
+      <button class="sort-btn" data-sort="az">✋ A→Z</button>
+      <button class="sort-btn" data-sort="za">🖖 Z→A</button>
+      <button class="sort-btn" data-sort="oldest">🥚 Oldest</button>
+      <button class="sort-btn" data-sort="newest">🐣 Newest</button>
     </div>
 
     <main id="works-grid" class="works-grid" aria-label="Artworks gallery">
@@ -566,6 +594,8 @@
   </script>
   <script>
     (function () {
+      var allWorks = [];
+
       function slugify(title, year) {
         return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + year;
       }
@@ -582,36 +612,52 @@
         return 'Enquire';
       }
 
+      function renderGrid(works) {
+        var grid = document.getElementById('works-grid');
+        grid.innerHTML = works.map(function (w) {
+          var slug  = slugify(w.title, w.year);
+          var thumb = '/' + w.image.replace('images/', 'images/thumbs/');
+          var sc    = statusClass(w.available);
+          var st    = statusText(w.available);
+          return '<a href="/works/' + slug + '/" class="work-card">' +
+            '<div class="work-card-info">' +
+              '<span class="work-card-title">' + w.title + '</span>' +
+              '<span class="work-card-year">'  + w.year  + '</span>' +
+            '</div>' +
+            '<div class="work-card-img">' +
+              '<img src="' + thumb + '" ' +
+                   'alt="' + w.title + ', ' + w.year + '" ' +
+                   'loading="lazy" ' +
+                   'onerror="this.src=\'/\' + w.image + \'\'\ " />' +
+              '<span class="status-badge ' + sc + '">' + st + '</span>' +
+            '</div>' +
+          '</a>';
+        }).join('');
+      }
+
+      function applySort(mode) {
+        var sorted = allWorks.slice();
+        if (mode === 'az')     sorted.sort(function (a, b) { return a.title.localeCompare(b.title); });
+        if (mode === 'za')     sorted.sort(function (a, b) { return b.title.localeCompare(a.title); });
+        if (mode === 'oldest') sorted.sort(function (a, b) { return a.year - b.year; });
+        if (mode === 'newest') sorted.sort(function (a, b) { return b.year - a.year; });
+        renderGrid(sorted);
+        document.querySelectorAll('.sort-btn').forEach(function (btn) {
+          btn.classList.toggle('is-active', btn.dataset.sort === mode);
+        });
+      }
+
       fetch('/data/artworks.json')
         .then(function (r) { return r.json(); })
         .then(function (data) {
-          var works = data.artworks;
-          var grid  = document.getElementById('works-grid');
-          var count = document.getElementById('works-count');
+          allWorks = data.artworks;
+          document.getElementById('works-count').textContent =
+            allWorks.length + ' work' + (allWorks.length !== 1 ? 's' : '');
+          renderGrid(allWorks);
 
-          count.textContent = works.length + ' work' + (works.length !== 1 ? 's' : '');
-
-          var html = works.map(function (w) {
-            var slug  = slugify(w.title, w.year);
-            var thumb = '/' + w.image.replace('images/', 'images/thumbs/');
-            var sc    = statusClass(w.available);
-            var st    = statusText(w.available);
-            return '<a href="/works/' + slug + '/" class="work-card">' +
-              '<div class="work-card-info">' +
-                '<span class="work-card-title">' + w.title + '</span>' +
-                '<span class="work-card-year">'  + w.year  + '</span>' +
-              '</div>' +
-              '<div class="work-card-img">' +
-                '<img src="' + thumb + '" ' +
-                     'alt="' + w.title + ', ' + w.year + '" ' +
-                     'loading="lazy" ' +
-                     'onerror="this.src=\'/' + w.image + '\'" />' +
-                '<span class="status-badge ' + sc + '">' + st + '</span>' +
-              '</div>' +
-            '</a>';
-          }).join('');
-
-          grid.innerHTML = html;
+          document.querySelectorAll('.sort-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () { applySort(btn.dataset.sort); });
+          });
         })
         .catch(function () {
           document.getElementById('works-grid').innerHTML =
