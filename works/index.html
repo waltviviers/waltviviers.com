@@ -241,7 +241,9 @@
     [data-theme="light"] .footer-social .social-icons a:hover { color: var(--ink); }
 
     /* ── Page layout ── */
-    .page-wrap { padding-top: 100px; }
+    .page-wrap {
+      padding-top: 100px;
+    }
 
     .page-head {
       padding: 64px 48px 48px;
@@ -283,7 +285,7 @@
     /* ── Works grid ── */
     .works-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 2px;
       background-color: #0D0D0D;
     }
@@ -409,6 +411,8 @@
 
     .sort-btn:hover { color: var(--ink); border-color: var(--stone); }
     .sort-btn.is-active { color: var(--ink); border-color: var(--stone); background: var(--bg2); }
+    .sort-emoji { display: none; }
+    @media (max-width: 600px) { .sort-emoji { display: inline; } }
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
@@ -432,6 +436,10 @@
       .footer-admin { position: static; transform: none; order: 1; }
       .footer-social { order: 0; }
       .footer-mark { position: static; transform: none; order: 2; }
+    }
+
+    @media (max-width: 600px) {
+      .works-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 560px) {
@@ -492,10 +500,10 @@
     </div>
 
     <div class="sort-bar" id="sort-bar">
-      <button class="sort-btn" data-sort="az">✋ A→Z</button>
-      <button class="sort-btn" data-sort="za">🖖 Z→A</button>
-      <button class="sort-btn" data-sort="oldest">🥚 Oldest</button>
-      <button class="sort-btn" data-sort="newest">🐣 Newest</button>
+      <button class="sort-btn" data-sort="az"><span class="sort-emoji">✋ </span>A→Z</button>
+      <button class="sort-btn" data-sort="za"><span class="sort-emoji">🖖 </span>Z→A</button>
+      <button class="sort-btn" data-sort="oldest"><span class="sort-emoji">🥚 </span>Oldest</button>
+      <button class="sort-btn" data-sort="newest"><span class="sort-emoji">🐣 </span>Newest</button>
     </div>
 
     <main id="works-grid" class="works-grid" aria-label="Artworks gallery">
@@ -628,7 +636,7 @@
               '<img src="' + thumb + '" ' +
                    'alt="' + w.title + ', ' + w.year + '" ' +
                    'loading="lazy" ' +
-                   'onerror="this.src=\'/\' + w.image + \'\'\ " />' +
+                   'onerror="this.src=\'/' + w.image + '\'" />' +
               '<span class="status-badge ' + sc + '">' + st + '</span>' +
             '</div>' +
           '</a>';
