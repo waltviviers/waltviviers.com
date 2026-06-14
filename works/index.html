@@ -411,6 +411,8 @@
 
     .sort-btn:hover { color: var(--ink); border-color: var(--stone); }
     .sort-btn.is-active { color: var(--ink); border-color: var(--stone); background: var(--bg2); }
+    .sort-emoji { display: none; }
+    @media (max-width: 600px) { .sort-emoji { display: inline; } }
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
@@ -494,10 +496,10 @@
     </div>
 
     <div class="sort-bar" id="sort-bar">
-      <button class="sort-btn" data-sort="az">✋ A→Z</button>
-      <button class="sort-btn" data-sort="za">🖖 Z→A</button>
-      <button class="sort-btn" data-sort="oldest">🥚 Oldest</button>
-      <button class="sort-btn" data-sort="newest">🐣 Newest</button>
+      <button class="sort-btn" data-sort="az"><span class="sort-emoji">✋ </span>A→Z</button>
+      <button class="sort-btn" data-sort="za"><span class="sort-emoji">🖖 </span>Z→A</button>
+      <button class="sort-btn" data-sort="oldest"><span class="sort-emoji">🥚 </span>Oldest</button>
+      <button class="sort-btn" data-sort="newest"><span class="sort-emoji">🐣 </span>Newest</button>
     </div>
 
     <main id="works-grid" class="works-grid" aria-label="Artworks gallery">
