@@ -404,6 +404,7 @@
         <span class="changes-banner-title">Pending changes</span>
         <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
           <button class="apply-btn" id="apply-btn">Apply edits</button>
+          <button class="changes-clear" id="change-token-btn">Change Token</button>
           <button class="changes-clear" id="changes-clear">Reset all</button>
         </div>
       </div>
@@ -704,6 +705,13 @@
         list.appendChild(item);
       });
     }
+
+    document.getElementById('change-token-btn').addEventListener('click', function () {
+      var row = document.getElementById('token-row');
+      var showing = row.style.display === 'flex';
+      row.style.display = showing ? 'none' : 'flex';
+      if (!showing) document.getElementById('gh-token-input').focus();
+    });
 
     document.getElementById('changes-clear').addEventListener('click', function () {
       overrides = {};
