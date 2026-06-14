@@ -303,10 +303,11 @@
       flex-wrap: wrap; gap: 16px;
       padding: 28px 32px;
       border: 1px solid var(--rule);
-      margin-bottom: 56px;
+      margin-bottom: 16px;
       transition: background 0.2s;
     }
     .cms-link-row:hover { background: var(--bg2); }
+    .cms-link-row:last-of-type { margin-bottom: 56px; }
     .cms-body {}
     .cms-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); margin-bottom: 4px; }
     .cms-title { font-family: var(--serif); font-size: 1.4rem; font-weight: 400; }
@@ -422,6 +423,16 @@
         <p class="cms-label">Content Management</p>
         <p class="cms-title">Vercel CMS</p>
         <p class="cms-desc">Edit artwork entries, content, and site data</p>
+      </div>
+      <span class="cms-arrow">↗</span>
+    </a>
+
+    <!-- Sitemap shortcut -->
+    <a href="/sitemap.xml" target="_blank" rel="noopener" class="cms-link-row">
+      <div class="cms-body">
+        <p class="cms-label">Search Engine Index</p>
+        <p class="cms-title">Sitemap</p>
+        <p class="cms-desc">XML sitemap — pages submitted to search engines</p>
       </div>
       <span class="cms-arrow">↗</span>
     </a>
