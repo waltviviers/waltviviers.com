@@ -285,7 +285,7 @@
     /* ── Works grid ── */
     .works-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 2px;
       background-color: #0D0D0D;
     }
@@ -435,6 +435,7 @@
       .page-wrap { padding-top: 50px; }
       .page-head { padding: 40px 24px 32px; flex-direction: column; gap: 12px; }
       .sort-bar { padding: 12px 24px; gap: 6px; flex-wrap: wrap; }
+      .works-grid { grid-template-columns: repeat(2, 1fr); }
 
       footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
       .footer-admin { position: static; transform: none; order: 1; }
@@ -640,7 +641,7 @@
               '<img src="' + thumb + '" ' +
                    'alt="' + w.title + ', ' + w.year + '" ' +
                    'loading="lazy" ' +
-                   'onerror="this.src=\'/\' + w.image + \'\'\'" />' +
+                   'onerror="this.src=\\'/\\' + w.image + \\'\'\\'' + '\" />' +
               '<span class="status-badge ' + sc + '">' + st + '</span>' +
             '</div>' +
           '</a>';
