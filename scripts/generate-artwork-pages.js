@@ -403,7 +403,7 @@ function sharedScripts() {
 function generatePage(w) {
   const slug    = slugify(w.title, w.year);
   const { cls, text: statusText } = statusInfo(w.available);
-  const canonical  = `https://waltviviers.com/works/${slug}/`;
+  const canonical  = `https://waltviviers.com/gallery/${slug}/`;
   const pageTitle  = `${w.title}, ${w.year} — Walt Viviers`;
   const ogImage    = `https://waltviviers.com/${w.image}`;
   const image800   = w.image.startsWith('images/') ? w.image.replace('images/', 'images/800/') : w.image;
@@ -427,7 +427,7 @@ function generatePage(w) {
         '@type': 'BreadcrumbList',
         itemListElement: [
           { '@type': 'ListItem', position: 1, name: 'Home',     item: 'https://waltviviers.com/' },
-          { '@type': 'ListItem', position: 2, name: 'Artworks', item: 'https://waltviviers.com/works/' },
+          { '@type': 'ListItem', position: 2, name: 'Artworks', item: 'https://waltviviers.com/gallery/' },
           { '@type': 'ListItem', position: 3, name: w.title,    item: canonical },
         ],
       },
@@ -741,7 +741,7 @@ ${sharedNavHTML()}
 
     <div class="artwork-actions">
       ${enquireBtn}
-      <a href="/works/" class="btn btn-secondary" data-i18n="btn-all-works">View all works</a>
+      <a href="/gallery/" class="btn btn-secondary" data-i18n="btn-all-works">View all works</a>
     </div>
     ${w.description ? `\n    <div class="artwork-desc">\n      <p id="artwork-description" data-en="${escapeHtml(w.description)}" data-af="${escapeHtml(w.description_af || w.description)}">${escapeHtml(w.description)}</p>\n    </div>` : ''}
     ${enquiryForm}${instagramLink}
