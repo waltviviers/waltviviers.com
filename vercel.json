@@ -1,4 +1,8 @@
 {
+  "redirects": [
+    { "source": "/works/", "destination": "/gallery/", "permanent": true },
+    { "source": "/works/:slug/", "destination": "/gallery/:slug/", "permanent": true }
+  ],
   "headers": [
     {
       "source": "/images/(.*)",
