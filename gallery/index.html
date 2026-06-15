@@ -391,6 +391,10 @@
       align-items: center;
       gap: 8px;
       border-bottom: 1px solid var(--rule);
+      position: sticky;
+      top: 50px;
+      z-index: 100;
+      background: var(--bg);
     }
 
     .sort-btn {
@@ -636,7 +640,7 @@
               '<img src="' + thumb + '" ' +
                    'alt="' + w.title + ', ' + w.year + '" ' +
                    'loading="lazy" ' +
-                   'onerror="this.src=\'/' + w.image + '\'" />' +
+                   'onerror="this.src=\'/\' + w.image + \'\'\'" />' +
               '<span class="status-badge ' + sc + '">' + st + '</span>' +
             '</div>' +
           '</a>';
