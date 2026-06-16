@@ -53,6 +53,21 @@
     .col-label { font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);margin-bottom:28px; }
     .cv-text p { font-family:var(--serif);font-size:clamp(1.05rem,1.5vw,1.2rem);line-height:1.8;color:var(--ink);margin-bottom:20px; }
     .cv-text p:last-child { margin-bottom:0; }
+    .form-section { border:1px solid var(--rule);border-top:none;padding:48px; }
+    .form-meta { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:1px; }
+    .form-meta-cell { background:var(--bg2);padding:18px 24px; }
+    .form-meta-label { font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);margin-bottom:6px; }
+    .form-meta-line { border-bottom:1px solid var(--stone);height:24px; }
+    .artwork-table { width:100%;border-collapse:collapse;margin-top:24px; }
+    .artwork-table th { font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);text-align:left;padding:12px 16px;border:1px solid var(--rule);background:var(--bg2); }
+    .artwork-table td { font-family:var(--serif);font-size:1rem;color:var(--ink);padding:20px 16px;border:1px solid var(--rule);background:var(--bg); }
+    .artwork-table .col-ref { width:12%; }
+    .artwork-table .col-title { width:52%; }
+    .artwork-table .col-size { width:18%; }
+    .artwork-table .col-price { width:18%; }
+    .signed-row { border:1px solid var(--rule);border-top:none;padding:28px 48px;background:var(--bg2);display:flex;align-items:center;gap:32px; }
+    .signed-label { font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);white-space:nowrap; }
+    .signed-line { flex:1;border-bottom:1px solid var(--stone); }
     .contact-strip { display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-top:none; }
     .contact-item { background:var(--bg);padding:28px 32px;display:flex;flex-direction:column;gap:6px;transition:background 0.2s; }
     .contact-item:hover { background:var(--bg2); }
@@ -64,7 +79,8 @@
     .footer-copy { font-size:11px;color:var(--stone);letter-spacing:0.06em; }
     .footer-back { position:absolute;left:48px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);padding:7px 16px;border:1px solid var(--rule);transition:border-color 0.2s,color 0.2s; }
     .footer-back:hover { border-color:var(--stone);color:var(--ink); }
-    @media (max-width:900px) { nav { padding:0 24px; } .page-wrap { padding:calc(64px + 40px) 24px 80px; } .cv-grid { grid-template-columns:1fr; } .cv-col { padding:36px 28px 40px; } .contact-strip { grid-template-columns:1fr 1fr; } footer { padding:40px 24px 32px;flex-direction:column;gap:20px; } .footer-back { position:static;transform:none;order:1; } }
+    @media (max-width:900px) { nav { padding:0 24px; } .page-wrap { padding:calc(64px + 40px) 24px 80px; } .cv-grid { grid-template-columns:1fr; } .cv-col { padding:36px 28px 40px; } .form-section { padding:36px 28px; } .signed-row { padding:24px 28px; } .contact-strip { grid-template-columns:1fr 1fr; } footer { padding:40px 24px 32px;flex-direction:column;gap:20px; } .footer-back { position:static;transform:none;order:1; } }
+    @media (max-width:700px) { .form-meta { grid-template-columns:1fr; } .artwork-table .col-size,.artwork-table .col-price { display:none; } }
     @media (max-width:560px) { .contact-strip { grid-template-columns:1fr; } .page-head-top { flex-direction:column;gap:8px; } }
   </style>
 </head>
@@ -89,22 +105,55 @@
     </div>
     <div class="cv-grid">
       <div class="cv-col">
-        <p class="col-label">About This Document</p>
+        <p class="col-label">About This Form</p>
         <div class="cv-text">
-          <p>The Walt Viviers Fine Art Consignment Note is a formal agreement between the artist and the receiving gallery or representative. It confirms the artwork(s) delivered, their estimated retail value, and the terms under which they are held on consignment.</p>
-          <p>The gallery holds works on behalf of the artist and is responsible for their safekeeping until sold or returned. The recipient's signature confirms that all delivered works — including frames — were received in perfect condition.</p>
-          <p>For a copy of this document including itemised artwork details, please download the PDF or contact the artist directly.</p>
+          <p>This is the official delivery and consignment note for Walt Viviers Fine Art. It is completed at the time of delivery and records each artwork left with a gallery or representative on consignment.</p>
+          <p>The form captures the date of delivery, the name of the person receiving the work, and a line-by-line record of each piece &#8212; including its reference code, title and description, dimensions, and retail price in ZAR.</p>
+          <p>The recipient&#8217;s signature confirms the work arrived in perfect condition. Download the PDF to print a blank copy for completion on delivery.</p>
         </div>
       </div>
       <div class="cv-col">
         <p class="col-label">Conditions</p>
         <div class="cv-text">
           <p>Please notify the artist by SMS, e-mail or telephonically upon the sale of artwork.</p>
-          <p>Payment to be made at the end of the month in which the artwork is sold, or at the latest by the 25th day of the following month.</p>
-          <p>If works are returned to the artist, they must be in the same condition as when received by the gallery. The recipient&#8217;s signature below confirms that the delivered work (including frames, if any) received by the gallery is not damaged, scratched, or dirty.</p>
+          <p>Payment is to be made at the end of the month in which the artwork is sold, or at the latest by the 25th day of the following month.</p>
+          <p>If works are returned to the artist, they must be in the same condition as when received by the gallery. The recipient&#8217;s signature below confirms that the delivered work (including frames, if any) is undamaged, unscratch, and clean.</p>
           <p>If returned works are damaged, the gallery will receive an invoice for repairs at a rate of R200 per hour.</p>
         </div>
       </div>
+    </div>
+    <div class="form-section">
+      <p class="col-label" style="margin-bottom:24px;">Artwork Record</p>
+      <div class="form-meta">
+        <div class="form-meta-cell"><p class="form-meta-label">Date</p><div class="form-meta-line"></div></div>
+        <div class="form-meta-cell"><p class="form-meta-label">Art Received by</p><div class="form-meta-line"></div></div>
+      </div>
+      <table class="artwork-table">
+        <thead>
+          <tr>
+            <th class="col-ref">Ref. Code</th>
+            <th class="col-title">Artwork Title &amp; Description</th>
+            <th class="col-size">Size (mm)</th>
+            <th class="col-price">Price (ZAR)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td></td><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td><td></td></tr>
+          <tr><td></td><td></td><td></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="signed-row">
+      <span class="signed-label">Checked and Signed</span>
+      <div class="signed-line"></div>
     </div>
     <div class="contact-strip">
       <a href="https://waltviviers.com/" class="contact-item"><span class="contact-label">Web</span><span class="contact-value">waltviviers.com</span></a>
