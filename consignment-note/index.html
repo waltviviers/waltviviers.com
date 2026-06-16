@@ -9,12 +9,10 @@
   <meta name="robots" content="noindex, nofollow" />
   <link rel="canonical" href="https://waltviviers.com/consignment-note/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-
   <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -50,7 +48,12 @@
     .page-head h1 { font-family:var(--serif);font-size:clamp(3rem,7vw,6rem);font-weight:400;line-height:1.0;letter-spacing:-0.01em; }
     .page-head-sub { font-size:12px;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone); }
     .page-head-discipline { font-family:var(--serif);font-size:clamp(1.1rem,2vw,1.4rem);font-style:italic;color:var(--stone);line-height:1.4;max-width:560px; }
-    .contact-strip { display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule); }
+    .cv-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:1px; }
+    .cv-col { background:var(--bg);padding:48px 48px 56px; }
+    .col-label { font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);margin-bottom:28px; }
+    .cv-text p { font-family:var(--serif);font-size:clamp(1.05rem,1.5vw,1.2rem);line-height:1.8;color:var(--ink);margin-bottom:20px; }
+    .cv-text p:last-child { margin-bottom:0; }
+    .contact-strip { display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-top:none; }
     .contact-item { background:var(--bg);padding:28px 32px;display:flex;flex-direction:column;gap:6px;transition:background 0.2s; }
     .contact-item:hover { background:var(--bg2); }
     .contact-label { font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone); }
@@ -61,7 +64,7 @@
     .footer-copy { font-size:11px;color:var(--stone);letter-spacing:0.06em; }
     .footer-back { position:absolute;left:48px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);padding:7px 16px;border:1px solid var(--rule);transition:border-color 0.2s,color 0.2s; }
     .footer-back:hover { border-color:var(--stone);color:var(--ink); }
-    @media (max-width:900px) { nav { padding:0 24px; } .page-wrap { padding:calc(64px + 40px) 24px 80px; } .contact-strip { grid-template-columns:1fr 1fr; } footer { padding:40px 24px 32px;flex-direction:column;gap:20px; } .footer-back { position:static;transform:none;order:1; } }
+    @media (max-width:900px) { nav { padding:0 24px; } .page-wrap { padding:calc(64px + 40px) 24px 80px; } .cv-grid { grid-template-columns:1fr; } .cv-col { padding:36px 28px 40px; } .contact-strip { grid-template-columns:1fr 1fr; } footer { padding:40px 24px 32px;flex-direction:column;gap:20px; } .footer-back { position:static;transform:none;order:1; } }
     @media (max-width:560px) { .contact-strip { grid-template-columns:1fr; } .page-head-top { flex-direction:column;gap:8px; } }
   </style>
 </head>
@@ -83,6 +86,25 @@
     <div class="page-head">
       <div class="page-head-top"><h1>Consignment Note</h1><span class="page-head-sub">Walt Viviers Fine Art</span></div>
       <p class="page-head-discipline">Fine Art &nbsp;/&nbsp; Gallery Delivery &nbsp;/&nbsp; Consignment Agreement</p>
+    </div>
+    <div class="cv-grid">
+      <div class="cv-col">
+        <p class="col-label">About This Document</p>
+        <div class="cv-text">
+          <p>The Walt Viviers Fine Art Consignment Note is a formal agreement between the artist and the receiving gallery or representative. It confirms the artwork(s) delivered, their estimated retail value, and the terms under which they are held on consignment.</p>
+          <p>The gallery holds works on behalf of the artist and is responsible for their safekeeping until sold or returned. The recipient's signature confirms that all delivered works — including frames — were received in perfect condition.</p>
+          <p>For a copy of this document including itemised artwork details, please download the PDF or contact the artist directly.</p>
+        </div>
+      </div>
+      <div class="cv-col">
+        <p class="col-label">Conditions</p>
+        <div class="cv-text">
+          <p>Please notify the artist by SMS, e-mail or telephonically upon the sale of artwork.</p>
+          <p>Payment to be made at the end of the month in which the artwork is sold, or at the latest by the 25th day of the following month.</p>
+          <p>If works are returned to the artist, they must be in the same condition as when received by the gallery. The recipient&#8217;s signature below confirms that the delivered work (including frames, if any) received by the gallery is not damaged, scratched, or dirty.</p>
+          <p>If returned works are damaged, the gallery will receive an invoice for repairs at a rate of R200 per hour.</p>
+        </div>
+      </div>
     </div>
     <div class="contact-strip">
       <a href="https://waltviviers.com/" class="contact-item"><span class="contact-label">Web</span><span class="contact-value">waltviviers.com</span></a>
