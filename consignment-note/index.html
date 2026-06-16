@@ -9,13 +9,16 @@
   <meta name="robots" content="noindex, nofollow" />
   <link rel="canonical" href="https://waltviviers.com/consignment-note/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+
   <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
     a { color: inherit; text-decoration: none; }
     button { font: inherit; cursor: pointer; border: none; background: none; }
     :root { --black:#0C0C0B;--white:#FAF9F7;--ink:#FAF9F7;--stone:#9A9890;--rule:#2A2826;--bg:#000000;--bg2:#0D0D0D;--serif:'EB Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif; }
@@ -29,7 +32,7 @@
     .download-btn:hover { background:var(--white);color:var(--black);border-color:var(--white); }
     .theme-toggle { width:auto;height:auto;border:none;padding:4px;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center; }
     .toggle-thumb { display:flex;align-items:center;justify-content:center; }
-    .toggle-thumb .icon-moon,.toggle-thumb .icon-sun { width:17px;height:17px;fill:none;stroke:var(--stone);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round; }
+    .toggle-thumb .icon-moon,.toggle-thumb .icon-sun { width:17px;height:17px;fill:none;stroke:var(--stone);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s; }
     .toggle-thumb .icon-moon { display:block; }
     .toggle-thumb .icon-sun  { display:none; }
     .theme-toggle:hover .toggle-thumb .icon-moon,.theme-toggle:hover .toggle-thumb .icon-sun { stroke:var(--ink); }
@@ -41,26 +44,32 @@
     [data-theme="light"] .toggle-thumb .icon-sun  { display:block; }
     [data-theme="light"] .download-btn { color:#0C0C0B;border-color:#D5D1CB; }
     [data-theme="light"] .download-btn:hover { background:#0C0C0B;color:#FAF9F7;border-color:#0C0C0B; }
-    .page-wrap { padding:calc(64px + 48px) 48px 80px;max-width:1200px;margin:0 auto; }
-    .page-head { margin-bottom:40px;padding-bottom:32px;border-bottom:1px solid var(--rule); }
-    .page-head h1 { font-family:var(--serif);font-size:clamp(2rem,5vw,3.5rem);font-weight:400;line-height:1.1;margin-bottom:8px; }
-    .page-head-meta { font-size:12px;letter-spacing:0.08em;color:var(--stone); }
-    .pdf-frame-wrap { width:100%;border:1px solid var(--rule);background:var(--bg2); }
-    .pdf-frame-wrap iframe { display:block;width:100%;height:85vh;min-height:600px;border:none; }
-    .pdf-fallback { padding:64px 48px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px; }
-    .pdf-fallback p { font-size:13px;color:var(--stone);max-width:380px;line-height:1.7; }
-    .pdf-fallback a { font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--white);padding:10px 24px;border:1px solid #4A4844;display:inline-block;transition:background 0.2s,color 0.2s; }
-    .pdf-fallback a:hover { background:var(--white);color:var(--black); }
-    [data-theme="light"] .pdf-fallback a { color:#0C0C0B;border-color:#D5D1CB; }
-    [data-theme="light"] .pdf-fallback a:hover { background:#0C0C0B;color:#FAF9F7; }
-    @media (max-width:900px) { nav { padding:0 24px; } .page-wrap { padding:calc(64px + 32px) 24px 64px; } .pdf-frame-wrap iframe { height:75vh; } }
+    .page-wrap { padding:calc(64px + 64px) 48px 100px;max-width:1200px;margin:0 auto; }
+    .page-head { padding-bottom:48px;border-bottom:1px solid var(--rule);margin-bottom:72px; }
+    .page-head-top { display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:16px;margin-bottom:16px; }
+    .page-head h1 { font-family:var(--serif);font-size:clamp(3rem,7vw,6rem);font-weight:400;line-height:1.0;letter-spacing:-0.01em; }
+    .page-head-sub { font-size:12px;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone); }
+    .page-head-discipline { font-family:var(--serif);font-size:clamp(1.1rem,2vw,1.4rem);font-style:italic;color:var(--stone);line-height:1.4;max-width:560px; }
+    .contact-strip { display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule); }
+    .contact-item { background:var(--bg);padding:28px 32px;display:flex;flex-direction:column;gap:6px;transition:background 0.2s; }
+    .contact-item:hover { background:var(--bg2); }
+    .contact-label { font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone); }
+    .contact-value { font-family:var(--serif);font-size:1.1rem;font-weight:400;line-height:1.3; }
+    a.contact-item .contact-value { transition:color 0.2s; }
+    a.contact-item:hover .contact-value { color:var(--stone); }
+    footer { padding:40px 48px;border-top:1px solid var(--rule);margin-top:80px;display:flex;justify-content:center;align-items:center;position:relative; }
+    .footer-copy { font-size:11px;color:var(--stone);letter-spacing:0.06em; }
+    .footer-back { position:absolute;left:48px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);padding:7px 16px;border:1px solid var(--rule);transition:border-color 0.2s,color 0.2s; }
+    .footer-back:hover { border-color:var(--stone);color:var(--ink); }
+    @media (max-width:900px) { nav { padding:0 24px; } .page-wrap { padding:calc(64px + 40px) 24px 80px; } .contact-strip { grid-template-columns:1fr 1fr; } footer { padding:40px 24px 32px;flex-direction:column;gap:20px; } .footer-back { position:static;transform:none;order:1; } }
+    @media (max-width:560px) { .contact-strip { grid-template-columns:1fr; } .page-head-top { flex-direction:column;gap:8px; } }
   </style>
 </head>
 <body>
   <nav>
     <a href="/" class="nav-logo" aria-label="Home"><img src="/logo.svg" alt="Walt Viviers" width="379" height="185" /></a>
     <div class="nav-right">
-      <a href="/" class="back-link">← Home</a>
+      <a href="/" class="back-link">&#8592; Home</a>
       <a href="/consignment-note/walt-viviers-consignment-note.pdf" target="_blank" rel="noopener" class="download-btn">Download PDF</a>
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
         <span class="toggle-thumb">
@@ -72,15 +81,20 @@
   </nav>
   <div class="page-wrap">
     <div class="page-head">
-      <h1>Consignment Note</h1>
-      <p class="page-head-meta">Walt Viviers Fine Art · Gallery Delivery &amp; Consignment</p>
+      <div class="page-head-top"><h1>Consignment Note</h1><span class="page-head-sub">Walt Viviers Fine Art</span></div>
+      <p class="page-head-discipline">Fine Art &nbsp;/&nbsp; Gallery Delivery &nbsp;/&nbsp; Consignment Agreement</p>
     </div>
-    <div class="pdf-frame-wrap">
-      <iframe src="/consignment-note/walt-viviers-consignment-note.pdf" title="Walt Viviers — Consignment Note" loading="lazy">
-        <div class="pdf-fallback"><p>Your browser does not support embedded PDFs.</p><a href="/consignment-note/walt-viviers-consignment-note.pdf" target="_blank" rel="noopener">Download (PDF)</a></div>
-      </iframe>
+    <div class="contact-strip">
+      <a href="https://waltviviers.com/" class="contact-item"><span class="contact-label">Web</span><span class="contact-value">waltviviers.com</span></a>
+      <a href="mailto:artist@waltviviers.com" class="contact-item"><span class="contact-label">Email</span><span class="contact-value">artist@waltviviers.com</span></a>
+      <a href="https://www.instagram.com/waltviviers" target="_blank" rel="noopener" class="contact-item"><span class="contact-label">Instagram</span><span class="contact-value">@waltviviers</span></a>
+      <div class="contact-item"><span class="contact-label">Location</span><span class="contact-value">Pretoria, Gauteng<br/>South Africa</span></div>
     </div>
   </div>
+  <footer>
+    <a href="/" class="footer-back">&#8592; Back to site</a>
+    <p class="footer-copy">&#169; 2026 Walt Viviers. All rights reserved.</p>
+  </footer>
   <script>(function(){document.getElementById('theme-toggle').addEventListener('click',function(){var html=document.documentElement;var next=html.dataset.theme==='light'?'dark':'light';html.dataset.theme=next;localStorage.setItem('wv-theme',next);});})();</script>
 </body>
 </html>
