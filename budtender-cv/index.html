@@ -9,12 +9,10 @@
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://waltviviers.com/budtender-cv/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-
   <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -50,7 +48,38 @@
     .page-head h1 { font-family:var(--serif);font-size:clamp(3rem,7vw,6rem);font-weight:400;line-height:1.0;letter-spacing:-0.01em; }
     .page-head-sub { font-size:12px;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone); }
     .page-head-discipline { font-family:var(--serif);font-size:clamp(1.1rem,2vw,1.4rem);font-style:italic;color:var(--stone);line-height:1.4;max-width:560px; }
-    .contact-strip { display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule); }
+    .cv-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:1px; }
+    .cv-col { background:var(--bg);padding:48px 48px 56px; }
+    .col-label { font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);margin-bottom:28px; }
+    .cv-text p { font-family:var(--serif);font-size:clamp(1.05rem,1.5vw,1.2rem);line-height:1.8;color:var(--ink);margin-bottom:20px; }
+    .cv-text p:last-child { margin-bottom:0; }
+    .results-list { list-style:none;padding:0;margin:0; }
+    .results-list li { font-family:var(--serif);font-size:clamp(1rem,1.4vw,1.1rem);line-height:1.6;color:var(--ink);padding:13px 0 13px 20px;border-bottom:1px solid var(--rule);position:relative; }
+    .results-list li:first-child { padding-top:0; }
+    .results-list li:last-child { border-bottom:none;padding-bottom:0; }
+    .results-list li::before { content:"–";position:absolute;left:0;color:var(--stone); }
+    .results-list strong { font-weight:500; }
+    .pull-quote { background:var(--bg2);border:1px solid var(--rule);border-top:none;padding:56px 48px;display:flex;align-items:flex-start;gap:32px; }
+    .pull-quote-mark { font-family:var(--serif);font-size:5rem;line-height:0.7;color:var(--stone);opacity:0.4;flex-shrink:0;margin-top:8px; }
+    .pull-quote-text { font-family:var(--serif);font-size:clamp(1.3rem,2.5vw,2rem);font-style:italic;font-weight:400;line-height:1.4;color:var(--ink); }
+    .pull-quote-attr { font-size:11px;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);margin-top:16px;display:block; }
+    .cv-section { border:1px solid var(--rule);border-top:none;padding:48px; }
+    .section-label { font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);margin-bottom:32px; }
+    .exp-entry { padding:0 0 36px;margin-bottom:36px;border-bottom:1px solid var(--rule); }
+    .exp-entry:last-child { padding-bottom:0;margin-bottom:0;border-bottom:none; }
+    .exp-role { font-family:var(--serif);font-size:1.2rem;font-weight:500;color:var(--ink); }
+    .exp-co { font-size:12px;letter-spacing:0.06em;color:var(--stone);margin-left:10px; }
+    .exp-period { font-family:var(--serif);font-size:0.95rem;font-style:italic;color:var(--stone);margin-top:3px;display:block; }
+    .exp-duties { list-style:none;padding:0;margin-top:14px; }
+    .exp-duties li { font-family:var(--serif);font-size:clamp(1rem,1.4vw,1.1rem);line-height:1.7;color:var(--ink);padding:3px 0 3px 20px;position:relative; }
+    .exp-duties li::before { content:"–";position:absolute;left:0;color:var(--stone); }
+    .skills-block { display:grid;gap:0; }
+    .skill-row { display:grid;grid-template-columns:160px 1fr;gap:32px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--rule); }
+    .skill-row:first-child { padding-top:0; }
+    .skill-row:last-child { border-bottom:none;padding-bottom:0; }
+    .skill-cat { font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone); }
+    .skill-val { font-family:var(--serif);font-size:clamp(1rem,1.4vw,1.1rem);color:var(--ink);line-height:1.5; }
+    .contact-strip { display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);border-top:none; }
     .contact-item { background:var(--bg);padding:28px 32px;display:flex;flex-direction:column;gap:6px;transition:background 0.2s; }
     .contact-item:hover { background:var(--bg2); }
     .contact-label { font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone); }
@@ -61,8 +90,8 @@
     .footer-copy { font-size:11px;color:var(--stone);letter-spacing:0.06em; }
     .footer-back { position:absolute;left:48px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);padding:7px 16px;border:1px solid var(--rule);transition:border-color 0.2s,color 0.2s; }
     .footer-back:hover { border-color:var(--stone);color:var(--ink); }
-    @media (max-width:900px) { nav { padding:0 24px; } .page-wrap { padding:calc(64px + 40px) 24px 80px; } .contact-strip { grid-template-columns:1fr 1fr; } footer { padding:40px 24px 32px;flex-direction:column;gap:20px; } .footer-back { position:static;transform:none;order:1; } }
-    @media (max-width:560px) { .contact-strip { grid-template-columns:1fr; } .page-head-top { flex-direction:column;gap:8px; } }
+    @media (max-width:900px) { nav { padding:0 24px; } .page-wrap { padding:calc(64px + 40px) 24px 80px; } .cv-grid { grid-template-columns:1fr; } .cv-col { padding:36px 28px 40px; } .pull-quote { padding:40px 28px; } .cv-section { padding:36px 28px; } .contact-strip { grid-template-columns:1fr 1fr; } .skill-row { grid-template-columns:1fr;gap:6px; } footer { padding:40px 24px 32px;flex-direction:column;gap:20px; } .footer-back { position:static;transform:none;order:1; } }
+    @media (max-width:560px) { .pull-quote { flex-direction:column;gap:12px; } .pull-quote-mark { font-size:3.5rem; } .contact-strip { grid-template-columns:1fr; } .page-head-top { flex-direction:column;gap:8px; } }
   </style>
 </head>
 <body>
@@ -83,6 +112,99 @@
     <div class="page-head">
       <div class="page-head-top"><h1>Budtender CV</h1><span class="page-head-sub">Pretoria, South Africa</span></div>
       <p class="page-head-discipline">Cannabis Industry &nbsp;/&nbsp; Dispensary Retail &nbsp;/&nbsp; Customer Service</p>
+    </div>
+    <div class="cv-grid">
+      <div class="cv-col">
+        <p class="col-label">Profile</p>
+        <div class="cv-text">
+          <p>Creative professional and cannabis enthusiast with 20 years of experience in high-pressure, client-facing environments. My design and marketing career has been built on listening carefully, communicating clearly, and solving problems creatively — skills that translate directly to the dispensary floor.</p>
+          <p>A genuine passion for cannabis culture, strain genetics, and the plant's evolving legal landscape in South Africa informs my approach. I bring the same meticulous attention to detail and guest-first mindset that defined my creative career to every customer interaction — finding the right product, every time.</p>
+        </div>
+      </div>
+      <div class="cv-col">
+        <p class="col-label">What I Bring to the Team</p>
+        <ul class="results-list">
+          <li>Genuine passion for cannabis — consumer, culture, and plant science</li>
+          <li>Proven customer service skills honed across retail and hospitality</li>
+          <li>Excellent verbal communication and active listening</li>
+          <li>Fast learner with strong retention for product knowledge</li>
+          <li>Calm under pressure; thrives in high-footfall environments</li>
+          <li>Creative problem-solving — matching the right product to each customer</li>
+          <li>Reliable, punctual, and team-oriented work ethic</li>
+        </ul>
+      </div>
+    </div>
+    <div class="pull-quote">
+      <span class="pull-quote-mark">&ldquo;</span>
+      <div>
+        <p class="pull-quote-text">Walt is an incredible creative, really has always gone above and beyond. His brain is really unique, and it shows in the work he produces.</p>
+        <span class="pull-quote-attr">Kieran Pearce &nbsp;&middot;&nbsp; Creative Director</span>
+      </div>
+    </div>
+    <div class="cv-section">
+      <p class="section-label">Experience</p>
+      <div class="exp-entry">
+        <span class="exp-role">Creative Director</span><span class="exp-co">&middot; Menzies Media</span>
+        <span class="exp-period">Nov 2019 – Present &middot; Full-time &middot; Johannesburg, Gauteng</span>
+        <ul class="exp-duties">
+          <li>Lead creative direction and strategic vision across a portfolio of major SA and international brand clients.</li>
+          <li>Present concepts, pitch ideas, and manage ongoing client relationships with C-suite stakeholders.</li>
+          <li>Coordinate cross-functional teams of designers, copywriters, photographers, and developers — keeping projects on time and on brief.</li>
+          <li>Clients include: Kaizer Chiefs, Alpha Industries, Kappa, Sebago, Superga, Broll Property Group, SAB.</li>
+        </ul>
+      </div>
+      <div class="exp-entry">
+        <span class="exp-role">Art Director</span><span class="exp-co">&middot; Menzies Media</span>
+        <span class="exp-period">Jul 2016 – Oct 2019 &middot; Full-time &middot; 3 yrs 4 mos &middot; Johannesburg, Gauteng</span>
+        <ul class="exp-duties">
+          <li>Set overall visual direction for all creative output; directed photography shoots and video productions.</li>
+          <li>Mentored junior designers; maintained quality and consistency across all client touchpoints.</li>
+        </ul>
+      </div>
+      <div class="exp-entry">
+        <span class="exp-role">Graphic Designer &middot; Co-Founder</span><span class="exp-co">&middot; Bang Bang Advertising</span>
+        <span class="exp-period">Feb 2007 – Feb 2010 &middot; Full-time &middot; 3 yrs &middot; Johannesburg, Gauteng</span>
+        <ul class="exp-duties">
+          <li>Co-founded a printing brokerage from the ground up — built the client base, managed supplier relationships, and handled all sales and operations.</li>
+          <li>Developed strong negotiation, sales, and account-management skills running a customer-facing SME.</li>
+          <li>Grew the business to profitability; successfully sold my share upon exit.</li>
+        </ul>
+      </div>
+      <div class="exp-entry">
+        <span class="exp-role">Salesperson &middot; Teller</span><span class="exp-co">&middot; Retail &amp; Banking</span>
+        <span class="exp-period">2004 – 2006 &middot; Various &middot; Johannesburg, Gauteng</span>
+        <ul class="exp-duties">
+          <li>Served customers across retail and banking environments; handled cash, POS transactions, and product queries.</li>
+          <li>Developed habits of accuracy, patience, and customer-first communication under busy floor conditions.</li>
+        </ul>
+      </div>
+      <div class="exp-entry">
+        <span class="exp-role">Waiter</span><span class="exp-co">&middot; Hospitality</span>
+        <span class="exp-period">2002 – 2004 &middot; Various &middot; Johannesburg, Gauteng</span>
+        <ul class="exp-duties">
+          <li>Waited tables in fast-paced restaurant environments; managed multiple covers simultaneously while maintaining service quality.</li>
+          <li>Built interpersonal skills, reading customer needs and upselling menu items through genuine recommendation.</li>
+        </ul>
+      </div>
+      <div class="exp-entry">
+        <span class="exp-role">Fine Artist &middot; Freelance Designer</span><span class="exp-co">&middot; waltviviers.com</span>
+        <span class="exp-period">2010 – Present &middot; Freelance &middot; Pretoria, Gauteng</span>
+        <ul class="exp-duties">
+          <li>Practising fine artist — acrylic &amp; mixed media — represented on Saatchi Art; shown on Behance and Instagram.</li>
+          <li>Freelance web design, graphic design, and illustration; AI-assisted creative workflows.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="cv-section">
+      <p class="section-label">Skills</p>
+      <div class="skills-block">
+        <div class="skill-row"><span class="skill-cat">Customer Service</span><span class="skill-val">Active listening &middot; Needs-based selling &middot; Conflict resolution &middot; POS systems &middot; Cash handling &middot; Product recommendation</span></div>
+        <div class="skill-row"><span class="skill-cat">Cannabis Knowledge</span><span class="skill-val">Strain genetics &middot; Terpene profiles &middot; Cannabinoid education (THC/CBD/CBG) &middot; Safe consumption guidelines &middot; SA cannabis regulations &middot; Product categories</span></div>
+        <div class="skill-row"><span class="skill-cat">Creative &amp; Design</span><span class="skill-val">Adobe Creative Suite &middot; Figma &middot; Brand Identity &middot; Visual Design &middot; Motion Graphics &middot; Typography &middot; Print Production</span></div>
+        <div class="skill-row"><span class="skill-cat">Social Media</span><span class="skill-val">Instagram &middot; Meta Business Suite &middot; Content creation &middot; Community management &middot; Trend awareness &middot; Influencer coordination</span></div>
+        <div class="skill-row"><span class="skill-cat">Digital Marketing</span><span class="skill-val">Google Ads &middot; SEO/SEM &middot; Google Analytics &middot; Shopify E-Commerce &middot; Email marketing &middot; Campaign reporting</span></div>
+        <div class="skill-row"><span class="skill-cat">Tech</span><span class="skill-val">WordPress &middot; HTML/CSS &middot; Google Workspace &middot; GitHub &middot; AI tools (ChatGPT &middot; Gemini &middot; Deepseek)</span></div>
+      </div>
     </div>
     <div class="contact-strip">
       <a href="https://waltviviers.com/" class="contact-item"><span class="contact-label">Web</span><span class="contact-value">waltviviers.com</span></a>
