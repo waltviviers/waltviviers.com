@@ -534,6 +534,20 @@
       position: relative;
     }
 
+    .works-grid .work-thumb:nth-child(n+13) { display: none; }
+
+    .view-gallery-btn {
+      display: flex;
+      width: fit-content;
+      margin: 40px auto 0;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--bg); background: var(--ink); padding: 14px 40px; border: 1px solid var(--ink);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      align-items: center; gap: 6px;
+    }
+    .view-gallery-btn:hover { background: transparent; color: var(--ink); border-color: var(--ink); }
+    [data-theme="light"] .view-gallery-btn { color: #FAF9F7; background: #0C0C0B; border-color: #0C0C0B; }
+    [data-theme="light"] .view-gallery-btn:hover { background: transparent; color: #0C0C0B; border-color: #0C0C0B; }
     .works-grid::before {
       content: '';
       position: absolute;
