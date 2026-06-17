@@ -538,6 +538,7 @@
 
     .view-gallery-btn {
       display: flex;
+      width: fit-content;
       margin: 40px auto 0;
       font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--bg); background: var(--ink); padding: 14px 40px; border: 1px solid var(--ink);
@@ -634,7 +635,13 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 80px;
-      align-items: start;
+      align-items: stretch;
+    }
+
+    .about-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .about-title {
@@ -659,13 +666,15 @@
     .about-body p + p { margin-top: 20px; }
 
     .about-bio-btn {
-      display: inline-flex; margin-top: 36px;
-      font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--ink); padding: 10px 28px; border: 1px solid var(--rule);
+      display: inline-flex; align-items: center; gap: 6px;
+      width: fit-content; margin-top: 48px;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--bg); background: var(--ink); padding: 14px 40px; border: 1px solid var(--ink);
       transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
-    .about-bio-btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-    [data-theme="light"] .about-bio-btn:hover { background: #0C0C0B; color: #FAF9F7; border-color: #0C0C0B; }
+    .about-bio-btn:hover { background: transparent; color: var(--ink); border-color: var(--ink); }
+    [data-theme="light"] .about-bio-btn { color: #FAF9F7; background: #0C0C0B; border-color: #0C0C0B; }
+    [data-theme="light"] .about-bio-btn:hover { background: transparent; color: #0C0C0B; border-color: #0C0C0B; }
 
     /* ── Enquiry sections ────────────────────────── */
     .enquiry-grid {
@@ -1542,16 +1551,18 @@
 
   <!-- About -->
   <section id="about">
-    <h2 class="about-title" data-i18n-html="about-title-html">
-      Created in South Africa<br/><em>Available to the World</em>
-    </h2>
+    <div class="about-left">
+      <h2 class="about-title" data-i18n-html="about-title-html">
+        Created in South Africa<br/><em>Available to the World</em>
+      </h2>
+      <a href="/artist-bio/" class="about-bio-btn" data-i18n="about-bio-btn">Bio &amp; Statement ↗</a>
+    </div>
     <div class="about-body">
       <p data-i18n="about-p1">I am a South African fine artist working in acrylic and mixed media. Twenty years of professional creative practice — across design, art direction, and brand — have sharpened a painter's eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.</p>
       <p data-i18n="about-p2">Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.</p>
       <p data-i18n="about-p3">For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.</p>
       <p data-i18n="about-p4">My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.</p>
     </div>
-    <a href="/artist-bio/" class="about-bio-btn" data-i18n="about-bio-btn">Bio &amp; Statement ↗</a>
   </section>
 
   <!-- Instagram feed -->
