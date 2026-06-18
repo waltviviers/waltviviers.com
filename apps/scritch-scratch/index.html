@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Scritch Scratch</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
+    canvas { display: block; touch-action: none; cursor: none; }
+  </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+'use strict';
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
+
+const S = 5;
+const DW = 10, DH = 8;
+const PW = DW * S, PH = DH * S;
+const SPEED = 2;
+const ANIM_TICKS = 10;
+const DIG_ANIM_TICKS = 4;
+const IDLE_TRIGGER = 60 * 10;  // 10 s idle before digging
+const DIG_DURATION = 60 * 2;   // 2 s of digging
+const FOUND_DURATION = 60 * 5; // 5 s presenting the find
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ─── Dog sprites (all facing RIGHT) ─────────────────────────────────────────
+// Head/nose at right (cols 7-9), tail at left (col 0).
+const IDLE = [
+  [0,0,0,0,0,0,0,0,1,1],
+  [0,0,0,0,0,0,0,1,1,0],
+  [0,0,0,0,0,0,0,1,0,1],
+  [0,1,1,1,1,1,1,1,1,0],
+  [1,1,1,1,1,1,1,1,0,0],
+  [0,1,1,1,1,1,1,0,0,0],
+  [0,0,1,1,0,0,1,1,0,0],
+  [0,0,1,0,0,0,1,0,0,0],
+];
+
+const WALK = [
+  [
+    [0,0,0,0,0,0,0,0,1,1],
+    [0,0,0,0,0,0,0,1,1,0],
+    [0,0,0,0,0,0,0,1,0,1],
+    [0,1,1,1,1,1,1,1,1,0],
+    [1,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,0,0,0],
+    [0,0,0,1,0,1,0,0,0,0],
+    [0,0,0,1,0,1,0,0,0,0],
+  ],
+  [
+    [0,0,0,0,0,0,0,0,1,1],
+    [0,0,0,0,0,0,0,1,1,0],
+    [0,0,0,0,0,0,0,1,0,1],
+    [0,1,1,1,1,1,1,1,1,0],
+    [1,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,0,0,0],
+    [0,1,0,0,0,0,0,1,0,0],
+    [0,1,0,0,0,0,0,1,0,0],
+  ],
+];
+
+const HAPPY = [
+  [
+    [0,0,0,0,0,0,0,0,1,1],
+    [1,0,0,0,0,0,0,1,1,0],
+    [1,0,0,0,0,0,0,1,1,1],
+    [0,1,1,1,1,1,1,1,1,0],
+    [0,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,0,0,0],
+    [0,0,1,1,0,0,1,1,0,0],
+    [0,0,1,0,0,0,1,0,0,0],
+  ],
+  [
+    [0,0,0,0,0,0,0,0,1,1],
+    [0,0,0,0,0,0,0,1,1,0],
+    [0,0,0,0,0,0,0,1,1,1],
+    [1,1,1,1,1,1,1,1,1,0],
+    [0,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,0,0,0],
+    [0,0,1,1,0,0,1,1,0,0],
+    [0,0,1,0,0,0,1,0,0,0],
+  ],
+];
+
+// Front legs (near head, cols 6-8) thrash fast during dig
+const DIG = [
+  [
+    [0,0,0,0,0,0,0,0,1,1],
+    [0,0,0,0,0,0,0,1,1,0],
+    [0,0,0,0,0,0,0,1,0,1],
+    [0,1,1,1,1,1,1,1,1,0],
+    [1,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,0,0,0],
+    [0,0,1,1,0,0,0,1,1,0],  // front paws thrust forward
+    [0,0,1,0,0,0,0,0,1,0],
+  ],
+  [
+    [0,0,0,0,0,0,0,0,1,1],
+    [0,0,0,0,0,0,0,1,1,0],
+    [0,0,0,0,0,0,0,1,0,1],
+    [0,1,1,1,1,1,1,1,1,0],
+    [1,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,0,0,0],
+    [0,0,1,1,0,1,1,0,0,0],  // front paws pulled back
+    [0,0,1,0,0,1,0,0,0,0],
+  ],
+];
+
+// ─── Items the dog digs up ────────────────────────────────────────────────────
+const ITEMS = [
+  {
+    name: 'bone',
+    color: '#ffffff',
+    sc: 3,
+    spr: [
+      [1,1,0,0,0,1,1],
+      [0,1,1,1,1,1,0],
+      [1,1,0,0,0,1,1],
+    ],
+  },
+  {
+    name: 'tennis ball',
+    color: '#bbff33',
+    sc: 3,
+    spr: [
+      [0,1,1,1,0],
+      [1,1,0,1,1],
+      [1,0,0,0,1],
+      [1,1,0,1,1],
+      [0,1,1,1,0],
+    ],
+  },
+  {
+    name: 'rat',
+    color: '#aaaaaa',
+    sc: 3,
+    spr: [
+      [0,0,1,1,0,0,0],
+      [0,1,1,1,1,0,0],
+      [1,1,1,1,1,1,0],
+      [0,0,1,1,0,0,0],
+      [0,0,0,1,1,1,1],
+    ],
+  },
+  {
+    name: 'bone',
+    color: '#ffffff',
+    sc: 3,
+    spr: [
+      [1,1,0,0,0,1,1],
+      [0,1,1,1,1,1,0],
+      [1,1,0,0,0,1,1],
+    ],
+  },
+  {
+    name: 'stick',
+    color: '#c8922a',
+    sc: 2,
+    spr: [
+      [0,0,1,0,0,0,0,0,1,0,0],
+      [0,1,1,1,1,1,1,1,1,1,0],
+      [0,0,0,1,0,0,1,0,0,0,0],
+    ],
+  },
+  {
+    name: 'old sock',
+    color: '#999966',
+    sc: 3,
+    spr: [
+      [0,1,1,1,1,0],
+      [1,1,1,1,1,1],
+      [1,1,1,1,1,1],
+      [0,1,1,1,0,0],
+      [0,1,1,0,0,0],
+    ],
+  },
+];
+
+let itemIdx = 0;
+
+function itemDims(item) {
+  return { w: item.spr[0].length * item.sc, h: item.spr.length * item.sc };
+}
+
+function drawItem(item, x, y) {
+  ctx.fillStyle = item.color;
+  const { sc, spr } = item;
+  for (let r = 0; r < spr.length; r++) {
+    for (let c = 0; c < spr[r].length; c++) {
+      if (spr[r][c]) ctx.fillRect(Math.round(x + c * sc), Math.round(y + r * sc), sc, sc);
+    }
+  }
+}
+
+// ─── Particles ───────────────────────────────────────────────────────────────
+const hearts = [];
+const dirts  = [];
+
+class Heart {
+  constructor(x, y) {
+    this.x = x + (Math.random() - 0.5) * 24;
+    this.y = y;
+    this.vx = (Math.random() - 0.5) * 0.5;
+    this.vy = -(0.5 + Math.random() * 0.7);
+    this.alpha = 1;
+    this.sz = 10 + Math.floor(Math.random() * 8);
+  }
+  update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.012; }
+  draw() {
+    if (this.alpha <= 0) return;
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = '#ff69b4';
+    ctx.font = `${this.sz}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText('♥', this.x, this.y);
+    ctx.restore();
+  }
+  get dead() { return this.alpha <= 0; }
+}
+
+class Dirt {
+  constructor(x, y, facingRight) {
+    this.x = x;
+    this.y = y;
+    this.vx = (facingRight ? -1 : 1) * (0.5 + Math.random() * 3);
+    this.vy = -(0.5 + Math.random() * 3);
+    this.ay = 0.12;
+    this.life = 1;
+    this.sz = 2 + Math.floor(Math.random() * 3);
+  }
+  update() { this.x += this.vx; this.y += this.vy; this.vy += this.ay; this.life -= 0.045; }
+  draw() {
+    if (this.life <= 0) return;
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, this.life);
+    ctx.fillStyle = '#8b7355';
+    ctx.fillRect(Math.round(this.x), Math.round(this.y), this.sz, this.sz);
+    ctx.restore();
+  }
+  get dead() { return this.life <= 0; }
+}
+
+// ─── Target marker ───────────────────────────────────────────────────────────
+let marker = null;
+
+// ─── Dog ─────────────────────────────────────────────────────────────────────
+const dog = {
+  x: 0, y: 0,
+  tx: null, ty: null,
+  state: 'idle',
+  right: true,
+  tick: 0,
+  frame: 0,
+  lingerTicks: 0,
+  idleTimer: 0,
+  digTimer: 0,
+  foundTimer: 0,
+  foundItem: null,
+
+  init() {
+    this.x = canvas.width  / 2 - PW / 2;
+    this.y = canvas.height / 2 - PH / 2;
+  },
+
+  get cx()   { return this.x + PW / 2; },
+  get cy()   { return this.y + PH / 2; },
+  get pawX() { return this.right ? this.x + PW * 0.85 : this.x + PW * 0.15; },
+  get pawY() { return this.y + PH; },
+
+  hitTest(px, py) {
+    const pad = S * 2;
+    return px >= this.x - pad && px <= this.x + PW + pad &&
+           py >= this.y - pad && py <= this.y + PH + pad;
+  },
+
+  walkTo(px, py) {
+    this.state      = 'walking';
+    this.tx         = px - PW / 2;
+    this.ty         = py - PH / 2;
+    this.lingerTicks = 0;
+    this.idleTimer  = 0;
+    this.foundItem  = null;
+    marker = { x: px, y: py, alpha: 1 };
+  },
+
+  pet() {
+    this.state      = 'happy';
+    this.tx = this.ty = null;
+    this.lingerTicks = 0;
+    this.idleTimer  = 0;
+    this.foundItem  = null;
+    marker = null;
+  },
+
+  unpet() {
+    if (this.state === 'happy') this.lingerTicks = 90;
+  },
+
+  update() {
+    const animSpeed = this.state === 'digging' ? DIG_ANIM_TICKS : ANIM_TICKS;
+    if (++this.tick >= animSpeed) { this.tick = 0; this.frame ^= 1; }
+
+    // Walk toward target
+    if (this.state === 'walking' && this.tx !== null) {
+      const dx = this.tx - this.x, dy = this.ty - this.y;
+      const d  = Math.hypot(dx, dy);
+      if (d < SPEED) {
+        this.x = this.tx; this.y = this.ty;
+        this.state = 'idle';
+        this.tx = this.ty = null;
+      } else {
+        if (Math.abs(dx) > 0.5) this.right = dx > 0;
+        this.x += dx / d * SPEED;
+        this.y += dy / d * SPEED;
+      }
+      this.x = Math.max(0, Math.min(canvas.width  - PW, this.x));
+      this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+    }
+
+    // Happy linger
+    if (this.lingerTicks > 0) {
+      if (--this.lingerTicks <= 0) this.state = 'idle';
+    }
+
+    // Idle timer → start digging
+    if (this.state === 'idle') {
+      if (++this.idleTimer >= IDLE_TRIGGER) {
+        this.idleTimer = 0;
+        this.state     = 'digging';
+        this.digTimer  = DIG_DURATION;
+        this.tick      = 0;
+        this.frame     = 0;
+      }
+    } else if (this.state !== 'digging' && this.state !== 'found') {
+      this.idleTimer = 0;
+    }
+
+    // Digging
+    if (this.state === 'digging') {
+      if (Math.random() < 0.45) dirts.push(new Dirt(this.pawX, this.pawY, this.right));
+      if (--this.digTimer <= 0) {
+        this.foundItem  = ITEMS[itemIdx++ % ITEMS.length];
+        this.state      = 'found';
+        this.foundTimer = FOUND_DURATION;
+        this.frame      = 0;
+      }
+    }
+
+    // Found timer
+    if (this.state === 'found') {
+      if (--this.foundTimer <= 0) {
+        this.state     = 'idle';
+        this.foundItem = null;
+        this.idleTimer = 0;
+      }
+    }
+
+    // Marker fade
+    if (marker) { marker.alpha -= 0.04; if (marker.alpha <= 0) marker = null; }
+  },
+
+  sprite() {
+    if (this.state === 'happy' || this.state === 'found') return HAPPY[this.frame];
+    if (this.state === 'walking')  return WALK[this.frame];
+    if (this.state === 'digging')  return DIG[this.frame];
+    return IDLE;
+  },
+
+  draw() {
+    // Item on the ground in front of nose
+    if (this.state === 'found' && this.foundItem) {
+      const item    = this.foundItem;
+      const { w, h } = itemDims(item);
+      const ix = this.right ? this.x + PW + 4 : this.x - w - 4;
+      const iy = this.y + PH - h;
+      drawItem(item, ix, iy);
+    }
+
+    const spr = this.sprite();
+    const x   = Math.round(this.x);
+    const y   = Math.round(this.y);
+    ctx.fillStyle = '#ffffff';
+    for (let r = 0; r < DH; r++) {
+      for (let c = 0; c < DW; c++) {
+        if (spr[r][c]) {
+          const dc = this.right ? c : DW - 1 - c;
+          ctx.fillRect(x + dc * S, y + r * S, S, S);
+        }
+      }
+    }
+  },
+};
+
+// ─── Input ───────────────────────────────────────────────────────────────────
+let scritching = false;
+let interacted  = false;
+
+canvas.addEventListener('pointerdown', e => {
+  e.preventDefault();
+  interacted = true;
+  const px = e.clientX, py = e.clientY;
+  if (dog.hitTest(px, py)) {
+    scritching = true;
+    dog.pet();
+    for (let i = 0; i < 4; i++) hearts.push(new Heart(dog.cx, dog.y));
+  } else {
+    scritching = false;
+    dog.walkTo(px, py);
+  }
+}, { passive: false });
+
+canvas.addEventListener('pointermove', e => {
+  if (!scritching) return;
+  if (Math.random() < 0.25) hearts.push(new Heart(dog.cx, dog.y));
+});
+
+canvas.addEventListener('pointerup',     () => { if (scritching) { scritching = false; dog.unpet(); } });
+canvas.addEventListener('pointercancel', () => { if (scritching) { scritching = false; dog.unpet(); } });
+
+// ─── Render loop ──────────────────────────────────────────────────────────────
+function drawParticles(arr) {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    arr[i].update();
+    if (arr[i].dead) arr.splice(i, 1);
+    else arr[i].draw();
+  }
+}
+
+function loop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  dog.update();
+
+  drawParticles(dirts);
+  drawParticles(hearts);
+
+  if (marker && marker.alpha > 0) {
+    ctx.save();
+    ctx.globalAlpha = marker.alpha;
+    ctx.fillStyle   = '#ffffff';
+    const mx = Math.round(marker.x), my = Math.round(marker.y);
+    ctx.fillRect(mx - 4, my - 1, 9, 2);
+    ctx.fillRect(mx - 1, my - 4, 2, 9);
+    ctx.restore();
+  }
+
+  dog.draw();
+
+  if (!interacted) {
+    ctx.save();
+    ctx.globalAlpha  = 0.25;
+    ctx.fillStyle    = '#ffffff';
+    ctx.font         = '11px monospace';
+    ctx.textAlign    = 'center';
+    ctx.fillText('tap to walk · hold to scritch', canvas.width / 2, canvas.height - 18);
+    ctx.restore();
+  }
+
+  requestAnimationFrame(loop);
+}
+
+dog.init();
+loop();
+</script>
+</body>
+</html>
