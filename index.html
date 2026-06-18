@@ -441,6 +441,7 @@
     .available   { background: #1A2E1B; color: #6AAE70; }
     .sold        { background: #2E1A1A; color: #AE6A6A; }
     .enquire     { background: #28251E; color: #AE9E6A; }
+    .on-show     { background: #1A2030; color: #6A8AAE; }
 
     .hero-actions {
       display: flex;
@@ -1859,8 +1860,8 @@
         "form-placeholder-enquiry": "I'm interested in this work…", "form-placeholder-contact": "What's on your mind…",
         'form-success-msg': 'Thank you — your message has been sent. Walt will be in touch shortly.',
         'form-success-close': 'Close',
-        'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-price': 'Price', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗', 'meta-article': 'Article', 'meta-read-article': 'Read article ↗',
-        'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire',
+        'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-price': 'Price', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗', 'meta-article': 'Article', 'meta-read-article': 'Read article ↗', 'meta-on-show': 'On Show', 'meta-view-show': 'View show ↗',
+        'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire', 'avail-on-show': 'On Show',
         'work-label': 'Work', 'works-suffix': 'artworks',
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.'
       },
@@ -1894,8 +1895,8 @@
         "form-placeholder-enquiry": "Ek stel belang in hierdie werk…", "form-placeholder-contact": "Wat's op jou hart…",
         'form-success-msg': 'Dankie — jou boodskap is gestuur. Walt sal gou kontak maak.',
         'form-success-close': 'Sluit',
-        'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-price': 'Prys', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗',
-        'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag',
+        'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-price': 'Prys', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗', 'meta-on-show': 'Op Vertoon', 'meta-view-show': 'Sien vertoning ↗',
+        'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag', 'avail-on-show': 'Op Vertoon',
         'work-label': 'Werk', 'works-suffix': 'kunswerke',
         'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.'
       }
@@ -1950,8 +1951,9 @@
       /* ── Availability badge ── */
       function availLabel(w) {
         var _t = window._t || function(k){return k;};
-        if (w.available === true)  return '<span class="availability-badge available">' + _t('avail-available') + '</span>';
-        if (w.available === false) return '<span class="availability-badge sold">'      + _t('avail-sold')      + '</span>';
+        if (w.available === true)        return '<span class="availability-badge available">' + _t('avail-available') + '</span>';
+        if (w.available === false)       return '<span class="availability-badge sold">'      + _t('avail-sold')      + '</span>';
+        if (w.available === 'on_show')   return '<span class="availability-badge on-show">'   + _t('avail-on-show')   + '</span>';
         return '<span class="availability-badge enquire">' + _t('avail-enquire') + '</span>';
       }
 
@@ -1994,8 +1996,9 @@
           (w.dimensions ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-dimensions') + '</span><span class="work-meta-value">' + w.dimensions + '</span></div>' : '') +
           (w.price      ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-price')      + '</span><span class="work-meta-value">' + w.price + '</span></div>' : '') +
           '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-status') + '</span><span class="work-meta-value">' + availLabel(w) + '</span></div>' +
-          (w.permalink  ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-instagram') + '</span><span class="work-meta-value"><a href="' + w.permalink + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-post') + '</a></span></div>' : '') +
-          (w.article    ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-article')   + '</span><span class="work-meta-value"><a href="' + w.article  + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-read-article') + '</a></span></div>' : '') +
+          (w.permalink    ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-instagram') + '</span><span class="work-meta-value"><a href="' + w.permalink    + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-post')    + '</a></span></div>' : '') +
+          (w.article      ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-article')   + '</span><span class="work-meta-value"><a href="' + w.article      + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-read-article') + '</a></span></div>' : '') +
+          (w.on_show_link ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-on-show')   + '</span><span class="work-meta-value"><a href="' + w.on_show_link + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-show')    + '</a></span></div>' : '') +
           '<div class="work-meta-row"><span class="work-meta-label">Page</span><span class="work-meta-value"><a href="/gallery/' + slugify(w.title, w.year) + '/" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">View artwork page ↗</a></span></div>';
 
         updateDots(index);
@@ -2031,7 +2034,7 @@
         document.getElementById('works-count').textContent = works.length + ' ' + _t('works-suffix');
         grid.innerHTML = works.map((w, i) => {
           const thumb     = '/' + w.image.replace('images/', 'images/thumbs/');
-          const statusKey = w.available === true ? 'available' : w.available === false ? 'sold' : 'enquire';
+          const statusKey = w.available === true ? 'available' : w.available === false ? 'sold' : w.available === 'on_show' ? 'on-show' : 'enquire';
           const slug      = slugify(w.title, w.year);
           return `
           <a href="/gallery/${slug}/" class="work-thumb" data-index="${i}" aria-label="${w.title}">
@@ -2162,13 +2165,15 @@
             year:       w.year       || '—',
             medium:     w.medium     || '',
             dimensions: w.dimensions || '',
-            available:  w.available === 'available' ? true
-                      : w.available === 'sold'      ? false
-                      : null,
-            featured:   w.featured   || false,
-            permalink:  w.instagram  || '',
-            article:    w.article    || '',
-            price:      w.price      || '',
+            available:    w.available === 'available' ? true
+                        : w.available === 'sold'      ? false
+                        : w.available === 'on_show'   ? 'on_show'
+                        : null,
+            featured:     w.featured     || false,
+            permalink:    w.instagram    || '',
+            article:      w.article      || '',
+            on_show_link: w.on_show_link || '',
+            price:        w.price        || '',
           }));
 
           works.sort((a, b) => Number(b.year) - Number(a.year));
