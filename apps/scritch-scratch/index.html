@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Scritch Scratch</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
+    canvas { display: block; touch-action: none; cursor: none; }
+  </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+'use strict';
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
+
+const S = 5;          // px per logical pixel
+const DW = 10, DH = 8;
+const PW = DW * S, PH = DH * S;
+const SPEED = 2;
+const ANIM_TICKS = 10;
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ─── Sprites (all facing RIGHT) ──────────────────────────────────────────────
+// Head at right (cols 7-9), tail at left (col 0).
+// Row 2 eye: col8 gap = eye hole; happy: all cols filled = excited round face.
+
+const IDLE = [
+  [0,0,0,0,0,0,0,0,1,1],  // ear
+  [0,0,0,0,0,0,0,1,1,0],  // head top
+  [0,0,0,0,0,0,0,1,0,1],  // head: eye gap + nose
+  [0,1,1,1,1,1,1,1,1,0],  // body top
+  [1,1,1,1,1,1,1,1,0,0],  // tail (col0) + body
+  [0,1,1,1,1,1,1,0,0,0],  // belly
+  [0,0,1,1,0,0,1,1,0,0],  // legs
+  [0,0,1,0,0,0,1,0,0,0],  // paws
+];
+
+const WALK = [
+  [  // frame 0: legs together-ish
+    [0,0,0,0,0,0,0,0,1,1],
+    [0,0,0,0,0,0,0,1,1,0],
+    [0,0,0,0,0,0,0,1,0,1],
+    [0,1,1,1,1,1,1,1,1,0],
+    [1,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,0,0,0],
+    [0,0,0,1,0,1,0,0,0,0],  // legs shifted forward
+    [0,0,0,1,0,1,0,0,0,0],
+  ],
+  [  // frame 1: legs spread
+    [0,0,0,0,0,0,0,0,1,1],
+    [0,0,0,0,0,0,0,1,1,0],
+    [0,0,0,0,0,0,0,1,0,1],
+    [0,1,1,1,1,1,1,1,1,0],
+    [1,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,0,0,0],
+    [0,1,0,0,0,0,0,1,0,0],  // legs spread apart
+    [0,1,0,0,0,0,0,1,0,0],
+  ],
+];
+
+const HAPPY = [
+  [  // frame 0: tail raised high
+    [0,0,0,0,0,0,0,0,1,1],
+    [1,0,0,0,0,0,0,1,1,0],  // tail tip
+    [1,0,0,0,0,0,0,1,1,1],  // tail base + happy face (no eye gap)
+    [0,1,1,1,1,1,1,1,1,0],
+    [0,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,0,0,0],
+    [0,0,1,1,0,0,1,1,0,0],
+    [0,0,1,0,0,0,1,0,0,0],
+  ],
+  [  // frame 1: tail mid-wag
+    [0,0,0,0,0,0,0,0,1,1],
+    [0,0,0,0,0,0,0,1,1,0],
+    [0,0,0,0,0,0,0,1,1,1],  // happy face
+    [1,1,1,1,1,1,1,1,1,0],  // tail at row3 + body
+    [0,1,1,1,1,1,1,1,0,0],
+    [0,1,1,1,1,1,1,0,0,0],
+    [0,0,1,1,0,0,1,1,0,0],
+    [0,0,1,0,0,0,1,0,0,0],
+  ],
+];
+
+// ─── Hearts ──────────────────────────────────────────────────────────────────
+const hearts = [];
+class Heart {
+  constructor(x, y) {
+    this.x = x + (Math.random() - 0.5) * 24;
+    this.y = y;
+    this.vy = -(0.5 + Math.random() * 0.7);
+    this.vx = (Math.random() - 0.5) * 0.5;
+    this.alpha = 1;
+    this.sz = 10 + Math.floor(Math.random() * 8);
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.alpha -= 0.012;
+  }
+  draw() {
+    if (this.alpha <= 0) return;
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.fillStyle = '#ff69b4';
+    ctx.font = `${this.sz}px sans-serif`;
+    ctx.textAlign = 'center';
+    ctx.fillText('♥', this.x, this.y);
+    ctx.restore();
+  }
+  get dead() { return this.alpha <= 0; }
+}
+
+// ─── Target marker ───────────────────────────────────────────────────────────
+let marker = null; // { x, y, alpha }
+
+// ─── Dog ─────────────────────────────────────────────────────────────────────
+const dog = {
+  x: 0, y: 0,
+  tx: null, ty: null,
+  state: 'idle',
+  right: true,
+  tick: 0,
+  frame: 0,
+  lingerTicks: 0,
+
+  init() {
+    this.x = canvas.width / 2 - PW / 2;
+    this.y = canvas.height / 2 - PH / 2;
+  },
+
+  get cx() { return this.x + PW / 2; },
+  get cy() { return this.y + PH / 2; },
+
+  hitTest(px, py) {
+    const pad = S * 2;
+    return px >= this.x - pad && px <= this.x + PW + pad &&
+           py >= this.y - pad && py <= this.y + PH + pad;
+  },
+
+  walkTo(px, py) {
+    this.tx = px - PW / 2;
+    this.ty = py - PH / 2;
+    this.state = 'walking';
+    this.lingerTicks = 0;
+    marker = { x: px, y: py, alpha: 1 };
+  },
+
+  pet() {
+    this.state = 'happy';
+    this.tx = this.ty = null;
+    this.lingerTicks = 0;
+    marker = null;
+  },
+
+  unpet() {
+    if (this.state === 'happy') this.lingerTicks = 90;
+  },
+
+  update() {
+    this.tick++;
+    if (this.tick >= ANIM_TICKS) { this.tick = 0; this.frame ^= 1; }
+
+    if (this.state === 'walking' && this.tx !== null) {
+      const dx = this.tx - this.x;
+      const dy = this.ty - this.y;
+      const d = Math.hypot(dx, dy);
+      if (d < SPEED) {
+        this.x = this.tx; this.y = this.ty;
+        this.state = 'idle';
+        this.tx = this.ty = null;
+      } else {
+        if (Math.abs(dx) > 0.5) this.right = dx > 0;
+        this.x += dx / d * SPEED;
+        this.y += dy / d * SPEED;
+      }
+      this.x = Math.max(0, Math.min(canvas.width - PW, this.x));
+      this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+    }
+
+    if (this.lingerTicks > 0) {
+      this.lingerTicks--;
+      if (this.lingerTicks <= 0) this.state = 'idle';
+    }
+
+    if (marker) {
+      marker.alpha -= 0.04;
+      if (marker.alpha <= 0) marker = null;
+    }
+  },
+
+  sprite() {
+    if (this.state === 'happy') return HAPPY[this.frame];
+    if (this.state === 'walking') return WALK[this.frame];
+    return IDLE;
+  },
+
+  draw() {
+    const spr = this.sprite();
+    const x = Math.round(this.x);
+    const y = Math.round(this.y);
+    ctx.fillStyle = '#ffffff';
+    for (let r = 0; r < DH; r++) {
+      for (let c = 0; c < DW; c++) {
+        if (spr[r][c]) {
+          const dc = this.right ? c : DW - 1 - c;
+          ctx.fillRect(x + dc * S, y + r * S, S, S);
+        }
+      }
+    }
+  },
+};
+
+// ─── Input ───────────────────────────────────────────────────────────────────
+let scritching = false;
+let interacted = false;
+
+canvas.addEventListener('pointerdown', e => {
+  e.preventDefault();
+  interacted = true;
+  const px = e.clientX, py = e.clientY;
+  if (dog.hitTest(px, py)) {
+    scritching = true;
+    dog.pet();
+    for (let i = 0; i < 4; i++) hearts.push(new Heart(dog.cx, dog.y));
+  } else {
+    scritching = false;
+    dog.walkTo(px, py);
+  }
+}, { passive: false });
+
+canvas.addEventListener('pointermove', e => {
+  if (!scritching) return;
+  if (Math.random() < 0.25) hearts.push(new Heart(dog.cx, dog.y));
+});
+
+canvas.addEventListener('pointerup', () => {
+  if (scritching) { scritching = false; dog.unpet(); }
+});
+
+canvas.addEventListener('pointercancel', () => {
+  if (scritching) { scritching = false; dog.unpet(); }
+});
+
+// ─── Loop ────────────────────────────────────────────────────────────────────
+function loop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  dog.update();
+
+  // Draw hearts
+  for (let i = hearts.length - 1; i >= 0; i--) {
+    hearts[i].update();
+    if (hearts[i].dead) hearts.splice(i, 1);
+    else hearts[i].draw();
+  }
+
+  // Draw target marker (small pixel cross)
+  if (marker && marker.alpha > 0) {
+    ctx.save();
+    ctx.globalAlpha = marker.alpha;
+    ctx.fillStyle = '#ffffff';
+    const mx = Math.round(marker.x), my = Math.round(marker.y);
+    ctx.fillRect(mx - 4, my - 1, 9, 2);
+    ctx.fillRect(mx - 1, my - 4, 2, 9);
+    ctx.restore();
+  }
+
+  dog.draw();
+
+  // Hint text (fades away after first tap)
+  if (!interacted) {
+    ctx.save();
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '11px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('tap to walk · hold to scritch', canvas.width / 2, canvas.height - 18);
+    ctx.restore();
+  }
+
+  requestAnimationFrame(loop);
+}
+
+dog.init();
+loop();
+</script>
+</body>
+</html>
