@@ -42,7 +42,13 @@ collections:
                   - { label: "Available for sale", value: "available" }
                   - { label: "Sold", value: "sold" }
                   - { label: "Enquire", value: "enquire" }
+                  - { label: "On Show", value: "on_show" }
                 default: enquire
+              - name: on_show_link
+                label: "On Show link (optional)"
+                widget: string
+                required: false
+                hint: "Link to exhibition or show details — only shown when Availability is set to On Show"
               - name: featured
                 label: "Show first in hero"
                 widget: boolean
