@@ -70,7 +70,8 @@
       <li>Tap a ball or stick to throw it — your dog will fetch</li>
       <li>Visitor dogs arrive to play now and then</li>
       <li>Rats flee when dogs visit</li>
-      <li>Switch to Rat Mode from the menu</li>
+      <li>Switch to Rat Mode or Cat Mode from the menu</li>
+      <li>Cat Mode: hold cats to purr, tap for laser, tap wool to throw</li>
     </ul>
     <button class="popup-close" id="htp-close">Close</button>
   </div>
@@ -247,8 +248,39 @@ class Label {
   get dead() { return this.life <= 0; }
 }
 
+// ─── Cat sprites (all facing RIGHT, head right, tail upper-left) ─────────────
+const CAT_IDLE = [
+  [1,0,0,0,0,0,0,1,0,1],
+  [1,0,0,0,0,0,1,1,1,1],
+  [1,0,0,1,1,0,1,1,1,1],
+  [0,1,1,1,1,1,1,1,0,0],
+  [1,1,1,1,1,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0],
+  [0,0,1,0,0,1,0,0,0,0],
+  [0,0,1,0,0,1,0,0,0,0],
+];
+const CAT_WALK = [
+  [[1,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
+  [[1,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,0,0,1,0,0,0],[0,1,0,0,0,0,1,0,0,0]],
+];
+const CAT_HAPPY = [
+  [[0,1,0,0,0,0,0,1,1,1],[1,0,0,0,0,0,1,1,1,0],[1,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,1,1,0,1,0,0,0,0],[0,0,1,0,0,1,0,0,0,0]],
+  [[1,0,0,0,0,0,0,0,1,1],[1,0,0,0,0,0,1,1,1,0],[1,0,0,1,1,0,0,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,1,1,0,0,1,0,0,0],[0,0,1,0,0,0,1,0,0,0]],
+];
+
+// Wool ball throwable item
+const WOOL_ITEM = { name:'wool', color:'#dd77cc', sc:3, spr:[[0,1,1,1,0],[1,0,1,0,1],[1,1,0,1,1],[1,0,1,0,1],[0,1,1,1,0]] };
+
 // ─── Game mode ────────────────────────────────────────────────────────────────
 let gameMode = 'dog';
+
+// ─── Cat Mode state ───────────────────────────────────────────────────────────
+const cats = [], kittens = [], catRats = [];
+const CAT_COLORS = ['#f5a623','#aaaaaa','#eeeeee','#444444','#c07840'];
+let laserX = 0, laserY = 0, laserActive = false, laserTimer = 0;
+let catVisitorCooldown = 60 * 25;
+let catRatCooldown = 60 * 8;
+let scritchCat = null;
 
 // ─── Cheese (Rat Mode) ────────────────────────────────────────────────────────
 const cheeses = [];
@@ -480,6 +512,255 @@ class Baby {
       ctx.fillStyle = '#ff99bb';
       ctx.fillRect(Math.round(this.x - size / 2), Math.round(this.y), 2, 2);
     }
+  }
+}
+
+// ─── Cat class ────────────────────────────────────────────────────────────────
+const KITTEN_MATURE = 60 * 15;
+
+class Cat {
+  constructor(opts = {}) {
+    this.x = opts.x !== undefined ? opts.x : canvas.width / 2 - PW / 2;
+    this.y = opts.y !== undefined ? opts.y : canvas.height / 2 - PH / 2;
+    this.color = opts.color || CAT_COLORS[0];
+    this.isMain = opts.isMain || false;
+    this.isVisitor = opts.isVisitor || false;
+    this.right = opts.right !== undefined ? opts.right : true;
+    this.state = opts.state || 'idle';
+    this.tx = opts.tx !== undefined ? opts.tx : null;
+    this.ty = opts.ty !== undefined ? opts.ty : null;
+    this.frame = 0; this.tick = 0;
+    this.idleTimer = 0; this.lingerTicks = 0;
+    this.scritchTimer = 0;
+    this.pregnant = false; this.pregnancyTimer = 0;
+    this.birthCooldown = opts.birthCooldown !== undefined ? opts.birthCooldown : 60 * 60;
+    this.chaseTarget = null;
+    this.visitTimer = 0;
+    this.dead = false;
+  }
+
+  get cx() { return this.x + PW / 2; }
+  get cy() { return this.y + PH / 2; }
+
+  hitTest(px, py) {
+    const pad = S * 2;
+    return px >= this.x - pad && px <= this.x + PW + pad &&
+           py >= this.y - pad && py <= this.y + PH + pad;
+  }
+
+  scritch() {
+    this.scritchTimer = 60;
+    for (let i = 0; i < 3; i++) hearts.push(new Heart(this.cx, this.y));
+    labels.push(new Label('Purr~', this.cx, Math.max(20, this.y - 6)));
+  }
+
+  _stepToward(spd) {
+    const s = spd || SPEED;
+    const dx = this.tx - this.x, dy = this.ty - this.y, d = Math.hypot(dx, dy);
+    if (d < s) { this.x = this.tx; this.y = this.ty; this.tx = this.ty = null; return true; }
+    if (Math.abs(dx) > 0.5) this.right = dx > 0;
+    this.x += dx / d * s; this.y += dy / d * s;
+    this.x = Math.max(0, Math.min(canvas.width - PW, this.x));
+    this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+    return false;
+  }
+
+  _roamTo(px, py) {
+    this.state = 'walking'; this.tx = px - PW / 2; this.ty = py - PH / 2;
+  }
+
+  update() {
+    if (++this.tick >= ANIM_TICKS) { this.tick = 0; this.frame ^= 1; }
+    if (this.scritchTimer > 0) --this.scritchTimer;
+    if (this.birthCooldown > 0) --this.birthCooldown;
+
+    // Visitor: walk in, trigger pregnancy, linger, leave
+    if (this.isVisitor) {
+      if (this.state === 'walking' && this.tx !== null) {
+        const arrived = this._stepToward();
+        if (arrived) {
+          // Arrived near main cat
+          const mc = cats[0];
+          if (mc && !mc.pregnant && mc.birthCooldown <= 0) {
+            mc.pregnant = true; mc.pregnancyTimer = 60 * 10; mc.birthCooldown = 60 * 90;
+            for (let i = 0; i < 6; i++) hearts.push(new Heart((mc.cx + this.cx) / 2, Math.min(mc.y, this.y)));
+          }
+          this.state = 'happy'; this.visitTimer = 60 * 5;
+        }
+      }
+      if (this.state === 'happy') {
+        if (Math.random() < 0.02) hearts.push(new Heart((cats[0] ? (cats[0].cx + this.cx)/2 : this.cx), this.y));
+        if (--this.visitTimer <= 0) {
+          this.state = 'leaving'; this.right = this.x > canvas.width / 2;
+        }
+      }
+      if (this.state === 'leaving') {
+        this.x += (this.right ? 1 : -1) * SPEED;
+        if (this.x > canvas.width + PW * 2 || this.x < -PW * 2) this.dead = true;
+      }
+      return;
+    }
+
+    // Pregnancy
+    if (this.pregnant) {
+      if (--this.pregnancyTimer <= 0) {
+        this.pregnant = false;
+        const n = 2 + Math.floor(Math.random() * 3);
+        for (let i = 0; i < n; i++) {
+          const color = CAT_COLORS[Math.floor(Math.random() * CAT_COLORS.length)];
+          kittens.push(new Kitten(this.cx, this.y + PH, color));
+        }
+        labels.push(new Label('Mew!', this.cx, Math.max(20, this.y - 8)));
+      }
+    }
+
+    // Non-main cats spontaneously have babies
+    if (!this.isMain && !this.pregnant && this.birthCooldown <= 0) {
+      const total = cats.length + kittens.length;
+      if (total < 35 && Math.random() < 0.00015) {
+        this.pregnant = true; this.pregnancyTimer = 60 * 8; this.birthCooldown = 60 * 150;
+      }
+    }
+
+    // Laser mode
+    if (this.state === 'laser') {
+      if (!laserActive) { this.state = 'idle'; }
+      else {
+        const dx = laserX - this.cx, dy = laserY - this.cy;
+        const d = Math.hypot(dx, dy);
+        if (d < 14) { this.state = 'happy'; this.lingerTicks = 45; }
+        else { const s = SPEED * 1.2; this.x += dx/d*s; this.y += dy/d*s; this.right = dx > 0;
+          this.x = Math.max(0, Math.min(canvas.width - PW, this.x));
+          this.y = Math.max(0, Math.min(canvas.height - PH, this.y)); }
+      }
+    }
+
+    // Chase rat
+    if (this.state === 'chase') {
+      if (!this.chaseTarget || this.chaseTarget.dead || this.chaseTarget.fleeing) {
+        this.state = 'idle'; this.chaseTarget = null;
+      } else {
+        const dx = this.chaseTarget.x + RAT_W/2 - this.cx;
+        const dy = this.chaseTarget.y + RAT_H/2 - this.cy;
+        const d = Math.hypot(dx, dy);
+        if (d < PW * 0.5) {
+          this.chaseTarget.flee(); this.chaseTarget = null;
+          this.state = 'happy'; this.lingerTicks = 60;
+        } else {
+          const s = SPEED * 1.25;
+          this.x += dx/d*s; this.y += dy/d*s; this.right = dx > 0;
+          this.x = Math.max(0, Math.min(canvas.width - PW, this.x));
+          this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+        }
+      }
+    }
+
+    // Fetch wool
+    if (this.state === 'fetch' && this.tx !== null) {
+      const arrived = this._stepToward();
+      if (arrived) {
+        if (thrownBall) {
+          const { w, h } = itemDims(WOOL_ITEM);
+          const ix = this.right ? this.x + PW + 4 : this.x - w - 4;
+          placedItems.push({ item: WOOL_ITEM, x: ix, y: this.y + PH - h });
+          thrownBall = null;
+        }
+        this.state = 'happy'; this.lingerTicks = 60;
+      }
+    }
+
+    // Walking
+    if (this.state === 'walking' && this.tx !== null) {
+      const arrived = this._stepToward();
+      if (arrived) this.state = 'idle';
+    }
+
+    if (this.lingerTicks > 0 && --this.lingerTicks <= 0) this.state = 'idle';
+
+    // Leaving the screen
+    if (this.state === 'leaving') {
+      this.x += (this.right ? 1 : -1) * SPEED;
+      if (this.x > canvas.width + PW * 2 || this.x < -PW * 2) this.dead = true;
+      return;
+    }
+
+    // Idle: decide what to do
+    if (this.state === 'idle') {
+      if (++this.idleTimer >= IDLE_TO_ACTION) {
+        this.idleTimer = 0;
+        if (laserActive && Math.random() < 0.65) {
+          this.state = 'laser';
+        } else if (catRats.length > 0 && Math.random() < 0.35) {
+          const r = catRats[Math.floor(Math.random() * catRats.length)];
+          if (r && !r.dead && !r.fleeing) { this.chaseTarget = r; this.state = 'chase'; }
+          else this._roamTo(PW + Math.random() * (canvas.width - PW * 2), PH + Math.random() * (canvas.height - PH * 2));
+        } else {
+          this._roamTo(PW + Math.random() * (canvas.width - PW * 2), PH + Math.random() * (canvas.height - PH * 2));
+        }
+      }
+    } else if (!['idle','happy','laser','chase'].includes(this.state)) {
+      this.idleTimer = 0;
+    }
+  }
+
+  sprite() {
+    switch (this.state) {
+      case 'happy': return CAT_HAPPY[this.frame];
+      case 'walking': case 'fetch': case 'laser': case 'chase': return CAT_WALK[this.frame];
+      default: return CAT_IDLE;
+    }
+  }
+
+  draw() {
+    if (this.dead) return;
+    const spr = this.sprite(), x = Math.round(this.x), y = Math.round(this.y);
+    const bodyColor = this.scritchTimer > 0 ? '#ffddcc' : this.color;
+    for (let r = 0; r < DH; r++)
+      for (let c = 0; c < DW; c++)
+        if (spr[r][c]) {
+          const dc = this.right ? c : DW - 1 - c;
+          const isNose = r === 2 && c === 9;
+          const isWhisker = r === 2 && (c === 3 || c === 4);
+          ctx.fillStyle = isNose ? '#ff99bb' : isWhisker ? '#dddddd' : bodyColor;
+          ctx.fillRect(x + dc * S, y + r * S, S, S);
+        }
+  }
+}
+
+// ─── Kitten class ─────────────────────────────────────────────────────────────
+class Kitten {
+  constructor(x, y, color) {
+    this.x = x + (Math.random() - 0.5) * 30;
+    this.y = y + (Math.random() - 0.5) * 10;
+    this.vx = (Math.random() - 0.5) * 0.6;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.age = 0; this.color = color; this.dead = false;
+  }
+  update() {
+    this.age++;
+    if (Math.random() < 0.012) { this.vx = (Math.random()-0.5)*0.6; this.vy = (Math.random()-0.5)*0.3; }
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0) { this.x = 0; this.vx = Math.abs(this.vx); }
+    if (this.x > canvas.width) { this.x = canvas.width; this.vx = -Math.abs(this.vx); }
+    if (this.y < 0) { this.y = 0; this.vy = Math.abs(this.vy); }
+    if (this.y > canvas.height) { this.y = canvas.height; this.vy = -Math.abs(this.vy); }
+    if (this.age >= KITTEN_MATURE) {
+      if (cats.length + kittens.length <= 35) {
+        cats.push(new Cat({
+          x: this.x, y: this.y, color: this.color,
+          birthCooldown: 60 * 40, right: Math.random() < 0.5
+        }));
+      }
+      this.dead = true;
+    }
+  }
+  draw() {
+    if (this.dead) return;
+    const p = this.age / KITTEN_MATURE;
+    const sz = Math.max(2, Math.round(p * PW * 0.45));
+    ctx.fillStyle = p < 0.25 ? '#ffddcc' : this.color;
+    ctx.fillRect(Math.round(this.x - sz/2), Math.round(this.y - sz/2), sz, sz);
+    if (p > 0.5) { ctx.fillStyle = '#ff99bb'; ctx.fillRect(Math.round(this.x - sz/2), Math.round(this.y), 2, 2); }
   }
 }
 
@@ -829,37 +1110,99 @@ const dog = {
 function enterRatMode() {
   gameMode = 'rat';
   visitors.length = 0;
-  rats.length = 0;
-  babies.length = 0;
-  cheeses.length = 0;
+  rats.length = 0; babies.length = 0; cheeses.length = 0;
+  cats.length = 0; kittens.length = 0; catRats.length = 0;
   placedItems.length = 0;
-  hearts.length = 0;
-  dirts.length = 0;
-  labels.length = 0;
-  thrownBall = null; marker = null;
-  interacted = false;
+  hearts.length = 0; dirts.length = 0; labels.length = 0;
+  thrownBall = null; marker = null; laserActive = false;
+  scritchCat = null; interacted = false;
   const cx = canvas.width / 2, cy = canvas.height / 2;
   rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#c8922a', matingCooldown: 60 * 8 }));
   rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0 }));
-  document.getElementById('mode-btn').textContent = 'Dog Mode';
+  document.getElementById('mode-btn').textContent = 'Cat Mode';
 }
 
 function enterDogMode() {
   gameMode = 'dog';
   visitors.length = 0;
-  rats.length = 0;
-  babies.length = 0;
-  cheeses.length = 0;
+  rats.length = 0; babies.length = 0; cheeses.length = 0;
+  cats.length = 0; kittens.length = 0; catRats.length = 0;
   placedItems.length = 0;
-  hearts.length = 0;
-  dirts.length = 0;
-  labels.length = 0;
-  thrownBall = null; marker = null;
-  interacted = false;
+  hearts.length = 0; dirts.length = 0; labels.length = 0;
+  thrownBall = null; marker = null; laserActive = false;
+  scritchCat = null; interacted = false;
   itemIdx = 1;
   visitorCooldown = 60 * (30 + Math.floor(Math.random() * 90));
   dog.init();
   document.getElementById('mode-btn').textContent = 'Rat Mode';
+}
+
+function enterCatMode() {
+  gameMode = 'cat';
+  visitors.length = 0; rats.length = 0; babies.length = 0; cheeses.length = 0;
+  cats.length = 0; kittens.length = 0; catRats.length = 0;
+  placedItems.length = 0; hearts.length = 0; dirts.length = 0; labels.length = 0;
+  thrownBall = null; marker = null; laserActive = false; interacted = false;
+  scritchCat = null;
+  catVisitorCooldown = 60 * 25;
+  // Main cat — always at index 0, never leaves
+  cats.push(new Cat({ isMain: true, color: CAT_COLORS[0],
+    x: canvas.width/2 - PW/2, y: canvas.height/2 - PH/2, birthCooldown: 0 }));
+  // Spawn initial wool ball
+  const { w, h } = itemDims(WOOL_ITEM);
+  placedItems.push({ item: WOOL_ITEM,
+    x: canvas.width/2 - w/2 - PW, y: canvas.height/2 + PH/2 - h });
+  document.getElementById('mode-btn').textContent = 'Dog Mode';
+}
+
+function trySpawnCatVisitor() {
+  if (--catVisitorCooldown > 0) return;
+  catVisitorCooldown = 60 * (20 + Math.floor(Math.random() * 30));
+  const fromLeft = Math.random() < 0.5;
+  const mc = cats[0];
+  const vy = mc ? mc.y + (Math.random()-0.5)*60 : canvas.height/2;
+  const vx = fromLeft ? -PW * 2 : canvas.width + PW;
+  const targetX = (mc ? mc.x : canvas.width/2) + (fromLeft ? PW*2.5 : -PW*2.5);
+  const vis = new Cat({
+    x: vx, y: Math.max(PH, Math.min(canvas.height - PH*2, vy)),
+    color: CAT_COLORS[1 + Math.floor(Math.random() * (CAT_COLORS.length - 1))],
+    right: fromLeft, isVisitor: true,
+    state: 'walking', tx: targetX - PW/2,
+    ty: (mc ? mc.y : canvas.height/2) - PH/2
+  });
+  cats.push(vis);
+}
+
+function trySpawnCatRat() {
+  if (catRats.length >= 5 || --catRatCooldown > 0) return;
+  catRatCooldown = 60 * (5 + Math.floor(Math.random() * 8));
+  const side = Math.random() < 0.5;
+  catRats.push(new Rat(
+    side ? 0 : canvas.width,
+    PH + Math.random() * (canvas.height - PH * 2)
+  ));
+}
+
+function manageCatPopulation() {
+  const total = cats.length + kittens.length;
+  if (total > 25 && Math.random() < 0.0015) {
+    const eligible = cats.filter((c, i) => i > 0 && !c.isVisitor && c.state !== 'leaving' && !c.dead);
+    if (eligible.length > 0) {
+      const c = eligible[Math.floor(Math.random() * eligible.length)];
+      c.state = 'leaving'; c.right = c.x > canvas.width / 2;
+    }
+  }
+}
+
+function drawLaser(x, y) {
+  ctx.save();
+  ctx.globalAlpha = 0.22;
+  ctx.fillStyle = '#ff3300';
+  ctx.fillRect(Math.round(x) - 7, Math.round(y) - 7, 14, 14);
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = '#ff1100';
+  ctx.fillRect(Math.round(x) - 2, Math.round(y) - 2, 5, 5);
+  ctx.restore();
 }
 
 // ─── Input ───────────────────────────────────────────────────────────────────
@@ -878,6 +1221,40 @@ canvas.addEventListener('pointerdown', e => {
   interacted = true;
   const px = e.clientX, py = e.clientY;
   scritching = false;
+
+  if (gameMode === 'cat') {
+    for (const cat of cats) {
+      if (!cat.dead && !cat.isVisitor && cat.hitTest(px, py)) {
+        scritching = true; scritchCat = cat; cat.scritch();
+        return;
+      }
+    }
+    // Tap wool ball = throw it
+    const bi = placedItems.findIndex(p => p.item.name === 'wool' && hitTestItem(p, px, py));
+    if (bi !== -1) {
+      const wool = placedItems.splice(bi, 1)[0];
+      const { w, h } = itemDims(WOOL_ITEM);
+      const bx = wool.x + w/2, by = wool.y + h/2;
+      const throwX = cats[0] && cats[0].x < canvas.width/2
+        ? canvas.width * 0.55 + Math.random() * (canvas.width * 0.35)
+        : Math.random() * (canvas.width * 0.35);
+      const throwY = PH * 2 + Math.random() * (canvas.height - PH * 4);
+      thrownBall = new BallProjectile(bx, by, throwX, throwY, WOOL_ITEM);
+      // All non-visitor cats go fetch
+      for (const cat of cats) {
+        if (!cat.dead && !cat.isVisitor && cat.state !== 'leaving') {
+          cat.state = 'fetch'; cat.tx = throwX - PW/2; cat.ty = throwY - PH/2;
+        }
+      }
+      return;
+    }
+    // Tap ground = laser pointer
+    laserX = px; laserY = py; laserActive = true; laserTimer = 60 * 12;
+    for (const cat of cats) {
+      if (!cat.dead && !cat.isVisitor && cat.state !== 'leaving') cat.state = 'laser';
+    }
+    return;
+  }
 
   if (gameMode === 'rat') {
     for (const rat of rats) {
@@ -917,10 +1294,27 @@ canvas.addEventListener('pointerdown', e => {
 
 canvas.addEventListener('pointermove', e => {
   if (e.pointerType === 'mouse') { cursorX = e.clientX; cursorY = e.clientY; cursorVisible = true; }
-  if (scritching && Math.random() < 0.25) hearts.push(new Heart(dog.cx, dog.y));
+  if (scritching) {
+    const target = scritchCat || dog;
+    if (Math.random() < 0.25) hearts.push(new Heart(target.cx, target.y));
+    if (scritchCat) {
+      scritchCat.scritchTimer = 50;
+      if (Math.random() < 0.02) labels.push(new Label('Purr~', scritchCat.cx, Math.max(20, scritchCat.y - 6)));
+    }
+  }
 });
-canvas.addEventListener('pointerup',     () => { if (scritching) { scritching = false; dog.unpet(); } });
-canvas.addEventListener('pointercancel', () => { if (scritching) { scritching = false; dog.unpet(); } });
+canvas.addEventListener('pointerup', () => {
+  if (scritching) {
+    scritching = false;
+    if (scritchCat) { scritchCat = null; } else { dog.unpet(); }
+  }
+});
+canvas.addEventListener('pointercancel', () => {
+  if (scritching) {
+    scritching = false;
+    if (scritchCat) { scritchCat = null; } else { dog.unpet(); }
+  }
+});
 canvas.addEventListener('pointerleave',  e => { if (e.pointerType === 'mouse') cursorVisible = false; });
 
 // ─── Cursor ──────────────────────────────────────────────────────────────────
@@ -981,8 +1375,7 @@ function loop() {
         canvas.width / 2, canvas.height - 18);
       ctx.restore();
     }
-  } else {
-    // Rat mode
+  } else if (gameMode === 'rat') {
     for (let i = cheeses.length - 1; i >= 0; i--) {
       if (cheeses[i].eaten) cheeses.splice(i, 1);
       else drawCheeseAt(cheeses[i].x, cheeses[i].y);
@@ -1005,6 +1398,45 @@ function loop() {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
       ctx.font = '11px monospace'; ctx.textAlign = 'center';
       ctx.fillText('tap rat to scritch · tap ground to place cheese',
+        canvas.width / 2, canvas.height - 18);
+      ctx.restore();
+    }
+  } else {
+    // Cat mode
+    if (laserActive) {
+      if (--laserTimer <= 0) laserActive = false;
+      else drawLaser(laserX, laserY);
+    }
+
+    for (const { item, x, y } of placedItems) drawItem(item, x, y);
+    if (thrownBall) { thrownBall.update(); thrownBall.draw(); }
+
+    trySpawnCatRat();
+    for (let i = catRats.length - 1; i >= 0; i--) {
+      catRats[i].update();
+      if (catRats[i].dead) catRats.splice(i, 1); else catRats[i].draw();
+    }
+
+    for (let i = kittens.length - 1; i >= 0; i--) {
+      kittens[i].update();
+      if (kittens[i].dead) kittens.splice(i, 1); else kittens[i].draw();
+    }
+
+    trySpawnCatVisitor();
+    manageCatPopulation();
+    for (let i = cats.length - 1; i >= 0; i--) {
+      cats[i].update();
+      if (cats[i].dead && i > 0) cats.splice(i, 1); else if (!cats[i].dead) cats[i].draw();
+    }
+
+    tickParticles(dirts);
+    tickParticles(hearts);
+    tickParticles(labels);
+
+    if (!interacted) {
+      ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
+      ctx.font = '11px monospace'; ctx.textAlign = 'center';
+      ctx.fillText('hold cat to purr · tap to place laser · tap wool to throw',
         canvas.width / 2, canvas.height - 18);
       ctx.restore();
     }
@@ -1052,6 +1484,7 @@ document.getElementById('mode-btn').addEventListener('click', () => {
   menuDrop.classList.remove('open');
   menuBtn.classList.remove('open');
   if (gameMode === 'dog') enterRatMode();
+  else if (gameMode === 'rat') enterCatMode();
   else enterDogMode();
 });
 </script>
