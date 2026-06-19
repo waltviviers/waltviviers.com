@@ -25,24 +25,23 @@ const PW = DW * S, PH = DH * S;
 const SPEED = 2;
 const ANIM_TICKS = 10;
 const DIG_ANIM_TICKS = 4;
-const IDLE_TO_FIDGET  = 60;       // 1 s idle → fidget
+const IDLE_TO_ACTION  = 60 * 3;   // 3 s idle → roam or fidget
 const FIDGET_DURATION = 60 * 3;   // 3 s fidget → dig
 const DIG_DURATION    = 60 * 2;   // 2 s digging
 const FOUND_DURATION  = 60 * 5;   // 5 s presenting
+const PLAY_DURATION   = 60 * 4;   // 4 s playing with visitor
 
 function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
 resize();
 window.addEventListener('resize', resize);
 
 // ─── Sprites (all facing RIGHT) ───────────────────────────────────────────────
-// Head cols 7-9 (right), tail col 0 (left). Tail now spans rows 2-4 at col 0.
-
 const IDLE = [
   [0,0,0,0,0,0,0,0,1,1],
   [0,0,0,0,0,0,0,1,1,0],
-  [1,0,0,0,0,0,0,1,0,1],  // tail tip + eye/nose
-  [1,1,1,1,1,1,1,1,1,0],  // tail + body
-  [1,1,1,1,1,1,1,1,0,0],  // tail + body
+  [1,0,0,0,0,0,0,1,0,1],
+  [1,1,1,1,1,1,1,1,1,0],
+  [1,1,1,1,1,1,1,1,0,0],
   [0,1,1,1,1,1,1,0,0,0],
   [0,0,1,1,0,0,1,1,0,0],
   [0,0,1,0,0,0,1,0,0,0],
@@ -117,7 +116,6 @@ const DIG = [
   ],
 ];
 
-// SIT: 2-frame (settling → settled)
 const SIT = [
   [
     [0,0,0,0,0,0,0,0,1,1],
@@ -141,22 +139,21 @@ const SIT = [
   ],
 ];
 
-// BEG: 2-frame paw-raise
 const BEG = [
   [
     [0,0,0,0,0,0,0,0,1,1],
     [0,0,0,0,0,0,0,1,1,0],
-    [0,0,0,0,0,0,0,1,1,1],  // happy face
-    [0,0,0,0,1,1,0,0,0,0],  // paws raised
+    [0,0,0,0,0,0,0,1,1,1],
     [0,0,0,0,1,1,0,0,0,0],
     [0,0,0,0,1,1,0,0,0,0],
-    [0,0,1,1,1,0,0,0,0,0],  // haunches
+    [0,0,0,0,1,1,0,0,0,0],
+    [0,0,1,1,1,0,0,0,0,0],
     [0,1,1,1,0,0,0,0,0,0],
   ],
   [
     [0,0,0,0,0,0,0,0,1,1],
     [0,0,0,0,0,0,0,1,1,0],
-    [0,0,0,0,0,1,0,1,1,1],  // paw higher + face
+    [0,0,0,0,0,1,0,1,1,1],
     [0,0,0,0,0,1,0,0,0,0],
     [0,0,0,0,1,1,0,0,0,0],
     [0,0,0,0,1,0,0,0,0,0],
@@ -165,25 +162,24 @@ const BEG = [
   ],
 ];
 
-// ROLL OVER: 2-frame (on side → on back)
 const ROLL_OVER = [
   [
-    [0,0,0,0,0,0,0,0,1,0],  // ear up
-    [0,0,0,0,0,0,0,1,1,1],  // head sideways
-    [0,1,1,1,1,1,1,1,1,0],  // body
+    [0,0,0,0,0,0,0,0,1,0],
+    [0,0,0,0,0,0,0,1,1,1],
+    [0,1,1,1,1,1,1,1,1,0],
     [1,1,1,1,1,1,1,1,0,0],
-    [0,1,1,1,1,1,1,0,0,0],  // belly
-    [0,0,1,0,0,0,1,0,0,0],  // legs flopped
+    [0,1,1,1,1,1,1,0,0,0],
+    [0,0,1,0,0,0,1,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
   ],
   [
-    [0,0,1,0,0,0,0,1,0,0],  // legs in air
     [0,0,1,0,0,0,0,1,0,0],
-    [0,0,0,0,0,0,0,0,1,0],  // ear
-    [0,1,1,1,1,1,1,1,0,0],  // body on back
+    [0,0,1,0,0,0,0,1,0,0],
+    [0,0,0,0,0,0,0,0,1,0],
+    [0,1,1,1,1,1,1,1,0,0],
     [1,1,1,1,1,1,1,1,1,0],
-    [0,0,1,1,1,1,1,0,0,0],  // belly round
+    [0,0,1,1,1,1,1,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0],
   ],
@@ -278,7 +274,15 @@ const dog = {
     this.foundItem = null;
   },
 
+  _roamTo(px, py) {
+    this.state = 'walking';
+    this.tx = px - PW / 2;
+    this.ty = py - PH / 2;
+    this.lingerTicks = 0;
+  },
+
   walkTo(px, py) {
+    visitor.dismiss();
     this._commitItem();
     this.state = 'walking'; this.tx = px - PW / 2; this.ty = py - PH / 2;
     this.lingerTicks = 0; this.idleTimer = 0;
@@ -286,12 +290,26 @@ const dog = {
   },
 
   pet() {
+    visitor.dismiss();
     this._commitItem();
     this.state = 'happy'; this.tx = this.ty = null;
     this.lingerTicks = 0; this.idleTimer = 0; marker = null;
   },
 
   unpet() { if (this.state === 'happy') this.lingerTicks = 90; },
+
+  startPlaying(vis) {
+    this._commitItem();
+    this.state = 'playing';
+    this.tx = this.ty = null;
+    this.right = this.x < vis.x;
+    this.idleTimer = 0;
+    marker = null;
+  },
+
+  stopPlaying() {
+    if (this.state === 'playing') { this.state = 'idle'; this.idleTimer = 0; }
+  },
 
   update() {
     const fast = this.state === 'digging';
@@ -313,15 +331,22 @@ const dog = {
     // Happy linger
     if (this.lingerTicks > 0 && --this.lingerTicks <= 0) this.state = 'idle';
 
-    // Idle → fidget
+    // Idle → roam or fidget
     if (this.state === 'idle') {
-      if (++this.idleTimer >= IDLE_TO_FIDGET) {
-        this.idleTimer = 0; this.state = 'fidget';
-        this.fidgetTimer = FIDGET_DURATION;
-        this.fidgetType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
-        this.frame = 0; this.tick = 0;
+      if (++this.idleTimer >= IDLE_TO_ACTION) {
+        this.idleTimer = 0;
+        if (Math.random() < 0.6) {
+          const rx = PW + Math.random() * (canvas.width - PW * 2);
+          const ry = PH + Math.random() * (canvas.height - PH * 2);
+          this._roamTo(rx, ry);
+        } else {
+          this.state = 'fidget';
+          this.fidgetTimer = FIDGET_DURATION;
+          this.fidgetType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
+          this.frame = 0; this.tick = 0;
+        }
       }
-    } else if (this.state !== 'fidget' && this.state !== 'digging' && this.state !== 'found') {
+    } else if (!['fidget','digging','found','playing'].includes(this.state)) {
       this.idleTimer = 0;
     }
 
@@ -350,7 +375,8 @@ const dog = {
   sprite() {
     switch (this.state) {
       case 'happy':
-      case 'found':   return HAPPY[this.frame];
+      case 'found':
+      case 'playing': return HAPPY[this.frame];
       case 'walking': return WALK[this.frame];
       case 'digging': return DIG[this.frame];
       case 'fidget':
@@ -369,6 +395,90 @@ const dog = {
     }
     const spr = this.sprite(), x = Math.round(this.x), y = Math.round(this.y);
     ctx.fillStyle = '#ffffff';
+    for (let r = 0; r < DH; r++)
+      for (let c = 0; c < DW; c++)
+        if (spr[r][c]) ctx.fillRect(x + (this.right ? c : DW - 1 - c) * S, y + r * S, S, S);
+  },
+};
+
+// ─── Visitor dog ─────────────────────────────────────────────────────────────
+const visitor = {
+  active: false,
+  x: 0, y: 0, right: true,
+  state: 'entering', // 'entering' | 'playing' | 'leaving'
+  frame: 0, tick: 0,
+  playTimer: 0,
+  cooldown: 60 * 15,   // first visitor after 15 s
+
+  trySpawn() {
+    if (this.active || --this.cooldown > 0) return;
+    const fromLeft = Math.random() < 0.5;
+    this.right = fromLeft;
+    this.x = fromLeft ? -PW * 2 : canvas.width + PW;
+    this.y = Math.max(PH, Math.min(canvas.height - PH * 2, dog.y + (Math.random() - 0.5) * 80));
+    this.active = true;
+    this.state = 'entering';
+    this.frame = 0; this.tick = 0;
+  },
+
+  dismiss() {
+    if (!this.active || this.state === 'leaving') return;
+    if (this.state === 'playing') dog.stopPlaying();
+    this.state = 'leaving';
+    this.right = this.x > dog.x;
+  },
+
+  update() {
+    if (!this.active) return;
+    if (++this.tick >= ANIM_TICKS) { this.tick = 0; this.frame ^= 1; }
+
+    if (this.state === 'entering') {
+      const onLeft = this.x < dog.x;
+      const targetX = onLeft ? dog.x - PW * 2.5 : dog.x + PW * 2.5;
+      const dx = targetX - this.x;
+      if (Math.abs(dx) < SPEED * 3) {
+        this.state = 'playing';
+        this.playTimer = PLAY_DURATION;
+        this.right = onLeft;             // face toward dog
+        dog.startPlaying(this);
+      } else {
+        this.x += Math.sign(dx) * SPEED;
+        this.right = dx > 0;
+      }
+      // Smoothly match dog's y
+      this.y += (dog.y - this.y) * 0.04;
+      this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+    }
+
+    if (this.state === 'playing') {
+      this.right = this.x < dog.x;      // always face the dog
+      if (--this.playTimer <= 0) {
+        this.state = 'leaving';
+        this.right = this.x > dog.x;    // leave away from dog
+        dog.stopPlaying();
+      }
+      // Hearts between the two dogs
+      if (Math.random() < 0.03) {
+        const mx = (this.x + PW / 2 + dog.x + PW / 2) / 2;
+        const my = Math.min(this.y, dog.y) + PH / 2;
+        hearts.push(new Heart(mx, my));
+      }
+    }
+
+    if (this.state === 'leaving') {
+      this.x += (this.right ? 1 : -1) * SPEED;
+      if (this.x > canvas.width + PW * 3 || this.x < -PW * 3) {
+        this.active = false;
+        this.cooldown = 60 * (30 + Math.floor(Math.random() * 15));
+      }
+    }
+  },
+
+  draw() {
+    if (!this.active) return;
+    const spr = this.state === 'playing' ? HAPPY[this.frame] : WALK[this.frame];
+    const x = Math.round(this.x), y = Math.round(this.y);
+    ctx.fillStyle = '#cc9944';
     for (let r = 0; r < DH; r++)
       for (let c = 0; c < DW; c++)
         if (spr[r][c]) ctx.fillRect(x + (this.right ? c : DW - 1 - c) * S, y + r * S, S, S);
@@ -404,6 +514,8 @@ function tickParticles(arr) {
 function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   dog.update();
+  visitor.trySpawn();
+  visitor.update();
 
   for (const { item, x, y } of placedItems) drawItem(item, x, y);
 
@@ -417,6 +529,7 @@ function loop() {
     ctx.restore();
   }
 
+  visitor.draw();
   dog.draw();
 
   if (!interacted) {
