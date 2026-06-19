@@ -1240,6 +1240,74 @@ function drawLaser(x, y) {
   ctx.restore();
 }
 
+function enterCatMode() {
+  gameMode = 'cat';
+  visitors.length = 0; rats.length = 0; babies.length = 0; cheeses.length = 0;
+  cats.length = 0; kittens.length = 0; catRats.length = 0;
+  placedItems.length = 0; hearts.length = 0; dirts.length = 0; labels.length = 0;
+  thrownBall = null; marker = null; laserActive = false; interacted = false;
+  scritchCat = null;
+  catVisitorCooldown = 60 * 25;
+  // Main cat — always at index 0, never leaves
+  cats.push(new Cat({ isMain: true, color: CAT_COLORS[0],
+    x: canvas.width/2 - PW/2, y: canvas.height/2 - PH/2, birthCooldown: 0 }));
+  // Spawn initial wool ball
+  const { w, h } = itemDims(WOOL_ITEM);
+  placedItems.push({ item: WOOL_ITEM,
+    x: canvas.width/2 - w/2 - PW, y: canvas.height/2 + PH/2 - h });
+  document.getElementById('mode-btn').textContent = 'Dog Mode';
+}
+
+function trySpawnCatVisitor() {
+  if (--catVisitorCooldown > 0) return;
+  catVisitorCooldown = 60 * (20 + Math.floor(Math.random() * 30));
+  const fromLeft = Math.random() < 0.5;
+  const mc = cats[0];
+  const vy = mc ? mc.y + (Math.random()-0.5)*60 : canvas.height/2;
+  const vx = fromLeft ? -PW * 2 : canvas.width + PW;
+  const targetX = (mc ? mc.x : canvas.width/2) + (fromLeft ? PW*2.5 : -PW*2.5);
+  const vis = new Cat({
+    x: vx, y: Math.max(PH, Math.min(canvas.height - PH*2, vy)),
+    color: CAT_COLORS[1 + Math.floor(Math.random() * (CAT_COLORS.length - 1))],
+    right: fromLeft, isVisitor: true,
+    state: 'walking', tx: targetX - PW/2,
+    ty: (mc ? mc.y : canvas.height/2) - PH/2
+  });
+  cats.push(vis);
+}
+
+function trySpawnCatRat() {
+  if (catRats.length >= 5 || --catRatCooldown > 0) return;
+  catRatCooldown = 60 * (5 + Math.floor(Math.random() * 8));
+  const side = Math.random() < 0.5;
+  catRats.push(new Rat(
+    side ? 0 : canvas.width,
+    PH + Math.random() * (canvas.height - PH * 2)
+  ));
+}
+
+function manageCatPopulation() {
+  const total = cats.length + kittens.length;
+  if (total > 25 && Math.random() < 0.0015) {
+    const eligible = cats.filter((c, i) => i > 0 && !c.isVisitor && c.state !== 'leaving' && !c.dead);
+    if (eligible.length > 0) {
+      const c = eligible[Math.floor(Math.random() * eligible.length)];
+      c.state = 'leaving'; c.right = c.x > canvas.width / 2;
+    }
+  }
+}
+
+function drawLaser(x, y) {
+  ctx.save();
+  ctx.globalAlpha = 0.22;
+  ctx.fillStyle = '#ff3300';
+  ctx.fillRect(Math.round(x) - 7, Math.round(y) - 7, 14, 14);
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = '#ff1100';
+  ctx.fillRect(Math.round(x) - 2, Math.round(y) - 2, 5, 5);
+  ctx.restore();
+}
+
 // ─── Input ───────────────────────────────────────────────────────────────────
 let scritching = false, interacted = false;
 let cursorX = -200, cursorY = -200, cursorVisible = false;
