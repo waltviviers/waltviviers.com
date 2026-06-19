@@ -81,17 +81,16 @@ const HEART_SPR = [
 ];
 const HEART_SC = 2;
 
-// Hand cursor — pointing finger at top, hotspot = col 2, row 0
+// Hand cursor — index finger (2px wide) + palm, hotspot = col 2, row 0
 const CURSOR_SPR = [
-  [0,0,1,0,0,0],
-  [0,0,1,0,0,0],
-  [0,0,1,0,0,0],
-  [0,1,1,1,0,0],
-  [0,1,1,1,1,0],
-  [1,1,1,1,1,0],
-  [1,1,1,1,1,0],
-  [0,1,1,1,1,0],
-  [0,0,1,1,0,0],
+  [0,0,1,1,0,0,0],
+  [0,0,1,1,0,0,0],
+  [0,0,1,1,1,0,0],
+  [0,1,1,1,1,1,0],
+  [1,1,1,1,1,1,0],
+  [1,1,1,1,1,1,0],
+  [0,1,1,1,1,0,0],
+  [0,0,1,1,0,0,0],
 ];
 const CURSOR_SC = 3;
 
@@ -253,10 +252,11 @@ class Rat {
 let thrownBall = null;
 
 class BallProjectile {
-  constructor(sx, sy, tx, ty) {
+  constructor(sx, sy, tx, ty, item) {
     this.sx = sx; this.sy = sy;
     this.x = sx; this.y = sy;
     this.tx = tx; this.ty = ty;
+    this.item = item;
     this.t = 0; this.duration = 28; this.inFlight = true;
   }
   update() {
@@ -268,9 +268,8 @@ class BallProjectile {
     if (this.t >= this.duration) { this.inFlight = false; this.x = this.tx; this.y = this.ty; }
   }
   draw() {
-    const item = ITEMS[1];
-    const { w, h } = itemDims(item);
-    drawItem(item, Math.round(this.x - w / 2), Math.round(this.y - h / 2));
+    const { w, h } = itemDims(this.item);
+    drawItem(this.item, Math.round(this.x - w / 2), Math.round(this.y - h / 2));
   }
 }
 
@@ -360,7 +359,7 @@ const dog = {
       const arrived = this._stepToward();
       if (arrived) {
         if (this.state === 'fetch') {
-          const titem = ITEMS[1];
+          const titem = thrownBall ? thrownBall.item : ITEMS[1];
           const { w, h } = itemDims(titem);
           const ix = this.right ? this.x + PW + 4 : this.x - w - 4;
           placedItems.push({ item: titem, x: ix, y: this.y + PH - h });
@@ -439,7 +438,7 @@ const dog = {
 const visitor = {
   active: false, x: 0, y: 0, right: true,
   state: 'entering', frame: 0, tick: 0,
-  playTimer: 0, cooldown: 60 * 15,
+  playTimer: 0, cooldown: 60 * (30 + Math.floor(Math.random() * 90)),
 
   trySpawn() {
     if (this.active || --this.cooldown > 0) return;
@@ -491,7 +490,7 @@ const visitor = {
       this.x += (this.right ? 1 : -1) * SPEED;
       if (this.x > canvas.width + PW * 3 || this.x < -PW * 3) {
         this.active = false;
-        this.cooldown = 60 * (30 + Math.floor(Math.random() * 15));
+        this.cooldown = 60 * (30 + Math.floor(Math.random() * 90));
       }
     }
   },
@@ -526,7 +525,8 @@ canvas.addEventListener('pointerdown', e => {
     if (!rat.dead && rat.hitTest(px, py)) { rat.scritch(); return; }
   }
 
-  const bi = placedItems.findIndex(p => p.item.name === 'tennis ball' && hitTestItem(p, px, py));
+  const bi = placedItems.findIndex(p =>
+    (p.item.name === 'tennis ball' || p.item.name === 'stick') && hitTestItem(p, px, py));
   if (bi !== -1) {
     const ball = placedItems.splice(bi, 1)[0];
     const { w, h } = itemDims(ball.item);
@@ -535,7 +535,7 @@ canvas.addEventListener('pointerdown', e => {
       ? canvas.width * 0.55 + Math.random() * (canvas.width * 0.35)
       : Math.random() * (canvas.width * 0.35);
     const throwY = PH * 2 + Math.random() * (canvas.height - PH * 4);
-    thrownBall = new BallProjectile(bx, by, throwX, throwY);
+    thrownBall = new BallProjectile(bx, by, throwX, throwY, ball.item);
     dog.fetch(throwX, throwY);
     return;
   }
@@ -601,7 +601,7 @@ function loop() {
   if (!interacted) {
     ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
     ctx.font = '11px monospace'; ctx.textAlign = 'center';
-    ctx.fillText('tap to walk · hold to scritch · tap ball to throw', canvas.width / 2, canvas.height - 18);
+    ctx.fillText('tap to walk · hold to scritch · tap ball or stick to throw', canvas.width / 2, canvas.height - 18);
     ctx.restore();
   }
 
