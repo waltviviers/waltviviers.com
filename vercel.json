@@ -1,7 +1,9 @@
 {
   "redirects": [
     { "source": "/works/", "destination": "/gallery/", "permanent": true },
-    { "source": "/works/:slug/", "destination": "/gallery/:slug/", "permanent": true }
+    { "source": "/works/:slug/", "destination": "/gallery/:slug/", "permanent": true },
+    { "source": "/apps/neurotrace/", "destination": "/apps/neurotracer/", "permanent": true },
+    { "source": "/apps/neurotrace/privacy-policy/", "destination": "/apps/neurotracer/privacy-policy/", "permanent": true }
   ],
   "headers": [
     {
