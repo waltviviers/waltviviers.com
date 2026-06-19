@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neurotracer — A cyberpunk memory puzzle for Android</title>
+  <meta name="description" content="A cyberpunk memory puzzle for Android. Tiles flash. You watch. Then you repeat. Free on Google Play — no ads, no subscriptions, no internet required." />
+  <link rel="canonical" href="https://waltviviers.com/apps/neurotracer/" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+
+  <meta name="robots" content="noindex, follow" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://waltviviers.com/apps/neurotracer/" />
+  <meta property="og:title"       content="Neurotracer — A cyberpunk memory puzzle for Android" />
+  <meta property="og:description" content="Tiles flash. You watch. Then you repeat — longer, deeper into the grid. Free on Google Play." />
+  <meta property="og:site_name"   content="Walt Viviers" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:title"       content="Neurotracer — A cyberpunk memory puzzle for Android" />
+  <meta name="twitter:description" content="Tiles flash. You watch. Then you repeat — longer, deeper into the grid. Free on Google Play." />
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Neurotracer",
+        "description": "A cyberpunk memory puzzle for Android. Tiles flash. You watch. Then you repeat — longer, deeper into the grid. Free, no ads, no subscriptions.",
+        "url": "https://waltviviers.com/apps/neurotracer/",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Android",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Walt Viviers", "url": "https://waltviviers.com" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltviviers.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://waltviviers.com/apps/" },
+          { "@type": "ListItem", "position": 3, "name": "Neurotracer", "item": "https://waltviviers.com/apps/neurotracer/" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+
+    :root {
+      --black:  #0C0C0B;
+      --white:  #FAF9F7;
+      --ink:    #FAF9F7;
+      --stone:  #9A9890;
+      --rule:   #2A2826;
+      --bg:     #000000;
+      --bg2:    #0D0D0D;
+      --serif:  'EB Garamond', Georgia, serif;
+      --sans:   'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 100px;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+      transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    nav.scrolled { height: 50px; }
+    .nav-left { display: flex; align-items: center; gap: 14px; }
+    .lang-toggle { display: flex; align-items: center; gap: 14px; }
+    .lang-group { display: flex; align-items: center; cursor: pointer; user-select: none; }
+    .lang-label, .lang-code {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--stone); font-family: var(--sans);
+      transition: color 0.2s; line-height: 1;
+    }
+    .lang-label {
+      max-width: 200px; overflow: hidden; white-space: nowrap;
+      transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
+    }
+    .lang-pipe {
+      font-size: 11px; color: var(--rule); padding: 0 4px; pointer-events: none;
+      max-width: 20px; overflow: hidden; white-space: nowrap;
+      transition: max-width 0.3s ease, opacity 0.2s ease;
+    }
+    .lang-group.active .lang-label,
+    .lang-group.active .lang-code  { color: var(--ink); }
+    .lang-group.active .lang-pipe  { color: var(--stone); }
+    .nav-logo img { height: 36px; width: auto; transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    nav.scrolled .nav-logo img { height: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-family: var(--sans); font-size: 12px; font-weight: 400;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--stone); transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      font-size: 12px !important; font-weight: 500 !important;
+      letter-spacing: 0.08em !important; color: var(--white) !important;
+      padding: 7px 18px; border: 1px solid #4A4844;
+      transition: background 0.2s, color 0.2s, border-color 0.2s !important;
+    }
+    .nav-cta:hover {
+      background: var(--white) !important; color: var(--black) !important;
+      border-color: var(--white) !important;
+    }
+    .social-icons { display: flex; align-items: center; gap: 16px; }
+    .social-icons a, .social-icons button {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--stone); transition: color 0.2s;
+      background: none; border: none; padding: 0; cursor: pointer;
+    }
+    .social-icons a:hover, .social-icons button:hover { color: var(--white); }
+    .social-icons svg {
+      width: 18px; height: 18px; fill: none;
+      stroke: currentColor; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .theme-toggle {
+      position: relative; width: 60px; height: 32px; border-radius: 16px;
+      border: 1.5px solid #4A4844; background: transparent;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .toggle-thumb {
+      position: absolute; top: 4px; left: 4px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    [data-theme="light"] .toggle-thumb { transform: translateX(28px); }
+    .toggle-thumb .icon-moon, .toggle-thumb .icon-sun {
+      width: 12px; height: 12px; fill: none; stroke: var(--bg);
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .toggle-thumb .icon-moon { display: block; }
+    .toggle-thumb .icon-sun  { display: none; }
+    nav.scrolled .lang-label,
+    nav.scrolled .lang-pipe { max-width: 0; opacity: 0; padding: 0; }
+    nav.scrolled .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
+    nav.scrolled .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
+    nav.scrolled .toggle-thumb .icon-moon,
+    nav.scrolled .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
+    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-moon,
+    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 48px; border-top: 1px solid var(--rule);
+      display: flex; justify-content: center; align-items: center; position: relative;
+    }
+    .footer-mark { position: absolute; top: 50%; right: 0; transform: translateY(-50%); line-height: 0; }
+    .footer-mark img { display: block; }
+    [data-theme="light"] .footer-mark img { filter: invert(1); }
+    .footer-social { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .footer-social .social-icons { gap: 24px; }
+    .footer-social .social-icons a { color: var(--stone); }
+    .footer-social .social-icons svg { width: 22px; height: 22px; }
+    .footer-social .social-icons a:hover { color: var(--white); }
+    .footer-copy { font-size: 11px; color: var(--stone); letter-spacing: 0.06em; text-align: center; }
+    .footer-admin {
+      position: absolute; top: 50%; transform: translateY(-50%); left: 48px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--stone); padding: 7px 16px; border: 1px solid var(--rule);
+      transition: border-color 0.2s, color 0.2s; background: none;
+    }
+    .footer-admin:hover { border-color: var(--stone); color: var(--ink); }
+
+    /* ── Light mode ── */
+    [data-theme="light"] {
+      --ink: #0C0C0B; --stone: #6B6560; --rule: #D5D1CB;
+      --bg: #F5F3EF; --bg2: #EDEAE5;
+    }
+    [data-theme="light"] body { background: #F5F3EF; }
+    [data-theme="light"] nav { background: rgba(245,243,239,0.95); }
+    [data-theme="light"] .nav-logo img { filter: invert(1); opacity: 1; }
+    [data-theme="light"] .nav-links a:hover { color: var(--ink); }
+    [data-theme="light"] .theme-toggle { border-color: #D5D1CB; }
+    [data-theme="light"] .toggle-thumb .icon-moon { display: none; }
+    [data-theme="light"] .toggle-thumb .icon-sun  { display: block; }
+    [data-theme="light"] .nav-cta { color: #0C0C0B !important; border-color: #D5D1CB !important; }
+    [data-theme="light"] .nav-cta:hover { background: #0C0C0B !important; color: #FAF9F7 !important; border-color: #0C0C0B !important; }
+    [data-theme="light"] .footer-admin:hover { color: #0C0C0B; border-color: #6B6560; }
+    [data-theme="light"] .footer-social .social-icons a:hover { color: var(--ink); }
+
+    /* ── Hero ── */
+    .hero {
+      padding-top: 100px;
+      padding-bottom: 100px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-left: 24px;
+      padding-right: 24px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+    }
+
+    .app-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .hero-tagline {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      color: var(--stone);
+      margin-bottom: 28px;
+    }
+
+    .hero-desc {
+      font-size: clamp(15px, 2vw, 18px);
+      color: var(--stone);
+      line-height: 1.7;
+      max-width: 520px;
+      margin: 0 auto 52px;
+    }
+
+    .app-icon {
+      width: 96px;
+      height: 96px;
+      border-radius: 22px;
+      background: #1A1A1A;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 40px;
+    }
+
+    .app-icon img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .download-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+
+    .store-btn:hover {
+      border-color: var(--stone);
+      background: var(--bg2);
+    }
+
+    .store-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--ink);
+      flex-shrink: 0;
+    }
+
+    .store-btn-inner { display: flex; flex-direction: column; gap: 1px; text-align: left; }
+    .store-btn-sub { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); font-weight: 400; }
+    .store-btn-name { font-size: 15px; font-weight: 500; }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--stone);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero-scroll svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--stone);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(4px); }
+    }
+
+    /* ── How it works ── */
+    .how-it-works {
+      padding: 96px 48px;
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .how-it-works h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 28px;
+    }
+
+    .how-it-works p {
+      font-size: clamp(15px, 1.8vw, 18px);
+      color: var(--stone);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .how-survive {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    /* ── Privacy strip ── */
+    .privacy-strip {
+      padding: 80px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .privacy-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 20px;
+    }
+
+    .privacy-strip h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3vw, 44px);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .privacy-strip p {
+      font-size: 15px;
+      color: var(--stone);
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+
+    .privacy-link {
+      font-size: 12px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--stone);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      transition: color 0.2s;
+    }
+
+    .privacy-link:hover { color: var(--ink); }
+
+    .privacy-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .privacy-checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 14px;
+      color: var(--stone);
+      line-height: 1.5;
+    }
+
+    .privacy-checklist li svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      stroke: var(--stone);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin-top: 2px;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 120px 48px;
+      text-align: center;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .cta-section h2 {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 48px;
+    }
+
+    .cta-section h2 em { font-style: italic; color: var(--stone); }
+
+    /* ── Light mode specifics ── */
+    [data-theme="light"] .app-icon { background: #1A1A1A; }
+    [data-theme="light"] .store-btn:hover { background: #EDEAE5; }
+    [data-theme="light"] .feature { background: #F5F3EF; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; height: 50px; }
+      .nav-logo img { height: 28px; }
+      .nav-links { gap: 20px; }
+      .nav-link-hide { display: none; }
+      .lang-label, .lang-pipe { display: none; }
+      .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
+      .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
+      .toggle-thumb .icon-moon,
+      .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
+      .theme-toggle:hover .toggle-thumb .icon-moon,
+      .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
+
+      .hero { padding-top: 50px; min-height: auto; padding-top: calc(50px + 80px); padding-bottom: 80px; }
+      .hero-scroll { display: none; }
+
+      .how-it-works { padding: 64px 24px; }
+
+      .privacy-strip { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
+
+      .cta-section { padding: 80px 24px; }
+
+      footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
+      .footer-admin { position: static; transform: none; order: 1; }
+      .footer-social { order: 0; }
+      .footer-mark { position: static; transform: none; order: 2; }
+    }
+
+    @media (max-width: 560px) {
+      .footer-admin { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
+        <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+      </a>
+      <div class="lang-toggle">
+        <div class="lang-group active" id="lang-en">
+          <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
+        </div>
+        <div class="lang-group" id="lang-af">
+          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
+        </div>
+      </div>
+    </div>
+    <ul class="nav-links">
+      <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
+      <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
+      <li>
+        <div class="social-icons">
+          <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+          </a>
+        </div>
+      </li>
+      <li>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
+          <span class="toggle-thumb">
+            <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <p class="app-eyebrow" data-i18n="app-eyebrow">A cyberpunk memory puzzle for Android</p>
+      <div class="app-icon" aria-hidden="true">
+        <img src="/images/neurotrace-icon2.webp" alt="Neurotracer" width="96" height="96" />
+      </div>
+      <h1>Neurotracer</h1>
+      <p class="hero-tagline" data-i18n="hero-tagline">Can you remember the sequence?</p>
+      <p class="hero-desc">Tiles flash. You watch. Then you repeat — longer, deeper into the grid. One wrong tap and a life is gone. Stay sharp or get flatlined.</p>
+      <div class="download-row">
+        <a href="#" class="store-btn" id="playstore-btn" aria-label="Get it on Google Play">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.18 23.76c.35.2.74.24 1.12.12l12.68-7.31-2.79-2.8-11.01 10zM.49 1.16C.18 1.53 0 2.08 0 2.79v18.42c0 .71.18 1.26.49 1.63l.09.08L10.29 13V12.79L.58 1.07l-.09.09zM19.84 10.08l-2.71-1.56-3.07 3.07 3.07 3.07 2.73-1.57c.78-.45.78-1.56-.02-2.01zM4.3.12L16.98 7.43l-2.79 2.79L3.18.22C3.53.1 3.93.14 4.3.12z"/></svg>
+          <span class="store-btn-inner">
+            <span class="store-btn-sub">Get it on</span>
+            <span class="store-btn-name">Google Play</span>
+          </span>
+        </a>
+      </div>
+      <div class="hero-scroll" aria-hidden="true">
+        <span>Scroll</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works">
+      <h2 data-i18n="how-heading">How it works</h2>
+      <p data-i18n="how-desc">Each round, a sequence of tiles lights up across a glowing grid. Your job is to replay it — perfectly, from memory. The sequences grow longer. The grid grows taller. The margin for error shrinks.</p>
+      <p class="how-survive" data-i18n="how-survive">Five lives. Twenty-seven rounds. One chance to beat it.</p>
+    </section>
+
+    <!-- Privacy -->
+    <section class="privacy-strip">
+      <div>
+        <p class="privacy-tag" data-i18n="privacy-tag">Built for focus</p>
+        <h2><span data-i18n="priv-h1">No ads.</span><br/><span data-i18n="priv-h2">No subscriptions.</span><br/><span data-i18n="priv-h3">No internet required.</span></h2>
+        <p data-i18n="privacy-desc">Just you, the grid, and your memory. Your high score is saved locally — nothing leaves your device.</p>
+        <a href="/apps/neurotracer/privacy-policy/" class="privacy-link" data-i18n="privacy-link">Read the privacy policy ↗</a>
+      </div>
+      <ul class="privacy-checklist" aria-label="Privacy commitments">
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-1">No personal data collected</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-2">No account or sign-in required</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-3">Works fully offline</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-4">No ads or tracking SDKs</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-5">No device permissions requested</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-6">Safe for all ages</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-7">Free to download</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <h2 data-i18n="cta-heading">Free to download</h2>
+      <div class="download-row">
+        <a href="#" class="store-btn" aria-label="Get it on Google Play">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.18 23.76c.35.2.74.24 1.12.12l12.68-7.31-2.79-2.8-11.01 10zM.49 1.16C.18 1.53 0 2.08 0 2.79v18.42c0 .71.18 1.26.49 1.63l.09.08L10.29 13V12.79L.58 1.07l-.09.09zM19.84 10.08l-2.71-1.56-3.07 3.07 3.07 3.07 2.73-1.57c.78-.45.78-1.56-.02-2.01zM4.3.12L16.98 7.43l-2.79 2.79L3.18.22C3.53.1 3.93.14 4.3.12z"/></svg>
+          <span class="store-btn-inner">
+            <span class="store-btn-sub">Get it on</span>
+            <span class="store-btn-name">Google Play</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <button class="footer-admin" id="admin-btn">Admin</button>
+    <div class="footer-social">
+      <div class="social-icons">
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+        </a>
+        <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" aria-label="Behance">
+          <svg viewBox="0 0 24 24"><path d="M3 4v16M3 4h5a3 3 0 0 1 0 6H3m0 0h5.5a3.5 3.5 0 0 1 0 7H3"/><line x1="14" y1="7" x2="20" y2="7"/><line x1="13.5" y1="13.5" x2="22" y2="13.5"/><path d="M21 12a3.5 3.5 0 1 0 0 3"/></svg>
+        </a>
+        <a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+        <a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">
+          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
+    </div>
+    <a href="/admin-index/" class="footer-mark" aria-label="Admin">
+      <img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
+    </a>
+  </footer>
+
+  <script>
+    (function () {
+      const html = document.documentElement;
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        const next = html.dataset.theme === 'light' ? 'dark' : 'light';
+        html.dataset.theme = next;
+        localStorage.setItem('wv-theme', next);
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      const nav = document.querySelector('nav');
+      let ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(function () {
+            nav.classList.toggle('scrolled', window.scrollY > 40);
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    })();
+  </script>
+  <script>
+    document.getElementById('admin-btn').addEventListener('click', function () {
+      window.open('https://waltviviers.com/admin#/collections/artworks/entries/artworks', '_blank', 'noopener,noreferrer');
+    });
+  </script>
+  <script>
+    (function() {
+      var LANG = {
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','app-eyebrow':'A cyberpunk memory puzzle for Android','hero-tagline':'Can you remember the sequence?','how-heading':'How it works','how-desc':'Each round, a sequence of tiles lights up across a glowing grid. Your job is to replay it — perfectly, from memory. The sequences grow longer. The grid grows taller. The margin for error shrinks.','how-survive':'Five lives. Twenty-seven rounds. One chance to beat it.','privacy-tag':'Built for focus','priv-h1':'No ads.','priv-h2':'No subscriptions.','priv-h3':'No internet required.','privacy-desc':'Just you, the grid, and your memory. Your high score is saved locally — nothing leaves your device.','privacy-link':'Read the privacy policy ↗','check-1':'No personal data collected','check-2':'No account or sign-in required','check-3':'Works fully offline','check-4':'No ads or tracking SDKs','check-5':'No device permissions requested','check-6':'Safe for all ages','check-7':'Free to download','cta-heading':'Free to download' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','app-eyebrow':'\'n Cyberpunk geheue-legkaart vir Android','hero-tagline':'Kan jy die volgorde onthou?','how-heading':'Hoe dit werk','how-desc':'Elke ronde flits \'n reeks teëls oor \'n gloeiende rooster. Jou taak is om dit — presies, uit die geheue — te herhaal. Die reekse word langer. Die rooster word groter. Die foutspeelruimte krimp.','how-survive':'Vyf lewens. Sewe-en-twintig rondes. Een kans om dit te klop.','privacy-tag':'Gebou vir fokus','priv-h1':'Geen advertensies.','priv-h2':'Geen intekenings.','priv-h3':'Geen internet benodig.','privacy-desc':'Net jy, die rooster en jou geheue. Jou topsyfer word plaaslik gestoor — niks verlaat jou toestel nie.','privacy-link':'Lees die privaatheidbeleid ↗','check-1':'Geen persoonlike data ingesamel','check-2':'Geen rekening of aanmelding benodig','check-3':'Werk volledig vanlyn','check-4':'Geen advertensies of opsporings-SDK\'s','check-5':'Geen toestemmings vereis','check-6':'Veilig vir alle ouderdomme','check-7':'Gratis om af te laai','cta-heading':'Gratis om af te laai' }
+      };
+      var lang = localStorage.getItem('wv-lang') || 'en';
+      function applyLang(l) {
+        lang = l; localStorage.setItem('wv-lang', l);
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          var k = el.dataset.i18n;
+          if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
+        });
+        document.querySelectorAll('[data-i18n-href]').forEach(function(el) {
+          var k = el.dataset.i18nHref;
+          if (LANG[l] && LANG[l][k] !== undefined) el.href = LANG[l][k];
+        });
+        document.getElementById('lang-en').classList.toggle('active', l === 'en');
+        document.getElementById('lang-af').classList.toggle('active', l === 'af');
+      }
+      document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
+      document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
+      applyLang(lang);
+    })();
+  </script>
+</body>
+</html>
