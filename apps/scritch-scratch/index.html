@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scritch Scratch — Play fetch with your Pixel Puppy</title>
-  <meta name="description" content="A tiny browser game by Walt Viviers. Play fetch with your Pixel Puppy. No download, no account, works in any browser." />
+  <title>Scritch Scratch — A pixel art dog toy for your browser</title>
+  <meta name="description" content="A tiny pixel dog lives in your browser. Scritch it, throw a ball, dig up buried treasure. Free, no install, no account required." />
   <link rel="canonical" href="https://waltviviers.com/apps/scritch-scratch/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
 
@@ -13,14 +13,14 @@
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://waltviviers.com/apps/scritch-scratch/" />
-  <meta property="og:title"       content="Scritch Scratch — Play fetch with your Pixel Puppy" />
-  <meta property="og:description" content="A tiny browser game. Play fetch with your Pixel Puppy. No download required." />
+  <meta property="og:title"       content="Scritch Scratch — A pixel art dog toy for your browser" />
+  <meta property="og:description" content="A tiny pixel dog lives in your browser. Scritch it, throw a ball, dig up buried treasure. Free, no install, no account." />
   <meta property="og:site_name"   content="Walt Viviers" />
 
   <!-- Twitter / X -->
   <meta name="twitter:card"        content="summary" />
-  <meta name="twitter:title"       content="Scritch Scratch — Play fetch with your Pixel Puppy" />
-  <meta name="twitter:description" content="A tiny browser game. Play fetch with your Pixel Puppy. No download required." />
+  <meta name="twitter:title"       content="Scritch Scratch — A pixel art dog toy for your browser" />
+  <meta name="twitter:description" content="A tiny pixel dog lives in your browser. Scritch it, throw a ball, dig up buried treasure. Free, no install, no account." />
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -30,10 +30,10 @@
       {
         "@type": "SoftwareApplication",
         "name": "Scritch Scratch",
-        "description": "A tiny browser game. Play fetch with your Pixel Puppy. No download, no account, works in any browser.",
+        "description": "A pixel art dog toy for your browser. Scritch it, throw a ball, dig up buried treasure. Free, no install, no account required.",
         "url": "https://waltviviers.com/apps/scritch-scratch/",
         "applicationCategory": "GameApplication",
-        "operatingSystem": "Any",
+        "operatingSystem": "Web",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
         "author": { "@type": "Person", "name": "Walt Viviers", "url": "https://waltviviers.com" }
       },
@@ -273,7 +273,7 @@
       width: 96px;
       height: 96px;
       border-radius: 22px;
-      background: #1A1A1A;
+      background: #120C04;
       box-shadow: 0 8px 32px rgba(0,0,0,0.5);
       overflow: hidden;
       display: flex;
@@ -282,34 +282,52 @@
       margin: 0 auto 40px;
     }
 
-    .app-icon img {
-      width: 100%;
-      height: 100%;
+    .app-icon svg {
+      width: 96px;
+      height: 96px;
       display: block;
-      object-fit: cover;
     }
 
-    .play-btn {
+    .download-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .store-btn {
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      padding: 16px 40px;
-      border: 1px solid var(--ink);
-      background: var(--ink);
-      color: var(--bg);
+      padding: 14px 24px;
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--ink);
       font-family: var(--sans);
       font-size: 13px;
       font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
       text-decoration: none;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
-    .play-btn:hover {
-      background: transparent;
-      color: var(--ink);
-      border-color: var(--ink);
+
+    .store-btn:hover {
+      border-color: var(--stone);
+      background: var(--bg2);
     }
+
+    .store-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--ink);
+      flex-shrink: 0;
+    }
+
+    .store-btn-inner { display: flex; flex-direction: column; gap: 1px; text-align: left; }
+    .store-btn-sub { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); font-weight: 400; }
+    .store-btn-name { font-size: 15px; font-weight: 500; }
 
     .hero-scroll {
       position: absolute;
@@ -325,17 +343,104 @@
       letter-spacing: 0.12em;
       text-transform: uppercase;
     }
+
     .hero-scroll svg {
-      width: 16px; height: 16px; stroke: var(--stone); fill: none;
-      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+      width: 16px;
+      height: 16px;
+      stroke: var(--stone);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
       animation: bounce 2s ease-in-out infinite;
     }
+
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
       50%       { transform: translateY(4px); }
     }
 
-    /* ── Privacy strip ── */
+    /* ── What's in the yard ── */
+    .how-it-works {
+      padding: 96px 48px;
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .how-it-works h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 28px;
+    }
+
+    .how-it-works p {
+      font-size: clamp(15px, 1.8vw, 18px);
+      color: var(--stone);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .how-survive {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    /* ── Three things ── */
+    .difficulty-section {
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .difficulty-header {
+      padding: 64px 48px 0;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    .difficulty-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .difficulty-card {
+      padding: 48px 56px 64px;
+      border-right: 1px solid var(--rule);
+    }
+
+    .difficulty-card:last-child { border-right: none; }
+
+    .diff-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-bottom: 28px;
+    }
+
+    .difficulty-card h3 {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .difficulty-card p {
+      font-size: 14px;
+      color: var(--stone);
+      line-height: 1.75;
+    }
+
+    /* ── No nonsense strip ── */
     .privacy-strip {
       padding: 80px 48px;
       display: grid;
@@ -346,8 +451,12 @@
     }
 
     .privacy-tag {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--stone); margin-bottom: 20px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 20px;
     }
 
     .privacy-strip h2 {
@@ -363,6 +472,7 @@
       font-size: 15px;
       color: var(--stone);
       line-height: 1.8;
+      margin-bottom: 32px;
     }
 
     .privacy-checklist {
@@ -374,61 +484,67 @@
 
     .privacy-checklist li {
       display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      font-size: 14px;
+      align-items: center;
+      gap: 12px;
+      font-size: 15px;
       color: var(--stone);
-      line-height: 1.5;
     }
 
-    .privacy-checklist li svg {
+    .privacy-checklist svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--stone);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
       flex-shrink: 0;
-      width: 16px; height: 16px;
-      stroke: var(--stone); fill: none;
-      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-      margin-top: 2px;
     }
 
-    /* ── CTA ── */
+    /* ── CTA section ── */
     .cta-section {
-      padding: 120px 48px;
+      padding: 96px 48px;
       text-align: center;
-      border-bottom: 1px solid var(--rule);
     }
 
     .cta-section h2 {
       font-family: var(--serif);
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
       font-weight: 400;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      margin-bottom: 48px;
+      letter-spacing: -0.01em;
+      margin-bottom: 40px;
     }
-
-    .cta-section h2 em { font-style: italic; color: var(--stone); }
-
-    /* ── Light mode specifics ── */
-    [data-theme="light"] .app-icon { background: #1A1A1A; }
-    [data-theme="light"] .play-btn { color: #FAF9F7; background: #0C0C0B; border-color: #0C0C0B; }
-    [data-theme="light"] .play-btn:hover { background: transparent; color: #0C0C0B; border-color: #0C0C0B; }
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
-      nav { padding: 0 24px; height: 50px; }
-      .nav-logo img { height: 28px; }
-      .nav-links { gap: 20px; }
+      nav { padding: 0 24px; }
       .nav-link-hide { display: none; }
-      .lang-label, .lang-pipe { display: none; }
-      .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
+      .lang-label { max-width: 0; opacity: 0; }
+      .lang-pipe  { max-width: 0; opacity: 0; }
+
+      .lang-group.active .lang-label { max-width: 0; opacity: 0; }
+      nav.scrolled .lang-label,
+      nav.scrolled .lang-pipe { max-width: 0; opacity: 0; padding: 0; }
+
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
       .toggle-thumb .icon-moon,
       .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
       .theme-toggle:hover .toggle-thumb .icon-moon,
       .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
+
       .hero { padding-top: calc(50px + 80px); padding-bottom: 80px; min-height: auto; }
       .hero-scroll { display: none; }
+
+      .how-it-works { padding: 64px 24px; }
+      .difficulty-header { padding: 48px 24px 0; }
+      .difficulty-grid { grid-template-columns: 1fr; }
+      .difficulty-card { border-right: none; border-bottom: 1px solid var(--rule); padding: 40px 24px; }
+      .difficulty-card:last-child { border-bottom: none; }
+
       .privacy-strip { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
+
       .cta-section { padding: 80px 24px; }
+
       footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
       .footer-admin { position: static; transform: none; order: 1; }
       .footer-social { order: 0; }
@@ -444,9 +560,6 @@
 
   <nav>
     <div class="nav-left">
-      <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
-        <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
-      </a>
       <div class="lang-toggle">
         <div class="lang-group active" id="lang-en">
           <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
@@ -481,6 +594,11 @@
           </span>
         </button>
       </li>
+      <li style="padding-left:16px;border-left:1px solid var(--rule);">
+        <a href="https://waltviviers.com/" class="nav-logo" aria-label="Back to waltviviers.com">
+          <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+        </a>
+      </li>
     </ul>
   </nav>
 
@@ -488,41 +606,162 @@
 
     <!-- Hero -->
     <section class="hero">
-      <p class="app-eyebrow" data-i18n="app-eyebrow">A browser game by Walt Viviers</p>
+      <p class="app-eyebrow" data-i18n="app-eyebrow">A pixel art dog toy for your browser</p>
       <div class="app-icon" aria-hidden="true">
-        <img src="/images/scritch-scratch-icon.webp" alt="Scritch Scratch" width="96" height="96" />
+        <!-- Pixel dog: IDLE sprite, 8px per pixel, facing right -->
+        <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg" fill="#D4A04A">
+          <!-- row 0 -->
+          <rect x="72" y="16" width="8" height="8"/>
+          <rect x="80" y="16" width="8" height="8"/>
+          <!-- row 1 -->
+          <rect x="64" y="24" width="8" height="8"/>
+          <rect x="72" y="24" width="8" height="8"/>
+          <!-- row 2 -->
+          <rect x="8"  y="32" width="8" height="8"/>
+          <rect x="64" y="32" width="8" height="8"/>
+          <rect x="80" y="32" width="8" height="8"/>
+          <!-- row 3 -->
+          <rect x="8"  y="40" width="8" height="8"/>
+          <rect x="16" y="40" width="8" height="8"/>
+          <rect x="24" y="40" width="8" height="8"/>
+          <rect x="32" y="40" width="8" height="8"/>
+          <rect x="40" y="40" width="8" height="8"/>
+          <rect x="48" y="40" width="8" height="8"/>
+          <rect x="56" y="40" width="8" height="8"/>
+          <rect x="64" y="40" width="8" height="8"/>
+          <rect x="72" y="40" width="8" height="8"/>
+          <!-- row 4 -->
+          <rect x="8"  y="48" width="8" height="8"/>
+          <rect x="16" y="48" width="8" height="8"/>
+          <rect x="24" y="48" width="8" height="8"/>
+          <rect x="32" y="48" width="8" height="8"/>
+          <rect x="40" y="48" width="8" height="8"/>
+          <rect x="48" y="48" width="8" height="8"/>
+          <rect x="56" y="48" width="8" height="8"/>
+          <rect x="64" y="48" width="8" height="8"/>
+          <!-- row 5 -->
+          <rect x="16" y="56" width="8" height="8"/>
+          <rect x="24" y="56" width="8" height="8"/>
+          <rect x="32" y="56" width="8" height="8"/>
+          <rect x="40" y="56" width="8" height="8"/>
+          <rect x="48" y="56" width="8" height="8"/>
+          <rect x="56" y="56" width="8" height="8"/>
+          <!-- row 6 -->
+          <rect x="24" y="64" width="8" height="8"/>
+          <rect x="32" y="64" width="8" height="8"/>
+          <rect x="56" y="64" width="8" height="8"/>
+          <rect x="64" y="64" width="8" height="8"/>
+          <!-- row 7 -->
+          <rect x="24" y="72" width="8" height="8"/>
+          <rect x="56" y="72" width="8" height="8"/>
+        </svg>
       </div>
       <h1>Scritch Scratch</h1>
-      <p class="hero-tagline" data-i18n="hero-tagline">Play fetch with your Pixel Puppy.</p>
-      <p class="hero-desc" data-i18n="hero-desc">No download. No account. Just you and your dog.</p>
-      <a href="/apps/scritch-scratch/play/" class="play-btn" data-i18n="play-btn">Play now →</a>
+      <p class="hero-tagline" data-i18n="hero-tagline">Who's a good dog?</p>
+      <p class="hero-desc" data-i18n="hero-desc">A tiny pixel dog lives in your browser. Scritch it, throw a ball, dig up buried treasure. Sometimes a visitor drops by. Sometimes a rat escapes.</p>
+      <div class="download-row">
+        <a href="/apps/scritch-scratch/play/" class="store-btn" aria-label="Play Scritch Scratch in your browser">
+          <svg viewBox="0 0 24 24" fill="var(--ink)" stroke="none">
+            <ellipse cx="12" cy="16" rx="5" ry="4"/>
+            <circle cx="6" cy="10" r="2"/>
+            <circle cx="10" cy="8"  r="2"/>
+            <circle cx="14" cy="8"  r="2"/>
+            <circle cx="18" cy="10" r="2"/>
+          </svg>
+          <span class="store-btn-inner">
+            <span class="store-btn-sub" data-i18n="play-sub">Play in your browser</span>
+            <span class="store-btn-name" data-i18n="play-name">Play now</span>
+          </span>
+        </a>
+      </div>
       <div class="hero-scroll" aria-hidden="true">
         <span>Scroll</span>
         <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
     </section>
 
-    <!-- Privacy -->
+    <!-- What's in the yard -->
+    <section class="how-it-works">
+      <h2 data-i18n="how-heading">What's in the yard</h2>
+      <p data-i18n="how-desc">Your dog wanders the yard, digs up buried things, and fidgets when bored. Tap to scritch. Tap a ball or stick to throw it — watch your dog chase it down. A visitor dog may drop in, steal a bone, and disappear. Rats bolt when strangers arrive.</p>
+      <p class="how-survive" data-i18n="how-survive">Start scratching. See what happens.</p>
+    </section>
+
+    <!-- Three things to do -->
+    <section class="difficulty-section">
+      <p class="difficulty-header" data-i18n="diff-heading">Three things to do</p>
+      <div class="difficulty-grid">
+        <div class="difficulty-card">
+          <div class="diff-dot" style="background:#FF9999" aria-hidden="true"></div>
+          <h3 data-i18n="diff-1">Scritch</h3>
+          <p data-i18n="diff-1-desc">Tap the dog. Tap a rat. Hearts fly. That's it.</p>
+        </div>
+        <div class="difficulty-card">
+          <div class="diff-dot" style="background:#BBFF33" aria-hidden="true"></div>
+          <h3 data-i18n="diff-2">Throw</h3>
+          <p data-i18n="diff-2-desc">Tap a tennis ball or stick to throw it. Your dog will fetch.</p>
+        </div>
+        <div class="difficulty-card">
+          <div class="diff-dot" style="background:#C8922A" aria-hidden="true"></div>
+          <h3 data-i18n="diff-3">Dig</h3>
+          <p data-i18n="diff-3-desc">Wait for your dog to dig something up. Bones. Socks. The occasional live rat.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- No nonsense -->
     <section class="privacy-strip">
       <div>
-        <p class="privacy-tag" data-i18n="privacy-tag">Built with care</p>
-        <h2><span data-i18n="priv-h1">No ads.</span><br/><span data-i18n="priv-h2">No data.</span><br/><span data-i18n="priv-h3">No install.</span></h2>
-        <p data-i18n="privacy-desc">Scritch Scratch runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked.</p>
+        <p class="privacy-tag" data-i18n="privacy-tag">Built for goofing off</p>
+        <h2><span data-i18n="priv-h1">No install.</span><br/><span data-i18n="priv-h2">No account.</span><br/><span data-i18n="priv-h3">No nonsense.</span></h2>
+        <p data-i18n="privacy-desc">It runs entirely in your browser. Nothing to download, nothing to sign up for, nothing to pay.</p>
       </div>
-      <ul class="privacy-checklist" aria-label="Privacy commitments">
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-1">No personal data collected</span></li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-2">No account or sign-in required</span></li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-3">Works fully offline</span></li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-4">No ads or tracking of any kind</span></li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-5">No device permissions requested</span></li>
-        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-6">Free to play</span></li>
+      <ul class="privacy-checklist" aria-label="What you get">
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-1">Runs entirely in your browser</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-2">No data collected</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-3">No account required</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-4">Free forever</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-5">Works on mobile and desktop</span>
+        </li>
+        <li>
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          <span data-i18n="check-6">Pixel hand cursor on desktop</span>
+        </li>
       </ul>
     </section>
 
     <!-- CTA -->
     <section class="cta-section">
-      <h2><span data-i18n="cta-line1">Your Pixel Puppy</span><br/><em data-i18n="cta-line2">is waiting.</em></h2>
-      <a href="/apps/scritch-scratch/play/" class="play-btn" data-i18n="play-btn">Play now →</a>
+      <h2 data-i18n="cta-heading">Go play</h2>
+      <div class="download-row">
+        <a href="/apps/scritch-scratch/play/" class="store-btn" aria-label="Play Scritch Scratch in your browser">
+          <svg viewBox="0 0 24 24" fill="var(--ink)" stroke="none">
+            <ellipse cx="12" cy="16" rx="5" ry="4"/>
+            <circle cx="6" cy="10" r="2"/>
+            <circle cx="10" cy="8"  r="2"/>
+            <circle cx="14" cy="8"  r="2"/>
+            <circle cx="18" cy="10" r="2"/>
+          </svg>
+          <span class="store-btn-inner">
+            <span class="store-btn-sub" data-i18n="play-sub">Play in your browser</span>
+            <span class="store-btn-name" data-i18n="play-name">Play now</span>
+          </span>
+        </a>
+      </div>
     </section>
 
   </main>
@@ -550,7 +789,7 @@
           <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
         </a>
       </div>
-      <p class="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
+      <p class="footer-copy">&#169; 2026 Walt Viviers. All rights reserved.</p>
     </div>
     <a href="/admin-index/" class="footer-mark" aria-label="Admin">
       <img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
@@ -590,8 +829,72 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','app-eyebrow':'A browser game by Walt Viviers','hero-tagline':'Play fetch with your Pixel Puppy.','hero-desc':'No download. No account. Just you and your dog.','play-btn':'Play now →','privacy-tag':'Built with care','priv-h1':'No ads.','priv-h2':'No data.','priv-h3':'No install.','privacy-desc':'Scritch Scratch runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked.','check-1':'No personal data collected','check-2':'No account or sign-in required','check-3':'Works fully offline','check-4':'No ads or tracking of any kind','check-5':'No device permissions requested','check-6':'Free to play','cta-line1':'Your Pixel Puppy','cta-line2':'is waiting.' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','app-eyebrow':'\'n Blaaierspeletjie deur Walt Viviers','hero-tagline':'Speel apportering met jou Pixel-hondjie.','hero-desc':'Geen aflaai nie. Geen rekening nie. Net jy en jou hond.','play-btn':'Speel nou →','privacy-tag':'Gebou met sorg','priv-h1':'Geen advertensies.','priv-h2':'Geen data.','priv-h3':'Geen installasie.','privacy-desc':'Scritch Scratch loop heeltemal in jou blaaier. Niks word gestoor, gestuur of gevolg nie.','check-1':'Geen persoonlike data ingesamel','check-2':'Geen rekening of aanmelding benodig','check-3':'Werk volledig vanlyn','check-4':'Geen advertensies of opsporing','check-5':'Geen toestemmings vereis','check-6':'Gratis om te speel','cta-line1':'Jou Pixel-hondjie','cta-line2':'wag vir jou.' }
+        en: {
+          'nav-artworks': 'Artworks',
+          'nav-about': 'About',
+          'nav-enquire': 'Enquire',
+          'email-href': 'mailto:artist@waltviviers.com',
+          'app-eyebrow': 'A pixel art dog toy for your browser',
+          'hero-tagline': 'Who\'s a good dog?',
+          'hero-desc': 'A tiny pixel dog lives in your browser. Scritch it, throw a ball, dig up buried treasure. Sometimes a visitor drops by. Sometimes a rat escapes.',
+          'play-sub': 'Play in your browser',
+          'play-name': 'Play now',
+          'how-heading': 'What\'s in the yard',
+          'how-desc': 'Your dog wanders the yard, digs up buried things, and fidgets when bored. Tap to scritch. Tap a ball or stick to throw it — watch your dog chase it down. A visitor dog may drop in, steal a bone, and disappear. Rats bolt when strangers arrive.',
+          'how-survive': 'Start scratching. See what happens.',
+          'diff-heading': 'Three things to do',
+          'diff-1': 'Scritch',
+          'diff-1-desc': 'Tap the dog. Tap a rat. Hearts fly. That\'s it.',
+          'diff-2': 'Throw',
+          'diff-2-desc': 'Tap a tennis ball or stick to throw it. Your dog will fetch.',
+          'diff-3': 'Dig',
+          'diff-3-desc': 'Wait for your dog to dig something up. Bones. Socks. The occasional live rat.',
+          'privacy-tag': 'Built for goofing off',
+          'priv-h1': 'No install.',
+          'priv-h2': 'No account.',
+          'priv-h3': 'No nonsense.',
+          'privacy-desc': 'It runs entirely in your browser. Nothing to download, nothing to sign up for, nothing to pay.',
+          'check-1': 'Runs entirely in your browser',
+          'check-2': 'No data collected',
+          'check-3': 'No account required',
+          'check-4': 'Free forever',
+          'check-5': 'Works on mobile and desktop',
+          'check-6': 'Pixel hand cursor on desktop',
+          'cta-heading': 'Go play'
+        },
+        af: {
+          'nav-artworks': 'Kunswerke',
+          'nav-about': 'Oor my',
+          'nav-enquire': 'Navraag',
+          'email-href': 'mailto:kunstenaar@waltviviers.com',
+          'app-eyebrow': '\'n Pixel-kuns speeltjie vir jou blaaier',
+          'hero-tagline': 'Wie is \'n goeie hond?',
+          'hero-desc': '\'n Klein pixel-hond woon in jou blaaier. Krap dit, gooi \'n bal, grawe begrawde skatte op. Soms kom \'n besoeker. Soms ontsnap \'n rot.',
+          'play-sub': 'Speel in jou blaaier',
+          'play-name': 'Speel nou',
+          'how-heading': 'Wat\'s in die tuin',
+          'how-desc': 'Jou hond dwaal in die tuin rond, grawe goed op en foetel wanneer hy verveel is. Tik om te krap. Tik \'n bal of stok om dit te gooi — kyk hoe jou hond dit haal. \'n Besoekhond kan opdaag, \'n been steel en verdwyn. Rotte vlug wanneer vreemdelinge aankom.',
+          'how-survive': 'Begin krap. Kyk wat gebeur.',
+          'diff-heading': 'Drie dinge om te doen',
+          'diff-1': 'Krap',
+          'diff-1-desc': 'Tik die hond. Tik \'n rot. Hartjies vlieg. Dit is als.',
+          'diff-2': 'Gooi',
+          'diff-2-desc': 'Tik \'n tennis-bal of stok om dit te gooi. Jou hond sal dit haal.',
+          'diff-3': 'Grawe',
+          'diff-3-desc': 'Wag vir jou hond om iets op te grawe. Bene. Sokkies. Soms \'n lewende rot.',
+          'privacy-tag': 'Gebou vir plesier',
+          'priv-h1': 'Geen installasie.',
+          'priv-h2': 'Geen rekening.',
+          'priv-h3': 'Geen nonsens.',
+          'privacy-desc': 'Dit loop heeltemal in jou blaaier. Niks om af te laai nie, niks om aan te meld nie, niks om te betaal nie.',
+          'check-1': 'Loop heeltemal in jou blaaier',
+          'check-2': 'Geen data ingesamel',
+          'check-3': 'Geen rekening benodig',
+          'check-4': 'Gratis vir altyd',
+          'check-5': 'Werk op mobiel en lessenaar',
+          'check-6': 'Pixel handwyser op lessenaar',
+          'cta-heading': 'Gaan speel'
+        }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
