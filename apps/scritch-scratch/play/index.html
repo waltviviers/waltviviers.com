@@ -49,6 +49,22 @@
       font-family: monospace; font-size: 11px; padding: 7px; cursor: pointer;
     }
     .popup-close:hover { background: #252525; color: #fff; }
+
+    #mode-pick {
+      display: flex; position: fixed; inset: 0; z-index: 400;
+      background: #050505; align-items: center; justify-content: center;
+      flex-direction: column; gap: 10px;
+    }
+    #mode-pick h1 {
+      font-family: monospace; color: #666; font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .mode-btn-pick {
+      display: block; width: 160px; padding: 13px;
+      background: #111; border: 1px solid #333; color: #ccc;
+      font-family: monospace; font-size: 11px; cursor: pointer;
+    }
+    .mode-btn-pick:hover { background: #1c1c1c; color: #fff; border-color: #666; }
   </style>
 </head>
 <body>
@@ -58,23 +74,28 @@
 <div id="menu-drop">
   <a href="https://waltviviers.com/">Go To Main Site</a>
   <button id="htp-btn" class="sep">How to Play</button>
-  <button id="mode-btn">Rat Mode</button>
+  <button class="sep mode-switch" data-mode="dog">Dog Mode</button>
+  <button class="mode-switch" data-mode="rat">Rat Mode</button>
+  <button class="mode-switch" data-mode="cat">Cat Mode</button>
 </div>
 <div id="htp-overlay" class="overlay">
   <div class="popup">
     <h2>How to Play</h2>
     <ul>
-      <li>Tap anywhere to walk your dog</li>
-      <li>Hold your dog to scritch it</li>
-      <li>Your dog digs up balls, bones, rats &amp; more</li>
-      <li>Tap a ball or stick to throw it — your dog will fetch</li>
-      <li>Visitor dogs arrive to play now and then</li>
-      <li>Rats flee when dogs visit</li>
-      <li>Switch to Rat Mode or Cat Mode from the menu</li>
-      <li>Cat Mode: hold cats to purr, tap for laser, tap wool to throw</li>
+      <li>Pick a mode from the start screen or menu</li>
+      <li>Dog: tap to walk, hold to scritch, tap ball or stick to throw</li>
+      <li>Rat: tap rat to scritch, tap ground to place cheese</li>
+      <li>Cat: hold to purr and wake, tap ground for laser pointer</li>
+      <li>Visitor animals arrive now and then</li>
     </ul>
     <button class="popup-close" id="htp-close">Close</button>
   </div>
+</div>
+<div id="mode-pick">
+  <h1>Scritch Scratch</h1>
+  <button class="mode-btn-pick" data-mode="dog">Dog Mode</button>
+  <button class="mode-btn-pick" data-mode="rat">Rat Mode</button>
+  <button class="mode-btn-pick" data-mode="cat">Cat Mode</button>
 </div>
 <canvas id="c"></canvas>
 <script>
@@ -248,28 +269,38 @@ class Label {
   get dead() { return this.life <= 0; }
 }
 
-// ─── Cat sprites (all facing RIGHT, head right, tail upper-left) ─────────────
+// ─── Cat sprites (all facing RIGHT, head right, tail rear-left) ──────────────
+// ears: row 0 cols 7+9 (gap=pointy), face rows 1-2 cols 6-9, nose row2 col9
+// whiskers: row 2 cols 3+4, body rows 3-4, tail row 5-6, legs rows 6-7
 const CAT_IDLE = [
-  [1,0,0,0,0,0,0,1,0,1],
-  [1,0,0,0,0,0,1,1,1,1],
-  [1,0,0,1,1,0,1,1,1,1],
+  [0,0,0,0,0,0,0,1,0,1],
+  [0,0,0,0,0,0,1,1,1,1],
+  [0,0,0,1,1,0,1,1,1,1],
   [0,1,1,1,1,1,1,1,0,0],
-  [1,1,1,1,1,0,0,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,0,1,0,0,1,0,0,0,0],
-  [0,0,1,0,0,1,0,0,0,0],
+  [0,1,1,1,1,1,0,0,0,0],
+  [1,1,1,0,0,0,0,0,0,0],
+  [1,0,0,1,0,1,0,0,0,0],
+  [0,0,0,1,0,1,0,0,0,0],
 ];
 const CAT_WALK = [
-  [[1,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
-  [[1,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,1,0,0,0,0,1,0,0,0],[0,1,0,0,0,0,1,0,0,0]],
+  [[0,0,0,0,0,0,0,1,0,1],[0,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,0,0,0,0],[1,1,1,0,0,0,0,0,0,0],[1,0,0,0,1,0,1,0,0,0],[0,0,0,0,1,0,1,0,0,0]],
+  [[0,0,0,0,0,0,0,1,0,1],[0,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,0,0,0,0],[1,1,1,0,0,0,0,0,0,0],[1,0,1,0,0,1,0,0,0,0],[0,0,1,0,0,1,0,0,0,0]],
 ];
 const CAT_HAPPY = [
-  [[0,1,0,0,0,0,0,1,1,1],[1,0,0,0,0,0,1,1,1,0],[1,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,1,1,0,1,0,0,0,0],[0,0,1,0,0,1,0,0,0,0]],
-  [[1,0,0,0,0,0,0,0,1,1],[1,0,0,0,0,0,1,1,1,0],[1,0,0,1,1,0,0,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,1,1,0,0,1,0,0,0],[0,0,1,0,0,0,1,0,0,0]],
+  [[0,0,0,0,0,0,0,1,0,1],[0,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,0,0,0,0,0],[0,1,0,0,0,0,0,0,0,0],[1,1,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
+  [[0,0,0,0,0,0,0,1,0,1],[0,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,0,1,1,1,1,1,1,0,0],[0,0,1,1,1,0,0,0,0,0],[0,1,0,0,0,0,0,0,0,0],[1,1,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
 ];
-
-// Wool ball throwable item
-const WOOL_ITEM = { name:'wool', color:'#dd77cc', sc:3, spr:[[0,1,1,1,0],[1,0,1,0,1],[1,1,0,1,1],[1,0,1,0,1],[0,1,1,1,0]] };
+// Sleeping cat: curled into a round ball, centered in sprite
+const CAT_SLEEP = [
+  [0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,1,1,1,1,0,0,0],
+  [0,0,1,1,1,1,1,1,0,0],
+  [0,1,1,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,1,1,1,0],
+  [0,0,1,1,1,1,1,1,0,0],
+  [0,0,0,1,1,1,1,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0],
+];
 
 // ─── Game mode ────────────────────────────────────────────────────────────────
 let gameMode = 'dog';
@@ -387,7 +418,7 @@ class Rat {
       }
     }
 
-    // Rat mode: mating (female initiates)
+    // Rat mode: mating (female initiates, actively seeks male)
     if (gameMode === 'rat' && this.sex === 'f' && !this.pregnant && this.matingCooldown <= 0) {
       const total = rats.length + babies.length;
       if (total < 25) {
@@ -397,22 +428,32 @@ class Rat {
           const d = Math.hypot(r.x - this.x, r.y - this.y);
           if (d < nearestDist) { nearestDist = d; nearestMale = r; }
         }
-        if (nearestMale && nearestDist < 55) {
-          if (Math.random() < 0.04)
-            hearts.push(new Heart(
-              (this.x + RAT_W / 2 + nearestMale.x + RAT_W / 2) / 2,
-              Math.min(this.y, nearestMale.y) - 4
-            ));
-          this.mateProximityTimer++;
-          if (this.mateProximityTimer >= 60 * 4) {
-            this.pregnant = true;
-            this.pregnancyTimer = 60 * 5;
-            this.mateProximityTimer = 0;
-            this.matingCooldown = 60 * 45;
-            nearestMale.matingCooldown = 60 * 20;
+        if (nearestMale) {
+          // Steer toward mate when within detection range
+          if (nearestDist < 180 && !seekingCheese) {
+            const dx = nearestMale.x - this.x, dy = nearestMale.y - this.y;
+            const d = nearestDist;
+            this.vx = this.vx * 0.85 + (dx / d * 1.0) * 0.15;
+            this.vy = this.vy * 0.85 + (dy / d * 0.4) * 0.15;
+            if (Math.abs(this.vx) > 0.1) this.right = this.vx > 0;
           }
-        } else {
-          this.mateProximityTimer = 0;
+          if (nearestDist < 35) {
+            if (Math.random() < 0.04)
+              hearts.push(new Heart(
+                (this.x + RAT_W / 2 + nearestMale.x + RAT_W / 2) / 2,
+                Math.min(this.y, nearestMale.y) - 4
+              ));
+            this.mateProximityTimer++;
+            if (this.mateProximityTimer >= 60 * 2) {
+              this.pregnant = true;
+              this.pregnancyTimer = 60 * 5;
+              this.mateProximityTimer = 0;
+              this.matingCooldown = 60 * 45;
+              nearestMale.matingCooldown = 60 * 20;
+            }
+          } else {
+            this.mateProximityTimer = 0;
+          }
         }
       }
     }
@@ -536,6 +577,7 @@ class Cat {
     this.birthCooldown = opts.birthCooldown !== undefined ? opts.birthCooldown : 60 * 60;
     this.chaseTarget = null;
     this.visitTimer = 0;
+    this.sleepTimer = 0;
     this.dead = false;
   }
 
@@ -655,20 +697,6 @@ class Cat {
       }
     }
 
-    // Fetch wool
-    if (this.state === 'fetch' && this.tx !== null) {
-      const arrived = this._stepToward();
-      if (arrived) {
-        if (thrownBall) {
-          const { w, h } = itemDims(WOOL_ITEM);
-          const ix = this.right ? this.x + PW + 4 : this.x - w - 4;
-          placedItems.push({ item: WOOL_ITEM, x: ix, y: this.y + PH - h });
-          thrownBall = null;
-        }
-        this.state = 'happy'; this.lingerTicks = 60;
-      }
-    }
-
     // Walking
     if (this.state === 'walking' && this.tx !== null) {
       const arrived = this._stepToward();
@@ -684,21 +712,34 @@ class Cat {
       return;
     }
 
+    // Sleep: wake on laser, scritch, or timer expiry
+    if (this.state === 'sleep') {
+      if (laserActive || scritchCat === this) {
+        this.state = 'idle'; this.idleTimer = 0;
+      } else {
+        if (--this.sleepTimer <= 0) this.state = 'idle';
+        if (Math.random() < 0.002) labels.push(new Label('z z z', this.cx, Math.max(20, this.y - 6)));
+      }
+      return;
+    }
+
     // Idle: decide what to do
     if (this.state === 'idle') {
       if (++this.idleTimer >= IDLE_TO_ACTION) {
         this.idleTimer = 0;
         if (laserActive && Math.random() < 0.65) {
           this.state = 'laser';
-        } else if (catRats.length > 0 && Math.random() < 0.35) {
+        } else if (catRats.length > 0 && Math.random() < 0.15) {
           const r = catRats[Math.floor(Math.random() * catRats.length)];
           if (r && !r.dead && !r.fleeing) { this.chaseTarget = r; this.state = 'chase'; }
-          else this._roamTo(PW + Math.random() * (canvas.width - PW * 2), PH + Math.random() * (canvas.height - PH * 2));
+          else { this.state = 'sleep'; this.sleepTimer = 60 * (10 + Math.floor(Math.random() * 20)); }
+        } else if (Math.random() < 0.8) {
+          this.state = 'sleep'; this.sleepTimer = 60 * (10 + Math.floor(Math.random() * 20));
         } else {
           this._roamTo(PW + Math.random() * (canvas.width - PW * 2), PH + Math.random() * (canvas.height - PH * 2));
         }
       }
-    } else if (!['idle','happy','laser','chase'].includes(this.state)) {
+    } else if (!['idle','happy','laser','chase','sleep'].includes(this.state)) {
       this.idleTimer = 0;
     }
   }
@@ -706,7 +747,8 @@ class Cat {
   sprite() {
     switch (this.state) {
       case 'happy': return CAT_HAPPY[this.frame];
-      case 'walking': case 'fetch': case 'laser': case 'chase': return CAT_WALK[this.frame];
+      case 'walking': case 'laser': case 'chase': return CAT_WALK[this.frame];
+      case 'sleep': return CAT_SLEEP;
       default: return CAT_IDLE;
     }
   }
@@ -1119,7 +1161,6 @@ function enterRatMode() {
   const cx = canvas.width / 2, cy = canvas.height / 2;
   rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#c8922a', matingCooldown: 60 * 8 }));
   rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0 }));
-  document.getElementById('mode-btn').textContent = 'Cat Mode';
 }
 
 function enterDogMode() {
@@ -1134,7 +1175,6 @@ function enterDogMode() {
   itemIdx = 1;
   visitorCooldown = 60 * (30 + Math.floor(Math.random() * 90));
   dog.init();
-  document.getElementById('mode-btn').textContent = 'Rat Mode';
 }
 
 function enterCatMode() {
@@ -1148,11 +1188,6 @@ function enterCatMode() {
   // Main cat — always at index 0, never leaves
   cats.push(new Cat({ isMain: true, color: CAT_COLORS[0],
     x: canvas.width/2 - PW/2, y: canvas.height/2 - PH/2, birthCooldown: 0 }));
-  // Spawn initial wool ball
-  const { w, h } = itemDims(WOOL_ITEM);
-  placedItems.push({ item: WOOL_ITEM,
-    x: canvas.width/2 - w/2 - PW, y: canvas.height/2 + PH/2 - h });
-  document.getElementById('mode-btn').textContent = 'Dog Mode';
 }
 
 function trySpawnCatVisitor() {
@@ -1229,29 +1264,12 @@ canvas.addEventListener('pointerdown', e => {
         return;
       }
     }
-    // Tap wool ball = throw it
-    const bi = placedItems.findIndex(p => p.item.name === 'wool' && hitTestItem(p, px, py));
-    if (bi !== -1) {
-      const wool = placedItems.splice(bi, 1)[0];
-      const { w, h } = itemDims(WOOL_ITEM);
-      const bx = wool.x + w/2, by = wool.y + h/2;
-      const throwX = cats[0] && cats[0].x < canvas.width/2
-        ? canvas.width * 0.55 + Math.random() * (canvas.width * 0.35)
-        : Math.random() * (canvas.width * 0.35);
-      const throwY = PH * 2 + Math.random() * (canvas.height - PH * 4);
-      thrownBall = new BallProjectile(bx, by, throwX, throwY, WOOL_ITEM);
-      // All non-visitor cats go fetch
-      for (const cat of cats) {
-        if (!cat.dead && !cat.isVisitor && cat.state !== 'leaving') {
-          cat.state = 'fetch'; cat.tx = throwX - PW/2; cat.ty = throwY - PH/2;
-        }
-      }
-      return;
-    }
-    // Tap ground = laser pointer
+    // Tap ground = laser pointer (wakes sleeping cats)
     laserX = px; laserY = py; laserActive = true; laserTimer = 60 * 12;
     for (const cat of cats) {
-      if (!cat.dead && !cat.isVisitor && cat.state !== 'leaving') cat.state = 'laser';
+      if (!cat.dead && !cat.isVisitor && cat.state !== 'leaving') {
+        cat.state = 'laser';
+      }
     }
     return;
   }
@@ -1408,9 +1426,6 @@ function loop() {
       else drawLaser(laserX, laserY);
     }
 
-    for (const { item, x, y } of placedItems) drawItem(item, x, y);
-    if (thrownBall) { thrownBall.update(); thrownBall.draw(); }
-
     trySpawnCatRat();
     for (let i = catRats.length - 1; i >= 0; i--) {
       catRats[i].update();
@@ -1436,7 +1451,7 @@ function loop() {
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
       ctx.font = '11px monospace'; ctx.textAlign = 'center';
-      ctx.fillText('hold cat to purr · tap to place laser · tap wool to throw',
+      ctx.fillText('hold cat to purr · tap ground for laser pointer',
         canvas.width / 2, canvas.height - 18);
       ctx.restore();
     }
@@ -1480,12 +1495,26 @@ htpOverlay.addEventListener('click', e => {
   if (e.target === htpOverlay) htpOverlay.classList.remove('open');
 });
 
-document.getElementById('mode-btn').addEventListener('click', () => {
-  menuDrop.classList.remove('open');
-  menuBtn.classList.remove('open');
-  if (gameMode === 'dog') enterRatMode();
-  else if (gameMode === 'rat') enterCatMode();
-  else enterDogMode();
+document.querySelectorAll('.mode-switch').forEach(btn => {
+  btn.addEventListener('click', () => {
+    menuDrop.classList.remove('open');
+    menuBtn.classList.remove('open');
+    const m = btn.dataset.mode;
+    if (m === 'dog') enterDogMode();
+    else if (m === 'rat') enterRatMode();
+    else enterCatMode();
+  });
+});
+
+const modePick = document.getElementById('mode-pick');
+document.querySelectorAll('.mode-btn-pick').forEach(btn => {
+  btn.addEventListener('click', () => {
+    modePick.style.display = 'none';
+    const m = btn.dataset.mode;
+    if (m === 'dog') enterDogMode();
+    else if (m === 'rat') enterRatMode();
+    else enterCatMode();
+  });
 });
 </script>
 </body>
