@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Scritch Scratch</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
+    canvas { display: block; touch-action: none; cursor: none; }
+  </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+'use strict';
+
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
+
+const S = 5;
+const DW = 10, DH = 8;
+const PW = DW * S, PH = DH * S;
+const SPEED = 2;
+const ANIM_TICKS = 10;
+const DIG_ANIM_TICKS = 4;
+const IDLE_TO_ACTION  = 60 * 3;
+const FIDGET_DURATION = 60 * 3;
+const DIG_DURATION    = 60 * 2;
+const FOUND_DURATION  = 60 * 5;
+const PLAY_DURATION   = 60 * 4;
+
+function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+// ─── Dog sprites (all facing RIGHT) ──────────────────────────────────────────
+const IDLE = [
+  [0,0,0,0,0,0,0,0,1,1],
+  [0,0,0,0,0,0,0,1,1,0],
+  [1,0,0,0,0,0,0,1,0,1],
+  [1,1,1,1,1,1,1,1,1,0],
+  [1,1,1,1,1,1,1,1,0,0],
+  [0,1,1,1,1,1,1,0,0,0],
+  [0,0,1,1,0,0,1,1,0,0],
+  [0,0,1,0,0,0,1,0,0,0],
+];
+const WALK = [
+  [[0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1,1,0],[1,0,0,0,0,0,0,1,0,1],[1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,1,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
+  [[0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1,1,0],[1,0,0,0,0,0,0,1,0,1],[1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,1,0,0,0],[0,1,0,0,0,0,0,1,0,0],[0,1,0,0,0,0,0,1,0,0]],
+];
+const HAPPY = [
+  [[0,0,0,0,0,0,0,0,1,1],[1,0,0,0,0,0,0,1,1,0],[1,0,0,0,0,0,0,1,1,1],[0,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,1,0,0,0],[0,0,1,1,0,0,1,1,0,0],[0,0,1,0,0,0,1,0,0,0]],
+  [[0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,1,1,1],[1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,1,0,0,0],[0,0,1,1,0,0,1,1,0,0],[0,0,1,0,0,0,1,0,0,0]],
+];
+const DIG = [
+  [[0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1,1,0],[1,0,0,0,0,0,0,1,0,1],[1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,1,0,0,0],[0,0,1,1,0,0,0,1,1,0],[0,0,1,0,0,0,0,0,1,0]],
+  [[0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1,1,0],[1,0,0,0,0,0,0,1,0,1],[1,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,1,0,0,0],[0,0,1,1,0,1,1,0,0,0],[0,0,1,0,0,1,0,0,0,0]],
+];
+const SIT = [
+  [[0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1,1,0],[1,0,0,0,0,0,0,1,0,1],[1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,0,0],[0,0,1,1,1,1,0,0,0,0],[0,0,1,1,0,1,1,0,0,0],[0,0,1,0,0,1,0,0,0,0]],
+  [[0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1,1,0],[1,0,0,0,0,0,0,1,0,1],[1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,0,0,0,0],[0,1,1,1,0,0,1,0,0,0],[0,1,1,1,0,0,1,0,0,0]],
+];
+const BEG = [
+  [[0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,0,0,1,1,1],[0,0,0,0,1,1,0,0,0,0],[0,0,0,0,1,1,0,0,0,0],[0,0,0,0,1,1,0,0,0,0],[0,0,1,1,1,0,0,0,0,0],[0,1,1,1,0,0,0,0,0,0]],
+  [[0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1,1,0],[0,0,0,0,0,1,0,1,1,1],[0,0,0,0,0,1,0,0,0,0],[0,0,0,0,1,1,0,0,0,0],[0,0,0,0,1,0,0,0,0,0],[0,0,1,1,1,0,0,0,0,0],[0,1,1,1,0,0,0,0,0,0]],
+];
+const ROLL_OVER = [
+  [[0,0,0,0,0,0,0,0,1,0],[0,0,0,0,0,0,0,1,1,1],[0,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,1,0,0,0],[0,0,1,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],
+  [[0,0,1,0,0,0,0,1,0,0],[0,0,1,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,1,1,1,1,0],[0,0,1,1,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],
+];
+
+// ─── Pixel UI sprites ─────────────────────────────────────────────────────────
+const HEART_SPR = [
+  [0,1,0,1,0],
+  [1,1,1,1,1],
+  [1,1,1,1,1],
+  [0,1,1,1,0],
+  [0,0,1,0,0],
+];
+const HEART_SC = 2;
+
+// Hand cursor — index finger (2px wide) + palm, hotspot = col 2, row 0
+const CURSOR_SPR = [
+  [0,0,1,1,0,0,0],
+  [0,0,1,1,0,0,0],
+  [0,0,1,1,1,0,0],
+  [0,1,1,1,1,1,0],
+  [1,1,1,1,1,1,0],
+  [1,1,1,1,1,1,0],
+  [0,1,1,1,1,0,0],
+  [0,0,1,1,0,0,0],
+];
+const CURSOR_SC = 3;
+
+// ─── Rat sprites (2-frame, faces LEFT by default) ─────────────────────────────
+const RAT_FRAMES = [
+  [[0,0,1,1,0,0,0],[0,1,1,1,1,0,0],[1,1,1,1,1,1,0],[0,0,1,1,0,0,0],[0,0,0,1,1,1,1]],
+  [[0,0,1,1,0,0,0],[0,1,1,1,1,0,0],[1,1,1,1,1,1,0],[0,1,1,0,0,0,0],[0,0,0,0,1,1,1]],
+];
+const RAT_SC = 3, RAT_COLS = 7, RAT_ROWS = 5;
+const RAT_W = RAT_COLS * RAT_SC, RAT_H = RAT_ROWS * RAT_SC;
+
+// ─── Items ───────────────────────────────────────────────────────────────────
+const ITEMS = [
+  { name:'bone',        color:'#ffffff', sc:3, spr:[[1,1,0,0,0,1,1],[0,1,1,1,1,1,0],[1,1,0,0,0,1,1]] },
+  { name:'tennis ball', color:'#bbff33', sc:3, spr:[[0,1,1,1,0],[1,1,0,1,1],[1,0,0,0,1],[1,1,0,1,1],[0,1,1,1,0]] },
+  { name:'rat',         color:'#aaaaaa', sc:3, spr:[[0,0,1,1,0,0,0],[0,1,1,1,1,0,0],[1,1,1,1,1,1,0],[0,0,1,1,0,0,0],[0,0,0,1,1,1,1]] },
+  { name:'bone',        color:'#ffffff', sc:3, spr:[[1,1,0,0,0,1,1],[0,1,1,1,1,1,0],[1,1,0,0,0,1,1]] },
+  { name:'stick',       color:'#c8922a', sc:2, spr:[[0,0,1,0,0,0,0,0,1,0,0],[0,1,1,1,1,1,1,1,1,1,0],[0,0,0,1,0,0,1,0,0,0,0]] },
+  { name:'old sock',    color:'#999966', sc:3, spr:[[0,1,1,1,1,0],[1,1,1,1,1,1],[1,1,1,1,1,1],[0,1,1,1,0,0],[0,1,1,0,0,0]] },
+];
+let itemIdx = 0;
+const placedItems = [];
+
+function itemDims(item) { return { w: item.spr[0].length * item.sc, h: item.spr.length * item.sc }; }
+
+function drawItem(item, x, y) {
+  ctx.fillStyle = item.color;
+  for (let r = 0; r < item.spr.length; r++)
+    for (let c = 0; c < item.spr[r].length; c++)
+      if (item.spr[r][c]) ctx.fillRect(Math.round(x + c * item.sc), Math.round(y + r * item.sc), item.sc, item.sc);
+}
+
+function hitTestItem(placed, px, py) {
+  const { w, h } = itemDims(placed.item);
+  return px >= placed.x && px <= placed.x + w && py >= placed.y && py <= placed.y + h;
+}
+
+// ─── Particles ───────────────────────────────────────────────────────────────
+const hearts = [], dirts = [];
+
+class Heart {
+  constructor(x, y) {
+    this.x = x + (Math.random() - 0.5) * 24; this.y = y;
+    this.vx = (Math.random() - 0.5) * 0.5; this.vy = -(0.5 + Math.random() * 0.7);
+    this.alpha = 1;
+  }
+  update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.012; }
+  draw() {
+    if (this.alpha <= 0) return;
+    ctx.save(); ctx.globalAlpha = this.alpha; ctx.fillStyle = '#ff69b4';
+    const hw = HEART_SPR[0].length * HEART_SC;
+    const hh = HEART_SPR.length * HEART_SC;
+    const px = Math.round(this.x - hw / 2), py = Math.round(this.y - hh / 2);
+    for (let r = 0; r < HEART_SPR.length; r++)
+      for (let c = 0; c < HEART_SPR[r].length; c++)
+        if (HEART_SPR[r][c]) ctx.fillRect(px + c * HEART_SC, py + r * HEART_SC, HEART_SC, HEART_SC);
+    ctx.restore();
+  }
+  get dead() { return this.alpha <= 0; }
+}
+
+class Dirt {
+  constructor(x, y, right) {
+    this.x = x; this.y = y;
+    this.vx = (right ? -1 : 1) * (0.5 + Math.random() * 3);
+    this.vy = -(0.5 + Math.random() * 3); this.ay = 0.12;
+    this.life = 1; this.sz = 2 + Math.floor(Math.random() * 3);
+  }
+  update() { this.x += this.vx; this.y += this.vy; this.vy += this.ay; this.life -= 0.045; }
+  draw() {
+    if (this.life <= 0) return;
+    ctx.save(); ctx.globalAlpha = Math.max(0, this.life);
+    ctx.fillStyle = '#8b7355'; ctx.fillRect(Math.round(this.x), Math.round(this.y), this.sz, this.sz);
+    ctx.restore();
+  }
+  get dead() { return this.life <= 0; }
+}
+
+// ─── Live rats ────────────────────────────────────────────────────────────────
+const rats = [];
+
+class Rat {
+  constructor(x, y) {
+    this.x = x - RAT_W / 2; this.y = y - RAT_H;
+    const spd = 0.8 + Math.random() * 0.7;
+    const angle = Math.random() * Math.PI * 2;
+    this.vx = Math.cos(angle) * spd;
+    this.vy = Math.sin(angle) * spd * 0.4;
+    this.right = this.vx > 0;
+    this.tick = 0; this.frame = 0;
+    this.dirTimer = 90 + Math.floor(Math.random() * 150);
+    this.scritchTimer = 0;
+    this.fleeing = false;
+    this.dead = false;
+  }
+
+  flee() {
+    this.fleeing = true;
+    this.vx = (this.x < canvas.width / 2 ? -1 : 1) * (4 + Math.random() * 2);
+    this.vy = (Math.random() - 0.5) * 1.5;
+    this.right = this.vx > 0;
+  }
+
+  scritch() {
+    this.scritchTimer = 50;
+    for (let i = 0; i < 3; i++) hearts.push(new Heart(this.x + RAT_W / 2, this.y));
+  }
+
+  hitTest(px, py) {
+    const pad = 4;
+    return px >= this.x - pad && px <= this.x + RAT_W + pad &&
+           py >= this.y - pad && py <= this.y + RAT_H + pad;
+  }
+
+  update() {
+    if (++this.tick >= 6) { this.tick = 0; this.frame ^= 1; }
+
+    if (this.fleeing) {
+      this.x += this.vx; this.y += this.vy;
+      if (this.x > canvas.width + RAT_W * 2 || this.x < -RAT_W * 3) this.dead = true;
+      return;
+    }
+
+    if (this.scritchTimer > 0) --this.scritchTimer;
+
+    if (--this.dirTimer <= 0) {
+      this.dirTimer = 90 + Math.floor(Math.random() * 150);
+      const spd = 0.8 + Math.random() * 0.7;
+      const angle = Math.random() * Math.PI * 2;
+      this.vx = Math.cos(angle) * spd;
+      this.vy = Math.sin(angle) * spd * 0.4;
+    }
+
+    this.x += this.vx; this.y += this.vy;
+
+    if (this.x < 0) { this.x = 0; this.vx = Math.abs(this.vx); }
+    if (this.x > canvas.width - RAT_W) { this.x = canvas.width - RAT_W; this.vx = -Math.abs(this.vx); }
+    if (this.y < 0) { this.y = 0; this.vy = Math.abs(this.vy); }
+    if (this.y > canvas.height - RAT_H) { this.y = canvas.height - RAT_H; this.vy = -Math.abs(this.vy); }
+
+    if (Math.abs(this.vx) > 0.1) this.right = this.vx > 0;
+  }
+
+  draw() {
+    if (this.dead) return;
+    const spr = RAT_FRAMES[this.frame];
+    const x = Math.round(this.x), y = Math.round(this.y);
+    ctx.fillStyle = this.scritchTimer > 0 ? '#ffbbcc' : '#aaaaaa';
+    for (let r = 0; r < RAT_ROWS; r++)
+      for (let c = 0; c < RAT_COLS; c++)
+        if (spr[r][c]) {
+          const dc = this.right ? (RAT_COLS - 1 - c) : c;
+          ctx.fillRect(x + dc * RAT_SC, y + r * RAT_SC, RAT_SC, RAT_SC);
+        }
+  }
+}
+
+// ─── Ball projectile ─────────────────────────────────────────────────────────
+let thrownBall = null;
+
+class BallProjectile {
+  constructor(sx, sy, tx, ty, item) {
+    this.sx = sx; this.sy = sy;
+    this.x = sx; this.y = sy;
+    this.tx = tx; this.ty = ty;
+    this.item = item;
+    this.t = 0; this.duration = 28; this.inFlight = true;
+  }
+  update() {
+    if (!this.inFlight) return;
+    this.t = Math.min(this.t + 1, this.duration);
+    const p = this.t / this.duration;
+    this.x = this.sx + (this.tx - this.sx) * p;
+    this.y = this.sy + (this.ty - this.sy) * p - 90 * Math.sin(Math.PI * p);
+    if (this.t >= this.duration) { this.inFlight = false; this.x = this.tx; this.y = this.ty; }
+  }
+  draw() {
+    const { w, h } = itemDims(this.item);
+    drawItem(this.item, Math.round(this.x - w / 2), Math.round(this.y - h / 2));
+  }
+}
+
+let marker = null;
+
+// ─── Dog ─────────────────────────────────────────────────────────────────────
+const dog = {
+  x: 0, y: 0, tx: null, ty: null,
+  state: 'idle', right: true,
+  tick: 0, frame: 0,
+  lingerTicks: 0, idleTimer: 0,
+  fidgetTimer: 0, fidgetType: 'sit',
+  digTimer: 0, foundTimer: 0, foundItem: null,
+
+  init() { this.x = canvas.width / 2 - PW / 2; this.y = canvas.height / 2 - PH / 2; },
+  get cx()   { return this.x + PW / 2; },
+  get pawX() { return this.right ? this.x + PW * 0.85 : this.x + PW * 0.15; },
+  get pawY() { return this.y + PH; },
+
+  hitTest(px, py) {
+    const pad = S * 2;
+    return px >= this.x - pad && px <= this.x + PW + pad && py >= this.y - pad && py <= this.y + PH + pad;
+  },
+
+  _commitItem() {
+    if (!this.foundItem) return;
+    if (this.foundItem.name === 'rat') {
+      rats.push(new Rat(this.x + PW / 2, this.y + PH));
+    } else {
+      const { w, h } = itemDims(this.foundItem);
+      const ix = this.right ? this.x + PW + 4 : this.x - w - 4;
+      placedItems.push({ item: this.foundItem, x: ix, y: this.y + PH - h });
+    }
+    this.foundItem = null;
+  },
+
+  _roamTo(px, py) {
+    this.state = 'walking'; this.tx = px - PW / 2; this.ty = py - PH / 2; this.lingerTicks = 0;
+  },
+
+  walkTo(px, py) {
+    thrownBall = null; visitor.dismiss(); this._commitItem();
+    this.state = 'walking'; this.tx = px - PW / 2; this.ty = py - PH / 2;
+    this.lingerTicks = 0; this.idleTimer = 0;
+    marker = { x: px, y: py, alpha: 1 };
+  },
+
+  pet() {
+    thrownBall = null; visitor.dismiss(); this._commitItem();
+    this.state = 'happy'; this.tx = this.ty = null;
+    this.lingerTicks = 0; this.idleTimer = 0; marker = null;
+  },
+
+  unpet() { if (this.state === 'happy') this.lingerTicks = 90; },
+
+  startPlaying(vis) {
+    thrownBall = null; this._commitItem();
+    this.state = 'playing'; this.tx = this.ty = null;
+    this.right = this.x < vis.x; this.idleTimer = 0; marker = null;
+  },
+
+  stopPlaying() { if (this.state === 'playing') { this.state = 'idle'; this.idleTimer = 0; } },
+
+  fetch(tx, ty) {
+    this._commitItem();
+    this.state = 'fetch'; this.tx = tx - PW / 2; this.ty = ty - PH / 2;
+    this.lingerTicks = 0; this.idleTimer = 0; marker = null;
+  },
+
+  _stepToward() {
+    const dx = this.tx - this.x, dy = this.ty - this.y, d = Math.hypot(dx, dy);
+    if (d < SPEED) {
+      this.x = this.tx; this.y = this.ty; this.tx = this.ty = null; return true;
+    }
+    if (Math.abs(dx) > 0.5) this.right = dx > 0;
+    this.x += dx / d * SPEED; this.y += dy / d * SPEED;
+    this.x = Math.max(0, Math.min(canvas.width - PW, this.x));
+    this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+    return false;
+  },
+
+  update() {
+    const fast = this.state === 'digging';
+    if (++this.tick >= (fast ? DIG_ANIM_TICKS : ANIM_TICKS)) { this.tick = 0; this.frame ^= 1; }
+
+    if ((this.state === 'walking' || this.state === 'fetch') && this.tx !== null) {
+      const arrived = this._stepToward();
+      if (arrived) {
+        if (this.state === 'fetch') {
+          const titem = thrownBall ? thrownBall.item : ITEMS[1];
+          const { w, h } = itemDims(titem);
+          const ix = this.right ? this.x + PW + 4 : this.x - w - 4;
+          placedItems.push({ item: titem, x: ix, y: this.y + PH - h });
+          thrownBall = null;
+          this.state = 'happy'; this.lingerTicks = 60;
+        } else {
+          this.state = 'idle';
+        }
+      }
+    }
+
+    if (this.lingerTicks > 0 && --this.lingerTicks <= 0) this.state = 'idle';
+
+    if (this.state === 'idle') {
+      if (++this.idleTimer >= IDLE_TO_ACTION) {
+        this.idleTimer = 0;
+        if (Math.random() < 0.6) {
+          this._roamTo(PW + Math.random() * (canvas.width - PW * 2), PH + Math.random() * (canvas.height - PH * 2));
+        } else {
+          this.state = 'fidget'; this.fidgetTimer = FIDGET_DURATION;
+          this.fidgetType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
+          this.frame = 0; this.tick = 0;
+        }
+      }
+    } else if (!['fidget','digging','found','playing'].includes(this.state)) {
+      this.idleTimer = 0;
+    }
+
+    if (this.state === 'fidget' && --this.fidgetTimer <= 0) {
+      this.state = 'digging'; this.digTimer = DIG_DURATION; this.frame = 0; this.tick = 0;
+    }
+
+    if (this.state === 'digging') {
+      if (Math.random() < 0.45) dirts.push(new Dirt(this.pawX, this.pawY, this.right));
+      if (--this.digTimer <= 0) {
+        this.foundItem = ITEMS[itemIdx++ % ITEMS.length];
+        this.state = 'found'; this.foundTimer = FOUND_DURATION; this.frame = 0;
+      }
+    }
+
+    if (this.state === 'found' && --this.foundTimer <= 0) {
+      this._commitItem(); this.state = 'idle'; this.idleTimer = 0;
+    }
+
+    if (marker) { marker.alpha -= 0.04; if (marker.alpha <= 0) marker = null; }
+  },
+
+  sprite() {
+    switch (this.state) {
+      case 'happy': case 'found': case 'playing': return HAPPY[this.frame];
+      case 'walking': case 'fetch': return WALK[this.frame];
+      case 'digging': return DIG[this.frame];
+      case 'fidget':
+        if (this.fidgetType === 'beg')  return BEG[this.frame];
+        if (this.fidgetType === 'roll') return ROLL_OVER[this.frame];
+        return SIT[this.frame];
+      default: return IDLE;
+    }
+  },
+
+  draw() {
+    if (this.state === 'found' && this.foundItem) {
+      const { w, h } = itemDims(this.foundItem);
+      const ix = this.right ? this.x + PW + 4 : this.x - w - 4;
+      drawItem(this.foundItem, ix, this.y + PH - h);
+    }
+    const spr = this.sprite(), x = Math.round(this.x), y = Math.round(this.y);
+    ctx.fillStyle = '#ffffff';
+    for (let r = 0; r < DH; r++)
+      for (let c = 0; c < DW; c++)
+        if (spr[r][c]) ctx.fillRect(x + (this.right ? c : DW - 1 - c) * S, y + r * S, S, S);
+  },
+};
+
+// ─── Visitor dog ─────────────────────────────────────────────────────────────
+const visitor = {
+  active: false, x: 0, y: 0, right: true,
+  state: 'entering', frame: 0, tick: 0,
+  playTimer: 0, cooldown: 60 * (30 + Math.floor(Math.random() * 90)),
+
+  trySpawn() {
+    if (this.active || --this.cooldown > 0) return;
+    const fromLeft = Math.random() < 0.5;
+    this.right = fromLeft;
+    this.x = fromLeft ? -PW * 2 : canvas.width + PW;
+    this.y = Math.max(PH, Math.min(canvas.height - PH * 2, dog.y + (Math.random() - 0.5) * 80));
+    this.active = true; this.state = 'entering'; this.frame = 0; this.tick = 0;
+    for (const rat of rats) rat.flee();
+  },
+
+  dismiss() {
+    if (!this.active || this.state === 'leaving') return;
+    if (this.state === 'playing') dog.stopPlaying();
+    this.state = 'leaving'; this.right = this.x > dog.x;
+  },
+
+  update() {
+    if (!this.active) return;
+    if (++this.tick >= ANIM_TICKS) { this.tick = 0; this.frame ^= 1; }
+
+    if (this.state === 'entering') {
+      const onLeft = this.x < dog.x;
+      const targetX = onLeft ? dog.x - PW * 2.5 : dog.x + PW * 2.5;
+      const dx = targetX - this.x;
+      if (Math.abs(dx) < SPEED * 3) {
+        this.state = 'playing'; this.playTimer = PLAY_DURATION;
+        this.right = onLeft; dog.startPlaying(this);
+      } else {
+        this.x += Math.sign(dx) * SPEED; this.right = dx > 0;
+      }
+      this.y += (dog.y - this.y) * 0.04;
+      this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+    }
+
+    if (this.state === 'playing') {
+      this.right = this.x < dog.x;
+      if (--this.playTimer <= 0) {
+        // Steal a bone on the way out
+        const bi = placedItems.findIndex(p => p.item.name === 'bone');
+        if (bi !== -1) placedItems.splice(bi, 1);
+        this.state = 'leaving'; this.right = this.x > dog.x; dog.stopPlaying();
+      }
+      if (Math.random() < 0.03)
+        hearts.push(new Heart((this.x + PW / 2 + dog.x + PW / 2) / 2, Math.min(this.y, dog.y) + PH / 2));
+    }
+
+    if (this.state === 'leaving') {
+      this.x += (this.right ? 1 : -1) * SPEED;
+      if (this.x > canvas.width + PW * 3 || this.x < -PW * 3) {
+        this.active = false;
+        this.cooldown = 60 * (30 + Math.floor(Math.random() * 90));
+      }
+    }
+  },
+
+  draw() {
+    if (!this.active) return;
+    const spr = this.state === 'playing' ? HAPPY[this.frame] : WALK[this.frame];
+    const x = Math.round(this.x), y = Math.round(this.y);
+    ctx.fillStyle = '#cc9944';
+    for (let r = 0; r < DH; r++)
+      for (let c = 0; c < DW; c++)
+        if (spr[r][c]) ctx.fillRect(x + (this.right ? c : DW - 1 - c) * S, y + r * S, S, S);
+  },
+};
+
+// ─── Input ───────────────────────────────────────────────────────────────────
+let scritching = false, interacted = false;
+let cursorX = -200, cursorY = -200, cursorVisible = false;
+
+canvas.addEventListener('pointerdown', e => {
+  e.preventDefault(); interacted = true;
+  const px = e.clientX, py = e.clientY;
+  scritching = false;
+
+  if (dog.hitTest(px, py)) {
+    scritching = true; dog.pet();
+    for (let i = 0; i < 4; i++) hearts.push(new Heart(dog.cx, dog.y));
+    return;
+  }
+
+  for (const rat of rats) {
+    if (!rat.dead && rat.hitTest(px, py)) { rat.scritch(); return; }
+  }
+
+  const bi = placedItems.findIndex(p =>
+    (p.item.name === 'tennis ball' || p.item.name === 'stick') && hitTestItem(p, px, py));
+  if (bi !== -1) {
+    const ball = placedItems.splice(bi, 1)[0];
+    const { w, h } = itemDims(ball.item);
+    const bx = ball.x + w / 2, by = ball.y + h / 2;
+    const throwX = dog.x < canvas.width / 2
+      ? canvas.width * 0.55 + Math.random() * (canvas.width * 0.35)
+      : Math.random() * (canvas.width * 0.35);
+    const throwY = PH * 2 + Math.random() * (canvas.height - PH * 4);
+    thrownBall = new BallProjectile(bx, by, throwX, throwY, ball.item);
+    dog.fetch(throwX, throwY);
+    return;
+  }
+
+  dog.walkTo(px, py);
+}, { passive: false });
+
+canvas.addEventListener('pointermove', e => {
+  if (e.pointerType === 'mouse') { cursorX = e.clientX; cursorY = e.clientY; cursorVisible = true; }
+  if (scritching && Math.random() < 0.25) hearts.push(new Heart(dog.cx, dog.y));
+});
+canvas.addEventListener('pointerup',     () => { if (scritching) { scritching = false; dog.unpet(); } });
+canvas.addEventListener('pointercancel', () => { if (scritching) { scritching = false; dog.unpet(); } });
+canvas.addEventListener('pointerleave',  e => { if (e.pointerType === 'mouse') cursorVisible = false; });
+
+// ─── Cursor ──────────────────────────────────────────────────────────────────
+function drawCursor(x, y) {
+  ctx.fillStyle = '#ffffff';
+  // Hotspot at col 2, row 0 of the sprite
+  const ox = 2 * CURSOR_SC, oy = 0;
+  for (let r = 0; r < CURSOR_SPR.length; r++)
+    for (let c = 0; c < CURSOR_SPR[r].length; c++)
+      if (CURSOR_SPR[r][c])
+        ctx.fillRect(Math.round(x - ox + c * CURSOR_SC), Math.round(y - oy + r * CURSOR_SC), CURSOR_SC, CURSOR_SC);
+}
+
+// ─── Loop ────────────────────────────────────────────────────────────────────
+function tickParticles(arr) {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    arr[i].update();
+    if (arr[i].dead) arr.splice(i, 1); else arr[i].draw();
+  }
+}
+
+function loop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  dog.update();
+  visitor.trySpawn();
+  visitor.update();
+
+  for (let i = rats.length - 1; i >= 0; i--) {
+    rats[i].update();
+    if (rats[i].dead) rats.splice(i, 1); else rats[i].draw();
+  }
+
+  for (const { item, x, y } of placedItems) drawItem(item, x, y);
+
+  if (thrownBall) { thrownBall.update(); thrownBall.draw(); }
+
+  tickParticles(dirts);
+  tickParticles(hearts);
+
+  if (marker && marker.alpha > 0) {
+    ctx.save(); ctx.globalAlpha = marker.alpha; ctx.fillStyle = '#ffffff';
+    const mx = Math.round(marker.x), my = Math.round(marker.y);
+    ctx.fillRect(mx - 4, my - 1, 9, 2); ctx.fillRect(mx - 1, my - 4, 2, 9);
+    ctx.restore();
+  }
+
+  visitor.draw();
+  dog.draw();
+
+  if (!interacted) {
+    ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
+    ctx.font = '11px monospace'; ctx.textAlign = 'center';
+    ctx.fillText('tap to walk · hold to scritch · tap ball or stick to throw', canvas.width / 2, canvas.height - 18);
+    ctx.restore();
+  }
+
+  if (cursorVisible) drawCursor(cursorX, cursorY);
+
+  requestAnimationFrame(loop);
+}
+
+dog.init();
+loop();
+</script>
+</body>
+</html>
