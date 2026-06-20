@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Loki &amp; Potato</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #1c1409; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+'use strict';
+
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+ctx.imageSmoothingEnabled = false;
+
+// ── Virtual canvas (portrait-first cage view) ─────────────────────────────────
+const VW = 360, VH = 640;
+let sc = 1, ox = 0, oy = 0;
+
+function resize() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const fw = canvas.width  / VW;
+  const fh = canvas.height / VH;
+  sc = Math.min(fw, fh);
+  ox = (canvas.width  - VW * sc) / 2;
+  oy = (canvas.height - VH * sc) / 2;
+}
+resize();
+window.addEventListener('resize', () => { resize(); draw(); });
+
+// Fill a virtual rectangle, snapped to pixel boundaries in canvas space.
+function fill(vx, vy, vw, vh, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(
+    Math.round(ox + vx * sc),
+    Math.round(oy + vy * sc),
+    Math.ceil(vw * sc),
+    Math.ceil(vh * sc)
+  );
+}
+
+// ── Palette ───────────────────────────────────────────────────────────────────
+const C = {
+  // Room
+  wall:    '#2a1d12',
+  wallAlt: '#241810',
+  floor:   '#1a1008',
+  skirtn:  '#3a2818',
+
+  // Cage structure
+  cageInt: '#f0e8d4',
+  frame:   '#6b7a40',
+  bar:     '#7a8e48',
+  barDim:  '#5c6c30',
+  plank:   '#8b6a2a',
+
+  // Bottom floor furnishings
+  bed0:    '#e4c870',
+  bed1:    '#c8a848',
+  grass0:  '#72b040',
+  grass1:  '#508828',
+
+  // Food bowl
+  bowlRim: '#b07030',
+  bowlIn:  '#d89040',
+  pellet:  '#7a4a28',
+
+  // Water bottle
+  bottle:  '#c8e8f0',
+  water:   '#58a8e0',
+  metal:   '#b0b8c0',
+
+  // Hammock
+  ham0:    '#c89040',
+  ham1:    '#a07030',
+  cord:    '#806020',
+
+  // Ladder / branch
+  wood0:   '#8b5e28',
+  wood1:   '#6a4418',
+
+  // Rats
+  lokiBody:      '#f8f5f0',
+  potatoBody:    '#ede8dc',
+  potatoPatch:   '#c8922a',
+  ratPink:       '#ff99bb',
+  ratTail:       '#e8b4a4',
+};
+
+// ── Cage geometry (virtual px) ─────────────────────────────────────────────────
+const CX   = 24,  CY  = 55;   // cage interior top-left
+const CW   = 312, CH  = 530;  // cage interior size
+const WALL = 6;               // frame thickness
+const MID  = 268;             // y-offset of mid-floor from CY
+const NBARS = 14;             // vertical bars per floor
+
+// ── Room ──────────────────────────────────────────────────────────────────────
+function drawRoom() {
+  // Fill whole canvas so desktop sides are warm wall colour
+  ctx.fillStyle = C.wall;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const floorY = Math.round(oy + (VH - 72) * sc);
+  ctx.fillStyle = C.floor;
+  ctx.fillRect(0, floorY, canvas.width, canvas.height - floorY);
+
+  // Skirting board
+  ctx.fillStyle = C.skirtn;
+  ctx.fillRect(0, floorY - Math.round(3 * sc), canvas.width, Math.ceil(4 * sc));
+}
+
+// ── Cage ──────────────────────────────────────────────────────────────────────
+function drawCage() {
+  // Interior fill
+  fill(CX, CY, CW, CH, C.cageInt);
+
+  // Vertical bars — top floor
+  for (let i = 1; i < NBARS; i++) {
+    const bx = CX + i * (CW / NBARS);
+    fill(bx - 1, CY, 2, MID - 2, C.bar);
+  }
+  // Vertical bars — bottom floor
+  for (let i = 1; i < NBARS; i++) {
+    const bx = CX + i * (CW / NBARS);
+    fill(bx - 1, CY + MID + 6, 2, CH - MID - 6, C.bar);
+  }
+
+  // Outer frame (drawn over bars to cap them cleanly)
+  fill(CX - WALL, CY - WALL, WALL, CH + WALL * 2, C.frame);        // left
+  fill(CX + CW,   CY - WALL, WALL, CH + WALL * 2, C.frame);        // right
+  fill(CX - WALL, CY - WALL, CW + WALL * 2, WALL, C.frame);        // top
+  fill(CX - WALL, CY + CH,   CW + WALL * 2, WALL + 2, C.frame);   // bottom
+
+  // Mid-floor plank
+  fill(CX, CY + MID,     CW, 6, C.barDim);
+  fill(CX, CY + MID - 2, CW, 3, C.bar);   // bright top edge
+
+  drawHammock();
+  drawLadder();
+  drawBranch();
+  drawBedding();
+  drawFoodBowl();
+  drawWaterBottle();
+}
+
+function drawHammock() {
+  const hx = CX + 28, hy = CY + 28;
+  const hw = 190, hh = 38, sag = 14;
+  const segs = 18;
+
+  // Hanging cords
+  fill(hx,      CY - WALL, 2, hy - CY + WALL, C.cord);
+  fill(hx + hw, CY - WALL, 2, hy - CY + WALL, C.cord);
+
+  // Hammock fabric — vertical slices to produce the sag curve
+  for (let i = 0; i < segs; i++) {
+    const t  = i / segs;
+    const sx = hx + t * hw;
+    const sy = hy + sag * Math.sin(t * Math.PI);
+    const sw = (hw / segs) + 1;
+    const sh = hh - sag * Math.sin(t * Math.PI);
+    fill(sx, sy, sw, sh, C.ham0);
+  }
+
+  // Top edge (darker seam)
+  fill(hx, hy, hw, 3, C.ham1);
+
+  // Woven stripes
+  for (let i = 1; i < 6; i++) {
+    const t = i / 6;
+    fill(hx + t * hw - 1, hy + 4, 2, hh - 8, C.ham1);
+  }
+
+  // Bottom fringe
+  for (let i = 0; i < 13; i++) {
+    fill(hx + i * 15 + 3, hy + hh, 2, 6, C.ham1);
+  }
+}
+
+function drawLadder() {
+  // Right side, connects mid-floor up to upper area
+  const lx = CX + CW - 46;
+  const ly = CY + MID - 82;
+  const lh = 90, lw = 22;
+
+  fill(lx,      ly, 3, lh, C.wood0);
+  fill(lx + lw, ly, 3, lh, C.wood0);
+  for (let i = 0; i < 6; i++) {
+    fill(lx, ly + i * 15 + 5, lw + 3, 3, C.wood1);
+  }
+}
+
+function drawBranch() {
+  // Diagonal branch in upper-left corner of top floor
+  const segs = 8;
+  for (let i = 0; i < segs; i++) {
+    const t  = i / (segs - 1);
+    const bx = CX + 10  + t * 130;
+    const by = CY + MID - 35 - t * 28;
+    fill(bx, by, 18, 5, i % 2 === 0 ? C.wood0 : C.wood1);
+    // Knot texture
+    if (i % 3 === 1) fill(bx + 5, by - 1, 4, 7, C.wood1);
+  }
+}
+
+function drawBedding() {
+  const fy = CY + MID + 6;
+  const fh = CH - MID - 6;
+
+  // Absorbent base
+  fill(CX, fy + fh - 26, CW, 26, C.bed0);
+  for (let i = 0; i < 20; i++) {
+    fill(CX + i * 16 + 4,  fy + fh - 20, 6, 5, C.bed1);
+    fill(CX + i * 16 + 11, fy + fh - 10, 5, 4, C.bed1);
+  }
+
+  // Soft grass on top of bedding
+  const gy = fy + fh - 34;
+  for (let i = 0; i < 28; i++) {
+    const gx = CX + i * 11 + (i % 3) * 2;
+    const gh = 7 + (i % 4) * 3;
+    fill(gx, gy - gh + 8, 4, gh, i % 2 === 0 ? C.grass0 : C.grass1);
+  }
+}
+
+function drawFoodBowl() {
+  const fy  = CY + MID + 6;
+  const fh  = CH - MID - 6;
+  const bx  = CX + 52;
+  const by  = fy + fh - 42;
+
+  // Shadow
+  ctx.globalAlpha = 0.18;
+  fill(bx - 2, by + 24, 48, 5, '#000');
+  ctx.globalAlpha = 1;
+
+  // Bowl outer rim
+  fill(bx, by + 8, 44, 22, C.bowlRim);
+  // Bowl inner
+  fill(bx + 3, by + 10, 38, 18, C.bowlIn);
+
+  // Food pellets
+  const pellets = [[4,3],[9,2],[15,3],[21,2],[28,3],[33,2],[7,9],[14,8],[22,9],[29,8]];
+  for (const [px2, py2] of pellets) {
+    fill(bx + px2, by + py2, 6, 5, C.pellet);
+  }
+}
+
+function drawWaterBottle() {
+  // Hangs on right cage wall
+  const bx = CX + CW - 44;
+  const by = CY + MID + 18;
+
+  // Bottle body
+  fill(bx, by, 24, 60, C.bottle);
+  // Water fill
+  fill(bx + 2, by + 8,  20, 50, C.water);
+  // Highlight
+  fill(bx + 4, by + 10,  5, 24, '#b8ddef');
+  // Cap
+  fill(bx + 5, by + 58, 14,  8, C.metal);
+  // Nozzle
+  fill(bx + 9, by + 66,  6, 16, '#c8c8c8');
+  fill(bx + 11,by + 82,  2,  4, '#aaa');
+  // Wall clips
+  fill(bx + 24, by + 14, 7, 5, C.bar);
+  fill(bx + 24, by + 44, 7, 5, C.bar);
+}
+
+// ── Rat sprite ─────────────────────────────────────────────────────────────────
+// Designed facing RIGHT: nose at col 9, tail at cols 0-2.
+// Values: 1=body, 2=pink (ear / nose), 3=tail
+const RAT_SPR = [
+  [0,0,0,0,0,0,0,2,0,0,0],   // r0  ear
+  [0,0,0,0,0,0,1,1,1,0,0],   // r1  head
+  [0,0,0,0,0,1,1,1,1,2,0],   // r2  head + nose
+  [3,3,3,1,1,1,1,1,0,0,0],   // r3  body + tail
+  [0,3,1,1,1,1,0,0,0,0,0],   // r4  body lower + tail tip
+  [0,0,1,1,0,0,0,0,0,0,0],   // r5  haunches
+  [0,0,1,0,1,0,0,0,0,0,0],   // r6  feet
+];
+const RS   = 4;                        // virtual px per sprite px
+const RCOLS = RAT_SPR[0].length;       // 11
+const RROWS = RAT_SPR.length;          // 7
+const RW    = RCOLS * RS;              // 44
+const RH    = RROWS * RS;             // 28
+
+// Brown-patch regions (in sprite coords, facing right)
+// Applied on top of body pixels only.
+const PATCHES = [
+  { r0: 1, r1: 2, c0: 6, c1: 8 },   // head patch
+  { r0: 3, r1: 5, c0: 3, c1: 6 },   // back patch
+];
+
+function drawRat(vx, vy, right, bodyCol, patchCol) {
+  // Body + ears + nose + tail
+  for (let r = 0; r < RROWS; r++) {
+    for (let c = 0; c < RCOLS; c++) {
+      const v = RAT_SPR[r][c];
+      if (!v) continue;
+      const dc = right ? c : (RCOLS - 1 - c);
+      const color = v === 2 ? C.ratPink : v === 3 ? C.ratTail : bodyCol;
+      fill(vx + dc * RS, vy + r * RS, RS, RS, color);
+    }
+  }
+
+  // Colour patches (Potato only), using same mirroring
+  if (patchCol) {
+    for (const p of PATCHES) {
+      for (let r = p.r0; r <= p.r1; r++) {
+        for (let c = p.c0; c <= p.c1; c++) {
+          if (RAT_SPR[r][c] !== 1) continue;  // only over body pixels
+          const dc = right ? c : (RCOLS - 1 - c);
+          fill(vx + dc * RS, vy + r * RS, RS, RS, patchCol);
+        }
+      }
+    }
+  }
+}
+
+// ── Rat placement ─────────────────────────────────────────────────────────────
+// Both girls are curled in the hammock together.
+// Hammock centre sag is around y = CY + 42.
+const LOKI = {
+  x: CX + 44, y: CY + 36,
+  right: true,
+  body: C.lokiBody, patch: null,
+};
+const POTATO = {
+  x: CX + 44 + RW + 4, y: CY + 38,
+  right: false,           // faces Loki
+  body: C.potatoBody, patch: C.potatoPatch,
+};
+
+// ── Main draw ─────────────────────────────────────────────────────────────────
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawRoom();
+  drawCage();
+  // Draw rats last so they appear in front of cage furnishings
+  drawRat(LOKI.x,   LOKI.y,   LOKI.right,   LOKI.body,   LOKI.patch);
+  drawRat(POTATO.x, POTATO.y, POTATO.right, POTATO.body, POTATO.patch);
+}
+
+draw();
+</script>
+</body>
+</html>

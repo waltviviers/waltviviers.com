@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loki &amp; Potato — A Pet Rat Companion for Your Browser</title>
+  <meta name="description" content="Two best-friend rats live in your browser. Visit them, feed them, watch them be friends. A gentle pixel-art companion, no install required." />
+  <link rel="canonical" href="https://waltviviers.com/apps/loki-and-potato/" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <meta name="robots" content="noindex, follow" />
+
+  <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+
+    :root {
+      --ink:   #FAF9F7; --stone: #9A9890; --rule: #2A2826;
+      --bg:    #000000; --bg2:  #0D0D0D;
+      --serif: 'EB Garamond', Georgia, serif;
+      --sans:  'Inter', system-ui, sans-serif;
+    }
+    [data-theme="light"] {
+      --ink: #0C0C0B; --stone: #6B6560; --rule: #D5D1CB;
+      --bg:  #F5F3EF; --bg2:  #EDEAE5;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── Nav (minimal) ── */
+    nav {
+      position: fixed; inset: 0 0 auto 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 60px;
+      background: rgba(0,0,0,0.92); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+    }
+    [data-theme="light"] nav { background: rgba(245,243,239,0.95); }
+    .nav-logo img { height: 28px; width: auto; }
+    [data-theme="light"] .nav-logo img { filter: invert(1); }
+    .nav-right { display: flex; align-items: center; gap: 20px; }
+    .nav-back {
+      font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--stone); transition: color 0.2s;
+    }
+    .nav-back:hover { color: var(--ink); }
+    .theme-toggle {
+      display: flex; align-items: center; justify-content: center;
+      background: none; border: none; padding: 4px; cursor: pointer;
+    }
+    .theme-toggle svg {
+      width: 17px; height: 17px; fill: none;
+      stroke: var(--stone); stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .theme-toggle:hover svg { stroke: var(--ink); }
+    .icon-sun { display: none; }
+    [data-theme="light"] .icon-moon { display: none; }
+    [data-theme="light"] .icon-sun  { display: block; }
+
+    /* ── Hero ── */
+    .hero {
+      padding-top: 60px;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding-left: 24px; padding-right: 24px; padding-bottom: 80px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .eyebrow {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--stone); margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 400; line-height: 1.05; letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .hero h1 em { font-style: italic; }
+    .tagline {
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+      color: var(--stone); margin-bottom: 24px;
+    }
+    .hero-desc {
+      font-size: clamp(14px, 1.8vw, 17px); color: var(--stone);
+      line-height: 1.8; max-width: 480px; margin: 0 auto 48px;
+    }
+
+    /* Pixel rat icon */
+    .app-icon {
+      width: 88px; height: 88px; border-radius: 20px;
+      background: #1c1409;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 36px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .app-icon svg { width: 88px; height: 88px; display: block; }
+
+    /* Play button */
+    .play-btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 14px 28px; border: 1px solid var(--rule);
+      color: var(--ink); font-family: var(--sans); font-size: 13px;
+      font-weight: 500; letter-spacing: 0.04em;
+      transition: border-color 0.2s, background 0.2s; cursor: pointer;
+    }
+    .play-btn:hover { border-color: var(--stone); background: var(--bg2); }
+    [data-theme="light"] .play-btn:hover { background: var(--bg2); }
+    .play-btn-inner { display: flex; flex-direction: column; gap: 1px; text-align: left; }
+    .play-btn-sub  { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); font-weight: 400; }
+    .play-btn-name { font-size: 15px; font-weight: 500; }
+
+    /* ── About section ── */
+    .about {
+      padding: 80px 48px;
+      max-width: 680px; margin: 0 auto;
+      text-align: center; border-bottom: 1px solid var(--rule);
+    }
+    .about h2 {
+      font-family: var(--serif); font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+      font-weight: 400; margin-bottom: 24px;
+    }
+    .about p {
+      font-size: clamp(14px, 1.6vw, 17px); color: var(--stone);
+      line-height: 1.85; margin-bottom: 20px;
+    }
+    .about p:last-child { margin-bottom: 0; }
+
+    /* ── Features ── */
+    .features { border-bottom: 1px solid var(--rule); }
+    .features-header {
+      padding: 56px 48px 0;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--stone);
+    }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+    }
+    .feat-card {
+      padding: 40px 48px 56px;
+      border-right: 1px solid var(--rule);
+    }
+    .feat-card:last-child { border-right: none; }
+    .feat-dot { width: 8px; height: 8px; border-radius: 50%; margin-bottom: 24px; }
+    .feat-card h3 {
+      font-family: var(--serif); font-size: 20px; font-weight: 400;
+      margin-bottom: 12px;
+    }
+    .feat-card p { font-size: 13px; color: var(--stone); line-height: 1.75; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 48px; border-top: 1px solid var(--rule);
+      display: flex; justify-content: center; align-items: center;
+    }
+    .footer-copy { font-size: 11px; color: var(--stone); letter-spacing: 0.06em; }
+
+    /* ── Responsive ── */
+    @media (max-width: 760px) {
+      nav { padding: 0 20px; }
+      .about { padding: 56px 24px; }
+      .features-header { padding: 40px 24px 0; }
+      .features-grid { grid-template-columns: 1fr; }
+      .feat-card { border-right: none; border-bottom: 1px solid var(--rule); padding: 32px 24px; }
+      .feat-card:last-child { border-bottom: none; }
+      footer { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
+      <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+    </a>
+    <div class="nav-right">
+      <a href="/apps/" class="nav-back">← Apps</a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+
+    <section class="hero">
+      <p class="eyebrow">A pixel-art rat companion for your browser</p>
+
+      <!-- Two-rat pixel icon: Loki (left) + Potato (right, brown patch) -->
+      <div class="app-icon" aria-hidden="true">
+        <svg viewBox="0 0 88 88" xmlns="http://www.w3.org/2000/svg">
+          <!-- Loki (all white, facing right) -->
+          <!-- ear -->
+          <rect x="46" y="18" width="4" height="4" fill="#ff99bb"/>
+          <!-- head -->
+          <rect x="42" y="22" width="12" height="4" fill="#f8f5f0"/>
+          <!-- head + nose -->
+          <rect x="40" y="26" width="12" height="4" fill="#f8f5f0"/>
+          <rect x="52" y="26" width="4" height="4" fill="#ff99bb"/>
+          <!-- body -->
+          <rect x="24" y="30" width="20" height="4" fill="#f8f5f0"/>
+          <rect x="20" y="34" width="22" height="4" fill="#f8f5f0"/>
+          <!-- tail (left) -->
+          <rect x="12" y="30" width="12" height="4" fill="#e8b4a4"/>
+          <rect x="12" y="34" width="8"  height="4" fill="#e8b4a4"/>
+          <!-- haunches -->
+          <rect x="24" y="38" width="8" height="4" fill="#f8f5f0"/>
+          <!-- feet -->
+          <rect x="24" y="42" width="4" height="4" fill="#f8f5f0"/>
+          <rect x="32" y="42" width="4" height="4" fill="#f8f5f0"/>
+
+          <!-- Potato (brown patch, facing left) -->
+          <!-- ear -->
+          <rect x="38" y="18" width="4" height="4" fill="#ff99bb"/>
+          <!-- head -->
+          <rect x="34" y="22" width="12" height="4" fill="#ede8dc"/>
+          <!-- nose (left side, facing left) -->
+          <rect x="30" y="26" width="4" height="4" fill="#ff99bb"/>
+          <rect x="34" y="26" width="12" height="4" fill="#ede8dc"/>
+          <!-- head patch -->
+          <rect x="38" y="22" width="8" height="4" fill="#c8922a"/>
+          <!-- body -->
+          <rect x="44" y="30" width="20" height="4" fill="#ede8dc"/>
+          <rect x="46" y="34" width="22" height="4" fill="#ede8dc"/>
+          <!-- back patch -->
+          <rect x="46" y="30" width="12" height="8" fill="#c8922a"/>
+          <!-- tail (right, facing left) -->
+          <rect x="64" y="30" width="12" height="4" fill="#e8b4a4"/>
+          <rect x="68" y="34" width="8"  height="4" fill="#e8b4a4"/>
+          <!-- haunches -->
+          <rect x="56" y="38" width="8" height="4" fill="#ede8dc"/>
+          <!-- feet -->
+          <rect x="56" y="42" width="4" height="4" fill="#ede8dc"/>
+          <rect x="64" y="42" width="4" height="4" fill="#ede8dc"/>
+        </svg>
+      </div>
+
+      <h1>Loki <em>&amp;</em> Potato</h1>
+      <p class="tagline">Two best friends in a cage.</p>
+      <p class="hero-desc">A pair of white rats live in your browser. Check on them in the morning. They're usually in the hammock.</p>
+
+      <a href="/apps/loki-and-potato/play/" class="play-btn">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none"/>
+        </svg>
+        <span class="play-btn-inner">
+          <span class="play-btn-sub">Play in your browser</span>
+          <span class="play-btn-name">Visit the girls</span>
+        </span>
+      </a>
+    </section>
+
+    <section class="about">
+      <h2>Who are they?</h2>
+      <p><strong>Loki</strong> is all white — the escape artist, the instigator, the one who got into everything first.</p>
+      <p><strong>Potato</strong> is white with light brown markings — deceptively named, because she was more rocket than couch, always a step behind Loki in whatever daft thing they were doing together.</p>
+      <p>They were real rats. They were best friends. This is a small way of keeping them around.</p>
+    </section>
+
+    <section class="features">
+      <p class="features-header">What's in the cage</p>
+      <div class="features-grid">
+        <div class="feat-card">
+          <div class="feat-dot" style="background:#f8c060" aria-hidden="true"></div>
+          <h3>The hammock</h3>
+          <p>Top floor. This is where they sleep — piled on top of each other, the way rats do when they trust you completely.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-dot" style="background:#72b040" aria-hidden="true"></div>
+          <h3>The bedding</h3>
+          <p>Soft grass on the bottom floor. They dig in it, rearrange it, and occasionally just sit in it for no reason.</p>
+        </div>
+        <div class="feat-card">
+          <div class="feat-dot" style="background:#58a8e0" aria-hidden="true"></div>
+          <h3>The bottle &amp; bowl</h3>
+          <p>Refill them in the morning. Nothing bad happens if you forget — they just look at you with very patient eyes.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p class="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
+  </footer>
+
+  <script>
+    (function () {
+      const html = document.documentElement;
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        const next = html.dataset.theme === 'light' ? 'dark' : 'light';
+        html.dataset.theme = next;
+        localStorage.setItem('wv-theme', next);
+      });
+    })();
+  </script>
+</body>
+</html>
