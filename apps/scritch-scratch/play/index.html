@@ -112,7 +112,7 @@ const SPEED = 2;
 const ANIM_TICKS = 10;
 const DIG_ANIM_TICKS = 4;
 const IDLE_TO_ACTION  = 60 * 3;
-const FIDGET_DURATION = 60 * 3;
+const FIDGET_DURATION = 60 * 1;
 const DIG_DURATION    = 60 * 2;
 const FOUND_DURATION  = 60 * 5;
 
@@ -354,7 +354,10 @@ class Rat {
     this.dead = false;
     // Rat mode
     this.sex = opts.sex || (Math.random() < 0.5 ? 'm' : 'f');
-    this.bodyColor = opts.bodyColor || '#aaaaaa';
+    this.isPink = opts.isPink !== undefined ? opts.isPink : Math.random() < 0.05;
+    this.bigEars = opts.bigEars !== undefined ? opts.bigEars : Math.random() < 0.1;
+    const defaultColor = this.isPink ? '#ffaabb' : '#aaaaaa';
+    this.bodyColor = opts.bodyColor || defaultColor;
     this.matingCooldown = opts.matingCooldown !== undefined
       ? opts.matingCooldown : 60 * (10 + Math.floor(Math.random() * 30));
     this.mateProximityTimer = 0;
@@ -420,8 +423,7 @@ class Rat {
 
     // Rat mode: mating (female initiates, actively seeks male)
     if (gameMode === 'rat' && this.sex === 'f' && !this.pregnant && this.matingCooldown <= 0) {
-      const total = rats.length + babies.length;
-      if (total < 25) {
+      {
         let nearestMale = null, nearestDist = Infinity;
         for (const r of rats) {
           if (r === this || r.dead || r.sex !== 'm' || r.matingCooldown > 0) continue;
@@ -496,12 +498,19 @@ class Rat {
     const spr = RAT_FRAMES[this.frame];
     const x = Math.round(this.x), y = Math.round(this.y);
     const bodyColor = this.scritchTimer > 0 ? '#ffbbcc' : this.bodyColor;
+    if (this.bigEars) {
+      ctx.fillStyle = this.isPink ? '#ff99bb' : '#cc6688';
+      const e1 = this.right ? (RAT_COLS - 2) : 1;
+      const e2 = this.right ? (RAT_COLS - 4) : 3;
+      ctx.fillRect(x + e1 * RAT_SC, y - RAT_SC, RAT_SC, RAT_SC);
+      ctx.fillRect(x + e2 * RAT_SC, y - RAT_SC, RAT_SC, RAT_SC);
+    }
     for (let r = 0; r < RAT_ROWS; r++)
       for (let c = 0; c < RAT_COLS; c++)
         if (spr[r][c]) {
           const dc = this.right ? (RAT_COLS - 1 - c) : c;
-          const isPink = r === 4 || (r === 2 && c === 0);
-          ctx.fillStyle = isPink ? '#ff99bb' : bodyColor;
+          const isTailOrNose = r === 4 || (r === 2 && c === 0);
+          ctx.fillStyle = isTailOrNose ? '#ff99bb' : bodyColor;
           ctx.fillRect(x + dc * RAT_SC, y + r * RAT_SC, RAT_SC, RAT_SC);
         }
   }
@@ -556,6 +565,50 @@ class Baby {
   }
 }
 
+// ─── Rat mode: raid cat ───────────────────────────────────────────────────────
+let cheeseCount = 0;
+const raidCats = [];
+
+class RaidCat {
+  constructor() {
+    const fromLeft = Math.random() < 0.5;
+    this.x = fromLeft ? -PW : canvas.width + PW;
+    this.y = PH * 1.5 + Math.random() * (canvas.height - PH * 3);
+    this.right = fromLeft;
+    this.vx = fromLeft ? 4 : -4;
+    this.color = CAT_COLORS[Math.floor(Math.random() * CAT_COLORS.length)];
+    this.frame = 0; this.tick = 0;
+    this.done = false;
+    // Pre-select half the live rats to scare
+    this.targets = rats.filter(r => !r.dead && !r.fleeing)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, Math.ceil(rats.length / 2));
+    labels.push(new Label('Cat!', canvas.width / 2, canvas.height / 2 - 20));
+  }
+  update() {
+    if (++this.tick >= ANIM_TICKS) { this.tick = 0; this.frame ^= 1; }
+    this.x += this.vx;
+    for (const r of this.targets) {
+      if (!r.dead && !r.fleeing && Math.hypot(r.x - this.x, r.y - this.y) < PW * 4) r.flee();
+    }
+    if (this.x > canvas.width + PW * 2 || this.x < -PW * 2) this.done = true;
+  }
+  draw() {
+    if (this.done) return;
+    const spr = CAT_WALK[this.frame];
+    const x = Math.round(this.x), y = Math.round(this.y);
+    for (let r = 0; r < DH; r++)
+      for (let c = 0; c < DW; c++)
+        if (spr[r][c]) {
+          const dc = this.right ? c : DW - 1 - c;
+          const isNose = r === 2 && c === 9;
+          const isWhisker = r === 2 && (c === 3 || c === 4);
+          ctx.fillStyle = isNose ? '#ff99bb' : isWhisker ? '#dddddd' : this.color;
+          ctx.fillRect(x + dc * S, y + r * S, S, S);
+        }
+  }
+}
+
 // ─── Cat class ────────────────────────────────────────────────────────────────
 const KITTEN_MATURE = 60 * 15;
 
@@ -598,6 +651,9 @@ class Cat {
 
   _stepToward(spd) {
     const s = spd || SPEED;
+    // Clamp target to valid bounds to prevent edge-stuck loops
+    this.tx = Math.max(0, Math.min(canvas.width - PW, this.tx));
+    this.ty = Math.max(0, Math.min(canvas.height - PH, this.ty));
     const dx = this.tx - this.x, dy = this.ty - this.y, d = Math.hypot(dx, dy);
     if (d < s) { this.x = this.tx; this.y = this.ty; this.tx = this.ty = null; return true; }
     if (Math.abs(dx) > 0.5) this.right = dx > 0;
@@ -668,9 +724,12 @@ class Cat {
     if (this.state === 'laser') {
       if (!laserActive) { this.state = 'idle'; }
       else {
-        const dx = laserX - this.cx, dy = laserY - this.cy;
+        // Use reachable center position to avoid edge-stuck
+        const reachX = Math.max(PW / 2, Math.min(canvas.width - PW / 2, laserX));
+        const reachY = Math.max(PH / 2, Math.min(canvas.height - PH / 2, laserY));
+        const dx = reachX - this.cx, dy = reachY - this.cy;
         const d = Math.hypot(dx, dy);
-        if (d < 14) { this.state = 'happy'; this.lingerTicks = 45; }
+        if (d < 14) { laserActive = false; this.state = 'happy'; this.lingerTicks = 45; }
         else { const s = SPEED * 1.2; this.x += dx/d*s; this.y += dy/d*s; this.right = dx > 0;
           this.x = Math.max(0, Math.min(canvas.width - PW, this.x));
           this.y = Math.max(0, Math.min(canvas.height - PH, this.y)); }
@@ -712,9 +771,9 @@ class Cat {
       return;
     }
 
-    // Sleep: wake on laser, scritch, or timer expiry
+    // Sleep: wake on scritch or timer expiry (laser alone doesn't wake)
     if (this.state === 'sleep') {
-      if (laserActive || scritchCat === this) {
+      if (scritchCat === this) {
         this.state = 'idle'; this.idleTimer = 0;
       } else {
         if (--this.sleepTimer <= 0) this.state = 'idle';
@@ -1077,7 +1136,7 @@ const dog = {
     if (this.state === 'idle') {
       if (++this.idleTimer >= IDLE_TO_ACTION) {
         this.idleTimer = 0;
-        if (Math.random() < 0.6) {
+        if (Math.random() < 0.35) {
           this._roamTo(PW + Math.random() * (canvas.width - PW * 2), PH + Math.random() * (canvas.height - PH * 2));
         } else {
           this.state = 'fidget'; this.fidgetTimer = FIDGET_DURATION;
@@ -1158,6 +1217,7 @@ function enterRatMode() {
   hearts.length = 0; dirts.length = 0; labels.length = 0;
   thrownBall = null; marker = null; laserActive = false;
   scritchCat = null; interacted = false;
+  cheeseCount = 0; raidCats.length = 0;
   const cx = canvas.width / 2, cy = canvas.height / 2;
   rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#c8922a', matingCooldown: 60 * 8 }));
   rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0 }));
@@ -1240,24 +1300,6 @@ function drawLaser(x, y) {
   ctx.restore();
 }
 
-function enterCatMode() {
-  gameMode = 'cat';
-  visitors.length = 0; rats.length = 0; babies.length = 0; cheeses.length = 0;
-  cats.length = 0; kittens.length = 0; catRats.length = 0;
-  placedItems.length = 0; hearts.length = 0; dirts.length = 0; labels.length = 0;
-  thrownBall = null; marker = null; laserActive = false; interacted = false;
-  scritchCat = null;
-  catVisitorCooldown = 60 * 25;
-  // Main cat — always at index 0, never leaves
-  cats.push(new Cat({ isMain: true, color: CAT_COLORS[0],
-    x: canvas.width/2 - PW/2, y: canvas.height/2 - PH/2, birthCooldown: 0 }));
-  // Spawn initial wool ball
-  const { w, h } = itemDims(WOOL_ITEM);
-  placedItems.push({ item: WOOL_ITEM,
-    x: canvas.width/2 - w/2 - PW, y: canvas.height/2 + PH/2 - h });
-  document.getElementById('mode-btn').textContent = 'Dog Mode';
-}
-
 function trySpawnCatVisitor() {
   if (--catVisitorCooldown > 0) return;
   catVisitorCooldown = 60 * (20 + Math.floor(Math.random() * 30));
@@ -1332,10 +1374,22 @@ canvas.addEventListener('pointerdown', e => {
         return;
       }
     }
-    // Tap ground = laser pointer (wakes sleeping cats)
+    // Tap on a cat-rat → cats chase it (wakes sleeping cats)
+    for (const r of catRats) {
+      if (!r.dead && !r.fleeing && r.hitTest(px, py)) {
+        for (const cat of cats) {
+          if (!cat.dead && !cat.isVisitor && cat.state !== 'leaving') {
+            if (cat.state === 'sleep') { cat.state = 'idle'; cat.idleTimer = 0; }
+            cat.chaseTarget = r; cat.state = 'chase';
+          }
+        }
+        return;
+      }
+    }
+    // Tap ground = laser pointer (only wakes awake cats, not sleeping ones)
     laserX = px; laserY = py; laserActive = true; laserTimer = 60 * 12;
     for (const cat of cats) {
-      if (!cat.dead && !cat.isVisitor && cat.state !== 'leaving') {
+      if (!cat.dead && !cat.isVisitor && cat.state !== 'leaving' && cat.state !== 'sleep') {
         cat.state = 'laser';
       }
     }
@@ -1347,6 +1401,7 @@ canvas.addEventListener('pointerdown', e => {
       if (!rat.dead && rat.hitTest(px, py)) { rat.scritch(); return; }
     }
     cheeses.push({ x: px - CHEESE_W / 2, y: py - CHEESE_H / 2, eaten: false });
+    if (++cheeseCount % 15 === 0 && rats.length > 0) raidCats.push(new RaidCat());
     return;
   }
 
@@ -1470,6 +1525,11 @@ function loop() {
     for (let i = rats.length - 1; i >= 0; i--) {
       rats[i].update();
       if (rats[i].dead) rats.splice(i, 1); else rats[i].draw();
+    }
+
+    for (let i = raidCats.length - 1; i >= 0; i--) {
+      raidCats[i].update();
+      if (raidCats[i].done) raidCats.splice(i, 1); else raidCats[i].draw();
     }
 
     for (let i = babies.length - 1; i >= 0; i--) {
