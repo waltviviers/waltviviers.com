@@ -334,30 +334,35 @@ function drawWaterBottle() {
 }
 
 // ── Rat sprite ─────────────────────────────────────────────────────────────────
-// Designed facing RIGHT: nose at col 20, tail at cols 0-3, ear at cols 12-14.
+// Designed facing RIGHT: nose at col 12, tail at cols 0-3, ear at cols 5-7.
+// Compact rounded shape ~14×14 cells. RS=4 → 56×56 virtual px.
 // Values: 1=body, 2=ear (pink), 3=tail, 4=nose (pink), 5=eye (dark)
 const RAT_SPR = [
-  [0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0],  // r0  ear
-  [0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,1,0,0,0,0,0,0],  // r1  ear base + head
-  [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0],  // r2  head
-  [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,5,1,1,1,4,0],  // r3  head + eye + nose
-  [0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0],  // r4  body (tail exits below, no gap)
-  [0,0,3,3,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0],  // r5  body + tail (adjacent, no gap)
-  [3,3,3,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0],  // r6  haunches + tail
-  [0,3,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // r7  lower haunches + tail tip
-  [0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // r8  legs
-  [0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // r9  feet
+  [0,0,0,0,0,2,2,2,0,0,0,0,0,0],  // r0  ear tip
+  [0,0,0,0,1,2,2,1,1,1,0,0,0,0],  // r1  ear base + head
+  [0,0,0,0,1,1,1,1,1,1,1,1,4,0],  // r2  head + nose
+  [0,0,0,1,1,1,1,1,1,5,1,1,0,0],  // r3  head + eye
+  [0,0,1,1,1,1,1,1,1,1,1,0,0,0],  // r4  neck / upper chest
+  [0,1,1,1,1,1,1,1,1,1,1,1,0,0],  // r5  upper body
+  [1,1,1,1,1,1,1,1,1,1,1,1,0,0],  // r6  body (widest)
+  [0,1,1,1,1,1,1,1,1,1,1,0,0,0],  // r7  body
+  [0,0,1,1,1,1,1,1,1,1,0,0,0,0],  // r8  lower body
+  [3,3,1,1,1,1,1,0,0,0,0,0,0,0],  // r9  haunches + tail exit
+  [0,3,3,1,1,0,0,0,0,0,0,0,0,0],  // r10 tail curve
+  [0,0,3,3,0,0,0,0,0,0,0,0,0,0],  // r11 tail tip
+  [0,0,1,0,1,0,0,0,0,0,0,0,0,0],  // r12 legs
+  [0,0,1,1,1,1,0,0,0,0,0,0,0,0],  // r13 feet
 ];
 const RS    = 4;                        // virtual px per sprite cell
-const RCOLS = RAT_SPR[0].length;       // 22
-const RROWS = RAT_SPR.length;          // 10
-const RW    = RCOLS * RS;              // 44
-const RH    = RROWS * RS;             // 20
+const RCOLS = RAT_SPR[0].length;       // 14
+const RROWS = RAT_SPR.length;          // 14
+const RW    = RCOLS * RS;              // 56
+const RH    = RROWS * RS;              // 56
 
-// Brown-patch regions for Potato (in sprite coords, facing right)
+// Brown-patch regions for Potato (sprite coords, facing right)
 const PATCHES = [
-  { r0: 1, r1: 2, c0: 12, c1: 15 },  // head/ear patch
-  { r0: 4, r1: 6, c0:  5, c1:  8 },  // back patch
+  { r0: 1, r1: 3, c0:  6, c1: 11 },  // head hood
+  { r0: 5, r1: 8, c0:  1, c1:  5 },  // back saddle
 ];
 
 function drawRat(vx, vy, right, bodyCol, patchCol, earTwitch = false) {
@@ -381,7 +386,7 @@ function drawRat(vx, vy, right, bodyCol, patchCol, earTwitch = false) {
   // Extra ear-tip pixels when twitching — ear perks up (3 cells wide)
   if (earTwitch) {
     for (let i = 0; i < 3; i++) {
-      const ec = right ? (12 + i) : (RCOLS - 1 - (12 + i));
+      const ec = right ? (5 + i) : (RCOLS - 1 - (5 + i));
       fill(vx + ec * RS, vy - RS, RS, RS, earCol);
     }
   }
