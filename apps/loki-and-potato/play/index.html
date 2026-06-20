@@ -92,6 +92,7 @@ const C = {
   potatoPatch:   '#c8922a',
   ratPink:       '#ff99bb',
   ratTail:       '#e8b4a4',
+  ratEye:        '#2a1a08',
 };
 
 // ── Cage geometry (virtual px) ─────────────────────────────────────────────────
@@ -275,28 +276,30 @@ function drawWaterBottle() {
 }
 
 // ── Rat sprite ─────────────────────────────────────────────────────────────────
-// Designed facing RIGHT: nose at col 9, tail at cols 0-2.
-// Values: 1=body, 2=pink (ear / nose), 3=tail
+// Designed facing RIGHT: nose at col 20, tail at cols 0-3, ear at cols 12-14.
+// Values: 1=body, 2=ear (pink), 3=tail, 4=nose (pink), 5=eye (dark)
 const RAT_SPR = [
-  [0,0,0,0,0,0,0,2,0,0,0],   // r0  ear
-  [0,0,0,0,0,0,1,1,1,0,0],   // r1  head
-  [0,0,0,0,0,1,1,1,1,4,0],   // r2  head + nose (4=nose, distinct from ear)
-  [3,3,3,1,1,1,1,1,0,0,0],   // r3  body + tail
-  [0,3,1,1,1,1,0,0,0,0,0],   // r4  body lower + tail tip
-  [0,0,1,1,0,0,0,0,0,0,0],   // r5  haunches
-  [0,0,1,0,1,0,0,0,0,0,0],   // r6  feet
+  [0,0,0,0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0],  // r0  ear
+  [0,0,0,0,0,0,0,0,0,0,0,1,2,2,1,1,0,0,0,0,0,0],  // r1  ear base + head
+  [0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,0,0,0,0],  // r2  head
+  [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,5,1,1,1,4,0],  // r3  head + eye + nose
+  [3,3,3,3,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0],  // r4  body + tail
+  [0,3,3,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0],  // r5  body + tail
+  [0,0,3,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0],  // r6  haunches + tail
+  [0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // r7  haunches
+  [0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // r8  legs
+  [0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // r9  feet
 ];
-const RS   = 4;                        // virtual px per sprite px
-const RCOLS = RAT_SPR[0].length;       // 11
-const RROWS = RAT_SPR.length;          // 7
+const RS    = 2;                        // virtual px per sprite cell
+const RCOLS = RAT_SPR[0].length;       // 22
+const RROWS = RAT_SPR.length;          // 10
 const RW    = RCOLS * RS;              // 44
-const RH    = RROWS * RS;             // 28
+const RH    = RROWS * RS;             // 20
 
-// Brown-patch regions (in sprite coords, facing right)
-// Applied on top of body pixels only.
+// Brown-patch regions for Potato (in sprite coords, facing right)
 const PATCHES = [
-  { r0: 1, r1: 2, c0: 6, c1: 8 },   // head patch
-  { r0: 3, r1: 5, c0: 3, c1: 6 },   // back patch
+  { r0: 1, r1: 2, c0: 12, c1: 15 },  // head/ear patch
+  { r0: 4, r1: 6, c0:  5, c1:  8 },  // back patch
 ];
 
 function drawRat(vx, vy, right, bodyCol, patchCol, earTwitch = false) {
@@ -310,16 +313,19 @@ function drawRat(vx, vy, right, bodyCol, patchCol, earTwitch = false) {
       const dc = right ? c : (RCOLS - 1 - c);
       const color = v === 2 ? earCol      // ear  (twitches)
                   : v === 3 ? C.ratTail   // tail
-                  : v === 4 ? C.ratPink   // nose (always the same pink)
+                  : v === 4 ? C.ratPink   // nose
+                  : v === 5 ? C.ratEye    // eye
                   : bodyCol;
       fill(vx + dc * RS, vy + r * RS, RS, RS, color);
     }
   }
 
-  // Extra ear-tip pixel when twitching — the ear perks up one pixel
+  // Extra ear-tip pixels when twitching — ear perks up (3 cells wide)
   if (earTwitch) {
-    const ec = right ? 7 : (RCOLS - 1 - 7);
-    fill(vx + ec * RS, vy - RS, RS, RS, earCol);
+    for (let i = 0; i < 3; i++) {
+      const ec = right ? (12 + i) : (RCOLS - 1 - (12 + i));
+      fill(vx + ec * RS, vy - RS, RS, RS, earCol);
+    }
   }
 
   // Colour patches (Potato only), using same mirroring
