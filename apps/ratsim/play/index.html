@@ -90,7 +90,7 @@ const C = {
 
   // Rats
   lokiBody:      '#f8f5f0',
-  potatoBody:    '#ede8dc',
+  potatoBody:    '#c09858',
   potatoPatch:   '#c8922a',
   ratPink:       '#ff99bb',
   ratTail:       '#e8b4a4',
@@ -276,9 +276,9 @@ function drawFoodBowl() {
 }
 
 function drawWaterBottle() {
-  // Hangs on right cage wall
+  // Hangs on right cage wall, nozzle at rat-reachable height
   const bx = CX + CW - 44;
-  const by = CY + MID + 18;
+  const by = CY + CH - 120;
 
   // Bottle body
   fill(bx, by, 24, 60, C.bottle);
@@ -311,7 +311,7 @@ const RAT_SPR = [
   [0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // r8  legs
   [0,0,0,1,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // r9  feet
 ];
-const RS    = 2;                        // virtual px per sprite cell
+const RS    = 4;                        // virtual px per sprite cell
 const RCOLS = RAT_SPR[0].length;       // 22
 const RROWS = RAT_SPR.length;          // 10
 const RW    = RCOLS * RS;              // 44
@@ -363,24 +363,51 @@ function drawRat(vx, vy, right, bodyCol, patchCol, earTwitch = false) {
   }
 }
 
-// ── Rat placement ─────────────────────────────────────────────────────────────
-// Lower floor. Grass top ≈ CY + CH - 34; rats stand with feet on grass.
-const FLOOR_Y = CY + CH - 34 - RH;   // = 523 virtual px
+// ── Rat layout constants ───────────────────────────────────────────────────────
+const FLOOR_Y    = CY + CH - 34 - RH;
+const FLOOR_MINX = CX + 10;
+const FLOOR_MAXX = CX + CW - RW - 10;
+const WALK_SPEED = 0.5;   // virtual px per frame (~30 vpx/s at 60 fps)
 
-const LOKI = {
-  x: CX + 85, y: FLOOR_Y,
-  right: true,
-  body: C.lokiBody, patch: null,
-};
-const POTATO = {
-  x: CX + 175, y: FLOOR_Y + 2,   // tiny y offset so they don't look copy-pasted
-  right: false,
-  body: C.potatoBody, patch: C.potatoPatch,
-};
+// ── Rat state ─────────────────────────────────────────────────────────────────
+function makeRat(x, right, body, patch) {
+  return {
+    x, y: FLOOR_Y,
+    right, body, patch,
+    tx: x,
+    idleTimer: 60 + Math.floor(Math.random() * 120),
+    twitch: 0,
+  };
+}
+
+function tickRat(rat) {
+  // Ear twitch
+  if (rat.twitch > 0) { rat.twitch--; }
+  else if (Math.random() < 0.003) { rat.twitch = 20; }
+
+  // Wander: count down idle, then walk toward target, then idle again
+  if (rat.idleTimer > 0) {
+    rat.idleTimer--;
+    if (rat.idleTimer === 0) {
+      rat.tx = FLOOR_MINX + Math.random() * (FLOOR_MAXX - FLOOR_MINX);
+    }
+  } else {
+    const dx = rat.tx - rat.x;
+    if (Math.abs(dx) <= WALK_SPEED) {
+      rat.x = rat.tx;
+      rat.idleTimer = 90 + Math.floor(Math.random() * 200);
+    } else {
+      rat.x += Math.sign(dx) * WALK_SPEED;
+      rat.right = dx > 0;
+    }
+  }
+}
+
+const loki   = makeRat(CX + 60,  true,  C.lokiBody,   null);
+const potato = makeRat(CX + 160, false, C.potatoBody, C.potatoPatch);
 
 // ── Animation state ───────────────────────────────────────────────────────────
 let tick = 0;
-let lokiTwitch = 0, potatoTwitch = 0;   // frames remaining in twitch; 0 = idle
 
 // Slow sine breath. Period ≈ 2π / 0.022 ≈ 285 frames ≈ 4.8 s at 60 fps.
 function breathOffset(phase) {
@@ -391,11 +418,8 @@ function breathOffset(phase) {
 function loop() {
   tick++;
 
-  // Randomly trigger ear twitches (~once every 5–9 s per rat)
-  if (lokiTwitch   <= 0 && Math.random() < 0.003) lokiTwitch   = 20;
-  if (potatoTwitch <= 0 && Math.random() < 0.003) potatoTwitch = 20;
-  if (lokiTwitch   > 0) lokiTwitch--;
-  if (potatoTwitch > 0) potatoTwitch--;
+  tickRat(loki);
+  tickRat(potato);
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawRoom();
@@ -405,8 +429,8 @@ function loop() {
   const lokiDY   = breathOffset(0);
   const potatoDY = breathOffset(1.4);
 
-  drawRat(LOKI.x,   LOKI.y   + lokiDY,   LOKI.right,   LOKI.body,   LOKI.patch,   lokiTwitch   > 0);
-  drawRat(POTATO.x, POTATO.y + potatoDY, POTATO.right, POTATO.body, POTATO.patch, potatoTwitch > 0);
+  drawRat(loki.x,   loki.y   + lokiDY,   loki.right,   loki.body,   loki.patch,   loki.twitch   > 0);
+  drawRat(potato.x, potato.y + potatoDY, potato.right, potato.body, potato.patch, potato.twitch > 0);
 
   requestAnimationFrame(loop);
 }
