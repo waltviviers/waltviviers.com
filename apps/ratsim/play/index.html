@@ -49,19 +49,19 @@ function fill(vx, vy, vw, vh, color) {
 // ── Palette ───────────────────────────────────────────────────────────────────
 const C = {
   // Room
-  wall:    '#2a1d12',
-  wallAlt: '#241810',
-  floor:   '#1a1008',
-  skirtn:  '#3a2818',
+  wall:    '#1e1a28',   // deep blue-grey
+  wallAlt: '#18141f',
+  floor:   '#130e08',   // dark warm wood
+  skirtn:  '#382810',
 
-  // Cage structure
-  cageBack:  '#cec4ac',   // back wall (recedes — darker, muted)
-  cageSide:  '#b6ac94',   // side wall depth panels
-  frame:     '#6b7a40',
-  bar:       '#7a8e48',
-  barHi:     '#96aa52',   // bar lit side (cylindrical highlight)
-  barDim:    '#5c6c30',
-  plank:     '#8b6a2a',
+  // Cage structure — near-black metal
+  cageBack:  '#1e1a28',   // matches wall (cage reads as open space)
+  cageSide:  '#0e0d16',   // slightly darker edges for subtle depth shadow
+  frame:     '#1c1e24',
+  bar:       '#28293a',
+  barHi:     '#363748',   // cylindrical highlight side
+  barDim:    '#141520',   // shadow side
+  plank:     '#8b6a2a',   // mid-floor shelf wood (warm, readable against dark BG)
 
   // Bottom floor furnishings
   bed0:    '#e4c870',
@@ -106,27 +106,64 @@ const NBARS = 14;             // vertical bars per floor
 
 // ── Room ──────────────────────────────────────────────────────────────────────
 function drawRoom() {
-  // Fill whole canvas so desktop sides are warm wall colour
+  // Wall — fills entire canvas so desktop gutters match
   ctx.fillStyle = C.wall;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  // Floor
   const floorY = Math.round(oy + (VH - 72) * sc);
   ctx.fillStyle = C.floor;
   ctx.fillRect(0, floorY, canvas.width, canvas.height - floorY);
 
+  // Wood floor planks — subtle horizontal grain lines
+  for (let i = 0; i < 5; i++) {
+    fill(0,         VH - 68 + i * 13, VW, 1, '#0a0804');
+    fill((i*73)%200, VH - 64 + i * 13, 55, 1, '#0e0c05');
+  }
+
   // Skirting board
   ctx.fillStyle = C.skirtn;
   ctx.fillRect(0, floorY - Math.round(3 * sc), canvas.width, Math.ceil(4 * sc));
+
+  // Framed artwork centred above the cage
+  drawWallArt();
+}
+
+function drawWallArt() {
+  const pw = 52, ph = 38;
+  const px = Math.round(VW / 2) - pw / 2;
+  const py = 7;
+
+  // Drop shadow
+  fill(px + 2, py + 3, pw, ph, '#0a0910');
+  // Dark wood frame
+  fill(px - 3, py - 3, pw + 6, ph + 6, '#2a1e10');
+  fill(px - 1, py - 1, pw + 2, ph + 2, '#1c1408');
+  // Off-white canvas
+  fill(px, py, pw, ph, '#cdc8b6');
+
+  // Minimal line-art face (single continuous stroke approximation)
+  const c = '#1a1510';
+  fill(px + 16, py + 2,  20, 2, c);   // crown
+  fill(px + 10, py + 4,   4, 12, c);  // left cheek
+  fill(px + 38, py + 4,   4, 12, c);  // right cheek
+  fill(px + 13, py + 16,  4,  4, c);  // jaw left
+  fill(px + 35, py + 16,  4,  4, c);  // jaw right
+  fill(px + 17, py + 20, 18,  2, c);  // chin
+  fill(px + 15, py + 10,  6,  3, c);  // left eye
+  fill(px + 31, py + 10,  6,  3, c);  // right eye
+  fill(px + 23, py + 15,  6,  4, c);  // nose
+  fill(px + 19, py + 20, 14,  2, c);  // mouth
 }
 
 // ── Cage ──────────────────────────────────────────────────────────────────────
 function drawCage() {
   const SW = 8;  // side wall panel width
 
-  // ── Back wall (recedes — darker, muted) ──────────────────────────────────
+  // ── Interior — matches room wall so cage reads as open space ────────────
   fill(CX, CY, CW, CH, C.cageBack);
 
-  // ── Side wall depth panels (cage walls going away from viewer) ────────────
+  // ── Inner-edge shadows (subtle depth, not a coloured panel) ───────────────
   fill(CX,           CY, SW, CH, C.cageSide);
   fill(CX + CW - SW, CY, SW, CH, C.cageSide);
 
@@ -159,10 +196,10 @@ function drawCage() {
   fill(CX - WALL, CY - WALL, CW + WALL * 2, WALL, C.frame);
   fill(CX - WALL, CY + CH,   CW + WALL * 2, WALL + 2, C.frame);
 
-  // ── Mid-floor shelf — top face + body + front-facing edge ─────────────────
-  fill(CX, CY + MID,     CW, 6, C.barDim);    // shelf body
-  fill(CX, CY + MID - 2, CW, 3, C.bar);       // top face (lit from above)
-  fill(CX, CY + MID + 6, CW, 4, C.cageSide);  // front-facing edge (faces viewer)
+  // ── Mid-floor shelf — warm wood, readable against dark interior ───────────
+  fill(CX, CY + MID,     CW, 6,  C.plank);            // shelf body
+  fill(CX, CY + MID - 2, CW, 3,  '#a07832');          // top face (lighter wood)
+  fill(CX, CY + MID + 6, CW, 4,  '#5a3c14');          // front-facing edge (shadow)
 
   drawHammock();
   drawLadder();
