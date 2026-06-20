@@ -83,9 +83,9 @@
     <h2>How to Play</h2>
     <ul>
       <li>Pick a mode from the start screen or menu</li>
-      <li>Dog: tap to walk, hold to scritch, tap ball or stick to throw</li>
-      <li>Rat: tap rat to scritch, tap ground to place cheese</li>
-      <li>Cat: hold to purr and wake, tap ground for laser pointer</li>
+      <li>Dog: tap to walk · hold to scritch · tap ball or stick to throw · double-tap to dig</li>
+      <li>Rat: tap rat to scritch · tap ground to place cheese · rats breed freely with no cap · 1 in 10 has big ears · 1 in 20 is pink · every 15th cheese triggers a raid cat</li>
+      <li>Cat: hold to purr and wake · tap ground for laser · laser won't wake sleeping cats</li>
       <li>Visitor animals arrive now and then</li>
     </ul>
     <button class="popup-close" id="htp-close">Close</button>
@@ -108,6 +108,7 @@ ctx.imageSmoothingEnabled = false;
 const S = 5;
 const DW = 10, DH = 8;
 const PW = DW * S, PH = DH * S;
+const CAT_S = 4; const CPW = DW * CAT_S; const CPH = DH * CAT_S;
 const SPEED = 2;
 const ANIM_TICKS = 10;
 const DIG_ANIM_TICKS = 4;
@@ -283,12 +284,12 @@ const CAT_IDLE = [
   [0,0,0,1,0,1,0,0,0,0],
 ];
 const CAT_WALK = [
-  [[0,0,0,0,0,0,0,1,0,1],[0,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,0,0,0,0],[1,1,1,0,0,0,0,0,0,0],[1,0,0,0,1,0,1,0,0,0],[0,0,0,0,1,0,1,0,0,0]],
-  [[0,0,0,0,0,0,0,1,0,1],[0,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,0,0,0,0],[1,1,1,0,0,0,0,0,0,0],[1,0,1,0,0,1,0,0,0,0],[0,0,1,0,0,1,0,0,0,0]],
+  [[0,1,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
+  [[1,0,0,0,0,0,0,1,0,1],[0,1,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,1,0,0,1,0,0,0,0],[0,0,1,0,0,1,0,0,0,0]],
 ];
 const CAT_HAPPY = [
-  [[0,0,0,0,0,0,0,1,0,1],[0,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,0,0,0,0,0],[0,1,0,0,0,0,0,0,0,0],[1,1,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
-  [[0,0,0,0,0,0,0,1,0,1],[0,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,0,1,1,1,1,1,1,0,0],[0,0,1,1,1,0,0,0,0,0],[0,1,0,0,0,0,0,0,0,0],[1,1,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
+  [[1,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
+  [[0,1,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
 ];
 // Sleeping cat: curled into a round ball, centered in sprite
 const CAT_SLEEP = [
@@ -358,6 +359,7 @@ class Rat {
     this.bigEars = opts.bigEars !== undefined ? opts.bigEars : Math.random() < 0.1;
     const defaultColor = this.isPink ? '#ffaabb' : '#aaaaaa';
     this.bodyColor = opts.bodyColor || defaultColor;
+    this.isSeed = opts.isSeed || false;
     this.matingCooldown = opts.matingCooldown !== undefined
       ? opts.matingCooldown : 60 * (10 + Math.floor(Math.random() * 30));
     this.mateProximityTimer = 0;
@@ -568,12 +570,13 @@ class Baby {
 // ─── Rat mode: raid cat ───────────────────────────────────────────────────────
 let cheeseCount = 0;
 const raidCats = [];
+let seedRespawnTimer = 0;
 
 class RaidCat {
   constructor() {
     const fromLeft = Math.random() < 0.5;
-    this.x = fromLeft ? -PW : canvas.width + PW;
-    this.y = PH * 1.5 + Math.random() * (canvas.height - PH * 3);
+    this.x = fromLeft ? -CPW : canvas.width + CPW;
+    this.y = CPH * 1.5 + Math.random() * (canvas.height - CPH * 3);
     this.right = fromLeft;
     this.vx = fromLeft ? 4 : -4;
     this.color = CAT_COLORS[Math.floor(Math.random() * CAT_COLORS.length)];
@@ -589,9 +592,9 @@ class RaidCat {
     if (++this.tick >= ANIM_TICKS) { this.tick = 0; this.frame ^= 1; }
     this.x += this.vx;
     for (const r of this.targets) {
-      if (!r.dead && !r.fleeing && Math.hypot(r.x - this.x, r.y - this.y) < PW * 4) r.flee();
+      if (!r.dead && !r.fleeing && Math.hypot(r.x - this.x, r.y - this.y) < CPW * 4) r.flee();
     }
-    if (this.x > canvas.width + PW * 2 || this.x < -PW * 2) this.done = true;
+    if (this.x > canvas.width + CPW * 2 || this.x < -CPW * 2) this.done = true;
   }
   draw() {
     if (this.done) return;
@@ -604,18 +607,18 @@ class RaidCat {
           const isNose = r === 2 && c === 9;
           const isWhisker = r === 2 && (c === 3 || c === 4);
           ctx.fillStyle = isNose ? '#ff99bb' : isWhisker ? '#dddddd' : this.color;
-          ctx.fillRect(x + dc * S, y + r * S, S, S);
+          ctx.fillRect(x + dc * CAT_S, y + r * CAT_S, CAT_S, CAT_S);
         }
   }
 }
 
 // ─── Cat class ────────────────────────────────────────────────────────────────
-const KITTEN_MATURE = 60 * 15;
+const KITTEN_MATURE = 60 * 90;
 
 class Cat {
   constructor(opts = {}) {
-    this.x = opts.x !== undefined ? opts.x : canvas.width / 2 - PW / 2;
-    this.y = opts.y !== undefined ? opts.y : canvas.height / 2 - PH / 2;
+    this.x = opts.x !== undefined ? opts.x : canvas.width / 2 - CPW / 2;
+    this.y = opts.y !== undefined ? opts.y : canvas.height / 2 - CPH / 2;
     this.color = opts.color || CAT_COLORS[0];
     this.isMain = opts.isMain || false;
     this.isVisitor = opts.isVisitor || false;
@@ -634,13 +637,13 @@ class Cat {
     this.dead = false;
   }
 
-  get cx() { return this.x + PW / 2; }
-  get cy() { return this.y + PH / 2; }
+  get cx() { return this.x + CPW / 2; }
+  get cy() { return this.y + CPH / 2; }
 
   hitTest(px, py) {
-    const pad = S * 2;
-    return px >= this.x - pad && px <= this.x + PW + pad &&
-           py >= this.y - pad && py <= this.y + PH + pad;
+    const pad = CAT_S * 2;
+    return px >= this.x - pad && px <= this.x + CPW + pad &&
+           py >= this.y - pad && py <= this.y + CPH + pad;
   }
 
   scritch() {
@@ -652,19 +655,19 @@ class Cat {
   _stepToward(spd) {
     const s = spd || SPEED;
     // Clamp target to valid bounds to prevent edge-stuck loops
-    this.tx = Math.max(0, Math.min(canvas.width - PW, this.tx));
-    this.ty = Math.max(0, Math.min(canvas.height - PH, this.ty));
+    this.tx = Math.max(0, Math.min(canvas.width - CPW, this.tx));
+    this.ty = Math.max(0, Math.min(canvas.height - CPH, this.ty));
     const dx = this.tx - this.x, dy = this.ty - this.y, d = Math.hypot(dx, dy);
     if (d < s) { this.x = this.tx; this.y = this.ty; this.tx = this.ty = null; return true; }
     if (Math.abs(dx) > 0.5) this.right = dx > 0;
     this.x += dx / d * s; this.y += dy / d * s;
-    this.x = Math.max(0, Math.min(canvas.width - PW, this.x));
-    this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+    this.x = Math.max(0, Math.min(canvas.width - CPW, this.x));
+    this.y = Math.max(0, Math.min(canvas.height - CPH, this.y));
     return false;
   }
 
   _roamTo(px, py) {
-    this.state = 'walking'; this.tx = px - PW / 2; this.ty = py - PH / 2;
+    this.state = 'walking'; this.tx = px - CPW / 2; this.ty = py - CPH / 2;
   }
 
   update() {
@@ -694,7 +697,7 @@ class Cat {
       }
       if (this.state === 'leaving') {
         this.x += (this.right ? 1 : -1) * SPEED;
-        if (this.x > canvas.width + PW * 2 || this.x < -PW * 2) this.dead = true;
+        if (this.x > canvas.width + CPW * 2 || this.x < -CPW * 2) this.dead = true;
       }
       return;
     }
@@ -706,7 +709,7 @@ class Cat {
         const n = 2 + Math.floor(Math.random() * 3);
         for (let i = 0; i < n; i++) {
           const color = CAT_COLORS[Math.floor(Math.random() * CAT_COLORS.length)];
-          kittens.push(new Kitten(this.cx, this.y + PH, color));
+          kittens.push(new Kitten(this.cx, this.y + CPH, color));
         }
         labels.push(new Label('Mew!', this.cx, Math.max(20, this.y - 8)));
       }
@@ -725,14 +728,14 @@ class Cat {
       if (!laserActive) { this.state = 'idle'; }
       else {
         // Use reachable center position to avoid edge-stuck
-        const reachX = Math.max(PW / 2, Math.min(canvas.width - PW / 2, laserX));
-        const reachY = Math.max(PH / 2, Math.min(canvas.height - PH / 2, laserY));
+        const reachX = Math.max(CPW / 2, Math.min(canvas.width - CPW / 2, laserX));
+        const reachY = Math.max(CPH / 2, Math.min(canvas.height - CPH / 2, laserY));
         const dx = reachX - this.cx, dy = reachY - this.cy;
         const d = Math.hypot(dx, dy);
         if (d < 14) { laserActive = false; this.state = 'happy'; this.lingerTicks = 45; }
         else { const s = SPEED * 1.2; this.x += dx/d*s; this.y += dy/d*s; this.right = dx > 0;
-          this.x = Math.max(0, Math.min(canvas.width - PW, this.x));
-          this.y = Math.max(0, Math.min(canvas.height - PH, this.y)); }
+          this.x = Math.max(0, Math.min(canvas.width - CPW, this.x));
+          this.y = Math.max(0, Math.min(canvas.height - CPH, this.y)); }
       }
     }
 
@@ -744,14 +747,14 @@ class Cat {
         const dx = this.chaseTarget.x + RAT_W/2 - this.cx;
         const dy = this.chaseTarget.y + RAT_H/2 - this.cy;
         const d = Math.hypot(dx, dy);
-        if (d < PW * 0.5) {
+        if (d < CPW * 0.5) {
           this.chaseTarget.flee(); this.chaseTarget = null;
           this.state = 'happy'; this.lingerTicks = 60;
         } else {
           const s = SPEED * 1.25;
           this.x += dx/d*s; this.y += dy/d*s; this.right = dx > 0;
-          this.x = Math.max(0, Math.min(canvas.width - PW, this.x));
-          this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+          this.x = Math.max(0, Math.min(canvas.width - CPW, this.x));
+          this.y = Math.max(0, Math.min(canvas.height - CPH, this.y));
         }
       }
     }
@@ -767,7 +770,7 @@ class Cat {
     // Leaving the screen
     if (this.state === 'leaving') {
       this.x += (this.right ? 1 : -1) * SPEED;
-      if (this.x > canvas.width + PW * 2 || this.x < -PW * 2) this.dead = true;
+      if (this.x > canvas.width + CPW * 2 || this.x < -CPW * 2) this.dead = true;
       return;
     }
 
@@ -795,7 +798,7 @@ class Cat {
         } else if (Math.random() < 0.8) {
           this.state = 'sleep'; this.sleepTimer = 60 * (10 + Math.floor(Math.random() * 20));
         } else {
-          this._roamTo(PW + Math.random() * (canvas.width - PW * 2), PH + Math.random() * (canvas.height - PH * 2));
+          this._roamTo(CPW + Math.random() * (canvas.width - CPW * 2), CPH + Math.random() * (canvas.height - CPH * 2));
         }
       }
     } else if (!['idle','happy','laser','chase','sleep'].includes(this.state)) {
@@ -823,7 +826,7 @@ class Cat {
           const isNose = r === 2 && c === 9;
           const isWhisker = r === 2 && (c === 3 || c === 4);
           ctx.fillStyle = isNose ? '#ff99bb' : isWhisker ? '#dddddd' : bodyColor;
-          ctx.fillRect(x + dc * S, y + r * S, S, S);
+          ctx.fillRect(x + dc * CAT_S, y + r * CAT_S, CAT_S, CAT_S);
         }
   }
 }
@@ -836,10 +839,14 @@ class Kitten {
     this.vx = (Math.random() - 0.5) * 0.6;
     this.vy = (Math.random() - 0.5) * 0.3;
     this.age = 0; this.color = color; this.dead = false;
+    this.right = Math.random() < 0.5;
   }
   update() {
     this.age++;
-    if (Math.random() < 0.012) { this.vx = (Math.random()-0.5)*0.6; this.vy = (Math.random()-0.5)*0.3; }
+    if (Math.random() < 0.012) {
+      this.vx = (Math.random()-0.5)*0.6; this.vy = (Math.random()-0.5)*0.3;
+    }
+    if (Math.abs(this.vx) > 0.1) this.right = this.vx > 0;
     this.x += this.vx; this.y += this.vy;
     if (this.x < 0) { this.x = 0; this.vx = Math.abs(this.vx); }
     if (this.x > canvas.width) { this.x = canvas.width; this.vx = -Math.abs(this.vx); }
@@ -848,8 +855,8 @@ class Kitten {
     if (this.age >= KITTEN_MATURE) {
       if (cats.length + kittens.length <= 35) {
         cats.push(new Cat({
-          x: this.x, y: this.y, color: this.color,
-          birthCooldown: 60 * 40, right: Math.random() < 0.5
+          x: this.x - CPW / 2, y: this.y - CPH,
+          color: this.color, birthCooldown: 60 * 40, right: this.right
         }));
       }
       this.dead = true;
@@ -858,10 +865,19 @@ class Kitten {
   draw() {
     if (this.dead) return;
     const p = this.age / KITTEN_MATURE;
-    const sz = Math.max(2, Math.round(p * PW * 0.45));
-    ctx.fillStyle = p < 0.25 ? '#ffddcc' : this.color;
-    ctx.fillRect(Math.round(this.x - sz/2), Math.round(this.y - sz/2), sz, sz);
-    if (p > 0.5) { ctx.fillStyle = '#ff99bb'; ctx.fillRect(Math.round(this.x - sz/2), Math.round(this.y), 2, 2); }
+    const sc = Math.max(1, Math.round(p * CAT_S));
+    const w = DW * sc, h = DH * sc;
+    const x = Math.round(this.x - w / 2), y = Math.round(this.y - h);
+    const bodyColor = p < 0.15 ? '#ffddcc' : this.color;
+    for (let r = 0; r < DH; r++)
+      for (let c = 0; c < DW; c++)
+        if (CAT_IDLE[r][c]) {
+          const dc = this.right ? c : DW - 1 - c;
+          const isNose = r === 2 && c === 9;
+          const isWhisker = r === 2 && (c === 3 || c === 4);
+          ctx.fillStyle = isNose ? '#ff99bb' : isWhisker ? '#dddddd' : bodyColor;
+          ctx.fillRect(x + dc * sc, y + r * sc, sc, sc);
+        }
   }
 }
 
@@ -1217,10 +1233,10 @@ function enterRatMode() {
   hearts.length = 0; dirts.length = 0; labels.length = 0;
   thrownBall = null; marker = null; laserActive = false;
   scritchCat = null; interacted = false;
-  cheeseCount = 0; raidCats.length = 0;
+  cheeseCount = 0; raidCats.length = 0; seedRespawnTimer = 0;
   const cx = canvas.width / 2, cy = canvas.height / 2;
-  rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#c8922a', matingCooldown: 60 * 8 }));
-  rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0 }));
+  rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#c8922a', matingCooldown: 60 * 8, isSeed: true }));
+  rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0, isSeed: true }));
 }
 
 function enterDogMode() {
@@ -1247,7 +1263,7 @@ function enterCatMode() {
   catVisitorCooldown = 60 * 25;
   // Main cat — always at index 0, never leaves
   cats.push(new Cat({ isMain: true, color: CAT_COLORS[0],
-    x: canvas.width/2 - PW/2, y: canvas.height/2 - PH/2, birthCooldown: 0 }));
+    x: canvas.width/2 - CPW/2, y: canvas.height/2 - CPH/2, birthCooldown: 0 }));
 }
 
 function trySpawnCatVisitor() {
@@ -1256,14 +1272,14 @@ function trySpawnCatVisitor() {
   const fromLeft = Math.random() < 0.5;
   const mc = cats[0];
   const vy = mc ? mc.y + (Math.random()-0.5)*60 : canvas.height/2;
-  const vx = fromLeft ? -PW * 2 : canvas.width + PW;
-  const targetX = (mc ? mc.x : canvas.width/2) + (fromLeft ? PW*2.5 : -PW*2.5);
+  const vx = fromLeft ? -CPW * 2 : canvas.width + CPW;
+  const targetX = (mc ? mc.x : canvas.width/2) + (fromLeft ? CPW*2.5 : -CPW*2.5);
   const vis = new Cat({
-    x: vx, y: Math.max(PH, Math.min(canvas.height - PH*2, vy)),
+    x: vx, y: Math.max(CPH, Math.min(canvas.height - CPH*2, vy)),
     color: CAT_COLORS[1 + Math.floor(Math.random() * (CAT_COLORS.length - 1))],
     right: fromLeft, isVisitor: true,
-    state: 'walking', tx: targetX - PW/2,
-    ty: (mc ? mc.y : canvas.height/2) - PH/2
+    state: 'walking', tx: targetX - CPW/2,
+    ty: (mc ? mc.y : canvas.height/2) - CPH/2
   });
   cats.push(vis);
 }
@@ -1274,57 +1290,7 @@ function trySpawnCatRat() {
   const side = Math.random() < 0.5;
   catRats.push(new Rat(
     side ? 0 : canvas.width,
-    PH + Math.random() * (canvas.height - PH * 2)
-  ));
-}
-
-function manageCatPopulation() {
-  const total = cats.length + kittens.length;
-  if (total > 25 && Math.random() < 0.0015) {
-    const eligible = cats.filter((c, i) => i > 0 && !c.isVisitor && c.state !== 'leaving' && !c.dead);
-    if (eligible.length > 0) {
-      const c = eligible[Math.floor(Math.random() * eligible.length)];
-      c.state = 'leaving'; c.right = c.x > canvas.width / 2;
-    }
-  }
-}
-
-function drawLaser(x, y) {
-  ctx.save();
-  ctx.globalAlpha = 0.22;
-  ctx.fillStyle = '#ff3300';
-  ctx.fillRect(Math.round(x) - 7, Math.round(y) - 7, 14, 14);
-  ctx.globalAlpha = 1;
-  ctx.fillStyle = '#ff1100';
-  ctx.fillRect(Math.round(x) - 2, Math.round(y) - 2, 5, 5);
-  ctx.restore();
-}
-
-function trySpawnCatVisitor() {
-  if (--catVisitorCooldown > 0) return;
-  catVisitorCooldown = 60 * (20 + Math.floor(Math.random() * 30));
-  const fromLeft = Math.random() < 0.5;
-  const mc = cats[0];
-  const vy = mc ? mc.y + (Math.random()-0.5)*60 : canvas.height/2;
-  const vx = fromLeft ? -PW * 2 : canvas.width + PW;
-  const targetX = (mc ? mc.x : canvas.width/2) + (fromLeft ? PW*2.5 : -PW*2.5);
-  const vis = new Cat({
-    x: vx, y: Math.max(PH, Math.min(canvas.height - PH*2, vy)),
-    color: CAT_COLORS[1 + Math.floor(Math.random() * (CAT_COLORS.length - 1))],
-    right: fromLeft, isVisitor: true,
-    state: 'walking', tx: targetX - PW/2,
-    ty: (mc ? mc.y : canvas.height/2) - PH/2
-  });
-  cats.push(vis);
-}
-
-function trySpawnCatRat() {
-  if (catRats.length >= 5 || --catRatCooldown > 0) return;
-  catRatCooldown = 60 * (5 + Math.floor(Math.random() * 8));
-  const side = Math.random() < 0.5;
-  catRats.push(new Rat(
-    side ? 0 : canvas.width,
-    PH + Math.random() * (canvas.height - PH * 2)
+    CPH + Math.random() * (canvas.height - CPH * 2)
   ));
 }
 
@@ -1353,6 +1319,7 @@ function drawLaser(x, y) {
 // ─── Input ───────────────────────────────────────────────────────────────────
 let scritching = false, interacted = false;
 let cursorX = -200, cursorY = -200, cursorVisible = false;
+let lastTapTime = 0, lastTapX = 0, lastTapY = 0;
 
 canvas.addEventListener('pointerdown', e => {
   e.preventDefault();
@@ -1402,6 +1369,21 @@ canvas.addEventListener('pointerdown', e => {
     }
     cheeses.push({ x: px - CHEESE_W / 2, y: py - CHEESE_H / 2, eaten: false });
     if (++cheeseCount % 15 === 0 && rats.length > 0) raidCats.push(new RaidCat());
+    return;
+  }
+
+  // Double-tap anywhere in dog mode → dig immediately
+  const now = Date.now();
+  const doubleTap = now - lastTapTime < 300 && Math.hypot(px - lastTapX, py - lastTapY) < 60;
+  lastTapTime = now; lastTapX = px; lastTapY = py;
+  if (doubleTap && gameMode === 'dog') {
+    dog.walkTo(px, py);
+    dog.state = 'digging'; dog.digTimer = DIG_DURATION; dog.frame = 0; dog.tick = 0;
+    dog.x = Math.round(px - PW / 2); dog.y = Math.round(py - PH / 2);
+    dog.x = Math.max(0, Math.min(canvas.width - PW, dog.x));
+    dog.y = Math.max(0, Math.min(canvas.height - PH, dog.y));
+    dog.tx = null; dog.ty = null;
+    labels.push(new Label('Dig!', dog.cx, Math.max(20, dog.y - 4)));
     return;
   }
 
@@ -1525,6 +1507,21 @@ function loop() {
     for (let i = rats.length - 1; i >= 0; i--) {
       rats[i].update();
       if (rats[i].dead) rats.splice(i, 1); else rats[i].draw();
+    }
+
+    // Respawn seed rats if they've been chased away
+    const hasSeedM = rats.some(r => r.isSeed && r.sex === 'm');
+    const hasSeedF = rats.some(r => r.isSeed && r.sex === 'f');
+    if (!hasSeedM || !hasSeedF) {
+      if (seedRespawnTimer === 0) seedRespawnTimer = 60 * 15;
+      else if (--seedRespawnTimer <= 0) {
+        seedRespawnTimer = 0;
+        const cx = canvas.width / 2, cy = canvas.height / 2;
+        if (!hasSeedM) rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#c8922a', matingCooldown: 60 * 5, isSeed: true }));
+        if (!hasSeedF) rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0, isSeed: true }));
+      }
+    } else {
+      seedRespawnTimer = 0;
     }
 
     for (let i = raidCats.length - 1; i >= 0; i--) {
