@@ -406,32 +406,86 @@ const FLOOR_MINX = CX + 10;
 const FLOOR_MAXX = CX + CW - RW - 10;
 const WALK_SPEED = 0.5;   // virtual px per frame (~30 vpx/s at 60 fps)
 
+// Eating/drinking spots: rat nose aligned to bowl centre / bottle nozzle
+const EAT_X   = Math.round(CX + 52 + 22 - RW);     // bowl centre at CX+74
+const DRINK_X  = Math.round(CX + CW - 44 + 10 - RW); // nozzle at CX+CW-34
+
 // ── Rat state ─────────────────────────────────────────────────────────────────
+const HUNGER_RATE  = 0.0056;  // depletes hunger in ~5 min at 60 fps
+const THIRST_RATE  = 0.0083;  // depletes thirst in ~3 min at 60 fps
+const ACT_DURATION = 100;     // frames spent eating/drinking
+
 function makeRat(x, right, body, patch) {
   return {
-    x, y: FLOOR_Y,
-    right, body, patch,
+    x, y: FLOOR_Y, right, body, patch,
     tx: x,
     idleTimer: 60 + Math.floor(Math.random() * 120),
     twitch: 0,
+    hunger: 75 + Math.random() * 25,
+    thirst: 75 + Math.random() * 25,
+    act: 'idle',   // 'idle'|'wander'|'to-eat'|'eating'|'to-drink'|'drinking'
+    actTimer: 0,
   };
 }
 
 function tickRat(rat) {
+  // Needs deplete every frame
+  rat.hunger = Math.max(0, rat.hunger - HUNGER_RATE);
+  rat.thirst = Math.max(0, rat.thirst - THIRST_RATE);
+
   // Ear twitch
   if (rat.twitch > 0) { rat.twitch--; }
   else if (Math.random() < 0.003) { rat.twitch = 20; }
 
-  // Wander: count down idle, then walk toward target, then idle again
+  // Eating or drinking — stay put and count down
+  if (rat.act === 'eating' || rat.act === 'drinking') {
+    rat.right = true;
+    if (rat.actTimer > 0) {
+      rat.actTimer--;
+    } else {
+      if (rat.act === 'eating')   rat.hunger = 100;
+      if (rat.act === 'drinking') rat.thirst = 100;
+      rat.act = 'idle';
+      rat.idleTimer = 60 + Math.floor(Math.random() * 120);
+    }
+    return;
+  }
+
+  // Walking toward bowl or bottle
+  if (rat.act === 'to-eat' || rat.act === 'to-drink') {
+    const dx = rat.tx - rat.x;
+    if (Math.abs(dx) <= WALK_SPEED) {
+      rat.x    = rat.tx;
+      rat.act  = rat.act === 'to-eat' ? 'eating' : 'drinking';
+      rat.actTimer = ACT_DURATION + Math.floor(Math.random() * 40);
+    } else {
+      rat.x    += Math.sign(dx) * WALK_SPEED;
+      rat.right = dx > 0;
+    }
+    return;
+  }
+
+  // Idle: count down, then choose next destination
   if (rat.idleTimer > 0) {
     rat.idleTimer--;
     if (rat.idleTimer === 0) {
-      rat.tx = FLOOR_MINX + Math.random() * (FLOOR_MAXX - FLOOR_MINX);
+      const hungry  = rat.hunger < 45;
+      const thirsty = rat.thirst < 45;
+      if (hungry && (!thirsty || rat.hunger <= rat.thirst)) {
+        rat.tx = EAT_X;  rat.act = 'to-eat';
+      } else if (thirsty) {
+        rat.tx = DRINK_X; rat.act = 'to-drink';
+      } else {
+        rat.tx  = FLOOR_MINX + Math.random() * (FLOOR_MAXX - FLOOR_MINX);
+        rat.act = 'wander';
+      }
     }
   } else {
+    // Walking to a random wander target
     const dx = rat.tx - rat.x;
     if (Math.abs(dx) <= WALK_SPEED) {
       rat.x = rat.tx;
+      rat.act = 'idle';
       rat.idleTimer = 90 + Math.floor(Math.random() * 200);
     } else {
       rat.x += Math.sign(dx) * WALK_SPEED;
@@ -451,6 +505,13 @@ function breathOffset(phase) {
   return Math.sin(tick * 0.022 + phase) * 1.5;
 }
 
+// Nibbling bob while eating; gentle sip while drinking.
+function actOffset(rat) {
+  if (rat.act === 'eating')   return Math.sin(tick * 0.18) * 2.5;
+  if (rat.act === 'drinking') return Math.sin(tick * 0.09) * 1.5;
+  return 0;
+}
+
 // ── Main loop ─────────────────────────────────────────────────────────────────
 function loop() {
   tick++;
@@ -463,8 +524,8 @@ function loop() {
   drawCage();
 
   // Each rat breathes on a slightly different phase so they don't sync perfectly
-  const lokiDY   = breathOffset(0);
-  const potatoDY = breathOffset(1.4);
+  const lokiDY   = breathOffset(0)   + actOffset(loki);
+  const potatoDY = breathOffset(1.4) + actOffset(potato);
 
   drawRat(loki.x,   loki.y   + lokiDY,   loki.right,   loki.body,   loki.patch,   loki.twitch   > 0);
   drawRat(potato.x, potato.y + potatoDY, potato.right, potato.body, potato.patch, potato.twitch > 0);
