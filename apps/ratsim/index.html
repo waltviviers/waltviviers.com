@@ -3,43 +3,24 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apps &amp; Games — Walt Viviers</title>
-  <meta name="description" content="Apps and games by Walt Viviers — South African fine artist and developer, based in Pretoria." />
-  <link rel="canonical" href="https://waltviviers.com/apps/" />
+  <title>Ratsim — A Pet Rat Simulator</title>
+  <meta name="description" content="A browser-based pet rat simulator by Walt Viviers. Feed it, play with it, watch it nap. No download, no account required." />
+  <link rel="canonical" href="https://waltviviers.com/apps/ratsim/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
 
   <meta name="robots" content="noindex, follow" />
 
-  <!-- Hreflang -->
-  <link rel="alternate" hreflang="en" href="https://waltviviers.com/apps/" />
-  <link rel="alternate" hreflang="af" href="https://waltviviers.com/apps/" />
-  <link rel="alternate" hreflang="x-default" href="https://waltviviers.com/apps/" />
-
-  <!-- Geo -->
-  <meta name="geo.region" content="ZA-GP" />
-  <meta name="geo.placename" content="Pretoria, Gauteng, South Africa" />
-  <meta name="geo.position" content="-25.7479;28.2293" />
-  <meta name="ICBM" content="-25.7479, 28.2293" />
-
   <!-- Open Graph -->
-  <meta property="og:type"         content="website" />
-  <meta property="og:url"          content="https://waltviviers.com/apps/" />
-  <meta property="og:title"        content="Apps &amp; Games — Walt Viviers" />
-  <meta property="og:description"  content="Apps and games by Walt Viviers — South African fine artist and developer." />
-  <meta property="og:image"        content="https://waltviviers.com/images/walt-viviers-fine-art-banner.webp" />
-  <meta property="og:image:alt"    content="Walt Viviers — fine artist and developer" />
-  <meta property="og:image:type"   content="image/webp" />
-  <meta property="og:image:width"  content="2360" />
-  <meta property="og:image:height" content="590" />
-  <meta property="og:locale"       content="en_ZA" />
-  <meta property="og:site_name"    content="Walt Viviers" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://waltviviers.com/apps/ratsim/" />
+  <meta property="og:title"       content="Ratsim — A Pet Rat Simulator" />
+  <meta property="og:description" content="A browser-based pet rat simulator. Feed it, play with it, watch it nap. No download required." />
+  <meta property="og:site_name"   content="Walt Viviers" />
 
   <!-- Twitter / X -->
-  <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:title"       content="Apps &amp; Games — Walt Viviers" />
-  <meta name="twitter:description" content="Apps and games by Walt Viviers — South African fine artist and developer." />
-  <meta name="twitter:image"       content="https://waltviviers.com/images/walt-viviers-fine-art-banner.webp" />
-  <meta name="twitter:image:alt"   content="Walt Viviers — fine artist and developer" />
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:title"       content="Ratsim — A Pet Rat Simulator" />
+  <meta name="twitter:description" content="A browser-based pet rat simulator. Feed it, play with it, watch it nap. No download required." />
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -47,22 +28,22 @@
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "CollectionPage",
-        "name": "Apps & Games — Walt Viviers",
-        "description": "Apps and games by Walt Viviers — South African fine artist and developer, based in Pretoria.",
-        "url": "https://waltviviers.com/apps/",
-        "author": {
-          "@type": "Person",
-          "name": "Walt Viviers",
-          "url": "https://waltviviers.com"
-        },
-        "breadcrumb": {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltviviers.com/" },
-            { "@type": "ListItem", "position": 2, "name": "Apps & Games", "item": "https://waltviviers.com/apps/" }
-          ]
-        }
+        "@type": "SoftwareApplication",
+        "name": "Ratsim",
+        "description": "A browser-based pet rat simulator. Feed it, play with it, watch it nap. No download, no account required.",
+        "url": "https://waltviviers.com/apps/ratsim/",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Any",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Walt Viviers", "url": "https://waltviviers.com" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltviviers.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Apps & Games", "item": "https://waltviviers.com/apps/" },
+          { "@type": "ListItem", "position": 3, "name": "Ratsim", "item": "https://waltviviers.com/apps/ratsim/" }
+        ]
       }
     ]
   }
@@ -105,16 +86,10 @@
 
     /* ── Nav ── */
     nav {
-      position: fixed;
-      inset: 0 0 auto 0;
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 48px;
-      height: 100px;
-      background: rgba(0,0,0,0.95);
-      backdrop-filter: blur(16px);
+      position: fixed; inset: 0 0 auto 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 100px;
+      background: rgba(0,0,0,0.95); backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--rule);
       transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -136,9 +111,8 @@
       max-width: 20px; overflow: hidden; white-space: nowrap;
       transition: max-width 0.3s ease, opacity 0.2s ease;
     }
-    .lang-group.active .lang-label,
-    .lang-group.active .lang-code  { color: var(--ink); }
-    .lang-group.active .lang-pipe  { color: var(--stone); }
+    .lang-group.active .lang-label, .lang-group.active .lang-code { color: var(--ink); }
+    .lang-group.active .lang-pipe { color: var(--stone); }
     .nav-logo img { height: 36px; width: auto; transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
     nav.scrolled .nav-logo img { height: 28px; }
     .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
@@ -154,10 +128,7 @@
       padding: 7px 18px; border: 1px solid #4A4844;
       transition: background 0.2s, color 0.2s, border-color 0.2s !important;
     }
-    .nav-cta:hover {
-      background: var(--white) !important; color: var(--black) !important;
-      border-color: var(--white) !important;
-    }
+    .nav-cta:hover { background: var(--white) !important; color: var(--black) !important; border-color: var(--white) !important; }
     .social-icons { display: flex; align-items: center; gap: 16px; }
     .social-icons a, .social-icons button {
       display: flex; align-items: center; justify-content: center;
@@ -165,11 +136,7 @@
       background: none; border: none; padding: 0; cursor: pointer;
     }
     .social-icons a:hover, .social-icons button:hover { color: var(--white); }
-    .social-icons svg {
-      width: 18px; height: 18px; fill: none;
-      stroke: currentColor; stroke-width: 1.5;
-      stroke-linecap: round; stroke-linejoin: round;
-    }
+    .social-icons svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
     .theme-toggle {
       position: relative; width: 60px; height: 32px; border-radius: 16px;
       border: 1.5px solid #4A4844; background: transparent;
@@ -178,8 +145,7 @@
     }
     .toggle-thumb {
       position: absolute; top: 4px; left: 4px;
-      width: 22px; height: 22px; border-radius: 50%;
-      background: var(--ink);
+      width: 22px; height: 22px; border-radius: 50%; background: var(--ink);
       display: flex; align-items: center; justify-content: center;
       transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -190,8 +156,7 @@
     }
     .toggle-thumb .icon-moon { display: block; }
     .toggle-thumb .icon-sun  { display: none; }
-    nav.scrolled .lang-label,
-    nav.scrolled .lang-pipe { max-width: 0; opacity: 0; padding: 0; }
+    nav.scrolled .lang-label, nav.scrolled .lang-pipe { max-width: 0; opacity: 0; padding: 0; }
     nav.scrolled .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
     nav.scrolled .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
     nav.scrolled .toggle-thumb .icon-moon,
@@ -222,10 +187,7 @@
     .footer-admin:hover { border-color: var(--stone); color: var(--ink); }
 
     /* ── Light mode ── */
-    [data-theme="light"] {
-      --ink: #0C0C0B; --stone: #6B6560; --rule: #D5D1CB;
-      --bg: #F5F3EF; --bg2: #EDEAE5;
-    }
+    [data-theme="light"] { --ink: #0C0C0B; --stone: #6B6560; --rule: #D5D1CB; --bg: #F5F3EF; --bg2: #EDEAE5; }
     [data-theme="light"] body { background: #F5F3EF; }
     [data-theme="light"] nav { background: rgba(245,243,239,0.95); }
     [data-theme="light"] .nav-logo img { filter: invert(1); opacity: 1; }
@@ -238,122 +200,88 @@
     [data-theme="light"] .footer-admin:hover { color: #0C0C0B; border-color: #6B6560; }
     [data-theme="light"] .footer-social .social-icons a:hover { color: var(--ink); }
 
-    /* ── Page ── */
-    .page-wrap {
-      padding: calc(100px + 64px) 48px 100px;
-      max-width: 1200px;
-      margin: 0 auto;
+    /* ── Hero ── */
+    .hero {
+      padding-top: 100px; padding-bottom: 100px; min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding-left: 24px; padding-right: 24px;
+      border-bottom: 1px solid var(--rule); position: relative;
     }
-
-    .page-head {
-      margin-bottom: 64px;
-      padding-bottom: 32px;
-      border-bottom: 1px solid var(--rule);
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 16px;
+    .app-eyebrow {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--stone); margin-bottom: 28px;
     }
-
-    .page-head h1 {
+    .hero h1 {
       font-family: var(--serif);
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 400;
-      line-height: 1.1;
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 20px;
+    }
+    .hero-tagline {
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem); color: var(--stone); margin-bottom: 28px;
+    }
+    .hero-desc {
+      font-size: clamp(15px, 2vw, 18px); color: var(--stone);
+      line-height: 1.7; max-width: 520px; margin: 0 auto 52px;
+    }
+    .app-icon {
+      width: 96px; height: 96px; border-radius: 22px; background: #1A1A1A;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5); overflow: hidden;
+      display: flex; align-items: center; justify-content: center; margin: 0 auto 40px;
+    }
+    .app-icon img { width: 100%; height: 100%; display: block; object-fit: cover; }
+    .coming-soon-badge {
+      display: inline-flex; align-items: center;
+      padding: 10px 28px; border: 1px solid var(--rule);
+      font-size: 12px; font-weight: 500; letter-spacing: 0.10em;
+      text-transform: uppercase; color: var(--stone);
+    }
+    .hero-scroll {
+      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      color: var(--stone); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .hero-scroll svg {
+      width: 16px; height: 16px; stroke: var(--stone); fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+      animation: bounce 2s ease-in-out infinite;
+    }
+    @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+
+    /* ── Privacy strip ── */
+    .privacy-strip {
+      padding: 80px 48px; display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center; border-bottom: 1px solid var(--rule);
+    }
+    .privacy-tag {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--stone); margin-bottom: 20px;
+    }
+    .privacy-strip h2 {
+      font-family: var(--serif); font-size: clamp(28px, 3vw, 44px);
+      font-weight: 400; line-height: 1.2; letter-spacing: -0.01em; margin-bottom: 20px;
+    }
+    .privacy-strip p { font-size: 15px; color: var(--stone); line-height: 1.8; }
+    .privacy-checklist { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+    .privacy-checklist li {
+      display: flex; align-items: flex-start; gap: 14px;
+      font-size: 14px; color: var(--stone); line-height: 1.5;
+    }
+    .privacy-checklist li svg {
+      flex-shrink: 0; width: 16px; height: 16px; stroke: var(--stone); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; margin-top: 2px;
     }
 
-    .back-link {
-      font-size: 11px;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--stone);
-      transition: color 0.2s;
+    /* ── CTA ── */
+    .cta-section { padding: 120px 48px; text-align: center; border-bottom: 1px solid var(--rule); }
+    .cta-section h2 {
+      font-family: var(--serif); font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 400; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 48px;
     }
-    .back-link:hover { color: var(--ink); }
+    .cta-section h2 em { font-style: italic; color: var(--stone); }
 
-    /* ── App grid ── */
-    .apps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1px;
-      background: var(--rule);
-      border: 1px solid var(--rule);
-    }
-
-    .app-card {
-      background: var(--bg);
-      display: flex;
-      align-items: flex-start;
-      gap: 24px;
-      padding: 40px;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-    .app-card:hover { background: var(--bg2); }
-
-    .app-card-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 16px;
-      background: #1A1A1A;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .app-card-icon svg,
-    .app-card-icon img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-    }
-
-    .app-card-body { flex: 1; min-width: 0; }
-
-    .app-card-name {
-      font-family: var(--serif);
-      font-size: 1.4rem;
-      font-weight: 400;
-      line-height: 1.2;
-      margin-bottom: 8px;
-    }
-
-    .app-card-desc {
-      font-size: 13px;
-      color: var(--stone);
-      line-height: 1.65;
-      margin-bottom: 16px;
-    }
-
-    .app-card-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .app-platform {
-      font-size: 10px;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--stone);
-      padding: 3px 8px;
-      border: 1px solid var(--rule);
-    }
-
-    .app-card-link {
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--stone);
-      transition: color 0.2s;
-    }
-    .app-card:hover .app-card-link { color: var(--ink); }
-
-    /* ── Light mode ── */
-    [data-theme="light"] .app-card { background: #F5F3EF; }
-    [data-theme="light"] .app-card:hover { background: #EDEAE5; }
+    /* ── Light mode specifics ── */
+    [data-theme="light"] .app-icon { background: #1A1A1A; }
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
@@ -364,22 +292,19 @@
       .lang-label, .lang-pipe { display: none; }
       .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
-      .toggle-thumb .icon-moon,
-      .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
+      .toggle-thumb .icon-moon, .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
       .theme-toggle:hover .toggle-thumb .icon-moon,
       .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
-      .page-wrap { padding: calc(50px + 40px) 24px 80px; }
-      .apps-grid { grid-template-columns: 1fr; }
-      .app-card { padding: 28px 24px; }
+      .hero { padding-top: calc(50px + 80px); padding-bottom: 80px; min-height: auto; }
+      .hero-scroll { display: none; }
+      .privacy-strip { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
+      .cta-section { padding: 80px 24px; }
       footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
       .footer-admin { position: static; transform: none; order: 1; }
       .footer-social { order: 0; }
       .footer-mark { position: static; transform: none; order: 2; }
     }
-
-    @media (max-width: 560px) {
-      .footer-admin { display: none; }
-    }
+    @media (max-width: 560px) { .footer-admin { display: none; } }
   </style>
 </head>
 <body>
@@ -426,63 +351,48 @@
     </ul>
   </nav>
 
-  <div class="page-wrap">
-    <div class="page-head">
-      <h1 data-i18n="page-title">Apps</h1>
-      <a href="/" class="back-link" data-i18n="back-home">← Back to home</a>
-    </div>
+  <main>
 
-    <div class="apps-grid">
-      <a href="/apps/bill_tipper/" class="app-card">
-        <div class="app-card-icon" aria-hidden="true">
-          <img src="/images/bill-tipper-icon.webp" alt="" width="64" height="64" />
-        </div>
-        <div class="app-card-body">
-          <div class="app-card-name">Bill Tipper</div>
-          <p class="app-card-desc" data-i18n="bt-desc">Split bills and calculate tips instantly. No ads, no tracking, works offline.</p>
-          <div class="app-card-meta">
-            <span class="app-card-link" data-i18n="view-app">Learn more →</span>
-          </div>
-        </div>
-      </a>
-      <a href="/apps/neurotracer/" class="app-card">
-        <div class="app-card-icon" aria-hidden="true">
-          <img src="/images/neurotrace-icon2.webp" alt="" width="64" height="64" />
-        </div>
-        <div class="app-card-body">
-          <div class="app-card-name">Neurotracer</div>
-          <p class="app-card-desc" data-i18n="nt-desc">A cyberpunk memory puzzle. Watch the sequence, repeat it back — and survive. No ads, no data collected, works offline.</p>
-          <div class="app-card-meta">
-            <span class="app-card-link" data-i18n="view-nt">Learn more →</span>
-          </div>
-        </div>
-      </a>
-      <a href="/apps/scritch-scratch/" class="app-card">
-        <div class="app-card-icon" aria-hidden="true">
-          <img src="/images/scritch-scratch-icon.webp" alt="" width="64" height="64" />
-        </div>
-        <div class="app-card-body">
-          <div class="app-card-name">Scritch Scratch</div>
-          <p class="app-card-desc" data-i18n="ss-desc">Play fetch with your Pixel Puppy.</p>
-          <div class="app-card-meta">
-            <span class="app-card-link" data-i18n="view-ss">Learn more →</span>
-          </div>
-        </div>
-      </a>
-      <a href="/apps/ratsim/" class="app-card">
-        <div class="app-card-icon" aria-hidden="true">
-          <img src="/images/scritch-scratch-icon.webp" alt="" width="64" height="64" />
-        </div>
-        <div class="app-card-body">
-          <div class="app-card-name">Ratsim</div>
-          <p class="app-card-desc" data-i18n="rs-desc">Your very own virtual rat. Coming soon.</p>
-          <div class="app-card-meta">
-            <span class="app-card-link" data-i18n="view-rs">Learn more →</span>
-          </div>
-        </div>
-      </a>
-    </div>
-  </div>
+    <!-- Hero -->
+    <section class="hero">
+      <p class="app-eyebrow" data-i18n="app-eyebrow">A browser game by Walt Viviers</p>
+      <div class="app-icon" aria-hidden="true">
+        <img src="/images/scritch-scratch-icon.webp" alt="Ratsim" width="96" height="96" />
+      </div>
+      <h1>Ratsim</h1>
+      <p class="hero-tagline" data-i18n="hero-tagline">Your very own virtual rat.</p>
+      <p class="hero-desc" data-i18n="hero-desc">Feed it. Play with it. Watch it nap in a tiny pile of bedding. Ratsim is a cozy pet simulation for people who have always wanted a rat.</p>
+      <span class="coming-soon-badge" data-i18n="coming-soon">Coming soon</span>
+      <div class="hero-scroll" aria-hidden="true">
+        <span>Scroll</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </section>
+
+    <!-- Privacy -->
+    <section class="privacy-strip">
+      <div>
+        <p class="privacy-tag" data-i18n="privacy-tag">Built with care</p>
+        <h2><span data-i18n="priv-h1">No ads.</span><br/><span data-i18n="priv-h2">No data.</span><br/><span data-i18n="priv-h3">No install.</span></h2>
+        <p data-i18n="privacy-desc">Ratsim runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you and your rat.</p>
+      </div>
+      <ul class="privacy-checklist" aria-label="Privacy commitments">
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-1">No personal data collected</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-2">No account or sign-in required</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-3">Works fully offline</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-4">No ads or tracking of any kind</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-5">No device permissions requested</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-6">Free to play</span></li>
+      </ul>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <h2><span data-i18n="cta-line1">Your rat is</span><br/><em data-i18n="cta-line2">almost ready.</em></h2>
+      <span class="coming-soon-badge" data-i18n="coming-soon">Coming soon</span>
+    </section>
+
+  </main>
 
   <footer>
     <button class="footer-admin" id="admin-btn">Admin</button>
@@ -519,8 +429,7 @@
       const html = document.documentElement;
       document.getElementById('theme-toggle').addEventListener('click', function () {
         const next = html.dataset.theme === 'light' ? 'dark' : 'light';
-        html.dataset.theme = next;
-        localStorage.setItem('wv-theme', next);
+        html.dataset.theme = next; localStorage.setItem('wv-theme', next);
       });
     })();
   </script>
@@ -530,10 +439,7 @@
       let ticking = false;
       window.addEventListener('scroll', function () {
         if (!ticking) {
-          requestAnimationFrame(function () {
-            nav.classList.toggle('scrolled', window.scrollY > 40);
-            ticking = false;
-          });
+          requestAnimationFrame(function () { nav.classList.toggle('scrolled', window.scrollY > 40); ticking = false; });
           ticking = true;
         }
       }, { passive: true });
@@ -547,8 +453,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps &amp; Games','nav-enquire':'Enquire','page-title':'Apps &amp; Games','back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','bt-desc':'Split bills and calculate tips instantly. No ads, no tracking, works offline.','platform-android':'Android','view-app':'Learn more →','nt-desc':'A cyberpunk memory puzzle. Watch the sequence, repeat it back — and survive. No ads, no data collected, works offline.','view-nt':'Learn more →','ss-desc':'Play fetch with your Pixel Puppy.','view-ss':'Learn more →','rs-desc':'Your very own virtual rat. Coming soon.','view-rs':'Learn more →' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme &amp; Speletjies','nav-enquire':'Navraag','page-title':'Programme &amp; Speletjies','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','bt-desc':'Verdeel rekeninge en bereken fooie onmiddellik. Geen advertensies, geen opsporing, werk vanlyn.','platform-android':'Android','view-app':'Meer inligting →','nt-desc':"'n Siberknip-geheuelegkaart. Kyk die volgorde, herhaal dit — en oorleef. Geen advertensies, geen data ingesamel nie, werk vanlyn.",'view-nt':'Meer inligting →','ss-desc':'Speel apportering met jou Pixel-hondjie.','view-ss':'Meer inligting →','rs-desc':'Jou eie virtuele rot. Binnekort beskikbaar.','view-rs':'Meer inligting →' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps & Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','app-eyebrow':'A browser game by Walt Viviers','hero-tagline':'Your very own virtual rat.','hero-desc':'Feed it. Play with it. Watch it nap in a tiny pile of bedding. Ratsim is a cozy pet simulation for people who have always wanted a rat.','coming-soon':'Coming soon','privacy-tag':'Built with care','priv-h1':'No ads.','priv-h2':'No data.','priv-h3':'No install.','privacy-desc':'Ratsim runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you and your rat.','check-1':'No personal data collected','check-2':'No account or sign-in required','check-3':'Works fully offline','check-4':'No ads or tracking of any kind','check-5':'No device permissions requested','check-6':'Free to play','cta-line1':'Your rat is','cta-line2':'almost ready.' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme & Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','app-eyebrow':'\'n Blaaierspeletjie deur Walt Viviers','hero-tagline':'Jou eie virtuele rot.','hero-desc':'Voer dit. Speel saam. Kyk hoe dit slaap in \'n klein hoop beddegoed. Ratsim is \'n gesellige troeteldier-simulasie vir mense wat altyd \'n rot wou hê.','coming-soon':'Binnekort beskikbaar','privacy-tag':'Gebou met sorg','priv-h1':'Geen advertensies.','priv-h2':'Geen data.','priv-h3':'Geen installasie.','privacy-desc':'Ratsim loop heeltemal in jou blaaier. Niks word gestoor, gestuur of gevolg nie. Net jy en jou rot.','check-1':'Geen persoonlike data ingesamel','check-2':'Geen rekening of aanmelding benodig','check-3':'Werk volledig vanlyn','check-4':'Geen advertensies of opsporing','check-5':'Geen toestemmings vereis','check-6':'Gratis om te speel','cta-line1':'Jou rot is','cta-line2':'amper gereed.' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
