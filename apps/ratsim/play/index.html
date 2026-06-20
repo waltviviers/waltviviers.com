@@ -55,11 +55,13 @@ const C = {
   skirtn:  '#3a2818',
 
   // Cage structure
-  cageInt: '#f0e8d4',
-  frame:   '#6b7a40',
-  bar:     '#7a8e48',
-  barDim:  '#5c6c30',
-  plank:   '#8b6a2a',
+  cageBack:  '#cec4ac',   // back wall (recedes — darker, muted)
+  cageSide:  '#b6ac94',   // side wall depth panels
+  frame:     '#6b7a40',
+  bar:       '#7a8e48',
+  barHi:     '#96aa52',   // bar lit side (cylindrical highlight)
+  barDim:    '#5c6c30',
+  plank:     '#8b6a2a',
 
   // Bottom floor furnishings
   bed0:    '#e4c870',
@@ -119,29 +121,48 @@ function drawRoom() {
 
 // ── Cage ──────────────────────────────────────────────────────────────────────
 function drawCage() {
-  // Interior fill
-  fill(CX, CY, CW, CH, C.cageInt);
+  const SW = 8;  // side wall panel width
 
-  // Vertical bars — top floor
+  // ── Back wall (recedes — darker, muted) ──────────────────────────────────
+  fill(CX, CY, CW, CH, C.cageBack);
+
+  // ── Side wall depth panels (cage walls going away from viewer) ────────────
+  fill(CX,           CY, SW, CH, C.cageSide);
+  fill(CX + CW - SW, CY, SW, CH, C.cageSide);
+
+  // ── Vertical bars — top floor (lit left side + shadow right = cylindrical) ─
   for (let i = 1; i < NBARS; i++) {
     const bx = CX + i * (CW / NBARS);
-    fill(bx - 1, CY, 2, MID - 2, C.bar);
+    fill(bx - 1, CY, 1, MID - 2, C.barHi);
+    fill(bx,     CY, 1, MID - 2, C.barDim);
   }
-  // Vertical bars — bottom floor
+
+  // ── Vertical bars — bottom floor ──────────────────────────────────────────
   for (let i = 1; i < NBARS; i++) {
     const bx = CX + i * (CW / NBARS);
-    fill(bx - 1, CY + MID + 6, 2, CH - MID - 6, C.bar);
+    fill(bx - 1, CY + MID + 6, 1, CH - MID - 6, C.barHi);
+    fill(bx,     CY + MID + 6, 1, CH - MID - 6, C.barDim);
   }
 
-  // Outer frame (drawn over bars to cap them cleanly)
-  fill(CX - WALL, CY - WALL, WALL, CH + WALL * 2, C.frame);        // left
-  fill(CX + CW,   CY - WALL, WALL, CH + WALL * 2, C.frame);        // right
-  fill(CX - WALL, CY - WALL, CW + WALL * 2, WALL, C.frame);        // top
-  fill(CX - WALL, CY + CH,   CW + WALL * 2, WALL + 2, C.frame);   // bottom
+  // ── Horizontal cross-wires — adds cage detail ──────────────────────────────
+  // Top floor: one wire visible below hammock
+  fill(CX, CY + Math.round(MID * 0.55), CW, 2, C.barDim);
+  // Bottom floor: two wires in the open space above bedding
+  const botTop = CY + MID + 6;
+  const botH   = CH - MID - 6;
+  fill(CX, botTop + Math.round(botH * 0.28), CW, 2, C.barDim);
+  fill(CX, botTop + Math.round(botH * 0.56), CW, 2, C.barDim);
 
-  // Mid-floor plank
-  fill(CX, CY + MID,     CW, 6, C.barDim);
-  fill(CX, CY + MID - 2, CW, 3, C.bar);   // bright top edge
+  // ── Outer frame ───────────────────────────────────────────────────────────
+  fill(CX - WALL, CY - WALL, WALL, CH + WALL * 2, C.frame);
+  fill(CX + CW,   CY - WALL, WALL, CH + WALL * 2, C.frame);
+  fill(CX - WALL, CY - WALL, CW + WALL * 2, WALL, C.frame);
+  fill(CX - WALL, CY + CH,   CW + WALL * 2, WALL + 2, C.frame);
+
+  // ── Mid-floor shelf — top face + body + front-facing edge ─────────────────
+  fill(CX, CY + MID,     CW, 6, C.barDim);    // shelf body
+  fill(CX, CY + MID - 2, CW, 3, C.bar);       // top face (lit from above)
+  fill(CX, CY + MID + 6, CW, 4, C.cageSide);  // front-facing edge (faces viewer)
 
   drawHammock();
   drawLadder();
