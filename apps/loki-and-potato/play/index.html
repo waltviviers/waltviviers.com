@@ -33,7 +33,7 @@ function resize() {
   oy = (canvas.height - VH * sc) / 2;
 }
 resize();
-window.addEventListener('resize', () => { resize(); draw(); });
+window.addEventListener('resize', resize);
 
 // Fill a virtual rectangle, snapped to pixel boundaries in canvas space.
 function fill(vx, vy, vw, vh, color) {
@@ -280,7 +280,7 @@ function drawWaterBottle() {
 const RAT_SPR = [
   [0,0,0,0,0,0,0,2,0,0,0],   // r0  ear
   [0,0,0,0,0,0,1,1,1,0,0],   // r1  head
-  [0,0,0,0,0,1,1,1,1,2,0],   // r2  head + nose
+  [0,0,0,0,0,1,1,1,1,4,0],   // r2  head + nose (4=nose, distinct from ear)
   [3,3,3,1,1,1,1,1,0,0,0],   // r3  body + tail
   [0,3,1,1,1,1,0,0,0,0,0],   // r4  body lower + tail tip
   [0,0,1,1,0,0,0,0,0,0,0],   // r5  haunches
@@ -299,16 +299,27 @@ const PATCHES = [
   { r0: 3, r1: 5, c0: 3, c1: 6 },   // back patch
 ];
 
-function drawRat(vx, vy, right, bodyCol, patchCol) {
+function drawRat(vx, vy, right, bodyCol, patchCol, earTwitch = false) {
+  const earCol = earTwitch ? '#ffd0e0' : C.ratPink;  // brighter when alert
+
   // Body + ears + nose + tail
   for (let r = 0; r < RROWS; r++) {
     for (let c = 0; c < RCOLS; c++) {
       const v = RAT_SPR[r][c];
       if (!v) continue;
       const dc = right ? c : (RCOLS - 1 - c);
-      const color = v === 2 ? C.ratPink : v === 3 ? C.ratTail : bodyCol;
+      const color = v === 2 ? earCol      // ear  (twitches)
+                  : v === 3 ? C.ratTail   // tail
+                  : v === 4 ? C.ratPink   // nose (always the same pink)
+                  : bodyCol;
       fill(vx + dc * RS, vy + r * RS, RS, RS, color);
     }
+  }
+
+  // Extra ear-tip pixel when twitching — the ear perks up one pixel
+  if (earTwitch) {
+    const ec = right ? 7 : (RCOLS - 1 - 7);
+    fill(vx + ec * RS, vy - RS, RS, RS, earCol);
   }
 
   // Colour patches (Potato only), using same mirroring
@@ -339,17 +350,40 @@ const POTATO = {
   body: C.potatoBody, patch: C.potatoPatch,
 };
 
-// ── Main draw ─────────────────────────────────────────────────────────────────
-function draw() {
+// ── Animation state ───────────────────────────────────────────────────────────
+let tick = 0;
+let lokiTwitch = 0, potatoTwitch = 0;   // frames remaining in twitch; 0 = idle
+
+// Slow sine breath. Period ≈ 2π / 0.022 ≈ 285 frames ≈ 4.8 s at 60 fps.
+function breathOffset(phase) {
+  return Math.sin(tick * 0.022 + phase) * 1.5;
+}
+
+// ── Main loop ─────────────────────────────────────────────────────────────────
+function loop() {
+  tick++;
+
+  // Randomly trigger ear twitches (~once every 5–9 s per rat)
+  if (lokiTwitch   <= 0 && Math.random() < 0.003) lokiTwitch   = 20;
+  if (potatoTwitch <= 0 && Math.random() < 0.003) potatoTwitch = 20;
+  if (lokiTwitch   > 0) lokiTwitch--;
+  if (potatoTwitch > 0) potatoTwitch--;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawRoom();
   drawCage();
-  // Draw rats last so they appear in front of cage furnishings
-  drawRat(LOKI.x,   LOKI.y,   LOKI.right,   LOKI.body,   LOKI.patch);
-  drawRat(POTATO.x, POTATO.y, POTATO.right, POTATO.body, POTATO.patch);
+
+  // Each rat breathes on a slightly different phase so they don't sync perfectly
+  const lokiDY   = breathOffset(0);
+  const potatoDY = breathOffset(1.4);
+
+  drawRat(LOKI.x,   LOKI.y   + lokiDY,   LOKI.right,   LOKI.body,   LOKI.patch,   lokiTwitch   > 0);
+  drawRat(POTATO.x, POTATO.y + potatoDY, POTATO.right, POTATO.body, POTATO.patch, potatoTwitch > 0);
+
+  requestAnimationFrame(loop);
 }
 
-draw();
+loop();
 </script>
 </body>
 </html>
