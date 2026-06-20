@@ -337,16 +337,17 @@ function drawRat(vx, vy, right, bodyCol, patchCol, earTwitch = false) {
 }
 
 // ── Rat placement ─────────────────────────────────────────────────────────────
-// Both girls are curled in the hammock together.
-// Hammock centre sag is around y = CY + 42.
+// Lower floor. Grass top ≈ CY + CH - 34; rats stand with feet on grass.
+const FLOOR_Y = CY + CH - 34 - RH;   // = 523 virtual px
+
 const LOKI = {
-  x: CX + 44, y: CY + 36,
+  x: CX + 85, y: FLOOR_Y,
   right: true,
   body: C.lokiBody, patch: null,
 };
 const POTATO = {
-  x: CX + 44 + RW + 4, y: CY + 38,
-  right: false,           // faces Loki
+  x: CX + 175, y: FLOOR_Y + 2,   // tiny y offset so they don't look copy-pasted
+  right: false,
   body: C.potatoBody, patch: C.potatoPatch,
 };
 
