@@ -84,7 +84,7 @@
     <ul>
       <li>Pick a mode from the start screen or menu</li>
       <li>Dog: tap to walk · hold to scritch · tap ball or stick to throw · double-tap to dig</li>
-      <li>Rat: tap rat to scritch · tap ground to place cheese · rats breed freely with no cap · 1 in 10 has big ears · 1 in 20 is pink · every 15th cheese triggers a raid cat</li>
+      <li>Rat: tap rat to scritch · tap ground to place cheese · rats breed freely · every 10th is a dumbo (big ears) · every 16th is a naked rat (pink) · every 15th cheese triggers a raid cat</li>
       <li>Cat: hold to purr and wake · tap ground for laser · laser won't wake sleeping cats</li>
       <li>Visitor animals arrive now and then</li>
     </ul>
@@ -194,7 +194,12 @@ const ITEMS = [
   { name:'rat',         color:'#aaaaaa', sc:3, spr:[[0,0,1,1,0,0,0],[0,1,1,1,1,0,0],[1,1,1,1,1,1,0],[0,0,1,1,0,0,0],[0,0,0,1,1,1,1]] },
   { name:'bone',        color:'#ffffff', sc:3, spr:[[1,1,0,0,0,1,1],[0,1,1,1,1,1,0],[1,1,0,0,0,1,1]] },
   { name:'stick',       color:'#c8922a', sc:2, spr:[[0,0,1,0,0,0,0,0,1,0,0],[0,1,1,1,1,1,1,1,1,1,0],[0,0,0,1,0,0,1,0,0,0,0]] },
-  { name:'old sock',    color:'#999966', sc:3, spr:[[0,1,1,1,1,0],[1,1,1,1,1,1],[1,1,1,1,1,1],[0,1,1,1,0,0],[0,1,1,0,0,0]] },
+  { name:'chew toy',    color:'#ff5533', sc:3, spr:[[0,1,1,0],[1,0,0,1],[1,0,0,1],[0,1,1,0]] },
+  { name:'grub',        color:'#ddcc88', sc:3, spr:[[0,1,1,0],[1,1,1,1],[0,1,1,1],[0,0,1,0]] },
+  { name:'remote',      color:'#445566', sc:2, spr:[[0,1,1,0],[1,1,1,1],[1,0,0,1],[1,1,1,1],[1,0,1,0],[1,1,1,1]] },
+  { name:'shoe',        color:'#884422', sc:3, spr:[[0,0,0,1,1],[0,1,1,1,1],[1,1,1,1,0],[1,1,0,0,0]] },
+  { name:'rubber duck', color:'#ffdd00', sc:3, spr:[[0,0,1,0],[0,1,1,1],[1,1,1,0],[0,1,1,0]] },
+  { name:'glove',       color:'#cc8844', sc:3, spr:[[0,1,0,1,0],[1,1,1,1,0],[1,1,1,1,1],[0,1,1,1,0],[0,0,1,0,0]] },
 ];
 let itemIdx = 1;
 const placedItems = [];
@@ -279,29 +284,161 @@ const CAT_IDLE = [
   [0,0,0,1,1,0,1,1,1,1],
   [0,1,1,1,1,1,1,1,0,0],
   [0,1,1,1,1,1,0,0,0,0],
-  [1,1,1,0,0,0,0,0,0,0],
+  [1,1,1,1,0,1,0,0,0,0],
   [1,0,0,1,0,1,0,0,0,0],
   [0,0,0,1,0,1,0,0,0,0],
 ];
 const CAT_WALK = [
-  [[0,1,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
-  [[1,0,0,0,0,0,0,1,0,1],[0,1,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,1,0,0,1,0,0,0,0],[0,0,1,0,0,1,0,0,0,0]],
+  [[0,1,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
+  [[1,0,0,0,0,0,0,1,0,1],[0,1,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,1,0,0,0,0],[0,0,1,0,0,1,0,0,0,0],[0,0,1,0,0,1,0,0,0,0],[0,0,1,0,0,1,0,0,0,0]],
 ];
 const CAT_HAPPY = [
-  [[1,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
-  [[0,1,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
+  [[1,0,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,0,0,0,0,0],[0,0,0,1,0,0,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
+  [[0,1,0,0,0,0,0,1,0,1],[1,0,0,0,0,0,1,1,1,1],[1,0,0,1,1,0,1,1,1,1],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,0,0,0,0,0],[0,0,0,1,0,0,0,0,0,0],[0,0,0,1,0,1,0,0,0,0],[0,0,0,1,0,1,0,0,0,0]],
 ];
-// Sleeping cat: curled into a round ball, centered in sprite
-const CAT_SLEEP = [
-  [0,0,0,0,0,0,0,0,0,0],
-  [0,0,0,1,1,1,1,0,0,0],
-  [0,0,1,1,1,1,1,1,0,0],
-  [0,1,1,1,1,1,1,1,1,0],
-  [0,1,1,1,1,1,1,1,1,0],
-  [0,0,1,1,1,1,1,1,0,0],
-  [0,0,0,1,1,1,1,0,0,0],
-  [0,0,0,0,0,0,0,0,0,0],
+// Sleep variants: curled ball, loaf (head visible), stretched on side
+const CAT_SLEEP_VARIANTS = [
+  [[0,0,0,0,0,0,0,0,0,0],[0,0,0,1,1,1,1,0,0,0],[0,0,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,1,0],[0,0,1,1,1,1,1,1,0,0],[0,0,0,1,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0]],
+  [[0,0,0,0,0,0,0,1,0,1],[0,0,0,0,0,0,1,1,1,1],[0,0,0,1,1,0,1,1,1,1],[0,1,1,1,1,1,1,0,0,0],[0,1,1,1,1,1,1,0,0,0],[0,0,1,1,1,1,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],
+  [[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,1,0,1],[0,0,0,0,0,0,1,1,1,1],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,0,0,0,0,0,0],[1,1,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],
 ];
+
+// ─── Furniture ────────────────────────────────────────────────────────────────
+// Dog furniture (placed at start of dog mode)
+const DOG_BED_SPR = [
+  [0,1,1,1,1,1,1,1,1,0],
+  [1,1,1,1,1,1,1,1,1,1],
+  [1,1,1,1,1,1,1,1,1,1],
+  [1,1,0,0,0,0,0,0,1,1],
+  [0,1,1,1,1,1,1,1,1,0],
+];
+const DOG_BOWL_SPR = [
+  [0,1,1,1,1,0],
+  [1,0,0,0,0,1],
+  [1,1,1,1,1,1],
+  [0,1,1,1,1,0],
+];
+const WATER_BOWL_SPR = [
+  [0,1,1,1,1,0],
+  [1,0,1,0,1,1],
+  [1,1,1,1,1,1],
+  [0,1,1,1,1,0],
+];
+const BED_SC = 4, BOWL_SC = 3;
+
+let dogBed = null, dogFoodBowl = null, dogWaterBowl = null;
+
+function placeDogFurniture() {
+  const w = canvas.width, h = canvas.height;
+  dogBed = { x: w * 0.15 - DOG_BED_SPR[0].length * BED_SC / 2, y: h * 0.75 };
+  dogFoodBowl = { x: w * 0.85 - DOG_BOWL_SPR[0].length * BOWL_SC / 2, y: h * 0.8 };
+  dogWaterBowl = { x: w * 0.85 - DOG_BOWL_SPR[0].length * BOWL_SC / 2 + DOG_BOWL_SPR[0].length * BOWL_SC + 10, y: h * 0.8 };
+}
+
+function drawDogFurniture() {
+  if (!dogBed) return;
+  // Bed
+  ctx.fillStyle = '#885533';
+  for (let r = 0; r < DOG_BED_SPR.length; r++)
+    for (let c = 0; c < DOG_BED_SPR[r].length; c++)
+      if (DOG_BED_SPR[r][c]) ctx.fillRect(Math.round(dogBed.x + c * BED_SC), Math.round(dogBed.y + r * BED_SC), BED_SC, BED_SC);
+  // Bed cushion highlight
+  ctx.fillStyle = '#bb7744';
+  for (let r = 0; r < DOG_BED_SPR.length; r++)
+    for (let c = 0; c < DOG_BED_SPR[r].length; c++)
+      if (DOG_BED_SPR[r][c] && r === 1) ctx.fillRect(Math.round(dogBed.x + c * BED_SC), Math.round(dogBed.y + r * BED_SC), BED_SC, BED_SC);
+  // Food bowl (brown kibble)
+  ctx.fillStyle = '#664422';
+  for (let r = 0; r < DOG_BOWL_SPR.length; r++)
+    for (let c = 0; c < DOG_BOWL_SPR[r].length; c++)
+      if (DOG_BOWL_SPR[r][c]) ctx.fillRect(Math.round(dogFoodBowl.x + c * BOWL_SC), Math.round(dogFoodBowl.y + r * BOWL_SC), BOWL_SC, BOWL_SC);
+  ctx.fillStyle = '#c8922a';
+  ctx.fillRect(Math.round(dogFoodBowl.x + BOWL_SC), Math.round(dogFoodBowl.y + BOWL_SC), BOWL_SC * 2, BOWL_SC);
+  // Water bowl (blue)
+  ctx.fillStyle = '#446688';
+  for (let r = 0; r < WATER_BOWL_SPR.length; r++)
+    for (let c = 0; c < WATER_BOWL_SPR[r].length; c++)
+      if (WATER_BOWL_SPR[r][c]) {
+        ctx.fillStyle = (r === 1 && c !== 0 && c !== 5) ? '#88bbdd' : '#446688';
+        ctx.fillRect(Math.round(dogWaterBowl.x + c * BOWL_SC), Math.round(dogWaterBowl.y + r * BOWL_SC), BOWL_SC, BOWL_SC);
+      }
+}
+
+// Rat furniture
+const RAT_BOTTLE_SPR = [
+  [0,0,1,0,0],
+  [0,1,1,1,0],
+  [1,1,1,1,1],
+  [1,1,1,1,1],
+  [1,1,1,1,1],
+  [0,0,1,0,0],
+];
+const RAT_RBOWL_SPR = [
+  [0,1,1,0],
+  [1,0,0,1],
+  [1,1,1,1],
+  [0,1,1,0],
+];
+const RAT_BOTTLE_SC = 3, RAT_BOWL_SC = 2;
+
+let ratBottle = null, ratFoodBowl = null;
+let ratBirthCount = 0;
+
+function placeRatFurniture() {
+  const w = canvas.width, h = canvas.height;
+  ratBottle = { x: w * 0.12, y: h * 0.25 };
+  ratFoodBowl = { x: w * 0.88 - RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, y: h * 0.25 };
+}
+
+function drawRatFurniture() {
+  if (!ratBottle) return;
+  // Water bottle
+  ctx.fillStyle = '#88ccee';
+  for (let r = 0; r < RAT_BOTTLE_SPR.length; r++)
+    for (let c = 0; c < RAT_BOTTLE_SPR[r].length; c++)
+      if (RAT_BOTTLE_SPR[r][c]) {
+        ctx.fillStyle = r < 2 ? '#aaaaaa' : '#88ccee';
+        ctx.fillRect(Math.round(ratBottle.x + c * RAT_BOTTLE_SC), Math.round(ratBottle.y + r * RAT_BOTTLE_SC), RAT_BOTTLE_SC, RAT_BOTTLE_SC);
+      }
+  // Food bowl
+  ctx.fillStyle = '#aaaaaa';
+  for (let r = 0; r < RAT_RBOWL_SPR.length; r++)
+    for (let c = 0; c < RAT_RBOWL_SPR[r].length; c++)
+      if (RAT_RBOWL_SPR[r][c]) {
+        ctx.fillStyle = r === 1 ? '#ddcc88' : '#aaaaaa';
+        ctx.fillRect(Math.round(ratFoodBowl.x + c * RAT_BOWL_SC), Math.round(ratFoodBowl.y + r * RAT_BOWL_SC), RAT_BOWL_SC, RAT_BOWL_SC);
+      }
+}
+
+// ─── Wool ball (cat mode) ─────────────────────────────────────────────────────
+const WOOL_SPR = [[0,1,1,0],[1,0,0,1],[1,0,0,1],[0,1,1,0]];
+const WOOL_SC = 4;
+let woolBall = null;
+
+// ─── Cat furniture ─────────────────────────────────────────────────────────
+let catFoodBowl = null, catWaterBowl = null;
+
+function placeCatFurniture() {
+  const w = canvas.width, h = canvas.height;
+  catFoodBowl  = { x: w * 0.10, y: h * 0.82 };
+  catWaterBowl = { x: w * 0.10 + DOG_BOWL_SPR[0].length * BOWL_SC + 12, y: h * 0.82 };
+}
+
+function drawCatFurniture() {
+  if (!catFoodBowl) return;
+  ctx.fillStyle = '#664422';
+  for (let r = 0; r < DOG_BOWL_SPR.length; r++)
+    for (let c = 0; c < DOG_BOWL_SPR[r].length; c++)
+      if (DOG_BOWL_SPR[r][c]) ctx.fillRect(Math.round(catFoodBowl.x + c * BOWL_SC), Math.round(catFoodBowl.y + r * BOWL_SC), BOWL_SC, BOWL_SC);
+  ctx.fillStyle = '#bb8833';
+  ctx.fillRect(Math.round(catFoodBowl.x + BOWL_SC), Math.round(catFoodBowl.y + BOWL_SC), BOWL_SC * 2, BOWL_SC);
+  for (let r = 0; r < WATER_BOWL_SPR.length; r++)
+    for (let c = 0; c < WATER_BOWL_SPR[r].length; c++)
+      if (WATER_BOWL_SPR[r][c]) {
+        ctx.fillStyle = (r === 1 && c !== 0 && c !== 5) ? '#88bbdd' : '#446688';
+        ctx.fillRect(Math.round(catWaterBowl.x + c * BOWL_SC), Math.round(catWaterBowl.y + r * BOWL_SC), BOWL_SC, BOWL_SC);
+      }
+}
 
 // ─── Game mode ────────────────────────────────────────────────────────────────
 let gameMode = 'dog';
@@ -355,8 +492,9 @@ class Rat {
     this.dead = false;
     // Rat mode
     this.sex = opts.sex || (Math.random() < 0.5 ? 'm' : 'f');
-    this.isPink = opts.isPink !== undefined ? opts.isPink : Math.random() < 0.05;
-    this.bigEars = opts.bigEars !== undefined ? opts.bigEars : Math.random() < 0.1;
+    ratBirthCount++;
+    this.bigEars = opts.bigEars !== undefined ? opts.bigEars : (ratBirthCount % 10 === 0);
+    this.isPink = opts.isPink !== undefined ? opts.isPink : (ratBirthCount % 16 === 0);
     const defaultColor = this.isPink ? '#ffaabb' : '#aaaaaa';
     this.bodyColor = opts.bodyColor || defaultColor;
     this.isSeed = opts.isSeed || false;
@@ -365,6 +503,8 @@ class Rat {
     this.mateProximityTimer = 0;
     this.pregnant = false;
     this.pregnancyTimer = 0;
+    this.furnitureTarget = null;
+    this.furnitureTimer = 60 * (10 + Math.floor(Math.random() * 15));
   }
 
   flee() {
@@ -448,7 +588,7 @@ class Rat {
                 Math.min(this.y, nearestMale.y) - 4
               ));
             this.mateProximityTimer++;
-            if (this.mateProximityTimer >= 60 * 2) {
+            if (this.mateProximityTimer >= 60 * 3) {
               this.pregnant = true;
               this.pregnancyTimer = 60 * 5;
               this.mateProximityTimer = 0;
@@ -465,7 +605,7 @@ class Rat {
     if (this.pregnant) {
       if (--this.pregnancyTimer <= 0) {
         this.pregnant = false;
-        const n = 2 + Math.floor(Math.random() * 3);
+        const n = 1 + Math.floor(Math.random() * 3);
         for (let i = 0; i < n; i++) {
           const r = Math.random();
           const col = r < 0.4 ? this.bodyColor : (r < 0.7 ? '#c8922a' : '#dddddd');
@@ -474,8 +614,44 @@ class Rat {
       }
     }
 
-    // Wander if not seeking cheese
-    if (!seekingCheese) {
+    // Rat furniture seeking (rat mode only)
+    let seekingFurniture = false;
+    if (gameMode === 'rat' && !this.fleeing && !seekingCheese && this.furnitureTarget) {
+      const ftgt = this.furnitureTarget === 'bottle' ? ratBottle : ratFoodBowl;
+      if (ftgt) {
+        const tw = this.furnitureTarget === 'bottle'
+          ? RAT_BOTTLE_SPR[0].length * RAT_BOTTLE_SC
+          : RAT_RBOWL_SPR[0].length * RAT_BOWL_SC;
+        const th = this.furnitureTarget === 'bottle'
+          ? RAT_BOTTLE_SPR.length * RAT_BOTTLE_SC
+          : RAT_RBOWL_SPR.length * RAT_BOWL_SC;
+        const ftx = ftgt.x + tw / 2, fty = ftgt.y + th / 2;
+        const fdx = ftx - (this.x + RAT_W / 2), fdy = fty - (this.y + RAT_H / 2);
+        const fd = Math.hypot(fdx, fdy);
+        if (fd < 14) {
+          labels.push(new Label(this.furnitureTarget === 'bottle' ? 'Drink!' : 'Nom!',
+            this.x + RAT_W / 2, Math.max(20, this.y - 4)));
+          this.furnitureTarget = null;
+          this.furnitureTimer = 60 * (12 + Math.floor(Math.random() * 18));
+        } else {
+          seekingFurniture = true;
+          this.vx = this.vx * 0.85 + (fdx / fd * 1.3) * 0.15;
+          this.vy = this.vy * 0.85 + (fdy / fd * 0.5) * 0.15;
+        }
+      } else { this.furnitureTarget = null; }
+    } else if (gameMode === 'rat' && !this.fleeing && !seekingCheese && !this.furnitureTarget) {
+      if (--this.furnitureTimer <= 0) {
+        const avail = [];
+        if (ratBottle) avail.push('bottle');
+        if (ratFoodBowl) avail.push('bowl');
+        if (avail.length && Math.random() < 0.3)
+          this.furnitureTarget = avail[Math.floor(Math.random() * avail.length)];
+        this.furnitureTimer = 60 * (12 + Math.floor(Math.random() * 18));
+      }
+    }
+
+    // Wander if not seeking cheese or furniture
+    if (!seekingCheese && !seekingFurniture) {
       if (--this.dirTimer <= 0) {
         this.dirTimer = 90 + Math.floor(Math.random() * 150);
         const spd = 0.8 + Math.random() * 0.7;
@@ -500,12 +676,17 @@ class Rat {
     const spr = RAT_FRAMES[this.frame];
     const x = Math.round(this.x), y = Math.round(this.y);
     const bodyColor = this.scritchTimer > 0 ? '#ffbbcc' : this.bodyColor;
+    ctx.fillStyle = this.isPink ? '#ff99bb' : '#cc6688';
     if (this.bigEars) {
-      ctx.fillStyle = this.isPink ? '#ff99bb' : '#cc6688';
+      // Dumbo: two tall ears
       const e1 = this.right ? (RAT_COLS - 2) : 1;
       const e2 = this.right ? (RAT_COLS - 4) : 3;
-      ctx.fillRect(x + e1 * RAT_SC, y - RAT_SC, RAT_SC, RAT_SC);
-      ctx.fillRect(x + e2 * RAT_SC, y - RAT_SC, RAT_SC, RAT_SC);
+      ctx.fillRect(x + e1 * RAT_SC, y - RAT_SC * 2, RAT_SC, RAT_SC * 2);
+      ctx.fillRect(x + e2 * RAT_SC, y - RAT_SC * 2, RAT_SC, RAT_SC * 2);
+    } else {
+      // Normal: one small ear
+      const ea = this.right ? (RAT_COLS - 3) : 2;
+      ctx.fillRect(x + ea * RAT_SC, y - RAT_SC, RAT_SC, RAT_SC);
     }
     for (let r = 0; r < RAT_ROWS; r++)
       for (let c = 0; c < RAT_COLS; c++)
@@ -605,7 +786,7 @@ class RaidCat {
         if (spr[r][c]) {
           const dc = this.right ? c : DW - 1 - c;
           const isNose = r === 2 && c === 9;
-          const isWhisker = r === 2 && (c === 3 || c === 4);
+          const isWhisker = r === 2 && (this.right ? (dc === 3 || dc === 4) : (dc === 5 || dc === 6));
           ctx.fillStyle = isNose ? '#ff99bb' : isWhisker ? '#dddddd' : this.color;
           ctx.fillRect(x + dc * CAT_S, y + r * CAT_S, CAT_S, CAT_S);
         }
@@ -634,6 +815,9 @@ class Cat {
     this.chaseTarget = null;
     this.visitTimer = 0;
     this.sleepTimer = 0;
+    this.sleepStyle = Math.floor(Math.random() * CAT_SLEEP_VARIANTS.length);
+    this.furnitureTarget = null;
+    this.wantWool = false;
     this.dead = false;
   }
 
@@ -762,7 +946,23 @@ class Cat {
     // Walking
     if (this.state === 'walking' && this.tx !== null) {
       const arrived = this._stepToward();
-      if (arrived) this.state = 'idle';
+      if (arrived) {
+        if (this.wantWool) {
+          this.wantWool = false;
+          if (woolBall) {
+            const angle = Math.random() * Math.PI * 2;
+            woolBall.vx = Math.cos(angle) * 5; woolBall.vy = Math.sin(angle) * 2.5;
+            labels.push(new Label('Paw!', this.cx, Math.max(20, this.y - 4)));
+          }
+          this.state = 'happy'; this.lingerTicks = 60;
+        } else if (this.furnitureTarget) {
+          const ft = this.furnitureTarget; this.furnitureTarget = null;
+          labels.push(new Label(ft === 'food' ? 'Nom!' : 'Slurp!', this.cx, Math.max(20, this.y - 6)));
+          this.state = 'happy'; this.lingerTicks = 60 * 2;
+        } else {
+          this.state = 'idle';
+        }
+      }
     }
 
     if (this.lingerTicks > 0 && --this.lingerTicks <= 0) this.state = 'idle';
@@ -795,10 +995,21 @@ class Cat {
           const r = catRats[Math.floor(Math.random() * catRats.length)];
           if (r && !r.dead && !r.fleeing) { this.chaseTarget = r; this.state = 'chase'; }
           else { this.state = 'sleep'; this.sleepTimer = 60 * (10 + Math.floor(Math.random() * 20)); }
-        } else if (Math.random() < 0.8) {
-          this.state = 'sleep'; this.sleepTimer = 60 * (10 + Math.floor(Math.random() * 20));
         } else {
-          this._roamTo(CPW + Math.random() * (canvas.width - CPW * 2), CPH + Math.random() * (canvas.height - CPH * 2));
+          const cr = Math.random();
+          if (catFoodBowl && cr < 0.12) {
+            const ft = Math.random() < 0.5 ? 'food' : 'water';
+            this.furnitureTarget = ft;
+            const ftgt = ft === 'food' ? catFoodBowl : catWaterBowl;
+            this._roamTo(ftgt.x + DOG_BOWL_SPR[0].length * BOWL_SC / 2, ftgt.y + DOG_BOWL_SPR.length * BOWL_SC / 2);
+          } else if (woolBall && cr < 0.24) {
+            this.wantWool = true;
+            this._roamTo(woolBall.x + WOOL_SPR[0].length * WOOL_SC / 2, woolBall.y + WOOL_SPR.length * WOOL_SC / 2);
+          } else if (cr < 0.85) {
+            this.state = 'sleep'; this.sleepTimer = 60 * (10 + Math.floor(Math.random() * 20));
+          } else {
+            this._roamTo(CPW + Math.random() * (canvas.width - CPW * 2), CPH + Math.random() * (canvas.height - CPH * 2));
+          }
         }
       }
     } else if (!['idle','happy','laser','chase','sleep'].includes(this.state)) {
@@ -810,7 +1021,7 @@ class Cat {
     switch (this.state) {
       case 'happy': return CAT_HAPPY[this.frame];
       case 'walking': case 'laser': case 'chase': return CAT_WALK[this.frame];
-      case 'sleep': return CAT_SLEEP;
+      case 'sleep': return CAT_SLEEP_VARIANTS[this.sleepStyle];
       default: return CAT_IDLE;
     }
   }
@@ -819,12 +1030,13 @@ class Cat {
     if (this.dead) return;
     const spr = this.sprite(), x = Math.round(this.x), y = Math.round(this.y);
     const bodyColor = this.scritchTimer > 0 ? '#ffddcc' : this.color;
+    const sleeping = this.state === 'sleep';
     for (let r = 0; r < DH; r++)
       for (let c = 0; c < DW; c++)
         if (spr[r][c]) {
           const dc = this.right ? c : DW - 1 - c;
-          const isNose = r === 2 && c === 9;
-          const isWhisker = r === 2 && (c === 3 || c === 4);
+          const isNose = !sleeping && r === 2 && c === 9;
+          const isWhisker = !sleeping && r === 2 && (this.right ? (dc === 3 || dc === 4) : (dc === 5 || dc === 6));
           ctx.fillStyle = isNose ? '#ff99bb' : isWhisker ? '#dddddd' : bodyColor;
           ctx.fillRect(x + dc * CAT_S, y + r * CAT_S, CAT_S, CAT_S);
         }
@@ -874,7 +1086,7 @@ class Kitten {
         if (CAT_IDLE[r][c]) {
           const dc = this.right ? c : DW - 1 - c;
           const isNose = r === 2 && c === 9;
-          const isWhisker = r === 2 && (c === 3 || c === 4);
+          const isWhisker = r === 2 && (this.right ? (dc === 3 || dc === 4) : (dc === 5 || dc === 6));
           ctx.fillStyle = isNose ? '#ff99bb' : isWhisker ? '#dddddd' : bodyColor;
           ctx.fillRect(x + dc * sc, y + r * sc, sc, sc);
         }
@@ -908,6 +1120,67 @@ class BallProjectile {
 
 let marker = null;
 
+// ─── Dog colours ─────────────────────────────────────────────────────────────
+const DOG_COLORS = ['#f5d5a0','#a0522d','#ffffff','#e8c99a','#222222','#d4a96a','#c4a882','#6b4226','#b5b5b5','#8b6914'];
+
+// ─── Puppies ─────────────────────────────────────────────────────────────────
+const puppies = [];
+let puppyTimer = 0, puppiesSpawned = false;
+
+class Puppy {
+  constructor(x, y, color) {
+    this.x = x; this.y = y; this.color = color;
+    this.vs = 2 + Math.floor(Math.random() * 2);
+    this.vx = (Math.random() - 0.5) * 2; this.vy = (Math.random() - 0.5) * 1;
+    this.right = this.vx > 0; this.frame = 0; this.tick = 0;
+    this.state = 'walking'; this.scritchTimer = 0; this.dirTimer = 60 + Math.floor(Math.random() * 90);
+  }
+  get cx() { return this.x + DW * this.vs / 2; }
+  hitTest(px, py) {
+    const w = DW * this.vs, h = DH * this.vs;
+    return px >= this.x - 4 && px <= this.x + w + 4 && py >= this.y - 4 && py <= this.y + h + 4;
+  }
+  scritch() {
+    this.scritchTimer = 60; this.state = 'happy';
+    for (let i = 0; i < 3; i++) hearts.push(new Heart(this.cx, this.y));
+  }
+  update() {
+    if (++this.tick >= ANIM_TICKS) { this.tick = 0; this.frame ^= 1; }
+    if (this.scritchTimer > 0 && --this.scritchTimer <= 0) this.state = 'walking';
+    if (this.state !== 'happy') {
+      const ddx = dog.cx - this.cx, ddy = dog.y - this.y;
+      if (Math.hypot(ddx, ddy) > 80) {
+        const d = Math.hypot(ddx, ddy);
+        this.vx = this.vx * 0.88 + (ddx / d * 1.5) * 0.12;
+        this.vy = this.vy * 0.88 + (ddy / d * 0.6) * 0.12;
+      } else if (--this.dirTimer <= 0) {
+        this.dirTimer = 60 + Math.floor(Math.random() * 90);
+        this.vx = (Math.random() - 0.5) * 2; this.vy = (Math.random() - 0.5) * 1;
+      }
+    }
+    this.x += this.vx; this.y += this.vy;
+    const w = DW * this.vs, h = DH * this.vs;
+    if (this.x < 0) { this.x = 0; this.vx = Math.abs(this.vx); }
+    if (this.x > canvas.width - w) { this.x = canvas.width - w; this.vx = -Math.abs(this.vx); }
+    if (this.y < 0) { this.y = 0; this.vy = Math.abs(this.vy); }
+    if (this.y > canvas.height - h) { this.y = canvas.height - h; this.vy = -Math.abs(this.vy); }
+    if (Math.abs(this.vx) > 0.1) this.right = this.vx > 0;
+    if (this.state !== 'happy') this.state = (Math.abs(this.vx) > 0.2 || Math.abs(this.vy) > 0.2) ? 'walking' : 'idle';
+  }
+  draw() {
+    const spr = this.state === 'happy' ? HAPPY[this.frame] : this.state === 'walking' ? WALK[this.frame] : IDLE;
+    const x = Math.round(this.x), y = Math.round(this.y), vs = this.vs;
+    const col = this.scritchTimer > 0 ? '#ffffcc' : this.color;
+    for (let r = 0; r < DH; r++)
+      for (let c = 0; c < DW; c++)
+        if (spr[r][c]) {
+          const dc = this.right ? c : DW - 1 - c;
+          ctx.fillStyle = (r === 2 && c === 9) ? '#ff99bb' : col;
+          ctx.fillRect(x + dc * vs, y + r * vs, vs, vs);
+        }
+  }
+}
+
 // ─── Visitors ────────────────────────────────────────────────────────────────
 const VISITOR_COLORS = ['#cc9944', '#cc7744', '#88cc66', '#cc88cc'];
 const visitors = [];
@@ -917,21 +1190,22 @@ class Visitor {
   constructor() {
     const fromLeft = Math.random() < 0.5;
     this.right = fromLeft;
-    this.x = fromLeft ? -PW * 2 : canvas.width + PW;
+    this.vs = [3, 4, 4, 5, 5, 6][Math.floor(Math.random() * 6)];
+    this.x = fromLeft ? -DW * this.vs * 2 : canvas.width + DW * this.vs;
     this.y = Math.max(PH, Math.min(canvas.height - PH * 2,
       dog.y + (Math.random() - 0.5) * 80));
     this.state = 'entering';
     this.frame = 0; this.tick = 0;
-    this.playTimer = 60 * (5 + Math.floor(Math.random() * 21)); // 5–25s
-    this.color = VISITOR_COLORS[Math.floor(Math.random() * VISITOR_COLORS.length)];
+    this.playTimer = 60 * (5 + Math.floor(Math.random() * 21));
+    this.color = DOG_COLORS[Math.floor(Math.random() * DOG_COLORS.length)];
     this.done = false;
     this.behavior = 'follow';
     this.behaviorTimer = 0;
     this.visFidgetType = 'sit';
   }
 
-  get pawX() { return this.right ? this.x + PW * 0.85 : this.x + PW * 0.15; }
-  get pawY() { return this.y + PH; }
+  get pawX() { const vw = DW * this.vs; return this.right ? this.x + vw * 0.85 : this.x + vw * 0.15; }
+  get pawY() { return this.y + DH * this.vs; }
 
   update() {
     if (this.done) return;
@@ -1018,14 +1292,14 @@ class Visitor {
     } else {
       spr = WALK[this.frame];
     }
-    const x = Math.round(this.x), y = Math.round(this.y);
+    const x = Math.round(this.x), y = Math.round(this.y), vs = this.vs;
     for (let r = 0; r < DH; r++)
       for (let c = 0; c < DW; c++)
         if (spr[r][c]) {
           const dc = this.right ? c : DW - 1 - c;
           const isNose = r === 2 && c === 9;
           ctx.fillStyle = isNose ? '#ff99bb' : this.color;
-          ctx.fillRect(x + dc * S, y + r * S, S, S);
+          ctx.fillRect(x + dc * vs, y + r * vs, vs, vs);
         }
   }
 }
@@ -1045,12 +1319,15 @@ const dog = {
   lingerTicks: 0, idleTimer: 0,
   fidgetTimer: 0, fidgetType: 'sit',
   digTimer: 0, foundTimer: 0, foundItem: null,
+  color: '#ffffff', furnitureTarget: null,
 
   init() {
     this.x = canvas.width / 2 - PW / 2;
     this.y = canvas.height / 2 - PH / 2;
+    this.color = DOG_COLORS[Math.floor(Math.random() * DOG_COLORS.length)];
     this.state = 'digging'; this.digTimer = DIG_DURATION;
     this.frame = 0; this.tick = 0;
+    this.furnitureTarget = null;
   },
 
   get cx()   { return this.x + PW / 2; },
@@ -1141,6 +1418,11 @@ const dog = {
           placedItems.push({ item: titem, x: ix, y: this.y + PH - h });
           thrownBall = null;
           this.state = 'happy'; this.lingerTicks = 60;
+        } else if (this.furnitureTarget) {
+          const ft = this.furnitureTarget; this.furnitureTarget = null;
+          const lbl = ft === 'bed' ? 'Zzz...' : ft === 'food' ? 'Nom!' : 'Slurp!';
+          labels.push(new Label(lbl, this.cx, Math.max(20, this.y - 8)));
+          this.state = 'happy'; this.lingerTicks = ft === 'bed' ? 60 * 4 : 60 * 2;
         } else {
           this.state = 'idle';
         }
@@ -1152,7 +1434,16 @@ const dog = {
     if (this.state === 'idle') {
       if (++this.idleTimer >= IDLE_TO_ACTION) {
         this.idleTimer = 0;
-        if (Math.random() < 0.35) {
+        const dr = Math.random();
+        if (dogBed && dr < 0.20) {
+          const pieces = ['bed','food','water'];
+          const ft = pieces[Math.floor(Math.random() * pieces.length)];
+          this.furnitureTarget = ft;
+          const ftgt = ft === 'bed' ? dogBed : ft === 'food' ? dogFoodBowl : dogWaterBowl;
+          const fw = ft === 'bed' ? DOG_BED_SPR[0].length * BED_SC : DOG_BOWL_SPR[0].length * BOWL_SC;
+          const fh = ft === 'bed' ? DOG_BED_SPR.length * BED_SC : DOG_BOWL_SPR.length * BOWL_SC;
+          this._roamTo(ftgt.x + fw / 2, ftgt.y + fh / 2);
+        } else if (dr < 0.55) {
           this._roamTo(PW + Math.random() * (canvas.width - PW * 2), PH + Math.random() * (canvas.height - PH * 2));
         } else {
           this.state = 'fidget'; this.fidgetTimer = FIDGET_DURATION;
@@ -1217,7 +1508,7 @@ const dog = {
         if (spr[r][c]) {
           const dc = this.right ? c : DW - 1 - c;
           const isNose = r === 2 && c === 9;
-          ctx.fillStyle = isNose ? '#ff99bb' : '#ffffff';
+          ctx.fillStyle = isNose ? '#ff99bb' : this.color;
           ctx.fillRect(x + dc * S, y + r * S, S, S);
         }
   },
@@ -1237,6 +1528,7 @@ function enterRatMode() {
   const cx = canvas.width / 2, cy = canvas.height / 2;
   rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#c8922a', matingCooldown: 60 * 8, isSeed: true }));
   rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0, isSeed: true }));
+  placeRatFurniture();
 }
 
 function enterDogMode() {
@@ -1249,8 +1541,10 @@ function enterDogMode() {
   thrownBall = null; marker = null; laserActive = false;
   scritchCat = null; interacted = false;
   itemIdx = 1;
+  puppies.length = 0; puppyTimer = 0; puppiesSpawned = false;
   visitorCooldown = 60 * (30 + Math.floor(Math.random() * 90));
   dog.init();
+  placeDogFurniture();
 }
 
 function enterCatMode() {
@@ -1261,6 +1555,8 @@ function enterCatMode() {
   thrownBall = null; marker = null; laserActive = false; interacted = false;
   scritchCat = null;
   catVisitorCooldown = 60 * 25;
+  woolBall = { x: canvas.width * 0.6, y: canvas.height * 0.4, vx: 0, vy: 0 };
+  placeCatFurniture();
   // Main cat — always at index 0, never leaves
   cats.push(new Cat({ isMain: true, color: CAT_COLORS[0],
     x: canvas.width/2 - CPW/2, y: canvas.height/2 - CPH/2, birthCooldown: 0 }));
@@ -1353,6 +1649,15 @@ canvas.addEventListener('pointerdown', e => {
         return;
       }
     }
+    // Tap wool ball → roll it
+    if (woolBall) {
+      const wbw = WOOL_SPR[0].length * WOOL_SC, wbh = WOOL_SPR.length * WOOL_SC;
+      if (px >= woolBall.x && px <= woolBall.x + wbw && py >= woolBall.y && py <= woolBall.y + wbh) {
+        const angle = Math.random() * Math.PI * 2;
+        woolBall.vx = Math.cos(angle) * 6; woolBall.vy = Math.sin(angle) * 3;
+        return;
+      }
+    }
     // Tap ground = laser pointer (only wakes awake cats, not sleeping ones)
     laserX = px; laserY = py; laserActive = true; laserTimer = 60 * 12;
     for (const cat of cats) {
@@ -1393,12 +1698,15 @@ canvas.addEventListener('pointerdown', e => {
     return;
   }
 
+  for (const p of puppies) {
+    if (p.hitTest(px, py)) { p.scritch(); return; }
+  }
+
   for (const rat of rats) {
     if (!rat.dead && rat.hitTest(px, py)) { rat.scritch(); return; }
   }
 
-  const bi = placedItems.findIndex(p =>
-    (p.item.name === 'tennis ball' || p.item.name === 'stick') && hitTestItem(p, px, py));
+  const bi = placedItems.findIndex(p => hitTestItem(p, px, py));
   if (bi !== -1) {
     const ball = placedItems.splice(bi, 1)[0];
     const { w, h } = itemDims(ball.item);
@@ -1475,6 +1783,7 @@ function loop() {
       if (rats[i].dead) rats.splice(i, 1); else rats[i].draw();
     }
 
+    drawDogFurniture();
     for (const { item, x, y } of placedItems) drawItem(item, x, y);
     if (thrownBall) { thrownBall.update(); thrownBall.draw(); }
 
@@ -1491,14 +1800,32 @@ function loop() {
 
     dog.draw();
 
+    // Puppies appear after 90s
+    if (!puppiesSpawned) {
+      if (++puppyTimer >= 60 * 90) {
+        puppiesSpawned = true;
+        for (let i = 0; i < 3; i++) {
+          const col = DOG_COLORS[Math.floor(Math.random() * DOG_COLORS.length)];
+          puppies.push(new Puppy(
+            dog.x + (Math.random() - 0.5) * 40,
+            dog.y + (Math.random() - 0.5) * 20,
+            col
+          ));
+        }
+        labels.push(new Label('Puppies!', dog.cx, Math.max(20, dog.y - 8)));
+      }
+    }
+    for (const p of puppies) { p.update(); p.draw(); }
+
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
       ctx.font = '11px monospace'; ctx.textAlign = 'center';
-      ctx.fillText('tap to walk · hold to scritch · tap ball or stick to throw',
+      ctx.fillText('tap to walk · hold to scritch · tap items to throw · double-tap to dig',
         canvas.width / 2, canvas.height - 18);
       ctx.restore();
     }
   } else if (gameMode === 'rat') {
+    drawRatFurniture();
     for (let i = cheeses.length - 1; i >= 0; i--) {
       if (cheeses[i].eaten) cheeses.splice(i, 1);
       else drawCheeseAt(cheeses[i].x, cheeses[i].y);
@@ -1546,6 +1873,26 @@ function loop() {
     }
   } else {
     // Cat mode
+    drawCatFurniture();
+
+    if (woolBall) {
+      woolBall.vx *= 0.92; woolBall.vy *= 0.92;
+      woolBall.x += woolBall.vx; woolBall.y += woolBall.vy;
+      const wbw = WOOL_SPR[0].length * WOOL_SC, wbh = WOOL_SPR.length * WOOL_SC;
+      if (woolBall.x < 0) { woolBall.x = 0; woolBall.vx = Math.abs(woolBall.vx) * 0.7; }
+      if (woolBall.x > canvas.width - wbw) { woolBall.x = canvas.width - wbw; woolBall.vx = -Math.abs(woolBall.vx) * 0.7; }
+      if (woolBall.y < 0) { woolBall.y = 0; woolBall.vy = Math.abs(woolBall.vy) * 0.7; }
+      if (woolBall.y > canvas.height - wbh) { woolBall.y = canvas.height - wbh; woolBall.vy = -Math.abs(woolBall.vy) * 0.7; }
+      ctx.fillStyle = '#cc4488';
+      const wbx = Math.round(woolBall.x), wby = Math.round(woolBall.y);
+      for (let r = 0; r < WOOL_SPR.length; r++)
+        for (let c = 0; c < WOOL_SPR[r].length; c++)
+          if (WOOL_SPR[r][c]) ctx.fillRect(wbx + c * WOOL_SC, wby + r * WOOL_SC, WOOL_SC, WOOL_SC);
+      // Cross highlight
+      ctx.fillStyle = '#ee66aa';
+      ctx.fillRect(wbx + WOOL_SC, wby + WOOL_SC, WOOL_SC * 2, WOOL_SC * 2);
+    }
+
     if (laserActive) {
       if (--laserTimer <= 0) laserActive = false;
       else drawLaser(laserX, laserY);
@@ -1576,7 +1923,7 @@ function loop() {
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
       ctx.font = '11px monospace'; ctx.textAlign = 'center';
-      ctx.fillText('hold cat to purr · tap ground for laser pointer',
+      ctx.fillText('hold cat to purr · tap ground for laser · tap wool ball to roll it',
         canvas.width / 2, canvas.height - 18);
       ctx.restore();
     }
