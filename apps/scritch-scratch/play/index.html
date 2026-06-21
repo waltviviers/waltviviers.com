@@ -862,6 +862,7 @@ class Cat {
     this.sleepStyle = Math.floor(Math.random() * CAT_SLEEP_VARIANTS.length);
     this.furnitureTarget = null;
     this.wantWool = false;
+    this.fightTarget = null;
     this.dead = false;
   }
 
@@ -1029,6 +1030,31 @@ class Cat {
       return;
     }
 
+    // Fight: walk toward fightTarget, hiss when close
+    if (this.state === 'fight') {
+      if (!this.fightTarget || this.fightTarget.dead || this.fightTarget.state === 'leaving') {
+        this.fightTarget = null; this.state = 'idle';
+      } else {
+        const dx = this.fightTarget.cx - this.cx, dy = this.fightTarget.cy - this.cy;
+        const d = Math.hypot(dx, dy);
+        if (d < CPW) {
+          const lbl = ['Hiss!','Sssst!','Mrrow!'][Math.floor(Math.random() * 3)];
+          labels.push(new Label(lbl, this.cx, Math.max(20, this.y - 6)));
+          labels.push(new Label(lbl, this.fightTarget.cx, Math.max(20, this.fightTarget.y - 6)));
+          const pushDir = dx > 0 ? -1 : 1;
+          this.x = Math.max(0, Math.min(canvas.width - CPW, this.x + pushDir * CPW * 0.8));
+          this.fightTarget.x = Math.max(0, Math.min(canvas.width - CPW, this.fightTarget.x - pushDir * CPW * 0.8));
+          if (this.fightTarget.state === 'fight') this.fightTarget.state = 'idle';
+          this.fightTarget = null; this.state = 'idle';
+        } else {
+          this.x += dx / d * SPEED; this.y += dy / d * SPEED * 0.5;
+          this.right = dx > 0;
+          this.x = Math.max(0, Math.min(canvas.width - CPW, this.x));
+          this.y = Math.max(0, Math.min(canvas.height - CPH, this.y));
+        }
+      }
+    }
+
     // Idle: decide what to do
     if (this.state === 'idle') {
       if (++this.idleTimer >= IDLE_TO_ACTION) {
@@ -1049,14 +1075,20 @@ class Cat {
           } else if (woolBall && cr < 0.24) {
             this.wantWool = true;
             this._roamTo(woolBall.x + WOOL_SPR[0].length * WOOL_SC / 2, woolBall.y + WOOL_SPR.length * WOOL_SC / 2);
-          } else if (cr < 0.85) {
+          } else if (cr < 0.78) {
             this.state = 'sleep'; this.sleepTimer = 60 * (10 + Math.floor(Math.random() * 20));
-          } else {
+          } else if (cr < 0.93) {
             this._roamTo(CPW + Math.random() * (canvas.width - CPW * 2), CPH + Math.random() * (canvas.height - CPH * 2));
+          } else {
+            const others = cats.filter(c => c !== this && !c.dead && !c.isVisitor && c.state !== 'leaving' && c.state !== 'fight');
+            if (others.length) {
+              this.fightTarget = others[Math.floor(Math.random() * others.length)];
+              this.state = 'fight';
+            }
           }
         }
       }
-    } else if (!['idle','happy','laser','chase','sleep'].includes(this.state)) {
+    } else if (!['idle','happy','laser','chase','sleep','fight'].includes(this.state)) {
       this.idleTimer = 0;
     }
   }
@@ -1064,7 +1096,7 @@ class Cat {
   sprite() {
     switch (this.state) {
       case 'happy': return CAT_HAPPY[this.frame];
-      case 'walking': case 'laser': case 'chase': return CAT_WALK[this.frame];
+      case 'walking': case 'laser': case 'chase': case 'fight': return CAT_WALK[this.frame];
       case 'sleep': return CAT_SLEEP_VARIANTS[this.sleepStyle];
       default: return CAT_IDLE;
     }
@@ -1711,12 +1743,42 @@ canvas.addEventListener('pointerdown', e => {
         return;
       }
     }
-    // Tap wool ball → roll it
+    // Tap wool ball → roll it and send a cat
     if (woolBall) {
       const wbw = WOOL_SPR[0].length * WOOL_SC, wbh = WOOL_SPR.length * WOOL_SC;
       if (px >= woolBall.x && px <= woolBall.x + wbw && py >= woolBall.y && py <= woolBall.y + wbh) {
         const angle = Math.random() * Math.PI * 2;
         woolBall.vx = Math.cos(angle) * 6; woolBall.vy = Math.sin(angle) * 3;
+        const awake = cats.filter(c => !c.dead && !c.isVisitor && c.state !== 'sleep' && c.state !== 'leaving');
+        if (awake.length) {
+          awake.sort((a, b) => Math.hypot(a.cx - woolBall.x, a.cy - woolBall.y) - Math.hypot(b.cx - woolBall.x, b.cy - woolBall.y));
+          awake[0].wantWool = true;
+          awake[0]._roamTo(woolBall.x + wbw / 2, woolBall.y + wbh / 2);
+        }
+        return;
+      }
+    }
+    // Tap cat bowls → send closest awake cat
+    if (catFoodBowl) {
+      const bw = DOG_BOWL_SPR[0].length * BOWL_SC, bh = DOG_BOWL_SPR.length * BOWL_SC;
+      if (px >= catFoodBowl.x && px <= catFoodBowl.x + bw && py >= catFoodBowl.y && py <= catFoodBowl.y + bh) {
+        const awake = cats.filter(c => !c.dead && !c.isVisitor && c.state !== 'sleep' && c.state !== 'leaving');
+        if (awake.length) {
+          awake.sort((a, b) => Math.hypot(a.cx - px, a.cy - py) - Math.hypot(b.cx - px, b.cy - py));
+          const cat = awake[0];
+          cat.furnitureTarget = 'food';
+          cat._roamTo(catFoodBowl.x + bw / 2, catFoodBowl.y + bh / 2);
+        }
+        return;
+      }
+      if (px >= catWaterBowl.x && px <= catWaterBowl.x + bw && py >= catWaterBowl.y && py <= catWaterBowl.y + bh) {
+        const awake = cats.filter(c => !c.dead && !c.isVisitor && c.state !== 'sleep' && c.state !== 'leaving');
+        if (awake.length) {
+          awake.sort((a, b) => Math.hypot(a.cx - px, a.cy - py) - Math.hypot(b.cx - px, b.cy - py));
+          const cat = awake[0];
+          cat.furnitureTarget = 'water';
+          cat._roamTo(catWaterBowl.x + bw / 2, catWaterBowl.y + bh / 2);
+        }
         return;
       }
     }
@@ -1733,6 +1795,32 @@ canvas.addEventListener('pointerdown', e => {
   if (gameMode === 'rat') {
     for (const rat of rats) {
       if (!rat.dead && rat.hitTest(px, py)) { rat.scritch(); return; }
+    }
+    // Tap on rat furniture → send closest rat
+    function sendClosestRat(ftName) {
+      const live = rats.filter(r => !r.dead && !r.fleeing);
+      if (!live.length) return;
+      live.sort((a, b) => Math.hypot(a.x - px, a.y - py) - Math.hypot(b.x - px, b.y - py));
+      live[0].furnitureTarget = ftName;
+      live[0].sleepTimer = 0;
+    }
+    if (ratBottle) {
+      const bw = RAT_BOTTLE_SPR[0].length * RAT_BOTTLE_SC, bh = RAT_BOTTLE_SPR.length * RAT_BOTTLE_SC;
+      if (px >= ratBottle.x && px <= ratBottle.x + bw && py >= ratBottle.y && py <= ratBottle.y + bh) {
+        sendClosestRat('bottle'); return;
+      }
+    }
+    if (ratFoodBowl) {
+      const bw = RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, bh = RAT_RBOWL_SPR.length * RAT_BOWL_SC;
+      if (px >= ratFoodBowl.x && px <= ratFoodBowl.x + bw && py >= ratFoodBowl.y && py <= ratFoodBowl.y + bh) {
+        sendClosestRat('bowl'); return;
+      }
+    }
+    if (ratBed) {
+      const bw = RAT_BED_SPR[0].length * RAT_BED_SC, bh = RAT_BED_SPR.length * RAT_BED_SC;
+      if (px >= ratBed.x && px <= ratBed.x + bw && py >= ratBed.y && py <= ratBed.y + bh) {
+        sendClosestRat('bed'); return;
+      }
     }
     cheeses.push({ x: px - CHEESE_W / 2, y: py - CHEESE_H / 2, eaten: false });
     if (++cheeseCount % 15 === 0 && rats.length > 0) raidCats.push(new RaidCat());
