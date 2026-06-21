@@ -150,8 +150,6 @@ function drawRoom() {
   drawHouseplant(CX - WALL - 36, VH - 72 - 52);
   drawHouseplant(CX + CW + WALL + 4, VH - 72 - 52);
 
-  // Framed artwork centred above the cage
-  drawWallArt();
 }
 
 function drawHouseplant(px, py) {
@@ -174,32 +172,6 @@ function drawHouseplant(px, py) {
   fill(px + 12, py - 2,   8, 4, C.leafHi);
 }
 
-function drawWallArt() {
-  const pw = 52, ph = 38;
-  const px = Math.round(VW / 2) - pw / 2;
-  const py = 7;
-
-  // Drop shadow
-  fill(px + 2, py + 3, pw, ph, '#0a0910');
-  // Dark wood frame
-  fill(px - 3, py - 3, pw + 6, ph + 6, '#2a1e10');
-  fill(px - 1, py - 1, pw + 2, ph + 2, '#1c1408');
-  // Off-white canvas
-  fill(px, py, pw, ph, '#cdc8b6');
-
-  // Minimal line-art face (single continuous stroke approximation)
-  const c = '#1a1510';
-  fill(px + 16, py + 2,  20, 2, c);   // crown
-  fill(px + 10, py + 4,   4, 12, c);  // left cheek
-  fill(px + 38, py + 4,   4, 12, c);  // right cheek
-  fill(px + 13, py + 16,  4,  4, c);  // jaw left
-  fill(px + 35, py + 16,  4,  4, c);  // jaw right
-  fill(px + 17, py + 20, 18,  2, c);  // chin
-  fill(px + 15, py + 10,  6,  3, c);  // left eye
-  fill(px + 31, py + 10,  6,  3, c);  // right eye
-  fill(px + 23, py + 15,  6,  4, c);  // nose
-  fill(px + 19, py + 20, 14,  2, c);  // mouth
-}
 
 // ── Cage ──────────────────────────────────────────────────────────────────────
 function drawCage() {
