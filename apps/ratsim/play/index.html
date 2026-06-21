@@ -368,102 +368,105 @@ function drawWaterBottle() {
   fill(bx + 24, by + 44, 7, 5, C.bar);
 }
 
-// ── Rat sprite ─────────────────────────────────────────────────────────────────
-// Facing RIGHT: nose=col 11, tail exits lower-left, ear sits above head.
-// 12 cols × 9 rows → 48×36 virtual px at RS=4.
-// Values: 1=body, 2=ear(pink), 3=tail, 4=nose(pink), 5=eye(dark)
-const RAT_SPR = [
-  [0,0,0,0,2,2,2,0,0,0,0,0],  // r0  ear (above head, cols 4-6)
-  [0,0,0,1,2,2,2,1,1,1,0,0],  // r1  head with ear embedded + back
-  [0,0,0,1,1,1,1,5,1,1,1,4],  // r2  head + eye(col7) + snout + nose
-  [3,3,0,1,1,1,1,1,1,1,1,0],  // r3  tail begins + full body row
-  [0,3,3,1,1,1,1,1,1,1,0,0],  // r4  tail + body
-  [0,0,3,3,1,1,1,1,0,0,0,0],  // r5  tail + haunches
-  [0,0,0,1,1,0,0,1,1,0,0,0],  // r6  legs (separated)
-  [0,0,0,1,1,0,0,1,1,0,0,0],  // r7  lower legs
-  [0,0,0,1,1,1,0,1,1,0,0,0],  // r8  feet
-];
-const RS    = 4;
-const RCOLS = RAT_SPR[0].length;  // 12
-const RROWS = RAT_SPR.length;     // 9
-const RW    = RCOLS * RS;         // 48
-const RH    = RROWS * RS;         // 36
+// ── Rat sprite definitions ─────────────────────────────────────────────────────
+// Values: 0=empty, 1=body, 2=ear(pink), 3=tail, 4=nose(pink), 5=eye(dark)
+// All sprites face RIGHT; mirrored at draw time.
 
-// Brown-patch regions for Potato (sprite coords, facing right)
-const PATCHES = [
-  { r0: 1, r1: 2, c0: 3, c1: 7 },  // head cap
-  { r0: 3, r1: 5, c0: 3, c1: 6 },  // back saddle
+// LOKI — "Chonk": compact round body, big head, close-set legs
+// 11 cols × 8 rows @ RS=4 → 44 × 32 virtual px
+const LOKI_SPR = [
+  [0,0,0,0,0,0,2,2,2,0,0],  // r0  ear above head (cols 6-8)
+  [0,0,0,0,0,1,2,2,2,1,0],  // r1  head + ear
+  [0,0,0,0,1,1,1,1,1,1,4],  // r2  head + snout + nose (nose col 10)
+  [3,3,0,0,1,1,1,1,5,1,0],  // r3  tail(0-1) + body + eye(col 8)
+  [0,3,3,1,1,1,1,1,1,0,0],  // r4  body + tail
+  [0,0,3,1,1,1,1,0,0,0,0],  // r5  rump + tail exit
+  [0,0,0,1,1,0,1,1,0,0,0],  // r6  close-set legs
+  [0,0,0,1,1,1,1,1,0,0,0],  // r7  feet (wider base)
 ];
 
-function drawRat(vx, vy, right, bodyCol, patchCol, earTwitch = false) {
-  const earCol = earTwitch ? '#ffd0e0' : C.ratPink;  // brighter when alert
+// POTATO — "Sleek": long slim body, small head, wide-spaced legs
+// 14 cols × 8 rows @ RS=4 → 56 × 32 virtual px
+const POTATO_SPR = [
+  [0,0,0,0,0,0,0,0,2,2,0,0,0,0],  // r0  small ear (cols 8-9)
+  [0,0,0,0,0,1,1,1,2,2,1,1,1,0],  // r1  head + ear (head cols 5-12)
+  [3,3,0,1,1,1,1,1,1,1,1,1,1,4],  // r2  long body + nose (nose col 13)
+  [0,3,3,1,1,1,1,1,1,1,1,1,5,0],  // r3  body + eye(col 12)
+  [0,0,3,3,1,1,1,1,1,1,0,0,0,0],  // r4  body + tail(cols 2-3)
+  [0,0,0,0,1,1,0,0,0,1,1,0,0,0],  // r5  wide-spaced legs
+  [0,0,0,0,1,1,0,0,0,1,1,0,0,0],  // r6  lower legs
+  [0,0,0,0,1,1,1,0,0,1,1,0,0,0],  // r7  feet
+];
 
-  // Body + ears + nose + tail
-  for (let r = 0; r < RROWS; r++) {
-    for (let c = 0; c < RCOLS; c++) {
-      const v = RAT_SPR[r][c];
+function makeDef(spr, rs, earCols, patches) {
+  const rcols = spr[0].length, rrows = spr.length;
+  return { spr, rs, rcols, rrows, rw: rcols * rs, rh: rrows * rs, earCols, patches };
+}
+
+const LOKI_DEF = makeDef(LOKI_SPR, 4, [6, 7, 8], []);
+const POTATO_DEF = makeDef(POTATO_SPR, 4, [8, 9], [
+  { r0: 0, r1: 1, c0: 5, c1: 12 },  // head cap
+  { r0: 2, r1: 4, c0: 3, c1: 8 },   // back saddle
+]);
+
+function drawRat(rat, vx, vy, earTwitch = false) {
+  const { spr, rs, rcols, rrows, earCols, patches } = rat.def;
+  const earCol = earTwitch ? '#ffd0e0' : C.ratPink;
+  const right  = rat.right;
+
+  for (let r = 0; r < rrows; r++) {
+    for (let c = 0; c < rcols; c++) {
+      const v = spr[r][c];
       if (!v) continue;
-      const dc = right ? c : (RCOLS - 1 - c);
-      const color = v === 2 ? earCol      // ear  (twitches)
-                  : v === 3 ? C.ratTail   // tail
-                  : v === 4 ? C.ratPink   // nose
-                  : v === 5 ? C.ratEye    // eye
-                  : bodyCol;
-      fill(vx + dc * RS, vy + r * RS, RS, RS, color);
+      const dc = right ? c : (rcols - 1 - c);
+      const color = v === 2 ? earCol : v === 3 ? C.ratTail
+                  : v === 4 ? C.ratPink : v === 5 ? C.ratEye : rat.body;
+      fill(vx + dc * rs, vy + r * rs, rs, rs, color);
     }
   }
 
-  // Extra ear-tip pixels when twitching — ear perks up (3 cells wide)
   if (earTwitch) {
-    for (let i = 0; i < 3; i++) {
-      const ec = right ? (4 + i) : (RCOLS - 1 - (4 + i));
-      fill(vx + ec * RS, vy - RS, RS, RS, earCol);
+    for (const ec of earCols) {
+      const dc = right ? ec : (rcols - 1 - ec);
+      fill(vx + dc * rs, vy - rs, rs, rs, earCol);
     }
   }
 
-  // Colour patches (Potato only), using same mirroring
-  if (patchCol) {
-    for (const p of PATCHES) {
+  if (rat.patch && patches.length) {
+    for (const p of patches) {
       for (let r = p.r0; r <= p.r1; r++) {
         for (let c = p.c0; c <= p.c1; c++) {
-          if (RAT_SPR[r][c] !== 1) continue;  // only over body pixels
-          const dc = right ? c : (RCOLS - 1 - c);
-          fill(vx + dc * RS, vy + r * RS, RS, RS, patchCol);
+          if (spr[r][c] !== 1) continue;
+          const dc = right ? c : (rcols - 1 - c);
+          fill(vx + dc * rs, vy + r * rs, rs, rs, rat.patch);
         }
       }
     }
   }
 }
 
-// ── Rat layout constants ───────────────────────────────────────────────────────
-const FLOOR_Y     = CY + CH - 34 - RH;
-const SHELF_Y     = CY + MID - RH - 2;
-const HAMMOCK_Y   = CY + 28 + 4;          // resting inside the hammock sag
-const FLOOR_MINX  = CX + 10;
-const FLOOR_MAXX  = CX + CW - RW - 10;
-const SHELF_MINX  = CX + 10;
-const SHELF_MAXX  = CX + CW - RW - 10;
-const WALK_SPEED  = 0.5;
-
-// Ladder x positions (rat centre when on ladder)
-const LADDER_L_X  = CX + 18;    // left ladder (bottom ↔ shelf)
-const LADDER_R_X  = CX + CW - 44;  // right ladder (shelf ↔ upper)
-const HAMMOCK_X   = CX + 80;    // resting spot inside hammock
-
-// Eating/drinking spots: rat nose aligned to bowl / bottle nozzle
-const EAT_X   = Math.round(CX + 4 + 44 - RW);      // left-wall bowl
-const DRINK_X  = Math.round(CX + CW - 44 + 10 - RW); // right-wall bottle
+// ── Shared layout constants ────────────────────────────────────────────────────
+const HAMMOCK_Y  = CY + 28 + 4;
+const LADDER_L_X = CX + 18;
+const LADDER_R_X = CX + CW - 44;
+const WALK_SPEED = 0.5;
 
 // ── Rat state ─────────────────────────────────────────────────────────────────
 const HUNGER_RATE  = 0.0056;  // depletes hunger in ~5 min at 60 fps
 const THIRST_RATE  = 0.0083;  // depletes thirst in ~3 min at 60 fps
 const ACT_DURATION = 100;     // frames spent eating/drinking
 
-function makeRat(x, right, body, patch) {
+function makeRat(x, right, body, patch, def) {
+  const floorY    = CY + CH - 34 - def.rh;
+  const shelfY    = CY + MID - def.rh - 2;
+  const floorMaxX = CX + CW - def.rw - 10;
+  const eatX      = CX + 40;
+  const drinkX    = Math.round(CX + CW - 22 - (def.rcols - 1) * def.rs);
   return {
-    x, y: FLOOR_Y, right, body, patch,
+    x, y: floorY, right, body, patch, def,
+    floorY, shelfY, floorMaxX, eatX, drinkX,
     tx: x,
-    floor: 'bottom',  // 'bottom'|'shelf'|'hammock'
+    floor: 'bottom',
     climbing: false,
     idleTimer: 60 + Math.floor(Math.random() * 120),
     twitch: 0,
@@ -474,10 +477,10 @@ function makeRat(x, right, body, patch) {
   };
 }
 
-function floorY(f) {
-  if (f === 'hammock') return HAMMOCK_Y;
-  if (f === 'shelf')   return SHELF_Y;
-  return FLOOR_Y;
+function ratFloorY(rat) {
+  if (rat.floor === 'hammock') return HAMMOCK_Y;
+  if (rat.floor === 'shelf')   return rat.shelfY;
+  return rat.floorY;
 }
 
 function tickRat(rat) {
@@ -487,9 +490,8 @@ function tickRat(rat) {
   if (rat.twitch > 0) { rat.twitch--; }
   else if (Math.random() < 0.003) { rat.twitch = 20; }
 
-  // Climbing transition — smoothly interpolate y
   if (rat.climbing) {
-    const targetY = floorY(rat.floor);
+    const targetY = ratFloorY(rat);
     const dy = targetY - rat.y;
     if (Math.abs(dy) <= 1.5) {
       rat.y = targetY;
@@ -502,7 +504,6 @@ function tickRat(rat) {
     return;
   }
 
-  // Eating or drinking
   if (rat.act === 'eating' || rat.act === 'drinking') {
     rat.right = rat.act === 'drinking';
     if (rat.actTimer > 0) {
@@ -516,32 +517,24 @@ function tickRat(rat) {
     return;
   }
 
-  // Napping in hammock
   if (rat.act === 'nap') {
     if (rat.actTimer > 0) { rat.actTimer--; }
-    else {
-      rat.act = 'idle';
-      rat.idleTimer = 30 + Math.floor(Math.random() * 60);
-    }
+    else { rat.act = 'idle'; rat.idleTimer = 30 + Math.floor(Math.random() * 60); }
     return;
   }
 
-  // Walking toward destination
   if (rat.act === 'to-eat' || rat.act === 'to-drink' || rat.act === 'wander' || rat.act === 'to-ladder') {
     const dx = rat.tx - rat.x;
     if (Math.abs(dx) <= WALK_SPEED) {
       rat.x = rat.tx;
       if (rat.act === 'to-eat') {
-        rat.act = 'eating';
-        rat.actTimer = ACT_DURATION + Math.floor(Math.random() * 40);
+        rat.act = 'eating';  rat.actTimer = ACT_DURATION + Math.floor(Math.random() * 40);
       } else if (rat.act === 'to-drink') {
-        rat.act = 'drinking';
-        rat.actTimer = ACT_DURATION + Math.floor(Math.random() * 40);
+        rat.act = 'drinking'; rat.actTimer = ACT_DURATION + Math.floor(Math.random() * 40);
       } else if (rat.act === 'to-ladder') {
         rat.climbing = true;
       } else {
-        rat.act = 'idle';
-        rat.idleTimer = 90 + Math.floor(Math.random() * 200);
+        rat.act = 'idle'; rat.idleTimer = 90 + Math.floor(Math.random() * 200);
       }
     } else {
       rat.x    += Math.sign(dx) * WALK_SPEED;
@@ -550,62 +543,46 @@ function tickRat(rat) {
     return;
   }
 
-  // Idle: count down, then decide
   if (rat.idleTimer > 0) {
     rat.idleTimer--;
     if (rat.idleTimer === 0) {
       const hungry  = rat.hunger < 45;
       const thirsty = rat.thirst < 45;
 
-      // Must be on bottom floor to eat/drink
       if (rat.floor === 'bottom') {
         if (hungry && (!thirsty || rat.hunger <= rat.thirst)) {
-          rat.tx = EAT_X;  rat.act = 'to-eat';
-          return;
+          rat.tx = rat.eatX; rat.act = 'to-eat'; return;
         } else if (thirsty) {
-          rat.tx = DRINK_X; rat.act = 'to-drink';
-          return;
+          rat.tx = rat.drinkX; rat.act = 'to-drink'; return;
         }
       }
 
-      // If in hammock, maybe stay for a nap or climb down
       if (rat.floor === 'hammock') {
         if (hungry || thirsty || Math.random() < 0.3) {
-          // Climb down: go to right ladder x, then descend
-          rat.tx = LADDER_R_X;
-          rat.act = 'to-ladder';
-          rat.floor = 'shelf';
+          rat.tx = LADDER_R_X; rat.act = 'to-ladder'; rat.floor = 'shelf';
         } else {
-          rat.act = 'nap';
-          rat.actTimer = 200 + Math.floor(Math.random() * 300);
+          rat.act = 'nap'; rat.actTimer = 200 + Math.floor(Math.random() * 300);
         }
         return;
       }
 
-      // Random floor change or wander
       const r = Math.random();
       if (rat.floor === 'bottom' && r < 0.15) {
-        // Climb up left ladder to shelf
         rat.tx = LADDER_L_X; rat.act = 'to-ladder'; rat.floor = 'shelf';
       } else if (rat.floor === 'shelf' && r < 0.2) {
-        // Climb up right ladder to hammock
         rat.tx = LADDER_R_X; rat.act = 'to-ladder'; rat.floor = 'hammock';
       } else if (rat.floor === 'shelf' && r < 0.35) {
-        // Climb down left ladder to bottom
         rat.tx = LADDER_L_X; rat.act = 'to-ladder'; rat.floor = 'bottom';
       } else {
-        // Wander on current floor
-        const minX = rat.floor === 'bottom' ? FLOOR_MINX : SHELF_MINX;
-        const maxX = rat.floor === 'bottom' ? FLOOR_MAXX : SHELF_MAXX;
-        rat.tx  = minX + Math.random() * (maxX - minX);
+        rat.tx  = (CX + 10) + Math.random() * (rat.floorMaxX - CX - 10);
         rat.act = 'wander';
       }
     }
   }
 }
 
-const loki   = makeRat(CX + 60,  true,  C.lokiBody,   null);
-const potato = makeRat(CX + 160, false, C.potatoBody, C.potatoPatch);
+const loki   = makeRat(CX + 60,  true,  C.lokiBody,   null,           LOKI_DEF);
+const potato = makeRat(CX + 160, false, C.potatoBody, C.potatoPatch,  POTATO_DEF);
 
 // ── Animation state ───────────────────────────────────────────────────────────
 let tick = 0;
@@ -639,8 +616,8 @@ function loop() {
   const lokiDY   = breathOffset(0)   + actOffset(loki);
   const potatoDY = breathOffset(1.4) + actOffset(potato);
 
-  drawRat(loki.x,   loki.y   + lokiDY,   loki.right,   loki.body,   loki.patch,   loki.twitch   > 0);
-  drawRat(potato.x, potato.y + potatoDY, potato.right, potato.body, potato.patch, potato.twitch > 0);
+  drawRat(loki,   loki.x,   loki.y   + lokiDY,   loki.twitch   > 0);
+  drawRat(potato, potato.x, potato.y + potatoDY, potato.twitch > 0);
 
   requestAnimationFrame(loop);
 }
