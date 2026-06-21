@@ -48,28 +48,27 @@ function fill(vx, vy, vw, vh, color) {
 
 // ── Palette ───────────────────────────────────────────────────────────────────
 const C = {
-  // Room
-  wall:    '#1e1a28',   // deep blue-grey
-  wallAlt: '#18141f',
-  floor:   '#130e08',   // dark warm wood
-  skirtn:  '#382810',
+  // Room — soft blue wallpaper
+  wall:    '#c2d4e0',
+  wallPat: '#aec4d4',   // wallpaper diamond pattern
+  floor:   '#7a5830',   // warm wood floor
+  skirtn:  '#4a3418',
 
-  // Cage structure — near-black metal
-  cageBack:  '#1e1a28',   // matches wall (cage reads as open space)
-  cageSide:  '#0e0d16',   // slightly darker edges for subtle depth shadow
-  frame:     '#1c1e24',
-  bar:       '#28293a',
-  barHi:     '#363748',   // cylindrical highlight side
-  barDim:    '#141520',   // shadow side
-  plank:     '#8b6a2a',   // mid-floor shelf wood (warm, readable against dark BG)
+  // Cage structure — dark metal bars read well on light BG
+  cageBack:  '#b8ccd8',   // slightly darker than wall — subtle depth
+  cageSide:  '#8aaabb',   // edge shadow
+  cageFar:   '#ccdce8',   // back-wall highlight (further = lighter)
+  frame:     '#252830',
+  bar:       '#32344a',
+  barHi:     '#484a60',
+  barDim:    '#1a1c28',
+  plank:     '#8b6a2a',
 
-  // Bottom floor furnishings
+  // Bottom floor bedding (no grass)
   bed0:    '#e4c870',
   bed1:    '#c8a848',
-  grass0:  '#72b040',
-  grass1:  '#508828',
 
-  // Food bowl
+  // Food bowl (clip-on, left wall)
   bowlRim: '#b07030',
   bowlIn:  '#d89040',
   pellet:  '#7a4a28',
@@ -79,14 +78,23 @@ const C = {
   water:   '#58a8e0',
   metal:   '#b0b8c0',
 
-  // Hammock
-  ham0:    '#c89040',
-  ham1:    '#a07030',
-  cord:    '#806020',
+  // Hammock — now pink!
+  ham0:    '#ff99cc',
+  ham1:    '#e0789a',
+  cord:    '#c04878',
 
-  // Ladder / branch
+  // Ladder / branch / rod perches
   wood0:   '#8b5e28',
   wood1:   '#6a4418',
+  rod:     '#505870',
+  rodHi:   '#707898',
+
+  // Houseplant
+  pot:     '#7a4a28',
+  potDark: '#5a3418',
+  leaf:    '#4a8030',
+  leafHi:  '#5a9840',
+  stem:    '#3a6020',
 
   // Rats
   lokiBody:      '#f8f5f0',
@@ -121,12 +129,49 @@ function drawRoom() {
     fill((i*73)%200, VH - 64 + i * 13, 55, 1, '#0e0c05');
   }
 
+  // Wallpaper diamond pattern
+  for (let row = 0; row < 18; row++) {
+    for (let col = 0; col < 14; col++) {
+      const wx = col * 28 + (row % 2) * 14 - 4;
+      const wy = row * 22 - 4;
+      // small diamond: 4 pixels
+      fill(wx + 12, wy,      4, 4, C.wallPat);
+      fill(wx + 8,  wy + 4,  4, 4, C.wallPat);
+      fill(wx + 16, wy + 4,  4, 4, C.wallPat);
+      fill(wx + 12, wy + 8,  4, 4, C.wallPat);
+    }
+  }
+
   // Skirting board
   ctx.fillStyle = C.skirtn;
   ctx.fillRect(0, floorY - Math.round(3 * sc), canvas.width, Math.ceil(4 * sc));
 
+  // Houseplants on either side of the cage
+  drawHouseplant(CX - WALL - 36, VH - 72 - 52);
+  drawHouseplant(CX + CW + WALL + 4, VH - 72 - 52);
+
   // Framed artwork centred above the cage
   drawWallArt();
+}
+
+function drawHouseplant(px, py) {
+  // Pot
+  fill(px + 4, py + 36, 24, 16, C.pot);
+  fill(px + 2, py + 34,  28,  4, C.potDark);
+  fill(px + 6, py + 48,  20,  4, C.potDark);
+  // Soil
+  fill(px + 5, py + 38, 22, 6, '#3a2810');
+  // Stem
+  fill(px + 14, py + 16, 4, 22, C.stem);
+  // Leaves
+  fill(px,      py + 10, 18, 8, C.leaf);
+  fill(px + 2,  py + 8,  14, 4, C.leafHi);
+  fill(px + 14, py + 18, 18, 8, C.leaf);
+  fill(px + 16, py + 16, 14, 4, C.leafHi);
+  fill(px + 4,  py + 22, 16, 8, C.leaf);
+  fill(px + 6,  py + 20, 12, 4, C.leafHi);
+  fill(px + 10, py,      12, 8, C.leaf);
+  fill(px + 12, py - 2,   8, 4, C.leafHi);
 }
 
 function drawWallArt() {
@@ -244,16 +289,41 @@ function drawHammock() {
 }
 
 function drawLadder() {
-  // Right side, connects mid-floor up to upper area
-  const lx = CX + CW - 46;
-  const ly = CY + MID - 82;
-  const lh = 90, lw = 22;
+  const lw = 22;
 
-  fill(lx,      ly, 3, lh, C.wood0);
-  fill(lx + lw, ly, 3, lh, C.wood0);
-  for (let i = 0; i < 6; i++) {
-    fill(lx, ly + i * 15 + 5, lw + 3, 3, C.wood1);
+  // Left ladder: bottom floor → mid-shelf
+  {
+    const lx = CX + 18;
+    const ly = CY + MID - 6;
+    const lh = CH - MID + 6;
+    fill(lx,      ly, 3, lh, C.wood0);
+    fill(lx + lw, ly, 3, lh, C.wood0);
+    const steps = Math.floor(lh / 16);
+    for (let i = 0; i < steps; i++) {
+      fill(lx, ly + i * 16 + 6, lw + 3, 3, C.wood1);
+    }
   }
+
+  // Right ladder: mid-shelf → upper area (near hammock)
+  {
+    const lx = CX + CW - 44;
+    const ly = CY + 10;
+    const lh = MID - 4;
+    fill(lx,      ly, 3, lh, C.wood0);
+    fill(lx + lw, ly, 3, lh, C.wood0);
+    const steps = Math.floor(lh / 16);
+    for (let i = 0; i < steps; i++) {
+      fill(lx, ly + i * 16 + 6, lw + 3, 3, C.wood1);
+    }
+  }
+
+  // Horizontal rod perches — metal, spanning full cage width
+  const rodY1 = CY + Math.round(MID * 0.35);
+  const rodY2 = CY + Math.round(MID * 0.72);
+  fill(CX + 8, rodY1 - 2, CW - 16, 4, C.rod);
+  fill(CX + 8, rodY1 - 2, CW - 16, 2, C.rodHi);
+  fill(CX + 8, rodY2 - 2, CW - 16, 4, C.rod);
+  fill(CX + 8, rodY2 - 2, CW - 16, 2, C.rodHi);
 }
 
 function drawBranch() {
@@ -280,35 +350,28 @@ function drawBedding() {
     fill(CX + i * 16 + 11, fy + fh - 10, 5, 4, C.bed1);
   }
 
-  // Soft grass on top of bedding
-  const gy = fy + fh - 34;
-  for (let i = 0; i < 28; i++) {
-    const gx = CX + i * 11 + (i % 3) * 2;
-    const gh = 7 + (i % 4) * 3;
-    fill(gx, gy - gh + 8, 4, gh, i % 2 === 0 ? C.grass0 : C.grass1);
-  }
 }
 
 function drawFoodBowl() {
   const fy  = CY + MID + 6;
   const fh  = CH - MID - 6;
-  const bx  = CX + 52;
-  const by  = fy + fh - 42;
+  // Clip-on bowl attached to left cage wall
+  const bx  = CX + 2;
+  const by  = fy + fh - 44;
 
-  // Shadow
-  ctx.globalAlpha = 0.18;
-  fill(bx - 2, by + 24, 48, 5, '#000');
-  ctx.globalAlpha = 1;
+  // Wall clip brackets
+  fill(bx, by + 4,  5, 4, C.bar);
+  fill(bx, by + 18, 5, 4, C.bar);
 
   // Bowl outer rim
-  fill(bx, by + 8, 44, 22, C.bowlRim);
+  fill(bx + 4, by + 8, 40, 22, C.bowlRim);
   // Bowl inner
-  fill(bx + 3, by + 10, 38, 18, C.bowlIn);
+  fill(bx + 7, by + 10, 34, 18, C.bowlIn);
 
   // Food pellets
-  const pellets = [[4,3],[9,2],[15,3],[21,2],[28,3],[33,2],[7,9],[14,8],[22,9],[29,8]];
+  const pellets = [[2,3],[7,2],[13,3],[19,2],[25,3],[30,2],[5,9],[12,8],[20,9],[27,8]];
   for (const [px2, py2] of pellets) {
-    fill(bx + px2, by + py2, 6, 5, C.pellet);
+    fill(bx + 7 + px2, by + py2, 5, 4, C.pellet);
   }
 }
 
@@ -334,30 +397,30 @@ function drawWaterBottle() {
 }
 
 // ── Rat sprite ─────────────────────────────────────────────────────────────────
-// Facing RIGHT: nose at col 12, tail at cols 0-1, ear at cols 5-7.
-// Horizontal side-view: 13 cols × 9 rows → 52×36 virtual px at RS=4.
-// Values: 1=body, 2=ear (pink), 3=tail, 4=nose (pink), 5=eye (dark)
+// Facing RIGHT: nose=col 11, tail exits lower-left, ear sits above head.
+// 12 cols × 9 rows → 48×36 virtual px at RS=4.
+// Values: 1=body, 2=ear(pink), 3=tail, 4=nose(pink), 5=eye(dark)
 const RAT_SPR = [
-  [0,0,0,0,0,2,2,2,0,0,0,0,0],  // r0  ear tip (cols 5-7)
-  [0,0,0,1,1,2,2,2,1,1,1,0,0],  // r1  back + ear base + head (cols 3-10)
-  [3,3,1,1,1,1,1,1,1,1,1,1,4],  // r2  tail + full body + nose
-  [3,3,1,1,1,1,1,1,1,5,1,1,0],  // r3  tail + body + eye (col 9)
-  [0,3,3,1,1,1,1,1,1,1,0,0,0],  // r4  tail + body narrowing
-  [0,0,3,3,1,1,1,0,0,0,0,0,0],  // r5  tail tip + haunches
-  [0,0,0,1,1,0,1,1,0,0,0,0,0],  // r6  legs
-  [0,0,0,1,1,0,1,1,0,0,0,0,0],  // r7  lower legs
-  [0,0,0,1,1,1,1,1,0,0,0,0,0],  // r8  feet
+  [0,0,0,0,2,2,2,0,0,0,0,0],  // r0  ear (above head, cols 4-6)
+  [0,0,0,1,2,2,2,1,1,1,0,0],  // r1  head with ear embedded + back
+  [0,0,0,1,1,1,1,5,1,1,1,4],  // r2  head + eye(col7) + snout + nose
+  [3,3,0,1,1,1,1,1,1,1,1,0],  // r3  tail begins + full body row
+  [0,3,3,1,1,1,1,1,1,1,0,0],  // r4  tail + body
+  [0,0,3,3,1,1,1,1,0,0,0,0],  // r5  tail + haunches
+  [0,0,0,1,1,0,0,1,1,0,0,0],  // r6  legs (separated)
+  [0,0,0,1,1,0,0,1,1,0,0,0],  // r7  lower legs
+  [0,0,0,1,1,1,0,1,1,0,0,0],  // r8  feet
 ];
-const RS    = 4;                        // virtual px per sprite cell
-const RCOLS = RAT_SPR[0].length;       // 13
-const RROWS = RAT_SPR.length;          // 9
-const RW    = RCOLS * RS;              // 52
-const RH    = RROWS * RS;             // 36
+const RS    = 4;
+const RCOLS = RAT_SPR[0].length;  // 12
+const RROWS = RAT_SPR.length;     // 9
+const RW    = RCOLS * RS;         // 48
+const RH    = RROWS * RS;         // 36
 
 // Brown-patch regions for Potato (sprite coords, facing right)
 const PATCHES = [
-  { r0: 1, r1: 3, c0: 3, c1:  8 },  // ear + back-of-head cap
-  { r0: 2, r1: 4, c0: 2, c1:  5 },  // back saddle
+  { r0: 1, r1: 2, c0: 3, c1: 7 },  // head cap
+  { r0: 3, r1: 5, c0: 3, c1: 6 },  // back saddle
 ];
 
 function drawRat(vx, vy, right, bodyCol, patchCol, earTwitch = false) {
@@ -381,7 +444,7 @@ function drawRat(vx, vy, right, bodyCol, patchCol, earTwitch = false) {
   // Extra ear-tip pixels when twitching — ear perks up (3 cells wide)
   if (earTwitch) {
     for (let i = 0; i < 3; i++) {
-      const ec = right ? (5 + i) : (RCOLS - 1 - (5 + i));
+      const ec = right ? (4 + i) : (RCOLS - 1 - (4 + i));
       fill(vx + ec * RS, vy - RS, RS, RS, earCol);
     }
   }
@@ -401,14 +464,23 @@ function drawRat(vx, vy, right, bodyCol, patchCol, earTwitch = false) {
 }
 
 // ── Rat layout constants ───────────────────────────────────────────────────────
-const FLOOR_Y    = CY + CH - 34 - RH;
-const FLOOR_MINX = CX + 10;
-const FLOOR_MAXX = CX + CW - RW - 10;
-const WALK_SPEED = 0.5;   // virtual px per frame (~30 vpx/s at 60 fps)
+const FLOOR_Y     = CY + CH - 34 - RH;
+const SHELF_Y     = CY + MID - RH - 2;
+const HAMMOCK_Y   = CY + 28 + 4;          // resting inside the hammock sag
+const FLOOR_MINX  = CX + 10;
+const FLOOR_MAXX  = CX + CW - RW - 10;
+const SHELF_MINX  = CX + 10;
+const SHELF_MAXX  = CX + CW - RW - 10;
+const WALK_SPEED  = 0.5;
 
-// Eating/drinking spots: rat nose aligned to bowl centre / bottle nozzle
-const EAT_X   = Math.round(CX + 52 + 22 - RW);     // bowl centre at CX+74
-const DRINK_X  = Math.round(CX + CW - 44 + 10 - RW); // nozzle at CX+CW-34
+// Ladder x positions (rat centre when on ladder)
+const LADDER_L_X  = CX + 18;    // left ladder (bottom ↔ shelf)
+const LADDER_R_X  = CX + CW - 44;  // right ladder (shelf ↔ upper)
+const HAMMOCK_X   = CX + 80;    // resting spot inside hammock
+
+// Eating/drinking spots: rat nose aligned to bowl / bottle nozzle
+const EAT_X   = Math.round(CX + 4 + 44 - RW);      // left-wall bowl
+const DRINK_X  = Math.round(CX + CW - 44 + 10 - RW); // right-wall bottle
 
 // ── Rat state ─────────────────────────────────────────────────────────────────
 const HUNGER_RATE  = 0.0056;  // depletes hunger in ~5 min at 60 fps
@@ -419,27 +491,48 @@ function makeRat(x, right, body, patch) {
   return {
     x, y: FLOOR_Y, right, body, patch,
     tx: x,
+    floor: 'bottom',  // 'bottom'|'shelf'|'hammock'
+    climbing: false,
     idleTimer: 60 + Math.floor(Math.random() * 120),
     twitch: 0,
-    hunger: 75 + Math.random() * 25,
-    thirst: 75 + Math.random() * 25,
-    act: 'idle',   // 'idle'|'wander'|'to-eat'|'eating'|'to-drink'|'drinking'
+    hunger: 5 + Math.random() * 10,
+    thirst: 5 + Math.random() * 10,
+    act: 'idle',
     actTimer: 0,
   };
 }
 
+function floorY(f) {
+  if (f === 'hammock') return HAMMOCK_Y;
+  if (f === 'shelf')   return SHELF_Y;
+  return FLOOR_Y;
+}
+
 function tickRat(rat) {
-  // Needs deplete every frame
   rat.hunger = Math.max(0, rat.hunger - HUNGER_RATE);
   rat.thirst = Math.max(0, rat.thirst - THIRST_RATE);
 
-  // Ear twitch
   if (rat.twitch > 0) { rat.twitch--; }
   else if (Math.random() < 0.003) { rat.twitch = 20; }
 
-  // Eating or drinking — stay put and count down
+  // Climbing transition — smoothly interpolate y
+  if (rat.climbing) {
+    const targetY = floorY(rat.floor);
+    const dy = targetY - rat.y;
+    if (Math.abs(dy) <= 1.5) {
+      rat.y = targetY;
+      rat.climbing = false;
+      rat.act = 'idle';
+      rat.idleTimer = 40 + Math.floor(Math.random() * 80);
+    } else {
+      rat.y += Math.sign(dy) * 1.5;
+    }
+    return;
+  }
+
+  // Eating or drinking
   if (rat.act === 'eating' || rat.act === 'drinking') {
-    rat.right = true;
+    rat.right = rat.act === 'drinking';
     if (rat.actTimer > 0) {
       rat.actTimer--;
     } else {
@@ -451,13 +544,33 @@ function tickRat(rat) {
     return;
   }
 
-  // Walking toward bowl or bottle
-  if (rat.act === 'to-eat' || rat.act === 'to-drink') {
+  // Napping in hammock
+  if (rat.act === 'nap') {
+    if (rat.actTimer > 0) { rat.actTimer--; }
+    else {
+      rat.act = 'idle';
+      rat.idleTimer = 30 + Math.floor(Math.random() * 60);
+    }
+    return;
+  }
+
+  // Walking toward destination
+  if (rat.act === 'to-eat' || rat.act === 'to-drink' || rat.act === 'wander' || rat.act === 'to-ladder') {
     const dx = rat.tx - rat.x;
     if (Math.abs(dx) <= WALK_SPEED) {
-      rat.x    = rat.tx;
-      rat.act  = rat.act === 'to-eat' ? 'eating' : 'drinking';
-      rat.actTimer = ACT_DURATION + Math.floor(Math.random() * 40);
+      rat.x = rat.tx;
+      if (rat.act === 'to-eat') {
+        rat.act = 'eating';
+        rat.actTimer = ACT_DURATION + Math.floor(Math.random() * 40);
+      } else if (rat.act === 'to-drink') {
+        rat.act = 'drinking';
+        rat.actTimer = ACT_DURATION + Math.floor(Math.random() * 40);
+      } else if (rat.act === 'to-ladder') {
+        rat.climbing = true;
+      } else {
+        rat.act = 'idle';
+        rat.idleTimer = 90 + Math.floor(Math.random() * 200);
+      }
     } else {
       rat.x    += Math.sign(dx) * WALK_SPEED;
       rat.right = dx > 0;
@@ -465,31 +578,56 @@ function tickRat(rat) {
     return;
   }
 
-  // Idle: count down, then choose next destination
+  // Idle: count down, then decide
   if (rat.idleTimer > 0) {
     rat.idleTimer--;
     if (rat.idleTimer === 0) {
       const hungry  = rat.hunger < 45;
       const thirsty = rat.thirst < 45;
-      if (hungry && (!thirsty || rat.hunger <= rat.thirst)) {
-        rat.tx = EAT_X;  rat.act = 'to-eat';
-      } else if (thirsty) {
-        rat.tx = DRINK_X; rat.act = 'to-drink';
+
+      // Must be on bottom floor to eat/drink
+      if (rat.floor === 'bottom') {
+        if (hungry && (!thirsty || rat.hunger <= rat.thirst)) {
+          rat.tx = EAT_X;  rat.act = 'to-eat';
+          return;
+        } else if (thirsty) {
+          rat.tx = DRINK_X; rat.act = 'to-drink';
+          return;
+        }
+      }
+
+      // If in hammock, maybe stay for a nap or climb down
+      if (rat.floor === 'hammock') {
+        if (hungry || thirsty || Math.random() < 0.3) {
+          // Climb down: go to right ladder x, then descend
+          rat.tx = LADDER_R_X;
+          rat.act = 'to-ladder';
+          rat.floor = 'shelf';
+        } else {
+          rat.act = 'nap';
+          rat.actTimer = 200 + Math.floor(Math.random() * 300);
+        }
+        return;
+      }
+
+      // Random floor change or wander
+      const r = Math.random();
+      if (rat.floor === 'bottom' && r < 0.15) {
+        // Climb up left ladder to shelf
+        rat.tx = LADDER_L_X; rat.act = 'to-ladder'; rat.floor = 'shelf';
+      } else if (rat.floor === 'shelf' && r < 0.2) {
+        // Climb up right ladder to hammock
+        rat.tx = LADDER_R_X; rat.act = 'to-ladder'; rat.floor = 'hammock';
+      } else if (rat.floor === 'shelf' && r < 0.35) {
+        // Climb down left ladder to bottom
+        rat.tx = LADDER_L_X; rat.act = 'to-ladder'; rat.floor = 'bottom';
       } else {
-        rat.tx  = FLOOR_MINX + Math.random() * (FLOOR_MAXX - FLOOR_MINX);
+        // Wander on current floor
+        const minX = rat.floor === 'bottom' ? FLOOR_MINX : SHELF_MINX;
+        const maxX = rat.floor === 'bottom' ? FLOOR_MAXX : SHELF_MAXX;
+        rat.tx  = minX + Math.random() * (maxX - minX);
         rat.act = 'wander';
       }
-    }
-  } else {
-    // Walking to a random wander target
-    const dx = rat.tx - rat.x;
-    if (Math.abs(dx) <= WALK_SPEED) {
-      rat.x = rat.tx;
-      rat.act = 'idle';
-      rat.idleTimer = 90 + Math.floor(Math.random() * 200);
-    } else {
-      rat.x += Math.sign(dx) * WALK_SPEED;
-      rat.right = dx > 0;
     }
   }
 }
@@ -505,10 +643,12 @@ function breathOffset(phase) {
   return Math.sin(tick * 0.022 + phase) * 1.5;
 }
 
-// Nibbling bob while eating; gentle sip while drinking.
+// Nibbling bob, sip, or walk bounce.
 function actOffset(rat) {
   if (rat.act === 'eating')   return Math.sin(tick * 0.18) * 2.5;
   if (rat.act === 'drinking') return Math.sin(tick * 0.09) * 1.5;
+  if (rat.act === 'wander' || rat.act === 'to-eat' || rat.act === 'to-drink' || rat.act === 'to-ladder')
+    return Math.abs(Math.sin(tick * 0.25)) * 2;
   return 0;
 }
 
