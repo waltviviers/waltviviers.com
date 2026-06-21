@@ -372,47 +372,54 @@ function drawWaterBottle() {
 // Values: 0=empty, 1=body, 2=ear(pink), 3=tail, 4=nose(pink), 5=eye(dark)
 // All sprites face RIGHT; mirrored at draw time.
 
-// LOKI — "Chonk": compact round body, big head, close legs
-// 12 cols × 9 rows @ RS=6 → 72 × 54 virtual px
+// LOKI — "Chonk": compact round body, big head — 24 cols × 13 rows @ RS=3 → 72×39 vp
 const LOKI_SPR = [
-  [0,0,0,0,0,0,0,2,2,2,0,0],  // r0  ear (cols 7-9)
-  [0,0,0,0,0,0,1,2,2,2,1,0],  // r1  head + ear
-  [0,0,0,0,0,1,1,1,1,1,1,4],  // r2  head + snout + nose (nose col 11)
-  [3,3,0,1,1,1,1,1,1,5,1,0],  // r3  tail(0-1) + body + eye(col 9)
-  [0,3,3,1,1,1,1,1,1,1,0,0],  // r4  body + tail
-  [0,0,3,1,1,1,1,1,0,0,0,0],  // r5  rump
-  [0,0,0,1,1,0,0,1,1,0,0,0],  // r6  legs (back=3-4, front=7-8)
-  [0,0,0,1,1,0,0,1,1,0,0,0],  // r7  lower legs
-  [0,0,0,1,1,1,0,1,1,0,0,0],  // r8  feet
+  //0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23
+  [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0], // r0  ear tip
+  [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0], // r1  ear
+  [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0], // r2  head + ear
+  [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], // r3  head
+  [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 4], // r4  head+eye(18)+nose(23)
+  [ 3, 3, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], // r5  tail+body
+  [ 0, 3, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0], // r6  body wide
+  [ 0, 0, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0], // r7  body
+  [ 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r8  rump
+  [ 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r9  haunches
+  [ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r10 legs back(4-6)+front(10-12)
+  [ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r11 lower legs
+  [ 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r12 feet
 ];
 
-// POTATO — "Sleek": long slim body, small head, wide-spaced legs
-// 16 cols × 9 rows @ RS=5 → 80 × 45 virtual px
+// POTATO — "Sleek": long slim body, small head — 28 cols × 12 rows @ RS=3 → 84×36 vp
 const POTATO_SPR = [
-  [0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0],  // r0  small ear (cols 12-13)
-  [0,0,0,0,0,0,0,0,0,0,1,1,2,2,1,0],  // r1  small head + ear (cols 10-14)
-  [0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,4],  // r2  long body + nose (nose col 15)
-  [3,3,0,1,1,1,1,1,1,1,1,1,1,5,0,0],  // r3  tail(0-1) + body + eye(col 13)
-  [0,3,3,1,1,1,1,1,1,1,1,1,0,0,0,0],  // r4  body + tail
-  [0,0,3,3,1,1,1,1,1,1,0,0,0,0,0,0],  // r5  rump + tail(cols 2-3)
-  [0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0],  // r6  legs (back=4-5, front=8-9)
-  [0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0],  // r7  lower legs
-  [0,0,0,0,1,1,1,0,1,1,0,0,0,0,0,0],  // r8  feet
+  //0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
+  [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0], // r0  ear (18-19)
+  [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0], // r1  head+ear
+  [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0], // r2  head
+  [ 3, 3, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1, 4], // r3  body+eye(20)+nose(27)
+  [ 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0], // r4  body (4-24)
+  [ 0, 0, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r5  body+tail
+  [ 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r6  rump
+  [ 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r7  haunches
+  [ 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r8  leg tops
+  [ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r9  legs back(4-6)+front(11-13)
+  [ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r10 lower legs
+  [ 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r11 feet
 ];
 
-function makeDef(spr, rs, earCols, patches, backLegCols, frontLegCols) {
+function makeDef(spr, rs, earCols, patches, backLegCols, frontLegCols, legRowStart) {
   const rcols = spr[0].length, rrows = spr.length;
   return { spr, rs, rcols, rrows, rw: rcols * rs, rh: rrows * rs,
-           earCols, patches, backLegCols, frontLegCols };
+           earCols, patches, backLegCols, frontLegCols, legRowStart };
 }
 
-// back/front leg cols: which sprite columns are back legs vs front legs
-const LOKI_DEF = makeDef(LOKI_SPR, 6, [7, 8, 9], [],
-  [3, 4], [7, 8]);
-const POTATO_DEF = makeDef(POTATO_SPR, 5, [12, 13], [
-  { r0: 0, r1: 1, c0: 10, c1: 14 },  // head cap
-  { r0: 2, r1: 5, c0:  3, c1:  8 },  // back saddle
-], [4, 5], [8, 9]);
+// RS=3; back/front leg cols match the new 24×13 / 28×12 sprites
+const LOKI_DEF = makeDef(LOKI_SPR, 3, [13,14,15,16,17], [],
+  [4,5,6,7], [10,11,12], 10);
+const POTATO_DEF = makeDef(POTATO_SPR, 3, [18,19], [
+  { r0: 0, r1: 2, c0: 17, c1: 23 },  // head cap
+  { r0: 3, r1: 7, c0:  4, c1: 11 },  // back saddle
+], [4,5,6,7], [11,12,13], 8);
 
 function drawRat(rat, vx, vy, earTwitch = false) {
   const { spr, rs, rcols, rrows, earCols, patches, backLegCols, frontLegCols } = rat.def;
@@ -422,7 +429,7 @@ function drawRat(rat, vx, vy, earTwitch = false) {
   const walking   = rat.act === 'wander' || rat.act === 'to-eat'
                  || rat.act === 'to-drink' || rat.act === 'to-ladder';
   const walkPhase = walking ? Math.floor(tick / 7) % 2 : -1;
-  const legRowStart = rrows - 3;  // bottom 3 rows are legs + feet
+  const legRowStart = rat.def.legRowStart;
 
   for (let r = 0; r < rrows; r++) {
     for (let c = 0; c < rcols; c++) {
