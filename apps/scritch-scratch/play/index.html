@@ -1324,7 +1324,7 @@ const dog = {
   lingerTicks: 0, idleTimer: 0,
   fidgetTimer: 0, fidgetType: 'sit',
   digTimer: 0, foundTimer: 0, foundItem: null,
-  color: '#ffffff', furnitureTarget: null, sleepTimer: 0, sleepZTimer: 0,
+  color: '#ffffff', furnitureTarget: null, sleepTimer: 0, sleepZTimer: 0, digPending: false,
 
   init() {
     this.x = canvas.width / 2 - PW / 2;
@@ -1332,7 +1332,7 @@ const dog = {
     this.color = DOG_COLORS[Math.floor(Math.random() * DOG_COLORS.length)];
     this.state = 'digging'; this.digTimer = DIG_DURATION;
     this.frame = 0; this.tick = 0;
-    this.furnitureTarget = null; this.sleepTimer = 0; this.sleepZTimer = 0;
+    this.furnitureTarget = null; this.sleepTimer = 0; this.sleepZTimer = 0; this.digPending = false;
   },
 
   get cx()   { return this.x + PW / 2; },
@@ -1371,7 +1371,7 @@ const dog = {
 
   pet() {
     thrownBall = null; this._commitItem();
-    this.sleepTimer = 0;
+    this.sleepTimer = 0; this.digPending = false;
     this.state = 'happy'; this.tx = this.ty = null;
     this.lingerTicks = 0; this.idleTimer = 0; marker = null;
   },
@@ -1433,6 +1433,10 @@ const dog = {
             labels.push(new Label(lbl, this.cx, Math.max(20, this.y - 8)));
             this.state = 'happy'; this.lingerTicks = 60 * 2;
           }
+        } else if (this.digPending) {
+          this.digPending = false;
+          this.state = 'digging'; this.digTimer = DIG_DURATION; this.frame = 0; this.tick = 0;
+          labels.push(new Label('Dig!', this.cx, Math.max(20, this.y - 4)));
         } else {
           this.state = 'idle';
         }
@@ -1707,12 +1711,7 @@ canvas.addEventListener('pointerdown', e => {
   lastTapTime = now; lastTapX = px; lastTapY = py;
   if (doubleTap && gameMode === 'dog') {
     dog.walkTo(px, py);
-    dog.state = 'digging'; dog.digTimer = DIG_DURATION; dog.frame = 0; dog.tick = 0;
-    dog.x = Math.round(px - PW / 2); dog.y = Math.round(py - PH / 2);
-    dog.x = Math.max(0, Math.min(canvas.width - PW, dog.x));
-    dog.y = Math.max(0, Math.min(canvas.height - PH, dog.y));
-    dog.tx = null; dog.ty = null;
-    labels.push(new Label('Dig!', dog.cx, Math.max(20, dog.y - 4)));
+    dog.digPending = true;
     return;
   }
 
@@ -1742,6 +1741,26 @@ canvas.addEventListener('pointerdown', e => {
     thrownBall = new BallProjectile(bx, by, throwX, throwY, ball.item);
     dog.fetch(throwX, throwY);
     return;
+  }
+
+  if (gameMode === 'dog' && dogBed) {
+    const bedW = DOG_BED_SPR[0].length * BED_SC, bedH = DOG_BED_SPR.length * BED_SC;
+    if (px >= dogBed.x && px <= dogBed.x + bedW && py >= dogBed.y && py <= dogBed.y + bedH) {
+      dog.furnitureTarget = 'bed';
+      dog._roamTo(dogBed.x + bedW / 2, dogBed.y + bedH / 2);
+      return;
+    }
+    const bowlW = DOG_BOWL_SPR[0].length * BOWL_SC, bowlH = DOG_BOWL_SPR.length * BOWL_SC;
+    if (px >= dogFoodBowl.x && px <= dogFoodBowl.x + bowlW && py >= dogFoodBowl.y && py <= dogFoodBowl.y + bowlH) {
+      dog.furnitureTarget = 'food';
+      dog._roamTo(dogFoodBowl.x + bowlW / 2, dogFoodBowl.y + bowlH / 2);
+      return;
+    }
+    if (px >= dogWaterBowl.x && px <= dogWaterBowl.x + bowlW && py >= dogWaterBowl.y && py <= dogWaterBowl.y + bowlH) {
+      dog.furnitureTarget = 'water';
+      dog._roamTo(dogWaterBowl.x + bowlW / 2, dogWaterBowl.y + bowlH / 2);
+      return;
+    }
   }
 
   dog.walkTo(px, py);
