@@ -150,6 +150,7 @@ function drawRoom() {
   drawHouseplant(CX - WALL - 36, VH - 72 - 52);
   drawHouseplant(CX + CW + WALL + 4, VH - 72 - 52);
 
+  drawRug();
 }
 
 function drawHouseplant(px, py) {
@@ -224,6 +225,9 @@ function drawCage() {
   drawBedding();
   drawFoodBowl();
   drawWaterBottle();
+  drawHideout();
+  drawHangingToy();
+  drawBunting();
 }
 
 function drawHammock() {
@@ -312,16 +316,27 @@ function drawBranch() {
 }
 
 function drawBedding() {
-  const fy = CY + MID + 6;
-  const fh = CH - MID - 6;
+  const fy   = CY + MID + 6;
+  const fh   = CH - MID - 6;
+  const bTop = fy + fh - 26;
 
-  // Absorbent base
-  fill(CX, fy + fh - 26, CW, 26, C.bed0);
+  fill(CX, bTop, CW, 26, C.bed0);
   for (let i = 0; i < 20; i++) {
-    fill(CX + i * 16 + 4,  fy + fh - 20, 6, 5, C.bed1);
-    fill(CX + i * 16 + 11, fy + fh - 10, 5, 4, C.bed1);
+    fill(CX + i * 16 + 4,  bTop + 6,  6, 5, C.bed1);
+    fill(CX + i * 16 + 11, bTop + 16, 5, 4, C.bed1);
   }
 
+  // Nesting pile (between hideout and water bottle)
+  fill(CX + 210, bTop - 7,  44, 7, C.bed0);
+  fill(CX + 214, bTop - 13, 36, 7, C.bed1);
+  fill(CX + 218, bTop - 18, 28, 6, C.bed0);
+  fill(CX + 222, bTop - 22, 18, 5, C.bed1);
+
+  // Scattered wisps
+  fill(CX + 30,  bTop - 4, 16, 2, C.bed0);
+  fill(CX + 72,  bTop - 6, 12, 2, C.bed1);
+  fill(CX + 100, bTop - 3, 14, 2, C.bed0);
+  fill(CX + 290, bTop - 5, 10, 2, C.bed1);
 }
 
 function drawFoodBowl() {
@@ -368,8 +383,69 @@ function drawWaterBottle() {
   fill(bx + 24, by + 44, 7, 5, C.bar);
 }
 
+function drawRug() {
+  const rx = CX - WALL - 22;
+  const rw = CW + WALL * 2 + 44;
+  const ry = VH - 72;
+  fill(rx, ry, rw, 14, '#722818');
+  fill(rx + 3, ry + 2, rw - 6, 10, '#8a3020');
+  fill(rx, ry,     rw, 2,  '#c05040');
+  fill(rx, ry + 12, rw, 2, '#c05040');
+  for (let i = 0; i < 10; i++) {
+    const mx = rx + 20 + i * 32;
+    fill(mx + 2, ry + 4, 2, 2, '#c05040');
+    fill(mx,     ry + 5, 2, 2, '#c05040');
+    fill(mx + 4, ry + 5, 2, 2, '#c05040');
+    fill(mx + 2, ry + 7, 2, 2, '#c05040');
+  }
+}
+
+function drawHideout() {
+  const bTop = CY + CH - 26;
+  const hx = CX + 134, hy = bTop - 34;
+  const hw = 54, hh = 34;
+  fill(hx,      hy,      hw, hh, C.wood0);
+  fill(hx + 3,  hy + 11, hw - 6, 2, C.wood1);
+  fill(hx + 3,  hy + 22, hw - 6, 2, C.wood1);
+  fill(hx,      hy, 3, hh, C.wood1);
+  fill(hx+hw-3, hy, 3, hh, C.wood1);
+  // Roof overhang
+  fill(hx - 4, hy - 7, hw + 8, 9, C.wood1);
+  fill(hx,     hy - 10, hw,    4, C.wood0);
+  // Arched entry hole
+  fill(hx + 14, hy + 5,  20, 25, '#120a04');
+  fill(hx + 16, hy + 3,  16,  4, '#120a04');
+  // Gnaw marks
+  fill(hx + 1, hy + 4, 2, 3, '#c08840');
+  fill(hx + 1, hy + 9, 2, 2, '#c08840');
+}
+
+function drawHangingToy() {
+  const tx = CX + 234, topY = CY + 2;
+  for (let i = 0; i < 5; i++) fill(tx + 3, topY + i * 9, 2, 7, '#c8a068');
+  fill(tx,     topY + 45, 10, 9, C.wood0);
+  fill(tx + 2, topY + 47,  6, 5, C.cageBack);
+  fill(tx + 3, topY + 54,  2, 7, '#c8a068');
+  fill(tx + 1, topY + 61, 10, 9, C.wood1);
+  fill(tx + 3, topY + 63,  6, 5, C.cageBack);
+  fill(tx + 3, topY + 70,  2, 6, '#c8a068');
+}
+
+function drawBunting() {
+  const bx = CX - 2, by = CY - WALL - 12, bw = CW + 4;
+  fill(bx, by + 2, bw, 1, '#a09080');
+  const cols = ['#e84040','#4080e8','#40c040','#e8c030','#c040c0','#e87030'];
+  for (let i = 0; i < 15; i++) {
+    const fx = bx + i * 22, fc = cols[i % cols.length];
+    fill(fx,     by,      12, 5, fc);
+    fill(fx + 2, by + 5,   8, 4, fc);
+    fill(fx + 4, by + 9,   4, 3, fc);
+    fill(fx + 5, by + 12,  2, 2, fc);
+  }
+}
+
 // ── Rat sprite definitions ─────────────────────────────────────────────────────
-// Values: 0=empty, 1=body, 2=ear(pink), 3=tail, 4=nose(pink), 5=eye(dark)
+// Values: 0=empty, 1=body, 2=ear(pink), 3=tail, 4=nose(pink), 5=eye(dark), 6=belly(lighter)
 // All sprites face RIGHT; mirrored at draw time.
 
 // LOKI — "Chonk": compact round body, big head — 24 cols × 13 rows @ RS=3 → 72×39 vp
@@ -380,10 +456,10 @@ const LOKI_SPR = [
   [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 2, 1, 1, 0, 0, 0, 0], // r2  head + ear
   [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], // r3  head
   [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 4], // r4  head+eye(18)+nose(23)
-  [ 3, 3, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], // r5  tail+body
-  [ 0, 3, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0], // r6  body wide
-  [ 0, 0, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0], // r7  body
-  [ 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r8  rump
+  [ 3, 3, 0, 0, 0, 0, 1, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], // r5  body(belly@7-8)
+  [ 0, 3, 3, 3, 0, 1, 1, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0], // r6  body(belly@7-8)
+  [ 0, 0, 3, 3, 1, 1, 1, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0], // r7  body(belly@7-8)
+  [ 0, 0, 0, 3, 1, 1, 1, 6, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r8  rump(belly@7)
   [ 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r9  haunches
   [ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r10 legs back(4-6)+front(10-12)
   [ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r11 lower legs
@@ -397,9 +473,9 @@ const POTATO_SPR = [
   [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0], // r1  head+ear
   [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0], // r2  head
   [ 3, 3, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1, 4], // r3  body+eye(20)+nose(27)
-  [ 0, 3, 3, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0], // r4  body (4-24)
-  [ 0, 0, 3, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r5  body+tail
-  [ 0, 0, 0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r6  rump
+  [ 0, 3, 3, 0, 1, 1, 1, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0], // r4  body(belly@7-9)
+  [ 0, 0, 3, 3, 1, 1, 1, 6, 6, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r5  body(belly@7-9)
+  [ 0, 0, 0, 3, 1, 1, 6, 6, 6, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r6  rump(belly@6-8)
   [ 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r7  haunches
   [ 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r8  leg tops
   [ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], // r9  legs back(4-6)+front(11-13)
@@ -409,8 +485,12 @@ const POTATO_SPR = [
 
 function makeDef(spr, rs, earCols, patches, backLegCols, frontLegCols, legRowStart) {
   const rcols = spr[0].length, rrows = spr.length;
+  let noseR = -1, noseC = -1;
+  for (let r = 0; r < rrows && noseR < 0; r++)
+    for (let c = 0; c < rcols && noseR < 0; c++)
+      if (spr[r][c] === 4) { noseR = r; noseC = c; }
   return { spr, rs, rcols, rrows, rw: rcols * rs, rh: rrows * rs,
-           earCols, patches, backLegCols, frontLegCols, legRowStart };
+           earCols, patches, backLegCols, frontLegCols, legRowStart, noseR, noseC };
 }
 
 // RS=3; back/front leg cols match the new 24×13 / 28×12 sprites
@@ -422,14 +502,13 @@ const POTATO_DEF = makeDef(POTATO_SPR, 3, [18,19], [
 ], [4,5,6,7], [11,12,13], 8);
 
 function drawRat(rat, vx, vy, earTwitch = false) {
-  const { spr, rs, rcols, rrows, earCols, patches, backLegCols, frontLegCols } = rat.def;
+  const { spr, rs, rcols, rrows, rw, earCols, patches, backLegCols, frontLegCols, legRowStart, noseR, noseC } = rat.def;
   const earCol = earTwitch ? '#ffd0e0' : C.ratPink;
   const right  = rat.right;
 
   const walking   = rat.act === 'wander' || rat.act === 'to-eat'
                  || rat.act === 'to-drink' || rat.act === 'to-ladder';
   const walkPhase = walking ? Math.floor(tick / 7) % 2 : -1;
-  const legRowStart = rat.def.legRowStart;
 
   for (let r = 0; r < rrows; r++) {
     for (let c = 0; c < rcols; c++) {
@@ -437,7 +516,6 @@ function drawRat(rat, vx, vy, earTwitch = false) {
       if (!v) continue;
       const dc = right ? c : (rcols - 1 - c);
 
-      // Leg stride: alternate front/back leg pairs up by one cell
       let yOff = 0;
       if (walkPhase >= 0 && r >= legRowStart && v === 1) {
         if (walkPhase === 0 && frontLegCols.includes(c)) yOff = -rs;
@@ -445,7 +523,8 @@ function drawRat(rat, vx, vy, earTwitch = false) {
       }
 
       const color = v === 2 ? earCol : v === 3 ? C.ratTail
-                  : v === 4 ? C.ratPink : v === 5 ? C.ratEye : rat.body;
+                  : v === 4 ? C.ratPink : v === 5 ? C.ratEye
+                  : v === 6 ? rat.belly : rat.body;
       fill(vx + dc * rs, vy + r * rs + yOff, rs, rs, color);
     }
   }
@@ -468,6 +547,17 @@ function drawRat(rat, vx, vy, earTwitch = false) {
       }
     }
   }
+
+  // Whiskers from nose tip
+  if (noseR >= 0) {
+    const wLen  = 14;
+    const noseY = vy + noseR * rs + Math.floor(rs / 2);
+    const tip   = right ? vx + rw : vx;
+    const wx    = right ? tip : tip - wLen;
+    fill(wx,               noseY - 2, wLen,     1, rat.whisker);
+    fill(wx,               noseY,     wLen,     1, rat.whisker);
+    fill(right ? wx+2 : wx, noseY + 2, wLen - 2, 1, rat.whisker);
+  }
 }
 
 // ── Shared layout constants ────────────────────────────────────────────────────
@@ -480,8 +570,7 @@ const HUNGER_RATE  = 0.0056;  // depletes hunger in ~5 min at 60 fps
 const THIRST_RATE  = 0.0083;  // depletes thirst in ~3 min at 60 fps
 const ACT_DURATION = 100;     // frames spent eating/drinking
 
-function makeRat(x, right, body, patch, def) {
-  // Bedding top = CY+CH-26; shelf top face = CY+MID-2; hammock sag center = CY+42
+function makeRat(x, right, body, patch, belly, whisker, def) {
   const floorY    = CY + CH - 26 - def.rh;
   const shelfY    = CY + MID - 2 - def.rh;
   const hammockY  = Math.round(CY + 42 - def.rh / 2);
@@ -489,7 +578,7 @@ function makeRat(x, right, body, patch, def) {
   const eatX      = CX + 40;
   const drinkX    = Math.round(CX + CW - 35 - (def.rcols - 1) * def.rs);
   return {
-    x, y: floorY, right, body, patch, def,
+    x, y: floorY, right, body, patch, belly, whisker, def,
     floorY, shelfY, hammockY, floorMaxX, eatX, drinkX,
     tx: x,
     floor: 'bottom',
@@ -607,8 +696,8 @@ function tickRat(rat) {
   }
 }
 
-const loki   = makeRat(CX + 60,  true,  C.lokiBody,   null,           LOKI_DEF);
-const potato = makeRat(CX + 160, false, C.potatoBody, C.potatoPatch,  POTATO_DEF);
+const loki   = makeRat(CX + 60,  true,  C.lokiBody,   null,          '#fff0f4', '#ccc8c0', LOKI_DEF);
+const potato = makeRat(CX + 160, false, C.potatoBody, C.potatoPatch, '#d8b46a', '#e0d4a0', POTATO_DEF);
 
 // ── Animation state ───────────────────────────────────────────────────────────
 let tick = 0;
