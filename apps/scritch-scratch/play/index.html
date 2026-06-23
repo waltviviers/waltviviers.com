@@ -556,6 +556,7 @@ function restoreDogState() {
   placedItems.length = 0;
   for (const pi of s.placedItems) placedItems.push({ item: pi.item, x: pi.x, y: pi.y });
   itemIdx = s.itemIdx || 0;
+  if (puppies.length > 0) { puppiesSpawned = true; }
   return true;
 }
 function restoreRatState() {
