@@ -194,6 +194,13 @@ const RAT_FRAMES = [
   [[0,0,1,1,0,0,0],[0,1,1,1,1,0,0],[1,1,1,1,1,1,0],[0,0,1,1,0,0,0],[0,0,0,1,1,1,1]],
   [[0,0,1,1,0,0,0],[0,1,1,1,1,0,0],[1,1,1,1,1,1,0],[0,1,1,0,0,0,0],[0,0,0,0,1,1,1]],
 ];
+const RAT_SLEEP_SPR = [
+  [0,0,0,0,0,0,0],
+  [0,0,1,1,1,0,0],
+  [0,1,1,1,1,1,0],
+  [0,1,1,1,1,1,0],
+  [0,0,1,1,1,0,0],
+];
 const RAT_SC = 3, RAT_COLS = 7, RAT_ROWS = 5;
 const RAT_W = RAT_COLS * RAT_SC, RAT_H = RAT_ROWS * RAT_SC;
 
@@ -670,6 +677,7 @@ class Rat {
           if (this.furnitureTarget === 'bed') {
             this.sleepTimer = 60 * (6 + Math.floor(Math.random() * 8));
             this.sleepZTimer = 60 * 2;
+            this.vx = 0; this.vy = 0;
           } else {
             labels.push(new Label(this.furnitureTarget === 'bottle' ? 'Drink!' : 'Nom!',
               this.x + RAT_W / 2, Math.max(20, this.y - 4)));
@@ -705,38 +713,39 @@ class Rat {
       }
     }
 
-    this.x += this.vx; this.y += this.vy;
-
-    if (this.x < 0) { this.x = 0; this.vx = Math.abs(this.vx); }
-    if (this.x > canvas.width - RAT_W) { this.x = canvas.width - RAT_W; this.vx = -Math.abs(this.vx); }
-    if (this.y < 0) { this.y = 0; this.vy = Math.abs(this.vy); }
-    if (this.y > canvas.height - RAT_H) { this.y = canvas.height - RAT_H; this.vy = -Math.abs(this.vy); }
-
-    if (Math.abs(this.vx) > 0.1) this.right = this.vx > 0;
+    if (this.sleepTimer <= 0) {
+      this.x += this.vx; this.y += this.vy;
+      if (this.x < 0) { this.x = 0; this.vx = Math.abs(this.vx); }
+      if (this.x > canvas.width - RAT_W) { this.x = canvas.width - RAT_W; this.vx = -Math.abs(this.vx); }
+      if (this.y < 0) { this.y = 0; this.vy = Math.abs(this.vy); }
+      if (this.y > canvas.height - RAT_H) { this.y = canvas.height - RAT_H; this.vy = -Math.abs(this.vy); }
+      if (Math.abs(this.vx) > 0.1) this.right = this.vx > 0;
+    }
   }
 
   draw() {
     if (this.dead) return;
-    const spr = RAT_FRAMES[this.frame];
+    const sleeping = this.sleepTimer > 0;
+    const spr = sleeping ? RAT_SLEEP_SPR : RAT_FRAMES[this.frame];
     const x = Math.round(this.x), y = Math.round(this.y);
     const bodyColor = this.scritchTimer > 0 ? '#ffbbcc' : this.bodyColor;
-    ctx.fillStyle = this.isPink ? '#ff99bb' : '#cc6688';
-    if (this.bigEars) {
-      // Dumbo: two tall ears
-      const e1 = this.right ? (RAT_COLS - 2) : 1;
-      const e2 = this.right ? (RAT_COLS - 4) : 3;
-      ctx.fillRect(x + e1 * RAT_SC, y - RAT_SC, RAT_SC, RAT_SC);
-      ctx.fillRect(x + e2 * RAT_SC, y - RAT_SC, RAT_SC, RAT_SC);
-    } else {
-      // Normal: one small ear
-      const ea = this.right ? (RAT_COLS - 3) : 2;
-      ctx.fillRect(x + ea * RAT_SC, y - RAT_SC, RAT_SC, RAT_SC);
+    if (!sleeping) {
+      ctx.fillStyle = this.isPink ? '#ff99bb' : '#cc6688';
+      if (this.bigEars) {
+        const e1 = this.right ? (RAT_COLS - 2) : 1;
+        const e2 = this.right ? (RAT_COLS - 4) : 3;
+        ctx.fillRect(x + e1 * RAT_SC, y - RAT_SC, RAT_SC, RAT_SC);
+        ctx.fillRect(x + e2 * RAT_SC, y - RAT_SC, RAT_SC, RAT_SC);
+      } else {
+        const ea = this.right ? (RAT_COLS - 3) : 2;
+        ctx.fillRect(x + ea * RAT_SC, y - RAT_SC, RAT_SC, RAT_SC);
+      }
     }
     for (let r = 0; r < RAT_ROWS; r++)
       for (let c = 0; c < RAT_COLS; c++)
         if (spr[r][c]) {
           const dc = this.right ? (RAT_COLS - 1 - c) : c;
-          const isTailOrNose = r === 4 || (r === 2 && c === 0);
+          const isTailOrNose = !sleeping && (r === 4 || (r === 2 && c === 0));
           ctx.fillStyle = isTailOrNose ? '#ff99bb' : bodyColor;
           ctx.fillRect(x + dc * RAT_SC, y + r * RAT_SC, RAT_SC, RAT_SC);
         }
