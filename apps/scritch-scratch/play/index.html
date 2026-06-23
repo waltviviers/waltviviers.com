@@ -478,6 +478,135 @@ function drawCatFurniture() {
 // ─── Game mode ────────────────────────────────────────────────────────────────
 let gameMode = 'dog';
 
+// ─── Persistent state ────────────────────────────────────────────────────────
+const modeStates = { dog: null, rat: null, cat: null };
+
+function serializeRat(r) {
+  return { x: r.x, y: r.y, vx: r.vx, vy: r.vy, right: r.right,
+    sex: r.sex, bodyColor: r.bodyColor, bigEars: r.bigEars, isPink: r.isPink,
+    matingCooldown: r.matingCooldown, mateProximityTimer: r.mateProximityTimer,
+    pregnant: r.pregnant, pregnancyTimer: r.pregnancyTimer,
+    birthCooldown: r.birthCooldown, isSeed: r.isSeed,
+    furnitureTimer: r.furnitureTimer, sleepTimer: r.sleepTimer, sleepZTimer: r.sleepZTimer };
+}
+function deserializeRat(d) {
+  const r = new Rat(d.x + RAT_W / 2, d.y + RAT_H, {
+    sex: d.sex, bodyColor: d.bodyColor, bigEars: d.bigEars, isPink: d.isPink,
+    matingCooldown: d.matingCooldown, isSeed: d.isSeed, birthCooldown: d.birthCooldown
+  });
+  r.x = d.x; r.y = d.y; r.vx = d.vx; r.vy = d.vy; r.right = d.right;
+  r.mateProximityTimer = d.mateProximityTimer || 0;
+  r.pregnant = d.pregnant; r.pregnancyTimer = d.pregnancyTimer;
+  r.furnitureTimer = d.furnitureTimer; r.sleepTimer = d.sleepTimer; r.sleepZTimer = d.sleepZTimer;
+  return r;
+}
+function serializeCat(c) {
+  return { x: c.x, y: c.y, color: c.color, right: c.right,
+    isMain: c.isMain, isVisitor: c.isVisitor,
+    pregnant: c.pregnant, pregnancyTimer: c.pregnancyTimer,
+    birthCooldown: c.birthCooldown, sleepStyle: c.sleepStyle };
+}
+function deserializeCat(d) {
+  const c = new Cat({ x: d.x, y: d.y, color: d.color, right: d.right,
+    isMain: d.isMain, isVisitor: d.isVisitor,
+    birthCooldown: d.birthCooldown, state: 'idle' });
+  c.pregnant = d.pregnant; c.pregnancyTimer = d.pregnancyTimer;
+  c.sleepStyle = d.sleepStyle;
+  return c;
+}
+
+function saveDogState() {
+  modeStates.dog = {
+    color: dog.color, x: dog.x, y: dog.y,
+    puppies: puppies.map(p => ({ x: p.x, y: p.y, color: p.color, vs: p.vs, right: p.right })),
+    placedItems: placedItems.map(p => ({ item: p.item, x: p.x, y: p.y })),
+    itemIdx,
+  };
+}
+function saveRatState() {
+  modeStates.rat = {
+    rats: rats.filter(r => !r.dead).map(serializeRat),
+    ratBirthCount, cheeseCount,
+  };
+}
+function saveCatState() {
+  modeStates.cat = {
+    cats: cats.filter(c => !c.dead && !c.isVisitor).map(serializeCat),
+    woolBall: woolBall ? { x: woolBall.x, y: woolBall.y } : null,
+  };
+}
+
+function restoreDogState() {
+  const s = modeStates.dog;
+  if (!s) return false;
+  dog.color = s.color;
+  dog.x = Math.max(0, Math.min(canvas.width - PW, s.x));
+  dog.y = Math.max(0, Math.min(canvas.height - PH, s.y));
+  dog.state = 'idle'; dog.tx = null; dog.ty = null;
+  dog.frame = 0; dog.tick = 0; dog.idleTimer = 0; dog.lingerTicks = 0;
+  dog.furnitureTarget = null; dog.sleepTimer = 0; dog.sleepZTimer = 0; dog.digPending = false;
+  puppies.length = 0;
+  for (const pd of s.puppies) {
+    const p = new Puppy(pd.x + DW * pd.vs / 2, pd.y + DH * pd.vs);
+    p.color = pd.color; p.vs = pd.vs; p.right = pd.right;
+    p.x = Math.max(0, Math.min(canvas.width - DW * pd.vs, pd.x));
+    p.y = Math.max(0, Math.min(canvas.height - DH * pd.vs, pd.y));
+    puppies.push(p);
+  }
+  placedItems.length = 0;
+  for (const pi of s.placedItems) placedItems.push({ item: pi.item, x: pi.x, y: pi.y });
+  itemIdx = s.itemIdx || 0;
+  return true;
+}
+function restoreRatState() {
+  const s = modeStates.rat;
+  if (!s) return false;
+  rats.length = 0; babies.length = 0; cheeses.length = 0;
+  for (const d of s.rats) {
+    const r = deserializeRat(d);
+    r.x = Math.max(0, Math.min(canvas.width - RAT_W, r.x));
+    r.y = Math.max(0, Math.min(canvas.height - RAT_H, r.y));
+    rats.push(r);
+  }
+  ratBirthCount = s.ratBirthCount || 0;
+  cheeseCount = s.cheeseCount || 0;
+  return true;
+}
+function restoreCatState() {
+  const s = modeStates.cat;
+  if (!s) return false;
+  cats.length = 0; kittens.length = 0; catRats.length = 0;
+  for (const d of s.cats) {
+    const c = deserializeCat(d);
+    c.x = Math.max(0, Math.min(canvas.width - CPW, c.x));
+    c.y = Math.max(0, Math.min(canvas.height - CPH, c.y));
+    cats.push(c);
+  }
+  if (s.woolBall && woolBall) {
+    woolBall.x = Math.max(0, Math.min(canvas.width - WOOL_SPR[0].length * WOOL_SC, s.woolBall.x));
+    woolBall.y = Math.max(0, Math.min(canvas.height - WOOL_SPR.length * WOOL_SC, s.woolBall.y));
+  }
+  return true;
+}
+
+function persistSave() {
+  try {
+    localStorage.setItem('scritch-scratch', JSON.stringify({ modeStates, gameMode }));
+  } catch (e) {}
+}
+function persistLoad() {
+  try {
+    const raw = localStorage.getItem('scritch-scratch');
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    if (data.modeStates) {
+      if (data.modeStates.dog) modeStates.dog = data.modeStates.dog;
+      if (data.modeStates.rat) modeStates.rat = data.modeStates.rat;
+      if (data.modeStates.cat) modeStates.cat = data.modeStates.cat;
+    }
+  } catch (e) {}
+}
+
 // ─── Cat Mode state ───────────────────────────────────────────────────────────
 const cats = [], kittens = [], catRats = [];
 const CAT_COLORS = ['#f5a623','#aaaaaa','#eeeeee','#444444','#c07840'];
@@ -1619,6 +1748,7 @@ const dog = {
 
 // ─── Mode transitions ─────────────────────────────────────────────────────────
 function enterRatMode() {
+  if (gameMode === 'dog') saveDogState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'rat';
   visitors.length = 0;
   rats.length = 0; babies.length = 0; cheeses.length = 0;
@@ -1628,13 +1758,17 @@ function enterRatMode() {
   thrownBall = null; marker = null; laserActive = false;
   scritchCat = null; interacted = false;
   cheeseCount = 0; raidCats.length = 0; seedRespawnTimer = 0;
-  const cx = canvas.width / 2, cy = canvas.height / 2;
-  rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#c8922a', matingCooldown: 60 * 8, isSeed: true }));
-  rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0, isSeed: true }));
   placeRatFurniture();
+  if (!restoreRatState()) {
+    const cx = canvas.width / 2, cy = canvas.height / 2;
+    rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#c8922a', matingCooldown: 60 * 8, isSeed: true }));
+    rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0, isSeed: true }));
+  }
+  persistSave();
 }
 
 function enterDogMode() {
+  if (gameMode === 'rat') saveRatState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'dog';
   visitors.length = 0;
   rats.length = 0; babies.length = 0; cheeses.length = 0;
@@ -1646,11 +1780,13 @@ function enterDogMode() {
   itemIdx = 1;
   puppies.length = 0; puppyTimer = 0; puppiesSpawned = false;
   visitorCooldown = 60 * (30 + Math.floor(Math.random() * 90));
-  dog.init();
   placeDogFurniture();
+  if (!restoreDogState()) { dog.init(); }
+  persistSave();
 }
 
 function enterCatMode() {
+  if (gameMode === 'dog') saveDogState(); else if (gameMode === 'rat') saveRatState();
   gameMode = 'cat';
   visitors.length = 0; rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
@@ -1660,9 +1796,12 @@ function enterCatMode() {
   catVisitorCooldown = 60 * 25;
   woolBall = { x: canvas.width * 0.6, y: canvas.height * 0.4, vx: 0, vy: 0 };
   placeCatFurniture();
-  // Main cat — always at index 0, never leaves
-  cats.push(new Cat({ isMain: true, color: CAT_COLORS[0],
-    x: canvas.width/2 - CPW/2, y: canvas.height/2 - CPH/2, birthCooldown: 0 }));
+  if (!restoreCatState()) {
+    // Main cat — always at index 0, never leaves
+    cats.push(new Cat({ isMain: true, color: CAT_COLORS[0],
+      x: canvas.width/2 - CPW/2, y: canvas.height/2 - CPH/2, birthCooldown: 0 }));
+  }
+  persistSave();
 }
 
 function trySpawnCatVisitor() {
@@ -2108,6 +2247,7 @@ function loop() {
   requestAnimationFrame(loop);
 }
 
+persistLoad();
 dog.init();
 loop();
 
