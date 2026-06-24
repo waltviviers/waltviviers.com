@@ -613,7 +613,7 @@ const cats = [], kittens = [], catRats = [];
 const CAT_COLORS = ['#f5a623','#aaaaaa','#eeeeee','#444444','#c07840'];
 let laserX = 0, laserY = 0, laserActive = false, laserTimer = 0;
 let catVisitorCooldown = 60 * 25;
-let catRatCooldown = 60 * 8;
+let catRatCooldown = 60 * 20;
 let scritchCat = null;
 
 // ─── Cheese (Rat Mode) ────────────────────────────────────────────────────────
@@ -1824,8 +1824,8 @@ function trySpawnCatVisitor() {
 }
 
 function trySpawnCatRat() {
-  if (catRats.length >= 5 || --catRatCooldown > 0) return;
-  catRatCooldown = 60 * (5 + Math.floor(Math.random() * 8));
+  if (catRats.length >= 3 || --catRatCooldown > 0) return;
+  catRatCooldown = 60 * (20 + Math.floor(Math.random() * 20));
   const side = Math.random() < 0.5;
   catRats.push(new Rat(
     side ? 0 : canvas.width,
