@@ -352,6 +352,24 @@ function placeDogFurniture() {
   dogWaterBowl = { x: w * 0.85 - DOG_BOWL_SPR[0].length * BOWL_SC / 2 + DOG_BOWL_SPR[0].length * BOWL_SC + 10, y: h * 0.8 };
 }
 
+function drawDogBackground() {
+  const W = canvas.width, H = canvas.height;
+  const splitX = Math.round(W * 0.65);
+  // Grass
+  ctx.fillStyle = '#4e9926';
+  ctx.fillRect(0, 0, splitX, H);
+  // Pavement
+  ctx.fillStyle = '#a8a8a8';
+  ctx.fillRect(splitX, 0, W - splitX, H);
+  // Pavement seam lines
+  ctx.fillStyle = '#888';
+  for (let bx = splitX + 32; bx < W; bx += 32) ctx.fillRect(bx, 0, 2, H);
+  for (let by = 24; by < H; by += 24) ctx.fillRect(splitX, by, W - splitX, 2);
+  // Grass edge
+  ctx.fillStyle = '#3a7318';
+  ctx.fillRect(splitX - 4, 0, 4, H);
+}
+
 function drawDogFurniture() {
   if (!dogBed) return;
   // Bed
@@ -2084,6 +2102,7 @@ function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (gameMode === 'dog') {
+    drawDogBackground();
     dog.update();
     trySpawnVisitor();
 
