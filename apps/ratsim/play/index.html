@@ -586,12 +586,13 @@ function makeRat(x, right, body, patch, belly, whisker, def, climbDef) {
   const floorY    = CY + CH - 26 - def.rh;
   const shelfY    = CY + MID - 2 - def.rh;
   const hammockY  = Math.round(CY + 42 - def.rh / 2);
+  const hammockX  = Math.round(CX + 28 + 95 - def.rw / 2);  // center of hammock fabric
   const floorMaxX = CX + CW - def.rw - 10;
   const eatX      = CX + 40;
   const drinkX    = Math.round(CX + CW - 35 - (def.rcols - 1) * def.rs);
   return {
     x, y: floorY, right, body, patch, belly, whisker, def, climbDef,
-    floorY, shelfY, hammockY, floorMaxX, eatX, drinkX,
+    floorY, shelfY, hammockY, hammockX, floorMaxX, eatX, drinkX,
     tx: x,
     floor: 'bottom',
     climbing: false,
@@ -623,8 +624,13 @@ function tickRat(rat) {
     if (Math.abs(dy) <= 1.5) {
       rat.y = targetY;
       rat.climbing = false;
-      rat.act = 'idle';
-      rat.idleTimer = 40 + Math.floor(Math.random() * 80);
+      if (rat.floor === 'hammock') {
+        rat.tx  = rat.hammockX;
+        rat.act = 'wander';
+      } else {
+        rat.act = 'idle';
+        rat.idleTimer = 40 + Math.floor(Math.random() * 80);
+      }
     } else {
       rat.y += Math.sign(dy) * 1.5;
     }
@@ -694,11 +700,11 @@ function tickRat(rat) {
       }
 
       const r = Math.random();
-      if (rat.floor === 'bottom' && r < 0.15) {
+      if (rat.floor === 'bottom' && r < 0.25) {
         rat.tx = LADDER_L_X; rat.act = 'to-ladder'; rat.floor = 'shelf';
-      } else if (rat.floor === 'shelf' && r < 0.2) {
+      } else if (rat.floor === 'shelf' && r < 0.40) {
         rat.tx = LADDER_R_X; rat.act = 'to-ladder'; rat.floor = 'hammock';
-      } else if (rat.floor === 'shelf' && r < 0.35) {
+      } else if (rat.floor === 'shelf' && r < 0.50) {
         rat.tx = LADDER_L_X; rat.act = 'to-ladder'; rat.floor = 'bottom';
       } else {
         rat.tx  = (CX + 10) + Math.random() * (rat.floorMaxX - CX - 10);
