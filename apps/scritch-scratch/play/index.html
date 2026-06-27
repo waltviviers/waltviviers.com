@@ -76,7 +76,7 @@
   <button id="htp-btn" class="sep">How to Play</button>
   <button class="sep mode-switch" data-mode="dog">Doggo Mode</button>
   <button class="mode-switch" data-mode="rat">Rat Mode</button>
-  <button class="mode-switch" data-mode="cat">Cat Mode</button>
+  <button class="mode-switch" data-mode="cat">Cat Lady Mode</button>
 </div>
 <div id="htp-overlay" class="overlay">
   <div class="popup">
@@ -85,7 +85,7 @@
       <li>Pick a mode from the start screen or menu</li>
       <li>Doggo: tap to walk · hold to scritch · tap ball or stick to throw · double-tap to dig</li>
       <li>Rat: tap rat to scritch · tap ground to place cheese · rats breed freely · every 10th is a dumbo (big ears) · every 16th is a naked rat (pink) · every 15th cheese triggers a raid cat</li>
-      <li>Cat: hold to purr and wake · tap ground for laser · laser won't wake sleeping cats</li>
+      <li>Cat Lady: hold to purr and wake · tap ground for laser · laser won't wake sleeping cats</li>
       <li>Visitor animals arrive now and then</li>
     </ul>
     <button class="popup-close" id="htp-close">Close</button>
@@ -95,7 +95,7 @@
   <h1>Scritch Scratch</h1>
   <button class="mode-btn-pick" data-mode="dog">Doggo Mode</button>
   <button class="mode-btn-pick" data-mode="rat">Rat Mode</button>
-  <button class="mode-btn-pick" data-mode="cat">Cat Mode</button>
+  <button class="mode-btn-pick" data-mode="cat">Cat Lady Mode</button>
 </div>
 <canvas id="c"></canvas>
 <script>
@@ -488,6 +488,22 @@ function placeCatFurniture() {
   const w = canvas.width, h = canvas.height;
   catFoodBowl  = { x: w * 0.10, y: h * 0.82 };
   catWaterBowl = { x: w * 0.10 + DOG_BOWL_SPR[0].length * BOWL_SC + 12, y: h * 0.82 };
+}
+
+function drawCatBackground() {
+  const W = canvas.width, H = canvas.height;
+  const tileSize = 32;
+  // Grout base
+  ctx.fillStyle = '#c8c0b0';
+  ctx.fillRect(0, 0, W, H);
+  // Tiles
+  for (let ty = 0; ty < H; ty += tileSize) {
+    for (let tx = 0; tx < W; tx += tileSize) {
+      const alt = ((Math.floor(tx / tileSize) + Math.floor(ty / tileSize)) % 2 === 0);
+      ctx.fillStyle = alt ? '#f0ece4' : '#e8e2d8';
+      ctx.fillRect(tx + 2, ty + 2, tileSize - 4, tileSize - 4);
+    }
+  }
 }
 
 function drawCatFurniture() {
@@ -2226,6 +2242,7 @@ function loop() {
     }
   } else {
     // Cat mode
+    drawCatBackground();
     drawCatFurniture();
 
     if (woolBall) {
