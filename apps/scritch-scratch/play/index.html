@@ -365,6 +365,19 @@ function drawDogBackground() {
   ctx.fillStyle = '#888';
   for (let bx = splitX + 32; bx < W; bx += 32) ctx.fillRect(bx, 0, 2, H);
   for (let by = 24; by < H; by += 24) ctx.fillRect(splitX, by, W - splitX, 2);
+  // Darker grass patches
+  ctx.fillStyle = '#3a7318';
+  const patches = [
+    [0.08,0.28],[0.22,0.52],[0.38,0.38],[0.12,0.68],[0.48,0.18],
+    [0.31,0.82],[0.55,0.62],[0.05,0.48],[0.42,0.72],[0.18,0.88],
+    [0.60,0.30],[0.28,0.15],[0.50,0.50],[0.10,0.10],[0.35,0.95],
+  ];
+  for (const [fx, fy] of patches) {
+    const bx = Math.round(fx * splitX), by = Math.round(fy * H);
+    ctx.fillRect(bx, by, 14, 6);
+    ctx.fillRect(bx + 4, by - 4, 8, 6);
+    ctx.fillRect(bx - 2, by + 4, 10, 4);
+  }
   // Grass edge
   ctx.fillStyle = '#3a7318';
   ctx.fillRect(splitX - 4, 0, 4, H);
@@ -1403,7 +1416,8 @@ class Puppy {
       for (let c = 0; c < DW; c++)
         if (spr[r][c]) {
           const dc = this.right ? c : DW - 1 - c;
-          ctx.fillStyle = (r === 2 && c === 9) ? '#ff99bb' : col;
+          const isNose = r === 2 && c === 9;
+          ctx.fillStyle = isNose ? '#ff99bb' : col;
           ctx.fillRect(x + dc * vs, y + r * vs, vs, vs);
         }
   }
@@ -1706,7 +1720,11 @@ const dog = {
     }
 
     if (this.state === 'fidget' && --this.fidgetTimer <= 0) {
-      this.state = 'digging'; this.digTimer = DIG_DURATION; this.frame = 0; this.tick = 0;
+      if (this.cx < Math.round(canvas.width * 0.65)) {
+        this.state = 'digging'; this.digTimer = DIG_DURATION; this.frame = 0; this.tick = 0;
+      } else {
+        this.state = 'idle';
+      }
     }
 
     if (this.state === 'digging') {
@@ -1999,8 +2017,10 @@ canvas.addEventListener('pointerdown', e => {
   const doubleTap = now - lastTapTime < 300 && Math.hypot(px - lastTapX, py - lastTapY) < 60;
   lastTapTime = now; lastTapX = px; lastTapY = py;
   if (doubleTap && gameMode === 'dog') {
-    dog.walkTo(px, py);
-    dog.digPending = true;
+    if (px < Math.round(canvas.width * 0.65)) {
+      dog.walkTo(px, py);
+      dog.digPending = true;
+    }
     return;
   }
 
