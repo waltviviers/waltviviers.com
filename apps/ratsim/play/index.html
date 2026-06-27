@@ -500,8 +500,31 @@ const POTATO_DEF = makeDef(POTATO_SPR, 3, [26,27], [
   { r0: 3, r1: 6, c0: 13, c1: 22 },  // back saddle
 ], [13,14,15], [21,22,23], 9);
 
+// Climbing pose — 10 cols × 11 rows @ RS=3 → 30×33 vp.
+// Rat grips ladder: front paws reach up (left cols), back paws push below,
+// head faces right (mirrored for left ladder), tail hangs from body base.
+const CLIMB_SPR = [
+  //  0  1  2  3  4  5  6  7  8  9
+  [ 0, 0, 0, 2, 2, 2, 0, 0, 0, 0], // r0  ear
+  [ 0, 0, 1, 2, 2, 2, 1, 1, 0, 0], // r1  head+ear
+  [ 7, 7, 1, 1, 1, 1, 1, 1, 1, 0], // r2  front paws(0-1) reach up + head
+  [ 1, 1, 0, 1, 5, 1, 1, 1, 1, 4], // r3  front legs + body + eye(4) + nose(9)
+  [ 1, 1, 0, 1, 6, 6, 6, 1, 0, 0], // r4  front legs + belly
+  [ 0, 0, 0, 1, 6, 6, 6, 1, 0, 0], // r5  belly (fattest)
+  [ 3, 0, 0, 1, 6, 6, 1, 0, 0, 0], // r6  tail base + belly
+  [ 3, 0, 0, 1, 1, 1, 0, 0, 0, 0], // r7  tail + body
+  [ 0, 0, 0, 1, 1, 0, 0, 0, 0, 0], // r8  body/haunches
+  [ 0, 1, 1, 1, 0, 0, 0, 0, 0, 0], // r9  back legs(1-2) + body
+  [ 0, 7, 7, 1, 0, 0, 0, 0, 0, 0], // r10 back paws grip lower rung
+];
+const LOKI_CLIMB_DEF   = makeDef(CLIMB_SPR, 3, [3,4,5], [], [1,2], [0,1], 99);
+const POTATO_CLIMB_DEF = makeDef(CLIMB_SPR, 3, [3,4,5], [
+  { r0: 3, r1: 7, c0: 3, c1: 6 },  // back saddle
+], [1,2], [0,1], 99);
+
 function drawRat(rat, vx, vy, earTwitch = false) {
-  const { spr, rs, rcols, rrows, rw, earCols, patches, backLegCols, frontLegCols, legRowStart, noseR, noseC } = rat.def;
+  const def = (rat.climbing && rat.climbDef) ? rat.climbDef : rat.def;
+  const { spr, rs, rcols, rrows, rw, earCols, patches, backLegCols, frontLegCols, legRowStart, noseR, noseC } = def;
   const earCol = earTwitch ? '#ffd0e0' : C.ratPink;
   const right  = rat.right;
 
@@ -559,7 +582,7 @@ const HUNGER_RATE  = 0.0056;  // depletes hunger in ~5 min at 60 fps
 const THIRST_RATE  = 0.0083;  // depletes thirst in ~3 min at 60 fps
 const ACT_DURATION = 100;     // frames spent eating/drinking
 
-function makeRat(x, right, body, patch, belly, whisker, def) {
+function makeRat(x, right, body, patch, belly, whisker, def, climbDef) {
   const floorY    = CY + CH - 26 - def.rh;
   const shelfY    = CY + MID - 2 - def.rh;
   const hammockY  = Math.round(CY + 42 - def.rh / 2);
@@ -567,7 +590,7 @@ function makeRat(x, right, body, patch, belly, whisker, def) {
   const eatX      = CX + 40;
   const drinkX    = Math.round(CX + CW - 35 - (def.rcols - 1) * def.rs);
   return {
-    x, y: floorY, right, body, patch, belly, whisker, def,
+    x, y: floorY, right, body, patch, belly, whisker, def, climbDef,
     floorY, shelfY, hammockY, floorMaxX, eatX, drinkX,
     tx: x,
     floor: 'bottom',
@@ -685,8 +708,8 @@ function tickRat(rat) {
   }
 }
 
-const loki   = makeRat(CX + 60,  true,  C.lokiBody,   null,          '#fff0f4', '#ccc8c0', LOKI_DEF);
-const potato = makeRat(CX + 160, false, C.potatoBody, C.potatoPatch, '#d8b46a', '#e0d4a0', POTATO_DEF);
+const loki   = makeRat(CX + 60,  true,  C.lokiBody,   null,          '#fff0f4', '#ccc8c0', LOKI_DEF,   LOKI_CLIMB_DEF);
+const potato = makeRat(CX + 160, false, C.potatoBody, C.potatoPatch, '#d8b46a', '#e0d4a0', POTATO_DEF, POTATO_CLIMB_DEF);
 
 // ── Animation state ───────────────────────────────────────────────────────────
 let tick = 0;
