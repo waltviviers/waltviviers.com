@@ -74,7 +74,7 @@
 <div id="menu-drop">
   <a href="https://waltviviers.com/">Go To Main Site</a>
   <button id="htp-btn" class="sep">How to Play</button>
-  <button class="sep mode-switch" data-mode="dog">Dog Mode</button>
+  <button class="sep mode-switch" data-mode="dog">Doggo Mode</button>
   <button class="mode-switch" data-mode="rat">Rat Mode</button>
   <button class="mode-switch" data-mode="cat">Cat Mode</button>
 </div>
@@ -83,7 +83,7 @@
     <h2>How to Play</h2>
     <ul>
       <li>Pick a mode from the start screen or menu</li>
-      <li>Dog: tap to walk · hold to scritch · tap ball or stick to throw · double-tap to dig</li>
+      <li>Doggo: tap to walk · hold to scritch · tap ball or stick to throw · double-tap to dig</li>
       <li>Rat: tap rat to scritch · tap ground to place cheese · rats breed freely · every 10th is a dumbo (big ears) · every 16th is a naked rat (pink) · every 15th cheese triggers a raid cat</li>
       <li>Cat: hold to purr and wake · tap ground for laser · laser won't wake sleeping cats</li>
       <li>Visitor animals arrive now and then</li>
@@ -93,7 +93,7 @@
 </div>
 <div id="mode-pick">
   <h1>Scritch Scratch</h1>
-  <button class="mode-btn-pick" data-mode="dog">Dog Mode</button>
+  <button class="mode-btn-pick" data-mode="dog">Doggo Mode</button>
   <button class="mode-btn-pick" data-mode="rat">Rat Mode</button>
   <button class="mode-btn-pick" data-mode="cat">Cat Mode</button>
 </div>
@@ -347,7 +347,7 @@ let dogBed = null, dogFoodBowl = null, dogWaterBowl = null;
 
 function placeDogFurniture() {
   const w = canvas.width, h = canvas.height;
-  dogBed = { x: w * 0.15 - DOG_BED_SPR[0].length * BED_SC / 2, y: h * 0.75 };
+  dogBed = { x: w * 0.825 - DOG_BED_SPR[0].length * BED_SC / 2, y: h * 0.55 };
   dogFoodBowl = { x: w * 0.85 - DOG_BOWL_SPR[0].length * BOWL_SC / 2, y: h * 0.8 };
   dogWaterBowl = { x: w * 0.85 - DOG_BOWL_SPR[0].length * BOWL_SC / 2 + DOG_BOWL_SPR[0].length * BOWL_SC + 10, y: h * 0.8 };
 }
