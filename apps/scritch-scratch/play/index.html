@@ -75,7 +75,7 @@
   <a href="https://waltviviers.com/">Go To Main Site</a>
   <button id="htp-btn" class="sep">How to Play</button>
   <button class="sep mode-switch" data-mode="dog">Doggo Mode</button>
-  <button class="mode-switch" data-mode="rat">Rat Mode</button>
+  <button class="mode-switch" data-mode="rat">Ratty Mode</button>
   <button class="mode-switch" data-mode="cat">Cat Lady Mode</button>
 </div>
 <div id="htp-overlay" class="overlay">
@@ -84,7 +84,7 @@
     <ul>
       <li>Pick a mode from the start screen or menu</li>
       <li>Doggo: tap to walk · hold to scritch · tap ball or stick to throw · double-tap to dig</li>
-      <li>Rat: tap rat to scritch · tap ground to place cheese · rats breed freely · every 10th is a dumbo (big ears) · every 16th is a naked rat (pink) · every 15th cheese triggers a raid cat</li>
+      <li>Ratty: tap rat to scritch · tap ground to place cheese · rats breed freely · every 10th is a dumbo (big ears) · every 16th is a naked rat (pink) · every 15th cheese triggers a raid cat</li>
       <li>Cat Lady: hold to purr and wake · tap ground for laser · laser won't wake sleeping cats</li>
       <li>Visitor animals arrive now and then</li>
     </ul>
@@ -94,7 +94,7 @@
 <div id="mode-pick">
   <h1>Scritch Scratch</h1>
   <button class="mode-btn-pick" data-mode="dog">Doggo Mode</button>
-  <button class="mode-btn-pick" data-mode="rat">Rat Mode</button>
+  <button class="mode-btn-pick" data-mode="rat">Ratty Mode</button>
   <button class="mode-btn-pick" data-mode="cat">Cat Lady Mode</button>
 </div>
 <canvas id="c"></canvas>
@@ -356,17 +356,17 @@ function drawDogBackground() {
   const W = canvas.width, H = canvas.height;
   const splitX = Math.round(W * 0.65);
   // Grass
-  ctx.fillStyle = '#4e9926';
+  ctx.fillStyle = '#2e6614';
   ctx.fillRect(0, 0, splitX, H);
   // Pavement
-  ctx.fillStyle = '#a8a8a8';
+  ctx.fillStyle = '#707070';
   ctx.fillRect(splitX, 0, W - splitX, H);
   // Pavement seam lines
-  ctx.fillStyle = '#888';
+  ctx.fillStyle = '#555';
   for (let bx = splitX + 32; bx < W; bx += 32) ctx.fillRect(bx, 0, 2, H);
   for (let by = 24; by < H; by += 24) ctx.fillRect(splitX, by, W - splitX, 2);
   // Darker grass patches
-  ctx.fillStyle = '#3a7318';
+  ctx.fillStyle = '#1e4a0c';
   const patches = [
     [0.08,0.28],[0.22,0.52],[0.38,0.38],[0.12,0.68],[0.48,0.18],
     [0.31,0.82],[0.55,0.62],[0.05,0.48],[0.42,0.72],[0.18,0.88],
@@ -494,13 +494,13 @@ function drawCatBackground() {
   const W = canvas.width, H = canvas.height;
   const tileSize = 32;
   // Grout base
-  ctx.fillStyle = '#c8c0b0';
+  ctx.fillStyle = '#6a6258';
   ctx.fillRect(0, 0, W, H);
   // Tiles
   for (let ty = 0; ty < H; ty += tileSize) {
     for (let tx = 0; tx < W; tx += tileSize) {
       const alt = ((Math.floor(tx / tileSize) + Math.floor(ty / tileSize)) % 2 === 0);
-      ctx.fillStyle = alt ? '#f0ece4' : '#e8e2d8';
+      ctx.fillStyle = alt ? '#9e9688' : '#928c7e';
       ctx.fillRect(tx + 2, ty + 2, tileSize - 4, tileSize - 4);
     }
   }
@@ -663,7 +663,7 @@ let catVisitorCooldown = 60 * 25;
 let catRatCooldown = 60 * 20;
 let scritchCat = null;
 
-// ─── Cheese (Rat Mode) ────────────────────────────────────────────────────────
+// ─── Cheese (Ratty Mode) ────────────────────────────────────────────────────────
 const cheeses = [];
 // 1 = cheese body, 2 = hole
 const CHEESE_SPR = [
