@@ -522,6 +522,173 @@ function drawCatFurniture() {
       }
 }
 
+function drawCatKitchenItems() {
+  const W = canvas.width, H = canvas.height;
+  const wallH = Math.round(H * 0.26);
+  const counterY = wallH;
+  const counterH = 18;
+  const cabinetY = counterY + counterH;
+  const cabinetH = Math.round(H * 0.14);
+
+  // Wall (warm beige over the tiles)
+  ctx.fillStyle = '#d0c2a0';
+  ctx.fillRect(0, 0, W, wallH);
+
+  // Upper cabinets (wood, fills wall area from top)
+  const ucabTop = 3;
+  const ucabH = wallH - 8;
+  ctx.fillStyle = '#b8925e';
+  ctx.fillRect(0, ucabTop, W, ucabH);
+  const numUpper = Math.max(3, Math.floor(W / 88));
+  const ucabDW = Math.floor(W / numUpper);
+  for (let i = 0; i < numUpper; i++) {
+    const cx = i * ucabDW;
+    ctx.fillStyle = '#cca870';
+    ctx.fillRect(cx + 3, ucabTop + 2, ucabDW - 6, ucabH - 4);
+    ctx.fillStyle = '#dcc088';
+    ctx.fillRect(cx + 8, ucabTop + 6, ucabDW - 16, ucabH - 12);
+    ctx.fillStyle = '#b89060';
+    ctx.fillRect(cx + 8, ucabTop + ucabH - 14, ucabDW - 16, 3);
+    ctx.fillRect(cx + ucabDW - 11, ucabTop + 6, 3, ucabH - 12);
+    ctx.fillStyle = '#888880';
+    ctx.fillRect(cx + Math.floor(ucabDW / 2) - 5, ucabTop + Math.floor(ucabH * 0.62), 10, 4);
+    ctx.fillStyle = '#aaaaaa';
+    ctx.fillRect(cx + Math.floor(ucabDW / 2) - 4, ucabTop + Math.floor(ucabH * 0.62) + 1, 8, 2);
+  }
+  ctx.fillStyle = '#8a6840';
+  for (let i = 1; i < numUpper; i++) ctx.fillRect(i * ucabDW - 1, ucabTop, 2, ucabH);
+  ctx.fillRect(0, ucabTop + ucabH, W, 3);
+
+  // Counter top (marble)
+  ctx.fillStyle = '#c4bcac';
+  ctx.fillRect(0, counterY, W, counterH);
+  ctx.fillStyle = '#d8d0c0';
+  ctx.fillRect(0, counterY, W, 3);
+  ctx.fillStyle = '#b0a898';
+  ctx.fillRect(0, counterY + counterH - 3, W, 3);
+  ctx.fillStyle = '#b8b0a0';
+  ctx.fillRect(Math.round(W * 0.14), counterY + 5, Math.round(W * 0.07), 2);
+  ctx.fillRect(Math.round(W * 0.46), counterY + 9, Math.round(W * 0.10), 2);
+  ctx.fillRect(Math.round(W * 0.73), counterY + 6, Math.round(W * 0.06), 2);
+
+  // Lower cabinets (wood body)
+  ctx.fillStyle = '#b8925e';
+  ctx.fillRect(0, cabinetY, W, cabinetH);
+  const numLower = Math.max(4, Math.floor(W / 68));
+  const lcabDW = Math.floor(W / numLower);
+  for (let i = 0; i < numLower; i++) {
+    const cx = i * lcabDW;
+    ctx.fillStyle = '#cca870';
+    ctx.fillRect(cx + 3, cabinetY + 3, lcabDW - 6, cabinetH - 6);
+    ctx.fillStyle = '#dcc088';
+    ctx.fillRect(cx + 8, cabinetY + 7, lcabDW - 16, cabinetH - 14);
+    ctx.fillStyle = '#b89060';
+    ctx.fillRect(cx + 8, cabinetY + cabinetH - 14, lcabDW - 16, 3);
+    ctx.fillStyle = '#888880';
+    ctx.fillRect(cx + Math.floor(lcabDW / 2) - 5, cabinetY + Math.floor(cabinetH * 0.42), 10, 4);
+    ctx.fillStyle = '#aaaaaa';
+    ctx.fillRect(cx + Math.floor(lcabDW / 2) - 4, cabinetY + Math.floor(cabinetH * 0.42) + 1, 8, 2);
+  }
+  ctx.fillStyle = '#8a6840';
+  for (let i = 1; i < numLower; i++) ctx.fillRect(i * lcabDW - 1, cabinetY, 2, cabinetH);
+
+  // Stove (right side) — covers lower cabinets + counter top
+  const stoveX = Math.round(W * 0.66);
+  const stoveW = Math.round(W * 0.19);
+  ctx.fillStyle = '#2a2a30';
+  ctx.fillRect(stoveX, cabinetY, stoveW, cabinetH);
+  ctx.fillStyle = '#38383e';
+  ctx.fillRect(stoveX, counterY, stoveW, counterH);
+  ctx.fillStyle = '#484850';
+  ctx.fillRect(stoveX, counterY, stoveW, 2);
+  // Oven door
+  ctx.fillStyle = '#404048';
+  ctx.fillRect(stoveX + 5, cabinetY + 5, stoveW - 10, cabinetH - 10);
+  ctx.fillStyle = '#888890';
+  ctx.fillRect(stoveX + 10, cabinetY + 10, stoveW - 20, 5);
+  ctx.fillStyle = '#181820';
+  ctx.fillRect(stoveX + 8, cabinetY + 20, stoveW - 16, cabinetH - 33);
+  ctx.fillStyle = '#20202a';
+  ctx.fillRect(stoveX + 10, cabinetY + 22, stoveW - 20, cabinetH - 37);
+  // Burners (2x2)
+  const b1x = stoveX + Math.round(stoveW * 0.26);
+  const b2x = stoveX + Math.round(stoveW * 0.72);
+  const b1y = counterY + 4;
+  const b2y = counterY + counterH - 7;
+  for (const [bx, by] of [[b1x, b1y], [b2x, b1y], [b1x, b2y], [b2x, b2y]]) {
+    ctx.fillStyle = '#0e0e14';
+    ctx.fillRect(bx - 7, by - 4, 14, 8);
+    ctx.fillStyle = '#1c1c24';
+    ctx.fillRect(bx - 5, by - 2, 10, 5);
+    ctx.fillStyle = '#0a0a10';
+    ctx.fillRect(bx - 4, by - 1, 8, 2);
+    ctx.fillRect(bx - 1, by - 4, 2, 8);
+  }
+  // Control knobs (front face, top of oven door)
+  ctx.fillStyle = '#1e1e24';
+  ctx.fillRect(stoveX + 4, cabinetY + 4, stoveW - 8, 7);
+  for (let k = 0; k < 4; k++) {
+    const kx = stoveX + Math.round(stoveW * (0.14 + k * 0.24));
+    ctx.fillStyle = '#505058';
+    ctx.fillRect(kx - 3, cabinetY + 4, 6, 6);
+    ctx.fillStyle = '#383840';
+    ctx.fillRect(kx - 1, cabinetY + 5, 2, 4);
+  }
+
+  // Sink (center-left)
+  const sinkX = Math.round(W * 0.31);
+  const sinkW = Math.round(W * 0.15);
+  ctx.fillStyle = '#b0b8bc';
+  ctx.fillRect(sinkX - 4, counterY, sinkW + 8, counterH);
+  ctx.fillStyle = '#ccd4d8';
+  ctx.fillRect(sinkX, counterY + 3, sinkW, counterH - 5);
+  ctx.fillStyle = '#8aaabb';
+  ctx.fillRect(sinkX + 2, counterY + counterH - 8, sinkW - 4, 5);
+  ctx.fillStyle = '#7a8890';
+  ctx.fillRect(sinkX + Math.floor(sinkW / 2) - 3, counterY + counterH - 5, 6, 3);
+  // Faucet
+  const faucetBaseX = sinkX + Math.floor(sinkW / 2) - 2;
+  ctx.fillStyle = '#a8b0b8';
+  ctx.fillRect(faucetBaseX, counterY - 18, 5, 20);
+  ctx.fillRect(faucetBaseX, counterY - 18, 16, 4);
+  ctx.fillStyle = '#909898';
+  ctx.fillRect(faucetBaseX + 13, counterY - 16, 4, 8);
+  ctx.fillStyle = '#78a0b8';
+  ctx.fillRect(faucetBaseX + 15, counterY - 7, 2, 6);
+
+  // Plant (far left on counter)
+  const plantX = Math.round(W * 0.06);
+  ctx.fillStyle = '#b05530';
+  ctx.fillRect(plantX, counterY - 18, 18, 18);
+  ctx.fillStyle = '#c86038';
+  ctx.fillRect(plantX + 2, counterY - 16, 14, 14);
+  ctx.fillStyle = '#cc6840';
+  ctx.fillRect(plantX - 1, counterY - 18, 20, 4);
+  ctx.fillStyle = '#422010';
+  ctx.fillRect(plantX + 2, counterY - 9, 14, 6);
+  ctx.fillStyle = '#286414';
+  ctx.fillRect(plantX + 7, counterY - 30, 4, 14);
+  ctx.fillStyle = '#247a10';
+  ctx.fillRect(plantX - 2, counterY - 36, 12, 8);
+  ctx.fillRect(plantX + 9, counterY - 40, 12, 8);
+  ctx.fillStyle = '#38981e';
+  ctx.fillRect(plantX + 1, counterY - 34, 8, 5);
+  ctx.fillRect(plantX + 10, counterY - 38, 8, 5);
+
+  // Toaster (right of sink)
+  const toastX = sinkX + sinkW + 14;
+  ctx.fillStyle = '#b0a898';
+  ctx.fillRect(toastX, counterY - 22, 32, 22);
+  ctx.fillStyle = '#c8c0b0';
+  ctx.fillRect(toastX + 2, counterY - 20, 28, 18);
+  ctx.fillStyle = '#6a6460';
+  ctx.fillRect(toastX + 5, counterY - 16, 8, 10);
+  ctx.fillRect(toastX + 17, counterY - 16, 8, 10);
+  ctx.fillStyle = '#808070';
+  ctx.fillRect(toastX + 29, counterY - 16, 4, 16);
+  ctx.fillRect(toastX + 25, counterY - 11, 8, 6);
+}
+
 // ─── Game mode ────────────────────────────────────────────────────────────────
 let gameMode = 'dog';
 
@@ -2243,6 +2410,7 @@ function loop() {
   } else {
     // Cat mode
     drawCatBackground();
+    drawCatKitchenItems();
     drawCatFurniture();
 
     if (woolBall) {
