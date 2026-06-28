@@ -738,7 +738,7 @@ const modeStates = { dog: null, rat: null, cat: null };
 
 function serializeRat(r) {
   return { x: r.x, y: r.y, vx: r.vx, vy: r.vy, right: r.right,
-    sex: r.sex, bodyColor: r.bodyColor, bigEars: r.bigEars, isPink: r.isPink,
+    sex: r.sex, bodyColor: r.bodyColor, patchColor: r.patchColor, bigEars: r.bigEars, isPink: r.isPink,
     matingCooldown: r.matingCooldown, mateProximityTimer: r.mateProximityTimer,
     pregnant: r.pregnant, pregnancyTimer: r.pregnancyTimer,
     birthCooldown: r.birthCooldown, isSeed: r.isSeed,
@@ -746,7 +746,7 @@ function serializeRat(r) {
 }
 function deserializeRat(d) {
   const r = new Rat(d.x + RAT_W / 2, d.y + RAT_H, {
-    sex: d.sex, bodyColor: d.bodyColor, bigEars: d.bigEars, isPink: d.isPink,
+    sex: d.sex, bodyColor: d.bodyColor, patchColor: d.patchColor || null, bigEars: d.bigEars, isPink: d.isPink,
     matingCooldown: d.matingCooldown, isSeed: d.isSeed, birthCooldown: d.birthCooldown
   });
   r.x = d.x; r.y = d.y; r.vx = d.vx; r.vy = d.vy; r.right = d.right;
@@ -916,8 +916,10 @@ class Rat {
     ratBirthCount++;
     this.bigEars = opts.bigEars !== undefined ? opts.bigEars : (ratBirthCount % 10 === 0);
     this.isPink = opts.isPink !== undefined ? opts.isPink : (ratBirthCount % 16 === 0);
-    const defaultColor = this.isPink ? '#ffaabb' : '#aaaaaa';
+    const RAT_BODY_COLORS = ['#e8e8e8', '#c8922a', '#864010', '#1a1a1a'];
+    const defaultColor = this.isPink ? '#ffaabb' : RAT_BODY_COLORS[Math.floor(Math.random() * RAT_BODY_COLORS.length)];
     this.bodyColor = opts.bodyColor || defaultColor;
+    this.patchColor = opts.patchColor !== undefined ? opts.patchColor : null;
     this.isSeed = opts.isSeed || false;
     this.matingCooldown = opts.matingCooldown !== undefined
       ? opts.matingCooldown : 60 * (10 + Math.floor(Math.random() * 30));
@@ -1030,8 +1032,16 @@ class Rat {
         const n = 1 + Math.floor(Math.random() * 3);
         for (let i = 0; i < n; i++) {
           const r = Math.random();
-          const col = r < 0.4 ? this.bodyColor : (r < 0.7 ? '#c8922a' : '#dddddd');
-          babies.push(new Baby(this.x + RAT_W / 2, this.y + RAT_H, col));
+          let babyColor, babyPatch = null;
+          if (r < 0.30) { babyColor = this.bodyColor; babyPatch = this.patchColor; }
+          else if (r < 0.45) { babyColor = '#e8e8e8'; }
+          else if (r < 0.57) { babyColor = '#c8922a'; }
+          else if (r < 0.67) { babyColor = '#864010'; }
+          else if (r < 0.75) { babyColor = '#1a1a1a'; }
+          else if (r < 0.85) { babyColor = '#e8e8e8'; babyPatch = '#1a1a1a'; }
+          else if (r < 0.94) { babyColor = '#e8e8e8'; babyPatch = '#c8922a'; }
+          else { babyColor = '#dddddd'; }
+          babies.push(new Baby(this.x + RAT_W / 2, this.y + RAT_H, babyColor, babyPatch));
         }
       }
     }
@@ -1116,6 +1126,7 @@ class Rat {
     const spr = sleeping ? RAT_SLEEP_SPR : RAT_FRAMES[this.frame];
     const x = Math.round(this.x), y = Math.round(this.y);
     const bodyColor = this.scritchTimer > 0 ? '#ffbbcc' : this.bodyColor;
+    const activePatch = this.scritchTimer > 0 ? '#ffaacc' : this.patchColor;
     if (!sleeping) {
       ctx.fillStyle = this.isPink ? '#ff99bb' : '#cc6688';
       if (this.bigEars) {
@@ -1133,7 +1144,8 @@ class Rat {
         if (spr[r][c]) {
           const dc = this.right ? (RAT_COLS - 1 - c) : c;
           const isTailOrNose = !sleeping && (r === 4 || (r === 2 && c === 0));
-          ctx.fillStyle = isTailOrNose ? '#ff99bb' : bodyColor;
+          const isHood = !sleeping && activePatch && c <= 2;
+          ctx.fillStyle = isTailOrNose ? '#ff99bb' : (isHood ? activePatch : bodyColor);
           ctx.fillRect(x + dc * RAT_SC, y + r * RAT_SC, RAT_SC, RAT_SC);
         }
   }
@@ -1144,13 +1156,14 @@ const babies = [];
 const BABY_MATURE = 60 * 12;
 
 class Baby {
-  constructor(x, y, color) {
+  constructor(x, y, color, patch = null) {
     this.x = x + (Math.random() - 0.5) * 20;
     this.y = y + (Math.random() - 0.5) * 10;
     this.vx = (Math.random() - 0.5) * 0.7;
     this.vy = (Math.random() - 0.5) * 0.4;
     this.age = 0;
     this.color = color;
+    this.patchColor = patch;
     this.dead = false;
   }
 
@@ -1169,7 +1182,7 @@ class Baby {
     if (this.age >= BABY_MATURE) {
       const sex = Math.random() < 0.5 ? 'm' : 'f';
       rats.push(new Rat(this.x, this.y + RAT_H, {
-        sex, bodyColor: this.color, matingCooldown: 60 * 20
+        sex, bodyColor: this.color, patchColor: this.patchColor, matingCooldown: 60 * 20
       }));
       this.dead = true;
     }
@@ -2031,8 +2044,8 @@ function enterRatMode() {
   placeRatFurniture();
   if (!restoreRatState()) {
     const cx = canvas.width / 2, cy = canvas.height / 2;
-    rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#c8922a', matingCooldown: 60 * 8, isSeed: true }));
-    rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0, isSeed: true }));
+    rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#e8e8e8', matingCooldown: 60 * 8, isSeed: true }));
+    rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#e8e8e8', matingCooldown: 0, isSeed: true }));
   }
   persistSave();
 }
@@ -2351,6 +2364,73 @@ function tickParticles(arr) {
   }
 }
 
+function drawDynamicLighting() {
+  const W = canvas.width, H = canvas.height;
+  ctx.save();
+  if (gameMode === 'dog') {
+    const phase = (gameTick / 21600) % 1;
+    let col, alpha;
+    if (phase < 0.06) {
+      alpha = 0.22 * (1 - phase / 0.06) + 0.04;
+      col = '#ff8844';
+    } else if (phase < 0.12) {
+      alpha = 0.04;
+      col = '#ffcc88';
+    } else if (phase < 0.45) {
+      alpha = 0.03;
+      col = '#ffeecc';
+    } else if (phase < 0.52) {
+      const t = (phase - 0.45) / 0.07;
+      alpha = 0.04 + 0.18 * t;
+      col = `rgb(255,${Math.round(80 - 50 * t)},10)`;
+    } else if (phase < 0.58) {
+      const t = (phase - 0.52) / 0.06;
+      alpha = 0.22 + 0.12 * t;
+      col = `rgb(${Math.round(180 - 150 * t)},30,${Math.round(80 + 80 * t)})`;
+    } else if (phase < 0.85) {
+      alpha = 0.34;
+      col = '#0a1450';
+    } else if (phase < 0.92) {
+      const t = (phase - 0.85) / 0.07;
+      alpha = 0.34 * (1 - t) + 0.18 * t;
+      col = '#442200';
+    } else {
+      const t = (phase - 0.92) / 0.08;
+      alpha = 0.18 * (1 - t) + 0.04;
+      col = '#ff8844';
+    }
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = col;
+    ctx.fillRect(0, 0, W, H);
+    if (phase >= 0.58 && phase < 0.88) {
+      const sa = phase < 0.62 ? (phase - 0.58) / 0.04
+               : phase > 0.84 ? (0.88 - phase) / 0.04 : 1;
+      ctx.globalAlpha = sa * 0.6;
+      ctx.fillStyle = '#eeeeff';
+      const STARS = [[0.12,0.07],[0.28,0.04],[0.45,0.10],[0.67,0.05],[0.82,0.08],[0.93,0.13],
+                     [0.05,0.17],[0.38,0.03],[0.55,0.14],[0.77,0.11],[0.20,0.21],[0.61,0.09]];
+      for (const [sx, sy] of STARS) ctx.fillRect(Math.round(sx * W), Math.round(sy * H), 2, 2);
+    }
+  } else if (gameMode === 'cat') {
+    const ambient = Math.sin(gameTick / 7200 * Math.PI);
+    ctx.globalAlpha = 0.035;
+    ctx.fillStyle = ambient >= 0 ? '#ffdd88' : '#aabbff';
+    ctx.fillRect(0, 0, W, H);
+    const flicker = Math.sin(gameTick * 0.13) * Math.sin(gameTick * 0.27);
+    if (flicker > 0.85) {
+      ctx.globalAlpha = (flicker - 0.85) * 0.5;
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, W, H);
+    }
+  } else if (gameMode === 'rat') {
+    const a = 0.06 + 0.04 * Math.sin(gameTick * 0.018);
+    ctx.globalAlpha = a;
+    ctx.fillStyle = '#aa4400';
+    ctx.fillRect(0, 0, W, H);
+  }
+  ctx.restore();
+}
+
 function loop() {
   gameTick++;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -2432,8 +2512,8 @@ function loop() {
       else if (--seedRespawnTimer <= 0) {
         seedRespawnTimer = 0;
         const cx = canvas.width / 2, cy = canvas.height / 2;
-        if (!hasSeedM) rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#c8922a', matingCooldown: 60 * 5, isSeed: true }));
-        if (!hasSeedF) rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0, isSeed: true }));
+        if (!hasSeedM) rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#e8e8e8', matingCooldown: 60 * 5, isSeed: true }));
+        if (!hasSeedF) rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#e8e8e8', matingCooldown: 0, isSeed: true }));
       }
     } else {
       seedRespawnTimer = 0;
@@ -2519,6 +2599,7 @@ function loop() {
     }
   }
 
+  drawDynamicLighting();
   if (cursorVisible) drawCursor(cursorX, cursorY);
 
   requestAnimationFrame(loop);
