@@ -352,9 +352,14 @@ function placeDogFurniture() {
   dogWaterBowl = { x: w * 0.85 - DOG_BOWL_SPR[0].length * BOWL_SC / 2 + DOG_BOWL_SPR[0].length * BOWL_SC + 10, y: h * 0.8 };
 }
 
+function dogPoolFloorY() {
+  return Math.round(canvas.height * 0.15);
+}
+
 function drawDogBackground() {
   const W = canvas.width, H = canvas.height;
   const splitX = Math.round(W * 0.65);
+  const poolFloor = dogPoolFloorY();
   // Grass
   ctx.fillStyle = '#2e6614';
   ctx.fillRect(0, 0, splitX, H);
@@ -365,15 +370,60 @@ function drawDogBackground() {
   ctx.fillStyle = '#555';
   for (let bx = splitX + 32; bx < W; bx += 32) ctx.fillRect(bx, 0, 2, H);
   for (let by = 24; by < H; by += 24) ctx.fillRect(splitX, by, W - splitX, 2);
-  // Darker grass patches
+
+  // Pool at top of grass area
+  const poolEdge = 10;
+  // Deck surround
+  ctx.fillStyle = '#c8c0a8';
+  ctx.fillRect(0, 0, splitX, poolFloor);
+  // Pool water
+  ctx.fillStyle = '#3a7eb8';
+  ctx.fillRect(poolEdge, 0, splitX - poolEdge * 2, poolFloor - poolEdge);
+  // Water surface shine
+  ctx.fillStyle = '#5599cc';
+  ctx.fillRect(poolEdge, 0, splitX - poolEdge * 2, 5);
+  // Pool tile band along bottom edge of water
+  ctx.fillStyle = '#2a68a0';
+  ctx.fillRect(poolEdge, poolFloor - poolEdge - 4, splitX - poolEdge * 2, 4);
+  // Pool deck edge (bottom lip)
+  ctx.fillStyle = '#b8b0a0';
+  ctx.fillRect(0, poolFloor - poolEdge, splitX, poolEdge);
+  // Deck grout lines
+  ctx.fillStyle = '#a8a098';
+  for (let tx = 16; tx < splitX - 16; tx += 22) ctx.fillRect(tx, poolFloor - poolEdge, 2, poolEdge);
+  // Animated ripples in pool
+  const ra = gameTick * 0.04;
+  for (let ri = 0; ri < 5; ri++) {
+    const rx = Math.round(splitX * (0.1 + ri * 0.18) + Math.cos(ra + ri * 1.9) * 10);
+    const ry = Math.round((poolFloor - poolEdge) * (0.25 + ri * 0.12) + Math.sin(ra * 0.8 + ri) * 6);
+    ctx.fillStyle = '#5aaade';
+    ctx.fillRect(rx, ry, 9, 2);
+    ctx.fillRect(rx + 2, ry - 2, 5, 2);
+  }
+
+  // Light grass spots (sun-dappled)
+  ctx.fillStyle = '#4aa020';
+  const lightPatches = [
+    [0.08,0.30],[0.22,0.54],[0.38,0.40],[0.12,0.70],[0.48,0.22],
+    [0.31,0.84],[0.55,0.63],[0.05,0.50],[0.42,0.74],[0.18,0.90],
+    [0.60,0.32],[0.28,0.18],[0.50,0.52],[0.34,0.68],[0.16,0.60],
+  ];
+  for (const [fx, fy] of lightPatches) {
+    const bx = Math.round(fx * splitX);
+    const by = Math.round(poolFloor + fy * (H - poolFloor));
+    ctx.fillRect(bx, by, 11, 5);
+    ctx.fillRect(bx + 3, by - 3, 7, 4);
+  }
+  // Darker grass patches (shadow)
   ctx.fillStyle = '#1e4a0c';
   const patches = [
-    [0.08,0.28],[0.22,0.52],[0.38,0.38],[0.12,0.68],[0.48,0.18],
-    [0.31,0.82],[0.55,0.62],[0.05,0.48],[0.42,0.72],[0.18,0.88],
-    [0.60,0.30],[0.28,0.15],[0.50,0.50],[0.10,0.10],[0.35,0.95],
+    [0.10,0.28],[0.24,0.52],[0.40,0.38],[0.14,0.68],[0.50,0.20],
+    [0.33,0.82],[0.57,0.62],[0.07,0.48],[0.44,0.72],[0.20,0.88],
+    [0.62,0.30],[0.30,0.15],[0.52,0.50],[0.12,0.10],[0.37,0.95],
   ];
   for (const [fx, fy] of patches) {
-    const bx = Math.round(fx * splitX), by = Math.round(fy * H);
+    const bx = Math.round(fx * splitX);
+    const by = Math.round(poolFloor + fy * (H - poolFloor));
     ctx.fillRect(bx, by, 14, 6);
     ctx.fillRect(bx + 4, by - 4, 8, 6);
     ctx.fillRect(bx - 2, by + 4, 10, 4);
@@ -465,26 +515,6 @@ function placeRatFurniture() {
   ratBottle = { x: w * 0.12, y: h * 0.25 };
   ratFoodBowl = { x: w * 0.88 - RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, y: h * 0.25 };
   ratBed = { x: w / 2 - RAT_BED_SPR[0].length * RAT_BED_SC / 2, y: h * 0.7 };
-}
-
-function drawRatBackground() {
-  const W = canvas.width, H = canvas.height;
-  ctx.fillStyle = '#b8903c';
-  ctx.fillRect(0, 0, W, H);
-  const cols = ['#cca04a','#d4aa58','#b88238','#c89844','#e0b860','#a87830','#dab050','#c09040'];
-  for (let i = 0; i < 90; i++) {
-    const fx = ((i * 137 + 17) % 97) / 97;
-    const fy = ((i * 179 + 53) % 89) / 89;
-    const len = 30 + (i * 43) % 55;
-    const thick = 2 + (i % 3);
-    const angle = (((i * 73) % 50) - 25) * (Math.PI / 180);
-    ctx.fillStyle = cols[i % cols.length];
-    ctx.save();
-    ctx.translate(Math.round(fx * W), Math.round(fy * H));
-    ctx.rotate(angle);
-    ctx.fillRect(-(len >> 1), -(thick >> 1), len, thick);
-    ctx.restore();
-  }
 }
 
 function drawRatFurniture() {
@@ -727,6 +757,58 @@ function drawCatKitchenItems() {
   ctx.fillStyle = '#808070';
   ctx.fillRect(toastX + 29, counterY - 16, 4, 16);
   ctx.fillRect(toastX + 25, counterY - 11, 8, 6);
+
+  // Fishbowl with animated goldfish (between plant and sink)
+  const fbCX = Math.round(W * 0.21);
+  const fbBW = 26, fbBH = 22;
+  const fbBotY = counterY;
+  const fbTopY = fbBotY - fbBH - 8;
+
+  // Stand
+  ctx.fillStyle = '#88b8c8';
+  ctx.fillRect(fbCX - 5, fbBotY - 4, 10, 4);
+  ctx.fillRect(fbCX - 7, fbBotY, 14, 3);
+
+  // Water fill inside bowl
+  ctx.fillStyle = '#68aac0';
+  ctx.fillRect(fbCX - fbBW / 2 + 4, fbTopY + 4, fbBW - 8, fbBH - 6);
+
+  // Bowl glass outline (pixel-art circle)
+  ctx.fillStyle = '#a4ccd8';
+  ctx.fillRect(fbCX - fbBW / 2 + 5, fbTopY, fbBW - 10, 3);
+  ctx.fillRect(fbCX - fbBW / 2, fbTopY + 5, 4, fbBH - 10);
+  ctx.fillRect(fbCX + fbBW / 2 - 4, fbTopY + 5, 4, fbBH - 10);
+  ctx.fillRect(fbCX - fbBW / 2 + 5, fbBotY - 8, fbBW - 10, 4);
+  ctx.fillRect(fbCX - fbBW / 2 + 2, fbTopY + 2, 4, 4);
+  ctx.fillRect(fbCX + fbBW / 2 - 6, fbTopY + 2, 4, 4);
+  ctx.fillRect(fbCX - fbBW / 2 + 2, fbBotY - 10, 4, 4);
+  ctx.fillRect(fbCX + fbBW / 2 - 6, fbBotY - 10, 4, 4);
+
+  // Water surface shimmer
+  ctx.fillStyle = '#88cce0';
+  ctx.fillRect(fbCX - fbBW / 2 + 4, fbTopY + 4, fbBW - 8, 3);
+  // Bowl shine
+  ctx.fillStyle = '#c0e4f0';
+  ctx.fillRect(fbCX - fbBW / 2 + 4, fbTopY + 4, 4, fbBH - 8);
+
+  // Animated goldfish
+  const fA = gameTick * 0.04;
+  const fishX = fbCX + Math.round(Math.cos(fA) * 5);
+  const fishY = (fbTopY + Math.round(fbBH / 2) + 2) + Math.round(Math.sin(fA) * 4);
+  const fishRight = Math.cos(fA) > 0;
+
+  ctx.fillStyle = '#ff7a00';
+  ctx.fillRect(fishX - 4, fishY - 1, 7, 3);
+  ctx.fillStyle = '#ffaa00';
+  ctx.fillRect(fishX - 1, fishY - 3, 3, 3);
+  ctx.fillStyle = '#ff4a00';
+  if (fishRight) {
+    ctx.fillRect(fishX - 6, fishY - 2, 3, 5);
+  } else {
+    ctx.fillRect(fishX + 3, fishY - 2, 3, 5);
+  }
+  ctx.fillStyle = '#111';
+  ctx.fillRect(fishRight ? fishX + 1 : fishX - 3, fishY - 1, 2, 2);
 }
 
 // ─── Game mode ────────────────────────────────────────────────────────────────
@@ -796,7 +878,7 @@ function restoreDogState() {
   if (!s) return false;
   dog.color = s.color;
   dog.x = Math.max(0, Math.min(canvas.width - PW, s.x));
-  dog.y = Math.max(0, Math.min(canvas.height - PH, s.y));
+  dog.y = Math.max(dogPoolFloorY(), Math.min(canvas.height - PH, s.y));
   dog.state = 'idle'; dog.tx = null; dog.ty = null;
   dog.frame = 0; dog.tick = 0; dog.idleTimer = 0; dog.lingerTicks = 0;
   dog.furnitureTarget = null; dog.sleepTimer = 0; dog.sleepZTimer = 0; dog.digPending = false;
@@ -805,7 +887,7 @@ function restoreDogState() {
     const p = new Puppy(pd.x + DW * pd.vs / 2, pd.y + DH * pd.vs);
     p.color = pd.color; p.vs = pd.vs; p.right = pd.right;
     p.x = Math.max(0, Math.min(canvas.width - DW * pd.vs, pd.x));
-    p.y = Math.max(0, Math.min(canvas.height - DH * pd.vs, pd.y));
+    p.y = Math.max(dogPoolFloorY(), Math.min(canvas.height - DH * pd.vs, pd.y));
     puppies.push(p);
   }
   placedItems.length = 0;
@@ -1649,7 +1731,7 @@ class Puppy {
     const w = DW * this.vs, h = DH * this.vs;
     if (this.x < 0) { this.x = 0; this.vx = Math.abs(this.vx); }
     if (this.x > canvas.width - w) { this.x = canvas.width - w; this.vx = -Math.abs(this.vx); }
-    if (this.y < 0) { this.y = 0; this.vy = Math.abs(this.vy); }
+    if (this.y < dogPoolFloorY()) { this.y = dogPoolFloorY(); this.vy = Math.abs(this.vy); }
     if (this.y > canvas.height - h) { this.y = canvas.height - h; this.vy = -Math.abs(this.vy); }
     if (Math.abs(this.vx) > 0.1) this.right = this.vx > 0;
     if (this.state !== 'happy') this.state = (Math.abs(this.vx) > 0.2 || Math.abs(this.vy) > 0.2) ? 'walking' : 'idle';
@@ -1680,7 +1762,7 @@ class Visitor {
     this.right = fromLeft;
     this.vs = [3, 4, 4, 5, 5, 6][Math.floor(Math.random() * 6)];
     this.x = fromLeft ? -DW * this.vs * 2 : canvas.width + DW * this.vs;
-    this.y = Math.max(PH, Math.min(canvas.height - PH * 2,
+    this.y = Math.max(dogPoolFloorY(), Math.min(canvas.height - PH * 2,
       dog.y + (Math.random() - 0.5) * 80));
     this.state = 'entering';
     this.frame = 0; this.tick = 0;
@@ -1711,7 +1793,7 @@ class Visitor {
         this.x += Math.sign(dx) * SPEED; this.right = dx > 0;
       }
       this.y += (dog.y - this.y) * 0.04;
-      this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+      this.y = Math.max(dogPoolFloorY(), Math.min(canvas.height - PH, this.y));
     }
 
     if (this.state === 'playing') {
@@ -1745,7 +1827,7 @@ class Visitor {
         const dx = targetX - this.x, dy = dog.y - this.y;
         if (Math.abs(dx) > SPEED) this.x += Math.sign(dx) * SPEED;
         if (Math.abs(dy) > SPEED) this.y += Math.sign(dy) * SPEED;
-        this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+        this.y = Math.max(dogPoolFloorY(), Math.min(canvas.height - PH, this.y));
         this.right = this.x < dog.x;
       } else if (this.behavior === 'dig') {
         this.right = this.x < dog.x;
@@ -1842,12 +1924,14 @@ const dog = {
   },
 
   _roamTo(px, py) {
-    this.state = 'walking'; this.tx = px - PW / 2; this.ty = py - PH / 2; this.lingerTicks = 0;
+    this.state = 'walking'; this.tx = px - PW / 2;
+    this.ty = Math.max(dogPoolFloorY(), py - PH / 2); this.lingerTicks = 0;
   },
 
   walkTo(px, py) {
     thrownBall = null; this._commitItem();
-    this.state = 'walking'; this.tx = px - PW / 2; this.ty = py - PH / 2;
+    this.state = 'walking'; this.tx = px - PW / 2;
+    this.ty = Math.max(dogPoolFloorY(), py - PH / 2);
     this.lingerTicks = 0; this.idleTimer = 0;
     marker = { x: px, y: py, alpha: 1 };
   },
@@ -1877,7 +1961,8 @@ const dog = {
 
   fetch(tx, ty) {
     this._commitItem();
-    this.state = 'fetch'; this.tx = tx - PW / 2; this.ty = ty - PH / 2;
+    this.state = 'fetch'; this.tx = tx - PW / 2;
+    this.ty = Math.max(dogPoolFloorY(), ty - PH / 2);
     this.lingerTicks = 0; this.idleTimer = 0; marker = null;
   },
 
@@ -1889,7 +1974,7 @@ const dog = {
     if (Math.abs(dx) > 0.5) this.right = dx > 0;
     this.x += dx / d * SPEED; this.y += dy / d * SPEED;
     this.x = Math.max(0, Math.min(canvas.width - PW, this.x));
-    this.y = Math.max(0, Math.min(canvas.height - PH, this.y));
+    this.y = Math.max(dogPoolFloorY(), Math.min(canvas.height - PH, this.y));
     return false;
   },
 
