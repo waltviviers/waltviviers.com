@@ -427,7 +427,7 @@ const RAT_RBOWL_SPR = [
   [1,1,1,1],
   [0,1,1,0],
 ];
-const RAT_BOTTLE_SC = 3, RAT_BOWL_SC = 3;
+const RAT_BOTTLE_SC = 5, RAT_BOWL_SC = 5;
 const RAT_BED_SPR = [
   [0,0,0,1,1,1,1,1,1,1,1,0,0,0],
   [0,0,1,1,0,0,0,1,0,0,1,1,0,0],
@@ -435,10 +435,30 @@ const RAT_BED_SPR = [
   [1,1,1,1,1,1,1,1,1,1,1,1,1,1],
   [0,1,1,1,1,1,1,1,1,1,1,1,1,0],
 ];
-const RAT_BED_SC = 4;
+const RAT_BED_SC = 6;
 
 let ratBottle = null, ratFoodBowl = null, ratBed = null;
 let ratBirthCount = 0;
+
+function drawRatBackground() {
+  const W = canvas.width, H = canvas.height;
+  ctx.fillStyle = '#6e4e1a';
+  ctx.fillRect(0, 0, W, H);
+  const cols = ['#8a6428','#926c30','#7e5c22','#9a7034','#7a5820','#8e6a2c','#a07838','#7c5e24'];
+  for (let i = 0; i < 100; i++) {
+    const fx = ((i * 137 + 17) % 97) / 97;
+    const fy = ((i * 179 + 53) % 89) / 89;
+    const len = 30 + (i * 43) % 55;
+    const thick = 2 + (i % 3);
+    const angle = (((i * 73) % 50) - 25) * (Math.PI / 180);
+    ctx.fillStyle = cols[i % cols.length];
+    ctx.save();
+    ctx.translate(Math.round(fx * W), Math.round(fy * H));
+    ctx.rotate(angle);
+    ctx.fillRect(-(len >> 1), -(thick >> 1), len, thick);
+    ctx.restore();
+  }
+}
 
 function placeRatFurniture() {
   const w = canvas.width, h = canvas.height;
