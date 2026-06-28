@@ -2130,7 +2130,7 @@ function enterRatMode() {
   if (!restoreRatState()) {
     const cx = canvas.width / 2, cy = canvas.height / 2;
     rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#e8e8e8', matingCooldown: 60 * 8, isSeed: true }));
-    rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#e8e8e8', matingCooldown: 0, isSeed: true }));
+    rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#c8922a', matingCooldown: 0, isSeed: true }));
   }
   persistSave();
 }
@@ -2598,7 +2598,7 @@ function loop() {
         seedRespawnTimer = 0;
         const cx = canvas.width / 2, cy = canvas.height / 2;
         if (!hasSeedM) rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#e8e8e8', matingCooldown: 60 * 5, isSeed: true }));
-        if (!hasSeedF) rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#e8e8e8', matingCooldown: 0, isSeed: true }));
+        if (!hasSeedF) rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#c8922a', matingCooldown: 0, isSeed: true }));
       }
     } else {
       seedRespawnTimer = 0;
