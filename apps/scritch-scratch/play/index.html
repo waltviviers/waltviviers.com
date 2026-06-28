@@ -84,7 +84,7 @@
     <ul>
       <li>Pick a mode from the start screen or menu</li>
       <li>Doggo: tap to walk · hold to scritch · tap ball or stick to throw · double-tap to dig</li>
-      <li>Ratty: tap rat to scritch · tap ground to place cheese · rats breed freely · every 10th is a dumbo (big ears) · every 16th is a naked rat (pink) · every 15th cheese triggers a raid cat</li>
+      <li>Ratty: tap rat to scritch · tap ground to place meal worms · rats breed freely · every 10th is a dumbo (big ears) · every 16th is a naked rat (pink) · every 15th meal worm triggers a raid cat</li>
       <li>Cat Lady: hold to purr and wake · tap ground for laser · laser won't wake sleeping cats</li>
       <li>Visitor animals arrive now and then</li>
     </ul>
@@ -663,14 +663,14 @@ let catVisitorCooldown = 60 * 25;
 let catRatCooldown = 60 * 20;
 let scritchCat = null;
 
-// ─── Cheese (Ratty Mode) ────────────────────────────────────────────────────────
+// ─── Meal Worm (Ratty Mode) ─────────────────────────────────────────────────────
 const cheeses = [];
-// 1 = cheese body, 2 = hole
+// 1 = worm body, 2 = segment divider
 const CHEESE_SPR = [
-  [0,1,1,1,1,0],
-  [1,1,2,1,1,1],
-  [1,1,1,1,2,1],
-  [0,1,1,1,1,0],
+  [0,1,1,2,1,1,2,1,1,2,1,0],
+  [1,1,1,2,1,1,2,1,1,2,1,1],
+  [1,1,1,2,1,1,2,1,1,2,1,1],
+  [0,1,1,2,1,1,2,1,1,2,1,0],
 ];
 const CHEESE_SC = 3;
 const CHEESE_W = CHEESE_SPR[0].length * CHEESE_SC;
@@ -681,7 +681,7 @@ function drawCheeseAt(x, y) {
     for (let c = 0; c < CHEESE_SPR[r].length; c++) {
       const v = CHEESE_SPR[r][c];
       if (!v) continue;
-      ctx.fillStyle = v === 2 ? '#8b5e1a' : '#f5d742';
+      ctx.fillStyle = v === 2 ? '#8c7a30' : '#c8b84c';
       ctx.fillRect(Math.round(x + c * CHEESE_SC), Math.round(y + r * CHEESE_SC), CHEESE_SC, CHEESE_SC);
     }
 }
@@ -2236,7 +2236,7 @@ function loop() {
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
       ctx.font = '11px monospace'; ctx.textAlign = 'center';
-      ctx.fillText('tap rat to scritch · tap ground to place cheese',
+      ctx.fillText('tap rat to scritch · tap ground to place meal worms',
         canvas.width / 2, canvas.height - 18);
       ctx.restore();
     }
