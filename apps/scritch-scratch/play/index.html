@@ -1858,7 +1858,8 @@ class Visitor {
         if (this.visFidgetType === 'beg') spr = BEG[this.frame];
         else if (this.visFidgetType === 'roll') spr = ROLL_OVER[this.frame];
         else spr = SIT[this.frame];
-      } else spr = HAPPY[this.frame];
+      } else if (this.behavior === 'follow') spr = WALK[this.frame];
+      else spr = HAPPY[this.frame];
     } else {
       spr = WALK[this.frame];
     }
