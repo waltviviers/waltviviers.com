@@ -731,6 +731,7 @@ function drawCatKitchenItems() {
 
 // ─── Game mode ────────────────────────────────────────────────────────────────
 let gameMode = 'dog';
+let gameTick = 0;
 
 // ─── Persistent state ────────────────────────────────────────────────────────
 const modeStates = { dog: null, rat: null, cat: null };
@@ -874,23 +875,24 @@ let scritchCat = null;
 const cheeses = [];
 // 1 = worm body, 2 = segment divider
 const CHEESE_SPR = [
-  [0,1,1,2,1,1,2,1,1,2,1,0],
-  [1,1,1,2,1,1,2,1,1,2,1,1],
-  [1,1,1,2,1,1,2,1,1,2,1,1],
-  [0,1,1,2,1,1,2,1,1,2,1,0],
+  [0,1,2,1,1,2,1,1,2,1,0,0],
+  [1,1,2,1,1,2,1,1,2,1,1,0],
+  [0,1,2,1,1,2,1,1,2,1,0,0],
 ];
 const CHEESE_SC = 3;
 const CHEESE_W = CHEESE_SPR[0].length * CHEESE_SC;
 const CHEESE_H = CHEESE_SPR.length * CHEESE_SC;
 
 function drawCheeseAt(x, y) {
-  for (let r = 0; r < CHEESE_SPR.length; r++)
-    for (let c = 0; c < CHEESE_SPR[r].length; c++) {
+  for (let c = 0; c < CHEESE_SPR[0].length; c++) {
+    const wo = Math.round(Math.sin(gameTick * 0.08 + c * 0.65) * 2);
+    for (let r = 0; r < CHEESE_SPR.length; r++) {
       const v = CHEESE_SPR[r][c];
       if (!v) continue;
       ctx.fillStyle = v === 2 ? '#8c7a30' : '#c8b84c';
-      ctx.fillRect(Math.round(x + c * CHEESE_SC), Math.round(y + r * CHEESE_SC), CHEESE_SC, CHEESE_SC);
+      ctx.fillRect(Math.round(x + c * CHEESE_SC), Math.round(y + r * CHEESE_SC + wo), CHEESE_SC, CHEESE_SC);
     }
+  }
 }
 
 // ─── Live rats ────────────────────────────────────────────────────────────────
@@ -2350,6 +2352,7 @@ function tickParticles(arr) {
 }
 
 function loop() {
+  gameTick++;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   if (gameMode === 'dog') {
