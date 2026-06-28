@@ -547,7 +547,9 @@ function drawRat(rat, vx, vy, earTwitch = false) {
       const color = v === 2 ? earCol : v === 3 ? C.ratTail
                   : v === 4 ? C.ratPink : v === 5 ? C.ratEye
                   : v === 6 ? rat.belly : v === 7 ? C.ratPink : rat.body;
-      fill(vx + dc * rs, vy + r * rs + yOff, rs, rs, color);
+      const xOff = (rat.boggling > 0 && v === 5)
+        ? [0, rs, -rs][Math.floor(tick / 2) % 3] : 0;
+      fill(vx + dc * rs + xOff, vy + r * rs + yOff, rs, rs, color);
     }
   }
 
@@ -598,6 +600,7 @@ function makeRat(x, right, body, patch, belly, whisker, def, climbDef) {
     climbing: false,
     idleTimer: 60 + Math.floor(Math.random() * 120),
     twitch: 0,
+    boggling: 0,
     hunger: 5 + Math.random() * 10,
     thirst: 5 + Math.random() * 10,
     act: 'idle',
@@ -615,8 +618,9 @@ function tickRat(rat) {
   rat.hunger = Math.max(0, rat.hunger - HUNGER_RATE);
   rat.thirst = Math.max(0, rat.thirst - THIRST_RATE);
 
-  if (rat.twitch > 0) { rat.twitch--; }
+  if (rat.twitch   > 0) { rat.twitch--;   }
   else if (Math.random() < 0.003) { rat.twitch = 20; }
+  if (rat.boggling > 0) { rat.boggling--; }
 
   if (rat.climbing) {
     const targetY = ratFloorY(rat);
@@ -654,6 +658,29 @@ function tickRat(rat) {
     if (rat.actTimer > 0) { rat.actTimer--; }
     else { rat.act = 'idle'; rat.idleTimer = 30 + Math.floor(Math.random() * 60); }
     return;
+  }
+
+  // Snack attraction — nearest treat on the same floor overrides wandering.
+  if (rat.act !== 'to-ladder') {
+    let nearSnack = null, nearDist = Infinity;
+    for (const s of snacks) {
+      if (s.floor === rat.floor) {
+        const d = Math.abs(s.vx - rat.x);
+        if (d < nearDist) { nearDist = d; nearSnack = s; }
+      }
+    }
+    if (nearSnack) {
+      if (nearDist < 6) {
+        snacks.splice(snacks.indexOf(nearSnack), 1);
+        rat.hunger = Math.min(100, rat.hunger + 30);
+        rat.act = 'eating'; rat.actTimer = 50 + Math.floor(Math.random() * 30);
+        return;
+      }
+      rat.tx = nearSnack.vx; rat.act = 'wander';
+    } else if (pointerHeld) {
+      const tx = Math.max(CX + 10, Math.min(rat.floorMaxX, lureVX));
+      if (Math.abs(rat.x - tx) > WALK_SPEED) { rat.tx = tx; rat.act = 'wander'; }
+    }
   }
 
   if (rat.act === 'to-eat' || rat.act === 'to-drink' || rat.act === 'wander' || rat.act === 'to-ladder') {
@@ -717,6 +744,67 @@ function tickRat(rat) {
 const loki   = makeRat(CX + 60,  true,  C.lokiBody,   null,          '#fff0f4', '#ccc8c0', LOKI_DEF,   LOKI_CLIMB_DEF);
 const potato = makeRat(CX + 160, false, C.potatoBody, C.potatoPatch, '#d8b46a', '#e0d4a0', POTATO_DEF, POTATO_CLIMB_DEF);
 
+// ── Interaction ───────────────────────────────────────────────────────────────
+canvas.style.touchAction = 'none';
+let pointerHeld = false;
+let lureVX = 0;
+const snacks = [];
+
+function toVirtual(e) {
+  const r = canvas.getBoundingClientRect();
+  return { vx: (e.clientX - r.left - ox) / sc, vy: (e.clientY - r.top  - oy) / sc };
+}
+
+function nearestFloor(vy) {
+  if (vy < CY + 155) return 'hammock';
+  if (vy < CY + 386) return 'shelf';
+  return 'bottom';
+}
+
+function snackFloorY(floor) {
+  if (floor === 'hammock') return CY + 40;
+  if (floor === 'shelf')   return CY + MID - 5;
+  return CY + CH - 28;
+}
+
+let tapT = 0, tapVX = 0, tapVY = 0;
+
+canvas.addEventListener('pointerdown', e => {
+  e.preventDefault();
+  canvas.setPointerCapture(e.pointerId);
+  const { vx, vy } = toVirtual(e);
+  // Boggle if touching a rat (generous hit area)
+  for (const rat of [loki, potato]) {
+    if (vx >= rat.x - 5 && vx <= rat.x + rat.def.rw + 5 &&
+        vy >= rat.y - 8 && vy <= rat.y + rat.def.rh + 5) {
+      rat.boggling = 90;
+      return;
+    }
+  }
+  pointerHeld = true;
+  lureVX = vx;
+  tapT = Date.now(); tapVX = vx; tapVY = vy;
+}, { passive: false });
+
+canvas.addEventListener('pointermove', e => {
+  if (pointerHeld) lureVX = toVirtual(e).vx;
+});
+
+canvas.addEventListener('pointerup', e => {
+  if (!pointerHeld) return;
+  const { vx, vy } = toVirtual(e);
+  const dx = vx - tapVX, dy = vy - tapVY;
+  if (Date.now() - tapT < 300 && dx * dx + dy * dy < 400 && snacks.length < 6) {
+    const floor = nearestFloor(tapVY);
+    snacks.push({
+      vx: Math.max(CX + 8, Math.min(CX + CW - 8, tapVX)),
+      vy: snackFloorY(floor),
+      floor,
+    });
+  }
+  pointerHeld = false;
+});
+
 // ── Animation state ───────────────────────────────────────────────────────────
 let tick = 0;
 
@@ -734,6 +822,17 @@ function actOffset(rat) {
   return 0;
 }
 
+// ── Snack rendering ───────────────────────────────────────────────────────────
+function drawSnacks() {
+  for (const s of snacks) {
+    const sx = Math.round(s.vx), sy = Math.round(s.vy);
+    fill(sx - 2, sy,     5, 3, '#c87828');
+    fill(sx - 1, sy - 1, 4, 5, '#c87828');
+    fill(sx - 1, sy,     3, 2, '#e8a040');
+    fill(sx,     sy - 1, 1, 1, '#ffe070');
+  }
+}
+
 // ── Main loop ─────────────────────────────────────────────────────────────────
 function loop() {
   tick++;
@@ -744,6 +843,7 @@ function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawRoom();
   drawCage();
+  drawSnacks();
 
   // Each rat breathes on a slightly different phase so they don't sync perfectly
   const lokiDY   = breathOffset(0)   + actOffset(loki);
