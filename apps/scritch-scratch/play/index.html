@@ -632,7 +632,7 @@ function restoreCatState() {
   }
   if (s.woolBall && woolBall) {
     woolBall.x = Math.max(0, Math.min(canvas.width - WOOL_SPR[0].length * WOOL_SC, s.woolBall.x));
-    woolBall.y = Math.max(0, Math.min(canvas.height - WOOL_SPR.length * WOOL_SC, s.woolBall.y));
+    woolBall.y = Math.max(catKitchenFloorY(), Math.min(canvas.height - WOOL_SPR.length * WOOL_SC, s.woolBall.y));
   }
   return true;
 }
@@ -894,7 +894,8 @@ class Rat {
       this.x += this.vx; this.y += this.vy;
       if (this.x < 0) { this.x = 0; this.vx = Math.abs(this.vx); }
       if (this.x > canvas.width - RAT_W) { this.x = canvas.width - RAT_W; this.vx = -Math.abs(this.vx); }
-      if (this.y < 0) { this.y = 0; this.vy = Math.abs(this.vy); }
+      const _ratMinY = gameMode === 'cat' ? catKitchenFloorY() : 0;
+      if (this.y < _ratMinY) { this.y = _ratMinY; this.vy = Math.abs(this.vy); }
       if (this.y > canvas.height - RAT_H) { this.y = canvas.height - RAT_H; this.vy = -Math.abs(this.vy); }
       if (Math.abs(this.vx) > 0.1) this.right = this.vx > 0;
     }
@@ -1024,6 +1025,12 @@ class RaidCat {
 }
 
 // ─── Cat class ────────────────────────────────────────────────────────────────
+// Returns the minimum Y (top-left of sprite) objects may occupy in cat mode,
+// keeping them below the kitchen counter drawn by drawCatKitchenItems().
+function catKitchenFloorY() {
+  return Math.round(canvas.height * 0.40) + 20;
+}
+
 const KITTEN_MATURE = 60 * 90;
 
 class Cat {
@@ -1077,12 +1084,13 @@ class Cat {
     if (Math.abs(dx) > 0.5) this.right = dx > 0;
     this.x += dx / d * s; this.y += dy / d * s;
     this.x = Math.max(0, Math.min(canvas.width - CPW, this.x));
-    this.y = Math.max(0, Math.min(canvas.height - CPH, this.y));
+    this.y = Math.max(catKitchenFloorY(), Math.min(canvas.height - CPH, this.y));
     return false;
   }
 
   _roamTo(px, py) {
-    this.state = 'walking'; this.tx = px - CPW / 2; this.ty = py - CPH / 2;
+    this.state = 'walking'; this.tx = px - CPW / 2;
+    this.ty = Math.max(catKitchenFloorY(), py - CPH / 2);
   }
 
   update() {
@@ -1144,13 +1152,13 @@ class Cat {
       else {
         // Use reachable center position to avoid edge-stuck
         const reachX = Math.max(CPW / 2, Math.min(canvas.width - CPW / 2, laserX));
-        const reachY = Math.max(CPH / 2, Math.min(canvas.height - CPH / 2, laserY));
+        const reachY = Math.max(catKitchenFloorY() + CPH / 2, Math.min(canvas.height - CPH / 2, laserY));
         const dx = reachX - this.cx, dy = reachY - this.cy;
         const d = Math.hypot(dx, dy);
         if (d < 14) { laserActive = false; this.state = 'happy'; this.lingerTicks = 45; }
         else { const s = SPEED * 1.2; this.x += dx/d*s; this.y += dy/d*s; this.right = dx > 0;
           this.x = Math.max(0, Math.min(canvas.width - CPW, this.x));
-          this.y = Math.max(0, Math.min(canvas.height - CPH, this.y)); }
+          this.y = Math.max(catKitchenFloorY(), Math.min(canvas.height - CPH, this.y)); }
       }
     }
 
@@ -1324,7 +1332,7 @@ class Kitten {
     this.x += this.vx; this.y += this.vy;
     if (this.x < 0) { this.x = 0; this.vx = Math.abs(this.vx); }
     if (this.x > canvas.width) { this.x = canvas.width; this.vx = -Math.abs(this.vx); }
-    if (this.y < 0) { this.y = 0; this.vy = Math.abs(this.vy); }
+    if (this.y < catKitchenFloorY()) { this.y = catKitchenFloorY(); this.vy = Math.abs(this.vy); }
     if (this.y > canvas.height) { this.y = canvas.height; this.vy = -Math.abs(this.vy); }
     if (this.age >= KITTEN_MATURE) {
       if (cats.length + kittens.length <= 35) {
@@ -1847,7 +1855,7 @@ function enterCatMode() {
   thrownBall = null; marker = null; laserActive = false; interacted = false;
   scritchCat = null;
   catVisitorCooldown = 60 * 25;
-  woolBall = { x: canvas.width * 0.6, y: canvas.height * 0.4, vx: 0, vy: 0 };
+  woolBall = { x: canvas.width * 0.6, y: canvas.height * 0.65, vx: 0, vy: 0 };
   placeCatFurniture();
   if (!restoreCatState()) {
     // Main cat — always at index 0, never leaves
@@ -1866,11 +1874,11 @@ function trySpawnCatVisitor() {
   const vx = fromLeft ? -CPW * 2 : canvas.width + CPW;
   const targetX = (mc ? mc.x : canvas.width/2) + (fromLeft ? CPW*2.5 : -CPW*2.5);
   const vis = new Cat({
-    x: vx, y: Math.max(CPH, Math.min(canvas.height - CPH*2, vy)),
+    x: vx, y: Math.max(catKitchenFloorY(), Math.min(canvas.height - CPH*2, vy)),
     color: CAT_COLORS[1 + Math.floor(Math.random() * (CAT_COLORS.length - 1))],
     right: fromLeft, isVisitor: true,
     state: 'walking', tx: targetX - CPW/2,
-    ty: (mc ? mc.y : canvas.height/2) - CPH/2
+    ty: Math.max(catKitchenFloorY(), (mc ? mc.y : canvas.height/2) - CPH/2)
   });
   cats.push(vis);
 }
@@ -1881,7 +1889,7 @@ function trySpawnCatRat() {
   const side = Math.random() < 0.5;
   catRats.push(new Rat(
     side ? 0 : canvas.width,
-    CPH + Math.random() * (canvas.height - CPH * 2)
+    catKitchenFloorY() + Math.random() * (canvas.height - catKitchenFloorY() - CPH)
   ));
 }
 
@@ -1984,7 +1992,7 @@ canvas.addEventListener('pointerdown', e => {
       }
     }
     // Tap ground = laser pointer (only wakes awake cats, not sleeping ones)
-    laserX = px; laserY = py; laserActive = true; laserTimer = 60 * 12;
+    laserX = px; laserY = Math.max(catKitchenFloorY(), py); laserActive = true; laserTimer = 60 * 12;
     for (const cat of cats) {
       if (!cat.dead && !cat.isVisitor && cat.state !== 'leaving' && cat.state !== 'sleep') {
         cat.state = 'laser';
@@ -2251,7 +2259,7 @@ function loop() {
       const wbw = WOOL_SPR[0].length * WOOL_SC, wbh = WOOL_SPR.length * WOOL_SC;
       if (woolBall.x < 0) { woolBall.x = 0; woolBall.vx = Math.abs(woolBall.vx) * 0.7; }
       if (woolBall.x > canvas.width - wbw) { woolBall.x = canvas.width - wbw; woolBall.vx = -Math.abs(woolBall.vx) * 0.7; }
-      if (woolBall.y < 0) { woolBall.y = 0; woolBall.vy = Math.abs(woolBall.vy) * 0.7; }
+      if (woolBall.y < catKitchenFloorY()) { woolBall.y = catKitchenFloorY(); woolBall.vy = Math.abs(woolBall.vy) * 0.7; }
       if (woolBall.y > canvas.height - wbh) { woolBall.y = canvas.height - wbh; woolBall.vy = -Math.abs(woolBall.vy) * 0.7; }
       ctx.fillStyle = '#cc4488';
       const wbx = Math.round(woolBall.x), wby = Math.round(woolBall.y);
