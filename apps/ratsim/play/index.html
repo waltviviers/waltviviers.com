@@ -125,18 +125,27 @@ function drawRoom() {
   ctx.fillStyle = C.floor;
   ctx.fillRect(0, floorY, canvas.width, canvas.height - floorY);
 
-  // Wood floor planks — subtle horizontal grain lines
+  // Wood floor planks — full-width horizontal grain lines
   for (let i = 0; i < 5; i++) {
-    fill(0,         VH - 68 + i * 13, VW, 1, '#0a0804');
-    fill((i*73)%200, VH - 64 + i * 13, 55, 1, '#0e0c05');
+    const cy1 = Math.round(oy + (VH - 68 + i * 13) * sc);
+    const cy2 = Math.round(oy + (VH - 64 + i * 13) * sc);
+    ctx.fillStyle = '#0a0804';
+    ctx.fillRect(0, cy1, canvas.width, Math.max(1, Math.ceil(sc)));
+    // Short plank-joint marks tiled across full canvas width
+    ctx.fillStyle = '#0e0c05';
+    const jx0 = (i * 73) % 200;
+    for (let vx0 = jx0 - Math.ceil(ox / sc / 200 + 1) * 200; vx0 < (canvas.width - ox) / sc; vx0 += 200) {
+      const cx = Math.round(ox + vx0 * sc);
+      ctx.fillRect(cx, cy2, Math.ceil(55 * sc), Math.max(1, Math.ceil(sc)));
+    }
   }
 
-  // Wallpaper diamond pattern
+  // Wallpaper diamond pattern — extends into desktop side gutters
+  const extraCols = sc > 0 ? Math.ceil(ox / sc / 28) + 1 : 2;
   for (let row = 0; row < 18; row++) {
-    for (let col = 0; col < 14; col++) {
+    for (let col = -extraCols; col < 14 + extraCols; col++) {
       const wx = col * 28 + (row % 2) * 14 - 4;
       const wy = row * 22 - 4;
-      // small diamond: 4 pixels
       fill(wx + 12, wy,      4, 4, C.wallPat);
       fill(wx + 8,  wy + 4,  4, 4, C.wallPat);
       fill(wx + 16, wy + 4,  4, 4, C.wallPat);
@@ -1061,8 +1070,12 @@ function drawLighting() {
            : t < 0.07 ? sm(Math.min(1 - t / 0.07, 1)) : 0;
   if (nv > 0.01) {
     const stars = [
+      // Main area (0–360 virtual)
       [38, 8, 0], [82, 20, 1.4], [132, 6, 2.8], [190, 15, 0.7],
       [246, 9, 3.5], [298, 22, 1.1], [338, 4, 4.2],
+      // Extended for wide desktop gutters (off-virtual-canvas coords, clipped by canvas)
+      [-160, 14, 5.3], [-100, 5, 2.1], [-55, 20, 0.9], [-210, 8, 3.6],
+      [375, 11, 3.7], [420, 6, 1.8], [475, 18, 4.9], [530, 9, 2.5], [590, 22, 1.2],
     ];
     ctx.save();
     ctx.fillStyle = '#e8f0ff';
