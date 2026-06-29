@@ -269,7 +269,7 @@ Machine-readable JSON: https://waltviviers.com/data/artworks.json
 ### Bill Tipper
 - Platform: Android (Google Play)
 - Description: A simple, elegant tip calculator.
-- Page: https://waltviviers.com/apps/bill_tipper/
+- Page: https://waltviviers.com/apps/billtipper/
 
 ## Commissions
 
