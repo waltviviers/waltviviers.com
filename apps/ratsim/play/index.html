@@ -654,6 +654,8 @@ function tickRat(rat) {
     rat.right = rat.act === 'drinking';
     if (rat.actTimer > 0) {
       rat.actTimer--;
+      if (rat.act === 'eating'   && tick % 22 === 0) SFX.munch();
+      if (rat.act === 'drinking' && tick % 28 === 0) SFX.sip();
     } else {
       if (rat.act === 'eating')   { rat.hunger = 100; rat.snackEating = false; }
       if (rat.act === 'drinking') rat.thirst = 100;
@@ -664,8 +666,10 @@ function tickRat(rat) {
   }
 
   if (rat.act === 'nap') {
-    if (rat.actTimer > 0) { rat.actTimer--; }
-    else { rat.act = 'idle'; rat.idleTimer = 30 + Math.floor(Math.random() * 60); }
+    if (rat.actTimer > 0) {
+      rat.actTimer--;
+      if (tick % 90 === 0 && Math.random() < 0.25) SFX.brux();
+    } else { rat.act = 'idle'; rat.idleTimer = 30 + Math.floor(Math.random() * 60); }
     return;
   }
 
@@ -714,12 +718,14 @@ function tickRat(rat) {
         rat.climbing = true;
       } else if (rat.act === 'to-hideout') {
         rat.act = 'in-hideout'; rat.actTimer = 300 + Math.floor(Math.random() * 600);
+        SFX.rustle();
       } else {
         rat.act = 'idle'; rat.idleTimer = 90 + Math.floor(Math.random() * 200);
       }
     } else {
       rat.x    += Math.sign(dx) * WALK_SPEED;
       rat.right = dx > 0;
+      if (tick % 14 === 0) SFX.scratch();
     }
     return;
   }
@@ -798,11 +804,13 @@ let lureVX = 0, lureVY = 0, lureDisplayY = 0, lureFallTarget = 0, lureTick = 0;
 canvas.addEventListener('pointerdown', e => {
   e.preventDefault();
   canvas.setPointerCapture(e.pointerId);
+  SFX.unlock();
   const { vx, vy } = toVirtual(e);
   for (const rat of [loki, potato]) {
     if (vx >= rat.x - 5 && vx <= rat.x + rat.def.rw + 5 &&
         vy >= rat.y - 8 && vy <= rat.y + rat.def.rh + 5) {
       rat.boggling = 90;
+      SFX.squeak();
       return;
     }
   }
@@ -829,6 +837,90 @@ canvas.addEventListener('pointerup', e => {
     tapPendingVX = vx; tapPendingVY = vy;
   }
 });
+
+// ── Sound effects (Web Audio API, synthesised — no external files) ─────────────
+const SFX = (() => {
+  let ac, unlocked = false;
+  const get = () => { if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)(); return ac; };
+
+  function tone(f0, f1, dur, vol, type = 'sine', delay = 0) {
+    const c = get(), now = c.currentTime + delay;
+    const osc = c.createOscillator(), g = c.createGain();
+    osc.connect(g); g.connect(c.destination);
+    osc.type = type;
+    osc.frequency.setValueAtTime(f0, now);
+    if (f1 !== f0) osc.frequency.exponentialRampToValueAtTime(f1, now + dur);
+    g.gain.setValueAtTime(vol, now);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+    osc.start(now); osc.stop(now + dur + 0.02);
+  }
+
+  function burst(freq, q, dur, vol) {
+    const c = get();
+    const buf = c.createBuffer(1, Math.ceil(c.sampleRate * dur), c.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    const src = c.createBufferSource(), filt = c.createBiquadFilter(), g = c.createGain();
+    src.buffer = buf; filt.type = 'bandpass'; filt.frequency.value = freq; filt.Q.value = q;
+    src.connect(filt); filt.connect(g); g.connect(c.destination);
+    g.gain.setValueAtTime(vol, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + dur);
+    src.start();
+  }
+
+  return {
+    unlock() { if (unlocked) return; get().resume(); unlocked = true; },
+    // Happy squeak when tapped
+    squeak()  { if (!unlocked) return; tone(2600, 1500, 0.14, 0.14); },
+    // Claws on floor while walking
+    scratch() { if (!unlocked) return; burst(3800, 1.8, 0.07, 0.07); },
+    // Nibbling food (4 rapid clicks)
+    munch() {
+      if (!unlocked) return;
+      const c = get();
+      for (let i = 0; i < 4; i++) {
+        const t = c.currentTime + i * 0.07;
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.connect(g); g.connect(c.destination);
+        osc.type = 'square'; osc.frequency.value = 260 + Math.random() * 90;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.05, t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05); osc.start(t); osc.stop(t + 0.06);
+      }
+    },
+    // Water bottle drip
+    sip()     { if (!unlocked) return; tone(900, 430, 0.17, 0.06); },
+    // Rustle into the house
+    rustle()  { if (!unlocked) return; burst(1800, 0.7, 0.20, 0.09); },
+    // Snack lands on floor
+    plop()    { if (!unlocked) return; tone(500, 190, 0.09, 0.10); },
+    // Content teeth grinding (bruxing) — happy rat sound
+    brux() {
+      if (!unlocked) return;
+      for (let i = 0; i < 7; i++) tone(175 + i * 10, 175 + i * 10, 0.04, 0.04, 'sawtooth', i * 0.048);
+    },
+    // Cricket chirp (3 pulses)
+    cricket() {
+      if (!unlocked) return;
+      const c = get();
+      for (let i = 0; i < 3; i++) {
+        const t = c.currentTime + i * 0.13;
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.connect(g); g.connect(c.destination);
+        osc.type = 'sine'; osc.frequency.value = 4800 + Math.random() * 220;
+        g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.055, t + 0.025);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.10); osc.start(t); osc.stop(t + 0.11);
+      }
+    },
+    // Simple bird tweet (rise then fall)
+    tweet() {
+      if (!unlocked) return;
+      tone(2000, 3400, 0.09, 0.065);
+      tone(3200, 2100, 0.11, 0.065, 'sine', 0.13);
+    },
+  };
+})();
+
+let nextAmbientTick = 240;  // first ambient sound after ~4 s
 
 // ── Animation state ───────────────────────────────────────────────────────────
 let tick = 0;
@@ -1008,7 +1100,21 @@ function loop() {
   for (const s of snacks) {
     if (s.falling) {
       s.vy = Math.min(s.vy + 4, s.targetVY);
-      if (s.vy >= s.targetVY) s.falling = false;
+      if (s.vy >= s.targetVY) { s.falling = false; SFX.plop(); }
+    }
+  }
+
+  // Ambient sounds — cricket at night, birdsong at dawn
+  if (tick >= nextAmbientTick) {
+    const t = (tick % 7200) / 7200;
+    if (t >= 0.75 || t < 0.08) {
+      SFX.cricket();
+      nextAmbientTick = tick + 420 + Math.floor(Math.random() * 480);
+    } else if (t >= 0.08 && t < 0.20) {
+      SFX.tweet();
+      nextAmbientTick = tick + 540 + Math.floor(Math.random() * 600);
+    } else {
+      nextAmbientTick = tick + 300 + Math.floor(Math.random() * 300);
     }
   }
 
