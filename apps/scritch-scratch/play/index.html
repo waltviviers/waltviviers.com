@@ -2501,10 +2501,10 @@ function drawDynamicLighting() {
     ctx.globalAlpha = 0.035;
     ctx.fillStyle = ambient >= 0 ? '#ffdd88' : '#aabbff';
     ctx.fillRect(0, 0, W, H);
-    const flicker = Math.sin(gameTick * 0.13) * Math.sin(gameTick * 0.27);
-    if (flicker > 0.85) {
-      ctx.globalAlpha = (flicker - 0.85) * 0.5;
-      ctx.fillStyle = '#ffffff';
+    const flicker = Math.sin(gameTick * 0.04) * Math.sin(gameTick * 0.09);
+    if (flicker > 0.88) {
+      ctx.globalAlpha = (flicker - 0.88) * 0.25;
+      ctx.fillStyle = '#ffffee';
       ctx.fillRect(0, 0, W, H);
     }
   } else if (gameMode === 'rat') {
