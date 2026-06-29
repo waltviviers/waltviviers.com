@@ -1021,6 +1021,7 @@ class Rat {
   }
 
   scritch() {
+    sndSqueak();
     this.scritchTimer = 50;
     for (let i = 0; i < 3; i++) hearts.push(new Heart(this.x + RAT_W / 2, this.y));
   }
@@ -1056,6 +1057,7 @@ class Rat {
       if (nearest && nearestDist < 250) {
         seekingCheese = true;
         if (nearestDist < 10) {
+          sndCrunch();
           nearest.eaten = true;
           this.scritch();
         } else {
@@ -1303,6 +1305,7 @@ class RaidCat {
       .sort(() => Math.random() - 0.5)
       .slice(0, Math.ceil(rats.length / 2));
     labels.push(new Label('Cat!', canvas.width / 2, canvas.height / 2 - 20));
+    sndRaidCat();
   }
   update() {
     if (++this.tick >= ANIM_TICKS) { this.tick = 0; this.frame ^= 1; }
@@ -1522,7 +1525,7 @@ class Cat {
       if (scritchCat === this) {
         this.state = 'idle'; this.idleTimer = 0;
       } else {
-        if (--this.sleepTimer <= 0) this.state = 'idle';
+        if (--this.sleepTimer <= 0) { this.state = 'idle'; sndMeow(); }
         if (Math.random() < 0.002) labels.push(new Label('z z z', this.cx, Math.max(20, this.y - 6)));
       }
       return;
@@ -1715,6 +1718,7 @@ class Puppy {
     return px >= this.x - 4 && px <= this.x + w + 4 && py >= this.y - 4 && py <= this.y + h + 4;
   }
   scritch() {
+    sndBark(false);
     this.scritchTimer = 60; this.state = 'happy';
     for (let i = 0; i < 3; i++) hearts.push(new Heart(this.cx, this.y));
   }
@@ -2059,7 +2063,7 @@ const dog = {
     }
 
     if (this.state === 'digging') {
-      if (Math.random() < 0.45) dirts.push(new Dirt(this.pawX, this.pawY, this.right));
+      if (Math.random() < 0.45) { dirts.push(new Dirt(this.pawX, this.pawY, this.right)); sndDig(); }
       if (--this.digTimer <= 0) {
         this.foundItem = ITEMS[itemIdx++ % ITEMS.length];
         this.state = 'found'; this.foundTimer = FOUND_DURATION; this.frame = 0;
@@ -2132,6 +2136,7 @@ function enterRatMode() {
     rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#e8e8e8', matingCooldown: 60 * 8, isSeed: true }));
     rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#e8e8e8', matingCooldown: 0, isSeed: true }));
   }
+  sndRatAmbient();
   persistSave();
 }
 
@@ -2150,6 +2155,7 @@ function enterDogMode() {
   visitorCooldown = 60 * (30 + Math.floor(Math.random() * 90));
   placeDogFurniture();
   if (!restoreDogState()) { dog.init(); }
+  sndDogAmbient();
   persistSave();
 }
 
@@ -2169,6 +2175,7 @@ function enterCatMode() {
     cats.push(new Cat({ isMain: true, color: CAT_COLORS[0],
       x: canvas.width/2 - CPW/2, y: canvas.height/2 - CPH/2, birthCooldown: 0 }));
   }
+  sndCatAmbient();
   persistSave();
 }
 
@@ -2299,7 +2306,7 @@ canvas.addEventListener('pointerdown', e => {
       }
     }
     // Tap ground = laser pointer (only wakes awake cats, not sleeping ones)
-    laserX = px; laserY = Math.max(catKitchenFloorY(), py); laserActive = true; laserTimer = 60 * 12;
+    laserX = px; laserY = Math.max(catKitchenFloorY(), py); laserActive = true; laserTimer = 60 * 12; sndLaser();
     for (const cat of cats) {
       if (!cat.dead && !cat.isVisitor && cat.state !== 'leaving' && cat.state !== 'sleep') {
         cat.state = 'laser';
@@ -2379,6 +2386,7 @@ canvas.addEventListener('pointerdown', e => {
       : Math.random() * (canvas.width * 0.35);
     const throwY = PH * 2 + Math.random() * (canvas.height - PH * 4);
     thrownBall = new BallProjectile(bx, by, throwX, throwY, ball.item);
+    sndWhoosh();
     dog.fetch(throwX, throwY);
     return;
   }
@@ -2439,6 +2447,213 @@ function drawCursor(x, y) {
     for (let c = 0; c < CURSOR_SPR[r].length; c++)
       if (CURSOR_SPR[r][c])
         ctx.fillRect(Math.round(x - ox + c * CURSOR_SC), Math.round(y - oy + r * CURSOR_SC), CURSOR_SC, CURSOR_SC);
+}
+
+// ─── Audio ───────────────────────────────────────────────────────────────────
+let _ac = null;
+let _masterGain = null;
+const _ambSrcs = [];
+let _purrSrc = null, _purrGain = null, _purrLfo = null;
+
+function _getAC() {
+  if (!_ac) {
+    _ac = new (window.AudioContext || window.webkitAudioContext)();
+    _masterGain = _ac.createGain();
+    _masterGain.gain.value = 0.4;
+    _masterGain.connect(_ac.destination);
+  }
+  if (_ac.state === 'suspended') _ac.resume();
+  return _ac;
+}
+
+function _noise(ctx, secs) {
+  const n = Math.ceil(ctx.sampleRate * secs);
+  const b = ctx.createBuffer(1, n, ctx.sampleRate);
+  const d = b.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+  return b;
+}
+
+const _sfxLast = {};
+function _cool(key, ticks) {
+  if (_sfxLast[key] && gameTick - _sfxLast[key] < ticks) return false;
+  _sfxLast[key] = gameTick;
+  return true;
+}
+
+function sndStopAmbient() {
+  if (!_ac) return;
+  const t = _ac.currentTime;
+  for (const { src, gain } of _ambSrcs) {
+    try { gain.gain.linearRampToValueAtTime(0, t + 0.5); } catch(e){}
+    try { setTimeout(() => { try { src.stop(); } catch(e){} }, 600); } catch(e){}
+  }
+  _ambSrcs.length = 0;
+  sndStopPurr();
+}
+
+function _startAmb(fFreq, fQ, fType, vol) {
+  const ctx = _getAC();
+  const t = ctx.currentTime;
+  const src = ctx.createBufferSource();
+  src.buffer = _noise(ctx, 4); src.loop = true;
+  const flt = ctx.createBiquadFilter();
+  flt.type = fType; flt.frequency.value = fFreq; flt.Q.value = fQ;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0, t);
+  gn.gain.linearRampToValueAtTime(vol, t + 2.5);
+  src.connect(flt); flt.connect(gn); gn.connect(_masterGain);
+  src.start(t);
+  _ambSrcs.push({ src, gain: gn });
+}
+
+function sndDogAmbient() { sndStopAmbient(); _startAmb(180, 0.7, 'lowpass', 0.05); _startAmb(900, 1.2, 'bandpass', 0.025); }
+function sndCatAmbient() { sndStopAmbient(); _startAmb(60, 0.4, 'lowpass', 0.035); }
+function sndRatAmbient() { sndStopAmbient(); _startAmb(80, 0.3, 'lowpass', 0.025); }
+
+function sndBark(small) {
+  if (!_cool('bark', 18)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const f0 = small ? 550 : 190;
+  const osc = ctx.createOscillator(); osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(f0 * 1.7, t);
+  osc.frequency.exponentialRampToValueAtTime(f0 * 0.65, t + 0.1);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = f0 * 3.5; flt.Q.value = 2.5;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0.18, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+  osc.connect(flt); flt.connect(gn); gn.connect(_masterGain);
+  osc.start(t); osc.stop(t + 0.25);
+}
+
+function sndBird() {
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const n = 3 + Math.floor(Math.random() * 4);
+  const baseF = 2200 + Math.random() * 1200;
+  for (let i = 0; i < n; i++) {
+    const dt = i * 0.075;
+    const osc = ctx.createOscillator(); osc.type = 'sine';
+    osc.frequency.setValueAtTime(baseF, t + dt);
+    osc.frequency.linearRampToValueAtTime(baseF * (1.2 + Math.random() * 0.3), t + dt + 0.04);
+    const gn = ctx.createGain();
+    gn.gain.setValueAtTime(0, t + dt); gn.gain.linearRampToValueAtTime(0.07, t + dt + 0.01);
+    gn.gain.linearRampToValueAtTime(0, t + dt + 0.055);
+    osc.connect(gn); gn.connect(_masterGain);
+    osc.start(t + dt); osc.stop(t + dt + 0.07);
+  }
+}
+
+function sndWhoosh() {
+  if (!_cool('whoosh', 25)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const src = ctx.createBufferSource(); src.buffer = _noise(ctx, 0.45);
+  const flt = ctx.createBiquadFilter(); flt.type = 'highpass';
+  flt.frequency.setValueAtTime(700, t); flt.frequency.exponentialRampToValueAtTime(180, t + 0.35);
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(0.14, t + 0.05);
+  gn.gain.linearRampToValueAtTime(0, t + 0.42);
+  src.connect(flt); flt.connect(gn); gn.connect(_masterGain); src.start(t);
+}
+
+function sndDig() {
+  if (!_cool('dig', 7)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const src = ctx.createBufferSource(); src.buffer = _noise(ctx, 0.14);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = 350; flt.Q.value = 0.6;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0.11, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+  src.connect(flt); flt.connect(gn); gn.connect(_masterGain); src.start(t);
+}
+
+function sndStartPurr() {
+  if (_purrSrc) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  _purrSrc = ctx.createBufferSource(); _purrSrc.buffer = _noise(ctx, 4); _purrSrc.loop = true;
+  const flt = ctx.createBiquadFilter(); flt.type = 'lowpass'; flt.frequency.value = 350;
+  const lfo = ctx.createOscillator(); lfo.frequency.value = 26; _purrLfo = lfo;
+  const lfoGn = ctx.createGain(); lfoGn.gain.value = 0.07;
+  _purrGain = ctx.createGain();
+  _purrGain.gain.setValueAtTime(0, t); _purrGain.gain.linearRampToValueAtTime(0.14, t + 0.4);
+  lfo.connect(lfoGn); lfoGn.connect(_purrGain.gain);
+  _purrSrc.connect(flt); flt.connect(_purrGain); _purrGain.connect(_masterGain);
+  lfo.start(t); _purrSrc.start(t);
+}
+
+function sndStopPurr() {
+  if (!_purrSrc) return;
+  const t = _ac ? _ac.currentTime : 0;
+  try { _purrGain.gain.linearRampToValueAtTime(0, t + 0.5); } catch(e){}
+  const ps = _purrSrc, pl = _purrLfo;
+  setTimeout(() => { try { ps.stop(); pl.stop(); } catch(e){} }, 600);
+  _purrSrc = null; _purrGain = null; _purrLfo = null;
+}
+
+function sndMeow(kitten) {
+  if (!_cool('meow', 80)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const f0 = kitten ? 750 : 380;
+  const osc = ctx.createOscillator(); osc.type = 'sine';
+  osc.frequency.setValueAtTime(f0 * 0.85, t);
+  osc.frequency.linearRampToValueAtTime(f0 * 1.45, t + 0.14);
+  osc.frequency.linearRampToValueAtTime(f0 * 0.9, t + 0.38);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = f0 * 2.2; flt.Q.value = 3.5;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(0.13, t + 0.06);
+  gn.gain.linearRampToValueAtTime(0, t + 0.42);
+  osc.connect(flt); flt.connect(gn); gn.connect(_masterGain);
+  osc.start(t); osc.stop(t + 0.45);
+}
+
+function sndLaser() {
+  if (!_cool('laser', 8)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const osc = ctx.createOscillator(); osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(750, t); osc.frequency.exponentialRampToValueAtTime(180, t + 0.12);
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0.07, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+  osc.connect(gn); gn.connect(_masterGain); osc.start(t); osc.stop(t + 0.13);
+}
+
+function sndClockTick() {
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const osc = ctx.createOscillator(); osc.type = 'square'; osc.frequency.value = 1100;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0.035, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.035);
+  osc.connect(gn); gn.connect(_masterGain); osc.start(t); osc.stop(t + 0.04);
+}
+
+function sndSqueak() {
+  if (!_cool('squeak', 12)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const f0 = 1100 + Math.random() * 400;
+  const osc = ctx.createOscillator(); osc.type = 'sine';
+  osc.frequency.setValueAtTime(f0, t);
+  osc.frequency.linearRampToValueAtTime(f0 * 1.6, t + 0.06);
+  osc.frequency.linearRampToValueAtTime(f0 * 0.85, t + 0.14);
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(0.1, t + 0.025);
+  gn.gain.linearRampToValueAtTime(0, t + 0.16);
+  osc.connect(gn); gn.connect(_masterGain); osc.start(t); osc.stop(t + 0.17);
+}
+
+function sndCrunch() {
+  if (!_cool('crunch', 18)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const src = ctx.createBufferSource(); src.buffer = _noise(ctx, 0.18);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = 1800; flt.Q.value = 1.5;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0.12, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+  src.connect(flt); flt.connect(gn); gn.connect(_masterGain); src.start(t);
+}
+
+function sndRaidCat() {
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const osc = ctx.createOscillator(); osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(280, t); osc.frequency.linearRampToValueAtTime(160, t + 0.35);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = 750; flt.Q.value = 4;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(0.16, t + 0.06);
+  gn.gain.linearRampToValueAtTime(0, t + 0.42);
+  osc.connect(flt); flt.connect(gn); gn.connect(_masterGain); osc.start(t); osc.stop(t + 0.45);
 }
 
 // ─── Loop ────────────────────────────────────────────────────────────────────
@@ -2569,6 +2784,8 @@ function loop() {
     }
     for (const p of puppies) { p.update(); p.draw(); }
 
+    if (Math.random() < 0.0015) sndBird();
+
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
       ctx.font = '11px monospace'; ctx.textAlign = 'center';
@@ -2674,6 +2891,9 @@ function loop() {
     tickParticles(dirts);
     tickParticles(hearts);
     tickParticles(labels);
+
+    if (scritchCat) sndStartPurr(); else sndStopPurr();
+    if (Math.random() < 0.0007) sndClockTick();
 
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
