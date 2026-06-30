@@ -236,6 +236,16 @@
       font-size: 12px; font-weight: 500; letter-spacing: 0.10em;
       text-transform: uppercase; color: var(--stone);
     }
+    .play-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 12px 32px; border: 1px solid var(--ink);
+      background: var(--ink); color: var(--bg);
+      font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .play-btn:hover { background: transparent; color: var(--ink); }
+    [data-theme="light"] .play-btn { background: #0C0C0B; color: #FAF9F7; border-color: #0C0C0B; }
+    [data-theme="light"] .play-btn:hover { background: transparent; color: #0C0C0B; }
     .hero-scroll {
       position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
       display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -389,7 +399,7 @@
       <h1>Rat Simulator</h1>
       <p class="hero-tagline" data-i18n="hero-tagline">Your very own virtual rats.</p>
       <p class="hero-desc" data-i18n="hero-desc">Feed them. Play with them. Watch them nap in a tiny pile of bedding. Rat Simulator is a cozy pet simulation for people who have always wanted rats.</p>
-      <span class="coming-soon-badge" data-i18n="coming-soon">Coming soon</span>
+      <a href="/apps/ratsim/play/" class="play-btn" data-i18n="play-now">Play now</a>
       <div class="hero-scroll" aria-hidden="true">
         <span>Scroll</span>
         <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
@@ -415,8 +425,8 @@
 
     <!-- CTA -->
     <section class="cta-section">
-      <h2><span data-i18n="cta-line1">Your rats are</span><br/><em data-i18n="cta-line2">almost ready.</em></h2>
-      <span class="coming-soon-badge" data-i18n="coming-soon">Coming soon</span>
+      <h2><span data-i18n="cta-line1">Your rats are</span><br/><em data-i18n="cta-line2">ready to play.</em></h2>
+      <a href="/apps/ratsim/play/" class="play-btn" data-i18n="play-now">Play now</a>
     </section>
 
   </main>
@@ -480,8 +490,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','app-eyebrow':'A browser game by Walt Viviers','hero-tagline':'Your very own virtual rats.','hero-desc':'Feed them. Play with them. Watch them nap in a tiny pile of bedding. Rat Simulator is a cozy pet simulation for people who have always wanted rats.','coming-soon':'Coming soon','privacy-tag':'Built with care','priv-h1':'No ads.','priv-h2':'No data.','priv-h3':'No install.','privacy-desc':'Rat Simulator runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you and your rats.','check-1':'No personal data collected','check-2':'No account or sign-in required','check-3':'Works fully offline','check-4':'No ads or tracking of any kind','check-5':'No device permissions requested','check-6':'Free to play','cta-line1':'Your rats are','cta-line2':'almost ready.' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','app-eyebrow':'\'n Blaaierspeletjie deur Walt Viviers','hero-tagline':'Jou eie virtuele rotte.','hero-desc':'Voer hulle. Speel saam. Kyk hoe hulle slaap in \'n klein hoop beddegoed. Rat Simulator is \'n gesellige troeteldier-simulasie vir mense wat altyd rotte wou hê.','coming-soon':'Binnekort beskikbaar','privacy-tag':'Gebou met sorg','priv-h1':'Geen advertensies.','priv-h2':'Geen data.','priv-h3':'Geen installasie.','privacy-desc':'Rat Simulator loop heeltemal in jou blaaier. Niks word gestoor, gestuur of gevolg nie. Net jy en jou rotte.','check-1':'Geen persoonlike data ingesamel','check-2':'Geen rekening of aanmelding benodig','check-3':'Werk volledig vanlyn','check-4':'Geen advertensies of opsporing','check-5':'Geen toestemmings vereis','check-6':'Gratis om te speel','cta-line1':'Jou rotte is','cta-line2':'amper gereed.' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','app-eyebrow':'A browser game by Walt Viviers','hero-tagline':'Your very own virtual rats.','hero-desc':'Feed them. Play with them. Watch them nap in a tiny pile of bedding. Rat Simulator is a cozy pet simulation for people who have always wanted rats.','coming-soon':'Coming soon','play-now':'Play now','privacy-tag':'Built with care','priv-h1':'No ads.','priv-h2':'No data.','priv-h3':'No install.','privacy-desc':'Rat Simulator runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you and your rats.','check-1':'No personal data collected','check-2':'No account or sign-in required','check-3':'Works fully offline','check-4':'No ads or tracking of any kind','check-5':'No device permissions requested','check-6':'Free to play','cta-line1':'Your rats are','cta-line2':'ready to play.' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','app-eyebrow':'\'n Blaaierspeletjie deur Walt Viviers','hero-tagline':'Jou eie virtuele rotte.','hero-desc':'Voer hulle. Speel saam. Kyk hoe hulle slaap in \'n klein hoop beddegoed. Rat Simulator is \'n gesellige troeteldier-simulasie vir mense wat altyd rotte wou hê.','coming-soon':'Binnekort beskikbaar','play-now':'Speel nou','privacy-tag':'Gebou met sorg','priv-h1':'Geen advertensies.','priv-h2':'Geen data.','priv-h3':'Geen installasie.','privacy-desc':'Rat Simulator loop heeltemal in jou blaaier. Niks word gestoor, gestuur of gevolg nie. Net jy en jou rotte.','check-1':'Geen persoonlike data ingesamel','check-2':'Geen rekening of aanmelding benodig','check-3':'Werk volledig vanlyn','check-4':'Geen advertensies of opsporing','check-5':'Geen toestemmings vereis','check-6':'Gratis om te speel','cta-line1':'Jou rotte is','cta-line2':'gereed om te speel.' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
