@@ -157,6 +157,10 @@ function drawRoom() {
   ctx.fillStyle = C.skirtn;
   ctx.fillRect(0, floorY - Math.round(3 * sc), canvas.width, Math.ceil(4 * sc));
 
+  // Window (left gutter) and floor lamp (right gutter) — visible on desktop
+  drawWindow(-250, 90);
+  drawDeskLamp(CX + CW + WALL + 60, VH - 72);
+
   // Houseplants on either side of the cage
   drawHouseplant(CX - WALL - 36, VH - 72 - 52);
   drawHouseplant(CX + CW + WALL + 4, VH - 72 - 52);
@@ -182,6 +186,60 @@ function drawHouseplant(px, py) {
   fill(px + 6,  py + 20, 12, 4, C.leafHi);
   fill(px + 10, py,      12, 8, C.leaf);
   fill(px + 12, py - 2,   8, 4, C.leafHi);
+}
+
+function drawWindow(wx, wy) {
+  // Glass colour shifts through the day/night cycle
+  const tp = (tick % 7200) / 7200;
+  const gc = tp < 0.08 ? '#1a2a44'
+           : tp < 0.20 ? '#d08858'
+           : tp < 0.50 ? '#c8e4f8'
+           : tp < 0.62 ? '#f0c060'
+           : tp < 0.75 ? '#603018'
+           : '#101830';
+  // Curtain rod
+  fill(wx - 14, wy - 8, 88, 3, '#80704c');
+  // Left curtain
+  fill(wx - 14, wy - 5, 18, 88, '#b04040');
+  fill(wx - 12, wy - 5,  8, 88, '#c05050');
+  // Right curtain
+  fill(wx + 56, wy - 5, 18, 88, '#b04040');
+  fill(wx + 60, wy - 5,  8, 88, '#c05050');
+  // Outer wood frame
+  fill(wx, wy, 60, 82, '#b49060');
+  // Four glass panes
+  fill(wx +  5, wy +  5, 22, 34, gc);
+  fill(wx + 33, wy +  5, 22, 34, gc);
+  fill(wx +  5, wy + 43, 22, 33, gc);
+  fill(wx + 33, wy + 43, 22, 33, gc);
+  // Frame bars
+  fill(wx + 28, wy +  4,  4, 73, '#b49060');
+  fill(wx +  4, wy + 39, 52,  5, '#b49060');
+  // Windowsill
+  fill(wx - 4, wy + 78, 68, 7, '#c8aa72');
+  // Glass inner-edge shadow (depth)
+  fill(wx +  5, wy +  5, 22, 2, '#8aaabb');
+  fill(wx +  5, wy +  5,  2, 34, '#8aaabb');
+  fill(wx + 33, wy +  5, 22, 2, '#8aaabb');
+  fill(wx + 33, wy +  5,  2, 34, '#8aaabb');
+}
+
+function drawDeskLamp(dx, dy) {
+  // Base
+  fill(dx - 13, dy - 6,  26, 6, '#403020');
+  fill(dx - 10, dy - 10, 20, 4, '#504030');
+  fill(dx -  3, dy - 13,  6, 3, '#605040');
+  // Pole
+  fill(dx - 2, dy - 80, 4, 67, '#786048');
+  // Shade (wider at open bottom)
+  fill(dx - 20, dy - 90, 40,  6, '#c07820');
+  fill(dx - 24, dy - 84, 48, 16, '#d09030');
+  fill(dx - 18, dy - 68, 36,  4, '#b06818');
+  // Bulb glow inside shade
+  fill(dx - 10, dy - 88, 20, 14, '#fff8d0');
+  fill(dx -  6, dy - 86, 12, 10, '#fffae8');
+  // Shade highlight
+  fill(dx - 22, dy - 88,  8,  8, '#e0a030');
 }
 
 
@@ -1049,6 +1107,32 @@ function drawLighting() {
   lg.addColorStop(1,    'rgba(255,200,80,0)');
   ctx.fillStyle = lg;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Floor lamp warm glow — right gutter
+  const dlx = ox + (CX + CW + WALL + 62) * sc;
+  const dly = oy + (VH - 72 - 82) * sc;
+  const dlr = 220 * sc;
+  const dlf = 0.18 + 0.04 * Math.sin(tick * 0.07 + 1.2);
+  const dlg = ctx.createRadialGradient(dlx, dly, 0, dlx, dly, dlr);
+  dlg.addColorStop(0,   `rgba(255,220,120,${dlf})`);
+  dlg.addColorStop(0.4, `rgba(255,200,100,${dlf * 0.35})`);
+  dlg.addColorStop(1,   'rgba(255,180,80,0)');
+  ctx.fillStyle = dlg;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Window cool daylight bloom — left gutter, daytime only
+  const wt = (t > 0.14 && t < 0.70)
+    ? sm(Math.min((t - 0.14) / 0.06, 1)) * sm(Math.min((0.70 - t) / 0.08, 1)) : 0;
+  if (wt > 0.01) {
+    const wlx = ox + (-250 + 30) * sc;
+    const wly = oy + (90 + 41) * sc;
+    const wlg = ctx.createRadialGradient(wlx, wly, 0, wlx, wly, 340 * sc);
+    wlg.addColorStop(0,    `rgba(210,235,255,${wt * 0.18})`);
+    wlg.addColorStop(0.35, `rgba(200,230,255,${wt * 0.07})`);
+    wlg.addColorStop(1,    'rgba(200,230,255,0)');
+    ctx.fillStyle = wlg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
 
   // Diagonal sun shaft from upper-right during daytime
   const sv = (t > 0.14 && t < 0.55)
