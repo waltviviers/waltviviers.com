@@ -820,7 +820,7 @@ const modeStates = { dog: null, rat: null, cat: null };
 
 function serializeRat(r) {
   return { x: r.x, y: r.y, vx: r.vx, vy: r.vy, right: r.right,
-    sex: r.sex, bodyColor: r.bodyColor, bigEars: r.bigEars, isPink: r.isPink,
+    sex: r.sex, bodyColor: r.bodyColor, patchColor: r.patchColor, bigEars: r.bigEars, isPink: r.isPink,
     matingCooldown: r.matingCooldown, mateProximityTimer: r.mateProximityTimer,
     pregnant: r.pregnant, pregnancyTimer: r.pregnancyTimer,
     birthCooldown: r.birthCooldown, isSeed: r.isSeed,
@@ -828,7 +828,7 @@ function serializeRat(r) {
 }
 function deserializeRat(d) {
   const r = new Rat(d.x + RAT_W / 2, d.y + RAT_H, {
-    sex: d.sex, bodyColor: d.bodyColor, bigEars: d.bigEars, isPink: d.isPink,
+    sex: d.sex, bodyColor: d.bodyColor, patchColor: d.patchColor || null, bigEars: d.bigEars, isPink: d.isPink,
     matingCooldown: d.matingCooldown, isSeed: d.isSeed, birthCooldown: d.birthCooldown
   });
   r.x = d.x; r.y = d.y; r.vx = d.vx; r.vy = d.vy; r.right = d.right;
@@ -998,8 +998,10 @@ class Rat {
     ratBirthCount++;
     this.bigEars = opts.bigEars !== undefined ? opts.bigEars : (ratBirthCount % 10 === 0);
     this.isPink = opts.isPink !== undefined ? opts.isPink : (ratBirthCount % 16 === 0);
-    const defaultColor = this.isPink ? '#ffaabb' : '#aaaaaa';
+    const RAT_BODY_COLORS = ['#e8e8e8', '#c8922a', '#864010', '#1a1a1a'];
+    const defaultColor = this.isPink ? '#ffaabb' : RAT_BODY_COLORS[Math.floor(Math.random() * RAT_BODY_COLORS.length)];
     this.bodyColor = opts.bodyColor || defaultColor;
+    this.patchColor = opts.patchColor !== undefined ? opts.patchColor : null;
     this.isSeed = opts.isSeed || false;
     this.matingCooldown = opts.matingCooldown !== undefined
       ? opts.matingCooldown : 60 * (10 + Math.floor(Math.random() * 30));
@@ -1019,6 +1021,7 @@ class Rat {
   }
 
   scritch() {
+    sndSqueak();
     this.scritchTimer = 50;
     for (let i = 0; i < 3; i++) hearts.push(new Heart(this.x + RAT_W / 2, this.y));
   }
@@ -1054,6 +1057,7 @@ class Rat {
       if (nearest && nearestDist < 250) {
         seekingCheese = true;
         if (nearestDist < 10) {
+          sndCrunch();
           nearest.eaten = true;
           this.scritch();
         } else {
@@ -1112,8 +1116,16 @@ class Rat {
         const n = 1 + Math.floor(Math.random() * 3);
         for (let i = 0; i < n; i++) {
           const r = Math.random();
-          const col = r < 0.4 ? this.bodyColor : (r < 0.7 ? '#864010' : '#dddddd');
-          babies.push(new Baby(this.x + RAT_W / 2, this.y + RAT_H, col));
+          let babyColor, babyPatch = null;
+          if (r < 0.30) { babyColor = this.bodyColor; babyPatch = this.patchColor; }
+          else if (r < 0.45) { babyColor = '#e8e8e8'; }
+          else if (r < 0.57) { babyColor = '#c8922a'; }
+          else if (r < 0.67) { babyColor = '#864010'; }
+          else if (r < 0.75) { babyColor = '#1a1a1a'; }
+          else if (r < 0.85) { babyColor = '#e8e8e8'; babyPatch = '#1a1a1a'; }
+          else if (r < 0.94) { babyColor = '#e8e8e8'; babyPatch = '#c8922a'; }
+          else { babyColor = '#dddddd'; }
+          babies.push(new Baby(this.x + RAT_W / 2, this.y + RAT_H, babyColor, babyPatch));
         }
       }
     }
@@ -1198,6 +1210,7 @@ class Rat {
     const spr = sleeping ? RAT_SLEEP_SPR : RAT_FRAMES[this.frame];
     const x = Math.round(this.x), y = Math.round(this.y);
     const bodyColor = this.scritchTimer > 0 ? '#ffbbcc' : this.bodyColor;
+    const activePatch = this.scritchTimer > 0 ? '#ffaacc' : this.patchColor;
     if (!sleeping) {
       ctx.fillStyle = this.isPink ? '#ff99bb' : '#cc6688';
       if (this.bigEars) {
@@ -1215,7 +1228,8 @@ class Rat {
         if (spr[r][c]) {
           const dc = this.right ? (RAT_COLS - 1 - c) : c;
           const isTailOrNose = !sleeping && (r === 4 || (r === 2 && c === 0));
-          ctx.fillStyle = isTailOrNose ? '#ff99bb' : bodyColor;
+          const isHood = !sleeping && activePatch && c <= 2;
+          ctx.fillStyle = isTailOrNose ? '#ff99bb' : (isHood ? activePatch : bodyColor);
           ctx.fillRect(x + dc * RAT_SC, y + r * RAT_SC, RAT_SC, RAT_SC);
         }
   }
@@ -1226,13 +1240,14 @@ const babies = [];
 const BABY_MATURE = 60 * 12;
 
 class Baby {
-  constructor(x, y, color) {
+  constructor(x, y, color, patch = null) {
     this.x = x + (Math.random() - 0.5) * 20;
     this.y = y + (Math.random() - 0.5) * 10;
     this.vx = (Math.random() - 0.5) * 0.7;
     this.vy = (Math.random() - 0.5) * 0.4;
     this.age = 0;
     this.color = color;
+    this.patchColor = patch;
     this.dead = false;
   }
 
@@ -1251,7 +1266,7 @@ class Baby {
     if (this.age >= BABY_MATURE) {
       const sex = Math.random() < 0.5 ? 'm' : 'f';
       rats.push(new Rat(this.x, this.y + RAT_H, {
-        sex, bodyColor: this.color, matingCooldown: 60 * 20
+        sex, bodyColor: this.color, patchColor: this.patchColor, matingCooldown: 60 * 20
       }));
       this.dead = true;
     }
@@ -1290,6 +1305,7 @@ class RaidCat {
       .sort(() => Math.random() - 0.5)
       .slice(0, Math.ceil(rats.length / 2));
     labels.push(new Label('Cat!', canvas.width / 2, canvas.height / 2 - 20));
+    sndRaidCat();
   }
   update() {
     if (++this.tick >= ANIM_TICKS) { this.tick = 0; this.frame ^= 1; }
@@ -1509,7 +1525,7 @@ class Cat {
       if (scritchCat === this) {
         this.state = 'idle'; this.idleTimer = 0;
       } else {
-        if (--this.sleepTimer <= 0) this.state = 'idle';
+        if (--this.sleepTimer <= 0) { this.state = 'idle'; sndMeow(); }
         if (Math.random() < 0.002) labels.push(new Label('z z z', this.cx, Math.max(20, this.y - 6)));
       }
       return;
@@ -1702,6 +1718,7 @@ class Puppy {
     return px >= this.x - 4 && px <= this.x + w + 4 && py >= this.y - 4 && py <= this.y + h + 4;
   }
   scritch() {
+    sndBark(false);
     this.scritchTimer = 60; this.state = 'happy';
     for (let i = 0; i < 3; i++) hearts.push(new Heart(this.cx, this.y));
   }
@@ -1845,7 +1862,8 @@ class Visitor {
         if (this.visFidgetType === 'beg') spr = BEG[this.frame];
         else if (this.visFidgetType === 'roll') spr = ROLL_OVER[this.frame];
         else spr = SIT[this.frame];
-      } else spr = HAPPY[this.frame];
+      } else if (this.behavior === 'follow') spr = WALK[this.frame];
+      else spr = HAPPY[this.frame];
     } else {
       spr = WALK[this.frame];
     }
@@ -2046,7 +2064,7 @@ const dog = {
     }
 
     if (this.state === 'digging') {
-      if (Math.random() < 0.45) dirts.push(new Dirt(this.pawX, this.pawY, this.right));
+      if (Math.random() < 0.45) { dirts.push(new Dirt(this.pawX, this.pawY, this.right)); sndDig(); }
       if (--this.digTimer <= 0) {
         this.foundItem = ITEMS[itemIdx++ % ITEMS.length];
         this.state = 'found'; this.foundTimer = FOUND_DURATION; this.frame = 0;
@@ -2116,9 +2134,10 @@ function enterRatMode() {
   placeRatFurniture();
   if (!restoreRatState()) {
     const cx = canvas.width / 2, cy = canvas.height / 2;
-    rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#864010', matingCooldown: 60 * 8, isSeed: true }));
-    rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0, isSeed: true }));
+    rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#e8e8e8', matingCooldown: 60 * 8, isSeed: true }));
+    rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#c8922a', matingCooldown: 0, isSeed: true }));
   }
+  sndRatAmbient();
   persistSave();
 }
 
@@ -2137,6 +2156,7 @@ function enterDogMode() {
   visitorCooldown = 60 * (30 + Math.floor(Math.random() * 90));
   placeDogFurniture();
   if (!restoreDogState()) { dog.init(); }
+  sndDogAmbient();
   persistSave();
 }
 
@@ -2156,6 +2176,7 @@ function enterCatMode() {
     cats.push(new Cat({ isMain: true, color: CAT_COLORS[0],
       x: canvas.width/2 - CPW/2, y: canvas.height/2 - CPH/2, birthCooldown: 0 }));
   }
+  sndCatAmbient();
   persistSave();
 }
 
@@ -2286,7 +2307,7 @@ canvas.addEventListener('pointerdown', e => {
       }
     }
     // Tap ground = laser pointer (only wakes awake cats, not sleeping ones)
-    laserX = px; laserY = Math.max(catKitchenFloorY(), py); laserActive = true; laserTimer = 60 * 12;
+    laserX = px; laserY = Math.max(catKitchenFloorY(), py); laserActive = true; laserTimer = 60 * 12; sndLaser();
     for (const cat of cats) {
       if (!cat.dead && !cat.isVisitor && cat.state !== 'leaving' && cat.state !== 'sleep') {
         cat.state = 'laser';
@@ -2366,6 +2387,7 @@ canvas.addEventListener('pointerdown', e => {
       : Math.random() * (canvas.width * 0.35);
     const throwY = PH * 2 + Math.random() * (canvas.height - PH * 4);
     thrownBall = new BallProjectile(bx, by, throwX, throwY, ball.item);
+    sndWhoosh();
     dog.fetch(throwX, throwY);
     return;
   }
@@ -2428,12 +2450,286 @@ function drawCursor(x, y) {
         ctx.fillRect(Math.round(x - ox + c * CURSOR_SC), Math.round(y - oy + r * CURSOR_SC), CURSOR_SC, CURSOR_SC);
 }
 
+// ─── Audio ───────────────────────────────────────────────────────────────────
+let _ac = null;
+let _masterGain = null;
+const _ambSrcs = [];
+let _purrSrc = null, _purrGain = null, _purrLfo = null;
+
+function _getAC() {
+  if (!_ac) {
+    _ac = new (window.AudioContext || window.webkitAudioContext)();
+    _masterGain = _ac.createGain();
+    _masterGain.gain.value = 0.4;
+    _masterGain.connect(_ac.destination);
+  }
+  if (_ac.state === 'suspended') _ac.resume();
+  return _ac;
+}
+
+function _noise(ctx, secs) {
+  const n = Math.ceil(ctx.sampleRate * secs);
+  const b = ctx.createBuffer(1, n, ctx.sampleRate);
+  const d = b.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+  return b;
+}
+
+const _sfxLast = {};
+function _cool(key, ticks) {
+  if (_sfxLast[key] && gameTick - _sfxLast[key] < ticks) return false;
+  _sfxLast[key] = gameTick;
+  return true;
+}
+
+function sndStopAmbient() {
+  if (!_ac) return;
+  const t = _ac.currentTime;
+  for (const { src, gain } of _ambSrcs) {
+    try { gain.gain.linearRampToValueAtTime(0, t + 0.5); } catch(e){}
+    try { setTimeout(() => { try { src.stop(); } catch(e){} }, 600); } catch(e){}
+  }
+  _ambSrcs.length = 0;
+  sndStopPurr();
+}
+
+function _startAmb(fFreq, fQ, fType, vol) {
+  const ctx = _getAC();
+  const t = ctx.currentTime;
+  const src = ctx.createBufferSource();
+  src.buffer = _noise(ctx, 4); src.loop = true;
+  const flt = ctx.createBiquadFilter();
+  flt.type = fType; flt.frequency.value = fFreq; flt.Q.value = fQ;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0, t);
+  gn.gain.linearRampToValueAtTime(vol, t + 2.5);
+  src.connect(flt); flt.connect(gn); gn.connect(_masterGain);
+  src.start(t);
+  _ambSrcs.push({ src, gain: gn });
+}
+
+function sndDogAmbient() { sndStopAmbient(); _startAmb(180, 0.7, 'lowpass', 0.05); _startAmb(900, 1.2, 'bandpass', 0.025); }
+function sndCatAmbient() { sndStopAmbient(); _startAmb(60, 0.4, 'lowpass', 0.035); }
+function sndRatAmbient() { sndStopAmbient(); _startAmb(80, 0.3, 'lowpass', 0.025); }
+
+function sndBark(small) {
+  if (!_cool('bark', 18)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const f0 = small ? 550 : 190;
+  const osc = ctx.createOscillator(); osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(f0 * 1.7, t);
+  osc.frequency.exponentialRampToValueAtTime(f0 * 0.65, t + 0.1);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = f0 * 3.5; flt.Q.value = 2.5;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0.18, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+  osc.connect(flt); flt.connect(gn); gn.connect(_masterGain);
+  osc.start(t); osc.stop(t + 0.25);
+}
+
+function sndBird() {
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const n = 3 + Math.floor(Math.random() * 4);
+  const baseF = 2200 + Math.random() * 1200;
+  for (let i = 0; i < n; i++) {
+    const dt = i * 0.075;
+    const osc = ctx.createOscillator(); osc.type = 'sine';
+    osc.frequency.setValueAtTime(baseF, t + dt);
+    osc.frequency.linearRampToValueAtTime(baseF * (1.2 + Math.random() * 0.3), t + dt + 0.04);
+    const gn = ctx.createGain();
+    gn.gain.setValueAtTime(0, t + dt); gn.gain.linearRampToValueAtTime(0.07, t + dt + 0.01);
+    gn.gain.linearRampToValueAtTime(0, t + dt + 0.055);
+    osc.connect(gn); gn.connect(_masterGain);
+    osc.start(t + dt); osc.stop(t + dt + 0.07);
+  }
+}
+
+function sndWhoosh() {
+  if (!_cool('whoosh', 25)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const src = ctx.createBufferSource(); src.buffer = _noise(ctx, 0.45);
+  const flt = ctx.createBiquadFilter(); flt.type = 'highpass';
+  flt.frequency.setValueAtTime(700, t); flt.frequency.exponentialRampToValueAtTime(180, t + 0.35);
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(0.14, t + 0.05);
+  gn.gain.linearRampToValueAtTime(0, t + 0.42);
+  src.connect(flt); flt.connect(gn); gn.connect(_masterGain); src.start(t);
+}
+
+function sndDig() {
+  if (!_cool('dig', 7)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const src = ctx.createBufferSource(); src.buffer = _noise(ctx, 0.14);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = 350; flt.Q.value = 0.6;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0.11, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+  src.connect(flt); flt.connect(gn); gn.connect(_masterGain); src.start(t);
+}
+
+function sndStartPurr() {
+  if (_purrSrc) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  _purrSrc = ctx.createBufferSource(); _purrSrc.buffer = _noise(ctx, 4); _purrSrc.loop = true;
+  const flt = ctx.createBiquadFilter(); flt.type = 'lowpass'; flt.frequency.value = 350;
+  const lfo = ctx.createOscillator(); lfo.frequency.value = 26; _purrLfo = lfo;
+  const lfoGn = ctx.createGain(); lfoGn.gain.value = 0.07;
+  _purrGain = ctx.createGain();
+  _purrGain.gain.setValueAtTime(0, t); _purrGain.gain.linearRampToValueAtTime(0.14, t + 0.4);
+  lfo.connect(lfoGn); lfoGn.connect(_purrGain.gain);
+  _purrSrc.connect(flt); flt.connect(_purrGain); _purrGain.connect(_masterGain);
+  lfo.start(t); _purrSrc.start(t);
+}
+
+function sndStopPurr() {
+  if (!_purrSrc) return;
+  const t = _ac ? _ac.currentTime : 0;
+  try { _purrGain.gain.linearRampToValueAtTime(0, t + 0.5); } catch(e){}
+  const ps = _purrSrc, pl = _purrLfo;
+  setTimeout(() => { try { ps.stop(); pl.stop(); } catch(e){} }, 600);
+  _purrSrc = null; _purrGain = null; _purrLfo = null;
+}
+
+function sndMeow(kitten) {
+  if (!_cool('meow', 80)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const f0 = kitten ? 750 : 380;
+  const osc = ctx.createOscillator(); osc.type = 'sine';
+  osc.frequency.setValueAtTime(f0 * 0.85, t);
+  osc.frequency.linearRampToValueAtTime(f0 * 1.45, t + 0.14);
+  osc.frequency.linearRampToValueAtTime(f0 * 0.9, t + 0.38);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = f0 * 2.2; flt.Q.value = 3.5;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(0.13, t + 0.06);
+  gn.gain.linearRampToValueAtTime(0, t + 0.42);
+  osc.connect(flt); flt.connect(gn); gn.connect(_masterGain);
+  osc.start(t); osc.stop(t + 0.45);
+}
+
+function sndLaser() {
+  if (!_cool('laser', 8)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const osc = ctx.createOscillator(); osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(750, t); osc.frequency.exponentialRampToValueAtTime(180, t + 0.12);
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0.07, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.12);
+  osc.connect(gn); gn.connect(_masterGain); osc.start(t); osc.stop(t + 0.13);
+}
+
+function sndClockTick() {
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const osc = ctx.createOscillator(); osc.type = 'square'; osc.frequency.value = 1100;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0.035, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.035);
+  osc.connect(gn); gn.connect(_masterGain); osc.start(t); osc.stop(t + 0.04);
+}
+
+function sndSqueak() {
+  if (!_cool('squeak', 12)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const f0 = 1100 + Math.random() * 400;
+  const osc = ctx.createOscillator(); osc.type = 'sine';
+  osc.frequency.setValueAtTime(f0, t);
+  osc.frequency.linearRampToValueAtTime(f0 * 1.6, t + 0.06);
+  osc.frequency.linearRampToValueAtTime(f0 * 0.85, t + 0.14);
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(0.1, t + 0.025);
+  gn.gain.linearRampToValueAtTime(0, t + 0.16);
+  osc.connect(gn); gn.connect(_masterGain); osc.start(t); osc.stop(t + 0.17);
+}
+
+function sndCrunch() {
+  if (!_cool('crunch', 18)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const src = ctx.createBufferSource(); src.buffer = _noise(ctx, 0.18);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = 1800; flt.Q.value = 1.5;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0.12, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+  src.connect(flt); flt.connect(gn); gn.connect(_masterGain); src.start(t);
+}
+
+function sndRaidCat() {
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const osc = ctx.createOscillator(); osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(280, t); osc.frequency.linearRampToValueAtTime(160, t + 0.35);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = 750; flt.Q.value = 4;
+  const gn = ctx.createGain();
+  gn.gain.setValueAtTime(0, t); gn.gain.linearRampToValueAtTime(0.16, t + 0.06);
+  gn.gain.linearRampToValueAtTime(0, t + 0.42);
+  osc.connect(flt); flt.connect(gn); gn.connect(_masterGain); osc.start(t); osc.stop(t + 0.45);
+}
+
 // ─── Loop ────────────────────────────────────────────────────────────────────
 function tickParticles(arr) {
   for (let i = arr.length - 1; i >= 0; i--) {
     arr[i].update();
     if (arr[i].dead) arr.splice(i, 1); else arr[i].draw();
   }
+}
+
+function drawDynamicLighting() {
+  const W = canvas.width, H = canvas.height;
+  ctx.save();
+  if (gameMode === 'dog') {
+    const phase = (gameTick / 21600) % 1;
+    let col, alpha;
+    if (phase < 0.06) {
+      alpha = 0.22 * (1 - phase / 0.06) + 0.04;
+      col = '#ff8844';
+    } else if (phase < 0.12) {
+      alpha = 0.04;
+      col = '#ffcc88';
+    } else if (phase < 0.45) {
+      alpha = 0.03;
+      col = '#ffeecc';
+    } else if (phase < 0.52) {
+      const t = (phase - 0.45) / 0.07;
+      alpha = 0.04 + 0.18 * t;
+      col = `rgb(255,${Math.round(80 - 50 * t)},10)`;
+    } else if (phase < 0.58) {
+      const t = (phase - 0.52) / 0.06;
+      alpha = 0.22 + 0.12 * t;
+      col = `rgb(${Math.round(180 - 150 * t)},30,${Math.round(80 + 80 * t)})`;
+    } else if (phase < 0.85) {
+      alpha = 0.34;
+      col = '#0a1450';
+    } else if (phase < 0.92) {
+      const t = (phase - 0.85) / 0.07;
+      alpha = 0.34 * (1 - t) + 0.18 * t;
+      col = '#442200';
+    } else {
+      const t = (phase - 0.92) / 0.08;
+      alpha = 0.18 * (1 - t) + 0.04;
+      col = '#ff8844';
+    }
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = col;
+    ctx.fillRect(0, 0, W, H);
+    if (phase >= 0.58 && phase < 0.88) {
+      const sa = phase < 0.62 ? (phase - 0.58) / 0.04
+               : phase > 0.84 ? (0.88 - phase) / 0.04 : 1;
+      ctx.globalAlpha = sa * 0.6;
+      ctx.fillStyle = '#eeeeff';
+      const STARS = [[0.12,0.07],[0.28,0.04],[0.45,0.10],[0.67,0.05],[0.82,0.08],[0.93,0.13],
+                     [0.05,0.17],[0.38,0.03],[0.55,0.14],[0.77,0.11],[0.20,0.21],[0.61,0.09]];
+      for (const [sx, sy] of STARS) ctx.fillRect(Math.round(sx * W), Math.round(sy * H), 2, 2);
+    }
+  } else if (gameMode === 'cat') {
+    const ambient = Math.sin(gameTick / 7200 * Math.PI);
+    ctx.globalAlpha = 0.035;
+    ctx.fillStyle = ambient >= 0 ? '#ffdd88' : '#aabbff';
+    ctx.fillRect(0, 0, W, H);
+    const flicker = Math.sin(gameTick * 0.04) * Math.sin(gameTick * 0.09);
+    if (flicker > 0.88) {
+      ctx.globalAlpha = (flicker - 0.88) * 0.25;
+      ctx.fillStyle = '#ffffee';
+      ctx.fillRect(0, 0, W, H);
+    }
+  } else if (gameMode === 'rat') {
+    const a = 0.06 + 0.04 * Math.sin(gameTick * 0.018);
+    ctx.globalAlpha = a;
+    ctx.fillStyle = '#aa4400';
+    ctx.fillRect(0, 0, W, H);
+  }
+  ctx.restore();
 }
 
 function loop() {
@@ -2489,6 +2785,8 @@ function loop() {
     }
     for (const p of puppies) { p.update(); p.draw(); }
 
+    if (Math.random() < 0.0015) sndBird();
+
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
       ctx.font = '11px monospace'; ctx.textAlign = 'center';
@@ -2517,8 +2815,8 @@ function loop() {
       else if (--seedRespawnTimer <= 0) {
         seedRespawnTimer = 0;
         const cx = canvas.width / 2, cy = canvas.height / 2;
-        if (!hasSeedM) rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#864010', matingCooldown: 60 * 5, isSeed: true }));
-        if (!hasSeedF) rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#ffffff', matingCooldown: 0, isSeed: true }));
+        if (!hasSeedM) rats.push(new Rat(cx - 50, cy, { sex: 'm', bodyColor: '#e8e8e8', matingCooldown: 60 * 5, isSeed: true }));
+        if (!hasSeedF) rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#c8922a', matingCooldown: 0, isSeed: true }));
       }
     } else {
       seedRespawnTimer = 0;
@@ -2595,6 +2893,9 @@ function loop() {
     tickParticles(hearts);
     tickParticles(labels);
 
+    if (scritchCat) sndStartPurr(); else sndStopPurr();
+    if (Math.random() < 0.0007) sndClockTick();
+
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
       ctx.font = '11px monospace'; ctx.textAlign = 'center';
@@ -2604,6 +2905,7 @@ function loop() {
     }
   }
 
+  drawDynamicLighting();
   if (cursorVisible) drawCursor(cursorX, cursorY);
 
   requestAnimationFrame(loop);
