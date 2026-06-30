@@ -550,6 +550,8 @@ function drawRatFurniture() {
 const WOOL_SPR = [[0,1,1,0],[1,0,0,1],[1,0,0,1],[0,1,1,0]];
 const WOOL_SC = 4;
 let woolBall = null;
+function woolRailY() { return Math.round(canvas.height * 0.70); }
+const RAIL_PAD = 24;
 
 // ─── Cat furniture ─────────────────────────────────────────────────────────
 let catFoodBowl = null, catWaterBowl = null;
@@ -1496,13 +1498,13 @@ class Cat {
         if (this.wantWool) {
           this.wantWool = false;
           if (woolBall) {
-            const angle = Math.random() * Math.PI * 2;
-            woolBall.vx = Math.cos(angle) * 5; woolBall.vy = Math.sin(angle) * 2.5;
+            woolBall.vx = (this.cx < woolBall.x + WOOL_SPR[0].length * WOOL_SC / 2 ? 1 : -1) * (4 + Math.random() * 4);
             labels.push(new Label('Paw!', this.cx, Math.max(20, this.y - 4)));
           }
           this.state = 'happy'; this.lingerTicks = 60;
         } else if (this.furnitureTarget) {
           const ft = this.furnitureTarget; this.furnitureTarget = null;
+          if (ft === 'food') sndNom(); else sndSip();
           labels.push(new Label(ft === 'food' ? 'Nom!' : 'Slurp!', this.cx, Math.max(20, this.y - 6)));
           this.state = 'happy'; this.lingerTicks = 60 * 2;
         } else {
@@ -1776,6 +1778,7 @@ class Visitor {
     this.behavior = 'follow';
     this.behaviorTimer = 0;
     this.visFidgetType = 'sit';
+    sndBark(false);
   }
 
   get pawX() { const vw = DW * this.vs; return this.right ? this.x + vw * 0.85 : this.x + vw * 0.15; }
@@ -2003,6 +2006,7 @@ const dog = {
             this.state = 'sleep'; this.sleepTimer = 60 * (8 + Math.floor(Math.random() * 12)); this.sleepZTimer = 60 * 2;
           } else {
             const lbl = ft === 'food' ? 'Nom!' : 'Slurp!';
+            if (ft === 'food') sndNom(); else sndSip();
             labels.push(new Label(lbl, this.cx, Math.max(20, this.y - 8)));
             this.state = 'happy'; this.lingerTicks = 60 * 2;
           }
@@ -2169,7 +2173,7 @@ function enterCatMode() {
   thrownBall = null; marker = null; laserActive = false; interacted = false;
   scritchCat = null;
   catVisitorCooldown = 60 * 25;
-  woolBall = { x: canvas.width * 0.6, y: canvas.height * 0.65, vx: 0, vy: 0 };
+  woolBall = { x: canvas.width * 0.6, y: woolRailY(), vx: 0, vy: 0 };
   placeCatFurniture();
   if (!restoreCatState()) {
     // Main cat — always at index 0, never leaves
@@ -2271,8 +2275,7 @@ canvas.addEventListener('pointerdown', e => {
     if (woolBall) {
       const wbw = WOOL_SPR[0].length * WOOL_SC, wbh = WOOL_SPR.length * WOOL_SC;
       if (px >= woolBall.x && px <= woolBall.x + wbw && py >= woolBall.y && py <= woolBall.y + wbh) {
-        const angle = Math.random() * Math.PI * 2;
-        woolBall.vx = Math.cos(angle) * 6; woolBall.vy = Math.sin(angle) * 3;
+        woolBall.vx = (Math.random() < 0.5 ? 1 : -1) * (5 + Math.random() * 4);
         const awake = cats.filter(c => !c.dead && !c.isVisitor && c.state !== 'sleep' && c.state !== 'leaving');
         if (awake.length) {
           awake.sort((a, b) => Math.hypot(a.cx - woolBall.x, a.cy - woolBall.y) - Math.hypot(b.cx - woolBall.x, b.cy - woolBall.y));
@@ -2657,6 +2660,34 @@ function sndRaidCat() {
   osc.connect(flt); flt.connect(gn); gn.connect(_masterGain); osc.start(t); osc.stop(t + 0.45);
 }
 
+function sndNom() {
+  if (!_cool('nom', 90)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  for (let i = 0; i < 4; i++) {
+    const dt = i * 0.065;
+    const src = ctx.createBufferSource(); src.buffer = _noise(ctx, 0.06);
+    const flt = ctx.createBiquadFilter(); flt.type = 'bandpass';
+    flt.frequency.value = 600 + Math.random() * 200; flt.Q.value = 1.2;
+    const gn = ctx.createGain();
+    gn.gain.setValueAtTime(0.09, t + dt); gn.gain.exponentialRampToValueAtTime(0.001, t + dt + 0.06);
+    src.connect(flt); flt.connect(gn); gn.connect(_masterGain); src.start(t + dt);
+  }
+}
+
+function sndSip() {
+  if (!_cool('sip', 90)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  for (let i = 0; i < 3; i++) {
+    const dt = i * 0.12;
+    const src = ctx.createBufferSource(); src.buffer = _noise(ctx, 0.10);
+    const flt = ctx.createBiquadFilter(); flt.type = 'lowpass'; flt.frequency.value = 800;
+    const gn = ctx.createGain();
+    gn.gain.setValueAtTime(0, t + dt); gn.gain.linearRampToValueAtTime(0.07, t + dt + 0.03);
+    gn.gain.linearRampToValueAtTime(0, t + dt + 0.10);
+    src.connect(flt); flt.connect(gn); gn.connect(_masterGain); src.start(t + dt);
+  }
+}
+
 // ─── Loop ────────────────────────────────────────────────────────────────────
 function tickParticles(arr) {
   for (let i = arr.length - 1; i >= 0; i--) {
@@ -2849,19 +2880,36 @@ function loop() {
     drawCatFurniture();
 
     if (woolBall) {
-      woolBall.vx *= 0.92; woolBall.vy *= 0.92;
-      woolBall.x += woolBall.vx; woolBall.y += woolBall.vy;
+      // Rail physics — horizontal only
+      const ry = woolRailY();
       const wbw = WOOL_SPR[0].length * WOOL_SC, wbh = WOOL_SPR.length * WOOL_SC;
-      if (woolBall.x < 0) { woolBall.x = 0; woolBall.vx = Math.abs(woolBall.vx) * 0.7; }
-      if (woolBall.x > canvas.width - wbw) { woolBall.x = canvas.width - wbw; woolBall.vx = -Math.abs(woolBall.vx) * 0.7; }
-      if (woolBall.y < catKitchenFloorY()) { woolBall.y = catKitchenFloorY(); woolBall.vy = Math.abs(woolBall.vy) * 0.7; }
-      if (woolBall.y > canvas.height - wbh) { woolBall.y = canvas.height - wbh; woolBall.vy = -Math.abs(woolBall.vy) * 0.7; }
+      woolBall.vx *= 0.94;
+      woolBall.x += woolBall.vx;
+      woolBall.y = ry; woolBall.vy = 0;
+      const rLeft = RAIL_PAD, rRight = canvas.width - RAIL_PAD - wbw;
+      if (woolBall.x < rLeft) { woolBall.x = rLeft; woolBall.vx = Math.abs(woolBall.vx) * 0.75; }
+      if (woolBall.x > rRight) { woolBall.x = rRight; woolBall.vx = -Math.abs(woolBall.vx) * 0.75; }
+
+      // Draw rail bar
+      const railBarY = ry + Math.floor(wbh / 2) - 2;
+      ctx.fillStyle = '#887766';
+      ctx.fillRect(RAIL_PAD - 4, railBarY, canvas.width - RAIL_PAD * 2 + 8, 4);
+      ctx.fillStyle = '#aaa090';
+      ctx.fillRect(RAIL_PAD - 4, railBarY, canvas.width - RAIL_PAD * 2 + 8, 2);
+      // End bracket mounts
+      for (const bx of [RAIL_PAD - 7, canvas.width - RAIL_PAD + 3]) {
+        ctx.fillStyle = '#665544';
+        ctx.fillRect(bx, railBarY - 5, 5, 13);
+        ctx.fillStyle = '#998877';
+        ctx.fillRect(bx, railBarY - 5, 5, 2);
+      }
+
+      // Draw ball
       ctx.fillStyle = '#cc4488';
       const wbx = Math.round(woolBall.x), wby = Math.round(woolBall.y);
       for (let r = 0; r < WOOL_SPR.length; r++)
         for (let c = 0; c < WOOL_SPR[r].length; c++)
           if (WOOL_SPR[r][c]) ctx.fillRect(wbx + c * WOOL_SC, wby + r * WOOL_SC, WOOL_SC, WOOL_SC);
-      // Cross highlight
       ctx.fillStyle = '#ee66aa';
       ctx.fillRect(wbx + WOOL_SC, wby + WOOL_SC, WOOL_SC * 2, WOOL_SC * 2);
     }
