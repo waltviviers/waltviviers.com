@@ -2912,6 +2912,18 @@ function loop() {
           if (WOOL_SPR[r][c]) ctx.fillRect(wbx + c * WOOL_SC, wby + r * WOOL_SC, WOOL_SC, WOOL_SC);
       ctx.fillStyle = '#ee66aa';
       ctx.fillRect(wbx + WOOL_SC, wby + WOOL_SC, WOOL_SC * 2, WOOL_SC * 2);
+      // Yarn tail — waggles behind ball in direction opposite to movement
+      const tailDir = woolBall.vx >= 0 ? -1 : 1;
+      const tailAnchorX = woolBall.vx >= 0 ? wbx : wbx + wbw;
+      const tailAnchorY = wby + Math.floor(wbh / 2);
+      ctx.fillStyle = '#cc4488';
+      for (let i = 0; i < 5; i++) {
+        const tx = tailAnchorX + tailDir * (i * 5 + 3);
+        const ty = tailAnchorY + Math.round(Math.sin(i * 1.3 + gameTick * 0.08) * 3);
+        ctx.fillRect(tx, ty, 2, 2);
+      }
+      ctx.fillStyle = '#ee66aa';
+      ctx.fillRect(tailAnchorX + tailDir * 3, tailAnchorY, 2, 2);
     }
 
     if (laserActive) {
