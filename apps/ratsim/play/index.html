@@ -767,8 +767,15 @@ function tickRat(rat) {
         return;
       }
       rat.tx = nearSnack.vx; rat.act = 'wander';
-    } else if (lureTick > 0) {
+    } else if (lureTick > 0 && lureFloor === rat.floor && lureDisplayY >= lureFallTarget - 2) {
       const tx = Math.max(CX + 10, Math.min(rat.floorMaxX, lureVX));
+      if (Math.abs(rat.x - tx) < 8) {
+        lureTick = 0;
+        rat.hunger = Math.min(100, rat.hunger + 50);
+        rat.snackEating = true;
+        rat.act = 'eating'; rat.actTimer = 60 + Math.floor(Math.random() * 40);
+        return;
+      }
       if (Math.abs(rat.x - tx) > WALK_SPEED) { rat.tx = tx; rat.act = 'wander'; }
     }
   }
@@ -866,7 +873,7 @@ function snackFloorY(floor) {
 
 let pointerDown = false, pointerDownT = 0, pointerDownVX = 0, pointerDownVY = 0;
 let tapPending = false, tapPendingTick = 0, tapPendingVX = 0, tapPendingVY = 0;
-let lureVX = 0, lureVY = 0, lureDisplayY = 0, lureFallTarget = 0, lureTick = 0;
+let lureVX = 0, lureVY = 0, lureDisplayY = 0, lureFallTarget = 0, lureTick = 0, lureFloor = 'bottom';
 
 canvas.addEventListener('pointerdown', e => {
   e.preventDefault();
@@ -894,9 +901,10 @@ canvas.addEventListener('pointerup', e => {
   // Valid tap — check for double-tap
   if (tapPending) {
     tapPending = false;
-    lureVX = vx; lureVY = vy;
+    lureFloor   = nearestFloor(vy);
+    lureVX      = vx; lureVY = vy;
     lureDisplayY = vy;
-    lureFallTarget = snackFloorY(nearestFloor(vy));
+    lureFallTarget = snackFloorY(lureFloor);
     lureTick = tick + 360;  // lure active for 6 s
   } else {
     tapPending = true;
