@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photography — Walt Viviers</title>
+  <meta name="description" content="Photography by Walt Viviers — South African fine artist and developer, based in Pretoria." />
+  <link rel="canonical" href="https://waltviviers.com/photography/" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+
+  <!-- Hreflang -->
+  <link rel="alternate" hreflang="en" href="https://waltviviers.com/photography/" />
+  <link rel="alternate" hreflang="af" href="https://waltviviers.com/photography/" />
+  <link rel="alternate" hreflang="x-default" href="https://waltviviers.com/photography/" />
+
+  <!-- Geo -->
+  <meta name="geo.region" content="ZA-GP" />
+  <meta name="geo.placename" content="Pretoria, Gauteng, South Africa" />
+  <meta name="geo.position" content="-25.7479;28.2293" />
+  <meta name="ICBM" content="-25.7479, 28.2293" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://waltviviers.com/photography/" />
+  <meta property="og:title"       content="Photography — Walt Viviers" />
+  <meta property="og:description" content="Photography by Walt Viviers — South African fine artist and developer, based in Pretoria." />
+  <meta property="og:image"       content="https://waltviviers.com/images/walt-viviers-fine-art-banner.webp" />
+  <meta property="og:image:alt"   content="Walt Viviers photography — South African fine artist" />
+  <meta property="og:image:type"  content="image/webp" />
+  <meta property="og:image:width" content="2360" />
+  <meta property="og:image:height" content="590" />
+  <meta property="og:locale"      content="en_ZA" />
+  <meta property="og:site_name"   content="Walt Viviers" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="Photography — Walt Viviers" />
+  <meta name="twitter:description" content="Photography by Walt Viviers — South African fine artist and developer, based in Pretoria." />
+  <meta name="twitter:image"       content="https://waltviviers.com/images/walt-viviers-fine-art-banner.webp" />
+  <meta name="twitter:image:alt"   content="Walt Viviers photography — South African fine artist" />
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        "name": "Photography — Walt Viviers",
+        "description": "Photography by Walt Viviers — South African fine artist and developer, based in Pretoria.",
+        "url": "https://waltviviers.com/photography/",
+        "author": { "@type": "Person", "name": "Walt Viviers", "url": "https://waltviviers.com" },
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltviviers.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Photography", "item": "https://waltviviers.com/photography/" }
+          ]
+        }
+      }
+    ]
+  }
+  </script>
+
+  <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
+
+  <link rel="preload" href="/data/photography.json" as="fetch" crossorigin />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+
+    :root {
+      --black:  #0C0C0B;
+      --white:  #FAF9F7;
+      --ink:    #FAF9F7;
+      --stone:  #9A9890;
+      --rule:   #2A2826;
+      --bg:     #000000;
+      --bg2:    #0D0D0D;
+      --serif:  'EB Garamond', Georgia, serif;
+      --sans:   'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 100px;
+      background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--rule);
+      transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    nav.scrolled { height: 50px; }
+    .nav-left { display: flex; align-items: center; gap: 14px; }
+    .lang-toggle { display: flex; align-items: center; gap: 14px; }
+    .lang-group { display: flex; align-items: center; cursor: pointer; user-select: none; }
+    .lang-label, .lang-code {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--stone); font-family: var(--sans);
+      transition: color 0.2s; line-height: 1;
+    }
+    .lang-label {
+      max-width: 200px; overflow: hidden; white-space: nowrap;
+      transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
+    }
+    .lang-pipe {
+      font-size: 11px; color: var(--rule); padding: 0 4px; pointer-events: none;
+      max-width: 20px; overflow: hidden; white-space: nowrap;
+      transition: max-width 0.3s ease, opacity 0.2s ease;
+    }
+    .lang-group.active .lang-label,
+    .lang-group.active .lang-code  { color: var(--ink); }
+    .lang-group.active .lang-pipe  { color: var(--stone); }
+    .nav-logo img { height: 36px; width: auto; transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    nav.scrolled .nav-logo img { height: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-family: var(--sans); font-size: 12px; font-weight: 400;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--stone); transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a.is-current { color: var(--ink); }
+    .nav-cta {
+      font-size: 12px !important; font-weight: 500 !important;
+      letter-spacing: 0.08em !important; color: var(--white) !important;
+      padding: 7px 18px; border: 1px solid #4A4844;
+      transition: background 0.2s, color 0.2s, border-color 0.2s !important;
+    }
+    .nav-cta:hover {
+      background: var(--white) !important; color: var(--black) !important;
+      border-color: var(--white) !important;
+    }
+    .social-icons { display: flex; align-items: center; gap: 16px; }
+    .social-icons a, .social-icons button {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--stone); transition: color 0.2s;
+      background: none; border: none; padding: 0; cursor: pointer;
+    }
+    .social-icons a:hover, .social-icons button:hover { color: var(--white); }
+    .social-icons svg {
+      width: 18px; height: 18px; fill: none;
+      stroke: currentColor; stroke-width: 1.5;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .theme-toggle {
+      position: relative; width: 60px; height: 32px; border-radius: 16px;
+      border: 1.5px solid #4A4844; background: transparent;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .toggle-thumb {
+      position: absolute; top: 4px; left: 4px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    [data-theme="light"] .toggle-thumb { transform: translateX(28px); }
+    .toggle-thumb .icon-moon, .toggle-thumb .icon-sun {
+      width: 12px; height: 12px; fill: none; stroke: var(--bg);
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .toggle-thumb .icon-moon { display: block; }
+    .toggle-thumb .icon-sun  { display: none; }
+    nav.scrolled .lang-label,
+    nav.scrolled .lang-pipe { max-width: 0; opacity: 0; padding: 0; }
+    nav.scrolled .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
+    nav.scrolled .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
+    nav.scrolled .toggle-thumb .icon-moon,
+    nav.scrolled .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
+    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-moon,
+    nav.scrolled .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
+
+    /* ── Footer ── */
+    footer {
+      padding: 40px 48px; border-top: 1px solid var(--rule);
+      display: flex; justify-content: center; align-items: center; position: relative;
+    }
+    .footer-mark { position: absolute; top: 50%; right: 0; transform: translateY(-50%); line-height: 0; }
+    .footer-mark img { display: block; }
+    [data-theme="light"] .footer-mark img { filter: invert(1); }
+    .footer-social { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .footer-social .social-icons { gap: 24px; }
+    .footer-social .social-icons a { color: var(--stone); }
+    .footer-social .social-icons svg { width: 22px; height: 22px; }
+    .footer-social .social-icons a:hover { color: var(--white); }
+    .footer-copy { font-size: 11px; color: var(--stone); letter-spacing: 0.06em; text-align: center; }
+    .footer-admin {
+      position: absolute; top: 50%; transform: translateY(-50%); left: 48px;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--stone); padding: 7px 16px; border: 1px solid var(--rule);
+      transition: border-color 0.2s, color 0.2s; background: none;
+    }
+    .footer-admin:hover { border-color: var(--stone); color: var(--ink); }
+
+    /* ── Light mode ── */
+    [data-theme="light"] {
+      --ink: #0C0C0B; --stone: #6B6560; --rule: #D5D1CB;
+      --bg: #F5F3EF; --bg2: #EDEAE5;
+    }
+    [data-theme="light"] body { background: #F5F3EF; }
+    [data-theme="light"] nav { background: rgba(245,243,239,0.95); }
+    [data-theme="light"] .nav-logo img { filter: invert(1); opacity: 1; }
+    [data-theme="light"] .nav-links a:hover { color: var(--ink); }
+    [data-theme="light"] .theme-toggle { border-color: #D5D1CB; }
+    [data-theme="light"] .toggle-thumb .icon-moon { display: none; }
+    [data-theme="light"] .toggle-thumb .icon-sun  { display: block; }
+    [data-theme="light"] .nav-cta { color: #0C0C0B !important; border-color: #D5D1CB !important; }
+    [data-theme="light"] .nav-cta:hover { background: #0C0C0B !important; color: #FAF9F7 !important; border-color: #0C0C0B !important; }
+    [data-theme="light"] .footer-admin:hover { color: #0C0C0B; border-color: #6B6560; }
+    [data-theme="light"] .footer-social .social-icons a:hover { color: var(--ink); }
+
+    /* ── Page layout ── */
+    .page-wrap { padding-top: 100px; }
+
+    .page-head {
+      padding: 64px 48px 48px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .page-head h1 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+    }
+
+    .page-head-meta { display: flex; align-items: center; gap: 24px; }
+    .photos-count { font-size: 12px; color: var(--stone); letter-spacing: 0.06em; }
+    .back-link {
+      font-size: 12px; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--stone); transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--ink); }
+
+    /* ── Photo grid ── */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background-color: #0D0D0D;
+    }
+
+    .photo-card {
+      background: var(--bg2);
+      transition: background 0.15s;
+      display: flex;
+      flex-direction: column;
+      color: inherit;
+      text-decoration: none;
+    }
+    .photo-card:hover { background: #222120; }
+
+    .photo-card-info {
+      order: -1;
+      padding: 20px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+    }
+    .photo-card-title { font-family: var(--serif); font-size: 17px; }
+    .photo-card-meta { font-size: 12px; color: var(--stone); white-space: nowrap; }
+
+    .photo-card-img {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: #0D0D0D;
+      position: relative;
+    }
+    .photo-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s;
+      display: block;
+    }
+    a.photo-card:hover .photo-card-img img { transform: scale(1.03); }
+
+    /* Placeholder tile (until a real photo is added) */
+    .photo-card-img.is-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .photo-card-img.is-placeholder svg {
+      width: 40px; height: 40px; fill: none;
+      stroke: var(--rule); stroke-width: 1.25;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    [data-theme="light"] .photo-card-img.is-placeholder svg { stroke: #C7C2BB; }
+
+    /* Empty / error states */
+    .grid-message {
+      grid-column: 1 / -1;
+      padding: 96px 48px;
+      text-align: center;
+      color: var(--stone);
+      font-family: var(--serif);
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+    }
+
+    /* Loading skeleton */
+    .skeleton { background: var(--bg2); animation: pulse 1.5s ease-in-out infinite; }
+    .skeleton-info { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .skeleton-line { height: 14px; border-radius: 2px; background: var(--rule); }
+    .skeleton-img { aspect-ratio: 4/3; background: var(--rule); }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    /* Light mode grid overrides */
+    [data-theme="light"] .photo-grid { background-color: #F5F3EF; }
+    [data-theme="light"] .photo-card  { background: #EDEAE5; }
+    [data-theme="light"] .photo-card:hover { background: #E0DDD8; }
+    [data-theme="light"] .photo-card-img { background: #DDD9D4; }
+    [data-theme="light"] .skeleton-line { background: #D5D1CB; }
+    [data-theme="light"] .skeleton-img  { background: #D5D1CB; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; height: 50px; }
+      .nav-logo img { height: 28px; }
+      .nav-links { gap: 20px; }
+      .nav-link-hide { display: none; }
+      .lang-label, .lang-pipe { display: none; }
+      .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
+      .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
+      .toggle-thumb .icon-moon,
+      .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
+      .theme-toggle:hover .toggle-thumb .icon-moon,
+      .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
+
+      .page-wrap { padding-top: 50px; }
+      .page-head { padding: 40px 24px 32px; }
+      .photo-grid { grid-template-columns: repeat(2, 1fr); }
+
+      footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
+      .footer-admin { position: static; transform: none; order: 1; }
+      .footer-social { order: 0; }
+      .footer-mark { position: static; transform: none; order: 2; }
+    }
+
+    @media (max-width: 600px) {
+      .photo-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .footer-admin { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
+        <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+      </a>
+      <div class="lang-toggle">
+        <div class="lang-group active" id="lang-en">
+          <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
+        </div>
+        <div class="lang-group" id="lang-af">
+          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
+        </div>
+      </div>
+    </div>
+    <ul class="nav-links">
+      <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
+      <li class="nav-link-hide"><a href="/photography/" class="is-current" data-i18n="nav-photography">Photography</a></li>
+      <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
+      <li>
+        <div class="social-icons">
+          <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+          </a>
+        </div>
+      </li>
+      <li>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
+          <span class="toggle-thumb">
+            <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="page-wrap">
+    <div class="page-head">
+      <h1 data-i18n="page-title">Photography</h1>
+      <div class="page-head-meta">
+        <span class="photos-count" id="photos-count"></span>
+        <a href="/" class="back-link" data-i18n="back-home">← Back to home</a>
+      </div>
+    </div>
+
+    <main id="photo-grid" class="photo-grid" aria-label="Photography gallery">
+      <!-- Skeleton placeholders while loading -->
+      <div class="skeleton"><div class="skeleton-info"><div class="skeleton-line" style="width:55%"></div><div class="skeleton-line" style="width:18%"></div></div><div class="skeleton-img"></div></div>
+      <div class="skeleton"><div class="skeleton-info"><div class="skeleton-line" style="width:45%"></div><div class="skeleton-line" style="width:20%"></div></div><div class="skeleton-img"></div></div>
+      <div class="skeleton"><div class="skeleton-info"><div class="skeleton-line" style="width:60%"></div><div class="skeleton-line" style="width:16%"></div></div><div class="skeleton-img"></div></div>
+    </main>
+  </div>
+
+  <footer>
+    <button class="footer-admin" id="admin-btn">Admin</button>
+    <div class="footer-social">
+      <div class="social-icons">
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
+        </a>
+        <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" aria-label="Behance">
+          <svg viewBox="0 0 24 24"><path d="M3 4v16M3 4h5a3 3 0 0 1 0 6H3m0 0h5.5a3.5 3.5 0 0 1 0 7H3"/><line x1="14" y1="7" x2="20" y2="7"/><line x1="13.5" y1="13.5" x2="22" y2="13.5"/><path d="M21 12a3.5 3.5 0 1 0 0 3"/></svg>
+        </a>
+        <a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        </a>
+        <a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">
+          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+        </a>
+      </div>
+      <p class="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
+    </div>
+    <div class="footer-mark">
+      <img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const html = document.documentElement;
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        const next = html.dataset.theme === 'light' ? 'dark' : 'light';
+        html.dataset.theme = next;
+        localStorage.setItem('wv-theme', next);
+      });
+    })();
+  </script>
+  <script>
+    (function () {
+      const nav = document.querySelector('nav');
+      let ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(function () {
+            nav.classList.toggle('scrolled', window.scrollY > 40);
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    })();
+  </script>
+  <script>
+    document.getElementById('admin-btn').addEventListener('click', function () {
+      window.open('https://waltviviers.com/admin#/collections/artworks/entries/artworks', '_blank', 'noopener,noreferrer');
+    });
+  </script>
+  <script>
+    (function() {
+      var LANG = {
+        en: { 'nav-artworks':'Artworks','nav-photography':'Photography','nav-about':'About','nav-enquire':'Enquire','page-title':'Photography','back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','count-suffix':'photograph','count-suffix-plural':'photographs','coming-soon':'Coming soon','empty':'Photographs coming soon.','load-error':'Could not load photography.' },
+        af: { 'nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-about':'Oor my','nav-enquire':'Navraag','page-title':'Fotografie','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','count-suffix':'foto','count-suffix-plural':'fotos','coming-soon':'Binnekort beskikbaar','empty':'Foto\'s binnekort beskikbaar.','load-error':'Kon nie fotografie laai nie.' }
+      };
+      var lang = localStorage.getItem('wv-lang') || 'en';
+      window._t = function (k) { return (LANG[lang] && LANG[lang][k] !== undefined) ? LANG[lang][k] : k; };
+      function applyLang(l) {
+        lang = l; localStorage.setItem('wv-lang', l);
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          var k = el.dataset.i18n;
+          if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
+        });
+        document.querySelectorAll('[data-i18n-href]').forEach(function(el) {
+          var k = el.dataset.i18nHref;
+          if (LANG[l] && LANG[l][k] !== undefined) el.href = LANG[l][k];
+        });
+        document.getElementById('lang-en').classList.toggle('active', l === 'en');
+        document.getElementById('lang-af').classList.toggle('active', l === 'af');
+        if (window._renderPhotos) window._renderPhotos();
+      }
+      document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
+      document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
+      window._applyLang = applyLang;
+      window._initLang = lang;
+    })();
+  </script>
+  <script>
+    (function () {
+      var photos = [];
+      var grid = document.getElementById('photo-grid');
+      var countEl = document.getElementById('photos-count');
+
+      var CAMERA_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+
+      function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+          return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+        });
+      }
+
+      function metaLine(p) {
+        return [p.location, p.year].filter(Boolean).map(esc).join(' · ');
+      }
+
+      function cardHTML(p) {
+        var hasImg = p.image && String(p.image).trim() !== '';
+        var title  = p.title && String(p.title).trim() !== '' ? esc(p.title) : (hasImg ? '&nbsp;' : window._t('coming-soon'));
+        var meta   = hasImg ? metaLine(p) : '';
+        var info   = '<div class="photo-card-info"><span class="photo-card-title">' + title + '</span>' +
+                     (meta ? '<span class="photo-card-meta">' + meta + '</span>' : '') + '</div>';
+        if (hasImg) {
+          var src = '/' + String(p.image).replace(/^\/+/, '');
+          var alt = esc(p.title || 'Photograph by Walt Viviers');
+          return '<a href="' + src + '" target="_blank" rel="noopener" class="photo-card">' + info +
+                 '<div class="photo-card-img"><img src="' + src + '" alt="' + alt + '" loading="lazy" /></div></a>';
+        }
+        return '<div class="photo-card">' + info +
+               '<div class="photo-card-img is-placeholder">' + CAMERA_SVG + '</div></div>';
+      }
+
+      function render() {
+        var real = photos.filter(function (p) { return p.image && String(p.image).trim() !== ''; });
+        if (!photos.length) {
+          grid.innerHTML = '<p class="grid-message">' + window._t('empty') + '</p>';
+          countEl.textContent = '';
+          return;
+        }
+        grid.innerHTML = photos.map(cardHTML).join('');
+        if (real.length) {
+          var suf = real.length === 1 ? window._t('count-suffix') : window._t('count-suffix-plural');
+          countEl.textContent = real.length + ' ' + suf;
+        } else {
+          countEl.textContent = window._t('coming-soon');
+        }
+      }
+      window._renderPhotos = render;
+
+      fetch('/data/photography.json')
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          photos = (data && data.photos) || [];
+          render();
+        })
+        .catch(function () {
+          grid.innerHTML = '<p class="grid-message">' + window._t('load-error') + '</p>';
+          countEl.textContent = '';
+        });
+
+      // Apply saved language now that render hooks exist
+      if (window._applyLang) window._applyLang(window._initLang || 'en');
+    })();
+  </script>
+</body>
+</html>
