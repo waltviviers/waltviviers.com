@@ -309,7 +309,19 @@
     }
     a.photo-card:hover .photo-card-img img { transform: scale(1.03); }
 
-    /* Placeholder tile (until a real photo is added) */
+    /* "View on Google Photos" affordance */
+    .album-badge {
+      position: absolute; bottom: 8px; left: 8px;
+      font-family: var(--sans); font-size: 0.62rem; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 4px 9px; border-radius: 2px;
+      line-height: 1.5; pointer-events: none; z-index: 2;
+      color: #fff; background: rgba(0, 0, 0, 0.62);
+      opacity: 0; transition: opacity 0.2s;
+    }
+    .photo-card:hover .album-badge,
+    .photo-card-img.is-placeholder .album-badge { opacity: 1; }
+
+    /* Placeholder tile (until a cover image is added) */
     .photo-card-img.is-placeholder {
       display: flex;
       align-items: center;
@@ -505,8 +517,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-photography':'Photography','nav-about':'About','nav-enquire':'Enquire','page-title':'Photography','back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','count-suffix':'photograph','count-suffix-plural':'photographs','coming-soon':'Coming soon','empty':'Photographs coming soon.','load-error':'Could not load photography.' },
-        af: { 'nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-about':'Oor my','nav-enquire':'Navraag','page-title':'Fotografie','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','count-suffix':'foto','count-suffix-plural':'fotos','coming-soon':'Binnekort beskikbaar','empty':'Foto\'s binnekort beskikbaar.','load-error':'Kon nie fotografie laai nie.' }
+        en: { 'nav-artworks':'Artworks','nav-photography':'Photography','nav-about':'About','nav-enquire':'Enquire','page-title':'Photography','back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','count-suffix':'album','count-suffix-plural':'albums','view-album':'View on Google Photos','untitled-album':'Untitled album','coming-soon':'Coming soon','empty':'Albums coming soon.','load-error':'Could not load albums.' },
+        af: { 'nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-about':'Oor my','nav-enquire':'Navraag','page-title':'Fotografie','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','count-suffix':'album','count-suffix-plural':'albums','view-album':'Sien op Google Foto\'s','untitled-album':'Naamlose album','coming-soon':'Binnekort beskikbaar','empty':'Albums binnekort beskikbaar.','load-error':'Kon nie albums laai nie.' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       window._t = function (k) { return (LANG[lang] && LANG[lang][k] !== undefined) ? LANG[lang][k] : k; };
@@ -532,11 +544,11 @@
   </script>
   <script>
     (function () {
-      var photos = [];
+      var albums = [];
       var grid = document.getElementById('photo-grid');
       var countEl = document.getElementById('photos-count');
 
-      var CAMERA_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>';
+      var STACK_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
 
       function esc(s) {
         return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -544,47 +556,44 @@
         });
       }
 
-      function metaLine(p) {
-        return [p.location, p.year].filter(Boolean).map(esc).join(' · ');
-      }
+      function isUrl(u) { return u && /^https?:\/\//i.test(String(u).trim()); }
 
-      function cardHTML(p) {
-        var hasImg = p.image && String(p.image).trim() !== '';
-        var title  = p.title && String(p.title).trim() !== '' ? esc(p.title) : (hasImg ? '&nbsp;' : window._t('coming-soon'));
-        var meta   = hasImg ? metaLine(p) : '';
-        var info   = '<div class="photo-card-info"><span class="photo-card-title">' + title + '</span>' +
-                     (meta ? '<span class="photo-card-meta">' + meta + '</span>' : '') + '</div>';
-        if (hasImg) {
-          var src = '/' + String(p.image).replace(/^\/+/, '');
-          var alt = esc(p.title || 'Photograph by Walt Viviers');
-          return '<a href="' + src + '" target="_blank" rel="noopener" class="photo-card">' + info +
-                 '<div class="photo-card-img"><img src="' + src + '" alt="' + alt + '" loading="lazy" /></div></a>';
+      function cardHTML(a) {
+        var hasCover = a.cover && String(a.cover).trim() !== '';
+        var title    = a.title && String(a.title).trim() !== '' ? esc(a.title) : window._t('untitled-album');
+        var date     = a.date ? esc(a.date) : '';
+        var info     = '<div class="photo-card-info"><span class="photo-card-title">' + title + '</span>' +
+                       (date ? '<span class="photo-card-meta">' + date + '</span>' : '') + '</div>';
+        var badge    = '<span class="album-badge">' + window._t('view-album') + ' ↗</span>';
+        var media;
+        if (hasCover) {
+          var src = isUrl(a.cover) ? esc(a.cover) : '/' + String(a.cover).replace(/^\/+/, '');
+          media = '<div class="photo-card-img"><img src="' + src + '" alt="' + title + '" loading="lazy" />' + badge + '</div>';
+        } else {
+          media = '<div class="photo-card-img is-placeholder">' + STACK_SVG + badge + '</div>';
         }
-        return '<div class="photo-card">' + info +
-               '<div class="photo-card-img is-placeholder">' + CAMERA_SVG + '</div></div>';
+        if (isUrl(a.url)) {
+          return '<a href="' + esc(a.url) + '" target="_blank" rel="noopener" class="photo-card">' + info + media + '</a>';
+        }
+        return '<div class="photo-card">' + info + media + '</div>';
       }
 
       function render() {
-        var real = photos.filter(function (p) { return p.image && String(p.image).trim() !== ''; });
-        if (!photos.length) {
+        if (!albums.length) {
           grid.innerHTML = '<p class="grid-message">' + window._t('empty') + '</p>';
           countEl.textContent = '';
           return;
         }
-        grid.innerHTML = photos.map(cardHTML).join('');
-        if (real.length) {
-          var suf = real.length === 1 ? window._t('count-suffix') : window._t('count-suffix-plural');
-          countEl.textContent = real.length + ' ' + suf;
-        } else {
-          countEl.textContent = window._t('coming-soon');
-        }
+        grid.innerHTML = albums.map(cardHTML).join('');
+        var suf = albums.length === 1 ? window._t('count-suffix') : window._t('count-suffix-plural');
+        countEl.textContent = albums.length + ' ' + suf;
       }
       window._renderPhotos = render;
 
       fetch('/data/photography.json')
         .then(function (r) { return r.json(); })
         .then(function (data) {
-          photos = (data && data.photos) || [];
+          albums = (data && data.albums) || [];
           render();
         })
         .catch(function () {
