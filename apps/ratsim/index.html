@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rat Simulator — A Pet Rat Game</title>
+  <title>Pet Rat Simulator — A cozy browser pet game</title>
   <meta name="description" content="A browser-based pet rat simulator by Walt Viviers. Feed them, play with them, watch them nap. No download, no account required." />
   <link rel="canonical" href="https://waltviviers.com/apps/ratsim/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
@@ -13,13 +13,13 @@
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://waltviviers.com/apps/ratsim/" />
-  <meta property="og:title"       content="Rat Simulator — A Pet Rat Game" />
+  <meta property="og:title"       content="Pet Rat Simulator — A cozy browser pet game" />
   <meta property="og:description" content="A browser-based pet rat simulator. Feed them, play with them, watch them nap. No download required." />
   <meta property="og:site_name"   content="Walt Viviers" />
 
   <!-- Twitter / X -->
   <meta name="twitter:card"        content="summary" />
-  <meta name="twitter:title"       content="Rat Simulator — A Pet Rat Game" />
+  <meta name="twitter:title"       content="Pet Rat Simulator — A cozy browser pet game" />
   <meta name="twitter:description" content="A browser-based pet rat simulator. Feed them, play with them, watch them nap. No download required." />
 
   <!-- Structured data -->
@@ -29,7 +29,7 @@
     "@graph": [
       {
         "@type": "SoftwareApplication",
-        "name": "Rat Simulator",
+        "name": "Pet Rat Simulator",
         "description": "A browser-based pet rat simulator. Feed them, play with them, watch them nap. No download, no account required.",
         "url": "https://waltviviers.com/apps/ratsim/",
         "applicationCategory": "GameApplication",
@@ -42,7 +42,7 @@
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltviviers.com/" },
           { "@type": "ListItem", "position": 2, "name": "Apps and Games", "item": "https://waltviviers.com/apps/" },
-          { "@type": "ListItem", "position": 3, "name": "Rat Simulator", "item": "https://waltviviers.com/apps/ratsim/" }
+          { "@type": "ListItem", "position": 3, "name": "Pet Rat Simulator", "item": "https://waltviviers.com/apps/ratsim/" }
         ]
       }
     ]
@@ -367,39 +367,24 @@
     <section class="hero">
       <p class="app-eyebrow" data-i18n="app-eyebrow">A browser game by Walt Viviers</p>
       <div class="app-icon" aria-hidden="true">
-        <svg viewBox="0 0 64 64" width="96" height="96" xmlns="http://www.w3.org/2000/svg" style="background:#1c1409">
-          <!-- Loki (left) -->
-          <rect x="8"  y="22" width="3" height="3" fill="#ff99bb"/>
-          <rect x="5"  y="25" width="9" height="3" fill="#f8f5f0"/>
-          <rect x="3"  y="28" width="9" height="3" fill="#f8f5f0"/>
-          <rect x="12" y="28" width="3" height="3" fill="#ff99bb"/>
-          <rect x="3"  y="31" width="14" height="3" fill="#f8f5f0"/>
-          <rect x="3"  y="34" width="11" height="3" fill="#f8f5f0"/>
-          <rect x="3"  y="37" width="6"  height="3" fill="#f8f5f0"/>
-          <rect x="3"  y="40" width="3" height="3" fill="#f8f5f0"/>
-          <rect x="8"  y="40" width="3" height="3" fill="#f8f5f0"/>
-          <!-- Potato (right) -->
-          <rect x="41" y="22" width="3" height="3" fill="#ff99bb"/>
-          <rect x="41" y="25" width="9" height="3" fill="#ede8dc"/>
-          <rect x="41" y="28" width="9" height="3" fill="#ede8dc"/>
-          <rect x="38" y="28" width="3" height="3" fill="#ff99bb"/>
-          <rect x="44" y="25" width="6" height="6" fill="#c8922a"/>
-          <rect x="41" y="31" width="14" height="3" fill="#ede8dc"/>
-          <rect x="41" y="34" width="14" height="3" fill="#ede8dc"/>
-          <rect x="44" y="31" width="8"  height="6" fill="#c8922a"/>
-          <rect x="53" y="31" width="8"  height="3" fill="#e8b4a4"/>
-          <rect x="53" y="37" width="6"  height="3" fill="#ede8dc"/>
-          <rect x="53" y="40" width="3" height="3" fill="#ede8dc"/>
-          <rect x="58" y="40" width="3" height="3" fill="#ede8dc"/>
-          <!-- hearts between them -->
-          <rect x="26" y="26" width="3" height="3" fill="#ff69b4"/>
-          <rect x="34" y="30" width="3" height="3" fill="#ff69b4"/>
+        <svg viewBox="0 0 64 64" width="96" height="96" xmlns="http://www.w3.org/2000/svg">
+          <rect width="64" height="64" fill="#2a2016"/>
+          <path d="M16 40 C7 41 8 29 16 30" fill="none" stroke="#c9bfae" stroke-width="2.6" stroke-linecap="round"/>
+          <ellipse cx="32" cy="39" rx="16" ry="10.5" fill="#e9e3d8"/>
+          <ellipse cx="27" cy="49" rx="3" ry="2" fill="#c9bfae"/>
+          <ellipse cx="37" cy="49" rx="3" ry="2" fill="#c9bfae"/>
+          <circle cx="46" cy="35" r="9.5" fill="#efe9df"/>
+          <circle cx="45" cy="26.5" r="5" fill="#efe9df"/>
+          <circle cx="45" cy="27" r="2.6" fill="#f3b9c7"/>
+          <circle cx="49" cy="34" r="1.7" fill="#22190f"/>
+          <circle cx="55.5" cy="37" r="2" fill="#f2a9bd"/>
+          <path d="M55 38 L61 39 M55 39.6 L61 41.6" stroke="#c9bfae" stroke-width="0.9" stroke-linecap="round"/>
         </svg>
       </div>
-      <h1>Rat Simulator</h1>
+      <h1>Pet Rat Simulator</h1>
       <p class="hero-tagline" data-i18n="hero-tagline">Your very own virtual rats.</p>
-      <p class="hero-desc" data-i18n="hero-desc">Feed them. Play with them. Watch them nap in a tiny pile of bedding. Rat Simulator is a cozy pet simulation for people who have always wanted rats.</p>
-      <a href="/apps/ratsim/play/" class="play-btn" data-i18n="play-now">Play now</a>
+      <p class="hero-desc" data-i18n="hero-desc">Feed them. Play with them. Watch them nap in a tiny pile of bedding. Pet Rat Simulator is a cozy pet simulation for people who have always wanted rats.</p>
+      <span class="coming-soon-badge" data-i18n="coming-soon">Coming soon</span>
       <div class="hero-scroll" aria-hidden="true">
         <span>Scroll</span>
         <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
@@ -411,7 +396,7 @@
       <div>
         <p class="privacy-tag" data-i18n="privacy-tag">Built with care</p>
         <h2><span data-i18n="priv-h1">No ads.</span><br/><span data-i18n="priv-h2">No data.</span><br/><span data-i18n="priv-h3">No install.</span></h2>
-        <p data-i18n="privacy-desc">Rat Simulator runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you and your rats.</p>
+        <p data-i18n="privacy-desc">Pet Rat Simulator runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you and your rats.</p>
       </div>
       <ul class="privacy-checklist" aria-label="Privacy commitments">
         <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-1">No personal data collected</span></li>
@@ -425,8 +410,8 @@
 
     <!-- CTA -->
     <section class="cta-section">
-      <h2><span data-i18n="cta-line1">Your rats are</span><br/><em data-i18n="cta-line2">ready to play.</em></h2>
-      <a href="/apps/ratsim/play/" class="play-btn" data-i18n="play-now">Play now</a>
+      <h2><span data-i18n="cta-line1">Your rats are</span><br/><em data-i18n="cta-line2">almost ready.</em></h2>
+      <span class="coming-soon-badge" data-i18n="coming-soon">Coming soon</span>
     </section>
 
   </main>
@@ -490,8 +475,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','app-eyebrow':'A browser game by Walt Viviers','hero-tagline':'Your very own virtual rats.','hero-desc':'Feed them. Play with them. Watch them nap in a tiny pile of bedding. Rat Simulator is a cozy pet simulation for people who have always wanted rats.','coming-soon':'Coming soon','play-now':'Play now','privacy-tag':'Built with care','priv-h1':'No ads.','priv-h2':'No data.','priv-h3':'No install.','privacy-desc':'Rat Simulator runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you and your rats.','check-1':'No personal data collected','check-2':'No account or sign-in required','check-3':'Works fully offline','check-4':'No ads or tracking of any kind','check-5':'No device permissions requested','check-6':'Free to play','cta-line1':'Your rats are','cta-line2':'ready to play.' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','app-eyebrow':'\'n Blaaierspeletjie deur Walt Viviers','hero-tagline':'Jou eie virtuele rotte.','hero-desc':'Voer hulle. Speel saam. Kyk hoe hulle slaap in \'n klein hoop beddegoed. Rat Simulator is \'n gesellige troeteldier-simulasie vir mense wat altyd rotte wou hê.','coming-soon':'Binnekort beskikbaar','play-now':'Speel nou','privacy-tag':'Gebou met sorg','priv-h1':'Geen advertensies.','priv-h2':'Geen data.','priv-h3':'Geen installasie.','privacy-desc':'Rat Simulator loop heeltemal in jou blaaier. Niks word gestoor, gestuur of gevolg nie. Net jy en jou rotte.','check-1':'Geen persoonlike data ingesamel','check-2':'Geen rekening of aanmelding benodig','check-3':'Werk volledig vanlyn','check-4':'Geen advertensies of opsporing','check-5':'Geen toestemmings vereis','check-6':'Gratis om te speel','cta-line1':'Jou rotte is','cta-line2':'gereed om te speel.' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','app-eyebrow':'A browser game by Walt Viviers','hero-tagline':'Your very own virtual rats.','hero-desc':'Feed them. Play with them. Watch them nap in a tiny pile of bedding. Pet Rat Simulator is a cozy pet simulation for people who have always wanted rats.','coming-soon':'Coming soon','play-now':'Play now','privacy-tag':'Built with care','priv-h1':'No ads.','priv-h2':'No data.','priv-h3':'No install.','privacy-desc':'Pet Rat Simulator runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you and your rats.','check-1':'No personal data collected','check-2':'No account or sign-in required','check-3':'Works fully offline','check-4':'No ads or tracking of any kind','check-5':'No device permissions requested','check-6':'Free to play','cta-line1':'Your rats are','cta-line2':'almost ready.' },
+        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','app-eyebrow':'\'n Blaaierspeletjie deur Walt Viviers','hero-tagline':'Jou eie virtuele rotte.','hero-desc':'Voer hulle. Speel saam. Kyk hoe hulle slaap in \'n klein hoop beddegoed. Pet Rat Simulator is \'n gesellige troeteldier-simulasie vir mense wat altyd rotte wou hê.','coming-soon':'Binnekort beskikbaar','play-now':'Speel nou','privacy-tag':'Gebou met sorg','priv-h1':'Geen advertensies.','priv-h2':'Geen data.','priv-h3':'Geen installasie.','privacy-desc':'Pet Rat Simulator loop heeltemal in jou blaaier. Niks word gestoor, gestuur of gevolg nie. Net jy en jou rotte.','check-1':'Geen persoonlike data ingesamel','check-2':'Geen rekening of aanmelding benodig','check-3':'Werk volledig vanlyn','check-4':'Geen advertensies of opsporing','check-5':'Geen toestemmings vereis','check-6':'Gratis om te speel','cta-line1':'Jou rotte is','cta-line2':'amper gereed.' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
