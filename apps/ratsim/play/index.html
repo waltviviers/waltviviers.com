@@ -766,7 +766,7 @@ function tickRat(rat) {
         rat.act = 'eating'; rat.actTimer = 50 + Math.floor(Math.random() * 30);
         return;
       }
-      rat.tx = nearSnack.vx; rat.act = 'wander';
+      rat.tx = Math.max(CX + 4, Math.min(rat.floorMaxX, nearSnack.vx));
     } else if (lureTick > 0) {
       const tx = Math.max(CX + 10, Math.min(rat.floorMaxX, lureVX));
       if (Math.abs(rat.x - tx) > WALK_SPEED) { rat.tx = tx; rat.act = 'wander'; }
@@ -791,6 +791,7 @@ function tickRat(rat) {
       }
     } else {
       rat.x    += Math.sign(dx) * WALK_SPEED;
+      rat.x     = Math.max(CX + 4, Math.min(rat.floorMaxX, rat.x));
       rat.right = dx > 0;
       if (tick % 14 === 0) SFX.scratch();
     }
