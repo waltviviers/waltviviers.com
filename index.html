@@ -2147,16 +2147,39 @@
       heroEl.addEventListener('touchstart', pauseAutoplay, { passive: true });
 
       /* ── Prev / Next ── */
-      document.getElementById('gn-prev').addEventListener('click', () => {
+      function goPrev() {
+        if (!works.length) return;
         current = (current - 1 + works.length) % works.length;
         renderHero(current);
         pauseAutoplay();
-      });
-      document.getElementById('gn-next').addEventListener('click', () => {
+      }
+      function goNext() {
+        if (!works.length) return;
         current = (current + 1) % works.length;
         renderHero(current);
         pauseAutoplay();
-      });
+      }
+      document.getElementById('gn-prev').addEventListener('click', goPrev);
+      document.getElementById('gn-next').addEventListener('click', goNext);
+
+      /* ── Swipe left / right on the hero image ── */
+      (function () {
+        var wrap = document.getElementById('hero-image');
+        var sx = 0, sy = 0, st = 0, tracking = false;
+        wrap.addEventListener('touchstart', function (e) {
+          var t = e.changedTouches[0];
+          sx = t.clientX; sy = t.clientY; st = Date.now(); tracking = true;
+        }, { passive: true });
+        wrap.addEventListener('touchend', function (e) {
+          if (!tracking) return;
+          tracking = false;
+          var t = e.changedTouches[0];
+          var dx = t.clientX - sx, dy = t.clientY - sy;
+          if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5 && (Date.now() - st) < 800) {
+            if (dx < 0) goNext(); else goPrev();
+          }
+        }, { passive: true });
+      })();
 
       /* ── Init: load artworks from CMS data ── */
       setHeroState('Loading…');
