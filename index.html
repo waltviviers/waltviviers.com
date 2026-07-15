@@ -486,6 +486,49 @@
       border-top: 1px solid var(--rule);
     }
 
+    /* ── Explore (Photography & Apps) ── */
+    #explore { border-top: 1px solid var(--rule); }
+    .explore-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--rule);
+    }
+    .explore-card {
+      background: var(--bg);
+      padding: 64px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 260px;
+      color: inherit;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .explore-card:hover { background: var(--bg2); }
+    .explore-title {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.1;
+    }
+    .explore-desc {
+      font-size: 15px;
+      color: var(--stone);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .explore-cta {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .explore-card:hover .explore-cta { text-decoration: underline; text-underline-offset: 4px; }
+    [data-theme="light"] .explore-card { background: #F5F3EF; }
+    [data-theme="light"] .explore-card:hover { background: #EDEAE5; }
+
     .section-head {
       display: flex;
       align-items: baseline;
@@ -1278,6 +1321,8 @@
       .hero-actions     { margin-top: 24px; }
 
       #works, #about { padding: 64px 24px; }
+      .explore-grid { grid-template-columns: 1fr; }
+      .explore-card { padding: 48px 24px; min-height: 0; }
       .instagram-head { padding: 48px 24px 32px; }
       .instagram-grid { grid-template-columns: repeat(3, 1fr); }
 
@@ -1549,6 +1594,22 @@
     </div>
     <div class="works-grid" id="works-grid"></div>
     <a href="/gallery/" class="view-gallery-btn" data-i18n="view-gallery">View Gallery ↗</a>
+  </section>
+
+  <!-- Explore: Photography & Apps -->
+  <section id="explore">
+    <div class="explore-grid">
+      <a href="/photography/" class="explore-card">
+        <h2 class="explore-title" data-i18n="explore-photo-title">Photography</h2>
+        <p class="explore-desc" data-i18n="explore-photo-desc">Albums from portrait shoots, events, and retreats.</p>
+        <span class="explore-cta" data-i18n="explore-photo-cta">View albums →</span>
+      </a>
+      <a href="/apps/" class="explore-card">
+        <h2 class="explore-title" data-i18n="explore-apps-title">Apps &amp; Games</h2>
+        <p class="explore-desc" data-i18n="explore-apps-desc">Browser games and small, private, offline-friendly apps.</p>
+        <span class="explore-cta" data-i18n="explore-apps-cta">Explore →</span>
+      </a>
+    </div>
   </section>
 
   <!-- Brush divider -->
@@ -1840,6 +1901,8 @@
         'nav-works': 'Artworks', 'nav-photography': 'Photography', 'nav-apps': 'Apps and Games', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on', 'view-gallery': 'View Gallery ↗',
+        'explore-photo-title': 'Photography', 'explore-photo-desc': 'Albums from portrait shoots, events, and retreats.', 'explore-photo-cta': 'View albums →',
+        'explore-apps-title': 'Apps & Games', 'explore-apps-desc': 'Browser games and small, private, offline-friendly apps.', 'explore-apps-cta': 'Explore →',
         'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
         'about-p1': 'I am a South African fine artist working in acrylic and mixed media. Twenty years of professional creative practice — across design, art direction, and brand — have sharpened a painter\'s eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.',
         'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
@@ -1875,6 +1938,8 @@
         'nav-works': 'Kunswerke', 'nav-photography': 'Fotografie', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
+        'explore-photo-title': 'Fotografie', 'explore-photo-desc': 'Albums van portret-sessies, geleenthede en toevlugte.', 'explore-photo-cta': 'Sien albums →',
+        'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': 'Blaaierspeletjies en klein, private programme wat vanlyn werk.', 'explore-apps-cta': 'Verken →',
         'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
         'about-p1': 'Ek is ‘n Suid-Afrikaanse kunstenaar wat in akriel en gemengde media werk. Twintig jaar se professionele kreatiewe praktyk — deur ontwerp, kunsdireksie en handelsmerk — het ‘n skilder se oog geslyp wat die spanning tussen die poësie en musiek van ‘n beeld vind: van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.',
         'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
