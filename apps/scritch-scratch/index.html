@@ -8,7 +8,7 @@
   <link rel="canonical" href="https://waltviviers.com/apps/scritch-scratch/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
 
-  <meta name="robots" content="noindex, follow" />
+  <meta name="robots" content="index, follow" />
 
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
@@ -234,6 +234,13 @@
       border-bottom: 1px solid var(--rule);
       position: relative;
     }
+
+    .app-back {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.10em;
+      text-transform: uppercase; color: var(--stone);
+      transition: color 0.2s; margin-bottom: 22px; display: inline-block;
+    }
+    .app-back:hover { color: var(--ink); }
 
     .app-eyebrow {
       font-size: 11px;
@@ -607,6 +614,7 @@
 
     <!-- Hero -->
     <section class="hero">
+      <a href="/apps/" class="app-back" data-i18n="back-apps">← Back to Apps and Games</a>
       <p class="app-eyebrow" data-i18n="app-eyebrow">A pixel art pet toy for your browser</p>
       <div class="app-icon" aria-hidden="true">
         <img src="/images/scritch-scratch-icon.webp" alt="" width="96" height="96" />
@@ -812,7 +820,7 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','nav-enquire':'Enquire','email-href': 'mailto:artist@waltviviers.com',
+        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','back-apps':'← Back to Apps and Games','nav-enquire':'Enquire','email-href': 'mailto:artist@waltviviers.com',
           'app-eyebrow': 'A pixel art pet toy for your browser',
           'hero-tagline': 'Who\'s a good pet?',
           'hero-desc': 'Three pixel pets share one browser. Play fetch with a dog, raise a colony of rats, or tease a cat with a laser pointer. Switch modes any time.',
@@ -841,7 +849,7 @@
           'check-6': 'Pixel hand cursor on desktop',
           'cta-heading': 'Go play'
         },
-        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','email-href': 'mailto:kunstenaar@waltviviers.com',
+        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-apps':'Programme en Speletjies','back-apps':'← Terug na Programme en Speletjies','nav-enquire':'Navraag','email-href': 'mailto:kunstenaar@waltviviers.com',
           'app-eyebrow': '\'n Pixel-kuns troeteldier-speeltjie vir jou blaaier',
           'hero-tagline': 'Wie is \'n goeie troeteldier?',
           'hero-desc': 'Drie pixel-troeteldiere deel een blaaier. Speel apportering met \'n hond, teel \'n kolonie rotte, of terg \'n kat met \'n laserpen. Verwissel modusse enige tyd.',
