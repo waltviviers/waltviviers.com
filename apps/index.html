@@ -263,6 +263,14 @@
       line-height: 1.1;
     }
 
+    .page-intro {
+      max-width: 680px;
+      margin: -40px 0 56px;
+      font-size: clamp(15px, 1.9vw, 18px);
+      color: var(--stone);
+      line-height: 1.8;
+    }
+
     .back-link {
       font-size: 11px;
       letter-spacing: 0.10em;
@@ -435,6 +443,8 @@
       <a href="/" class="back-link" data-i18n="back-home">← Back to home</a>
     </div>
 
+    <p class="page-intro" data-i18n="apps-intro">A corner of the site for the things I build when I'm not painting — browser games and small, genuinely useful apps. Everything here is made independently, free to use, and works without accounts or ads. Nothing is tracked. Have a play.</p>
+
     <div class="apps-grid">
       <a href="/apps/scritch-scratch/" class="app-card">
         <div class="app-card-icon" aria-hidden="true">
@@ -538,8 +548,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','nav-enquire':'Enquire','lp-desc':'Two best-friend rats live in your browser. Visit them in the morning.','view-lp':'Learn more →','rs-soon':'Coming soon','page-title':'Apps and Games','back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','bt-desc':'Split bills and calculate tips instantly. No ads, no tracking, works offline.','platform-android':'Android','view-app':'Learn more →','nt-desc':'A cyberpunk memory puzzle. Watch the sequence, repeat it back — and survive. No ads, no data collected, works offline.','view-nt':'Learn more →','ss-desc':'Three pixel pets in one. Play fetch with a dog, raise a colony of rats, or tease a cat with a laser pointer.','view-ss':'Learn more →' },
-        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','lp-desc':'Twee beste-vriendinne rotte woon in jou blaaier. Besoek hulle soggens.','view-lp':'Meer inligting →','rs-soon':'Binnekort beskikbaar','page-title':'Programme en Speletjies','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','bt-desc':'Verdeel rekeninge en bereken fooie onmiddellik. Geen advertensies, geen opsporing, werk vanlyn.','platform-android':'Android','view-app':'Meer inligting →','nt-desc':"'n Siberknip-geheuelegkaart. Kyk die volgorde, herhaal dit — en oorleef. Geen advertensies, geen data ingesamel nie, werk vanlyn.",'view-nt':'Meer inligting →','ss-desc':'Drie piksel-troeteldiere in een. Speel apportering met \'n hond, teel \'n kolonie rotte, of terg \'n kat met \'n laserpen.','view-ss':'Meer inligting →' }
+        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','nav-enquire':'Enquire','lp-desc':'Two best-friend rats live in your browser. Visit them in the morning.','view-lp':'Learn more →','rs-soon':'Coming soon','page-title':'Apps and Games','apps-intro':"A corner of the site for the things I build when I'm not painting — browser games and small, genuinely useful apps. Everything here is made independently, free to use, and works without accounts or ads. Nothing is tracked. Have a play.",'back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','bt-desc':'Split bills and calculate tips instantly. No ads, no tracking, works offline.','platform-android':'Android','view-app':'Learn more →','nt-desc':'A cyberpunk memory puzzle. Watch the sequence, repeat it back — and survive. No ads, no data collected, works offline.','view-nt':'Learn more →','ss-desc':'Three pixel pets in one. Play fetch with a dog, raise a colony of rats, or tease a cat with a laser pointer.','view-ss':'Learn more →' },
+        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','lp-desc':'Twee beste-vriendinne rotte woon in jou blaaier. Besoek hulle soggens.','view-lp':'Meer inligting →','rs-soon':'Binnekort beskikbaar','page-title':'Programme en Speletjies','apps-intro':'\'n Hoekie van die webwerf vir die goed wat ek bou wanneer ek nie skilder nie — blaaierspeletjies en klein, werklik nuttige programme. Alles hier is onafhanklik gemaak, gratis om te gebruik, en werk sonder rekeninge of advertensies. Niks word gevolg nie. Speel gerus rond.','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','bt-desc':'Verdeel rekeninge en bereken fooie onmiddellik. Geen advertensies, geen opsporing, werk vanlyn.','platform-android':'Android','view-app':'Meer inligting →','nt-desc':"'n Siberknip-geheuelegkaart. Kyk die volgorde, herhaal dit — en oorleef. Geen advertensies, geen data ingesamel nie, werk vanlyn.",'view-nt':'Meer inligting →','ss-desc':'Drie piksel-troeteldiere in een. Speel apportering met \'n hond, teel \'n kolonie rotte, of terg \'n kat met \'n laserpen.','view-ss':'Meer inligting →' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
