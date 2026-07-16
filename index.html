@@ -496,16 +496,47 @@
     }
     .explore-card {
       background: var(--bg);
-      padding: 64px 48px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      min-height: 260px;
       color: inherit;
       text-decoration: none;
       transition: background 0.2s;
     }
     .explore-card:hover { background: var(--bg2); }
+    .explore-media {
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #0D0D0D;
+    }
+    .explore-media > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .explore-card:hover .explore-media > img { transform: scale(1.04); }
+    .explore-media--icons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      background: var(--bg2);
+    }
+    .explore-media--icons img {
+      width: 84px; height: 84px;
+      border-radius: 20px;
+      object-fit: cover;
+      transition: transform 0.35s;
+    }
+    .explore-card:hover .explore-media--icons img:nth-child(1) { transform: translateY(-4px); }
+    .explore-card:hover .explore-media--icons img:nth-child(3) { transform: translateY(4px); }
+    .explore-body {
+      padding: 40px 48px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
     .explore-title {
       font-family: var(--serif);
       font-size: clamp(1.6rem, 3vw, 2.4rem);
@@ -528,6 +559,7 @@
     .explore-card:hover .explore-cta { text-decoration: underline; text-underline-offset: 4px; }
     [data-theme="light"] .explore-card { background: #F5F3EF; }
     [data-theme="light"] .explore-card:hover { background: #EDEAE5; }
+    [data-theme="light"] .explore-media, [data-theme="light"] .explore-media--icons { background: #EDEAE5; }
 
     .section-head {
       display: flex;
@@ -1322,7 +1354,7 @@
 
       #works, #about { padding: 64px 24px; }
       .explore-grid { grid-template-columns: 1fr; }
-      .explore-card { padding: 48px 24px; min-height: 0; }
+      .explore-body { padding: 32px 24px 40px; }
       .instagram-head { padding: 48px 24px 32px; }
       .instagram-grid { grid-template-columns: repeat(3, 1fr); }
 
@@ -1600,14 +1632,26 @@
   <section id="explore">
     <div class="explore-grid">
       <a href="/photography/" class="explore-card">
-        <h2 class="explore-title" data-i18n="explore-photo-title">Photography</h2>
-        <p class="explore-desc" data-i18n="explore-photo-desc">Albums from portrait shoots, events, and retreats.</p>
-        <span class="explore-cta" data-i18n="explore-photo-cta">View albums →</span>
+        <div class="explore-media">
+          <img src="/images/800/IMG_9409.jpg" alt="Photography by Walt Viviers" loading="lazy" width="1152" height="768" />
+        </div>
+        <div class="explore-body">
+          <h2 class="explore-title" data-i18n="explore-photo-title">Photography</h2>
+          <p class="explore-desc" data-i18n="explore-photo-desc">Portrait sessions, events, and wellness retreats — moments captured with a fine artist's eye. Each album opens in Google Photos.</p>
+          <span class="explore-cta" data-i18n="explore-photo-cta">View albums →</span>
+        </div>
       </a>
       <a href="/apps/" class="explore-card">
-        <h2 class="explore-title" data-i18n="explore-apps-title">Apps &amp; Games</h2>
-        <p class="explore-desc" data-i18n="explore-apps-desc">Browser games and small, private, offline-friendly apps.</p>
-        <span class="explore-cta" data-i18n="explore-apps-cta">Explore →</span>
+        <div class="explore-media explore-media--icons" aria-hidden="true">
+          <img src="/images/scritch-scratch-icon.webp" alt="" loading="lazy" width="84" height="84" />
+          <img src="/images/neurotrace-icon2.webp" alt="" loading="lazy" width="84" height="84" />
+          <img src="/images/bill-tipper-icon.webp" alt="" loading="lazy" width="84" height="84" />
+        </div>
+        <div class="explore-body">
+          <h2 class="explore-title" data-i18n="explore-apps-title">Apps &amp; Games</h2>
+          <p class="explore-desc" data-i18n="explore-apps-desc">A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.</p>
+          <span class="explore-cta" data-i18n="explore-apps-cta">Explore →</span>
+        </div>
       </a>
     </div>
   </section>
@@ -1901,8 +1945,8 @@
         'nav-works': 'Artworks', 'nav-photography': 'Photography', 'nav-apps': 'Apps and Games', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on', 'view-gallery': 'View Gallery ↗',
-        'explore-photo-title': 'Photography', 'explore-photo-desc': 'Albums from portrait shoots, events, and retreats.', 'explore-photo-cta': 'View albums →',
-        'explore-apps-title': 'Apps & Games', 'explore-apps-desc': 'Browser games and small, private, offline-friendly apps.', 'explore-apps-cta': 'Explore →',
+        'explore-photo-title': 'Photography', 'explore-photo-desc': 'Portrait sessions, events, and wellness retreats — moments captured with a fine artist\'s eye. Each album opens in Google Photos.', 'explore-photo-cta': 'View albums →',
+        'explore-apps-title': 'Apps & Games', 'explore-apps-desc': 'A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.', 'explore-apps-cta': 'Explore →',
         'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
         'about-p1': 'I am a South African fine artist working in acrylic and mixed media. Twenty years of professional creative practice — across design, art direction, and brand — have sharpened a painter\'s eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.',
         'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
@@ -1938,8 +1982,8 @@
         'nav-works': 'Kunswerke', 'nav-photography': 'Fotografie', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
-        'explore-photo-title': 'Fotografie', 'explore-photo-desc': 'Albums van portret-sessies, geleenthede en toevlugte.', 'explore-photo-cta': 'Sien albums →',
-        'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': 'Blaaierspeletjies en klein, private programme wat vanlyn werk.', 'explore-apps-cta': 'Verken →',
+        'explore-photo-title': 'Fotografie', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — oomblikke vasgevang met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →',
+        'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': '\'n Groeiende versameling blaaierspeletjies en klein, private programme wat vanlyn werk — van \'n drie-troeteldier-speelding tot \'n handige fooi-sakrekenaar. Geen advertensies, geen opsporing.', 'explore-apps-cta': 'Verken →',
         'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
         'about-p1': 'Ek is ‘n Suid-Afrikaanse kunstenaar wat in akriel en gemengde media werk. Twintig jaar se professionele kreatiewe praktyk — deur ontwerp, kunsdireksie en handelsmerk — het ‘n skilder se oog geslyp wat die spanning tussen die poësie en musiek van ‘n beeld vind: van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.',
         'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
