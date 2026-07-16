@@ -207,6 +207,13 @@
       text-align: center; padding-left: 24px; padding-right: 24px;
       border-bottom: 1px solid var(--rule); position: relative;
     }
+    .app-back {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.10em;
+      text-transform: uppercase; color: var(--stone);
+      transition: color 0.2s; margin-bottom: 22px; display: inline-block;
+    }
+    .app-back:hover { color: var(--ink); }
+
     .app-eyebrow {
       font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
       text-transform: uppercase; color: var(--stone); margin-bottom: 28px;
@@ -368,6 +375,7 @@
 
     <!-- Hero -->
     <section class="hero">
+      <a href="/apps/" class="app-back" data-i18n="back-apps">← Back to Apps and Games</a>
       <p class="app-eyebrow" data-i18n="app-eyebrow">A browser game by Walt Viviers</p>
       <div class="app-icon" aria-hidden="true">
         <svg viewBox="0 0 64 64" width="96" height="96" xmlns="http://www.w3.org/2000/svg">
@@ -478,8 +486,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','app-eyebrow':'A browser game by Walt Viviers','hero-tagline':'Your very own virtual rats.','hero-desc':'Feed them. Play with them. Watch them nap in a tiny pile of bedding. Pet Rat Simulator is a cozy pet simulation for people who have always wanted rats.','coming-soon':'Coming soon','play-now':'Play now','privacy-tag':'Built with care','priv-h1':'No ads.','priv-h2':'No data.','priv-h3':'No install.','privacy-desc':'Pet Rat Simulator runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you and your rats.','check-1':'No personal data collected','check-2':'No account or sign-in required','check-3':'Works fully offline','check-4':'No ads or tracking of any kind','check-5':'No device permissions requested','check-6':'Free to play','cta-line1':'Your rats are','cta-line2':'almost ready.' },
-        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','app-eyebrow':'\'n Blaaierspeletjie deur Walt Viviers','hero-tagline':'Jou eie virtuele rotte.','hero-desc':'Voer hulle. Speel saam. Kyk hoe hulle slaap in \'n klein hoop beddegoed. Pet Rat Simulator is \'n gesellige troeteldier-simulasie vir mense wat altyd rotte wou hê.','coming-soon':'Binnekort beskikbaar','play-now':'Speel nou','privacy-tag':'Gebou met sorg','priv-h1':'Geen advertensies.','priv-h2':'Geen data.','priv-h3':'Geen installasie.','privacy-desc':'Pet Rat Simulator loop heeltemal in jou blaaier. Niks word gestoor, gestuur of gevolg nie. Net jy en jou rotte.','check-1':'Geen persoonlike data ingesamel','check-2':'Geen rekening of aanmelding benodig','check-3':'Werk volledig vanlyn','check-4':'Geen advertensies of opsporing','check-5':'Geen toestemmings vereis','check-6':'Gratis om te speel','cta-line1':'Jou rotte is','cta-line2':'amper gereed.' }
+        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','back-apps':'← Back to Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','app-eyebrow':'A browser game by Walt Viviers','hero-tagline':'Your very own virtual rats.','hero-desc':'Feed them. Play with them. Watch them nap in a tiny pile of bedding. Pet Rat Simulator is a cozy pet simulation for people who have always wanted rats.','coming-soon':'Coming soon','play-now':'Play now','privacy-tag':'Built with care','priv-h1':'No ads.','priv-h2':'No data.','priv-h3':'No install.','privacy-desc':'Pet Rat Simulator runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you and your rats.','check-1':'No personal data collected','check-2':'No account or sign-in required','check-3':'Works fully offline','check-4':'No ads or tracking of any kind','check-5':'No device permissions requested','check-6':'Free to play','cta-line1':'Your rats are','cta-line2':'almost ready.' },
+        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-apps':'Programme en Speletjies','back-apps':'← Terug na Programme en Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','app-eyebrow':'\'n Blaaierspeletjie deur Walt Viviers','hero-tagline':'Jou eie virtuele rotte.','hero-desc':'Voer hulle. Speel saam. Kyk hoe hulle slaap in \'n klein hoop beddegoed. Pet Rat Simulator is \'n gesellige troeteldier-simulasie vir mense wat altyd rotte wou hê.','coming-soon':'Binnekort beskikbaar','play-now':'Speel nou','privacy-tag':'Gebou met sorg','priv-h1':'Geen advertensies.','priv-h2':'Geen data.','priv-h3':'Geen installasie.','privacy-desc':'Pet Rat Simulator loop heeltemal in jou blaaier. Niks word gestoor, gestuur of gevolg nie. Net jy en jou rotte.','check-1':'Geen persoonlike data ingesamel','check-2':'Geen rekening of aanmelding benodig','check-3':'Werk volledig vanlyn','check-4':'Geen advertensies of opsporing','check-5':'Geen toestemmings vereis','check-6':'Gratis om te speel','cta-line1':'Jou rotte is','cta-line2':'amper gereed.' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {
