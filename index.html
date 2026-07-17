@@ -624,7 +624,7 @@
       position: relative;
     }
 
-    .works-grid .work-thumb:nth-child(n+13) { display: none; }
+    .works-grid .work-thumb:nth-child(n+9) { display: none; }
 
     .view-gallery-btn {
       display: flex;
@@ -1296,6 +1296,7 @@
     /* ── Responsive ──────────────────────────────── */
     @media (max-width: 1200px) {
       .works-grid { grid-template-columns: repeat(3, 1fr); }
+      .works-grid .work-thumb:nth-child(n+7) { display: none; }
       .instagram-grid { grid-template-columns: repeat(6, 1fr); }
     }
 
