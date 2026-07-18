@@ -795,10 +795,19 @@ function drawCatKitchenItems() {
   ctx.fillRect(fbCX - fbBW / 2 + 4, fbTopY + 4, 4, fbBH - 8);
 
   // Animated goldfish
+  if (fishJumpTick > 0) {
+    if (fishJumpTick === 4) {
+      labels.push(new Label('Splash!', fbCX, fbTopY - 2));
+      sndBlub();
+    }
+    fishJumpTick--;
+  }
   const fA = gameTick * 0.04;
   const fishX = fbCX + Math.round(Math.cos(fA) * 5);
-  const fishY = (fbTopY + Math.round(fbBH / 2) + 2) + Math.round(Math.sin(fA) * 4);
+  const fishBaseY = (fbTopY + Math.round(fbBH / 2) + 2) + Math.round(Math.sin(fA) * 4);
   const fishRight = Math.cos(fA) > 0;
+  const jumpT = fishJumpTick > 0 ? 1 - fishJumpTick / 60 : 0;
+  const fishY = fishBaseY - Math.round(36 * 4 * jumpT * (1 - jumpT));
 
   ctx.fillStyle = '#ff7a00';
   ctx.fillRect(fishX - 4, fishY - 1, 7, 3);
@@ -812,11 +821,22 @@ function drawCatKitchenItems() {
   }
   ctx.fillStyle = '#111';
   ctx.fillRect(fishRight ? fishX + 1 : fishX - 3, fishY - 1, 2, 2);
+
+  // Splash ripples on water surface while jumping
+  if (fishJumpTick > 40 || (fishJumpTick > 0 && fishJumpTick < 12)) {
+    const rippleAlpha = fishJumpTick > 40 ? (60 - fishJumpTick) / 20 : fishJumpTick / 12;
+    ctx.save(); ctx.globalAlpha = rippleAlpha * 0.7;
+    ctx.fillStyle = '#aaddee';
+    ctx.fillRect(fishX - 6, fbTopY + 4, 3, 2);
+    ctx.fillRect(fishX + 3, fbTopY + 4, 3, 2);
+    ctx.restore();
+  }
 }
 
 // ─── Game mode ────────────────────────────────────────────────────────────────
 let gameMode = 'dog';
 let gameTick = 0;
+let fishJumpTick = 0;
 
 // ─── Persistent state ────────────────────────────────────────────────────────
 const modeStates = { dog: null, rat: null, cat: null };
@@ -2174,6 +2194,7 @@ function enterCatMode() {
   thrownBall = null; marker = null; laserActive = false; interacted = false;
   scritchCat = null;
   catVisitorCooldown = 60 * 25;
+  fishJumpTick = 0;
   woolBall = { x: canvas.width * 0.6, y: woolRailY(), vx: 0, vy: 0 };
   placeCatFurniture();
   if (!restoreCatState()) {
@@ -2269,6 +2290,17 @@ canvas.addEventListener('pointerdown', e => {
             cat.chaseTarget = r; cat.state = 'chase';
           }
         }
+        return;
+      }
+    }
+    // Tap fishbowl → fish jumps
+    {
+      const fbCX = Math.round(canvas.width * 0.21);
+      const fbBotY = Math.round(canvas.height * 0.26);
+      const fbTopY = fbBotY - 22 - 8;
+      if (px >= fbCX - 16 && px <= fbCX + 16 && py >= fbTopY - 6 && py <= fbBotY + 6) {
+        fishJumpTick = 60; sndBlub();
+        labels.push(new Label('Blub!', fbCX, fbTopY - 12));
         return;
       }
     }
@@ -2686,6 +2718,20 @@ function sndSip() {
     gn.gain.setValueAtTime(0, t + dt); gn.gain.linearRampToValueAtTime(0.07, t + dt + 0.03);
     gn.gain.linearRampToValueAtTime(0, t + dt + 0.10);
     src.connect(flt); flt.connect(gn); gn.connect(_masterGain); src.start(t + dt);
+  }
+}
+
+function sndBlub() {
+  if (!_cool('blub', 30)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  for (let i = 0; i < 2; i++) {
+    const dt = i * 0.07;
+    const osc = ctx.createOscillator(); osc.type = 'sine';
+    osc.frequency.setValueAtTime(500 - i * 60, t + dt);
+    osc.frequency.exponentialRampToValueAtTime(200 - i * 30, t + dt + 0.09);
+    const gn = ctx.createGain();
+    gn.gain.setValueAtTime(0.07, t + dt); gn.gain.exponentialRampToValueAtTime(0.001, t + dt + 0.10);
+    osc.connect(gn); gn.connect(_masterGain); osc.start(t + dt); osc.stop(t + dt + 0.11);
   }
 }
 
