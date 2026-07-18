@@ -338,25 +338,24 @@
     .hero {
       padding-top: 100px; /* nav height */
       display: grid;
-      grid-template-columns: 1fr 320px;
-      min-height: 100vh;
+      grid-template-columns: 1fr 440px;
+      align-items: start;
     }
 
     .hero-image-wrap {
       position: relative;
       background: #0D0D0D;
       overflow: hidden;
-      min-height: calc(100vh - 100px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .hero-image-wrap img {
-      position: absolute;
-      top: 0;
-      left: 0;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
+      height: auto;
+      max-height: 72vh;
+      object-fit: contain;
       transition: opacity 0.6s;
       display: block;
     }
@@ -486,6 +485,95 @@
       border-top: 1px solid var(--rule);
     }
 
+    /* ── Explore (Photography & Apps) ── */
+    #explore { border-top: 1px solid var(--rule); }
+    .explore-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1px;
+      background: var(--rule);
+    }
+    .explore-card {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      color: inherit;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .explore-card:hover { background: var(--bg2); }
+    .explore-media {
+      aspect-ratio: 12 / 5;
+      overflow: hidden;
+      background: #0D0D0D;
+    }
+    .explore-media > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .explore-card:hover .explore-media > img { transform: scale(1.04); }
+    .explore-media--grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2px;
+      background: var(--rule);
+    }
+    .explore-media--grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .explore-media--grid img:first-child { grid-row: 1 / 3; }
+    .explore-card:hover .explore-media--grid img { transform: none; }
+    .explore-media--icons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      background: var(--bg2);
+    }
+    .explore-media--icons img {
+      width: 84px; height: 84px;
+      border-radius: 20px;
+      object-fit: cover;
+      transition: transform 0.35s;
+    }
+    .explore-card:hover .explore-media--icons img:nth-child(1) { transform: translateY(-4px); }
+    .explore-card:hover .explore-media--icons img:nth-child(3) { transform: translateY(4px); }
+    .explore-body {
+      padding: 40px 48px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      flex: 1;
+    }
+    .explore-title {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.1;
+    }
+    .explore-desc {
+      font-size: 15px;
+      color: var(--stone);
+      line-height: 1.7;
+      flex: 1;
+    }
+    .explore-cta {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .explore-card:hover .explore-cta { text-decoration: underline; text-underline-offset: 4px; }
+    [data-theme="light"] .explore-card { background: #F5F3EF; }
+    [data-theme="light"] .explore-card:hover { background: #EDEAE5; }
+    [data-theme="light"] .explore-media, [data-theme="light"] .explore-media--icons { background: #EDEAE5; }
+
     .section-head {
       display: flex;
       align-items: baseline;
@@ -535,7 +623,7 @@
       position: relative;
     }
 
-    .works-grid .work-thumb:nth-child(n+13) { display: none; }
+    .works-grid .work-thumb:nth-child(n+9) { display: none; }
 
     .view-gallery-btn {
       display: flex;
@@ -1207,6 +1295,7 @@
     /* ── Responsive ──────────────────────────────── */
     @media (max-width: 1200px) {
       .works-grid { grid-template-columns: repeat(3, 1fr); }
+      .works-grid .work-thumb:nth-child(n+7) { display: none; }
       .instagram-grid { grid-template-columns: repeat(6, 1fr); }
     }
 
@@ -1235,15 +1324,12 @@
 
       .hero-image-wrap {
         min-height: 0;
-        aspect-ratio: 4/3;
       }
 
       .hero-image-wrap img {
-        position: absolute;
         width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
+        height: auto;
+        max-height: 62vh;
       }
 
       .hero-detail {
@@ -1278,6 +1364,8 @@
       .hero-actions     { margin-top: 24px; }
 
       #works, #about { padding: 64px 24px; }
+      .explore-grid { grid-template-columns: 1fr; }
+      .explore-body { padding: 32px 24px 40px; }
       .instagram-head { padding: 48px 24px 32px; }
       .instagram-grid { grid-template-columns: repeat(3, 1fr); }
 
@@ -1434,10 +1522,11 @@
       </div>
     </div>
     <ul class="nav-links">
-      <li class="nav-link-hide"><a href="#works" data-i18n="nav-works">Artworks</a></li>
-      <li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography</a></li>
       <li class="nav-link-hide"><a href="#about" data-i18n="nav-about">About</a></li>
       <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>
+      <li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-works">Artworks</a></li>
+      <li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps and Games</a></li>
       <li class="nav-link-hide"><a href="#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -1472,10 +1561,11 @@
   <!-- Mobile menu overlay -->
   <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Navigation menu">
     <div class="mobile-menu-links">
-      <a href="#works" class="mobile-menu-link" data-i18n="nav-works">Artworks <span class="mobile-menu-arrow">↗</span></a>
-      <a href="/photography/" class="mobile-menu-link" data-i18n="nav-photography">Photography <span class="mobile-menu-arrow">↗</span></a>
       <a href="#about" class="mobile-menu-link" data-i18n="nav-about">About <span class="mobile-menu-arrow">↗</span></a>
       <a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio &amp; Statement <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/gallery/" class="mobile-menu-link" data-i18n="nav-works">Artworks <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/photography/" class="mobile-menu-link" data-i18n="nav-photography">Photography <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/apps/" class="mobile-menu-link" data-i18n="nav-apps">Apps and Games <span class="mobile-menu-arrow">↗</span></a>
       <a href="#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>
     </div>
     <div class="mobile-menu-foot">
@@ -1543,10 +1633,40 @@
           <span class="saatchi-wordmark">SAATCHI ART</span>
         </a>
       </div>
-      <span class="section-count" id="works-count"></span>
+      <a href="/gallery/" class="section-count" id="works-count" style="text-decoration:underline;text-underline-offset:3px;"></a>
     </div>
     <div class="works-grid" id="works-grid"></div>
     <a href="/gallery/" class="view-gallery-btn" data-i18n="view-gallery">View Gallery ↗</a>
+  </section>
+
+  <!-- Explore: Photography & Apps -->
+  <section id="explore">
+    <div class="explore-grid">
+      <a href="/photography/" class="explore-card">
+        <div class="explore-media explore-media--grid" aria-hidden="true">
+          <img src="/images/800/IMG_9409.jpg" alt="" loading="lazy" width="1152" height="768" />
+          <img src="/images/800/IMG_9032.jpg" alt="" loading="lazy" width="1152" height="768" />
+          <img src="/images/800/IMG_8939.jpg" alt="" loading="lazy" width="1152" height="768" />
+        </div>
+        <div class="explore-body">
+          <h2 class="explore-title" data-i18n="explore-photo-title">Photography</h2>
+          <p class="explore-desc" data-i18n="explore-photo-desc">Portrait sessions, events, and wellness retreats — moments captured with a fine artist's eye. Each album opens in Google Photos.</p>
+          <span class="explore-cta" data-i18n="explore-photo-cta">View albums →</span>
+        </div>
+      </a>
+      <a href="/apps/" class="explore-card">
+        <div class="explore-media explore-media--icons" aria-hidden="true">
+          <img src="/images/scritch-scratch-icon.webp" alt="" loading="lazy" width="84" height="84" />
+          <img src="/images/neurotrace-icon2.webp" alt="" loading="lazy" width="84" height="84" />
+          <img src="/images/bill-tipper-icon.webp" alt="" loading="lazy" width="84" height="84" />
+        </div>
+        <div class="explore-body">
+          <h2 class="explore-title" data-i18n="explore-apps-title">Apps &amp; Games</h2>
+          <p class="explore-desc" data-i18n="explore-apps-desc">A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.</p>
+          <span class="explore-cta" data-i18n="explore-apps-cta">Explore →</span>
+        </div>
+      </a>
+    </div>
   </section>
 
   <!-- Brush divider -->
@@ -1835,9 +1955,11 @@
   (function () {
     var T = {
       en: {
-        'nav-works': 'Artworks', 'nav-photography': 'Photography', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-enquire': 'Enquire',
+        'nav-works': 'Artworks', 'nav-photography': 'Photography', 'nav-apps': 'Apps and Games', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on', 'view-gallery': 'View Gallery ↗',
+        'explore-photo-title': 'Photography', 'explore-photo-desc': 'Portrait sessions, events, and wellness retreats — moments captured with a fine artist\'s eye. Each album opens in Google Photos.', 'explore-photo-cta': 'View albums →',
+        'explore-apps-title': 'Apps & Games', 'explore-apps-desc': 'A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.', 'explore-apps-cta': 'Explore →',
         'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
         'about-p1': 'I am a South African fine artist working in acrylic and mixed media. Twenty years of professional creative practice — across design, art direction, and brand — have sharpened a painter\'s eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.',
         'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
@@ -1870,9 +1992,11 @@
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.'
       },
       af: {
-        'nav-works': 'Kunswerke', 'nav-photography': 'Fotografie', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-enquire': 'Navraag',
+        'nav-works': 'Kunswerke', 'nav-photography': 'Fotografie', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
+        'explore-photo-title': 'Fotografie', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — oomblikke vasgevang met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →',
+        'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': '\'n Groeiende versameling blaaierspeletjies en klein, private programme wat vanlyn werk — van \'n drie-troeteldier-speelding tot \'n handige fooi-sakrekenaar. Geen advertensies, geen opsporing.', 'explore-apps-cta': 'Verken →',
         'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
         'about-p1': 'Ek is ‘n Suid-Afrikaanse kunstenaar wat in akriel en gemengde media werk. Twintig jaar se professionele kreatiewe praktyk — deur ontwerp, kunsdireksie en handelsmerk — het ‘n skilder se oog geslyp wat die spanning tussen die poësie en musiek van ‘n beeld vind: van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.',
         'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
@@ -2145,16 +2269,39 @@
       heroEl.addEventListener('touchstart', pauseAutoplay, { passive: true });
 
       /* ── Prev / Next ── */
-      document.getElementById('gn-prev').addEventListener('click', () => {
+      function goPrev() {
+        if (!works.length) return;
         current = (current - 1 + works.length) % works.length;
         renderHero(current);
         pauseAutoplay();
-      });
-      document.getElementById('gn-next').addEventListener('click', () => {
+      }
+      function goNext() {
+        if (!works.length) return;
         current = (current + 1) % works.length;
         renderHero(current);
         pauseAutoplay();
-      });
+      }
+      document.getElementById('gn-prev').addEventListener('click', goPrev);
+      document.getElementById('gn-next').addEventListener('click', goNext);
+
+      /* ── Swipe left / right on the hero image ── */
+      (function () {
+        var wrap = document.getElementById('hero-image');
+        var sx = 0, sy = 0, st = 0, tracking = false;
+        wrap.addEventListener('touchstart', function (e) {
+          var t = e.changedTouches[0];
+          sx = t.clientX; sy = t.clientY; st = Date.now(); tracking = true;
+        }, { passive: true });
+        wrap.addEventListener('touchend', function (e) {
+          if (!tracking) return;
+          tracking = false;
+          var t = e.changedTouches[0];
+          var dx = t.clientX - sx, dy = t.clientY - sy;
+          if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5 && (Date.now() - st) < 800) {
+            if (dx < 0) goNext(); else goPrev();
+          }
+        }, { passive: true });
+      })();
 
       /* ── Init: load artworks from CMS data ── */
       setHeroState('Loading…');

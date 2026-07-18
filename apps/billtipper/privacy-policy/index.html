@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow" />
+  <meta name="robots" content="index, follow" />
   <title>Privacy Policy — Bill Tipper</title>
   <meta name="description" content="Privacy policy for Bill Tipper, a tip and bill splitting app by Walt Viviers." />
   <link rel="canonical" href="https://waltviviers.com/apps/billtipper/privacy-policy/" />
@@ -307,8 +307,11 @@
       </div>
     </div>
     <ul class="nav-links">
-      <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>
+      <li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-artworks">Artworks</a></li>
+      <li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps and Games</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -347,13 +350,13 @@
     <p>Nothing. Bill Tipper is a simple tip and bill-splitting calculator. It requires no account, no sign-in, and no network connection to function. No information is collected from you at any time.</p>
 
     <h2>Data Storage</h2>
-    <p>Bill Tipper does not store any data beyond the current session. When you close the app, all values are cleared. Nothing is written to external servers, analytics platforms, or third-party services.</p>
+    <p>Bill Tipper does not store any data beyond the current session. When you close the app, all values are cleared. Nothing is written to external servers, analytics platforms, or third-party services. If you use the optional receipt-scanning feature, the captured image is analysed on your device to read the bill total and is then discarded immediately — it is never saved, uploaded, or shared.</p>
 
     <h2>Third-Party Services</h2>
     <p>Bill Tipper does not integrate any third-party SDKs, advertising networks, analytics tools, or crash-reporting services. There are no trackers of any kind.</p>
 
     <h2>Permissions</h2>
-    <p>Bill Tipper requests no device permissions. It does not access your camera, microphone, contacts, location, or any other sensitive data.</p>
+    <p>Bill Tipper requests only optional camera access, used solely for the optional receipt-scanning feature. The camera is never accessed unless you choose to scan a receipt, and any image captured is processed entirely on your device and never stored, uploaded, or shared. Bill Tipper does not access your microphone, contacts, location, or any other sensitive data.</p>
 
     <h2>Children's Privacy</h2>
     <p>Because Bill Tipper collects no data whatsoever, it is safe for users of all ages.</p>
@@ -432,8 +435,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.' }
+        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.' },
+        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {

@@ -10,7 +10,7 @@
     canvas { display: block; touch-action: none; cursor: none; }
 
     #menu-btn {
-      position: fixed; top: 16px; right: 16px; z-index: 100;
+      position: fixed; top: 16px; left: 16px; z-index: 100;
       background: none; border: none; cursor: pointer;
       opacity: 0.35; transition: opacity 0.2s; line-height: 0; padding: 0;
     }
@@ -18,7 +18,7 @@
     #menu-btn img { height: 24px; width: auto; display: block; }
 
     #menu-drop {
-      display: none; position: fixed; top: 48px; right: 16px; z-index: 200;
+      display: none; position: fixed; top: 48px; left: 16px; z-index: 200;
       background: #0a0a0a; border: 1px solid #333; min-width: 140px;
     }
     #menu-drop.open { display: block; }
@@ -73,6 +73,7 @@
 </button>
 <div id="menu-drop">
   <a href="https://waltviviers.com/">Go To Main Site</a>
+  <a href="https://waltviviers.com/apps/">Apps &amp; Games</a>
   <button id="htp-btn" class="sep">How to Play</button>
   <button class="sep mode-switch" data-mode="dog">Doggo Mode</button>
   <button class="mode-switch" data-mode="rat">Ratty Mode</button>
@@ -2889,20 +2890,6 @@ function loop() {
       const rLeft = RAIL_PAD, rRight = canvas.width - RAIL_PAD - wbw;
       if (woolBall.x < rLeft) { woolBall.x = rLeft; woolBall.vx = Math.abs(woolBall.vx) * 0.75; }
       if (woolBall.x > rRight) { woolBall.x = rRight; woolBall.vx = -Math.abs(woolBall.vx) * 0.75; }
-
-      // Draw rail bar
-      const railBarY = ry + Math.floor(wbh / 2) - 2;
-      ctx.fillStyle = '#887766';
-      ctx.fillRect(RAIL_PAD - 4, railBarY, canvas.width - RAIL_PAD * 2 + 8, 4);
-      ctx.fillStyle = '#aaa090';
-      ctx.fillRect(RAIL_PAD - 4, railBarY, canvas.width - RAIL_PAD * 2 + 8, 2);
-      // End bracket mounts
-      for (const bx of [RAIL_PAD - 7, canvas.width - RAIL_PAD + 3]) {
-        ctx.fillStyle = '#665544';
-        ctx.fillRect(bx, railBarY - 5, 5, 13);
-        ctx.fillStyle = '#998877';
-        ctx.fillRect(bx, railBarY - 5, 5, 2);
-      }
 
       // Draw ball
       ctx.fillStyle = '#cc4488';

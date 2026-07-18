@@ -349,6 +349,58 @@
       font-size: clamp(1.1rem, 2vw, 1.5rem);
     }
 
+    /* Page byline */
+    .page-head-title { display: flex; flex-direction: column; gap: 6px; }
+    .page-byline {
+      font-family: var(--serif); font-style: italic;
+      font-size: clamp(0.95rem, 1.6vw, 1.15rem); color: var(--stone);
+    }
+
+    /* ── Enquiry ── */
+    .enquiry {
+      padding: 88px 48px 96px;
+      border-top: 1px solid var(--rule);
+    }
+    .enquiry-inner { max-width: 560px; margin: 0 auto; }
+    .enquiry-tag {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--stone); margin-bottom: 16px;
+    }
+    .enquiry-title {
+      font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em;
+      font-size: clamp(1.7rem, 3.4vw, 2.6rem); line-height: 1.1; margin-bottom: 16px;
+    }
+    .enquiry-desc { color: var(--stone); line-height: 1.7; margin-bottom: 36px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .form-group label {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.10em;
+      text-transform: uppercase; color: var(--stone);
+    }
+    .form-group input, .form-group textarea {
+      background: var(--bg); border: 1px solid var(--rule); color: var(--ink);
+      font-family: var(--sans); font-size: 14px; padding: 12px 14px;
+      outline: none; transition: border-color 0.2s; resize: none; width: 100%;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--stone); }
+    [data-theme="light"] .form-group input,
+    [data-theme="light"] .form-group textarea { background: #FBFAF8; }
+
+    .btn-primary {
+      display: block; width: 100%; text-align: center; cursor: pointer;
+      padding: 14px 24px; background: var(--white); color: var(--black);
+      font-family: var(--sans); font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase; border: none;
+      transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-primary:disabled { opacity: 0.5; cursor: default; }
+    [data-theme="light"] .btn-primary { background: #0C0C0B; color: #FAF9F7; }
+
+    .form-error { font-size: 0.82rem; color: #c0392b; margin-top: 8px; text-align: center; }
+    .form-success { text-align: center; padding: 8px 0; }
+    .form-success p { color: var(--stone); line-height: 1.7; }
+
     /* Loading skeleton */
     .skeleton { background: var(--bg2); animation: pulse 1.5s ease-in-out infinite; }
     .skeleton-info { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
@@ -381,6 +433,7 @@
       .page-wrap { padding-top: 50px; }
       .page-head { padding: 40px 24px 32px; }
       .photo-grid { grid-template-columns: repeat(2, 1fr); }
+      .enquiry { padding: 64px 24px 72px; }
 
       footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
       .footer-admin { position: static; transform: none; order: 1; }
@@ -414,9 +467,11 @@
       </div>
     </div>
     <ul class="nav-links">
-      <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
-      <li class="nav-link-hide"><a href="/photography/" class="is-current" data-i18n="nav-photography">Photography</a></li>
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
+      <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>
+      <li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-artworks">Artworks</a></li>
+      <li class="nav-link-hide"><a href="/photography/" class="is-current" data-i18n="nav-photography">Photography</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps and Games</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -444,7 +499,10 @@
 
   <div class="page-wrap">
     <div class="page-head">
-      <h1 data-i18n="page-title">Photography</h1>
+      <div class="page-head-title">
+        <h1 data-i18n="page-title">Photography</h1>
+        <p class="page-byline" data-i18n="page-byline">by Walt Viviers</p>
+      </div>
       <div class="page-head-meta">
         <span class="photos-count" id="photos-count"></span>
         <a href="/" class="back-link" data-i18n="back-home">← Back to home</a>
@@ -457,6 +515,34 @@
       <div class="skeleton"><div class="skeleton-info"><div class="skeleton-line" style="width:45%"></div><div class="skeleton-line" style="width:20%"></div></div><div class="skeleton-img"></div></div>
       <div class="skeleton"><div class="skeleton-info"><div class="skeleton-line" style="width:60%"></div><div class="skeleton-line" style="width:16%"></div></div><div class="skeleton-img"></div></div>
     </main>
+
+    <section class="enquiry" id="enquiry" aria-label="Photography enquiry">
+      <div class="enquiry-inner">
+        <p class="enquiry-tag" data-i18n="enq-tag">Enquiries</p>
+        <h2 class="enquiry-title" data-i18n="enq-title">Book a shoot</h2>
+        <p class="enquiry-desc" data-i18n="enq-desc">Portraits, events, retreats, weddings — tell me what you have in mind and I'll be in touch.</p>
+        <form id="photo-enquiry-form" novalidate>
+          <input type="hidden" name="_subject" value="Photography Enquiry" />
+          <div class="form-group">
+            <label for="pe-name" data-i18n="form-name">Name</label>
+            <input type="text" id="pe-name" name="name" required placeholder="Your name" data-i18n-placeholder="form-placeholder-name" />
+          </div>
+          <div class="form-group">
+            <label for="pe-email" data-i18n="form-email">Email</label>
+            <input type="email" id="pe-email" name="email" required placeholder="your@email.com" data-i18n-placeholder="form-placeholder-email" />
+          </div>
+          <div class="form-group">
+            <label for="pe-message" data-i18n="form-message">Message</label>
+            <textarea id="pe-message" name="message" rows="4" placeholder="I'd like to enquire about…" data-i18n-placeholder="form-placeholder-photo"></textarea>
+          </div>
+          <p class="form-error" hidden></p>
+          <button type="submit" class="btn-primary" data-i18n="enq-send">Send enquiry</button>
+        </form>
+        <div class="form-success" hidden>
+          <p data-i18n="form-success-msg">Thank you — your message has been sent. Walt will be in touch shortly.</p>
+        </div>
+      </div>
+    </section>
   </div>
 
   <footer>
@@ -522,8 +608,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-photography':'Photography','nav-about':'About','nav-enquire':'Enquire','page-title':'Photography','back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','count-suffix':'album','count-suffix-plural':'albums','view-album':'View on Google Photos','untitled-album':'Untitled album','coming-soon':'Coming soon','empty':'Albums coming soon.','load-error':'Could not load albums.' },
-        af: { 'nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-about':'Oor my','nav-enquire':'Navraag','page-title':'Fotografie','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','count-suffix':'album','count-suffix-plural':'albums','view-album':'Sien op Google Foto\'s','untitled-album':'Naamlose album','coming-soon':'Binnekort beskikbaar','empty':'Albums binnekort beskikbaar.','load-error':'Kon nie albums laai nie.' }
+        en: { 'nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','nav-bio':'Bio & Statement','nav-about':'About','nav-enquire':'Enquire','page-title':'Photography','page-byline':'by Walt Viviers','back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','count-suffix':'album','count-suffix-plural':'albums','view-album':'View on Google Photos','untitled-album':'Untitled album','coming-soon':'Coming soon','empty':'Albums coming soon.','load-error':'Could not load albums.','enq-tag':'Enquiries','enq-title':'Book a shoot','enq-desc':"Portraits, events, retreats, weddings — tell me what you have in mind and I'll be in touch.",'form-name':'Name','form-email':'Email','form-message':'Message','form-placeholder-name':'Your name','form-placeholder-email':'your@email.com','form-placeholder-photo':"I'd like to enquire about…",'enq-send':'Send enquiry','form-success-msg':'Thank you — your message has been sent. Walt will be in touch shortly.' },
+        af: { 'nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-apps':'Programme en Speletjies','nav-bio':'Bio & Verklaring','nav-about':'Oor my','nav-enquire':'Navraag','page-title':'Fotografie','page-byline':'deur Walt Viviers','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','count-suffix':'album','count-suffix-plural':'albums','view-album':'Sien op Google Foto\'s','untitled-album':'Naamlose album','coming-soon':'Binnekort beskikbaar','empty':'Albums binnekort beskikbaar.','load-error':'Kon nie albums laai nie.','enq-tag':'Navrae','enq-title':'Bespreek \'n sessie','enq-desc':'Portrette, geleenthede, toevlugte, troues — laat weet my wat jy in gedagte het en ek sal in kontak wees.','form-name':'Naam','form-email':'E-pos','form-message':'Boodskap','form-placeholder-name':'Jou naam','form-placeholder-email':'jou@e-pos.com','form-placeholder-photo':'Ek wil graag navraag doen oor…','enq-send':'Stuur navraag','form-success-msg':'Dankie — jou boodskap is gestuur. Walt sal binnekort in kontak wees.' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       window._t = function (k) { return (LANG[lang] && LANG[lang][k] !== undefined) ? LANG[lang][k] : k; };
@@ -536,6 +622,10 @@
         document.querySelectorAll('[data-i18n-href]').forEach(function(el) {
           var k = el.dataset.i18nHref;
           if (LANG[l] && LANG[l][k] !== undefined) el.href = LANG[l][k];
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+          var k = el.dataset.i18nPlaceholder;
+          if (LANG[l] && LANG[l][k] !== undefined) el.placeholder = LANG[l][k];
         });
         document.getElementById('lang-en').classList.toggle('active', l === 'en');
         document.getElementById('lang-af').classList.toggle('active', l === 'af');
@@ -608,6 +698,41 @@
 
       // Apply saved language now that render hooks exist
       if (window._applyLang) window._applyLang(window._initLang || 'en');
+    })();
+  </script>
+  <script>
+    // ── Formspree enquiry form ──
+    (function () {
+      var form = document.getElementById('photo-enquiry-form');
+      if (!form) return;
+      var btn = form.querySelector('[type="submit"]');
+      var origText = btn.textContent;
+      var section = document.getElementById('enquiry');
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        if (!form.reportValidity()) return;
+        var errEl = form.querySelector('.form-error');
+        btn.disabled = true; btn.textContent = '…';
+        errEl.hidden = true; errEl.textContent = '';
+        try {
+          var res = await fetch('https://formspree.io/f/mrevzark', {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+          });
+          if (res.ok) {
+            form.hidden = true;
+            section.querySelector('.form-success').hidden = false;
+          } else {
+            var data = await res.json();
+            errEl.textContent = (data.errors || []).map(function (x) { return x.message; }).join(', ') || 'Something went wrong. Please try again.';
+            errEl.hidden = false; btn.disabled = false; btn.textContent = origText;
+          }
+        } catch (_) {
+          errEl.textContent = (window._t && window._t('email-fallback')) || 'Could not send. Email artist@waltviviers.com directly.';
+          errEl.hidden = false; btn.disabled = false; btn.textContent = origText;
+        }
+      });
     })();
   </script>
 </body>
