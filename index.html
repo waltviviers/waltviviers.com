@@ -529,16 +529,19 @@
     .explore-media--grid img:first-child { grid-row: 1 / 3; }
     .explore-card:hover .explore-media--grid img { transform: none; }
     .explore-media--icons {
+      aspect-ratio: auto;
+      min-height: 240px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 22px;
+      gap: clamp(18px, 4vw, 44px);
       background: var(--bg2);
     }
     .explore-media--icons img {
-      width: 84px; height: 84px;
-      border-radius: 20px;
+      width: min(118px, 22vw); height: min(118px, 22vw);
+      border-radius: 26px;
       object-fit: cover;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
       transition: transform 0.35s;
     }
     .explore-card:hover .explore-media--icons img:nth-child(1) { transform: translateY(-4px); }
@@ -549,6 +552,7 @@
       flex-direction: column;
       gap: 14px;
       flex: 1;
+      order: -1;
     }
     .explore-title {
       font-family: var(--serif);
@@ -1366,6 +1370,8 @@
       #works, #about { padding: 64px 24px; }
       .explore-grid { grid-template-columns: 1fr; }
       .explore-body { padding: 32px 24px 40px; }
+      .explore-media--icons { min-height: 180px; }
+      .explore-media--icons img { border-radius: 20px; }
       .instagram-head { padding: 48px 24px 32px; }
       .instagram-grid { grid-template-columns: repeat(3, 1fr); }
 
