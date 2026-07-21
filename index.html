@@ -528,6 +528,27 @@
     }
     .explore-media--grid img:first-child { grid-row: 1 / 3; }
     .explore-card:hover .explore-media--grid img { transform: none; }
+    /* 9-photo mixed-size mosaic (Photography) */
+    .explore-media--mosaic {
+      aspect-ratio: auto;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      grid-auto-flow: dense;
+      gap: 2px;
+      background: var(--rule);
+    }
+    .explore-media--mosaic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      aspect-ratio: 1;
+    }
+    .explore-media--mosaic img:first-child {
+      grid-column: span 2;
+      grid-row: span 2;
+      aspect-ratio: auto;
+    }
+    .explore-card:hover .explore-media--mosaic img { transform: none; }
     .explore-media--icons {
       display: flex;
       align-items: center;
@@ -549,6 +570,7 @@
       flex-direction: column;
       gap: 14px;
       flex: 1;
+      order: -1;
     }
     .explore-title {
       font-family: var(--serif);
@@ -1366,6 +1388,7 @@
       #works, #about { padding: 64px 24px; }
       .explore-grid { grid-template-columns: 1fr; }
       .explore-body { padding: 32px 24px 40px; }
+      .explore-media--mosaic { grid-template-columns: repeat(4, 1fr); }
       .instagram-head { padding: 48px 24px 32px; }
       .instagram-grid { grid-template-columns: repeat(3, 1fr); }
 
@@ -1413,6 +1436,7 @@
       .footer-admin { display: none; }
       .works-grid .work-thumb:nth-child(n+5) { display: none; }
       .view-gallery-btn { display: flex; }
+      .explore-media--mosaic { grid-template-columns: repeat(3, 1fr); }
     }
 
     /* ── Burger button ── */
@@ -1643,10 +1667,16 @@
   <section id="explore">
     <div class="explore-grid">
       <a href="/photography/" class="explore-card">
-        <div class="explore-media explore-media--grid" aria-hidden="true">
+        <div class="explore-media explore-media--mosaic" aria-hidden="true">
           <img src="/images/800/IMG_9409.jpg" alt="" loading="lazy" width="1152" height="768" />
           <img src="/images/800/IMG_9032.jpg" alt="" loading="lazy" width="1152" height="768" />
           <img src="/images/800/IMG_8939.jpg" alt="" loading="lazy" width="1152" height="768" />
+          <img src="/images/800/IMG_9032.jpg" alt="" loading="lazy" width="1152" height="768" />
+          <img src="/images/800/IMG_8939.jpg" alt="" loading="lazy" width="1152" height="768" />
+          <img src="/images/800/IMG_9409.jpg" alt="" loading="lazy" width="1152" height="768" />
+          <img src="/images/800/IMG_8939.jpg" alt="" loading="lazy" width="1152" height="768" />
+          <img src="/images/800/IMG_9409.jpg" alt="" loading="lazy" width="1152" height="768" />
+          <img src="/images/800/IMG_9032.jpg" alt="" loading="lazy" width="1152" height="768" />
         </div>
         <div class="explore-body">
           <h2 class="explore-title" data-i18n="explore-photo-title">Photography</h2>
