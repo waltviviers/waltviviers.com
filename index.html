@@ -528,6 +528,34 @@
     }
     .explore-media--grid img:first-child { grid-row: 1 / 3; }
     .explore-card:hover .explore-media--grid img { transform: none; }
+    /* Albums shown side by side (Photography) */
+    .explore-albums {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--rule);
+    }
+    .explore-album {
+      display: flex;
+      flex-direction: column;
+      background: var(--bg2);
+      color: inherit;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .explore-album:hover { background: #1A1A18; }
+    .explore-album-img {
+      display: block;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+    }
+    .explore-album-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .explore-album:hover .explore-album-img img { transform: scale(1.05); }
     .explore-media--icons {
       aspect-ratio: auto;
       min-height: 240px;
@@ -577,6 +605,9 @@
     [data-theme="light"] .explore-card { background: #F5F3EF; }
     [data-theme="light"] .explore-card:hover { background: #EDEAE5; }
     [data-theme="light"] .explore-media, [data-theme="light"] .explore-media--icons { background: #EDEAE5; }
+    [data-theme="light"] .explore-albums { background: #E4E0D9; }
+    [data-theme="light"] .explore-album { background: #EDEAE5; }
+    [data-theme="light"] .explore-album:hover { background: #E4E0D9; }
 
     .section-head {
       display: flex;
@@ -1648,18 +1679,24 @@
   <!-- Explore: Photography & Apps -->
   <section id="explore">
     <div class="explore-grid">
-      <a href="/photography/" class="explore-card">
-        <div class="explore-media explore-media--grid" aria-hidden="true">
-          <img src="/images/800/IMG_9409.jpg" alt="" loading="lazy" width="1152" height="768" />
-          <img src="/images/800/IMG_9032.jpg" alt="" loading="lazy" width="1152" height="768" />
-          <img src="/images/800/IMG_8939.jpg" alt="" loading="lazy" width="1152" height="768" />
-        </div>
+      <div class="explore-card">
         <div class="explore-body">
           <h2 class="explore-title" data-i18n="explore-photo-title">Photography</h2>
           <p class="explore-desc" data-i18n="explore-photo-desc">Portrait sessions, events, and wellness retreats — moments captured with a fine artist's eye. Each album opens in Google Photos.</p>
-          <span class="explore-cta" data-i18n="explore-photo-cta">View albums →</span>
+          <a href="/photography/" class="explore-cta" data-i18n="explore-photo-cta">View albums →</a>
         </div>
-      </a>
+        <div class="explore-albums">
+          <a class="explore-album" href="/photography/" aria-label="Chantal @ Woodlands Spa">
+            <span class="explore-album-img"><img src="/images/800/IMG_8939.jpg" alt="Chantal @ Woodlands Spa" loading="lazy" width="1152" height="768" /></span>
+          </a>
+          <a class="explore-album" href="/photography/" aria-label="The Farm">
+            <span class="explore-album-img"><img src="/images/800/IMG_9032.jpg" alt="The Farm" loading="lazy" width="1152" height="768" /></span>
+          </a>
+          <a class="explore-album" href="/photography/" aria-label="Manifesto Wellness Africa — Burn Out to Balance Retreat">
+            <span class="explore-album-img"><img src="/images/800/IMG_9409.jpg" alt="Manifesto Wellness Africa — Burn Out to Balance Retreat" loading="lazy" width="1152" height="768" /></span>
+          </a>
+        </div>
+      </div>
       <a href="/apps/" class="explore-card">
         <div class="explore-media explore-media--icons" aria-hidden="true">
           <img src="/images/scritch-scratch-icon.webp" alt="" loading="lazy" width="84" height="84" />
