@@ -432,7 +432,6 @@
 
       .page-wrap { padding-top: 50px; }
       .page-head { padding: 40px 24px 32px; }
-      .photo-grid { grid-template-columns: repeat(2, 1fr); }
       .enquiry { padding: 64px 24px 72px; }
 
       footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
@@ -441,7 +440,11 @@
       .footer-mark { position: static; transform: none; order: 2; }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 720px) {
+      .photo-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 480px) {
       .photo-grid { grid-template-columns: 1fr; }
     }
 
