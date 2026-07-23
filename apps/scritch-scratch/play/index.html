@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="robots" content="index, follow" />
   <title>Scritch Scratch</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -178,15 +179,17 @@ const HEART_SPR = [
 ];
 const HEART_SC = 2;
 
+// Open hand — four spread fingers + thumb
 const CURSOR_SPR = [
-  [0,0,1,1,0,0,0],
-  [0,0,1,1,0,0,0],
-  [0,0,1,1,1,0,0],
-  [0,1,1,1,1,1,0],
-  [1,1,1,1,1,1,0],
-  [1,1,1,1,1,1,0],
-  [0,1,1,1,1,0,0],
-  [0,0,1,1,0,0,0],
+  [0,1,0,1,0,1,0,1,0],
+  [0,1,0,1,0,1,0,1,0],
+  [0,1,1,1,1,1,1,1,0],
+  [0,1,1,1,1,1,1,1,0],
+  [1,1,1,1,1,1,1,1,0],
+  [1,1,1,1,1,1,1,0,0],
+  [0,1,1,1,1,1,1,0,0],
+  [0,0,1,1,1,1,0,0,0],
+  [0,0,0,1,1,0,0,0,0],
 ];
 const CURSOR_SC = 3;
 
@@ -1500,6 +1503,7 @@ class Cat {
           this.wantWool = false;
           if (woolBall) {
             woolBall.vx = (this.cx < woolBall.x + WOOL_SPR[0].length * WOOL_SC / 2 ? 1 : -1) * (4 + Math.random() * 4);
+            woolBall.vy = (this.cy < woolBall.y + WOOL_SPR.length * WOOL_SC / 2 ? 1 : -1) * (4 + Math.random() * 4);
             labels.push(new Label('Paw!', this.cx, Math.max(20, this.y - 4)));
           }
           this.state = 'happy'; this.lingerTicks = 60;
@@ -2241,6 +2245,7 @@ let cursorX = -200, cursorY = -200, cursorVisible = false;
 let lastTapTime = 0, lastTapX = 0, lastTapY = 0;
 
 canvas.addEventListener('pointerdown', e => {
+  if (e.button === 2) return; // right-click is handled by the contextmenu → menu
   e.preventDefault();
   // Close menu if open
   const drop = document.getElementById('menu-drop');
@@ -2277,6 +2282,7 @@ canvas.addEventListener('pointerdown', e => {
       const wbw = WOOL_SPR[0].length * WOOL_SC, wbh = WOOL_SPR.length * WOOL_SC;
       if (px >= woolBall.x && px <= woolBall.x + wbw && py >= woolBall.y && py <= woolBall.y + wbh) {
         woolBall.vx = (Math.random() < 0.5 ? 1 : -1) * (5 + Math.random() * 4);
+        woolBall.vy = (Math.random() < 0.5 ? 1 : -1) * (5 + Math.random() * 4);
         const awake = cats.filter(c => !c.dead && !c.isVisitor && c.state !== 'sleep' && c.state !== 'leaving');
         if (awake.length) {
           awake.sort((a, b) => Math.hypot(a.cx - woolBall.x, a.cy - woolBall.y) - Math.hypot(b.cx - woolBall.x, b.cy - woolBall.y));
@@ -2447,7 +2453,7 @@ canvas.addEventListener('pointerleave',  e => { if (e.pointerType === 'mouse') c
 // ─── Cursor ──────────────────────────────────────────────────────────────────
 function drawCursor(x, y) {
   ctx.fillStyle = '#ffffff';
-  const ox = 2 * CURSOR_SC, oy = 0;
+  const ox = 4 * CURSOR_SC, oy = 0;
   for (let r = 0; r < CURSOR_SPR.length; r++)
     for (let c = 0; c < CURSOR_SPR[r].length; c++)
       if (CURSOR_SPR[r][c])
@@ -2881,15 +2887,18 @@ function loop() {
     drawCatFurniture();
 
     if (woolBall) {
-      // Rail physics — horizontal only
-      const ry = woolRailY();
+      // Floor physics — rolls anywhere on the kitchen floor (2D)
       const wbw = WOOL_SPR[0].length * WOOL_SC, wbh = WOOL_SPR.length * WOOL_SC;
       woolBall.vx *= 0.94;
+      woolBall.vy *= 0.94;
       woolBall.x += woolBall.vx;
-      woolBall.y = ry; woolBall.vy = 0;
+      woolBall.y += woolBall.vy;
       const rLeft = RAIL_PAD, rRight = canvas.width - RAIL_PAD - wbw;
-      if (woolBall.x < rLeft) { woolBall.x = rLeft; woolBall.vx = Math.abs(woolBall.vx) * 0.75; }
-      if (woolBall.x > rRight) { woolBall.x = rRight; woolBall.vx = -Math.abs(woolBall.vx) * 0.75; }
+      const rTop = catKitchenFloorY(), rBottom = canvas.height - RAIL_PAD - wbh;
+      if (woolBall.x < rLeft)   { woolBall.x = rLeft;   woolBall.vx =  Math.abs(woolBall.vx) * 0.75; }
+      if (woolBall.x > rRight)  { woolBall.x = rRight;  woolBall.vx = -Math.abs(woolBall.vx) * 0.75; }
+      if (woolBall.y < rTop)    { woolBall.y = rTop;    woolBall.vy =  Math.abs(woolBall.vy) * 0.75; }
+      if (woolBall.y > rBottom) { woolBall.y = rBottom; woolBall.vy = -Math.abs(woolBall.vy) * 0.75; }
 
       // Draw ball
       ctx.fillStyle = '#cc4488';
@@ -2969,6 +2978,13 @@ const htpOverlay = document.getElementById('htp-overlay');
 
 menuBtn.addEventListener('click', e => {
   e.stopPropagation();
+  const open = menuDrop.classList.toggle('open');
+  menuBtn.classList.toggle('open', open);
+});
+
+// Right-click anywhere opens (toggles) the menu instead of the browser context menu
+window.addEventListener('contextmenu', e => {
+  e.preventDefault();
   const open = menuDrop.classList.toggle('open');
   menuBtn.classList.toggle('open', open);
 });
