@@ -280,6 +280,15 @@
     }
     .back-link:hover { color: var(--ink); }
 
+    /* Testimonial pull-quote */
+    .pull-quote { background: var(--bg2); border: 1px solid var(--rule); padding: 56px 48px; margin-top: 40px; display: flex; align-items: flex-start; gap: 32px; }
+    .pull-quote-mark { font-family: var(--serif); font-size: 5rem; line-height: 0.7; color: var(--stone); opacity: 0.4; flex-shrink: 0; margin-top: 6px; }
+    .pull-quote-body { display: flex; flex-direction: column; gap: 20px; }
+    .pull-quote-text { font-family: var(--serif); font-size: clamp(1.15rem, 1.7vw, 1.5rem); font-style: italic; font-weight: 400; line-height: 1.5; color: var(--ink); }
+    .pull-quote-cite { font-size: 14px; line-height: 1.5; color: var(--stone); margin-top: 4px; }
+    .pull-quote-cite strong { color: var(--ink); font-weight: 500; }
+    .pull-quote-cite a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
     /* ── App grid ── */
     .apps-grid {
       display: grid;
@@ -377,6 +386,7 @@
       .theme-toggle:hover .toggle-thumb .icon-moon,
       .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
       .page-wrap { padding: calc(50px + 40px) 24px 80px; }
+      .pull-quote { padding: 40px 28px; }
       .apps-grid { grid-template-columns: 1fr; }
       .app-card { padding: 28px 24px; }
       footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
@@ -387,6 +397,8 @@
 
     @media (max-width: 560px) {
       .footer-admin { display: none; }
+      .pull-quote { flex-direction: column; gap: 12px; }
+      .pull-quote-mark { font-size: 3.5rem; }
     }
   </style>
 </head>
@@ -482,6 +494,16 @@
           </div>
         </div>
       </a>
+    </div>
+
+    <div class="pull-quote">
+      <span class="pull-quote-mark">&ldquo;</span>
+      <div class="pull-quote-body">
+        <p class="pull-quote-text">I had the pleasure of working closely with Walt as our Creative Director at Menzies, and I cannot recommend him highly enough. Walt is a visionary in the field of design, particularly excelling in UI/UX, and his impact on our projects was truly outstanding.</p>
+        <p class="pull-quote-text">As a developer, I had the opportunity to collaborate with him on several projects, and his designs consistently exceeded expectations. His keen understanding of user experience and interface design not only made the development process smoother but also significantly enhanced the end-user engagement. Walt's ability to translate complex ideas into visually appealing and user-friendly interfaces is truly remarkable.</p>
+        <p class="pull-quote-text">What sets Walt apart is his unique blend of creativity and practicality. He not only has an eye for stunning design but also a deep understanding of the technical aspects of development. This made our collaboration seamless, as he was able to provide designs that were not only aesthetically pleasing but also practical and feasible to implement.</p>
+        <p class="pull-quote-cite"><a href="https://www.linkedin.com/in/humphrey-mukwenga-82062440/" target="_blank" rel="noopener"><strong>Humphrey Mukwenga</strong></a> — Lead Web Developer at LSi</p>
+      </div>
     </div>
   </div>
 
