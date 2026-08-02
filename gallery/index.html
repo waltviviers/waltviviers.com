@@ -450,7 +450,172 @@
     @media (max-width: 560px) {
       .footer-admin { display: none; }
     }
+    .btn-primary {
+      display: block;
+      text-align: center;
+      padding: 14px 24px;
+      background: var(--white);
+      color: var(--black);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.85; }
+
+    .enquiry-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .enquiry-panel {
+      padding: 80px 56px;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .enquiry-panel .btn-primary { margin-top: auto; }
+
+    .enquiry-panel:first-child {
+      border-right: 1px solid var(--rule);
+    }
+
+    .enquiry-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 24px;
+    }
+
+    .enquiry-title {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3vw, 44px);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .enquiry-desc {
+      font-size: 15px;
+      color: var(--stone);
+      line-height: 1.75;
+      max-width: 400px;
+      margin-bottom: 40px;
+    }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: #141412;
+      border: 1px solid var(--rule);
+      width: 100%;
+      max-width: 480px;
+      padding: 48px;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      font-size: 22px;
+      color: var(--stone);
+      cursor: pointer;
+      transition: color 0.2s;
+      line-height: 1;
+    }
+
+    .modal-close:hover { color: var(--white); }
+
+    .modal-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 12px;
+    }
+
+    .modal-title {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 14px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--stone); }
+
+    .modal form .btn-primary { width: 100%; margin-top: 8px; }
+    .form-success { text-align: center; padding: 16px 0 8px; }
+    .form-success p { margin-bottom: 20px; opacity: 0.8; }
+    .form-success .btn-primary { width: 100%; }
+    .form-error { font-size: 0.82rem; color: #c0392b; margin-top: 8px; text-align: center; }
+
+    [data-theme="light"] .btn-primary { background: #0C0C0B; color: #FAF9F7; }
+    [data-theme="light"] .modal { background: #F5F3EF; }
+    [data-theme="light"] .form-group input,
+    [data-theme="light"] .form-group textarea {
+      background: #FAF9F7;
+      border-color: #D5D1CB;
+      color: #0C0C0B;
+    }
+
+    @media (max-width: 900px) {
+      .enquiry-grid { grid-template-columns: 1fr; }
+      .enquiry-panel:first-child { border-right: none; border-bottom: 1px solid var(--rule); }
+      .enquiry-panel { padding: 56px 24px; }
+    }
   </style>
+  <link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
+  <script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
 </head>
 <body>
 
@@ -499,6 +664,54 @@
     </ul>
   </nav>
 
+  <!-- Enquiry panels -->
+  <div class="enquiry-grid">
+    <div class="enquiry-panel" id="commission">
+      <p class="enquiry-tag">For collectors</p>
+      <h2 class="enquiry-title">Commission<br/>a new work</h2>
+      <p class="enquiry-desc">Each commission begins with a conversation. Discussions cover scale, subject, palette, and context. Lead time is typically 8–16 weeks.</p>
+      <button class="btn-primary commission-btn">Start a conversation</button>
+      <p style="margin:16px 0 8px;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;">or</p>
+      <!-- Google Calendar Appointment Scheduling begin -->
+      <script>
+      (function() {
+        var target = document.currentScript;
+        window.addEventListener('load', function() {
+          calendar.schedulingButton.load({
+            url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0QO8CeUOV5-OresAPemXPfW4ZMFlLJ95FP1auhl6qK2kH7JD4jNheJqtYlEh5QyovDJQQ1LAKM?gv=true',
+            color: '#039BE5',
+            label: "Book a Consultation",
+            target,
+          });
+        });
+      })();
+      </script>
+      <!-- end Google Calendar Appointment Scheduling -->
+    </div>
+    <div class="enquiry-panel">
+      <p class="enquiry-tag">For galleries</p>
+      <h2 class="enquiry-title">Gallery<br/>representation</h2>
+      <p class="enquiry-desc">Interested in representing me or proposing an exhibition? Get in touch with a brief introduction and your programme.</p>
+      <button class="btn-primary gallery-btn">Get in touch</button>
+      <p style="margin:16px 0 8px;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;">or</p>
+      <!-- Google Calendar Appointment Scheduling begin -->
+      <script>
+      (function() {
+        var target = document.currentScript;
+        window.addEventListener('load', function() {
+          calendar.schedulingButton.load({
+            url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0QO8CeUOV5-OresAPemXPfW4ZMFlLJ95FP1auhl6qK2kH7JD4jNheJqtYlEh5QyovDJQQ1LAKM?gv=true',
+            color: '#039BE5',
+            label: "Book a Consultation",
+            target,
+          });
+        });
+      })();
+      </script>
+      <!-- end Google Calendar Appointment Scheduling -->
+    </div>
+  </div>
+
   <div class="page-wrap">
     <div class="page-head">
       <div class="page-head-meta">
@@ -521,6 +734,114 @@
       <div class="skeleton"><div class="skeleton-info"><div class="skeleton-line" style="width:60%"></div><div class="skeleton-line" style="width:16%"></div></div><div class="skeleton-img"></div></div>
       <div class="skeleton"><div class="skeleton-info"><div class="skeleton-line" style="width:40%"></div><div class="skeleton-line" style="width:22%"></div></div><div class="skeleton-img"></div></div>
     </main>
+  </div>
+
+  <!-- Enquiry panels -->
+  <div class="enquiry-grid">
+    <div class="enquiry-panel">
+      <p class="enquiry-tag">For collectors</p>
+      <h2 class="enquiry-title">Commission<br/>a new work</h2>
+      <p class="enquiry-desc">Each commission begins with a conversation. Discussions cover scale, subject, palette, and context. Lead time is typically 8–16 weeks.</p>
+      <button class="btn-primary commission-btn">Start a conversation</button>
+      <p style="margin:16px 0 8px;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;">or</p>
+      <!-- Google Calendar Appointment Scheduling begin -->
+      <script>
+      (function() {
+        var target = document.currentScript;
+        window.addEventListener('load', function() {
+          calendar.schedulingButton.load({
+            url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0QO8CeUOV5-OresAPemXPfW4ZMFlLJ95FP1auhl6qK2kH7JD4jNheJqtYlEh5QyovDJQQ1LAKM?gv=true',
+            color: '#039BE5',
+            label: "Book a Consultation",
+            target,
+          });
+        });
+      })();
+      </script>
+      <!-- end Google Calendar Appointment Scheduling -->
+    </div>
+    <div class="enquiry-panel">
+      <p class="enquiry-tag">For galleries</p>
+      <h2 class="enquiry-title">Gallery<br/>representation</h2>
+      <p class="enquiry-desc">Interested in representing me or proposing an exhibition? Get in touch with a brief introduction and your programme.</p>
+      <button class="btn-primary gallery-btn">Get in touch</button>
+      <p style="margin:16px 0 8px;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;">or</p>
+      <!-- Google Calendar Appointment Scheduling begin -->
+      <script>
+      (function() {
+        var target = document.currentScript;
+        window.addEventListener('load', function() {
+          calendar.schedulingButton.load({
+            url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0QO8CeUOV5-OresAPemXPfW4ZMFlLJ95FP1auhl6qK2kH7JD4jNheJqtYlEh5QyovDJQQ1LAKM?gv=true',
+            color: '#039BE5',
+            label: "Book a Consultation",
+            target,
+          });
+        });
+      })();
+      </script>
+      <!-- end Google Calendar Appointment Scheduling -->
+    </div>
+  </div>
+
+  <!-- Commission Modal -->
+  <div class="modal-backdrop" id="commission-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="commission-modal-title">
+    <div class="modal">
+      <button class="modal-close" data-modal="commission-modal" aria-label="Close">&times;</button>
+      <p class="modal-tag">For collectors</p>
+      <h2 class="modal-title" id="commission-modal-title">Commission<br/><em>a new work</em></h2>
+      <form id="commission-form">
+        <input type="hidden" name="_subject" value="Commission Enquiry" />
+        <div class="form-group">
+          <label for="c-name">Name</label>
+          <input type="text" id="c-name" name="name" required placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label for="c-email">Email</label>
+          <input type="email" id="c-email" name="email" required placeholder="your@email.com" />
+        </div>
+        <div class="form-group">
+          <label for="c-message">Tell me about the work you have in mind</label>
+          <textarea id="c-message" name="message" rows="4" placeholder="Scale, subject, palette, where it will live…"></textarea>
+        </div>
+        <p class="form-error" hidden></p>
+        <button type="submit" class="btn-primary">Send enquiry</button>
+      </form>
+      <div class="form-success" hidden>
+        <p>Thank you — your message has been sent. Walt will be in touch shortly.</p>
+        <button class="btn-primary" onclick="closeAll()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gallery Modal -->
+  <div class="modal-backdrop" id="gallery-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="gallery-modal-title">
+    <div class="modal">
+      <button class="modal-close" data-modal="gallery-modal" aria-label="Close">&times;</button>
+      <p class="modal-tag">For galleries</p>
+      <h2 class="modal-title" id="gallery-modal-title">Gallery<br/><em>representation</em></h2>
+      <form id="gallery-form">
+        <input type="hidden" name="_subject" value="Gallery Representation Enquiry" />
+        <div class="form-group">
+          <label for="g-name">Name &amp; gallery</label>
+          <input type="text" id="g-name" name="name" required placeholder="Your name and gallery name" />
+        </div>
+        <div class="form-group">
+          <label for="g-email">Email</label>
+          <input type="email" id="g-email" name="email" required placeholder="your@gallery.com" />
+        </div>
+        <div class="form-group">
+          <label for="g-message">Introduction &amp; programme</label>
+          <textarea id="g-message" name="message" rows="4" placeholder="Tell me about your gallery and what you have in mind…"></textarea>
+        </div>
+        <p class="form-error" hidden></p>
+        <button type="submit" class="btn-primary">Send enquiry</button>
+      </form>
+      <div class="form-success" hidden>
+        <p>Thank you — your message has been sent. Walt will be in touch shortly.</p>
+        <button class="btn-primary" onclick="closeAll()">Close</button>
+      </div>
+    </div>
   </div>
 
   <footer>
@@ -679,6 +1000,41 @@
           document.getElementById('works-grid').innerHTML =
             '<p style="padding:48px;color:var(--stone);grid-column:1/-1">Could not load artworks.</p>';
         });
+    })();
+  </script>
+  <!-- Enquiry modal logic -->
+  <script>
+    (function () {
+      function openModal(id){var m=document.getElementById(id);if(!m)return;m.classList.add('open');m.removeAttribute('aria-hidden');document.body.style.overflow='hidden';}
+      function resetModal(m){
+        m.querySelectorAll('form').forEach(function(f){f.reset();f.hidden=false;var b=f.querySelector('[type="submit"]');if(b){b.disabled=false;b.textContent=b.dataset.origText||b.textContent;}});
+        m.querySelectorAll('.form-success').forEach(function(s){s.hidden=true;});
+        m.querySelectorAll('.form-error').forEach(function(e){e.hidden=true;e.textContent='';});
+      }
+      function closeModal(id){var m=document.getElementById(id);if(!m)return;m.classList.remove('open');m.setAttribute('aria-hidden','true');document.body.style.overflow='';resetModal(m);}
+      function closeAll(){document.querySelectorAll('.modal-backdrop.open').forEach(function(m){m.classList.remove('open');m.setAttribute('aria-hidden','true');resetModal(m);});document.body.style.overflow='';}
+      window.closeAll=closeAll;
+      document.querySelectorAll('.modal-backdrop').forEach(function(m){m.addEventListener('click',function(e){if(e.target===m)closeAll();});});
+      document.addEventListener('keydown',function(e){if(e.key==='Escape')closeAll();});
+      document.querySelectorAll('.modal-close').forEach(function(b){b.addEventListener('click',function(){closeModal(b.dataset.modal);});});
+      function wireForm(formId, modalId){
+        var form=document.getElementById(formId); if(!form) return;
+        var btn=form.querySelector('[type="submit"]'); btn.dataset.origText=btn.textContent;
+        form.addEventListener('submit', async function(e){
+          e.preventDefault();
+          var errEl=form.querySelector('.form-error'); var origText=btn.dataset.origText;
+          btn.disabled=true; btn.textContent='…'; errEl.hidden=true; errEl.textContent='';
+          try{
+            var res=await fetch('https://formspree.io/f/mrevzark',{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
+            if(res.ok){form.hidden=true;document.querySelector('#'+modalId+' .form-success').hidden=false;}
+            else{var data=await res.json();errEl.textContent=(data.errors||[]).map(function(x){return x.message;}).join(', ')||'Something went wrong. Please try again.';errEl.hidden=false;btn.disabled=false;btn.textContent=origText;}
+          }catch(_){errEl.textContent='Could not send. Email artist@waltviviers.com directly.';errEl.hidden=false;btn.disabled=false;btn.textContent=origText;}
+        });
+      }
+      document.querySelectorAll('.commission-btn').forEach(function(b){b.addEventListener('click',function(){openModal('commission-modal');});});
+      document.querySelectorAll('.gallery-btn').forEach(function(b){b.addEventListener('click',function(){openModal('gallery-modal');});});
+      wireForm('commission-form','commission-modal');
+      wireForm('gallery-form','gallery-modal');
     })();
   </script>
 </body>
