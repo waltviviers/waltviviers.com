@@ -1590,7 +1590,7 @@
       <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio</a></li>
       <li class="nav-link-hide"><a href="#about" data-i18n="nav-about">About</a></li>
       <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
-      <li class="nav-link-hide"><a href="#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
+      <li class="nav-link-hide"><a href="/gallery/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
           <a href="https://instagram.com/waltviviers" target="_blank" aria-label="Instagram">
@@ -1629,7 +1629,7 @@
       <a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio <span class="mobile-menu-arrow">↗</span></a>
       <a href="#about" class="mobile-menu-link" data-i18n="nav-about">About <span class="mobile-menu-arrow">↗</span></a>
       <a href="/apps/" class="mobile-menu-link" data-i18n="nav-apps">Apps <span class="mobile-menu-arrow">↗</span></a>
-      <a href="#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>
     </div>
     <div class="mobile-menu-foot">
       <a href="/admin-index/" class="mobile-admin-btn">Admin</a>
@@ -1786,57 +1786,6 @@
     <div class="instagram-grid" id="instagram-grid"></div>
   </section>
 
-  <!-- Enquiry panels -->
-  <div class="enquiry-grid">
-
-    <div class="enquiry-panel" id="commission">
-      <p class="enquiry-tag" data-i18n="commission-tag">For collectors</p>
-      <h2 class="enquiry-title" data-i18n-html="commission-title-html">Commission<br/>a new work</h2>
-      <p class="enquiry-desc" data-i18n="commission-desc">Each commission begins with a conversation. Discussions cover scale, subject, palette, and context. Lead time is typically 8–16 weeks.</p>
-      <button class="btn-primary" id="commission-btn" data-i18n="commission-btn">Start a conversation</button>
-      <p style="margin:16px 0 8px;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;" data-i18n="commission-or">or</p>
-      <!-- Google Calendar Appointment Scheduling begin -->
-      <script>
-      (function() {
-        var target = document.currentScript;
-        window.addEventListener('load', function() {
-          calendar.schedulingButton.load({
-            url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0QO8CeUOV5-OresAPemXPfW4ZMFlLJ95FP1auhl6qK2kH7JD4jNheJqtYlEh5QyovDJQQ1LAKM?gv=true',
-            color: '#039BE5',
-            label: "Book a Consultation",
-            target,
-          });
-        });
-      })();
-      </script>
-      <!-- end Google Calendar Appointment Scheduling -->
-    </div>
-
-    <div class="enquiry-panel" id="gallery-rep">
-      <p class="enquiry-tag" data-i18n="gallery-tag">For galleries</p>
-      <h2 class="enquiry-title" data-i18n-html="gallery-title-html">Gallery<br/>representation</h2>
-      <p class="enquiry-desc" data-i18n="gallery-desc">Interested in representing me or proposing an exhibition? Get in touch with a brief introduction and your programme.</p>
-      <button class="btn-primary" id="gallery-btn" data-i18n="gallery-btn">Get in touch</button>
-      <p style="margin:16px 0 8px;font-size:0.78rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5;" data-i18n="commission-or">or</p>
-      <!-- Google Calendar Appointment Scheduling begin -->
-      <script>
-      (function() {
-        var target = document.currentScript;
-        window.addEventListener('load', function() {
-          calendar.schedulingButton.load({
-            url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0QO8CeUOV5-OresAPemXPfW4ZMFlLJ95FP1auhl6qK2kH7JD4jNheJqtYlEh5QyovDJQQ1LAKM?gv=true',
-            color: '#039BE5',
-            label: "Book a Consultation",
-            target,
-          });
-        });
-      })();
-      </script>
-      <!-- end Google Calendar Appointment Scheduling -->
-    </div>
-
-  </div>
-
   <!-- Enquiry Modal -->
   <div class="modal-backdrop" id="enquiry-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="enquiry-modal-title">
     <div class="modal">
@@ -1890,66 +1839,6 @@
         </div>
         <p class="form-error" hidden></p>
         <button type="submit" class="btn-primary" data-i18n="modal-contact-send">Send message</button>
-      </form>
-      <div class="form-success" hidden>
-        <p data-i18n="form-success-msg">Thank you — your message has been sent. Walt will be in touch shortly.</p>
-        <button class="btn-primary" onclick="closeAll()" data-i18n="form-success-close">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Commission Modal -->
-  <div class="modal-backdrop" id="commission-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="commission-modal-title">
-    <div class="modal">
-      <button class="modal-close" data-modal="commission-modal" aria-label="Close">&times;</button>
-      <p class="modal-tag" data-i18n="modal-commission-tag">For collectors</p>
-      <h2 class="modal-title" id="commission-modal-title" data-i18n-html="modal-commission-title-html">Commission<br/><em>a new work</em></h2>
-      <form id="commission-form">
-        <input type="hidden" name="_subject" value="Commission Enquiry" />
-        <div class="form-group">
-          <label for="c-name" data-i18n="form-name">Name</label>
-          <input type="text" id="c-name" name="name" required placeholder="Your name" data-i18n-placeholder="form-placeholder-name" />
-        </div>
-        <div class="form-group">
-          <label for="c-email" data-i18n="form-email">Email</label>
-          <input type="email" id="c-email" name="email" required placeholder="your@email.com" data-i18n-placeholder="form-placeholder-email" />
-        </div>
-        <div class="form-group">
-          <label for="c-message" data-i18n="modal-commission-label">Tell me about the work you have in mind</label>
-          <textarea id="c-message" name="message" rows="4" placeholder="Scale, subject, palette, where it will live…" data-i18n-placeholder="modal-commission-placeholder"></textarea>
-        </div>
-        <p class="form-error" hidden></p>
-        <button type="submit" class="btn-primary" data-i18n="form-send-enquiry">Send enquiry</button>
-      </form>
-      <div class="form-success" hidden>
-        <p data-i18n="form-success-msg">Thank you — your message has been sent. Walt will be in touch shortly.</p>
-        <button class="btn-primary" onclick="closeAll()" data-i18n="form-success-close">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Gallery Modal -->
-  <div class="modal-backdrop" id="gallery-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="gallery-modal-title">
-    <div class="modal">
-      <button class="modal-close" data-modal="gallery-modal" aria-label="Close">&times;</button>
-      <p class="modal-tag" data-i18n="modal-gallery-tag">For galleries</p>
-      <h2 class="modal-title" id="gallery-modal-title" data-i18n-html="modal-gallery-title-html">Gallery<br/><em>representation</em></h2>
-      <form id="gallery-form">
-        <input type="hidden" name="_subject" value="Gallery Representation Enquiry" />
-        <div class="form-group">
-          <label for="g-name" data-i18n="modal-gallery-label-name">Name &amp; gallery</label>
-          <input type="text" id="g-name" name="name" required placeholder="Your name and gallery name" data-i18n-placeholder="modal-gallery-placeholder-name" />
-        </div>
-        <div class="form-group">
-          <label for="g-email" data-i18n="form-email">Email</label>
-          <input type="email" id="g-email" name="email" required placeholder="your@gallery.com" data-i18n-placeholder="form-placeholder-email" />
-        </div>
-        <div class="form-group">
-          <label for="g-message" data-i18n="modal-gallery-label-msg">Introduction &amp; programme</label>
-          <textarea id="g-message" name="message" rows="4" placeholder="Tell me about your gallery and what you have in mind…" data-i18n-placeholder="modal-gallery-placeholder-msg"></textarea>
-        </div>
-        <p class="form-error" hidden></p>
-        <button type="submit" class="btn-primary" data-i18n="form-send-enquiry">Send enquiry</button>
       </form>
       <div class="form-success" hidden>
         <p data-i18n="form-success-msg">Thank you — your message has been sent. Walt will be in touch shortly.</p>
@@ -2557,12 +2446,6 @@
       });
       wireForm('enquiry-form', 'enquiry-modal');
 
-      // ── Commission modal ──
-      document.getElementById('commission-btn').addEventListener('click', function () {
-        openModal('commission-modal');
-      });
-      wireForm('commission-form', 'commission-modal');
-
       // ── Contact (email icon) modal ──
       document.querySelectorAll('.email-icon-btn').forEach(btn => {
         btn.addEventListener('click', function () { openModal('contact-modal'); });
@@ -2570,12 +2453,6 @@
         btn.addEventListener('mouseout',  function () { btn.style.color = 'var(--stone)'; });
       });
       wireForm('contact-form', 'contact-modal');
-
-      // ── Gallery modal ──
-      document.getElementById('gallery-btn').addEventListener('click', function () {
-        openModal('gallery-modal');
-      });
-      wireForm('gallery-form', 'gallery-modal');
 
       // Expose for inline onclick and external callers
       window.openModal = openModal;
