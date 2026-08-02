@@ -528,25 +528,29 @@
     }
     .explore-media--grid img:first-child { grid-row: 1 / 3; }
     .explore-card:hover .explore-media--grid img { transform: none; }
-    /* Albums shown side by side (Photography) */
+    /* Photography — creative 5-album mosaic (one feature + four) */
+    #apps-teaser { border-top: 1px solid var(--rule); }
     .explore-albums {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      aspect-ratio: 2 / 1;
+      grid-auto-flow: dense;
       gap: 2px;
       background: var(--rule);
     }
     .explore-album {
-      display: flex;
-      flex-direction: column;
+      position: relative;
+      overflow: hidden;
       background: var(--bg2);
       color: inherit;
       text-decoration: none;
-      transition: background 0.2s;
     }
-    .explore-album:hover { background: #1A1A18; }
+    .explore-album:first-child { grid-column: span 2; grid-row: span 2; }
     .explore-album-img {
       display: block;
-      aspect-ratio: 4 / 3;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
     }
     .explore-album-img img {
@@ -556,6 +560,29 @@
       transition: transform 0.5s;
     }
     .explore-album:hover .explore-album-img img { transform: scale(1.05); }
+    .explore-album-cap {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 26px 18px 14px;
+      font-family: var(--serif);
+      font-size: 14px;
+      line-height: 1.2;
+      color: #fff;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.72));
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+    }
+    .explore-album:first-child .explore-album-cap { font-size: 18px; padding: 32px 22px 18px; }
+    .explore-album:hover .explore-album-cap { opacity: 1; transform: none; }
+    @media (max-width: 700px) {
+      .explore-albums { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; aspect-ratio: auto; }
+      .explore-album:first-child { grid-column: span 2; grid-row: auto; }
+      .explore-album-img { aspect-ratio: 4 / 3; }
+      .explore-album:first-child .explore-album-img { aspect-ratio: 16 / 9; }
+      .explore-album-cap { opacity: 1; transform: none; }
+    }
     .explore-media--icons {
       aspect-ratio: auto;
       min-height: 240px;
@@ -1684,30 +1711,29 @@
           <p class="explore-desc" data-i18n="explore-photo-desc">Portrait sessions, events, and wellness retreats — moments captured with a fine artist's eye. Each album opens in Google Photos.</p>
           <a href="/photography/" class="explore-cta" data-i18n="explore-photo-cta">View albums →</a>
         </div>
-        <div class="explore-albums">
+        <div class="explore-albums explore-albums--mosaic">
+          <a class="explore-album" href="/photography/" aria-label="Manifesto Wellness Africa — Burn Out to Balance Retreat">
+            <span class="explore-album-img"><img src="/images/800/IMG_9409.jpg" alt="Manifesto Wellness Africa — Burn Out to Balance Retreat" loading="lazy" width="1152" height="768" /></span>
+            <span class="explore-album-cap">Manifesto Wellness Africa</span>
+          </a>
           <a class="explore-album" href="/photography/" aria-label="Chantal @ Woodlands Spa">
             <span class="explore-album-img"><img src="/images/800/IMG_8939.jpg" alt="Chantal @ Woodlands Spa" loading="lazy" width="1152" height="768" /></span>
+            <span class="explore-album-cap">Chantal @ Woodlands Spa</span>
           </a>
           <a class="explore-album" href="/photography/" aria-label="The Farm">
             <span class="explore-album-img"><img src="/images/800/IMG_9032.jpg" alt="The Farm" loading="lazy" width="1152" height="768" /></span>
+            <span class="explore-album-cap">The Farm</span>
           </a>
-          <a class="explore-album" href="/photography/" aria-label="Manifesto Wellness Africa — Burn Out to Balance Retreat">
-            <span class="explore-album-img"><img src="/images/800/IMG_9409.jpg" alt="Manifesto Wellness Africa — Burn Out to Balance Retreat" loading="lazy" width="1152" height="768" /></span>
+          <a class="explore-album" href="/photography/" aria-label="Manifesto Wellness @ Unlimited Events Group">
+            <span class="explore-album-img"><img src="/images/800/DSC_0004.webp" alt="Manifesto Wellness @ Unlimited Events Group" loading="lazy" width="1200" height="800" /></span>
+            <span class="explore-album-cap">Manifesto @ Unlimited Events</span>
+          </a>
+          <a class="explore-album" href="/photography/" aria-label="One Stop Wellness &amp; Manifesto Wellness @ Woodlands Spa">
+            <span class="explore-album-img"><img src="/images/800/DSC_0610.webp" alt="One Stop Wellness &amp; Manifesto Wellness @ Woodlands Spa" loading="lazy" width="1200" height="800" /></span>
+            <span class="explore-album-cap">One Stop Wellness @ Woodlands Spa</span>
           </a>
         </div>
       </div>
-      <a href="/apps/" class="explore-card">
-        <div class="explore-media explore-media--icons" aria-hidden="true">
-          <img src="/images/scritch-scratch-icon.webp" alt="" loading="lazy" width="84" height="84" />
-          <img src="/images/neurotrace-icon2.webp" alt="" loading="lazy" width="84" height="84" />
-          <img src="/images/bill-tipper-icon.webp" alt="" loading="lazy" width="84" height="84" />
-        </div>
-        <div class="explore-body">
-          <h2 class="explore-title" data-i18n="explore-apps-title">Apps &amp; Games</h2>
-          <p class="explore-desc" data-i18n="explore-apps-desc">A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.</p>
-          <span class="explore-cta" data-i18n="explore-apps-cta">Explore →</span>
-        </div>
-      </a>
     </div>
   </section>
 
@@ -1730,6 +1756,22 @@
       <p data-i18n="about-p3">For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.</p>
       <p data-i18n="about-p4">My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.</p>
     </div>
+  </section>
+
+  <!-- Apps & Games -->
+  <section id="apps-teaser">
+    <a href="/apps/" class="explore-card">
+      <div class="explore-media explore-media--icons" aria-hidden="true">
+        <img src="/images/scritch-scratch-icon.webp" alt="" loading="lazy" width="84" height="84" />
+        <img src="/images/neurotrace-icon2.webp" alt="" loading="lazy" width="84" height="84" />
+        <img src="/images/bill-tipper-icon.webp" alt="" loading="lazy" width="84" height="84" />
+      </div>
+      <div class="explore-body">
+        <h2 class="explore-title" data-i18n="explore-apps-title">Apps &amp; Games</h2>
+        <p class="explore-desc" data-i18n="explore-apps-desc">A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.</p>
+        <span class="explore-cta" data-i18n="explore-apps-cta">Explore →</span>
+      </div>
+    </a>
   </section>
 
   <!-- Instagram feed -->
