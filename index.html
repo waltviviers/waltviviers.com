@@ -308,10 +308,11 @@
 
     .nav-links a {
       font-family: var(--sans);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 400;
-      letter-spacing: 0.10em;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
+      white-space: nowrap;
       color: var(--stone);
       transition: color 0.2s;
     }
@@ -1575,9 +1576,9 @@
     </div>
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography &amp; Video</a></li>
-      <li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-works">Fine Art</a></li>
-      <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio</a></li>
-      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
+      <li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-works">Fine Art &amp; Illustration</a></li>
+      <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps &amp; Games</a></li>
       <li class="nav-link-hide"><a href="/gallery/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -1613,9 +1614,9 @@
   <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Navigation menu">
     <div class="mobile-menu-links">
       <a href="/photography/" class="mobile-menu-link" data-i18n="nav-photography">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>
-      <a href="/gallery/" class="mobile-menu-link" data-i18n="nav-works">Fine Art <span class="mobile-menu-arrow">↗</span></a>
-      <a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio <span class="mobile-menu-arrow">↗</span></a>
-      <a href="/apps/" class="mobile-menu-link" data-i18n="nav-apps">Apps <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/gallery/" class="mobile-menu-link" data-i18n="nav-works">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio &amp; Statement <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/apps/" class="mobile-menu-link" data-i18n="nav-apps">Apps &amp; Games <span class="mobile-menu-arrow">↗</span></a>
       <a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>
     </div>
     <div class="mobile-menu-foot">
@@ -1878,7 +1879,7 @@
   (function () {
     var T = {
       en: {
-        'nav-works': 'Fine Art', 'nav-photography': 'Photography & Video', 'nav-apps': 'Apps', 'nav-about': 'About', 'nav-bio': 'Bio', 'nav-design': 'Graphic Design', 'nav-enquire': 'Enquire',
+        'nav-works': 'Fine Art & Illustration', 'nav-photography': 'Photography & Video', 'nav-apps': 'Apps & Games', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on', 'view-gallery': 'View Gallery ↗',
         'explore-photo-title': 'Photography & Video', 'explore-photo-desc': 'Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist\'s eye. Each album opens in Google Photos.', 'explore-photo-cta': 'View albums →',
@@ -1915,7 +1916,7 @@
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.'
       },
       af: {
-        'nav-works': 'Skone Kunste', 'nav-photography': 'Fotografie & Video', 'nav-apps': 'Programme', 'nav-about': 'Omheen', 'nav-bio': 'Bio', 'nav-design': 'Grafiese Ontwerp', 'nav-enquire': 'Navraag',
+        'nav-works': 'Skone Kunste & Illustrasie', 'nav-photography': 'Fotografie & Video', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
         'explore-photo-title': 'Fotografie & Video', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — vasgevang in foto en video met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →',

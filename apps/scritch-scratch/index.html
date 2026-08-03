@@ -122,10 +122,10 @@
     .lang-group.active .lang-pipe  { color: var(--stone); }
     .nav-logo img { height: 36px; width: auto; transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
     nav.scrolled .nav-logo img { height: 28px; }
-    .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+    .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
     .nav-links a {
-      font-family: var(--sans); font-size: 12px; font-weight: 400;
-      letter-spacing: 0.10em; text-transform: uppercase;
+      font-family: var(--sans); font-size: 11px; font-weight: 400;
+      letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap;
       color: var(--stone); transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--white); }
@@ -581,9 +581,9 @@
     </div>
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography &amp; Video</a></li>
-      <li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-artworks">Fine Art</a></li>
-      <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio</a></li>
-      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps</a></li>
+      <li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-artworks">Fine Art &amp; Illustration</a></li>
+      <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>
+      <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps &amp; Games</a></li>
       <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
@@ -819,7 +819,7 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-about':'About','nav-bio':'Bio','nav-artworks':'Fine Art','nav-photography':'Photography & Video','nav-apps':'Apps','back-apps':'← Back to Apps and Games','nav-enquire':'Enquire','email-href': 'mailto:artist@waltviviers.com',
+        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Fine Art & Illustration','nav-photography':'Photography & Video','nav-apps':'Apps & Games','back-apps':'← Back to Apps and Games','nav-enquire':'Enquire','email-href': 'mailto:artist@waltviviers.com',
           'app-eyebrow': 'A pixel art pet toy for your browser',
           'hero-tagline': 'Who\'s a good pet?',
           'hero-desc': 'Three pixel pets share one browser. Play fetch with a dog, raise a colony of rats, or tease a cat with a laser pointer. Switch modes any time.',
@@ -848,7 +848,7 @@
           'check-6': 'Pixel hand cursor on desktop',
           'cta-heading': 'Go play'
         },
-        af: { 'nav-about':'Oor my','nav-bio':'Bio','nav-artworks':'Skone Kunste','nav-photography':'Fotografie & Video','nav-apps':'Programme','back-apps':'← Terug na Programme en Speletjies','nav-enquire':'Navraag','email-href': 'mailto:kunstenaar@waltviviers.com',
+        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Skone Kunste & Illustrasie','nav-photography':'Fotografie & Video','nav-apps':'Programme en Speletjies','back-apps':'← Terug na Programme en Speletjies','nav-enquire':'Navraag','email-href': 'mailto:kunstenaar@waltviviers.com',
           'app-eyebrow': '\'n Pixel-kuns troeteldier-speeltjie vir jou blaaier',
           'hero-tagline': 'Wie is \'n goeie troeteldier?',
           'hero-desc': 'Drie pixel-troeteldiere deel een blaaier. Speel apportering met \'n hond, teel \'n kolonie rotte, of terg \'n kat met \'n laserpen. Verwissel modusse enige tyd.',
