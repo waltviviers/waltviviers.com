@@ -400,7 +400,30 @@
       .pull-quote { flex-direction: column; gap: 12px; }
       .pull-quote-mark { font-size: 3.5rem; }
     }
+    /* Global Enquire modal + Book-a-Consultation FAB */
+    .gx-fab { position: fixed; right: 20px; bottom: 20px; z-index: 250; }
+    .gx-modal { position: fixed; inset: 0; z-index: 400; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); padding: 24px; }
+    .gx-modal.open { display: flex; }
+    .gx-box { background: var(--bg2); border: 1px solid var(--rule); width: 100%; max-width: 480px; padding: 44px 40px 40px; position: relative; max-height: 90vh; overflow-y: auto; }
+    .gx-close { position: absolute; top: 12px; right: 16px; font-size: 28px; line-height: 1; color: var(--stone); background: none; border: none; cursor: pointer; }
+    .gx-close:hover { color: var(--ink); }
+    .gx-box h2 { font-family: var(--serif); font-size: 2rem; font-weight: 400; line-height: 1.1; margin-bottom: 10px; }
+    .gx-sub { color: var(--stone); font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
+    .gx-field { margin-bottom: 16px; }
+    .gx-field label { display: block; font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase; color: var(--stone); margin-bottom: 8px; }
+    .gx-field input, .gx-field textarea, .gx-field select { width: 100%; background: var(--bg); border: 1px solid var(--rule); color: var(--ink); padding: 12px 14px; font: inherit; font-size: 14px; border-radius: 0; }
+    .gx-field input:focus, .gx-field textarea:focus, .gx-field select:focus { border-color: var(--stone); outline: none; }
+    .gx-submit { display: block; width: 100%; text-align: center; padding: 14px; margin-top: 8px; background: var(--ink); color: var(--bg); font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--ink); cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .gx-submit:hover { background: transparent; color: var(--ink); }
+    .gx-err { color: #c0392b; font-size: 0.82rem; margin-top: 10px; text-align: center; }
+    .gx-success { text-align: center; }
+    .gx-success p { color: var(--stone); margin-bottom: 22px; }
+    [data-theme="light"] .gx-box { background: #F5F3EF; }
+    [data-theme="light"] .gx-field input, [data-theme="light"] .gx-field textarea, [data-theme="light"] .gx-field select { background: #FAF9F7; border-color: #D5D1CB; color: #0C0C0B; }
+    [data-theme="light"] .gx-submit { background: #0C0C0B; color: #FAF9F7; }
   </style>
+  <link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
+  <script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
 </head>
 <body>
 
@@ -423,7 +446,7 @@
       <li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-artworks">Fine Art &amp; Illustration</a></li>
       <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>
       <li class="nav-link-hide"><a href="/apps/" data-i18n="nav-apps">Apps &amp; Games</a></li>
-      <li class="nav-link-hide"><a href="/#commission" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
+      <li class="nav-link-hide"><a href="#enquire" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
       <li>
         <div class="social-icons">
           <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
@@ -589,6 +612,60 @@
       document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
       document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
       applyLang(lang);
+    })();
+  </script>
+  <!-- Global: floating Book a Consultation + Enquire modal -->
+  <div class="gx-fab" id="gx-book" aria-label="Book a Consultation"></div>
+  <div class="gx-modal" id="gx-enquire" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enquire">
+    <div class="gx-box">
+      <button class="gx-close" type="button" aria-label="Close">&times;</button>
+      <h2>Enquire</h2>
+      <p class="gx-sub">Commissions, original artworks, photography &amp; video bookings, gallery representation — tell me what you have in mind and I'll be in touch.</p>
+      <form id="gx-form">
+        <input type="hidden" name="_subject" value="Website Enquiry" />
+        <div class="gx-field"><label for="gx-name">Name</label><input id="gx-name" name="name" type="text" required placeholder="Your name" /></div>
+        <div class="gx-field"><label for="gx-email">Email</label><input id="gx-email" name="email" type="email" required placeholder="your@email.com" /></div>
+        <div class="gx-field"><label for="gx-about">I'm enquiring about</label><select id="gx-about" name="about"><option>Commission</option><option>Purchasing an artwork</option><option>Photography &amp; Video</option><option>Gallery representation</option><option>Something else</option></select></div>
+        <div class="gx-field"><label for="gx-msg">Message</label><textarea id="gx-msg" name="message" rows="4" placeholder="Tell me what you have in mind…"></textarea></div>
+        <p class="gx-err" hidden></p>
+        <button type="submit" class="gx-submit">Send enquiry</button>
+      </form>
+      <div class="gx-success" hidden>
+        <p>Thank you — your message has been sent. Walt will be in touch shortly.</p>
+        <button type="button" class="gx-submit gx-close">Close</button>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var modal = document.getElementById('gx-enquire');
+      var form = document.getElementById('gx-form');
+      if (!modal || !form) return;
+      var success = modal.querySelector('.gx-success');
+      var err = form.querySelector('.gx-err');
+      var btn = form.querySelector('[type="submit"]');
+      var orig = btn.textContent;
+      function openM(e) { if (e) e.preventDefault(); modal.classList.add('open'); modal.removeAttribute('aria-hidden'); document.body.style.overflow = 'hidden'; }
+      function closeM() { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; form.hidden = false; success.hidden = true; err.hidden = true; btn.disabled = false; btn.textContent = orig; }
+      document.querySelectorAll('[data-i18n="nav-enquire"]').forEach(function (a) { a.addEventListener('click', openM); });
+      modal.addEventListener('click', function (e) { if (e.target === modal) closeM(); });
+      modal.querySelectorAll('.gx-close').forEach(function (b) { b.addEventListener('click', closeM); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeM(); });
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault(); btn.disabled = true; btn.textContent = '…'; err.hidden = true;
+        try {
+          var res = await fetch('https://formspree.io/f/mrevzark', { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+          if (res.ok) { form.hidden = true; success.hidden = false; }
+          else { var d = await res.json(); err.textContent = (d.errors || []).map(function (x) { return x.message; }).join(', ') || 'Something went wrong. Please try again.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
+        } catch (_) { err.textContent = 'Could not send. Email artist@waltviviers.com directly.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
+      });
+      // Floating Book a Consultation (Google Calendar)
+      var target = document.getElementById('gx-book'); var tries = 0;
+      (function poll() {
+        if (window.calendar && window.calendar.schedulingButton) {
+          window.calendar.schedulingButton.load({ url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0QO8CeUOV5-OresAPemXPfW4ZMFlLJ95FP1auhl6qK2kH7JD4jNheJqtYlEh5QyovDJQQ1LAKM?gv=true', color: '#039BE5', label: 'Book a Consultation', target: target });
+        } else if (tries++ < 50) { setTimeout(poll, 150); }
+      })();
     })();
   </script>
 </body>
