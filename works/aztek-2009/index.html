@@ -410,7 +410,10 @@
       .btn { width: auto; flex: 1; }
     }
     /* Global Enquire modal + Book-a-Consultation FAB */
-    .gx-fab { position: fixed; right: 20px; bottom: 20px; z-index: 250; }
+    .gx-fab { display: none; }
+    @media (max-width: 900px) {
+      .gx-fab { display: inline-block; position: fixed; right: 16px; bottom: 16px; z-index: 250; background: var(--ink); color: var(--bg); border: none; padding: 13px 22px; border-radius: 40px; font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; cursor: pointer; box-shadow: 0 6px 22px rgba(0,0,0,0.4); }
+    }
     .gx-modal { position: fixed; inset: 0; z-index: 400; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); padding: 24px; }
     .gx-modal.open { display: flex; }
     .gx-box { background: var(--bg2); border: 1px solid var(--rule); width: 100%; max-width: 480px; padding: 44px 40px 40px; position: relative; max-height: 90vh; overflow-y: auto; }
@@ -431,8 +434,6 @@
     [data-theme="light"] .gx-field input, [data-theme="light"] .gx-field textarea, [data-theme="light"] .gx-field select { background: #FAF9F7; border-color: #D5D1CB; color: #0C0C0B; }
     [data-theme="light"] .gx-submit { background: #0C0C0B; color: #FAF9F7; }
   </style>
-  <link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
-  <script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
 </head>
 <body>
 
@@ -600,8 +601,8 @@
     })();
   </script>
 
-  <!-- Global: floating Book a Consultation + Enquire modal -->
-  <div class="gx-fab" id="gx-book" aria-label="Book a Consultation"></div>
+  <!-- Global: floating Enquire button + Enquire modal -->
+  <button type="button" class="gx-fab gx-open" aria-label="Enquire now">Enquire Now</button>
   <div class="gx-modal" id="gx-enquire" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enquire">
     <div class="gx-box">
       <button class="gx-close" type="button" aria-label="Close">&times;</button>
@@ -633,7 +634,7 @@
       var orig = btn.textContent;
       function openM(e) { if (e) e.preventDefault(); modal.classList.add('open'); modal.removeAttribute('aria-hidden'); document.body.style.overflow = 'hidden'; }
       function closeM() { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; form.hidden = false; success.hidden = true; err.hidden = true; btn.disabled = false; btn.textContent = orig; }
-      document.querySelectorAll('[data-i18n="nav-enquire"]').forEach(function (a) { a.addEventListener('click', openM); });
+      document.querySelectorAll('[data-i18n="nav-enquire"], .gx-open').forEach(function (a) { a.addEventListener('click', openM); });
       modal.addEventListener('click', function (e) { if (e.target === modal) closeM(); });
       modal.querySelectorAll('.gx-close').forEach(function (b) { b.addEventListener('click', closeM); });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeM(); });
@@ -645,13 +646,6 @@
           else { var d = await res.json(); err.textContent = (d.errors || []).map(function (x) { return x.message; }).join(', ') || 'Something went wrong. Please try again.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
         } catch (_) { err.textContent = 'Could not send. Email artist@waltviviers.com directly.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
       });
-      // Floating Book a Consultation (Google Calendar)
-      var target = document.getElementById('gx-book'); var tries = 0;
-      (function poll() {
-        if (window.calendar && window.calendar.schedulingButton) {
-          window.calendar.schedulingButton.load({ url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0QO8CeUOV5-OresAPemXPfW4ZMFlLJ95FP1auhl6qK2kH7JD4jNheJqtYlEh5QyovDJQQ1LAKM?gv=true', color: '#039BE5', label: 'Book a Consultation', target: target });
-        } else if (tries++ < 50) { setTimeout(poll, 150); }
-      })();
     })();
   </script>
 </body>
