@@ -66,6 +66,19 @@
       font-family: monospace; font-size: 11px; cursor: pointer;
     }
     .mode-btn-pick:hover { background: #1c1c1c; color: #fff; border-color: #666; }
+
+    #name-overlay input {
+      width: 100%; padding: 8px; background: #111; border: 1px solid #444;
+      color: #eee; font-family: monospace; font-size: 13px;
+      margin-bottom: 12px; box-sizing: border-box; outline: none;
+    }
+    #name-overlay input:focus { border-color: #777; }
+    #catnip-btn {
+      display: none; position: fixed; bottom: 20px; right: 20px; z-index: 50;
+      background: #1a2a1a; border: 1px solid #446644; color: #88cc66;
+      font-family: monospace; font-size: 11px; padding: 7px 12px; cursor: pointer;
+    }
+    #catnip-btn:hover { background: #223322; }
   </style>
 </head>
 <body>
@@ -76,6 +89,7 @@
   <a href="https://waltviviers.com/">Go To Main Site</a>
   <a href="https://waltviviers.com/apps/">Apps &amp; Games</a>
   <button id="htp-btn" class="sep">How to Play</button>
+  <button id="rename-btn" class="sep">Rename Pet</button>
   <button class="sep mode-switch" data-mode="dog">Doggo Mode</button>
   <button class="mode-switch" data-mode="rat">Ratty Mode</button>
   <button class="mode-switch" data-mode="cat">Cat Lady Mode</button>
@@ -85,14 +99,24 @@
     <h2>How to Play</h2>
     <ul>
       <li>Pick a mode from the start screen or menu</li>
-      <li>Doggo: tap to walk · hold to scritch · tap ball or stick to throw · double-tap to dig</li>
-      <li>Ratty: tap rat to scritch · tap ground to place meal worms · rats breed freely · every 10th is a dumbo (big ears) · every 16th is a naked rat (pink) · every 15th meal worm triggers a raid cat</li>
-      <li>Cat Lady: hold to purr and wake · tap ground for laser · laser won't wake sleeping cats</li>
-      <li>Visitor animals arrive now and then</li>
+      <li>Doggo: tap to walk · hold to scritch (hold longer for tricks!) · tap ball or stick to throw · double-tap to dig · puppies appear after a while and grow up</li>
+      <li>Ratty: tap rat to scritch · tap ground to place meal worms · rats breed freely · every 10th is a dumbo · every 16th is a naked rat · every 15th worm triggers a raid cat · rats use the exercise wheel</li>
+      <li>Cat Lady: hold to purr and wake · tap ground for laser · tap Catnip button for zoomies · tap wool ball to roll it</li>
+      <li>Happiness bar top-right tracks pet wellbeing — scritches, food, and treats raise it</li>
+      <li>Name your pet via the menu · unlock achievements by playing</li>
+      <li>Day/night in dog mode follows your real clock · visitor animals arrive now and then</li>
     </ul>
     <button class="popup-close" id="htp-close">Close</button>
   </div>
 </div>
+<div id="name-overlay" class="overlay">
+  <div class="popup">
+    <h2 id="name-prompt">Name your pet</h2>
+    <input id="name-input" type="text" maxlength="12" placeholder="e.g. Biscuit">
+    <button class="popup-close" id="name-confirm">Done</button>
+  </div>
+</div>
+<button id="catnip-btn">Catnip</button>
 <div id="mode-pick">
   <h1>Scritch Scratch</h1>
   <button class="mode-btn-pick" data-mode="dog">Doggo Mode</button>
@@ -519,10 +543,13 @@ function placeRatFurniture() {
   ratBottle = { x: w * 0.12, y: h * 0.25 };
   ratFoodBowl = { x: w * 0.88 - RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, y: h * 0.25 };
   ratBed = { x: w / 2 - RAT_BED_SPR[0].length * RAT_BED_SC / 2, y: h * 0.7 };
+  ratWheel = { x: w * 0.5, y: h * 0.4 };
+  _wheelAngle = 0; _wheelSpeed = 0;
 }
 
 function drawRatFurniture() {
   if (!ratBottle) return;
+  drawRatWheel();
   // Water bottle
   ctx.fillStyle = '#88ccee';
   for (let r = 0; r < RAT_BOTTLE_SPR.length; r++)
@@ -841,6 +868,46 @@ let gameMode = 'dog';
 let gameTick = 0;
 let fishJumpTick = 0;
 
+// ─── Day/night seed from real clock ──────────────────────────────────────────
+const _dayNightSeed = (() => {
+  const d = new Date();
+  return (d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds()) / 86400 * 21600;
+})();
+
+// ─── Screen shake ─────────────────────────────────────────────────────────────
+let _shakeTicks = 0, _shakeAmt = 0;
+function triggerShake(amt, ticks) { _shakeAmt = amt; _shakeTicks = ticks; }
+
+// ─── Happiness ────────────────────────────────────────────────────────────────
+let happiness = 80;
+function addHappiness(n) { happiness = Math.min(100, happiness + n); }
+
+// ─── Milestones ───────────────────────────────────────────────────────────────
+const _achievements = new Set();
+function unlockAchievement(key, text) {
+  if (_achievements.has(key)) return;
+  _achievements.add(key);
+  labels.push(new Label('★ ' + text, Math.round(canvas.width / 2), Math.max(60, Math.round(canvas.height * 0.3))));
+  try {
+    const _arr = JSON.parse(localStorage.getItem('ss-ach') || '[]');
+    if (!_arr.includes(key)) { _arr.push(key); localStorage.setItem('ss-ach', JSON.stringify(_arr)); }
+  } catch(e) {}
+}
+
+// ─── Catnip ───────────────────────────────────────────────────────────────────
+const catnips = [];
+
+// ─── Rat wheel ────────────────────────────────────────────────────────────────
+let ratWheel = null;
+const WHEEL_R = 26;
+let _wheelAngle = 0, _wheelSpeed = 0;
+
+// ─── Dog hold-scritch ─────────────────────────────────────────────────────────
+let _scritchHoldTicks = 0;
+
+// ─── Pet names ────────────────────────────────────────────────────────────────
+let petNames = { dog: '', cat: '', rat: '' };
+
 // ─── Persistent state ────────────────────────────────────────────────────────
 const modeStates = { dog: null, rat: null, cat: null };
 
@@ -961,14 +1028,25 @@ function persistSave() {
 function persistLoad() {
   try {
     const raw = localStorage.getItem('scritch-scratch');
-    if (!raw) return;
-    const data = JSON.parse(raw);
-    if (data.modeStates) {
-      if (data.modeStates.dog) modeStates.dog = data.modeStates.dog;
-      if (data.modeStates.rat) modeStates.rat = data.modeStates.rat;
-      if (data.modeStates.cat) modeStates.cat = data.modeStates.cat;
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data.modeStates) {
+        if (data.modeStates.dog) modeStates.dog = data.modeStates.dog;
+        if (data.modeStates.rat) modeStates.rat = data.modeStates.rat;
+        if (data.modeStates.cat) modeStates.cat = data.modeStates.cat;
+      }
     }
   } catch (e) {}
+  try {
+    const achArr = JSON.parse(localStorage.getItem('ss-ach') || '[]');
+    for (const k of achArr) _achievements.add(k);
+  } catch(e) {}
+  try {
+    const nm = JSON.parse(localStorage.getItem('ss-names') || '{}');
+    if (nm.dog) petNames.dog = nm.dog;
+    if (nm.cat) petNames.cat = nm.cat;
+    if (nm.rat) petNames.rat = nm.rat;
+  } catch(e) {}
 }
 
 // ─── Cat Mode state ───────────────────────────────────────────────────────────
@@ -1048,6 +1126,7 @@ class Rat {
 
   scritch() {
     sndSqueak();
+    addHappiness(5);
     this.scritchTimer = 50;
     for (let i = 0; i < 3; i++) hearts.push(new Heart(this.x + RAT_W / 2, this.y));
   }
@@ -1168,15 +1247,21 @@ class Rat {
       }
     } else if (gameMode === 'rat' && !this.fleeing && !seekingCheese && this.furnitureTarget) {
       const ftgt = this.furnitureTarget === 'bottle' ? ratBottle
-        : this.furnitureTarget === 'bowl' ? ratFoodBowl : ratBed;
+        : this.furnitureTarget === 'bowl' ? ratFoodBowl
+        : this.furnitureTarget === 'wheel' ? ratWheel : ratBed;
       if (ftgt) {
-        const tw = this.furnitureTarget === 'bottle' ? RAT_BOTTLE_SPR[0].length * RAT_BOTTLE_SC
-          : this.furnitureTarget === 'bowl' ? RAT_RBOWL_SPR[0].length * RAT_BOWL_SC
-          : RAT_BED_SPR[0].length * RAT_BED_SC;
-        const th = this.furnitureTarget === 'bottle' ? RAT_BOTTLE_SPR.length * RAT_BOTTLE_SC
-          : this.furnitureTarget === 'bowl' ? RAT_RBOWL_SPR.length * RAT_BOWL_SC
-          : RAT_BED_SPR.length * RAT_BED_SC;
-        const ftx = ftgt.x + tw / 2, fty = ftgt.y + th / 2;
+        let ftx, fty;
+        if (this.furnitureTarget === 'wheel') {
+          ftx = ratWheel.x; fty = ratWheel.y + WHEEL_R;
+        } else {
+          const tw = this.furnitureTarget === 'bottle' ? RAT_BOTTLE_SPR[0].length * RAT_BOTTLE_SC
+            : this.furnitureTarget === 'bowl' ? RAT_RBOWL_SPR[0].length * RAT_BOWL_SC
+            : RAT_BED_SPR[0].length * RAT_BED_SC;
+          const th = this.furnitureTarget === 'bottle' ? RAT_BOTTLE_SPR.length * RAT_BOTTLE_SC
+            : this.furnitureTarget === 'bowl' ? RAT_RBOWL_SPR.length * RAT_BOWL_SC
+            : RAT_BED_SPR.length * RAT_BED_SC;
+          ftx = ftgt.x + tw / 2; fty = ftgt.y + th / 2;
+        }
         const fdx = ftx - (this.x + RAT_W / 2), fdy = fty - (this.y + RAT_H / 2);
         const fd = Math.hypot(fdx, fdy);
         if (fd < 16) {
@@ -1184,9 +1269,13 @@ class Rat {
             this.sleepTimer = 60 * (6 + Math.floor(Math.random() * 8));
             this.sleepZTimer = 60 * 2;
             this.vx = 0; this.vy = 0;
+          } else if (this.furnitureTarget === 'wheel') {
+            _wheelSpeed = Math.max(_wheelSpeed, 0.05 + Math.random() * 0.04);
+            addHappiness(3);
           } else {
             labels.push(new Label(this.furnitureTarget === 'bottle' ? 'Drink!' : 'Nom!',
               this.x + RAT_W / 2, Math.max(20, this.y - 4)));
+            addHappiness(3);
           }
           this.furnitureTarget = null;
           this.furnitureTimer = 60 * (12 + Math.floor(Math.random() * 18));
@@ -1202,6 +1291,7 @@ class Rat {
         if (ratBottle) avail.push('bottle');
         if (ratFoodBowl) avail.push('bowl');
         if (ratBed) avail.push('bed');
+        if (ratWheel) avail.push('wheel');
         if (avail.length && Math.random() < 0.4)
           this.furnitureTarget = avail[Math.floor(Math.random() * avail.length)];
         this.furnitureTimer = 60 * (12 + Math.floor(Math.random() * 18));
@@ -1332,6 +1422,7 @@ class RaidCat {
       .slice(0, Math.ceil(rats.length / 2));
     labels.push(new Label('Cat!', canvas.width / 2, canvas.height / 2 - 20));
     sndRaidCat();
+    triggerShake(5, 10);
   }
   update() {
     if (++this.tick >= ANIM_TICKS) { this.tick = 0; this.frame ^= 1; }
@@ -1339,7 +1430,10 @@ class RaidCat {
     for (const r of this.targets) {
       if (!r.dead && !r.fleeing && Math.hypot(r.x - this.x, r.y - this.y) < CPW * 4) r.flee();
     }
-    if (this.x > canvas.width + CPW * 2 || this.x < -CPW * 2) this.done = true;
+    if (this.x > canvas.width + CPW * 2 || this.x < -CPW * 2) {
+      this.done = true;
+      unlockAchievement('raid_survived', 'Raid survived!');
+    }
   }
   draw() {
     if (this.done) return;
@@ -1403,6 +1497,7 @@ class Cat {
 
   scritch() {
     this.scritchTimer = 60;
+    addHappiness(5);
     for (let i = 0; i < 3; i++) hearts.push(new Heart(this.cx, this.y));
     labels.push(new Label('Purr~', this.cx, Math.max(20, this.y - 6)));
   }
@@ -1531,6 +1626,7 @@ class Cat {
           const ft = this.furnitureTarget; this.furnitureTarget = null;
           if (ft === 'food') sndNom(); else sndSip();
           labels.push(new Label(ft === 'food' ? 'Nom!' : 'Slurp!', this.cx, Math.max(20, this.y - 6)));
+          addHappiness(5);
           this.state = 'happy'; this.lingerTicks = 60 * 2;
         } else {
           this.state = 'idle';
@@ -1738,6 +1834,7 @@ class Puppy {
     this.vx = (Math.random() - 0.5) * 2; this.vy = (Math.random() - 0.5) * 1;
     this.right = this.vx > 0; this.frame = 0; this.tick = 0;
     this.state = 'walking'; this.scritchTimer = 0; this.dirTimer = 60 + Math.floor(Math.random() * 90);
+    this.age = 0;
   }
   get cx() { return this.x + DW * this.vs / 2; }
   hitTest(px, py) {
@@ -1752,6 +1849,11 @@ class Puppy {
   update() {
     if (++this.tick >= ANIM_TICKS) { this.tick = 0; this.frame ^= 1; }
     if (this.scritchTimer > 0 && --this.scritchTimer <= 0) this.state = 'walking';
+    this.age++;
+    if (this.age % (60 * 60) === 0 && this.vs < 5) {
+      this.vs = Math.min(5, this.vs + 1);
+      if (this.vs >= 5) unlockAchievement('puppy_grown', 'Puppy grew up!');
+    }
     if (this.state !== 'happy') {
       if (--this.dirTimer <= 0) {
         this.dirTimer = 60 + Math.floor(Math.random() * 120);
@@ -1804,6 +1906,7 @@ class Visitor {
     this.behaviorTimer = 0;
     this.visFidgetType = 'sit';
     sndBark(false);
+    unlockAchievement('first_visitor', 'A friend arrived!');
   }
 
   get pawX() { const vw = DW * this.vs; return this.right ? this.x + vw * 0.85 : this.x + vw * 0.15; }
@@ -1974,6 +2077,7 @@ const dog = {
     this.sleepTimer = 0; this.digPending = false;
     this.state = 'happy'; this.tx = this.ty = null;
     this.lingerTicks = 0; this.idleTimer = 0; marker = null;
+    addHappiness(3);
   },
 
   unpet() { if (this.state === 'happy') this.lingerTicks = 90; },
@@ -2033,6 +2137,7 @@ const dog = {
             const lbl = ft === 'food' ? 'Nom!' : 'Slurp!';
             if (ft === 'food') sndNom(); else sndSip();
             labels.push(new Label(lbl, this.cx, Math.max(20, this.y - 8)));
+            addHappiness(5);
             this.state = 'happy'; this.lingerTicks = 60 * 2;
           }
         } else if (this.digPending) {
@@ -2149,9 +2254,14 @@ const dog = {
 };
 
 // ─── Mode transitions ─────────────────────────────────────────────────────────
+function updateCatnipBtn() {
+  document.getElementById('catnip-btn').style.display = gameMode === 'cat' ? 'block' : 'none';
+}
+
 function enterRatMode() {
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'rat';
+  happiness = 80;
   visitors.length = 0;
   rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
@@ -2167,12 +2277,14 @@ function enterRatMode() {
     rats.push(new Rat(cx + 50, cy, { sex: 'f', bodyColor: '#c8922a', matingCooldown: 0, isSeed: true }));
   }
   sndRatAmbient();
+  updateCatnipBtn();
   persistSave();
 }
 
 function enterDogMode() {
   if (gameMode === 'rat') saveRatState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'dog';
+  happiness = 80;
   visitors.length = 0;
   rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
@@ -2186,12 +2298,14 @@ function enterDogMode() {
   placeDogFurniture();
   if (!restoreDogState()) { dog.init(); }
   sndDogAmbient();
+  updateCatnipBtn();
   persistSave();
 }
 
 function enterCatMode() {
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'rat') saveRatState();
   gameMode = 'cat';
+  happiness = 80;
   visitors.length = 0; rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
   placedItems.length = 0; hearts.length = 0; dirts.length = 0; labels.length = 0;
@@ -2207,6 +2321,7 @@ function enterCatMode() {
       x: canvas.width/2 - CPW/2, y: canvas.height/2 - CPH/2, birthCooldown: 0 }));
   }
   sndCatAmbient();
+  updateCatnipBtn();
   persistSave();
 }
 
@@ -2556,6 +2671,7 @@ function sndRatAmbient() { sndStopAmbient(); _startAmb(80, 0.3, 'lowpass', 0.025
 
 function sndBark(small) {
   if (!_cool('bark', 18)) return;
+  if (!small) triggerShake(2, 5);
   const ctx = _getAC(); const t = ctx.currentTime;
   const f0 = small ? 550 : 190;
   const osc = ctx.createOscillator(); osc.type = 'sawtooth';
@@ -2741,6 +2857,99 @@ function sndBlub() {
   }
 }
 
+// ─── HUD helpers ─────────────────────────────────────────────────────────────
+function drawHappinessBar() {
+  const h = happiness / 100;
+  const barW = 48, barH = 4;
+  const bx = canvas.width - barW - 12, by = 12;
+  const col = h >= 0.65 ? '#55cc33' : h >= 0.35 ? '#ffcc00' : '#ee3333';
+  ctx.save(); ctx.globalAlpha = 0.6;
+  ctx.fillStyle = '#1a1a1a'; ctx.fillRect(bx - 1, by - 1, barW + 2, barH + 2);
+  ctx.fillStyle = '#333'; ctx.fillRect(bx, by, barW, barH);
+  ctx.fillStyle = col; ctx.fillRect(bx, by, Math.round(barW * h), barH);
+  const hx = bx - 11, hy = by - 1;
+  ctx.fillStyle = col;
+  for (let r = 0; r < HEART_SPR.length; r++)
+    for (let c = 0; c < HEART_SPR[r].length; c++)
+      if (HEART_SPR[r][c]) ctx.fillRect(hx + c, hy + r, 1, 1);
+  ctx.restore();
+}
+
+function drawRatWheel() {
+  if (!ratWheel) return;
+  const cx = Math.round(ratWheel.x), cy = Math.round(ratWheel.y);
+  const R = WHEEL_R;
+  ctx.fillStyle = '#6b4226';
+  ctx.fillRect(cx - R - 2, cy + R, 5, 10);
+  ctx.fillRect(cx + R - 3, cy + R, 5, 10);
+  ctx.fillRect(cx - R - 4, cy + R + 8, R * 2 + 8, 3);
+  ctx.fillStyle = '#a87040';
+  for (let a = 0; a < Math.PI * 2; a += 0.22) {
+    const rx = cx + Math.round(Math.cos(a) * R), ry = cy + Math.round(Math.sin(a) * R);
+    ctx.fillRect(rx - 2, ry - 2, 4, 4);
+  }
+  ctx.save(); ctx.translate(cx, cy); ctx.rotate(_wheelAngle);
+  ctx.fillStyle = '#8b6040';
+  for (let i = 0; i < 4; i++) {
+    ctx.save(); ctx.rotate(i * Math.PI / 2);
+    ctx.fillRect(-2, -R + 5, 4, R * 2 - 10);
+    ctx.restore();
+  }
+  ctx.fillStyle = '#6b4226'; ctx.fillRect(-4, -4, 8, 8);
+  ctx.restore();
+}
+
+function drawCatnips() {
+  for (let i = catnips.length - 1; i >= 0; i--) {
+    const cn = catnips[i];
+    cn.life--;
+    if (cn.life <= 0) { catnips.splice(i, 1); continue; }
+    const a = Math.min(1, cn.life / 45) * 0.9;
+    ctx.save(); ctx.globalAlpha = a;
+    ctx.fillStyle = '#44cc44';
+    ctx.fillRect(Math.round(cn.x) - 4, Math.round(cn.y), 8, 3);
+    ctx.fillRect(Math.round(cn.x) - 1, Math.round(cn.y) - 6, 3, 7);
+    ctx.fillRect(Math.round(cn.x) - 6, Math.round(cn.y) - 3, 5, 3);
+    ctx.fillRect(Math.round(cn.x) + 2, Math.round(cn.y) - 3, 5, 3);
+    ctx.fillStyle = '#88ee88';
+    ctx.fillRect(Math.round(cn.x) - 2, Math.round(cn.y) - 1, 5, 2);
+    ctx.restore();
+    for (const cat of cats) {
+      if (cat.dead || cat.state === 'leaving') continue;
+      const d = Math.hypot(cat.cx - cn.x, cat.cy - cn.y);
+      if (d < 90) {
+        if (cat.state === 'sleep') { cat.state = 'idle'; cat.idleTimer = 0; sndMeow(false); }
+        if (Math.random() < 0.025) {
+          cat._roamTo(cn.x + (Math.random()-0.5)*100, cn.y + (Math.random()-0.5)*60);
+          if (Math.random() < 0.4) hearts.push(new Heart(cat.cx, cat.y));
+          unlockAchievement('catnip_craze', 'Catnip craze!');
+        }
+      }
+    }
+  }
+}
+
+function drawPetName() {
+  const name = petNames[gameMode];
+  if (!name) return;
+  let nx = 0, ny = 0;
+  if (gameMode === 'dog') {
+    nx = dog.cx; ny = Math.max(20, dog.y - 14);
+  } else if (gameMode === 'cat') {
+    const mc = cats.find(c => c.isMain && !c.dead);
+    if (!mc) return;
+    nx = mc.cx; ny = Math.max(20, mc.y - 14);
+  } else {
+    const lr = rats.find(r => r.isSeed && !r.dead);
+    if (!lr) return;
+    nx = lr.x + RAT_W / 2; ny = Math.max(20, lr.y - 10);
+  }
+  ctx.save(); ctx.globalAlpha = 0.55;
+  ctx.fillStyle = '#ffffff'; ctx.font = 'bold 9px monospace'; ctx.textAlign = 'center';
+  ctx.fillText(name, Math.round(nx), Math.round(ny));
+  ctx.restore();
+}
+
 // ─── Loop ────────────────────────────────────────────────────────────────────
 function tickParticles(arr) {
   for (let i = arr.length - 1; i >= 0; i--) {
@@ -2753,7 +2962,7 @@ function drawDynamicLighting() {
   const W = canvas.width, H = canvas.height;
   ctx.save();
   if (gameMode === 'dog') {
-    const phase = (gameTick / 21600) % 1;
+    const phase = ((gameTick + _dayNightSeed) / 21600) % 1;
     let col, alpha;
     if (phase < 0.06) {
       alpha = 0.22 * (1 - phase / 0.06) + 0.04;
@@ -2820,6 +3029,15 @@ function loop() {
   gameTick++;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // Screen shake
+  let _shakeSave = false;
+  if (_shakeTicks > 0) {
+    _shakeTicks--;
+    _shakeSave = true;
+    ctx.save();
+    ctx.translate((Math.random() - 0.5) * _shakeAmt * 2, (Math.random() - 0.5) * _shakeAmt * 2);
+  }
+
   if (gameMode === 'dog') {
     drawDogBackground();
     dog.update();
@@ -2865,9 +3083,25 @@ function loop() {
           ));
         }
         labels.push(new Label('Puppies!', dog.cx, Math.max(20, dog.y - 8)));
+        unlockAchievement('first_puppies', 'Puppies arrived!');
       }
     }
     for (const p of puppies) { p.update(); p.draw(); }
+
+    // Hold-scritch dog trick
+    if (scritching && !scritchCat) {
+      if (++_scritchHoldTicks === 90) {
+        dog.state = 'fidget'; dog.fidgetTimer = 60 * 3;
+        dog.fidgetType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
+        dog.frame = 0; dog.tick = 0;
+        const trickNames = { sit: 'Sit!', beg: 'Beg!', roll: 'Roll over!' };
+        labels.push(new Label(trickNames[dog.fidgetType], dog.cx, Math.max(20, dog.y - 8)));
+        unlockAchievement('dog_trick', 'Good dog!');
+        _scritchHoldTicks = 0;
+      }
+    } else {
+      _scritchHoldTicks = 0;
+    }
 
     if (Math.random() < 0.0015) sndBird();
 
@@ -2915,6 +3149,11 @@ function loop() {
       babies[i].update();
       if (babies[i].dead) babies.splice(i, 1); else babies[i].draw();
     }
+
+    _wheelAngle += _wheelSpeed;
+    _wheelSpeed *= 0.992;
+
+    if (rats.length >= 10) unlockAchievement('rat_colony', '10 rats!');
 
     tickParticles(hearts);
     tickParticles(labels);
@@ -3001,13 +3240,21 @@ function loop() {
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
       ctx.font = '11px monospace'; ctx.textAlign = 'center';
-      ctx.fillText('hold cat to purr · tap ground for laser · tap wool ball to roll it',
+      ctx.fillText('hold cat to purr · tap ground for laser · Catnip button for zoomies',
         canvas.width / 2, canvas.height - 18);
       ctx.restore();
     }
   }
 
   drawDynamicLighting();
+  if (_shakeSave) ctx.restore();
+
+  // Unshaken HUD
+  drawHappinessBar();
+  drawPetName();
+  if (gameMode === 'cat') drawCatnips();
+  if (gameTick % 300 === 0) happiness = Math.max(0, happiness - 1);
+
   if (cursorVisible) drawCursor(cursorX, cursorY);
 
   requestAnimationFrame(loop);
@@ -3074,6 +3321,46 @@ document.querySelectorAll('.mode-btn-pick').forEach(btn => {
     else if (m === 'rat') enterRatMode();
     else enterCatMode();
   });
+});
+
+// ─── Name overlay ─────────────────────────────────────────────────────────────
+const nameOverlay = document.getElementById('name-overlay');
+const nameInput   = document.getElementById('name-input');
+const namePrompt  = document.getElementById('name-prompt');
+
+function showNameOverlay() {
+  menuDrop.classList.remove('open');
+  menuBtn.classList.remove('open');
+  const modeLabel = gameMode === 'dog' ? 'dog' : gameMode === 'cat' ? 'cat' : 'rat';
+  namePrompt.textContent = 'Name your ' + modeLabel;
+  nameInput.value = petNames[gameMode] || '';
+  nameOverlay.classList.add('open');
+  setTimeout(() => nameInput.focus(), 50);
+}
+
+document.getElementById('rename-btn').addEventListener('click', showNameOverlay);
+
+document.getElementById('name-confirm').addEventListener('click', () => {
+  petNames[gameMode] = nameInput.value.trim().slice(0, 12);
+  nameOverlay.classList.remove('open');
+  try { localStorage.setItem('ss-names', JSON.stringify(petNames)); } catch(e) {}
+});
+
+nameOverlay.addEventListener('click', e => {
+  if (e.target === nameOverlay) nameOverlay.classList.remove('open');
+});
+nameInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('name-confirm').click();
+});
+
+// ─── Catnip button ────────────────────────────────────────────────────────────
+document.getElementById('catnip-btn').addEventListener('click', () => {
+  if (gameMode !== 'cat') return;
+  const mc = cats.find(c => c.isMain && !c.dead);
+  const cx = mc ? mc.cx : canvas.width / 2;
+  const cy = mc ? mc.cy : canvas.height / 2;
+  catnips.push({ x: cx + (Math.random()-0.5)*100, y: cy + (Math.random()-0.5)*50, life: 360 });
+  sndLaser();
 });
 </script>
 </body>
