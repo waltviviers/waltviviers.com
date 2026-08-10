@@ -82,10 +82,7 @@
   <link rel="dns-prefetch" href="https://feeds.behold.so" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preload" href="/data/artworks.json" as="fetch" crossorigin />
-  <link rel="preload" as="image"
-        imagesrcset="/images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, /images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
-        imagesizes="100vw"
-        fetchpriority="high" />
+  <link rel="preload" as="image" href="/images/800/DSC_0610.webp" fetchpriority="high" />
 
   <!-- Prevent theme FOUC: set data-theme before any CSS paints -->
   <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
@@ -495,13 +492,13 @@
       overflow: hidden;
       background: #0D0D0D;
     }
-    .pf-hero-img { position: absolute; inset: 0; }
+    .pf-hero-img { position: absolute; inset: 0; overflow: hidden; }
     .pf-hero-img img {
-      width: 100%; height: 100%;
+      position: absolute; left: 0; top: -20%;
+      width: 100%; height: 140%;
       object-fit: cover;
-      transition: transform 0.8s cubic-bezier(0.2, 0, 0.2, 1);
+      will-change: transform;
     }
-    #photo-feature:hover .pf-hero-img img { transform: scale(1.03); }
     .pf-hero::after {
       content: "";
       position: absolute; inset: 0;
@@ -1620,15 +1617,36 @@
     </div>
   </div>
 
-  <!-- Hero: Featured Work -->
   <main id="main" role="main">
+
+  <!-- Photography & Video — feature -->
+  <section id="photo-feature" aria-label="Photography & Video">
+    <div class="pf-hero">
+      <div class="pf-hero-img">
+        <img src="/images/800/DSC_0610.webp" alt="Walt Viviers photography — wellness retreat portrait session"
+             fetchpriority="high" width="1200" height="800" />
+      </div>
+      <div class="pf-hero-inner">
+        <p class="pf-eyebrow" data-i18n="explore-photo-title">Photography &amp; Video</p>
+        <h2 class="pf-title" data-i18n="pf-headline">Portraits, events &amp; retreats — through a fine artist's eye</h2>
+        <p class="pf-desc" data-i18n="explore-photo-desc">Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist's eye. Each album opens in Google Photos.</p>
+        <div class="pf-actions">
+          <a href="/photography/" class="pf-btn pf-btn-primary" data-i18n="explore-photo-cta">View albums →</a>
+          <button type="button" class="pf-btn pf-btn-secondary gx-open" data-i18n="pf-book">Book a session</button>
+        </div>
+      </div>
+    </div>
+    <div class="explore-albums" id="explore-albums"></div>
+  </section>
+
+  <!-- Hero: Featured Work -->
     <section class="hero" id="hero">
     <div class="hero-image-wrap" id="hero-image">
       <img src="images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
            srcset="images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
            sizes="100vw"
            alt="Walt Viviers, T-Rex, 2020, Acrylic on Canvas"
-           fetchpriority="high"
+           loading="lazy"
            width="1600" height="1067" />
     </div>
     <div class="hero-detail">
@@ -1697,26 +1715,6 @@
   <div class="brush-divider" aria-hidden="true">
     <img src="/brushstrokes-bg.webp" alt="Walt Viviers — South African fine artist, acrylic and mixed media" loading="lazy" width="2360" height="590" />
   </div>
-
-  <!-- Photography & Video — feature -->
-  <section id="photo-feature" aria-label="Photography & Video">
-    <div class="pf-hero">
-      <div class="pf-hero-img">
-        <img src="/images/800/DSC_0610.webp" alt="Walt Viviers photography — wellness retreat portrait session"
-             loading="lazy" width="1200" height="800" />
-      </div>
-      <div class="pf-hero-inner">
-        <p class="pf-eyebrow" data-i18n="explore-photo-title">Photography &amp; Video</p>
-        <h2 class="pf-title" data-i18n="pf-headline">Portraits, events &amp; retreats — through a fine artist's eye</h2>
-        <p class="pf-desc" data-i18n="explore-photo-desc">Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist's eye. Each album opens in Google Photos.</p>
-        <div class="pf-actions">
-          <a href="/photography/" class="pf-btn pf-btn-primary" data-i18n="explore-photo-cta">View albums →</a>
-          <button type="button" class="pf-btn pf-btn-secondary gx-open" data-i18n="pf-book">Book a session</button>
-        </div>
-      </div>
-    </div>
-    <div class="explore-albums" id="explore-albums"></div>
-  </section>
 
   <!-- Instagram feed -->
   <section id="instagram">
@@ -2438,6 +2436,29 @@
         img.style.transform = 'translateY(' + (-mid * 0.25) + 'px)';
       }
       window.addEventListener('scroll', update, { passive: true });
+      update();
+    })();
+  </script>
+
+  <!-- Photography hero parallax -->
+  <script>
+    (function () {
+      var hero = document.querySelector('#photo-feature .pf-hero');
+      var img = hero && hero.querySelector('.pf-hero-img img');
+      if (!img) return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var ticking = false;
+      function update() {
+        var rect = hero.getBoundingClientRect();
+        var mid = rect.top + rect.height / 2 - window.innerHeight / 2;
+        var maxShift = hero.offsetHeight * 0.18;
+        var shift = Math.max(-maxShift, Math.min(maxShift, -mid * 0.12));
+        img.style.transform = 'translate3d(0,' + shift.toFixed(1) + 'px,0)';
+        ticking = false;
+      }
+      function onScroll() { if (!ticking) { requestAnimationFrame(update); ticking = true; } }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
       update();
     })();
   </script>
