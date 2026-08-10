@@ -494,8 +494,8 @@
     }
     .pf-hero-img { position: absolute; inset: 0; overflow: hidden; }
     .pf-hero-img img {
-      position: absolute; left: 0; top: -20%;
-      width: 100%; height: 140%;
+      position: absolute; left: 0; top: -35%;
+      width: 100%; height: 170%;
       object-fit: cover;
       will-change: transform;
     }
@@ -736,7 +736,7 @@
     }
 
     /* ── About ───────────────────────────────────── */
-    #about {
+    #about, #photo-about {
       padding: 100px 48px;
       border-top: 1px solid var(--rule);
       display: grid;
@@ -1379,7 +1379,7 @@
       .work-meta-table  { flex: 0 0 100%; order: 5; }
       .hero-actions     { margin-top: 24px; }
 
-      #works, #about { padding: 64px 24px; }
+      #works, #about, #photo-about { padding: 64px 24px; }
       .explore-albums { grid-template-columns: repeat(2, 1fr); }
       .instagram-head { padding: 48px 24px 32px; }
       .instagram-grid { grid-template-columns: repeat(3, 1fr); }
@@ -1395,7 +1395,7 @@
         object-fit: initial;
       }
 
-      #about {
+      #about, #photo-about {
         grid-template-columns: 1fr;
         gap: 40px;
       }
@@ -1637,6 +1637,22 @@
       </div>
     </div>
     <div class="explore-albums" id="explore-albums"></div>
+  </section>
+
+  <!-- Photography — editorial copy -->
+  <section id="photo-about">
+    <div class="about-left">
+      <h2 class="about-title" data-i18n-html="photo-about-title-html">
+        A Painter's Eye<br/><em>Behind the Lens</em>
+      </h2>
+      <button type="button" class="about-bio-btn gx-open" data-i18n="pf-book">Book a session</button>
+    </div>
+    <div class="about-body">
+      <p data-i18n="photo-about-p1">Photography and video are an extension of the same practice — the same instinct for light, composition, and the quiet moment that says everything. I bring a fine artist's eye to every frame.</p>
+      <p data-i18n="photo-about-p2">I work with people first: portrait sessions, events, and wellness retreats where the aim is to capture something true rather than posed — unhurried, comfortable, and attentive to the story unfolding in front of the camera.</p>
+      <p data-i18n="photo-about-p3">Based in Pretoria and available across South Africa and beyond, I shoot in both photo and video, and every session is delivered as a private online album.</p>
+      <p data-i18n="photo-about-p4">Whether it's a single portrait or a multi-day retreat, tell me what you have in mind and I'll shape the session around it.</p>
+    </div>
   </section>
 
   <!-- Hero: Featured Work -->
@@ -1881,6 +1897,11 @@
         'explore-photo-title': 'Photography & Video', 'explore-photo-desc': 'Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist\'s eye. Each album opens in Google Photos.', 'explore-photo-cta': 'View albums →', 'pf-headline': 'Portraits, events & retreats — through a fine artist\'s eye', 'pf-book': 'Book a session',
         'explore-apps-title': 'Apps & Games', 'explore-apps-desc': 'A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.', 'explore-apps-cta': 'Explore →',
         'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
+        'photo-about-title-html': 'A Painter\'s Eye<br/><em>Behind the Lens</em>',
+        'photo-about-p1': 'Photography and video are an extension of the same practice — the same instinct for light, composition, and the quiet moment that says everything. I bring a fine artist\'s eye to every frame.',
+        'photo-about-p2': 'I work with people first: portrait sessions, events, and wellness retreats where the aim is to capture something true rather than posed — unhurried, comfortable, and attentive to the story unfolding in front of the camera.',
+        'photo-about-p3': 'Based in Pretoria and available across South Africa and beyond, I shoot in both photo and video, and every session is delivered as a private online album.',
+        'photo-about-p4': 'Whether it\'s a single portrait or a multi-day retreat, tell me what you have in mind and I\'ll shape the session around it.',
         'about-p1': 'I am a South African fine artist working in acrylic and mixed media. Twenty years of professional creative practice — across design, art direction, and brand — have sharpened a painter\'s eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.',
         'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
         'about-p3': 'For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.',
@@ -1918,6 +1939,11 @@
         'explore-photo-title': 'Fotografie & Video', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — vasgevang in foto en video met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →', 'pf-headline': 'Portrette, geleenthede & toevlugte — deur \'n kunstenaar se oog', 'pf-book': 'Bespreek \'n sessie',
         'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': '\'n Groeiende versameling blaaierspeletjies en klein, private programme wat vanlyn werk — van \'n drie-troeteldier-speelding tot \'n handige fooi-sakrekenaar. Geen advertensies, geen opsporing.', 'explore-apps-cta': 'Verken →',
         'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
+        'photo-about-title-html': '\'n Skildersoog<br/><em>Agter die Lens</em>',
+        'photo-about-p1': 'Fotografie en video is \'n verlengstuk van dieselfde praktyk — dieselfde instink vir lig, komposisie en die stil oomblik wat alles sê. Ek bring \'n kunstenaar se oog na elke raam.',
+        'photo-about-p2': 'Ek werk eers met mense: portret-sessies, geleenthede en welstand-toevlugte waar die doel is om iets waar vas te vang eerder as poserend — ontspanne, gemaklik en aandagtig vir die storie wat voor die kamera ontvou.',
+        'photo-about-p3': 'Gebaseer in Pretoria en beskikbaar regoor Suid-Afrika en verder, skiet ek in beide foto en video, en elke sessie word as \'n privaat aanlyn album gelewer.',
+        'photo-about-p4': 'Of dit \'n enkele portret of \'n multi-dag toevlug is, laat weet my wat jy in gedagte het en ek sal die sessie daarom vorm.',
         'about-p1': 'Ek is ‘n Suid-Afrikaanse kunstenaar wat in akriel en gemengde media werk. Twintig jaar se professionele kreatiewe praktyk — deur ontwerp, kunsdireksie en handelsmerk — het ‘n skilder se oog geslyp wat die spanning tussen die poësie en musiek van ‘n beeld vind: van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.',
         'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
         'about-p3': 'Vir my is kunsmaak terapie: ‘n manier om jouself uit te druk om jouself te vind. Geloof, familie en kreatiwiteit lê aan die hart van alles wat ek maak.',
@@ -2451,8 +2477,8 @@
       function update() {
         var rect = hero.getBoundingClientRect();
         var mid = rect.top + rect.height / 2 - window.innerHeight / 2;
-        var maxShift = hero.offsetHeight * 0.18;
-        var shift = Math.max(-maxShift, Math.min(maxShift, -mid * 0.12));
+        var maxShift = hero.offsetHeight * 0.30;
+        var shift = Math.max(-maxShift, Math.min(maxShift, -mid * 0.30));
         img.style.transform = 'translate3d(0,' + shift.toFixed(1) + 'px,0)';
         ticking = false;
       }
