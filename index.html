@@ -331,97 +331,102 @@
     }
 
     /* ── Hero / Featured Work ────────────────────── */
+    /* ── Fine-art hero (full-bleed, overlaid) ── */
     .hero {
-      padding-top: 100px; /* nav height */
-      display: grid;
-      grid-template-columns: 1fr 440px;
-      align-items: start;
+      position: relative;
+      min-height: clamp(540px, 84vh, 860px);
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      background: #0D0D0D;
     }
 
     .hero-image-wrap {
-      position: relative;
+      position: absolute; inset: 0;
       background: #0D0D0D;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .hero-image-wrap img {
-      width: 100%;
-      height: auto;
-      max-height: 72vh;
-      object-fit: contain;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
       transition: opacity 0.6s;
       display: block;
     }
 
     .hero-image-wrap .placeholder {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
       font-family: var(--serif);
       font-size: 14px;
       color: var(--stone);
       letter-spacing: 0.05em;
     }
 
+    .hero::after {
+      content: "";
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 42%, rgba(0,0,0,0.12) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.12) 46%, rgba(0,0,0,0) 72%);
+      pointer-events: none;
+    }
+
     .hero-detail {
-      display: flex;
-      flex-direction: column;
-      padding: 56px 40px;
-      border-left: 1px solid var(--rule);
-      background: var(--bg);
+      position: relative; z-index: 2;
+      padding: clamp(32px, 5vw, 68px);
+      max-width: 720px;
     }
 
     .hero-work-info {
       display: flex;
       flex-direction: column;
-      flex: 1;
+      gap: 14px;
     }
 
     .hero-work-number {
-      font-size: 11px;
-      letter-spacing: 0.12em;
+      font-size: 12px;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--stone);
-      margin-bottom: 32px;
+      color: #CDCAC2;
     }
 
     .hero-work-title {
       font-family: var(--serif);
-      font-size: 36px;
+      font-size: clamp(2rem, 5vw, 3.8rem);
       font-weight: 400;
-      line-height: 1.15;
+      line-height: 1.04;
       letter-spacing: -0.01em;
-      margin-bottom: 8px;
+      color: #FAF9F7;
     }
 
     .hero-work-year {
       font-family: var(--serif);
-      font-size: 20px;
+      font-size: clamp(1.1rem, 2vw, 1.6rem);
       font-style: italic;
-      color: var(--stone);
-      margin-bottom: 40px;
+      color: #E7E4DD;
+      margin-top: -8px;
     }
 
+    /* Compact inline meta line (over image) */
     .work-meta-table {
-      display: grid;
-      gap: 0;
-    }
-
-    .work-meta-row {
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 16px;
-      padding: 10px 0;
-      border-top: 1px solid var(--rule);
-      font-size: 13px;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 14px;
+      font-size: clamp(13px, 1.3vw, 15px);
+      color: #E7E4DD;
+      margin-top: 4px;
     }
 
-    .work-meta-row:last-child { border-bottom: 1px solid var(--rule); }
-
-    .work-meta-label { color: var(--stone); }
-
-    .work-meta-value { font-weight: 500; }
+    .work-meta-item { display: inline-flex; align-items: center; gap: 6px; }
+    .work-meta-item + .work-meta-item::before {
+      content: "·"; color: rgba(231,228,221,0.55); margin-right: 8px;
+    }
+    .work-meta-label { color: rgba(231,228,221,0.7); }
+    .work-meta-value { font-weight: 500; color: #F4F2EC; }
+    .work-meta-value a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
 
     .availability-badge {
       display: inline-block;
@@ -440,10 +445,22 @@
 
     .hero-actions {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 24px;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 12px;
     }
+
+    /* Hero-scoped button + carousel styling (always light over the image) */
+    .hero .btn-primary,
+    .hero .btn-secondary { display: inline-block; }
+    .hero .btn-primary { border: 1px solid #FAF9F7; }
+    .hero .btn-secondary { color: #FAF9F7; border-color: rgba(250,249,247,0.5); }
+    .hero .btn-secondary:hover { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+    .hero .gallery-nav { margin-top: 6px; padding-top: 0; }
+    .hero .gn-btn { border-color: rgba(250,249,247,0.4); color: #E7E4DD; background: transparent; }
+    .hero .gn-btn:hover { border-color: #fff; color: #fff; }
+    .hero .gn-dot { background: rgba(250,249,247,0.35); }
+    .hero .gn-dot.active { background: #fff; }
 
     .btn-primary {
       display: block;
@@ -1101,8 +1118,13 @@
     [data-theme="light"] .nav-logo img { filter: invert(1); opacity: 1; }
     [data-theme="light"] .nav-links a:hover { color: var(--ink); }
 
-    [data-theme="light"] .hero-image-wrap { background: #EDEAE5; }
-    [data-theme="light"] .hero-detail     { background: #F5F3EF; }
+    /* Fine-art hero is a dark overlaid band in both themes */
+    [data-theme="light"] .hero .btn-primary { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+    [data-theme="light"] .hero .btn-secondary { color: #FAF9F7; border-color: rgba(250,249,247,0.5); }
+    [data-theme="light"] .hero .btn-secondary:hover { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+    [data-theme="light"] .hero .gn-btn { border-color: rgba(250,249,247,0.4); color: #E7E4DD; }
+    [data-theme="light"] .hero .gn-dot { background: rgba(250,249,247,0.35); }
+    [data-theme="light"] .hero .gn-dot.active { background: #fff; }
 
     [data-theme="light"] .works-grid {
       background-color: #F5F3EF;
@@ -1333,51 +1355,12 @@
       .toggle-thumb .icon-sun { font-size: 17px; }
 
       .hero {
-        padding-top: 50px;
-        grid-template-columns: 1fr;
-        min-height: auto;
+        min-height: clamp(480px, 76vh, 680px);
       }
 
-      .hero-image-wrap {
-        min-height: 0;
-      }
-
-      .hero-image-wrap img {
-        width: 100%;
-        height: auto;
-        max-height: 62vh;
-      }
-
-      .hero-detail {
-        border-left: none;
-        border-top: 1px solid var(--rule);
-        padding: 24px 24px 32px;
-        background: var(--bg);
-      }
-
-      .hero-work-info {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        flex: unset;
-      }
-
-      .hero-work-number {
-        flex: 1;
-        order: 1;
-        margin-bottom: 0;
-      }
-
-      .hero-work-info .gallery-nav {
-        order: 2;
-        margin-top: 0;
-        padding-top: 0;
-      }
-
-      .hero-work-title  { flex: 0 0 100%; order: 3; margin-top: 24px; }
-      .hero-work-year   { flex: 0 0 100%; order: 4; }
-      .work-meta-table  { flex: 0 0 100%; order: 5; }
-      .hero-actions     { margin-top: 24px; }
+      .hero-detail { padding: 28px 24px 36px; max-width: 100%; }
+      .hero-actions .btn-primary,
+      .hero-actions .btn-secondary { flex: 1 1 auto; text-align: center; }
 
       #works, #about, #photo-about { padding: 64px 24px; }
       .explore-albums { grid-template-columns: repeat(2, 1fr); }
@@ -1676,16 +1659,15 @@
         <h1 class="hero-work-title" id="hero-title">Walt Viviers</h1>
         <p class="hero-work-year"  id="hero-year"></p>
         <div class="work-meta-table" id="hero-meta"></div>
+        <div class="hero-actions">
+          <button class="btn-primary" id="inquire-btn" data-i18n="hero-inquire">Enquire about this work</button>
+          <a href="#gallery-rep" class="btn-secondary" data-i18n="hero-gallery-rep">Gallery representation</a>
+        </div>
         <div class="gallery-nav">
           <button class="gn-btn" id="gn-prev" aria-label="Previous work">&#8592;</button>
           <div class="gn-dots" id="gn-dots"></div>
           <button class="gn-btn" id="gn-next" aria-label="Next work">&#8594;</button>
         </div>
-      </div>
-
-      <div class="hero-actions">
-        <button class="btn-primary" id="inquire-btn" data-i18n="hero-inquire">Enquire about this work</button>
-        <a href="#gallery-rep" class="btn-secondary" data-i18n="hero-gallery-rep">Gallery representation</a>
       </div>
     </div>
   </section>
@@ -1929,7 +1911,7 @@
         'form-success-close': 'Close',
         'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-price': 'Price', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗', 'meta-article': 'Article', 'meta-read-article': 'Read article ↗', 'meta-on-show': 'On Show', 'meta-view-show': 'View show ↗',
         'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire', 'avail-on-show': 'On Show',
-        'work-label': 'Work', 'works-suffix': 'artworks',
+        'work-label': 'Work', 'works-suffix': 'artworks', 'view-artwork-page': 'View artwork page ↗',
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.'
       },
       af: {
@@ -1971,7 +1953,7 @@
         'form-success-close': 'Sluit',
         'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-price': 'Prys', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗', 'meta-on-show': 'Op Vertoon', 'meta-view-show': 'Sien vertoning ↗',
         'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag', 'avail-on-show': 'Op Vertoon',
-        'work-label': 'Werk', 'works-suffix': 'kunswerke',
+        'work-label': 'Werk', 'works-suffix': 'kunswerke', 'view-artwork-page': 'Sien kunswerkblad ↗',
         'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.'
       }
     };
@@ -2056,7 +2038,7 @@
             }, 150);
           }
         } else {
-          imgWrap.innerHTML = `<img src="/${w.image}" srcset="${srcset}" sizes="100vw" alt="${newAlt}" fetchpriority="high" />`;
+          imgWrap.innerHTML = `<img src="/${w.image}" srcset="${srcset}" sizes="100vw" alt="${newAlt}" loading="lazy" />`;
         }
 
         var _t = window._t || function(k){return k;};
@@ -2065,15 +2047,14 @@
         document.getElementById('hero-title').textContent = w.title;
         document.getElementById('hero-year').textContent  = w.year;
         var _t = window._t || function(k){return k;};
+        // Compact inline meta line (values separated by ·), overlaid on the image
+        var metaItem = function (val) { return '<span class="work-meta-item"><span class="work-meta-value">' + val + '</span></span>'; };
         document.getElementById('hero-meta').innerHTML =
-          (w.medium     ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-medium')     + '</span><span class="work-meta-value">' + w.medium     + '</span></div>' : '') +
-          (w.dimensions ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-dimensions') + '</span><span class="work-meta-value">' + w.dimensions + '</span></div>' : '') +
-          (w.price      ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-price')      + '</span><span class="work-meta-value">' + w.price + '</span></div>' : '') +
-          '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-status') + '</span><span class="work-meta-value">' + availLabel(w) + '</span></div>' +
-          (w.permalink    ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-instagram') + '</span><span class="work-meta-value"><a href="' + w.permalink    + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-post')    + '</a></span></div>' : '') +
-          (w.article      ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-article')   + '</span><span class="work-meta-value"><a href="' + w.article      + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-read-article') + '</a></span></div>' : '') +
-          (w.on_show_link ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-on-show')   + '</span><span class="work-meta-value"><a href="' + w.on_show_link + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-show')    + '</a></span></div>' : '') +
-          '<div class="work-meta-row"><span class="work-meta-label">Page</span><span class="work-meta-value"><a href="/gallery/' + slugify(w.title, w.year) + '/" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">View artwork page ↗</a></span></div>';
+          (w.medium     ? metaItem(w.medium)     : '') +
+          (w.dimensions ? metaItem(w.dimensions) : '') +
+          (w.price      ? metaItem(w.price)      : '') +
+          '<span class="work-meta-item">' + availLabel(w) + '</span>' +
+          '<span class="work-meta-item"><span class="work-meta-value"><a href="/gallery/' + slugify(w.title, w.year) + '/">' + _t('view-artwork-page') + '</a></span></span>';
 
         updateDots(index);
       }
