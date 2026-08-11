@@ -26,11 +26,11 @@
   <meta property="og:url"         content="https://waltviviers.com/photography/" />
   <meta property="og:title"       content="Photography &amp; Video — Walt Viviers" />
   <meta property="og:description" content="Photography &amp; Video by Walt Viviers — South African fine artist and developer, based in Pretoria." />
-  <meta property="og:image"       content="https://waltviviers.com/brushstrokes-bg.webp" />
-  <meta property="og:image:alt"   content="Walt Viviers photography — South African fine artist" />
+  <meta property="og:image"       content="https://waltviviers.com/images/800/DSC_0610.webp" />
+  <meta property="og:image:alt"   content="Walt Viviers photography — wellness retreat portrait session" />
   <meta property="og:image:type"  content="image/webp" />
-  <meta property="og:image:width" content="2360" />
-  <meta property="og:image:height" content="590" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="800" />
   <meta property="og:locale"      content="en_ZA" />
   <meta property="og:site_name"   content="Walt Viviers" />
 
@@ -38,8 +38,8 @@
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="Photography &amp; Video — Walt Viviers" />
   <meta name="twitter:description" content="Photography &amp; Video by Walt Viviers — South African fine artist and developer, based in Pretoria." />
-  <meta name="twitter:image"       content="https://waltviviers.com/brushstrokes-bg.webp" />
-  <meta name="twitter:image:alt"   content="Walt Viviers photography — South African fine artist" />
+  <meta name="twitter:image"       content="https://waltviviers.com/images/800/DSC_0610.webp" />
+  <meta name="twitter:image:alt"   content="Walt Viviers photography — wellness retreat portrait session" />
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -118,6 +118,7 @@
     }
     nav.scrolled { height: 50px; }
     .nav-left { display: flex; align-items: center; gap: 14px; }
+.lang-slash { display: none; }
     .lang-toggle { display: flex; align-items: center; gap: 14px; }
     .lang-group { display: flex; align-items: center; cursor: pointer; user-select: none; }
     .lang-label, .lang-code {
@@ -264,6 +265,66 @@
       color: var(--stone); transition: color 0.2s;
     }
     .back-link:hover { color: var(--ink); }
+
+    /* ── Photography hero ── */
+    .ph-hero {
+      position: relative;
+      min-height: clamp(440px, 66vh, 680px);
+      display: flex; align-items: flex-end;
+      overflow: hidden; background: #0D0D0D;
+      border-bottom: 1px solid var(--rule);
+    }
+    .ph-hero-img { position: absolute; inset: 0; }
+    .ph-hero-img img { width: 100%; height: 100%; object-fit: cover; }
+    .ph-hero::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 46%, rgba(0,0,0,0.14) 100%);
+    }
+    .ph-hero-inner {
+      position: relative; z-index: 2;
+      padding: clamp(36px, 5vw, 72px);
+      max-width: 820px;
+      display: flex; flex-direction: column; gap: 18px;
+    }
+    .ph-eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #CDCAC2; }
+    .ph-title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(2.2rem, 5.4vw, 4rem); line-height: 1.03;
+      letter-spacing: -0.01em; color: #FAF9F7;
+    }
+    .ph-lead { font-size: clamp(15px, 1.5vw, 17px); line-height: 1.7; color: #E7E4DD; max-width: 620px; }
+    .ph-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 6px; }
+    .ph-btn {
+      font-family: var(--sans); font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      padding: 14px 28px; cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .ph-btn-primary { background: #FAF9F7; color: #0C0C0B; border: 1px solid #FAF9F7; }
+    .ph-btn-primary:hover { background: transparent; color: #FAF9F7; }
+    .ph-btn-secondary { background: transparent; color: #FAF9F7; border: 1px solid rgba(250,249,247,0.5); }
+    .ph-btn-secondary:hover { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+
+    /* ── Services strip ── */
+    .ph-services {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+      padding: 26px 48px; border-bottom: 1px solid var(--rule);
+    }
+    .ph-services-label {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--stone); margin-right: 6px;
+    }
+    .ph-chip {
+      font-size: 12px; letter-spacing: 0.04em; color: var(--ink);
+      border: 1px solid var(--rule); padding: 7px 15px; border-radius: 40px;
+    }
+
+    /* ── Grid meta bar ── */
+    .ph-gridbar {
+      display: flex; align-items: baseline; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap; padding: 44px 48px 24px;
+    }
+    .ph-gridbar h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(1.4rem, 2.6vw, 2rem); }
 
     /* ── Photo grid ── */
     .photo-grid {
@@ -433,6 +494,7 @@
       .nav-links { gap: 20px; }
       .nav-link-hide { display: none; }
       .lang-label, .lang-pipe { display: none; }
+      .lang-slash { display: inline; color: var(--stone); font-size: 11px; letter-spacing: 0.06em; }
       .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
       .toggle-thumb .icon-moon,
@@ -442,6 +504,8 @@
 
       .page-wrap { padding-top: 50px; }
       .page-head { padding: 40px 24px 32px; }
+      .ph-services { padding: 22px 24px; }
+      .ph-gridbar { padding: 32px 24px 20px; }
       .pull-quote { padding: 40px 24px; }
       .enquiry { padding: 64px 24px 72px; }
 
@@ -501,6 +565,7 @@
         <div class="lang-group active" id="lang-en">
           <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
         </div>
+        <span class="lang-slash" aria-hidden="true">/</span>
         <div class="lang-group" id="lang-af">
           <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
         </div>
@@ -536,11 +601,33 @@
   </nav>
 
   <div class="page-wrap">
-    <div class="page-head">
-      <div class="page-head-title">
-        <h1 data-i18n="page-title">Photography &amp; Video</h1>
-        <p class="page-byline" data-i18n="page-byline">by Walt Viviers</p>
+    <section class="ph-hero" aria-label="Photography & Video">
+      <div class="ph-hero-img">
+        <img src="/images/800/DSC_0610.webp" alt="Walt Viviers photography — wellness retreat portrait session"
+             fetchpriority="high" width="1200" height="800" />
       </div>
+      <div class="ph-hero-inner">
+        <p class="ph-eyebrow" data-i18n="page-eyebrow">Photography &amp; Video</p>
+        <h1 class="ph-title" data-i18n="page-title">Photography &amp; Video</h1>
+        <p class="ph-lead" data-i18n="page-lead">Portrait sessions, events, wellness retreats and weddings — captured in photo and video with a fine artist's eye. Based in Pretoria, available across South Africa and beyond.</p>
+        <div class="ph-actions">
+          <button type="button" class="ph-btn ph-btn-primary gx-open" data-i18n="page-book">Book a session</button>
+          <a href="#albums" class="ph-btn ph-btn-secondary" data-i18n="page-view-albums">View albums ↓</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="ph-services">
+      <span class="ph-services-label" data-i18n="services-label">Services</span>
+      <span class="ph-chip" data-i18n="svc-portraits">Portraits</span>
+      <span class="ph-chip" data-i18n="svc-events">Events</span>
+      <span class="ph-chip" data-i18n="svc-retreats">Wellness retreats</span>
+      <span class="ph-chip" data-i18n="svc-weddings">Weddings</span>
+      <span class="ph-chip" data-i18n="svc-video">Video</span>
+    </div>
+
+    <div class="ph-gridbar" id="albums">
+      <h2 data-i18n="albums-title">Selected albums</h2>
       <div class="page-head-meta">
         <span class="photos-count" id="photos-count"></span>
         <a href="/" class="back-link" data-i18n="back-home">← Back to home</a>
@@ -654,8 +741,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Fine Art & Illustration','nav-photography':'Photography & Video','nav-apps':'Apps & Games','nav-bio':'Bio & Statement','nav-about':'About','nav-enquire':'Enquire','page-title':'Photography & Video','page-byline':'by Walt Viviers','back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','count-suffix':'album','count-suffix-plural':'albums','view-album':'View on Google Photos','untitled-album':'Untitled album','coming-soon':'Coming soon','empty':'Albums coming soon.','load-error':'Could not load albums.','enq-tag':'Enquiries','enq-title':'Book a shoot','enq-desc':"Portraits, events, retreats, weddings — tell me what you have in mind and I'll be in touch.",'form-name':'Name','form-email':'Email','form-message':'Message','form-placeholder-name':'Your name','form-placeholder-email':'your@email.com','form-placeholder-photo':"I'd like to enquire about…",'enq-send':'Send enquiry','form-success-msg':'Thank you — your message has been sent. Walt will be in touch shortly.' },
-        af: { 'nav-artworks':'Skone Kunste & Illustrasie','nav-photography':'Fotografie & Video','nav-apps':'Programme en Speletjies','nav-bio':'Bio & Verklaring','nav-about':'Oor my','nav-enquire':'Navraag','page-title':'Fotografie & Video','page-byline':'deur Walt Viviers','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','count-suffix':'album','count-suffix-plural':'albums','view-album':'Sien op Google Foto\'s','untitled-album':'Naamlose album','coming-soon':'Binnekort beskikbaar','empty':'Albums binnekort beskikbaar.','load-error':'Kon nie albums laai nie.','enq-tag':'Navrae','enq-title':'Bespreek \'n sessie','enq-desc':'Portrette, geleenthede, toevlugte, troues — laat weet my wat jy in gedagte het en ek sal in kontak wees.','form-name':'Naam','form-email':'E-pos','form-message':'Boodskap','form-placeholder-name':'Jou naam','form-placeholder-email':'jou@e-pos.com','form-placeholder-photo':'Ek wil graag navraag doen oor…','enq-send':'Stuur navraag','form-success-msg':'Dankie — jou boodskap is gestuur. Walt sal binnekort in kontak wees.' }
+        en: { 'nav-artworks':'Fine Art & Illustration','nav-photography':'Photography & Video','nav-apps':'Apps & Games','nav-bio':'Bio & Statement','nav-about':'About','nav-enquire':'Enquire','page-eyebrow':'Photography & Video','page-title':'Photography & Video','page-byline':'by Walt Viviers','page-lead':"Portrait sessions, events, wellness retreats and weddings — captured in photo and video with a fine artist's eye. Based in Pretoria, available across South Africa and beyond.",'page-book':'Book a session','page-view-albums':'View albums ↓','services-label':'Services','svc-portraits':'Portraits','svc-events':'Events','svc-retreats':'Wellness retreats','svc-weddings':'Weddings','svc-video':'Video','albums-title':'Selected albums','back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','count-suffix':'album','count-suffix-plural':'albums','view-album':'View on Google Photos','untitled-album':'Untitled album','coming-soon':'Coming soon','empty':'Albums coming soon.','load-error':'Could not load albums.','enq-tag':'Enquiries','enq-title':'Book a shoot','enq-desc':"Portraits, events, retreats, weddings — tell me what you have in mind and I'll be in touch.",'form-name':'Name','form-email':'Email','form-message':'Message','form-placeholder-name':'Your name','form-placeholder-email':'your@email.com','form-placeholder-photo':"I'd like to enquire about…",'enq-send':'Send enquiry','form-success-msg':'Thank you — your message has been sent. Walt will be in touch shortly.' },
+        af: { 'nav-artworks':'Skone Kunste & Illustrasie','nav-photography':'Fotografie & Video','nav-apps':'Programme en Speletjies','nav-bio':'Bio & Verklaring','nav-about':'Oor my','nav-enquire':'Navraag','page-eyebrow':'Fotografie & Video','page-title':'Fotografie & Video','page-byline':'deur Walt Viviers','page-lead':"Portret-sessies, geleenthede, welstand-toevlugte en troues — vasgevang in foto en video met 'n kunstenaar se oog. Gebaseer in Pretoria, beskikbaar regoor Suid-Afrika en verder.",'page-book':"Bespreek 'n sessie",'page-view-albums':'Sien albums ↓','services-label':'Dienste','svc-portraits':'Portrette','svc-events':'Geleenthede','svc-retreats':'Welstand-toevlugte','svc-weddings':'Troues','svc-video':'Video','albums-title':'Uitgesoekte albums','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','count-suffix':'album','count-suffix-plural':'albums','view-album':'Sien op Google Foto\'s','untitled-album':'Naamlose album','coming-soon':'Binnekort beskikbaar','empty':'Albums binnekort beskikbaar.','load-error':'Kon nie albums laai nie.','enq-tag':'Navrae','enq-title':'Bespreek \'n sessie','enq-desc':'Portrette, geleenthede, toevlugte, troues — laat weet my wat jy in gedagte het en ek sal in kontak wees.','form-name':'Naam','form-email':'E-pos','form-message':'Boodskap','form-placeholder-name':'Jou naam','form-placeholder-email':'jou@e-pos.com','form-placeholder-photo':'Ek wil graag navraag doen oor…','enq-send':'Stuur navraag','form-success-msg':'Dankie — jou boodskap is gestuur. Walt sal binnekort in kontak wees.' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       window._t = function (k) { return (LANG[lang] && LANG[lang][k] !== undefined) ? LANG[lang][k] : k; };

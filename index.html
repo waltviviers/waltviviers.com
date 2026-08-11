@@ -82,10 +82,7 @@
   <link rel="dns-prefetch" href="https://feeds.behold.so" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preload" href="/data/artworks.json" as="fetch" crossorigin />
-  <link rel="preload" as="image"
-        imagesrcset="/images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, /images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
-        imagesizes="100vw"
-        fetchpriority="high" />
+  <link rel="preload" as="image" href="/images/800/DSC_0610.webp" fetchpriority="high" />
 
   <!-- Prevent theme FOUC: set data-theme before any CSS paints -->
   <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
@@ -239,6 +236,7 @@
       gap: 14px;
     }
 
+.lang-slash { display: none; }
     .lang-toggle {
       display: flex;
       align-items: center;
@@ -334,97 +332,103 @@
     }
 
     /* ── Hero / Featured Work ────────────────────── */
+    /* ── Fine-art hero (full-bleed, overlaid) ── */
     .hero {
-      padding-top: 100px; /* nav height */
-      display: grid;
-      grid-template-columns: 1fr 440px;
-      align-items: start;
+      position: relative;
+      min-height: clamp(540px, 84vh, 860px);
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+      background: #0D0D0D;
     }
 
     .hero-image-wrap {
-      position: relative;
+      position: absolute; inset: 0;
       background: #0D0D0D;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .hero-image-wrap img {
-      width: 100%;
-      height: auto;
-      max-height: 72vh;
-      object-fit: contain;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
       transition: opacity 0.6s;
       display: block;
     }
 
     .hero-image-wrap .placeholder {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
       font-family: var(--serif);
       font-size: 14px;
       color: var(--stone);
       letter-spacing: 0.05em;
     }
 
-    .hero-detail {
-      display: flex;
-      flex-direction: column;
-      padding: 56px 40px;
-      border-left: 1px solid var(--rule);
-      background: var(--bg);
+    .hero::after {
+      content: "";
+      position: absolute; inset: 0; z-index: 1;
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.74) 34%, rgba(0,0,0,0.44) 60%, rgba(0,0,0,0.18) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0) 76%);
+      pointer-events: none;
     }
+
+    .hero-detail {
+      position: relative; z-index: 2;
+      padding: clamp(32px, 5vw, 68px);
+      max-width: 720px;
+    }
+    .hero-work-number, .hero-work-title, .hero-work-year, .work-meta-table { text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
 
     .hero-work-info {
       display: flex;
       flex-direction: column;
-      flex: 1;
+      gap: 14px;
     }
 
     .hero-work-number {
-      font-size: 11px;
-      letter-spacing: 0.12em;
+      font-size: 12px;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: var(--stone);
-      margin-bottom: 32px;
+      color: #CDCAC2;
     }
 
     .hero-work-title {
       font-family: var(--serif);
-      font-size: 36px;
+      font-size: clamp(2rem, 5vw, 3.8rem);
       font-weight: 400;
-      line-height: 1.15;
+      line-height: 1.04;
       letter-spacing: -0.01em;
-      margin-bottom: 8px;
+      color: #FAF9F7;
     }
 
     .hero-work-year {
       font-family: var(--serif);
-      font-size: 20px;
+      font-size: clamp(1.1rem, 2vw, 1.6rem);
       font-style: italic;
-      color: var(--stone);
-      margin-bottom: 40px;
+      color: #E7E4DD;
+      margin-top: -8px;
     }
 
+    /* Compact inline meta line (over image) */
     .work-meta-table {
-      display: grid;
-      gap: 0;
-    }
-
-    .work-meta-row {
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 16px;
-      padding: 10px 0;
-      border-top: 1px solid var(--rule);
-      font-size: 13px;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 14px;
+      font-size: clamp(13px, 1.3vw, 15px);
+      color: #E7E4DD;
+      margin-top: 4px;
     }
 
-    .work-meta-row:last-child { border-bottom: 1px solid var(--rule); }
-
-    .work-meta-label { color: var(--stone); }
-
-    .work-meta-value { font-weight: 500; }
+    .work-meta-item { display: inline-flex; align-items: center; gap: 6px; }
+    .work-meta-item + .work-meta-item::before {
+      content: "·"; color: rgba(231,228,221,0.55); margin-right: 8px;
+    }
+    .work-meta-label { color: rgba(231,228,221,0.7); }
+    .work-meta-value { font-weight: 500; color: #F4F2EC; }
+    .work-meta-value a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
 
     .availability-badge {
       display: inline-block;
@@ -443,10 +447,22 @@
 
     .hero-actions {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 24px;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 12px;
     }
+
+    /* Hero-scoped button + carousel styling (always light over the image) */
+    .hero .btn-primary,
+    .hero .btn-secondary { display: inline-block; }
+    .hero .btn-primary { border: 1px solid #FAF9F7; }
+    .hero .btn-secondary { color: #FAF9F7; border-color: rgba(250,249,247,0.5); }
+    .hero .btn-secondary:hover { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+    .hero .gallery-nav { margin-top: 6px; padding-top: 0; }
+    .hero .gn-btn { border-color: rgba(250,249,247,0.4); color: #E7E4DD; background: transparent; }
+    .hero .gn-btn:hover { border-color: #fff; color: #fff; }
+    .hero .gn-dot { background: rgba(250,249,247,0.35); }
+    .hero .gn-dot.active { background: #fff; }
 
     .btn-primary {
       display: block;
@@ -485,52 +501,68 @@
     }
 
     /* ── Explore (Photography & Apps) ── */
-    #explore { border-top: 1px solid var(--rule); }
-    .explore-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1px;
-      background: var(--rule);
-    }
-    .explore-card {
-      background: var(--bg);
+    /* ── Photography & Video — full feature ── */
+    #photo-feature { border-top: 1px solid var(--rule); }
+    .pf-hero {
+      position: relative;
+      min-height: clamp(420px, 62vh, 640px);
       display: flex;
-      flex-direction: column;
-      color: inherit;
-      text-decoration: none;
-      transition: background 0.2s;
-    }
-    .explore-card:hover { background: var(--bg2); }
-    .explore-media {
-      aspect-ratio: 12 / 5;
+      align-items: flex-end;
       overflow: hidden;
       background: #0D0D0D;
     }
-    .explore-media > img {
-      width: 100%;
-      height: 100%;
+    .pf-hero-img { position: absolute; inset: 0; overflow: hidden; }
+    .pf-hero-img img {
+      position: absolute; left: 0; top: -35%;
+      width: 100%; height: 170%;
       object-fit: cover;
-      transition: transform 0.5s;
+      will-change: transform;
     }
-    .explore-card:hover .explore-media > img { transform: scale(1.04); }
-    .explore-media--grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 2px;
-      background: var(--rule);
+    .pf-hero::after {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.74) 34%, rgba(0,0,0,0.44) 60%, rgba(0,0,0,0.2) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0) 76%);
+      pointer-events: none;
     }
-    .explore-media--grid img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .pf-eyebrow, .pf-title, .pf-desc { text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
+    .pf-hero-inner {
+      position: relative; z-index: 2;
+      padding: clamp(32px, 5vw, 68px);
+      max-width: 780px;
+      display: flex; flex-direction: column; gap: 16px;
     }
-    .explore-media--grid img:first-child { grid-row: 1 / 3; }
-    .explore-card:hover .explore-media--grid img { transform: none; }
-    /* Photography — creative 5-album mosaic (one feature + four) */
+    .pf-eyebrow {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.16em;
+      text-transform: uppercase; color: #CDCAC2;
+    }
+    .pf-title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(1.9rem, 4.6vw, 3.5rem); line-height: 1.06;
+      letter-spacing: -0.01em; color: #FAF9F7;
+    }
+    .pf-desc {
+      font-size: clamp(14px, 1.4vw, 16px); line-height: 1.7;
+      color: #E7E4DD; max-width: 580px;
+    }
+    .pf-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; }
+    .pf-btn {
+      font-family: var(--sans); font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      padding: 13px 26px; cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .pf-btn-primary { background: #FAF9F7; color: #0C0C0B; border: 1px solid #FAF9F7; }
+    .pf-btn-primary:hover { background: transparent; color: #FAF9F7; }
+    .pf-btn-secondary { background: transparent; color: #FAF9F7; border: 1px solid rgba(250,249,247,0.5); }
+    .pf-btn-secondary:hover { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+    /* Fine-art intro band reuses the photography-hero styling (static cover, no parallax) */
+    #art-intro { border-top: 1px solid var(--rule); }
+    #art-intro .pf-hero-img img { height: 100%; top: 0; }
     .explore-albums {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 2px;
       background: var(--rule);
     }
@@ -571,55 +603,6 @@
     @media (max-width: 560px) {
       .explore-album-cap { opacity: 1; transform: none; }
     }
-    .explore-media--icons {
-      aspect-ratio: auto;
-      min-height: 240px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(18px, 4vw, 44px);
-      background: var(--bg2);
-    }
-    .explore-media--icons img {
-      width: min(118px, 22vw); height: min(118px, 22vw);
-      border-radius: 26px;
-      object-fit: cover;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-      transition: transform 0.35s;
-    }
-    .explore-card:hover .explore-media--icons img:nth-child(1) { transform: translateY(-4px); }
-    .explore-card:hover .explore-media--icons img:nth-child(3) { transform: translateY(4px); }
-    .explore-body {
-      padding: 40px 48px 48px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      flex: 1;
-      order: -1;
-    }
-    .explore-title {
-      font-family: var(--serif);
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
-      font-weight: 400;
-      line-height: 1.1;
-    }
-    .explore-desc {
-      font-size: 15px;
-      color: var(--stone);
-      line-height: 1.7;
-      flex: 1;
-    }
-    .explore-cta {
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--ink);
-    }
-    .explore-card:hover .explore-cta { text-decoration: underline; text-underline-offset: 4px; }
-    [data-theme="light"] .explore-card { background: #F5F3EF; }
-    [data-theme="light"] .explore-card:hover { background: #EDEAE5; }
-    [data-theme="light"] .explore-media, [data-theme="light"] .explore-media--icons { background: #EDEAE5; }
     [data-theme="light"] .explore-albums { background: #E4E0D9; }
     [data-theme="light"] .explore-album { background: #EDEAE5; }
     [data-theme="light"] .explore-album:hover { background: #E4E0D9; }
@@ -641,13 +624,6 @@
     /* Match "Selected Artworks" to the "Photography & Video" heading size */
     #works .section-title { font-size: clamp(1.6rem, 3vw, 2.4rem); }
 
-    /* Get in touch (home footer CTA) */
-    #get-in-touch { border-top: 1px solid var(--rule); padding: 72px 48px; text-align: center; }
-    .get-in-touch-btn { display: inline-block; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--bg); background: var(--ink); padding: 16px 44px; border: 1px solid var(--ink); cursor: pointer; transition: background 0.2s, color 0.2s; }
-    .get-in-touch-btn:hover { background: transparent; color: var(--ink); }
-    [data-theme="light"] .get-in-touch-btn { background: #0C0C0B; color: #FAF9F7; }
-    [data-theme="light"] .get-in-touch-btn:hover { background: transparent; color: #0C0C0B; }
-    @media (max-width: 900px) { #get-in-touch { padding: 56px 24px; } }
 
     .section-count {
       font-size: 12px;
@@ -779,7 +755,7 @@
     }
 
     /* ── About ───────────────────────────────────── */
-    #about {
+    #about, #photo-about {
       padding: 100px 48px;
       border-top: 1px solid var(--rule);
       display: grid;
@@ -1144,8 +1120,13 @@
     [data-theme="light"] .nav-logo img { filter: invert(1); opacity: 1; }
     [data-theme="light"] .nav-links a:hover { color: var(--ink); }
 
-    [data-theme="light"] .hero-image-wrap { background: #EDEAE5; }
-    [data-theme="light"] .hero-detail     { background: #F5F3EF; }
+    /* Fine-art hero is a dark overlaid band in both themes */
+    [data-theme="light"] .hero .btn-primary { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+    [data-theme="light"] .hero .btn-secondary { color: #FAF9F7; border-color: rgba(250,249,247,0.5); }
+    [data-theme="light"] .hero .btn-secondary:hover { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+    [data-theme="light"] .hero .gn-btn { border-color: rgba(250,249,247,0.4); color: #E7E4DD; }
+    [data-theme="light"] .hero .gn-dot { background: rgba(250,249,247,0.35); }
+    [data-theme="light"] .hero .gn-dot.active { background: #fff; }
 
     [data-theme="light"] .works-grid {
       background-color: #F5F3EF;
@@ -1273,6 +1254,13 @@
       gap: 12px;
     }
 
+    .ig-follow-lead {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--stone); transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .ig-follow-lead:hover { color: var(--ink); }
+
     .instagram-handle svg {
       width: 20px;
       height: 20px;
@@ -1286,7 +1274,7 @@
 
     .instagram-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 2px;
       background: var(--rule);
     }
@@ -1355,7 +1343,6 @@
     /* ── Responsive ──────────────────────────────── */
     @media (max-width: 1200px) {
       .works-grid { grid-template-columns: repeat(2, 1fr); }
-      .instagram-grid { grid-template-columns: repeat(6, 1fr); }
     }
 
     @media (max-width: 900px) {
@@ -1369,6 +1356,7 @@
       .nav-links { gap: 20px; }
       .nav-link-hide { display: none; }
       .lang-label, .lang-pipe { display: none; }
+      .lang-slash { display: inline; color: var(--stone); font-size: 11px; letter-spacing: 0.06em; }
 
       .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
@@ -1376,61 +1364,20 @@
       .toggle-thumb .icon-sun { font-size: 17px; }
 
       .hero {
-        padding-top: 50px;
-        grid-template-columns: 1fr;
-        min-height: auto;
+        min-height: clamp(480px, 76vh, 680px);
       }
 
-      .hero-image-wrap {
-        min-height: 0;
-      }
+      .hero-detail { padding: 28px 24px 36px; max-width: 100%; }
+      .hero-actions .btn-primary,
+      .hero-actions .btn-secondary { flex: 1 1 auto; text-align: center; }
 
-      .hero-image-wrap img {
-        width: 100%;
-        height: auto;
-        max-height: 62vh;
-      }
-
-      .hero-detail {
-        border-left: none;
-        border-top: 1px solid var(--rule);
-        padding: 24px 24px 32px;
-        background: var(--bg);
-      }
-
-      .hero-work-info {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        flex: unset;
-      }
-
-      .hero-work-number {
-        flex: 1;
-        order: 1;
-        margin-bottom: 0;
-      }
-
-      .hero-work-info .gallery-nav {
-        order: 2;
-        margin-top: 0;
-        padding-top: 0;
-      }
-
-      .hero-work-title  { flex: 0 0 100%; order: 3; margin-top: 24px; }
-      .hero-work-year   { flex: 0 0 100%; order: 4; }
-      .work-meta-table  { flex: 0 0 100%; order: 5; }
-      .hero-actions     { margin-top: 24px; }
-
-      #works, #about { padding: 64px 24px; }
-      .explore-grid { grid-template-columns: 1fr; }
-      .explore-body { padding: 32px 24px 40px; }
-      .explore-media--icons { min-height: 180px; }
-      .explore-media--icons img { border-radius: 20px; }
+      #works, #about, #photo-about { padding: 64px 24px; }
+      .explore-albums { grid-template-columns: repeat(2, 1fr); }
       .instagram-head { padding: 48px 24px 32px; }
-      .instagram-grid { grid-template-columns: repeat(3, 1fr); }
+      .instagram-head .section-count { display: none; } /* hide right-side follow link on mobile */
 
       .works-grid { grid-template-columns: 1fr; }
+      .works-grid .work-thumb:nth-child(n+5) { display: none; }
 
       .work-thumb-img {
         aspect-ratio: unset;
@@ -1441,7 +1388,7 @@
         object-fit: initial;
       }
 
-      #about {
+      #about, #photo-about {
         grid-template-columns: 1fr;
         gap: 40px;
       }
@@ -1472,7 +1419,6 @@
     @media (max-width: 560px) {
       .works-grid { grid-template-columns: 1fr; }
       .footer-admin { display: none; }
-      .works-grid .work-thumb:nth-child(n+5) { display: none; }
       .view-gallery-btn { display: flex; }
     }
 
@@ -1601,6 +1547,7 @@
         <div class="lang-group active" data-lang="en">
           <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
         </div>
+        <span class="lang-slash" aria-hidden="true">/</span>
         <div class="lang-group" data-lang="af">
           <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
         </div>
@@ -1663,33 +1610,66 @@
     </div>
   </div>
 
-  <!-- Hero: Featured Work -->
   <main id="main" role="main">
-    <section class="hero" id="hero">
-    <div class="hero-image-wrap" id="hero-image">
-      <img src="images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
-           srcset="images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
-           sizes="100vw"
-           alt="Walt Viviers, T-Rex, 2020, Acrylic on Canvas"
-           fetchpriority="high"
-           width="1600" height="1067" />
-    </div>
-    <div class="hero-detail">
-      <div class="hero-work-info">
-        <p class="hero-work-number" id="hero-number">Featured work</p>
-        <h1 class="hero-work-title" id="hero-title">Walt Viviers</h1>
-        <p class="hero-work-year"  id="hero-year"></p>
-        <div class="work-meta-table" id="hero-meta"></div>
-        <div class="gallery-nav">
-          <button class="gn-btn" id="gn-prev" aria-label="Previous work">&#8592;</button>
-          <div class="gn-dots" id="gn-dots"></div>
-          <button class="gn-btn" id="gn-next" aria-label="Next work">&#8594;</button>
+
+  <!-- Photography & Video — feature -->
+  <section id="photo-feature" aria-label="Photography & Video">
+    <div class="pf-hero">
+      <div class="pf-hero-img">
+        <img src="/images/800/DSC_0610.webp" alt="Walt Viviers photography — wellness retreat portrait session"
+             fetchpriority="high" width="1200" height="800" />
+      </div>
+      <div class="pf-hero-inner">
+        <p class="pf-eyebrow" data-i18n="explore-photo-title">Photography &amp; Video</p>
+        <h2 class="pf-title" data-i18n="pf-headline">Portraits, events &amp; retreats — through a fine artist's eye</h2>
+        <p class="pf-desc" data-i18n="explore-photo-desc">Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist's eye. Each album opens in Google Photos.</p>
+        <div class="pf-actions">
+          <a href="/photography/" class="pf-btn pf-btn-primary" data-i18n="explore-photo-cta">View albums →</a>
+          <button type="button" class="pf-btn pf-btn-secondary gx-open" data-i18n="pf-book">Book a session</button>
         </div>
       </div>
+    </div>
+    <div class="explore-albums" id="explore-albums"></div>
+  </section>
 
-      <div class="hero-actions">
-        <button class="btn-primary" id="inquire-btn" data-i18n="hero-inquire">Enquire about this work</button>
-        <a href="#gallery-rep" class="btn-secondary" data-i18n="hero-gallery-rep">Gallery representation</a>
+  <!-- Photography — editorial copy -->
+  <section id="photo-about">
+    <div class="about-left">
+      <h2 class="about-title" data-i18n-html="photo-about-title-html">
+        A Painter's Eye<br/><em>Behind the Lens</em>
+      </h2>
+      <button type="button" class="about-bio-btn gx-open" data-i18n="pf-book">Book a session</button>
+    </div>
+    <div class="about-body">
+      <p data-i18n="photo-about-p1">Photography and video are an extension of the same practice — the same instinct for light, composition, and the quiet moment that says everything. I bring a fine artist's eye to every frame.</p>
+      <p data-i18n="photo-about-p2">I work with people first: portrait sessions, events, and wellness retreats where the aim is to capture something true rather than posed — unhurried, comfortable, and attentive to the story unfolding in front of the camera.</p>
+      <p data-i18n="photo-about-p3">Based in Pretoria and available across South Africa and beyond, I shoot in both photo and video, and every session is delivered as a private online album.</p>
+      <p data-i18n="photo-about-p4">Whether it's a single portrait or a multi-day retreat, tell me what you have in mind and I'll shape the session around it.</p>
+    </div>
+  </section>
+
+  <!-- Brush divider -->
+  <div class="brush-divider" aria-hidden="true">
+    <img src="/brushstrokes-bg.webp" alt="Walt Viviers — South African fine artist, acrylic and mixed media" loading="lazy" width="2360" height="590" />
+  </div>
+
+  <!-- Fine Art & Illustration — intro band -->
+  <section id="art-intro" aria-label="Fine Art & Illustration">
+    <div class="pf-hero">
+      <div class="pf-hero-img">
+        <img src="/images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
+             srcset="/images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, /images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
+             sizes="100vw"
+             alt="Walt Viviers — acrylic and mixed-media painting" loading="lazy" width="1600" height="1067" />
+      </div>
+      <div class="pf-hero-inner">
+        <p class="pf-eyebrow" data-i18n="art-intro-eyebrow">Fine Art &amp; Illustration</p>
+        <h2 class="pf-title" data-i18n="art-intro-headline">Bold originals — from the iconic to the unexpected</h2>
+        <p class="pf-desc" data-i18n="art-intro-desc">Acrylic and mixed-media paintings that read with clarity from across the room and reveal expressive, unmistakable brushwork up close — held in private collections across South Africa and abroad.</p>
+        <div class="pf-actions">
+          <a href="/gallery/" class="pf-btn pf-btn-primary" data-i18n="view-gallery">View Gallery ↗</a>
+          <button type="button" class="pf-btn pf-btn-secondary gx-open" data-i18n="nav-enquire">Enquire</button>
+        </div>
       </div>
     </div>
   </section>
@@ -1707,6 +1687,35 @@
       <p data-i18n="about-p2">Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.</p>
       <p data-i18n="about-p3">For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.</p>
       <p data-i18n="about-p4">My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.</p>
+    </div>
+  </section>
+
+  <!-- Hero: Featured Work -->
+    <section class="hero" id="hero">
+    <div class="hero-image-wrap" id="hero-image">
+      <img src="images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
+           srcset="images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
+           sizes="100vw"
+           alt="Walt Viviers, T-Rex, 2020, Acrylic on Canvas"
+           loading="lazy"
+           width="1600" height="1067" />
+    </div>
+    <div class="hero-detail">
+      <div class="hero-work-info">
+        <p class="hero-work-number" id="hero-number">Featured work</p>
+        <h1 class="hero-work-title" id="hero-title">Walt Viviers</h1>
+        <p class="hero-work-year"  id="hero-year"></p>
+        <div class="work-meta-table" id="hero-meta"></div>
+        <div class="hero-actions">
+          <button class="btn-primary" id="inquire-btn" data-i18n="hero-inquire">Enquire about this work</button>
+          <a href="#gallery-rep" class="btn-secondary" data-i18n="hero-gallery-rep">Gallery representation</a>
+        </div>
+        <div class="gallery-nav">
+          <button class="gn-btn" id="gn-prev" aria-label="Previous work">&#8592;</button>
+          <div class="gn-dots" id="gn-dots"></div>
+          <button class="gn-btn" id="gn-next" aria-label="Next work">&#8594;</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1736,29 +1745,11 @@
     <a href="/gallery/" class="view-gallery-btn" data-i18n="view-gallery">View Gallery ↗</a>
   </section>
 
-  <!-- Brush divider -->
-  <div class="brush-divider" aria-hidden="true">
-    <img src="/brushstrokes-bg.webp" alt="Walt Viviers — South African fine artist, acrylic and mixed media" loading="lazy" width="2360" height="590" />
-  </div>
-
-  <!-- Explore: Photography & Apps -->
-  <section id="explore">
-    <div class="explore-grid">
-      <div class="explore-card">
-        <div class="explore-body">
-          <h2 class="explore-title" data-i18n="explore-photo-title">Photography &amp; Video</h2>
-          <p class="explore-desc" data-i18n="explore-photo-desc">Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist's eye. Each album opens in Google Photos.</p>
-          <a href="/photography/" class="explore-cta" data-i18n="explore-photo-cta">View albums →</a>
-        </div>
-        <div class="explore-albums" id="explore-albums"></div>
-      </div>
-    </div>
-  </section>
-
   <!-- Instagram feed -->
   <section id="instagram">
     <div class="instagram-head">
       <div class="instagram-handle">
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</a>
         <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
         <h2 class="section-title">@waltviviers</h2>
       </div>
@@ -1829,11 +1820,6 @@
   </div>
 
   </main>
-
-  <!-- Get in touch -->
-  <section id="get-in-touch">
-    <button type="button" class="get-in-touch-btn gx-open">Get in touch</button>
-  </section>
 
   <!-- Footer -->
   <footer>
@@ -1917,15 +1903,21 @@
         'nav-works': 'Fine Art & Illustration', 'nav-photography': 'Photography & Video', 'nav-apps': 'Apps & Games', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on', 'view-gallery': 'View Gallery ↗',
-        'explore-photo-title': 'Photography & Video', 'explore-photo-desc': 'Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist\'s eye. Each album opens in Google Photos.', 'explore-photo-cta': 'View albums →',
+        'art-intro-eyebrow': 'Fine Art & Illustration', 'art-intro-headline': 'Bold originals — from the iconic to the unexpected', 'art-intro-desc': 'Acrylic and mixed-media paintings that read with clarity from across the room and reveal expressive, unmistakable brushwork up close — held in private collections across South Africa and abroad.',
+        'explore-photo-title': 'Photography & Video', 'explore-photo-desc': 'Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist\'s eye. Each album opens in Google Photos.', 'explore-photo-cta': 'View albums →', 'pf-headline': 'Portraits, events & retreats — through a fine artist\'s eye', 'pf-book': 'Book a session',
         'explore-apps-title': 'Apps & Games', 'explore-apps-desc': 'A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.', 'explore-apps-cta': 'Explore →',
         'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
+        'photo-about-title-html': 'A Painter\'s Eye<br/><em>Behind the Lens</em>',
+        'photo-about-p1': 'Photography and video are an extension of the same practice — the same instinct for light, composition, and the quiet moment that says everything. I bring a fine artist\'s eye to every frame.',
+        'photo-about-p2': 'I work with people first: portrait sessions, events, and wellness retreats where the aim is to capture something true rather than posed — unhurried, comfortable, and attentive to the story unfolding in front of the camera.',
+        'photo-about-p3': 'Based in Pretoria and available across South Africa and beyond, I shoot in both photo and video, and every session is delivered as a private online album.',
+        'photo-about-p4': 'Whether it\'s a single portrait or a multi-day retreat, tell me what you have in mind and I\'ll shape the session around it.',
         'about-p1': 'I am a South African fine artist working in acrylic and mixed media. Twenty years of professional creative practice — across design, art direction, and brand — have sharpened a painter\'s eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.',
         'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
         'about-p3': 'For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.',
         'about-p4': 'My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.',
         'about-bio-btn': 'Bio & Statement ↗',
-        'ig-follow': 'Follow on Instagram ↗',
+        'ig-follow': 'Follow on Instagram ↗', 'ig-follow-me': 'Follow me on Instagram',
         'commission-tag': 'For collectors', 'commission-title-html': 'Commission<br/>a new work',
         'commission-desc': 'Each commission begins with a conversation. Discussions cover scale, subject, palette, and context. Lead time is typically 8–16 weeks.',
         'commission-btn': 'Start a conversation', 'commission-or': 'or',
@@ -1947,22 +1939,28 @@
         'form-success-close': 'Close',
         'meta-medium': 'Medium', 'meta-dimensions': 'Dimensions', 'meta-price': 'Price', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'View post ↗', 'meta-article': 'Article', 'meta-read-article': 'Read article ↗', 'meta-on-show': 'On Show', 'meta-view-show': 'View show ↗',
         'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire', 'avail-on-show': 'On Show',
-        'work-label': 'Work', 'works-suffix': 'artworks',
+        'work-label': 'Work', 'works-suffix': 'artworks', 'view-artwork-page': 'View artwork page ↗',
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.'
       },
       af: {
         'nav-works': 'Skone Kunste & Illustrasie', 'nav-photography': 'Fotografie & Video', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
-        'explore-photo-title': 'Fotografie & Video', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — vasgevang in foto en video met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →',
+        'art-intro-eyebrow': 'Skone Kunste & Illustrasie', 'art-intro-headline': 'Gedurfde oorspronklikes — van die ikoniese tot die onverwagte', 'art-intro-desc': 'Akriel- en gemengde-media skilderye wat met helderheid van oorkant die kamer lees en van naby uitdrukkingsvolle, onmiskenbare kwaswerk openbaar — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
+        'explore-photo-title': 'Fotografie & Video', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — vasgevang in foto en video met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →', 'pf-headline': 'Portrette, geleenthede & toevlugte — deur \'n kunstenaar se oog', 'pf-book': 'Bespreek \'n sessie',
         'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': '\'n Groeiende versameling blaaierspeletjies en klein, private programme wat vanlyn werk — van \'n drie-troeteldier-speelding tot \'n handige fooi-sakrekenaar. Geen advertensies, geen opsporing.', 'explore-apps-cta': 'Verken →',
         'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
+        'photo-about-title-html': '\'n Skildersoog<br/><em>Agter die Lens</em>',
+        'photo-about-p1': 'Fotografie en video is \'n verlengstuk van dieselfde praktyk — dieselfde instink vir lig, komposisie en die stil oomblik wat alles sê. Ek bring \'n kunstenaar se oog na elke raam.',
+        'photo-about-p2': 'Ek werk eers met mense: portret-sessies, geleenthede en welstand-toevlugte waar die doel is om iets waar vas te vang eerder as poserend — ontspanne, gemaklik en aandagtig vir die storie wat voor die kamera ontvou.',
+        'photo-about-p3': 'Gebaseer in Pretoria en beskikbaar regoor Suid-Afrika en verder, skiet ek in beide foto en video, en elke sessie word as \'n privaat aanlyn album gelewer.',
+        'photo-about-p4': 'Of dit \'n enkele portret of \'n multi-dag toevlug is, laat weet my wat jy in gedagte het en ek sal die sessie daarom vorm.',
         'about-p1': 'Ek is ‘n Suid-Afrikaanse kunstenaar wat in akriel en gemengde media werk. Twintig jaar se professionele kreatiewe praktyk — deur ontwerp, kunsdireksie en handelsmerk — het ‘n skilder se oog geslyp wat die spanning tussen die poësie en musiek van ‘n beeld vind: van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.',
         'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
         'about-p3': 'Vir my is kunsmaak terapie: ‘n manier om jouself uit te druk om jouself te vind. Geloof, familie en kreatiwiteit lê aan die hart van alles wat ek maak.',
         'about-p4': 'My werk word op Saatchi Art verteenwoordig en in privaat versamelings regoor Suid-Afrika en oorsee gehou. Opdragte en galery-navrae is welkom.',
         'about-bio-btn': 'Bio & Verklaring ↗',
-        'ig-follow': 'Volg op Instagram ↗',
+        'ig-follow': 'Volg op Instagram ↗', 'ig-follow-me': 'Volg my op Instagram',
         'commission-tag': 'Vir versamelaars', 'commission-title-html': 'Bestel<br/>‘n nuwe werk',
         'commission-desc': 'Elke opdrag begin met ‘n gesprek. Besprekings dek skaal, onderwerp, palet en konteks. Lewertyd is gewoonlik 8–16 weke.',
         'commission-btn': 'Begin ‘n gesprek', 'commission-or': 'of',
@@ -1984,7 +1982,7 @@
         'form-success-close': 'Sluit',
         'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-price': 'Prys', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗', 'meta-on-show': 'Op Vertoon', 'meta-view-show': 'Sien vertoning ↗',
         'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag', 'avail-on-show': 'Op Vertoon',
-        'work-label': 'Werk', 'works-suffix': 'kunswerke',
+        'work-label': 'Werk', 'works-suffix': 'kunswerke', 'view-artwork-page': 'Sien kunswerkblad ↗',
         'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.'
       }
     };
@@ -2069,7 +2067,7 @@
             }, 150);
           }
         } else {
-          imgWrap.innerHTML = `<img src="/${w.image}" srcset="${srcset}" sizes="100vw" alt="${newAlt}" fetchpriority="high" />`;
+          imgWrap.innerHTML = `<img src="/${w.image}" srcset="${srcset}" sizes="100vw" alt="${newAlt}" loading="lazy" />`;
         }
 
         var _t = window._t || function(k){return k;};
@@ -2078,15 +2076,14 @@
         document.getElementById('hero-title').textContent = w.title;
         document.getElementById('hero-year').textContent  = w.year;
         var _t = window._t || function(k){return k;};
+        // Compact inline meta line (values separated by ·), overlaid on the image
+        var metaItem = function (val) { return '<span class="work-meta-item"><span class="work-meta-value">' + val + '</span></span>'; };
         document.getElementById('hero-meta').innerHTML =
-          (w.medium     ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-medium')     + '</span><span class="work-meta-value">' + w.medium     + '</span></div>' : '') +
-          (w.dimensions ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-dimensions') + '</span><span class="work-meta-value">' + w.dimensions + '</span></div>' : '') +
-          (w.price      ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-price')      + '</span><span class="work-meta-value">' + w.price + '</span></div>' : '') +
-          '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-status') + '</span><span class="work-meta-value">' + availLabel(w) + '</span></div>' +
-          (w.permalink    ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-instagram') + '</span><span class="work-meta-value"><a href="' + w.permalink    + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-post')    + '</a></span></div>' : '') +
-          (w.article      ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-article')   + '</span><span class="work-meta-value"><a href="' + w.article      + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-read-article') + '</a></span></div>' : '') +
-          (w.on_show_link ? '<div class="work-meta-row"><span class="work-meta-label">' + _t('meta-on-show')   + '</span><span class="work-meta-value"><a href="' + w.on_show_link + '" target="_blank" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">' + _t('meta-view-show')    + '</a></span></div>' : '') +
-          '<div class="work-meta-row"><span class="work-meta-label">Page</span><span class="work-meta-value"><a href="/gallery/' + slugify(w.title, w.year) + '/" style="color:var(--stone);text-decoration:underline;text-underline-offset:3px">View artwork page ↗</a></span></div>';
+          (w.medium     ? metaItem(w.medium)     : '') +
+          (w.dimensions ? metaItem(w.dimensions) : '') +
+          (w.price      ? metaItem(w.price)      : '') +
+          '<span class="work-meta-item">' + availLabel(w) + '</span>' +
+          '<span class="work-meta-item"><span class="work-meta-value"><a href="/gallery/' + slugify(w.title, w.year) + '/">' + _t('view-artwork-page') + '</a></span></span>';
 
         updateDots(index);
       }
@@ -2119,13 +2116,14 @@
         const grid = document.getElementById('works-grid');
         var _t = window._t || function(k){return k;};
         document.getElementById('works-count').textContent = works.length + ' ' + _t('works-suffix');
-        // Pick 4 random artworks from the full gallery (Fisher–Yates shuffle of indices)
+        // Pick 8 random artworks from the full gallery (Fisher–Yates shuffle of indices);
+        // CSS caps the grid to 4 on narrow screens.
         var order = works.map((w, i) => i);
         for (var k = order.length - 1; k > 0; k--) {
           var j = Math.floor(Math.random() * (k + 1));
           var swap = order[k]; order[k] = order[j]; order[j] = swap;
         }
-        var picks = order.slice(0, 4);
+        var picks = order.slice(0, 8);
         grid.innerHTML = picks.map((i) => {
           const w         = works[i];
           const thumb     = '/' + w.image.replace('images/', 'images/thumbs/');
@@ -2479,6 +2477,29 @@
     })();
   </script>
 
+  <!-- Photography hero parallax -->
+  <script>
+    (function () {
+      var hero = document.querySelector('#photo-feature .pf-hero');
+      var img = hero && hero.querySelector('.pf-hero-img img');
+      if (!img) return;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var ticking = false;
+      function update() {
+        var rect = hero.getBoundingClientRect();
+        var mid = rect.top + rect.height / 2 - window.innerHeight / 2;
+        var maxShift = hero.offsetHeight * 0.30;
+        var shift = Math.max(-maxShift, Math.min(maxShift, -mid * 0.30));
+        img.style.transform = 'translate3d(0,' + shift.toFixed(1) + 'px,0)';
+        ticking = false;
+      }
+      function onScroll() { if (!ticking) { requestAnimationFrame(update); ticking = true; } }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      update();
+    })();
+  </script>
+
   <!-- Instagram feed (Behold) -->
   <script>
     (function () {
@@ -2549,7 +2570,7 @@
         { img: '/images/800/IMG_9032.jpg', title: 'The Farm', cap: 'The Farm' },
         { img: '/images/800/DSC_0004.webp', title: 'Manifesto Wellness @ Unlimited Events Group', cap: 'Manifesto @ Unlimited Events' },
         { img: '/images/800/DSC_0610.webp', title: 'One Stop Wellness & Manifesto Wellness @ Woodlands Spa', cap: 'One Stop Wellness @ Woodlands Spa' }
-      ];
+      ].filter(function (a) { return a.img.indexOf('DSC_0610') === -1; }); // hero cover — don't repeat below
       for (var i = ALBUMS.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = ALBUMS[i]; ALBUMS[i] = ALBUMS[j]; ALBUMS[j] = tmp; }
       grid.innerHTML = ALBUMS.slice(0, 4).map(function (a) {
         return '<a class="explore-album" href="/photography/" aria-label="' + esc(a.title) + '">' +
