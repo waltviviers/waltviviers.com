@@ -435,6 +435,21 @@
     [data-theme="light"] .gx-box { background: #F5F3EF; }
     [data-theme="light"] .gx-field input, [data-theme="light"] .gx-field textarea, [data-theme="light"] .gx-field select { background: #FAF9F7; border-color: #D5D1CB; color: #0C0C0B; }
     [data-theme="light"] .gx-submit { background: #0C0C0B; color: #FAF9F7; }
+    /* Language switch: English [ slider ] Afrikaans */
+    .lang-toggle, .lang-switch { display: flex; align-items: center; gap: 10px; }
+    .lang-group { display: block; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); font-family: var(--sans); line-height: 1; cursor: pointer; user-select: none; white-space: nowrap; transition: color 0.2s; }
+    .lang-group.active { color: var(--ink); }
+    .lang-group:not(.active):hover { color: var(--ink); }
+    .lang-track { position: relative; width: 40px; height: 20px; border-radius: 12px; border: 1.5px solid #4A4844; background: transparent; cursor: pointer; padding: 0; flex-shrink: 0; }
+    .lang-knob { position: absolute; top: 50%; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--ink); transform: translateY(-50%); transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1); }
+    .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 22px; }
+    [data-theme="light"] .lang-track { border-color: #D5D1CB; }
+    @media (max-width: 900px) {
+      .lang-switch { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); gap: 7px; }
+      .lang-group { font-size: 10px; letter-spacing: 0.04em; }
+      .lang-track { width: 34px; height: 18px; }
+      .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 18px; }
+    }
   </style>
 </head>
 <body>
@@ -444,14 +459,10 @@
       <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
         <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
-      <div class="lang-toggle">
-        <div class="lang-group active" id="lang-en">
-          <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
-        </div>
-        <span class="lang-slash" aria-hidden="true">/</span>
-        <div class="lang-group" id="lang-af">
-          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
-        </div>
+      <div class="lang-toggle lang-switch" id="lang-toggle">
+        <div class="lang-group active" id="lang-en">English</div>
+        <button type="button" class="lang-track" aria-label="Toggle language"><span class="lang-knob"></span></button>
+        <div class="lang-group" id="lang-af">Afrikaans</div>
       </div>
     </div>
     <ul class="nav-links">
@@ -599,6 +610,7 @@
       }
       document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
       document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
+      var _lt = document.querySelector('.lang-track'); if (_lt) _lt.addEventListener('click', function () { applyLang(document.getElementById('lang-af').classList.contains('active') ? 'en' : 'af'); });
       applyLang(lang);
     })();
   </script>

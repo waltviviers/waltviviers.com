@@ -236,56 +236,51 @@
       gap: 14px;
     }
 
-.lang-slash { display: none; }
-    .lang-toggle {
+    /* Language switch: English [ slider ] Afrikaans */
+    .lang-toggle, .lang-switch {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 10px;
     }
 
     .lang-group {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .lang-label,
-    .lang-code {
       font-size: 11px;
       font-weight: 500;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--stone);
       font-family: var(--sans);
-      transition: color 0.2s;
       line-height: 1;
-    }
-
-    .lang-label {
-      max-width: 200px;
-      overflow: hidden;
+      cursor: pointer;
+      user-select: none;
       white-space: nowrap;
-      transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
+      transition: color 0.2s;
     }
 
-    .lang-pipe {
-      font-size: 11px;
-      color: var(--rule);
-      padding: 0 4px;
-      pointer-events: none;
-      max-width: 20px;
-      overflow: hidden;
-      white-space: nowrap;
-      transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
+    .lang-group.active { color: var(--ink); }
+    .lang-group:not(.active):hover { color: var(--ink); }
+
+    .lang-track {
+      position: relative;
+      width: 40px; height: 20px;
+      border-radius: 12px;
+      border: 1.5px solid #4A4844;
+      background: transparent;
+      cursor: pointer;
+      padding: 0;
+      flex-shrink: 0;
     }
-
-    .lang-group.active .lang-label,
-    .lang-group.active .lang-code  { color: var(--ink); }
-    .lang-group.active .lang-pipe  { color: var(--stone); }
-
-    .lang-group:not(.active):hover .lang-label,
-    .lang-group:not(.active):hover .lang-code { color: var(--ink); }
+    .lang-knob {
+      position: absolute; top: 50%; left: 3px;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      background: var(--ink);
+      transform: translateY(-50%);
+      transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    /* Knob slides right when Afrikaans (the last word) is active */
+    .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 22px; }
+    [data-theme="light"] .lang-track { border-color: #D5D1CB; }
 
     .nav-logo img {
       height: 36px;
@@ -1053,9 +1048,6 @@
       justify-content: center;
     }
 
-    nav.scrolled .lang-label,
-    nav.scrolled .lang-pipe { max-width: 0; opacity: 0; padding: 0; }
-
     nav.scrolled .theme-toggle {
       width: auto;
       height: auto;
@@ -1355,8 +1347,10 @@
 
       .nav-links { gap: 20px; }
       .nav-link-hide { display: none; }
-      .lang-label, .lang-pipe { display: none; }
-      .lang-slash { display: inline; color: var(--stone); font-size: 11px; letter-spacing: 0.06em; }
+      .lang-switch { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); gap: 7px; }
+      .lang-group { font-size: 10px; letter-spacing: 0.04em; }
+      .lang-track { width: 34px; height: 18px; }
+      .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 18px; }
 
       .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
@@ -1500,7 +1494,7 @@
 
     @media (max-width: 900px) {
       .burger-btn { display: flex; }
-      .social-icons { display: none; } /* duplicated in burger menu foot */
+      nav .social-icons { display: none; } /* nav icons only — duplicated in burger menu foot; footer icons stay visible */
     }
     /* Global Enquire modal + Book-a-Consultation FAB */
     .gx-fab { display: none; }
@@ -1543,14 +1537,10 @@
       <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
         <img src="logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
-      <div class="lang-toggle" id="lang-toggle">
-        <div class="lang-group active" data-lang="en">
-          <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
-        </div>
-        <span class="lang-slash" aria-hidden="true">/</span>
-        <div class="lang-group" data-lang="af">
-          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
-        </div>
+      <div class="lang-toggle lang-switch" id="lang-toggle">
+        <div class="lang-group active" data-lang="en">English</div>
+        <button type="button" class="lang-track" aria-label="Toggle language"><span class="lang-knob"></span></button>
+        <div class="lang-group" data-lang="af">Afrikaans</div>
       </div>
     </div>
     <ul class="nav-links">
@@ -2015,8 +2005,9 @@
 
     document.getElementById('lang-toggle').addEventListener('click', function (e) {
       var group = e.target.closest('.lang-group[data-lang]');
-      if (!group) return;
-      lang = group.dataset.lang;
+      if (group) { lang = group.dataset.lang; }
+      else if (e.target.closest('.lang-track')) { lang = (lang === 'en' ? 'af' : 'en'); }
+      else { return; }
       localStorage.setItem('wv-lang', lang);
       apply();
     });
@@ -2558,7 +2549,7 @@
     })();
   </script>
 
-  <!-- Homepage album picker (4 random, 2x2) -->
+  <!-- Homepage album picker: random hero + 4 albums below -->
   <script>
     (function () {
       var grid = document.getElementById('explore-albums');
@@ -2570,9 +2561,16 @@
         { img: '/images/800/IMG_9032.jpg', title: 'The Farm', cap: 'The Farm' },
         { img: '/images/800/DSC_0004.webp', title: 'Manifesto Wellness @ Unlimited Events Group', cap: 'Manifesto @ Unlimited Events' },
         { img: '/images/800/DSC_0610.webp', title: 'One Stop Wellness & Manifesto Wellness @ Woodlands Spa', cap: 'One Stop Wellness @ Woodlands Spa' }
-      ].filter(function (a) { return a.img.indexOf('DSC_0610') === -1; }); // hero cover — don't repeat below
+      ];
       for (var i = ALBUMS.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = ALBUMS[i]; ALBUMS[i] = ALBUMS[j]; ALBUMS[j] = tmp; }
-      grid.innerHTML = ALBUMS.slice(0, 4).map(function (a) {
+      // Rotate the header image through a random album on each visit…
+      var heroImg = document.querySelector('#photo-feature .pf-hero-img img');
+      if (heroImg && heroImg.getAttribute('src') !== ALBUMS[0].img) {
+        heroImg.src = ALBUMS[0].img;
+        heroImg.alt = ALBUMS[0].title;
+      }
+      // …and show the remaining four albums below (never the one in the header).
+      grid.innerHTML = ALBUMS.slice(1, 5).map(function (a) {
         return '<a class="explore-album" href="/photography/" aria-label="' + esc(a.title) + '">' +
           '<span class="explore-album-img"><img src="' + a.img + '" alt="' + esc(a.title) + '" loading="lazy" width="1200" height="800" /></span>' +
           '<span class="explore-album-cap">' + esc(a.cap) + '</span></a>';
