@@ -368,8 +368,8 @@
       content: "";
       position: absolute; inset: 0; z-index: 1;
       background:
-        linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 42%, rgba(0,0,0,0.12) 100%),
-        linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.12) 46%, rgba(0,0,0,0) 72%);
+        linear-gradient(to top, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.74) 34%, rgba(0,0,0,0.44) 60%, rgba(0,0,0,0.18) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0) 76%);
       pointer-events: none;
     }
 
@@ -378,6 +378,7 @@
       padding: clamp(32px, 5vw, 68px);
       max-width: 720px;
     }
+    .hero-work-number, .hero-work-title, .hero-work-year, .work-meta-table { text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
 
     .hero-work-info {
       display: flex;
@@ -519,8 +520,12 @@
     .pf-hero::after {
       content: "";
       position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.5) 44%, rgba(0,0,0,0.12) 100%);
+      background:
+        linear-gradient(to top, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.74) 34%, rgba(0,0,0,0.44) 60%, rgba(0,0,0,0.2) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0) 76%);
+      pointer-events: none;
     }
+    .pf-eyebrow, .pf-title, .pf-desc { text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
     .pf-hero-inner {
       position: relative; z-index: 2;
       padding: clamp(32px, 5vw, 68px);
