@@ -1268,7 +1268,7 @@
 
     .instagram-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 2px;
       background: var(--rule);
     }
@@ -1337,7 +1337,6 @@
     /* ── Responsive ──────────────────────────────── */
     @media (max-width: 1200px) {
       .works-grid { grid-template-columns: repeat(2, 1fr); }
-      .instagram-grid { grid-template-columns: repeat(6, 1fr); }
     }
 
     @media (max-width: 900px) {
@@ -1368,7 +1367,6 @@
       #works, #about, #photo-about { padding: 64px 24px; }
       .explore-albums { grid-template-columns: repeat(2, 1fr); }
       .instagram-head { padding: 48px 24px 32px; }
-      .instagram-grid { grid-template-columns: repeat(3, 1fr); }
 
       .works-grid { grid-template-columns: 1fr; }
       .works-grid .work-thumb:nth-child(n+5) { display: none; }
