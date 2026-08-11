@@ -500,7 +500,7 @@
 
     /* ── Explore (Photography & Apps) ── */
     /* ── Photography & Video — full feature ── */
-    #photo-feature { padding-top: 148px; } /* clear fixed nav (100px) + breathing room */
+    #photo-feature { border-top: 1px solid var(--rule); }
     .pf-hero {
       position: relative;
       min-height: clamp(420px, 62vh, 640px);
@@ -618,13 +618,6 @@
     /* Match "Selected Artworks" to the "Photography & Video" heading size */
     #works .section-title { font-size: clamp(1.6rem, 3vw, 2.4rem); }
 
-    /* Get in touch (home footer CTA) */
-    #get-in-touch { border-top: 1px solid var(--rule); padding: 72px 48px; text-align: center; }
-    .get-in-touch-btn { display: inline-block; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--bg); background: var(--ink); padding: 16px 44px; border: 1px solid var(--ink); cursor: pointer; transition: background 0.2s, color 0.2s; }
-    .get-in-touch-btn:hover { background: transparent; color: var(--ink); }
-    [data-theme="light"] .get-in-touch-btn { background: #0C0C0B; color: #FAF9F7; }
-    [data-theme="light"] .get-in-touch-btn:hover { background: transparent; color: #0C0C0B; }
-    @media (max-width: 900px) { #get-in-touch { padding: 56px 24px; } }
 
     .section-count {
       font-size: 12px;
@@ -1255,6 +1248,13 @@
       gap: 12px;
     }
 
+    .ig-follow-lead {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--stone); transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .ig-follow-lead:hover { color: var(--ink); }
+
     .instagram-handle svg {
       width: 20px;
       height: 20px;
@@ -1366,12 +1366,12 @@
       .hero-actions .btn-secondary { flex: 1 1 auto; text-align: center; }
 
       #works, #about, #photo-about { padding: 64px 24px; }
-      #photo-feature { padding-top: 82px; } /* clear fixed nav (50px) + breathing room */
       .explore-albums { grid-template-columns: repeat(2, 1fr); }
       .instagram-head { padding: 48px 24px 32px; }
       .instagram-grid { grid-template-columns: repeat(3, 1fr); }
 
       .works-grid { grid-template-columns: 1fr; }
+      .works-grid .work-thumb:nth-child(n+5) { display: none; }
 
       .work-thumb-img {
         aspect-ratio: unset;
@@ -1413,7 +1413,6 @@
     @media (max-width: 560px) {
       .works-grid { grid-template-columns: 1fr; }
       .footer-admin { display: none; }
-      .works-grid .work-thumb:nth-child(n+5) { display: none; }
       .view-gallery-btn { display: flex; }
     }
 
@@ -1668,6 +1667,22 @@
     </div>
   </section>
 
+  <!-- About -->
+  <section id="about">
+    <div class="about-left">
+      <h2 class="about-title" data-i18n-html="about-title-html">
+        Created in South Africa<br/><em>Available to the World</em>
+      </h2>
+      <a href="/artist-bio/" class="about-bio-btn" data-i18n="about-bio-btn">Bio &amp; Statement ↗</a>
+    </div>
+    <div class="about-body">
+      <p data-i18n="about-p1">I am a South African fine artist working in acrylic and mixed media. Twenty years of professional creative practice — across design, art direction, and brand — have sharpened a painter's eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.</p>
+      <p data-i18n="about-p2">Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.</p>
+      <p data-i18n="about-p3">For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.</p>
+      <p data-i18n="about-p4">My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.</p>
+    </div>
+  </section>
+
   <!-- Hero: Featured Work -->
     <section class="hero" id="hero">
     <div class="hero-image-wrap" id="hero-image">
@@ -1694,22 +1709,6 @@
           <button class="gn-btn" id="gn-next" aria-label="Next work">&#8594;</button>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section id="about">
-    <div class="about-left">
-      <h2 class="about-title" data-i18n-html="about-title-html">
-        Created in South Africa<br/><em>Available to the World</em>
-      </h2>
-      <a href="/artist-bio/" class="about-bio-btn" data-i18n="about-bio-btn">Bio &amp; Statement ↗</a>
-    </div>
-    <div class="about-body">
-      <p data-i18n="about-p1">I am a South African fine artist working in acrylic and mixed media. Twenty years of professional creative practice — across design, art direction, and brand — have sharpened a painter's eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.</p>
-      <p data-i18n="about-p2">Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.</p>
-      <p data-i18n="about-p3">For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.</p>
-      <p data-i18n="about-p4">My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.</p>
     </div>
   </section>
 
@@ -1743,6 +1742,7 @@
   <section id="instagram">
     <div class="instagram-head">
       <div class="instagram-handle">
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</a>
         <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
         <h2 class="section-title">@waltviviers</h2>
       </div>
@@ -1813,11 +1813,6 @@
   </div>
 
   </main>
-
-  <!-- Get in touch -->
-  <section id="get-in-touch">
-    <button type="button" class="get-in-touch-btn gx-open">Get in touch</button>
-  </section>
 
   <!-- Footer -->
   <footer>
@@ -1915,7 +1910,7 @@
         'about-p3': 'For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.',
         'about-p4': 'My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.',
         'about-bio-btn': 'Bio & Statement ↗',
-        'ig-follow': 'Follow on Instagram ↗',
+        'ig-follow': 'Follow on Instagram ↗', 'ig-follow-me': 'Follow me on Instagram',
         'commission-tag': 'For collectors', 'commission-title-html': 'Commission<br/>a new work',
         'commission-desc': 'Each commission begins with a conversation. Discussions cover scale, subject, palette, and context. Lead time is typically 8–16 weeks.',
         'commission-btn': 'Start a conversation', 'commission-or': 'or',
@@ -1958,7 +1953,7 @@
         'about-p3': 'Vir my is kunsmaak terapie: ‘n manier om jouself uit te druk om jouself te vind. Geloof, familie en kreatiwiteit lê aan die hart van alles wat ek maak.',
         'about-p4': 'My werk word op Saatchi Art verteenwoordig en in privaat versamelings regoor Suid-Afrika en oorsee gehou. Opdragte en galery-navrae is welkom.',
         'about-bio-btn': 'Bio & Verklaring ↗',
-        'ig-follow': 'Volg op Instagram ↗',
+        'ig-follow': 'Volg op Instagram ↗', 'ig-follow-me': 'Volg my op Instagram',
         'commission-tag': 'Vir versamelaars', 'commission-title-html': 'Bestel<br/>‘n nuwe werk',
         'commission-desc': 'Elke opdrag begin met ‘n gesprek. Besprekings dek skaal, onderwerp, palet en konteks. Lewertyd is gewoonlik 8–16 weke.',
         'commission-btn': 'Begin ‘n gesprek', 'commission-or': 'of',
@@ -2114,13 +2109,14 @@
         const grid = document.getElementById('works-grid');
         var _t = window._t || function(k){return k;};
         document.getElementById('works-count').textContent = works.length + ' ' + _t('works-suffix');
-        // Pick 4 random artworks from the full gallery (Fisher–Yates shuffle of indices)
+        // Pick 8 random artworks from the full gallery (Fisher–Yates shuffle of indices);
+        // CSS caps the grid to 4 on narrow screens.
         var order = works.map((w, i) => i);
         for (var k = order.length - 1; k > 0; k--) {
           var j = Math.floor(Math.random() * (k + 1));
           var swap = order[k]; order[k] = order[j]; order[j] = swap;
         }
-        var picks = order.slice(0, 4);
+        var picks = order.slice(0, 8);
         grid.innerHTML = picks.map((i) => {
           const w         = works[i];
           const thumb     = '/' + w.image.replace('images/', 'images/thumbs/');
