@@ -551,6 +551,9 @@
     .pf-btn-primary:hover { background: transparent; color: #FAF9F7; }
     .pf-btn-secondary { background: transparent; color: #FAF9F7; border: 1px solid rgba(250,249,247,0.5); }
     .pf-btn-secondary:hover { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+    /* Fine-art intro band reuses the photography-hero styling (static cover, no parallax) */
+    #art-intro { border-top: 1px solid var(--rule); }
+    #art-intro .pf-hero-img img { height: 100%; top: 0; }
     .explore-albums {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -1643,6 +1646,27 @@
     <img src="/brushstrokes-bg.webp" alt="Walt Viviers — South African fine artist, acrylic and mixed media" loading="lazy" width="2360" height="590" />
   </div>
 
+  <!-- Fine Art & Illustration — intro band -->
+  <section id="art-intro" aria-label="Fine Art & Illustration">
+    <div class="pf-hero">
+      <div class="pf-hero-img">
+        <img src="/images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
+             srcset="/images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, /images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
+             sizes="100vw"
+             alt="Walt Viviers — acrylic and mixed-media painting" loading="lazy" width="1600" height="1067" />
+      </div>
+      <div class="pf-hero-inner">
+        <p class="pf-eyebrow" data-i18n="art-intro-eyebrow">Fine Art &amp; Illustration</p>
+        <h2 class="pf-title" data-i18n="art-intro-headline">Bold originals — from the iconic to the unexpected</h2>
+        <p class="pf-desc" data-i18n="art-intro-desc">Acrylic and mixed-media paintings that read with clarity from across the room and reveal expressive, unmistakable brushwork up close — held in private collections across South Africa and abroad.</p>
+        <div class="pf-actions">
+          <a href="/gallery/" class="pf-btn pf-btn-primary" data-i18n="view-gallery">View Gallery ↗</a>
+          <button type="button" class="pf-btn pf-btn-secondary gx-open" data-i18n="nav-enquire">Enquire</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Hero: Featured Work -->
     <section class="hero" id="hero">
     <div class="hero-image-wrap" id="hero-image">
@@ -1876,6 +1900,7 @@
         'nav-works': 'Fine Art & Illustration', 'nav-photography': 'Photography & Video', 'nav-apps': 'Apps & Games', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on', 'view-gallery': 'View Gallery ↗',
+        'art-intro-eyebrow': 'Fine Art & Illustration', 'art-intro-headline': 'Bold originals — from the iconic to the unexpected', 'art-intro-desc': 'Acrylic and mixed-media paintings that read with clarity from across the room and reveal expressive, unmistakable brushwork up close — held in private collections across South Africa and abroad.',
         'explore-photo-title': 'Photography & Video', 'explore-photo-desc': 'Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist\'s eye. Each album opens in Google Photos.', 'explore-photo-cta': 'View albums →', 'pf-headline': 'Portraits, events & retreats — through a fine artist\'s eye', 'pf-book': 'Book a session',
         'explore-apps-title': 'Apps & Games', 'explore-apps-desc': 'A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.', 'explore-apps-cta': 'Explore →',
         'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
@@ -1918,6 +1943,7 @@
         'nav-works': 'Skone Kunste & Illustrasie', 'nav-photography': 'Fotografie & Video', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
+        'art-intro-eyebrow': 'Skone Kunste & Illustrasie', 'art-intro-headline': 'Gedurfde oorspronklikes — van die ikoniese tot die onverwagte', 'art-intro-desc': 'Akriel- en gemengde-media skilderye wat met helderheid van oorkant die kamer lees en van naby uitdrukkingsvolle, onmiskenbare kwaswerk openbaar — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
         'explore-photo-title': 'Fotografie & Video', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — vasgevang in foto en video met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →', 'pf-headline': 'Portrette, geleenthede & toevlugte — deur \'n kunstenaar se oog', 'pf-book': 'Bespreek \'n sessie',
         'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': '\'n Groeiende versameling blaaierspeletjies en klein, private programme wat vanlyn werk — van \'n drie-troeteldier-speelding tot \'n handige fooi-sakrekenaar. Geen advertensies, geen opsporing.', 'explore-apps-cta': 'Verken →',
         'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
