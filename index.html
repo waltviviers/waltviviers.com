@@ -786,6 +786,21 @@
 
     .about-body p + p { margin-top: 20px; }
 
+    /* Read more (mobile only): show first paragraph, expand the rest */
+    .read-more-btn { display: none; }
+    @media (max-width: 900px) {
+      .about-body:not(.is-expanded) p:nth-of-type(n+2) { display: none; }
+      .read-more-btn {
+        display: inline-flex; align-items: center; gap: 6px; margin-top: 20px;
+        font-family: var(--sans); font-size: 12px; font-weight: 500;
+        letter-spacing: 0.10em; text-transform: uppercase; color: var(--ink);
+        background: none; border: none; border-bottom: 1px solid var(--stone);
+        padding: 6px 0; cursor: pointer; transition: border-color 0.2s;
+      }
+      .read-more-btn:hover { border-color: var(--ink); }
+      .about-body.is-expanded .read-more-btn { display: none; }
+    }
+
     .about-bio-btn {
       display: inline-flex; align-items: center; gap: 6px;
       width: fit-content; margin-top: 48px;
@@ -1639,6 +1654,7 @@
       <p data-i18n="photo-about-p2">I work with people first: portrait sessions, events, and wellness retreats where the aim is to capture something true rather than posed — unhurried, comfortable, and attentive to the story unfolding in front of the camera.</p>
       <p data-i18n="photo-about-p3">Based in Pretoria and available across South Africa and beyond, I shoot in both photo and video, and every session is delivered as a private online album.</p>
       <p data-i18n="photo-about-p4">Whether it's a single portrait or a multi-day retreat, tell me what you have in mind and I'll shape the session around it.</p>
+      <button type="button" class="read-more-btn" data-i18n="read-more">Read more ↓</button>
     </div>
   </section>
 
@@ -1681,6 +1697,7 @@
       <p data-i18n="about-p2">Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.</p>
       <p data-i18n="about-p3">For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.</p>
       <p data-i18n="about-p4">My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.</p>
+      <button type="button" class="read-more-btn" data-i18n="read-more">Read more ↓</button>
     </div>
   </section>
 
@@ -1906,6 +1923,7 @@
         'photo-about-p2': 'I work with people first: portrait sessions, events, and wellness retreats where the aim is to capture something true rather than posed — unhurried, comfortable, and attentive to the story unfolding in front of the camera.',
         'photo-about-p3': 'Based in Pretoria and available across South Africa and beyond, I shoot in both photo and video, and every session is delivered as a private online album.',
         'photo-about-p4': 'Whether it\'s a single portrait or a multi-day retreat, tell me what you have in mind and I\'ll shape the session around it.',
+        'read-more': 'Read more ↓',
         'about-p1': 'I am a South African fine artist working in acrylic and mixed media. Twenty years of professional creative practice — across design, art direction, and brand — have sharpened a painter\'s eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.',
         'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
         'about-p3': 'For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.',
@@ -1949,6 +1967,7 @@
         'photo-about-p2': 'Ek werk eers met mense: portret-sessies, geleenthede en welstand-toevlugte waar die doel is om iets waar vas te vang eerder as poserend — ontspanne, gemaklik en aandagtig vir die storie wat voor die kamera ontvou.',
         'photo-about-p3': 'Gebaseer in Pretoria en beskikbaar regoor Suid-Afrika en verder, skiet ek in beide foto en video, en elke sessie word as \'n privaat aanlyn album gelewer.',
         'photo-about-p4': 'Of dit \'n enkele portret of \'n multi-dag toevlug is, laat weet my wat jy in gedagte het en ek sal die sessie daarom vorm.',
+        'read-more': 'Lees meer ↓',
         'about-p1': 'Ek is ‘n Suid-Afrikaanse kunstenaar wat in akriel en gemengde media werk. Twintig jaar se professionele kreatiewe praktyk — deur ontwerp, kunsdireksie en handelsmerk — het ‘n skilder se oog geslyp wat die spanning tussen die poësie en musiek van ‘n beeld vind: van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.',
         'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
         'about-p3': 'Vir my is kunsmaak terapie: ‘n manier om jouself uit te druk om jouself te vind. Geloof, familie en kreatiwiteit lê aan die hart van alles wat ek maak.',
@@ -2625,6 +2644,17 @@
           if (res.ok) { form.hidden = true; success.hidden = false; }
           else { var d = await res.json(); err.textContent = (d.errors || []).map(function (x) { return x.message; }).join(', ') || 'Something went wrong. Please try again.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
         } catch (_) { err.textContent = 'Could not send. Email artist@waltviviers.com directly.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
+      });
+    })();
+  </script>
+  <!-- Read more (mobile, editorial sections) -->
+  <script>
+    (function () {
+      document.querySelectorAll('.read-more-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var body = btn.closest('.about-body');
+          if (body) body.classList.add('is-expanded');
+        });
       });
     })();
   </script>
