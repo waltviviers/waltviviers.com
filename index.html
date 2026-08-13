@@ -508,17 +508,16 @@
     }
     .pf-hero-img { position: absolute; inset: 0; overflow: hidden; }
     .pf-hero-img img {
-      position: absolute; left: 0; top: -35%;
-      width: 100%; height: 170%;
+      position: absolute; left: 0; top: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
-      will-change: transform;
     }
     .pf-hero::after {
       content: "";
       position: absolute; inset: 0;
       background:
-        linear-gradient(to top, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.74) 34%, rgba(0,0,0,0.44) 60%, rgba(0,0,0,0.2) 100%),
-        linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0) 76%);
+        linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.5) 36%, rgba(0,0,0,0.22) 64%, rgba(0,0,0,0.05) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.08) 52%, rgba(0,0,0,0) 78%);
       pointer-events: none;
     }
     .pf-eyebrow, .pf-title, .pf-desc { text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
@@ -1231,7 +1230,7 @@
 
     .brush-divider img {
       width: 100%;
-      height: calc(100% + 100px);
+      height: calc(100% + 220px);
       object-fit: cover;
       object-position: center 50%;
       filter: invert(1);
@@ -2480,39 +2479,18 @@
       const divider = document.querySelector('.brush-divider');
       const img = divider && divider.querySelector('img');
       if (!img) return;
-      img.style.marginTop = '-50px';
+      img.style.marginTop = '-110px';
       function update() {
         const rect = divider.getBoundingClientRect();
         const mid  = rect.top + rect.height / 2 - window.innerHeight / 2;
-        img.style.transform = 'translateY(' + (-mid * 0.25) + 'px)';
+        var shift = Math.max(-90, Math.min(90, -mid * 0.15)); // clamp so the image always fills the band
+        img.style.transform = 'translateY(' + shift + 'px)';
       }
       window.addEventListener('scroll', update, { passive: true });
       update();
     })();
   </script>
 
-  <!-- Photography hero parallax -->
-  <script>
-    (function () {
-      var hero = document.querySelector('#photo-feature .pf-hero');
-      var img = hero && hero.querySelector('.pf-hero-img img');
-      if (!img) return;
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var ticking = false;
-      function update() {
-        var rect = hero.getBoundingClientRect();
-        var mid = rect.top + rect.height / 2 - window.innerHeight / 2;
-        var maxShift = hero.offsetHeight * 0.30;
-        var shift = Math.max(-maxShift, Math.min(maxShift, -mid * 0.30));
-        img.style.transform = 'translate3d(0,' + shift.toFixed(1) + 'px,0)';
-        ticking = false;
-      }
-      function onScroll() { if (!ticking) { requestAnimationFrame(update); ticking = true; } }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll, { passive: true });
-      update();
-    })();
-  </script>
 
   <!-- Instagram feed (Behold) -->
   <script>
