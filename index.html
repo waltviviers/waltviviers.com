@@ -508,10 +508,9 @@
     }
     .pf-hero-img { position: absolute; inset: 0; overflow: hidden; }
     .pf-hero-img img {
-      position: absolute; left: 0; top: -35%;
-      width: 100%; height: 170%;
+      position: absolute; left: 0; top: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
-      will-change: transform;
     }
     .pf-hero::after {
       content: "";
@@ -2491,28 +2490,6 @@
     })();
   </script>
 
-  <!-- Photography hero parallax -->
-  <script>
-    (function () {
-      var hero = document.querySelector('#photo-feature .pf-hero');
-      var img = hero && hero.querySelector('.pf-hero-img img');
-      if (!img) return;
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      var ticking = false;
-      function update() {
-        var rect = hero.getBoundingClientRect();
-        var mid = rect.top + rect.height / 2 - window.innerHeight / 2;
-        var maxShift = hero.offsetHeight * 0.30;
-        var shift = Math.max(-maxShift, Math.min(maxShift, -mid * 0.30));
-        img.style.transform = 'translate3d(0,' + shift.toFixed(1) + 'px,0)';
-        ticking = false;
-      }
-      function onScroll() { if (!ticking) { requestAnimationFrame(update); ticking = true; } }
-      window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll, { passive: true });
-      update();
-    })();
-  </script>
 
   <!-- Instagram feed (Behold) -->
   <script>
