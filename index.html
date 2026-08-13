@@ -500,7 +500,7 @@
     #photo-feature { border-top: 1px solid var(--rule); }
     .pf-hero {
       position: relative;
-      min-height: clamp(420px, 62vh, 640px);
+      min-height: clamp(440px, 66vh, 680px);
       display: flex;
       align-items: flex-end;
       overflow: hidden;
@@ -2589,11 +2589,11 @@
       if (!grid) return;
       function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var ALBUMS = [
-        { img: '/images/800/IMG_9409.jpg', title: 'Manifesto Wellness Africa — Burn Out to Balance Retreat', cap: 'Manifesto Wellness Africa' },
-        { img: '/images/800/IMG_8939.jpg', title: 'Chantal @ Woodlands Spa', cap: 'Chantal @ Woodlands Spa' },
-        { img: '/images/800/IMG_9032.jpg', title: 'The Farm', cap: 'The Farm' },
-        { img: '/images/800/DSC_0004.webp', title: 'Manifesto Wellness @ Unlimited Events Group', cap: 'Manifesto @ Unlimited Events' },
-        { img: '/images/800/DSC_0610.webp', title: 'One Stop Wellness & Manifesto Wellness @ Woodlands Spa', cap: 'One Stop Wellness @ Woodlands Spa' }
+        { img: '/images/800/garden.webp', title: 'Manifesto Wellness Africa — Burn Out to Balance Retreat', cap: 'Manifesto Wellness Africa', url: 'https://photos.app.goo.gl/yZNbUvQbBJcjaW2B6' },
+        { img: '/images/800/chantal.webp', title: 'Chantal @ Woodlands Spa', cap: 'Chantal @ Woodlands Spa', url: 'https://photos.app.goo.gl/kvpgbiE5KeBqGsv18' },
+        { img: '/images/800/the-farm.webp', title: 'The Farm', cap: 'The Farm', url: 'https://photos.app.goo.gl/GbPyGQkrKDQKqwgd6' },
+        { img: '/images/800/unlimited.webp', title: 'Manifesto Wellness @ Unlimited Events Group', cap: 'Manifesto @ Unlimited Events', url: 'https://photos.app.goo.gl/D4QaKwYNPWjBYhXJ7' },
+        { img: '/images/800/one-stop.webp', title: 'One Stop Wellness & Manifesto Wellness @ Woodlands Spa', cap: 'One Stop Wellness @ Woodlands Spa', url: 'https://photos.app.goo.gl/fjpzW417JGBTYsGi9' }
       ];
       for (var i = ALBUMS.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = ALBUMS[i]; ALBUMS[i] = ALBUMS[j]; ALBUMS[j] = tmp; }
       // Rotate the header image through a random album on each visit…
@@ -2604,7 +2604,7 @@
       }
       // …and show the remaining four albums below (never the one in the header).
       grid.innerHTML = ALBUMS.slice(1, 5).map(function (a) {
-        return '<a class="explore-album" href="/photography/" aria-label="' + esc(a.title) + '">' +
+        return '<a class="explore-album" href="' + esc(a.url) + '" target="_blank" rel="noopener" aria-label="' + esc(a.title) + ' — open album">' +
           '<span class="explore-album-img"><img src="' + a.img + '" alt="' + esc(a.title) + '" loading="lazy" width="1200" height="800" /></span>' +
           '<span class="explore-album-cap">' + esc(a.cap) + '</span></a>';
       }).join('');
