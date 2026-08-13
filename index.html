@@ -364,8 +364,8 @@
       content: "";
       position: absolute; inset: 0; z-index: 1;
       background:
-        linear-gradient(to top, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.74) 34%, rgba(0,0,0,0.44) 60%, rgba(0,0,0,0.18) 100%),
-        linear-gradient(to right, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0) 76%);
+        linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.52) 34%, rgba(0,0,0,0.26) 62%, rgba(0,0,0,0.06) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.12) 52%, rgba(0,0,0,0) 78%);
       pointer-events: none;
     }
 
@@ -1082,6 +1082,8 @@
     nav.scrolled .toggle-thumb .icon-sun {
       font-size: 17px;
     }
+    nav.scrolled .toggle-thumb svg.icon-moon,
+    nav.scrolled .toggle-thumb svg.icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
 
     .toggle-thumb {
       position: absolute;
@@ -1107,6 +1109,12 @@
 
     .toggle-thumb .icon-moon { display: block; }
     .toggle-thumb .icon-sun  { display: none; }
+    /* Desktop uses line icons; the day/night emoji is mobile-only */
+    .toggle-thumb svg.icon-moon, .toggle-thumb svg.icon-sun {
+      width: 13px; height: 13px; fill: none; stroke: var(--bg);
+      stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .toggle-thumb .emoji-moon, .toggle-thumb .emoji-sun { display: none; }
 
     /* ── Light mode ──────────────────────────────── */
     [data-theme="light"] {
@@ -1263,9 +1271,10 @@
     .ig-follow-lead {
       font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
       text-transform: uppercase; color: var(--stone); transition: color 0.2s;
-      white-space: nowrap;
+      white-space: nowrap; line-height: 1;
     }
     .ig-follow-lead:hover { color: var(--ink); }
+    .instagram-handle .section-title { line-height: 1; }
 
     .instagram-handle svg {
       width: 20px;
@@ -1280,7 +1289,7 @@
 
     .instagram-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 2px;
       background: var(--rule);
     }
@@ -1370,6 +1379,12 @@
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
       .toggle-thumb .icon-moon,
       .toggle-thumb .icon-sun { font-size: 17px; }
+      /* mobile: hide the line icons, show the day/night emoji per theme */
+      .toggle-thumb svg.icon-moon, .toggle-thumb svg.icon-sun { display: none !important; }
+      .toggle-thumb .emoji-moon { display: block; font-size: 17px; line-height: 1; }
+      .toggle-thumb .emoji-sun { display: none; font-size: 17px; line-height: 1; }
+      [data-theme="light"] .toggle-thumb .emoji-moon { display: none; }
+      [data-theme="light"] .toggle-thumb .emoji-sun { display: block; }
 
       .hero {
         min-height: clamp(480px, 76vh, 680px);
@@ -1381,6 +1396,8 @@
 
       #works, #about, #photo-about { padding: 64px 24px; }
       .explore-albums { grid-template-columns: repeat(2, 1fr); }
+      #hero { display: none; } /* hide the featured-work carousel on mobile */
+      .instagram-grid { grid-template-columns: repeat(2, 1fr); } /* two across on mobile */
       .instagram-head { padding: 48px 24px 32px; }
       .instagram-head .section-count { display: none; } /* hide right-side follow link on mobile */
 
@@ -1585,8 +1602,10 @@
       <li>
         <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
           <span class="toggle-thumb">
-            <span class="icon-moon">🌙</span>
-            <span class="icon-sun">🌞</span>
+            <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+            <span class="emoji-moon">🌙</span>
+            <span class="emoji-sun">🌞</span>
           </span>
         </button>
       </li>
