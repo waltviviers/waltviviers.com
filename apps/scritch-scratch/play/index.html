@@ -13,13 +13,17 @@
     #menu-btn {
       position: fixed; top: 16px; left: 16px; z-index: 100;
       background: none; border: none; cursor: pointer;
-      opacity: 0.35; transition: opacity 0.2s; line-height: 0; padding: 0;
+      padding: 0; line-height: 0; width: 50px; height: 50px;
+      transition: transform 0.18s ease; filter: drop-shadow(0 4px 9px rgba(0,0,0,0.4));
     }
-    #menu-btn:hover, #menu-btn.open { opacity: 1; }
-    #menu-btn img { height: 24px; width: auto; display: block; }
+    #menu-btn:hover, #menu-btn.open { transform: scale(1.06); }
+    #menu-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s; }
+    #menu-btn .ss-over { opacity: 0; }
+    #menu-btn:hover .ss-up, #menu-btn.open .ss-up { opacity: 0; }
+    #menu-btn:hover .ss-over, #menu-btn.open .ss-over { opacity: 1; }
 
     #menu-drop {
-      display: none; position: fixed; top: 48px; left: 16px; z-index: 200;
+      display: none; position: fixed; top: 72px; left: 16px; z-index: 200;
       background: #0a0a0a; border: 1px solid #333; min-width: 140px;
     }
     #menu-drop.open { display: block; }
@@ -90,7 +94,8 @@
 </head>
 <body>
 <button id="menu-btn" aria-label="Menu">
-  <img src="/logo.svg" alt="Walt Viviers" />
+  <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" />
+  <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" />
 </button>
 <div id="menu-drop">
   <a href="https://waltviviers.com/">Go To Main Site</a>
