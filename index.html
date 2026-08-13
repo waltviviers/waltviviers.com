@@ -1268,6 +1268,11 @@
       align-items: flex-start;
       gap: 8px;
     }
+    .ig-lead-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
     .instagram-handle-row {
       display: flex;
       align-items: center;
@@ -1790,9 +1795,11 @@
   <section id="instagram">
     <div class="instagram-head">
       <div class="instagram-handle">
-        <span class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</span>
-        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="instagram-handle-row">
+        <div class="ig-lead-row">
+          <span class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</span>
           <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+        </div>
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="instagram-handle-row">
           <h2 class="section-title">@waltviviers</h2>
         </a>
       </div>
