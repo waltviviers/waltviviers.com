@@ -1264,8 +1264,15 @@
 
     .instagram-handle {
       display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .instagram-handle-row {
+      display: flex;
       align-items: center;
       gap: 12px;
+      color: inherit;
     }
 
     .ig-follow-lead {
@@ -1289,10 +1296,11 @@
 
     .instagram-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 2px;
       background: var(--rule);
     }
+    .instagram-grid > *:nth-child(n+7) { display: none; } /* 3 × 2 = 6 on desktop */
 
     .ig-thumb {
       aspect-ratio: 1;
@@ -1781,11 +1789,12 @@
   <section id="instagram">
     <div class="instagram-head">
       <div class="instagram-handle">
-        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</a>
-        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
-        <h2 class="section-title">@waltviviers</h2>
+        <span class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</span>
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="instagram-handle-row">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+          <h2 class="section-title">@waltviviers</h2>
+        </a>
       </div>
-      <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="section-count" style="text-decoration:underline;text-underline-offset:3px;" data-i18n="ig-follow">Follow on Instagram ↗</a>
     </div>
     <div class="instagram-grid" id="instagram-grid"></div>
   </section>
