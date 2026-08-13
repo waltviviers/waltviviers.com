@@ -37,23 +37,30 @@
 
     .overlay {
       display: none; position: fixed; inset: 0; z-index: 500;
-      background: rgba(0,0,0,0.75); align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.55); align-items: center; justify-content: center;
     }
     .overlay.open { display: flex; }
     .popup {
-      background: #0e0e0e; border: 1px solid #444; padding: 22px 24px;
-      max-width: 300px; width: 88%; font-family: monospace; color: #ddd;
+      background: rgba(255,251,244,0.97); border: 2px solid rgba(90,60,40,0.22);
+      border-radius: 22px; padding: 24px 26px;
+      max-width: 300px; width: 88%; font-family: monospace; color: #5a3a28;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.35);
     }
-    .popup h2 { font-size: 13px; color: #fff; margin-bottom: 12px; }
+    .popup h2 { font-size: 13px; color: #5a3a28; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 12px; }
     .popup ul { list-style: none; padding: 0; }
     .popup ul li { font-size: 11px; padding: 3px 0; line-height: 1.6; }
-    .popup ul li::before { content: '· '; color: #777; }
+    .popup ul li::before { content: '· '; color: rgba(90,60,40,0.5); }
     .popup-close {
-      margin-top: 16px; display: block; width: 100%;
-      background: #1a1a1a; border: 1px solid #333; color: #ddd;
-      font-family: monospace; font-size: 11px; padding: 7px; cursor: pointer;
+      margin-top: 12px; display: block; width: 100%;
+      background: rgba(255,251,244,0.82); border: 2px solid rgba(90,60,40,0.18);
+      border-radius: 24px; color: #5a3a28;
+      font-family: monospace; font-weight: 600; font-size: 11px; letter-spacing: 0.04em;
+      padding: 10px; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.14);
+      transition: transform 0.15s ease, background 0.15s;
     }
-    .popup-close:hover { background: #252525; color: #fff; }
+    .popup-close:hover { background: #fff; transform: translateY(-2px); }
+    .popup-close:active { transform: translateY(0); }
 
     #mode-pick {
       display: flex; position: fixed; inset: 0; z-index: 400;
@@ -106,14 +113,16 @@
 
     /* Suggest-a-feature form (inside the How-to-Play popup) */
     .popup textarea, .popup input {
-      width: 100%; background: #050505; border: 1px solid #333; color: #ddd;
-      font-family: monospace; font-size: 11px; padding: 8px; margin-bottom: 8px; resize: none;
+      width: 100%; background: #fffdf9; border: 1.5px solid rgba(90,60,40,0.25); color: #5a3a28;
+      border-radius: 12px; font-family: monospace; font-size: 11px;
+      padding: 9px 10px; margin-bottom: 8px; resize: none;
     }
-    .popup textarea:focus, .popup input:focus { border-color: #666; outline: none; }
-    .popup .popup-cta { background: #2a2a2a; color: #fff; border-color: #555; }
-    .popup .popup-cta:hover { background: #383838; color: #fff; }
-    .popup .popup-err { color: #c0392b; font-size: 10px; margin: 4px 0 8px; }
-    .popup .popup-success { color: #6aae70; font-size: 11px; line-height: 1.6; }
+    .popup textarea::placeholder, .popup input::placeholder { color: rgba(90,60,40,0.45); }
+    .popup textarea:focus, .popup input:focus { border-color: rgba(90,60,40,0.55); outline: none; }
+    .popup .popup-cta { background: rgba(255,251,244,0.94); color: #5a3a28; border-color: rgba(90,60,40,0.28); font-weight: 700; }
+    .popup .popup-cta:hover { background: #fff; }
+    .popup .popup-err { color: #b0401f; font-size: 10px; margin: 4px 0 8px; }
+    .popup .popup-success { color: #4f7a4a; font-size: 11px; line-height: 1.6; }
   </style>
 </head>
 <body>

@@ -898,6 +898,15 @@
         .then(function (data) {
           albums = (data && data.albums) || [];
           render();
+          // Randomise the hero image from the album covers on each visit
+          var heroImg = document.querySelector('.ph-hero-img img');
+          var covers = albums
+            .map(function (a) { return a.cover; })
+            .filter(function (c) { return c && String(c).trim() !== '' && !/^https?:/i.test(c); })
+            .map(function (c) { return '/' + String(c).replace(/^\/+/, ''); });
+          if (heroImg && covers.length) {
+            heroImg.src = covers[Math.floor(Math.random() * covers.length)];
+          }
         })
         .catch(function () {
           grid.innerHTML = '<p class="grid-message">' + window._t('load-error') + '</p>';
