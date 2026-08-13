@@ -1230,7 +1230,7 @@
 
     .brush-divider img {
       width: 100%;
-      height: calc(100% + 100px);
+      height: calc(100% + 220px);
       object-fit: cover;
       object-position: center 50%;
       filter: invert(1);
@@ -2479,11 +2479,12 @@
       const divider = document.querySelector('.brush-divider');
       const img = divider && divider.querySelector('img');
       if (!img) return;
-      img.style.marginTop = '-50px';
+      img.style.marginTop = '-110px';
       function update() {
         const rect = divider.getBoundingClientRect();
         const mid  = rect.top + rect.height / 2 - window.innerHeight / 2;
-        img.style.transform = 'translateY(' + (-mid * 0.25) + 'px)';
+        var shift = Math.max(-90, Math.min(90, -mid * 0.15)); // clamp so the image always fills the band
+        img.style.transform = 'translateY(' + shift + 'px)';
       }
       window.addEventListener('scroll', update, { passive: true });
       update();
