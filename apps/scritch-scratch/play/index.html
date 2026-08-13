@@ -53,15 +53,12 @@
 
     #mode-pick {
       display: flex; position: fixed; inset: 0; z-index: 400;
-      flex-direction: column; align-items: center; justify-content: flex-end;
-      gap: 12px; padding: 0 24px 7vh;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; padding: 24px;
       background: #bfe0ea url('/apps/scritch-scratch/ScritchScratch_Walt_desktop.jpg') center center / cover no-repeat;
     }
     @media (max-width: 820px), (orientation: portrait) {
-      #mode-pick {
-        background-image: url('/apps/scritch-scratch/ScritchScratch_Walt_mobile.jpg');
-        padding-bottom: 8vh;
-      }
+      #mode-pick { background-image: url('/apps/scritch-scratch/ScritchScratch_Walt_mobile.jpg'); }
     }
     /* the logo lives in the artwork — keep the heading for screen readers only */
     #mode-pick h1 {
@@ -78,6 +75,17 @@
     }
     .mode-btn-pick:hover { background: #fff; transform: translateY(-2px); }
     .mode-btn-pick:active { transform: translateY(0); }
+    .mode-sec-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+    .mode-btn-sec {
+      display: inline-block; padding: 10px 16px; text-decoration: none;
+      background: rgba(255,251,244,0.82); border: 2px solid rgba(90,60,40,0.18);
+      border-radius: 24px; color: #5a3a28;
+      font-family: monospace; font-weight: 600; font-size: 11px; letter-spacing: 0.04em;
+      cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.16);
+      transition: transform 0.15s ease, background 0.15s;
+    }
+    .mode-btn-sec:hover { background: #fff; transform: translateY(-2px); }
+    .mode-btn-sec:active { transform: translateY(0); }
   </style>
 </head>
 <body>
@@ -110,6 +118,10 @@
   <button class="mode-btn-pick" data-mode="dog">Doggo Mode</button>
   <button class="mode-btn-pick" data-mode="rat">Ratty Mode</button>
   <button class="mode-btn-pick" data-mode="cat">Cat Lady Mode</button>
+  <div class="mode-sec-row">
+    <button class="mode-btn-sec" id="pick-htp" type="button">How to Play</button>
+    <a class="mode-btn-sec" href="/">Back to Main Site</a>
+  </div>
 </div>
 <canvas id="c"></canvas>
 <script>
@@ -3057,6 +3069,10 @@ document.addEventListener('click', e => {
 document.getElementById('htp-btn').addEventListener('click', () => {
   menuDrop.classList.remove('open');
   menuBtn.classList.remove('open');
+  htpOverlay.classList.add('open');
+});
+
+document.getElementById('pick-htp').addEventListener('click', () => {
   htpOverlay.classList.add('open');
 });
 
