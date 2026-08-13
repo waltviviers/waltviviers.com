@@ -364,8 +364,8 @@
       content: "";
       position: absolute; inset: 0; z-index: 1;
       background:
-        linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.52) 34%, rgba(0,0,0,0.26) 62%, rgba(0,0,0,0.06) 100%),
-        linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.12) 52%, rgba(0,0,0,0) 78%);
+        linear-gradient(to top, rgba(0,0,0,0.66) 0%, rgba(0,0,0,0.38) 34%, rgba(0,0,0,0.16) 62%, rgba(0,0,0,0) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0) 74%);
       pointer-events: none;
     }
 
@@ -1566,6 +1566,7 @@
     .scritch-fab:hover { transform: translateY(-3px) scale(1.07); }
     .scritch-fab:hover .ss-up { opacity: 0; }
     .scritch-fab:hover .ss-over { opacity: 1; }
+    @media (max-width: 900px) { .scritch-fab { bottom: 16px; } } /* level with the Enquire FAB on mobile */
   </style>
 </head>
 <body>

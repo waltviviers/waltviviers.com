@@ -36,7 +36,7 @@
     #menu-drop .sep { border-top: 1px solid #333; }
 
     .overlay {
-      display: none; position: fixed; inset: 0; z-index: 300;
+      display: none; position: fixed; inset: 0; z-index: 500;
       background: rgba(0,0,0,0.75); align-items: center; justify-content: center;
     }
     .overlay.open { display: flex; }
@@ -59,7 +59,7 @@
       display: flex; position: fixed; inset: 0; z-index: 400;
       flex-direction: column; align-items: center; justify-content: center;
       gap: 12px; padding: 24px;
-      background: #bfe0ea url('/apps/scritch-scratch/ScritchScratch_Walt_desktop.jpg') center center / cover no-repeat;
+      background: #bfe0ea url('/apps/scritch-scratch/ScritchScratch_Walt_desktop.jpg') center top / cover no-repeat;
     }
     @media (max-width: 820px), (orientation: portrait) {
       #mode-pick { background-image: url('/apps/scritch-scratch/ScritchScratch_Walt_mobile.jpg'); }
@@ -90,6 +90,30 @@
     }
     .mode-btn-sec:hover { background: #fff; transform: translateY(-2px); }
     .mode-btn-sec:active { transform: translateY(0); }
+
+    /* Floating dog button — matches the main site (bottom-left), reloads the game */
+    #menu-btn { display: none; }
+    .scritch-fab {
+      position: fixed; left: 16px; bottom: 90px; z-index: 250;
+      width: 66px; height: 66px; display: block;
+      transition: transform 0.18s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.4));
+    }
+    .scritch-fab img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
+    .scritch-fab .ss-over { opacity: 0; }
+    .scritch-fab:hover { transform: translateY(-3px) scale(1.07); }
+    .scritch-fab:hover .ss-up { opacity: 0; }
+    .scritch-fab:hover .ss-over { opacity: 1; }
+
+    /* Suggest-a-feature form (inside the How-to-Play popup) */
+    .popup textarea, .popup input {
+      width: 100%; background: #050505; border: 1px solid #333; color: #ddd;
+      font-family: monospace; font-size: 11px; padding: 8px; margin-bottom: 8px; resize: none;
+    }
+    .popup textarea:focus, .popup input:focus { border-color: #666; outline: none; }
+    .popup .popup-cta { background: #2a2a2a; color: #fff; border-color: #555; }
+    .popup .popup-cta:hover { background: #383838; color: #fff; }
+    .popup .popup-err { color: #c0392b; font-size: 10px; margin: 4px 0 8px; }
+    .popup .popup-success { color: #6aae70; font-size: 11px; line-height: 1.6; }
   </style>
 </head>
 <body>
@@ -115,7 +139,22 @@
       <li>Cat Lady: hold to purr and wake · tap ground for laser · laser won't wake sleeping cats</li>
       <li>Visitor animals arrive now and then</li>
     </ul>
+    <button class="popup-close popup-cta" id="htp-suggest" type="button">Suggest a Feature</button>
     <button class="popup-close" id="htp-close">Close</button>
+  </div>
+</div>
+<div id="sf-overlay" class="overlay">
+  <div class="popup">
+    <h2>Suggest a Feature</h2>
+    <form id="sf-form">
+      <input type="hidden" name="_subject" value="Scritch Scratch — feature suggestion" />
+      <textarea name="message" rows="4" placeholder="What should Scritch Scratch do next?" required></textarea>
+      <input type="email" name="email" placeholder="Your email (optional)" />
+      <p class="popup-err" hidden></p>
+      <button type="submit" class="popup-close popup-cta" id="sf-send">Send suggestion</button>
+    </form>
+    <div class="popup-success" hidden>Thanks — your idea has been sent!</div>
+    <button class="popup-close" id="sf-close">Close</button>
   </div>
 </div>
 <div id="mode-pick">
@@ -3087,6 +3126,27 @@ htpOverlay.addEventListener('click', e => {
   if (e.target === htpOverlay) htpOverlay.classList.remove('open');
 });
 
+// Suggest a Feature popup + form
+const sfOverlay = document.getElementById('sf-overlay');
+document.getElementById('htp-suggest').addEventListener('click', () => {
+  htpOverlay.classList.remove('open');
+  sfOverlay.classList.add('open');
+});
+document.getElementById('sf-close').addEventListener('click', () => sfOverlay.classList.remove('open'));
+sfOverlay.addEventListener('click', e => { if (e.target === sfOverlay) sfOverlay.classList.remove('open'); });
+document.getElementById('sf-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const form = e.target, btn = document.getElementById('sf-send');
+  const err = form.querySelector('.popup-err'), success = sfOverlay.querySelector('.popup-success');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = '…'; err.hidden = true;
+  try {
+    const res = await fetch('https://formspree.io/f/mrevzark', { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+    if (res.ok) { form.hidden = true; success.hidden = false; }
+    else { err.textContent = 'Something went wrong. Please try again.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
+  } catch (_) { err.textContent = 'Could not send. Please try again later.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
+});
+
 document.querySelectorAll('.mode-switch').forEach(btn => {
   btn.addEventListener('click', () => {
     menuDrop.classList.remove('open');
@@ -3109,5 +3169,9 @@ document.querySelectorAll('.mode-btn-pick').forEach(btn => {
   });
 });
 </script>
+<a href="https://waltviviers.com/apps/scritch-scratch/play/" class="scritch-fab" aria-label="Scritch Scratch">
+  <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Scritch Scratch" width="64" height="64" />
+  <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
+</a>
 </body>
 </html>
