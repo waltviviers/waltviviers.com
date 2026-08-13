@@ -364,8 +364,8 @@
       content: "";
       position: absolute; inset: 0; z-index: 1;
       background:
-        linear-gradient(to top, rgba(0,0,0,0.66) 0%, rgba(0,0,0,0.38) 34%, rgba(0,0,0,0.16) 62%, rgba(0,0,0,0) 100%),
-        linear-gradient(to right, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0) 74%);
+        linear-gradient(to top, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.2) 36%, rgba(0,0,0,0.06) 64%, rgba(0,0,0,0) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.26) 0%, rgba(0,0,0,0.05) 52%, rgba(0,0,0,0) 76%);
       pointer-events: none;
     }
 
@@ -374,7 +374,7 @@
       padding: clamp(32px, 5vw, 68px);
       max-width: 720px;
     }
-    .hero-work-number, .hero-work-title, .hero-work-year, .work-meta-table { text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
+    .hero-work-number, .hero-work-title, .hero-work-year, .work-meta-table { text-shadow: 0 1px 4px rgba(0,0,0,0.65), 0 2px 20px rgba(0,0,0,0.5); }
 
     .hero-work-info {
       display: flex;
@@ -1660,8 +1660,8 @@
   <section id="photo-feature" aria-label="Photography & Video">
     <div class="pf-hero">
       <div class="pf-hero-img">
-        <img src="/images/800/DSC_0610.webp" alt="Walt Viviers photography — wellness retreat portrait session"
-             fetchpriority="high" width="1200" height="800" />
+        <img src="/images/1600/garden.webp" alt="Walt Viviers photography — wellness retreat portrait session"
+             fetchpriority="high" width="1600" height="1066" />
       </div>
       <div class="pf-hero-inner">
         <p class="pf-eyebrow" data-i18n="explore-photo-title">Photography &amp; Video</p>
@@ -2596,17 +2596,17 @@
       if (!grid) return;
       function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var ALBUMS = [
-        { img: '/images/800/garden.webp', title: 'Manifesto Wellness Africa — Burn Out to Balance Retreat', cap: 'Manifesto Wellness Africa', url: 'https://photos.app.goo.gl/yZNbUvQbBJcjaW2B6' },
-        { img: '/images/800/chantal.webp', title: 'Chantal @ Woodlands Spa', cap: 'Chantal @ Woodlands Spa', url: 'https://photos.app.goo.gl/kvpgbiE5KeBqGsv18' },
-        { img: '/images/800/the-farm.webp', title: 'The Farm', cap: 'The Farm', url: 'https://photos.app.goo.gl/GbPyGQkrKDQKqwgd6' },
-        { img: '/images/800/unlimited.webp', title: 'Manifesto Wellness @ Unlimited Events Group', cap: 'Manifesto @ Unlimited Events', url: 'https://photos.app.goo.gl/D4QaKwYNPWjBYhXJ7' },
-        { img: '/images/800/one-stop.webp', title: 'One Stop Wellness & Manifesto Wellness @ Woodlands Spa', cap: 'One Stop Wellness @ Woodlands Spa', url: 'https://photos.app.goo.gl/fjpzW417JGBTYsGi9' }
+        { img: '/images/800/garden.webp', hero: '/images/1600/garden.webp', title: 'Manifesto Wellness Africa — Burn Out to Balance Retreat', cap: 'Manifesto Wellness Africa', url: 'https://photos.app.goo.gl/yZNbUvQbBJcjaW2B6' },
+        { img: '/images/800/chantal.webp', hero: '/images/1600/chantal.webp', title: 'Chantal @ Woodlands Spa', cap: 'Chantal @ Woodlands Spa', url: 'https://photos.app.goo.gl/kvpgbiE5KeBqGsv18' },
+        { img: '/images/800/the-farm.webp', hero: '/images/1600/the-farm.webp', title: 'The Farm', cap: 'The Farm', url: 'https://photos.app.goo.gl/GbPyGQkrKDQKqwgd6' },
+        { img: '/images/800/unlimited.webp', hero: '/images/1600/unlimited.webp', title: 'Manifesto Wellness @ Unlimited Events Group', cap: 'Manifesto @ Unlimited Events', url: 'https://photos.app.goo.gl/D4QaKwYNPWjBYhXJ7' },
+        { img: '/images/800/one-stop.webp', hero: '/images/1600/one-stop.webp', title: 'One Stop Wellness & Manifesto Wellness @ Woodlands Spa', cap: 'One Stop Wellness @ Woodlands Spa', url: 'https://photos.app.goo.gl/fjpzW417JGBTYsGi9' }
       ];
       for (var i = ALBUMS.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = ALBUMS[i]; ALBUMS[i] = ALBUMS[j]; ALBUMS[j] = tmp; }
       // Rotate the header image through a random album on each visit…
       var heroImg = document.querySelector('#photo-feature .pf-hero-img img');
-      if (heroImg && heroImg.getAttribute('src') !== ALBUMS[0].img) {
-        heroImg.src = ALBUMS[0].img;
+      if (heroImg) {
+        heroImg.src = ALBUMS[0].hero || ALBUMS[0].img;
         heroImg.alt = ALBUMS[0].title;
       }
       // …and show the remaining four albums below (never the one in the header).
