@@ -677,8 +677,8 @@
   <div class="page-wrap">
     <section class="ph-hero" aria-label="Photography & Video">
       <div class="ph-hero-img">
-        <img src="/images/800/DSC_0610.webp" alt="Walt Viviers photography — wellness retreat portrait session"
-             fetchpriority="high" width="1200" height="800" />
+        <img src="/images/1600/garden.webp" alt="Walt Viviers photography — wellness retreat portrait session"
+             fetchpriority="high" width="1600" height="1066" />
       </div>
       <div class="ph-hero-inner">
         <p class="ph-eyebrow" data-i18n="page-eyebrow">Photography &amp; Video</p>
@@ -899,11 +899,12 @@
           albums = (data && data.albums) || [];
           render();
           // Randomise the hero image from the album covers on each visit
+          // (use the larger 1600px variant for the full-width banner when available)
           var heroImg = document.querySelector('.ph-hero-img img');
           var covers = albums
             .map(function (a) { return a.cover; })
             .filter(function (c) { return c && String(c).trim() !== '' && !/^https?:/i.test(c); })
-            .map(function (c) { return '/' + String(c).replace(/^\/+/, ''); });
+            .map(function (c) { return '/' + String(c).replace(/^\/+/, '').replace('/800/', '/1600/'); });
           if (heroImg && covers.length) {
             heroImg.src = covers[Math.floor(Math.random() * covers.length)];
           }
