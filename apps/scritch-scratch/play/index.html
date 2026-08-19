@@ -145,6 +145,17 @@
       transition: transform 0.15s ease, background 0.15s;
     }
     #catnip-btn:hover { background: #fff; transform: translateY(-2px); }
+
+    /* WALT logo — same top-left position as the main site header */
+    .walt-logo {
+      position: fixed; top: 32px; left: 48px; z-index: 450; display: block; line-height: 0;
+      filter: drop-shadow(0 0 2px rgba(0,0,0,0.7)) drop-shadow(0 1px 4px rgba(0,0,0,0.5));
+    }
+    .walt-logo img { height: 36px; width: auto; display: block; }
+    @media (max-width: 900px), (orientation: portrait) {
+      .walt-logo { top: 11px; left: 24px; }
+      .walt-logo img { height: 28px; }
+    }
   </style>
 </head>
 <body>
@@ -537,6 +548,58 @@ function drawDogBackground() {
   // Grass edge
   ctx.fillStyle = '#3a7318';
   ctx.fillRect(splitX - 4, 0, 4, H);
+
+  // ── Yard scenery ────────────────────────────────────────────────────
+  // Back of the house seen from above — tiled roof, ridge cap and eave gutter
+  const houseW = Math.min(74, Math.round((W - splitX) * 0.5));
+  const houseX = W - houseW;
+  ctx.fillStyle = '#a8542f';                               // terracotta roof base
+  ctx.fillRect(houseX, 0, houseW, H);
+  const tileH = 12, tileW = 14;                            // staggered tile courses
+  for (let ty = 0; ty < H; ty += tileH) {
+    const offX = (Math.floor(ty / tileH) % 2) ? tileW / 2 : 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.20)';                    // course shadow line
+    ctx.fillRect(houseX, ty, houseW, 2);
+    ctx.fillStyle = '#c06840';                             // tile faces
+    for (let tx = houseX + offX; tx < W; tx += tileW)
+      ctx.fillRect(Math.round(tx) + 1, ty + 3, tileW - 3, tileH - 4);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)';                    // vertical tile seams
+    for (let tx = houseX + offX; tx < W; tx += tileW)
+      ctx.fillRect(Math.round(tx), ty, 1, tileH);
+  }
+  ctx.fillStyle = '#8a3f22'; ctx.fillRect(W - 6, 0, 6, H); // ridge cap (high side)
+  ctx.fillStyle = '#7a3419'; ctx.fillRect(W - 6, 0, 2, H);
+  // gutter running along the eave (edge facing the porch) + a downpipe
+  ctx.fillStyle = '#c8c8c2'; ctx.fillRect(houseX - 5, 0, 6, H);
+  ctx.fillStyle = '#9a9a94'; ctx.fillRect(houseX - 5, 0, 2, H);
+  ctx.fillStyle = '#b0b0aa'; ctx.fillRect(houseX - 4, Math.round(H * 0.55), 4, Math.round(H * 0.45));
+
+  // Barbecue (kettle grill) on the porch
+  const bqx = splitX + Math.round((houseX - splitX) * 0.30), bqy = Math.round(H * 0.52);
+  ctx.fillStyle = '#2a2a2a';
+  ctx.fillRect(bqx - 13, bqy + 6, 3, 22); ctx.fillRect(bqx + 11, bqy + 6, 3, 22); ctx.fillRect(bqx - 1, bqy + 8, 3, 20);
+  ctx.fillStyle = '#333'; ctx.fillRect(bqx - 16, bqy, 32, 11);
+  ctx.fillStyle = '#1e1e1e'; ctx.fillRect(bqx - 14, bqy + 8, 28, 4);
+  ctx.fillStyle = '#3d3d3d'; ctx.fillRect(bqx - 15, bqy - 8, 30, 9); ctx.fillRect(bqx - 11, bqy - 12, 22, 5);
+  ctx.fillStyle = '#111'; ctx.fillRect(bqx - 2, bqy - 16, 6, 4);
+  ctx.fillStyle = '#555'; ctx.fillRect(bqx - 11, bqy - 6, 5, 2);
+  const _sm = Math.sin(gameTick * 0.05);
+  ctx.fillStyle = 'rgba(210,210,210,0.45)';
+  ctx.fillRect(bqx + Math.round(_sm * 2), bqy - 21, 3, 3);
+  ctx.fillRect(bqx + Math.round(_sm * 3) + 2, bqy - 27, 3, 3);
+  ctx.fillRect(bqx + Math.round(_sm) + 1, bqy - 33, 2, 2);
+
+  // Pool skimmer net leaning into the water
+  const netBaseX = Math.round(splitX * 0.60), netBaseY = poolFloor - poolEdge - 1;
+  const netHeadX = Math.round(splitX * 0.34), netHeadY = Math.round(poolFloor * 0.36);
+  ctx.strokeStyle = '#cfd6da'; ctx.lineWidth = 3;                      // aluminium pole
+  ctx.beginPath(); ctx.moveTo(netBaseX, netBaseY); ctx.lineTo(netHeadX, netHeadY); ctx.stroke();
+  ctx.fillStyle = '#eef2f4';                                          // net frame (hoop)
+  ctx.fillRect(netHeadX - 12, netHeadY - 9, 22, 3);
+  ctx.fillRect(netHeadX - 12, netHeadY + 8, 22, 3);
+  ctx.fillRect(netHeadX - 12, netHeadY - 9, 3, 20);
+  ctx.fillRect(netHeadX + 7, netHeadY - 9, 3, 20);
+  ctx.fillStyle = 'rgba(232,242,247,0.35)'; ctx.fillRect(netHeadX - 9, netHeadY - 6, 16, 14); // mesh
 }
 
 function drawDogFurniture() {
@@ -947,10 +1010,8 @@ let gameTick = 0;
 let fishJumpTick = 0;
 
 // ─── Day/night seed from real clock ──────────────────────────────────────────
-const _dayNightSeed = (() => {
-  const d = new Date();
-  return (d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds()) / 86400 * 21600;
-})();
+// Day/night cycle always starts in the morning when the page is first opened
+const _dayNightSeed = 0.10 * 21600;   // ≈ early morning phase
 
 // ─── Screen shake ─────────────────────────────────────────────────────────────
 let _shakeTicks = 0, _shakeAmt = 0;
@@ -1900,6 +1961,7 @@ let marker = null;
 
 // ─── Dog colours ─────────────────────────────────────────────────────────────
 const DOG_COLORS = ['#f5d5a0','#a0522d','#ffffff','#e8c99a','#222222','#d4a96a','#c4a882','#6b4226','#b5b5b5','#8b6914'];
+const GOLDEN_RETRIEVER = '#e8b866';   // warm golden coat for the starting dog
 
 // ─── Puppies ─────────────────────────────────────────────────────────────────
 const puppies = [];
@@ -2108,7 +2170,7 @@ const dog = {
   init() {
     this.x = canvas.width / 2 - PW / 2;
     this.y = canvas.height / 2 - PH / 2;
-    this.color = DOG_COLORS[Math.floor(Math.random() * DOG_COLORS.length)];
+    this.color = GOLDEN_RETRIEVER;   // the dog always starts as a golden retriever
     this.state = 'digging'; this.digTimer = DIG_DURATION;
     this.frame = 0; this.tick = 0;
     this.furnitureTarget = null; this.sleepTimer = 0; this.sleepZTimer = 0; this.digPending = false;
@@ -2937,7 +2999,14 @@ function sndBlub() {
 function drawHappinessBar() {
   const h = happiness / 100;
   const barW = 48, barH = 4;
-  const bx = canvas.width - barW - 12, by = 12;
+  // Sit just under the floating menu (dog) icon, bottom-left
+  let bx = 28, by = canvas.height - 22;
+  const _fab = document.querySelector('.scritch-fab');
+  if (_fab) {
+    const r = _fab.getBoundingClientRect();
+    bx = Math.round(r.left) + 12;
+    by = Math.round(r.bottom) + 8;
+  }
   const col = h >= 0.65 ? '#55cc33' : h >= 0.35 ? '#ffcc00' : '#ee3333';
   ctx.save(); ctx.globalAlpha = 0.6;
   ctx.fillStyle = '#1a1a1a'; ctx.fillRect(bx - 1, by - 1, barW + 2, barH + 2);
@@ -3037,66 +3106,59 @@ function tickParticles(arr) {
 function drawDynamicLighting() {
   const W = canvas.width, H = canvas.height;
   ctx.save();
-  if (gameMode === 'dog') {
-    const phase = ((gameTick + _dayNightSeed) / 21600) % 1;
-    let col, alpha;
-    if (phase < 0.06) {
-      alpha = 0.22 * (1 - phase / 0.06) + 0.04;
-      col = '#ff8844';
-    } else if (phase < 0.12) {
-      alpha = 0.04;
-      col = '#ffcc88';
-    } else if (phase < 0.45) {
-      alpha = 0.03;
-      col = '#ffeecc';
-    } else if (phase < 0.52) {
-      const t = (phase - 0.45) / 0.07;
-      alpha = 0.04 + 0.18 * t;
-      col = `rgb(255,${Math.round(80 - 50 * t)},10)`;
-    } else if (phase < 0.58) {
-      const t = (phase - 0.52) / 0.06;
-      alpha = 0.22 + 0.12 * t;
-      col = `rgb(${Math.round(180 - 150 * t)},30,${Math.round(80 + 80 * t)})`;
-    } else if (phase < 0.85) {
-      alpha = 0.34;
-      col = '#0a1450';
-    } else if (phase < 0.92) {
-      const t = (phase - 0.85) / 0.07;
-      alpha = 0.34 * (1 - t) + 0.18 * t;
-      col = '#442200';
-    } else {
-      const t = (phase - 0.92) / 0.08;
-      alpha = 0.18 * (1 - t) + 0.04;
-      col = '#ff8844';
-    }
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = col;
-    ctx.fillRect(0, 0, W, H);
-    if (phase >= 0.58 && phase < 0.88) {
-      const sa = phase < 0.62 ? (phase - 0.58) / 0.04
-               : phase > 0.84 ? (0.88 - phase) / 0.04 : 1;
-      ctx.globalAlpha = sa * 0.6;
-      ctx.fillStyle = '#eeeeff';
-      const STARS = [[0.12,0.07],[0.28,0.04],[0.45,0.10],[0.67,0.05],[0.82,0.08],[0.93,0.13],
-                     [0.05,0.17],[0.38,0.03],[0.55,0.14],[0.77,0.11],[0.20,0.21],[0.61,0.09]];
-      for (const [sx, sy] of STARS) ctx.fillRect(Math.round(sx * W), Math.round(sy * H), 2, 2);
-    }
-  } else if (gameMode === 'cat') {
-    const ambient = Math.sin(gameTick / 7200 * Math.PI);
-    ctx.globalAlpha = 0.035;
-    ctx.fillStyle = ambient >= 0 ? '#ffdd88' : '#aabbff';
-    ctx.fillRect(0, 0, W, H);
+  // Shared day/night cycle across all three modes (starts in the morning)
+  const phase = ((gameTick + _dayNightSeed) / 21600) % 1;
+  let col, alpha;
+  if (phase < 0.06) {
+    alpha = 0.22 * (1 - phase / 0.06) + 0.04;
+    col = '#ff8844';
+  } else if (phase < 0.12) {
+    alpha = 0.04;
+    col = '#ffcc88';
+  } else if (phase < 0.45) {
+    alpha = 0.03;
+    col = '#ffeecc';
+  } else if (phase < 0.52) {
+    const t = (phase - 0.45) / 0.07;
+    alpha = 0.04 + 0.18 * t;
+    col = `rgb(255,${Math.round(80 - 50 * t)},10)`;
+  } else if (phase < 0.58) {
+    const t = (phase - 0.52) / 0.06;
+    alpha = 0.22 + 0.12 * t;
+    col = `rgb(${Math.round(180 - 150 * t)},30,${Math.round(80 + 80 * t)})`;
+  } else if (phase < 0.85) {
+    alpha = 0.34;
+    col = '#0a1450';
+  } else if (phase < 0.92) {
+    const t = (phase - 0.85) / 0.07;
+    alpha = 0.34 * (1 - t) + 0.18 * t;
+    col = '#442200';
+  } else {
+    const t = (phase - 0.92) / 0.08;
+    alpha = 0.18 * (1 - t) + 0.04;
+    col = '#ff8844';
+  }
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = col;
+  ctx.fillRect(0, 0, W, H);
+  // stars at night — only over the outdoor dog scene
+  if (gameMode === 'dog' && phase >= 0.58 && phase < 0.88) {
+    const sa = phase < 0.62 ? (phase - 0.58) / 0.04
+             : phase > 0.84 ? (0.88 - phase) / 0.04 : 1;
+    ctx.globalAlpha = sa * 0.6;
+    ctx.fillStyle = '#eeeeff';
+    const STARS = [[0.12,0.07],[0.28,0.04],[0.45,0.10],[0.67,0.05],[0.82,0.08],[0.93,0.13],
+                   [0.05,0.17],[0.38,0.03],[0.55,0.14],[0.77,0.11],[0.20,0.21],[0.61,0.09]];
+    for (const [sx, sy] of STARS) ctx.fillRect(Math.round(sx * W), Math.round(sy * H), 2, 2);
+  }
+  // cat mode keeps its candle flicker on top of the ambient
+  if (gameMode === 'cat') {
     const flicker = Math.sin(gameTick * 0.04) * Math.sin(gameTick * 0.09);
     if (flicker > 0.88) {
       ctx.globalAlpha = (flicker - 0.88) * 0.25;
       ctx.fillStyle = '#ffffee';
       ctx.fillRect(0, 0, W, H);
     }
-  } else if (gameMode === 'rat') {
-    const a = 0.06 + 0.04 * Math.sin(gameTick * 0.018);
-    ctx.globalAlpha = a;
-    ctx.fillStyle = '#aa4400';
-    ctx.fillRect(0, 0, W, H);
   }
   ctx.restore();
 }
@@ -3463,7 +3525,16 @@ document.getElementById('catnip-btn').addEventListener('click', () => {
   catnips.push({ x: cx + (Math.random()-0.5)*100, y: cy + (Math.random()-0.5)*50, life: 360 });
   sndLaser();
 });
+
+// Right-click anywhere returns to the play screen (title / mode picker)
+document.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  window.location.href = 'https://waltviviers.com/apps/scritch-scratch/play/';
+});
 </script>
+<a href="https://waltviviers.com/" class="walt-logo" aria-label="Walt Viviers — home">
+  <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+</a>
 <a href="https://waltviviers.com/apps/scritch-scratch/play/" class="scritch-fab" aria-label="Scritch Scratch">
   <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Scritch Scratch" width="64" height="64" />
   <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
