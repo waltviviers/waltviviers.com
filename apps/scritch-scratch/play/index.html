@@ -587,7 +587,14 @@ function drawDogBackground() {
   ctx.fillStyle = '#3a7318';
   ctx.fillRect(splitX - 4, 0, 4, H);
 
-  // ── Yard scenery ────────────────────────────────────────────────────
+}
+
+function drawDogForeground() {
+  const W = canvas.width, H = canvas.height;
+  const splitX = Math.round(W * 0.65);
+  const poolFloor = dogPoolFloorY();
+
+  // ── Yard scenery (drawn after animals so they appear behind these) ───
   // Back of the house seen from above — tiled roof, ridge cap and eave gutter
   const { houseW, houseX } = _dogLayout();
   ctx.fillStyle = '#a8542f';                               // terracotta roof base
@@ -2058,7 +2065,7 @@ class Puppy {
   draw() {
     const spr = this.state === 'happy' ? HAPPY[this.frame] : this.state === 'walking' ? WALK[this.frame] : IDLE;
     const x = Math.round(this.x), y = Math.round(this.y), vs = this.vs;
-    const col = this.scritchTimer > 0 ? '#ffffcc' : this.color;
+    const col = this.color;
     for (let r = 0; r < DH; r++)
       for (let c = 0; c < DW; c++)
         if (spr[r][c]) {
@@ -2863,6 +2870,21 @@ function sndDogAmbient() { sndStopAmbient(); _startAmb(180, 0.7, 'lowpass', 0.05
 function sndCatAmbient() { sndStopAmbient(); _startAmb(60, 0.4, 'lowpass', 0.035); }
 function sndRatAmbient() { sndStopAmbient(); _startAmb(80, 0.3, 'lowpass', 0.025); }
 
+function sndPant() {
+  if (!_cool('pant', 28)) return;
+  const ac = _getAC(); const t = ac.currentTime;
+  const buf = _noise(ac, 0.16);
+  const src = ac.createBufferSource(); src.buffer = buf;
+  const filt = ac.createBiquadFilter(); filt.type = 'bandpass';
+  filt.frequency.value = 480; filt.Q.value = 1.0;
+  const g = ac.createGain();
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(0.18, t + 0.05);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+  src.connect(filt); filt.connect(g); g.connect(_masterGain);
+  src.start(t); src.stop(t + 0.16);
+}
+
 function sndBark(small) {
   if (!_cool('bark', 18)) return;
   if (!small) triggerShake(2, 5);
@@ -3281,6 +3303,10 @@ function loop() {
       }
     }
     for (const p of puppies) { p.update(); p.draw(); }
+
+    drawDogForeground();
+
+    if (scritching && !scritchCat && gameTick % 45 === 0) sndPant();
 
     if (Math.random() < 0.0015) sndBird();
 
