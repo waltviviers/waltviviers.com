@@ -2433,6 +2433,19 @@ function updateCatnipBtn() {
   document.getElementById('catnip-btn').style.display = gameMode === 'cat' ? 'block' : 'none';
 }
 
+function updateFab() {
+  const fab = document.querySelector('.scritch-fab');
+  if (!fab) return;
+  const icons = {
+    dog: ['/apps/scritch-scratch/ss-up.webp',       '/apps/scritch-scratch/ss-over.webp'],
+    cat: ['/apps/scritch-scratch/ss-cat-up.png',    '/apps/scritch-scratch/ss-cat-over.png'],
+    rat: ['/apps/scritch-scratch/ss-rat-up.png',    '/apps/scritch-scratch/ss-rat-over.png'],
+  };
+  const [up, over] = icons[gameMode] || icons.dog;
+  fab.querySelector('.ss-up').src   = up;
+  fab.querySelector('.ss-over').src = over;
+}
+
 function enterRatMode() {
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'rat';
@@ -2453,6 +2466,7 @@ function enterRatMode() {
   }
   sndRatAmbient();
   updateCatnipBtn();
+  updateFab();
   persistSave();
 }
 
@@ -2474,6 +2488,7 @@ function enterDogMode() {
   if (!restoreDogState()) { dog.init(); }
   sndDogAmbient();
   updateCatnipBtn();
+  updateFab();
   persistSave();
 }
 
@@ -2497,6 +2512,7 @@ function enterCatMode() {
   }
   sndCatAmbient();
   updateCatnipBtn();
+  updateFab();
   persistSave();
 }
 
