@@ -145,6 +145,17 @@
       transition: transform 0.15s ease, background 0.15s;
     }
     #catnip-btn:hover { background: #fff; transform: translateY(-2px); }
+
+    /* WALT logo — same top-left position as the main site header */
+    .walt-logo {
+      position: fixed; top: 32px; left: 48px; z-index: 450; display: block; line-height: 0;
+      filter: drop-shadow(0 0 2px rgba(0,0,0,0.7)) drop-shadow(0 1px 4px rgba(0,0,0,0.5));
+    }
+    .walt-logo img { height: 36px; width: auto; display: block; }
+    @media (max-width: 900px), (orientation: portrait) {
+      .walt-logo { top: 11px; left: 24px; }
+      .walt-logo img { height: 28px; }
+    }
   </style>
 </head>
 <body>
@@ -3521,6 +3532,9 @@ document.addEventListener('contextmenu', e => {
   window.location.href = 'https://waltviviers.com/apps/scritch-scratch/play/';
 });
 </script>
+<a href="https://waltviviers.com/" class="walt-logo" aria-label="Walt Viviers — home">
+  <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+</a>
 <a href="https://waltviviers.com/apps/scritch-scratch/play/" class="scritch-fab" aria-label="Scritch Scratch">
   <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Scritch Scratch" width="64" height="64" />
   <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
