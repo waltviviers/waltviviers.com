@@ -290,9 +290,10 @@ const HEART_SPR = [
 const HEART_SC = 2;
 
 // Cursor PNG images (loaded async; hotspot = col 4 × 4px = 16px from left)
-const _cursorUpImg = new Image();   _cursorUpImg.src   = '../images/pointer_up.png';
-const _cursorDownImg = new Image(); _cursorDownImg.src = '../images/pointer_down.png';
-const CURSOR_HOTSPOT_X = 16, CURSOR_HOTSPOT_Y = 0;
+const _cursorUpImg = new Image();   _cursorUpImg.src   = '/images/pointer_up.png';
+const _cursorDownImg = new Image(); _cursorDownImg.src = '/images/pointer_down.png';
+// Hotspot = index-finger tip of the supplied 40×50 hand
+const CURSOR_HOTSPOT_X = 6, CURSOR_HOTSPOT_Y = 1;
 
 // ─── Rat sprites (2-frame, faces LEFT by default) ─────────────────────────────
 const RAT_FRAMES = [
