@@ -3463,6 +3463,12 @@ document.getElementById('catnip-btn').addEventListener('click', () => {
   catnips.push({ x: cx + (Math.random()-0.5)*100, y: cy + (Math.random()-0.5)*50, life: 360 });
   sndLaser();
 });
+
+// Right-click anywhere returns to the play screen (title / mode picker)
+document.addEventListener('contextmenu', e => {
+  e.preventDefault();
+  window.location.href = 'https://waltviviers.com/apps/scritch-scratch/play/';
+});
 </script>
 <a href="https://waltviviers.com/apps/scritch-scratch/play/" class="scritch-fab" aria-label="Scritch Scratch">
   <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Scritch Scratch" width="64" height="64" />
