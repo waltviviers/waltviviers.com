@@ -537,6 +537,60 @@ function drawDogBackground() {
   // Grass edge
   ctx.fillStyle = '#3a7318';
   ctx.fillRect(splitX - 4, 0, 4, H);
+
+  // ── Yard scenery ────────────────────────────────────────────────────
+  // Back of the house along the right edge of the porch
+  const houseW = Math.min(74, Math.round((W - splitX) * 0.5));
+  const houseX = W - houseW;
+  ctx.fillStyle = '#caa46e';                              // warm plaster wall
+  ctx.fillRect(houseX, 0, houseW, H);
+  ctx.fillStyle = 'rgba(120,80,40,0.16)';                 // horizontal siding lines
+  for (let sy = 12; sy < H; sy += 14) ctx.fillRect(houseX, sy, houseW, 2);
+  ctx.fillStyle = 'rgba(0,0,0,0.16)';                     // shadow edge facing the porch
+  ctx.fillRect(houseX, 0, 5, H);
+  ctx.fillStyle = '#7a5230';                              // roof eave
+  ctx.fillRect(houseX - 4, 0, houseW + 4, 9);
+  // back door
+  const doorW = 24, doorH = 50;
+  const doorX = houseX + Math.round(houseW * 0.50), doorY = H - doorH - Math.round(H * 0.06);
+  ctx.fillStyle = '#5a3a24'; ctx.fillRect(doorX - 2, doorY - 2, doorW + 4, doorH + 2);
+  ctx.fillStyle = '#3d2716'; ctx.fillRect(doorX, doorY, doorW, doorH);
+  ctx.fillStyle = '#2a1a0f'; ctx.fillRect(doorX + 4, doorY + 6, doorW - 8, doorH - 12);
+  ctx.fillStyle = '#e8c86a'; ctx.fillRect(doorX + doorW - 6, doorY + Math.round(doorH * 0.5), 3, 3);
+  // window
+  const winS = 20, winX = houseX + Math.round(houseW * 0.16), winY = Math.round(H * 0.30);
+  ctx.fillStyle = '#7a5230'; ctx.fillRect(winX - 2, winY - 2, winS + 4, winS + 4);
+  ctx.fillStyle = '#4a6b78'; ctx.fillRect(winX, winY, winS, winS);
+  ctx.fillStyle = '#cfe0e6'; ctx.fillRect(winX + 2, winY + 2, 7, 7);
+  ctx.fillStyle = '#caa46e';
+  ctx.fillRect(winX + winS / 2 - 1, winY, 2, winS); ctx.fillRect(winX, winY + winS / 2 - 1, winS, 2);
+
+  // Barbecue (kettle grill) on the porch
+  const bqx = splitX + Math.round((houseX - splitX) * 0.30), bqy = Math.round(H * 0.52);
+  ctx.fillStyle = '#2a2a2a';
+  ctx.fillRect(bqx - 13, bqy + 6, 3, 22); ctx.fillRect(bqx + 11, bqy + 6, 3, 22); ctx.fillRect(bqx - 1, bqy + 8, 3, 20);
+  ctx.fillStyle = '#333'; ctx.fillRect(bqx - 16, bqy, 32, 11);
+  ctx.fillStyle = '#1e1e1e'; ctx.fillRect(bqx - 14, bqy + 8, 28, 4);
+  ctx.fillStyle = '#3d3d3d'; ctx.fillRect(bqx - 15, bqy - 8, 30, 9); ctx.fillRect(bqx - 11, bqy - 12, 22, 5);
+  ctx.fillStyle = '#111'; ctx.fillRect(bqx - 2, bqy - 16, 6, 4);
+  ctx.fillStyle = '#555'; ctx.fillRect(bqx - 11, bqy - 6, 5, 2);
+  const _sm = Math.sin(gameTick * 0.05);
+  ctx.fillStyle = 'rgba(210,210,210,0.45)';
+  ctx.fillRect(bqx + Math.round(_sm * 2), bqy - 21, 3, 3);
+  ctx.fillRect(bqx + Math.round(_sm * 3) + 2, bqy - 27, 3, 3);
+  ctx.fillRect(bqx + Math.round(_sm) + 1, bqy - 33, 2, 2);
+
+  // Pool skimmer net leaning into the water
+  const netBaseX = Math.round(splitX * 0.60), netBaseY = poolFloor - poolEdge - 1;
+  const netHeadX = Math.round(splitX * 0.34), netHeadY = Math.round(poolFloor * 0.36);
+  ctx.strokeStyle = '#cfd6da'; ctx.lineWidth = 3;                      // aluminium pole
+  ctx.beginPath(); ctx.moveTo(netBaseX, netBaseY); ctx.lineTo(netHeadX, netHeadY); ctx.stroke();
+  ctx.fillStyle = '#eef2f4';                                          // net frame (hoop)
+  ctx.fillRect(netHeadX - 12, netHeadY - 9, 22, 3);
+  ctx.fillRect(netHeadX - 12, netHeadY + 8, 22, 3);
+  ctx.fillRect(netHeadX - 12, netHeadY - 9, 3, 20);
+  ctx.fillRect(netHeadX + 7, netHeadY - 9, 3, 20);
+  ctx.fillStyle = 'rgba(232,242,247,0.35)'; ctx.fillRect(netHeadX - 9, netHeadY - 6, 16, 14); // mesh
 }
 
 function drawDogFurniture() {
@@ -1900,6 +1954,7 @@ let marker = null;
 
 // ─── Dog colours ─────────────────────────────────────────────────────────────
 const DOG_COLORS = ['#f5d5a0','#a0522d','#ffffff','#e8c99a','#222222','#d4a96a','#c4a882','#6b4226','#b5b5b5','#8b6914'];
+const GOLDEN_RETRIEVER = '#e8b866';   // warm golden coat for the starting dog
 
 // ─── Puppies ─────────────────────────────────────────────────────────────────
 const puppies = [];
@@ -2108,7 +2163,7 @@ const dog = {
   init() {
     this.x = canvas.width / 2 - PW / 2;
     this.y = canvas.height / 2 - PH / 2;
-    this.color = DOG_COLORS[Math.floor(Math.random() * DOG_COLORS.length)];
+    this.color = GOLDEN_RETRIEVER;   // the dog always starts as a golden retriever
     this.state = 'digging'; this.digTimer = DIG_DURATION;
     this.frame = 0; this.tick = 0;
     this.furnitureTarget = null; this.sleepTimer = 0; this.sleepZTimer = 0; this.digPending = false;
@@ -2937,7 +2992,14 @@ function sndBlub() {
 function drawHappinessBar() {
   const h = happiness / 100;
   const barW = 48, barH = 4;
-  const bx = canvas.width - barW - 12, by = 12;
+  // Sit just under the floating menu (dog) icon, bottom-left
+  let bx = 28, by = canvas.height - 22;
+  const _fab = document.querySelector('.scritch-fab');
+  if (_fab) {
+    const r = _fab.getBoundingClientRect();
+    bx = Math.round(r.left) + 12;
+    by = Math.round(r.bottom) + 8;
+  }
   const col = h >= 0.65 ? '#55cc33' : h >= 0.35 ? '#ffcc00' : '#ee3333';
   ctx.save(); ctx.globalAlpha = 0.6;
   ctx.fillStyle = '#1a1a1a'; ctx.fillRect(bx - 1, by - 1, barW + 2, barH + 2);
