@@ -539,31 +539,29 @@ function drawDogBackground() {
   ctx.fillRect(splitX - 4, 0, 4, H);
 
   // ── Yard scenery ────────────────────────────────────────────────────
-  // Back of the house along the right edge of the porch
+  // Back of the house seen from above — tiled roof, ridge cap and eave gutter
   const houseW = Math.min(74, Math.round((W - splitX) * 0.5));
   const houseX = W - houseW;
-  ctx.fillStyle = '#caa46e';                              // warm plaster wall
+  ctx.fillStyle = '#a8542f';                               // terracotta roof base
   ctx.fillRect(houseX, 0, houseW, H);
-  ctx.fillStyle = 'rgba(120,80,40,0.16)';                 // horizontal siding lines
-  for (let sy = 12; sy < H; sy += 14) ctx.fillRect(houseX, sy, houseW, 2);
-  ctx.fillStyle = 'rgba(0,0,0,0.16)';                     // shadow edge facing the porch
-  ctx.fillRect(houseX, 0, 5, H);
-  ctx.fillStyle = '#7a5230';                              // roof eave
-  ctx.fillRect(houseX - 4, 0, houseW + 4, 9);
-  // back door
-  const doorW = 24, doorH = 50;
-  const doorX = houseX + Math.round(houseW * 0.50), doorY = H - doorH - Math.round(H * 0.06);
-  ctx.fillStyle = '#5a3a24'; ctx.fillRect(doorX - 2, doorY - 2, doorW + 4, doorH + 2);
-  ctx.fillStyle = '#3d2716'; ctx.fillRect(doorX, doorY, doorW, doorH);
-  ctx.fillStyle = '#2a1a0f'; ctx.fillRect(doorX + 4, doorY + 6, doorW - 8, doorH - 12);
-  ctx.fillStyle = '#e8c86a'; ctx.fillRect(doorX + doorW - 6, doorY + Math.round(doorH * 0.5), 3, 3);
-  // window
-  const winS = 20, winX = houseX + Math.round(houseW * 0.16), winY = Math.round(H * 0.30);
-  ctx.fillStyle = '#7a5230'; ctx.fillRect(winX - 2, winY - 2, winS + 4, winS + 4);
-  ctx.fillStyle = '#4a6b78'; ctx.fillRect(winX, winY, winS, winS);
-  ctx.fillStyle = '#cfe0e6'; ctx.fillRect(winX + 2, winY + 2, 7, 7);
-  ctx.fillStyle = '#caa46e';
-  ctx.fillRect(winX + winS / 2 - 1, winY, 2, winS); ctx.fillRect(winX, winY + winS / 2 - 1, winS, 2);
+  const tileH = 12, tileW = 14;                            // staggered tile courses
+  for (let ty = 0; ty < H; ty += tileH) {
+    const offX = (Math.floor(ty / tileH) % 2) ? tileW / 2 : 0;
+    ctx.fillStyle = 'rgba(0,0,0,0.20)';                    // course shadow line
+    ctx.fillRect(houseX, ty, houseW, 2);
+    ctx.fillStyle = '#c06840';                             // tile faces
+    for (let tx = houseX + offX; tx < W; tx += tileW)
+      ctx.fillRect(Math.round(tx) + 1, ty + 3, tileW - 3, tileH - 4);
+    ctx.fillStyle = 'rgba(0,0,0,0.12)';                    // vertical tile seams
+    for (let tx = houseX + offX; tx < W; tx += tileW)
+      ctx.fillRect(Math.round(tx), ty, 1, tileH);
+  }
+  ctx.fillStyle = '#8a3f22'; ctx.fillRect(W - 6, 0, 6, H); // ridge cap (high side)
+  ctx.fillStyle = '#7a3419'; ctx.fillRect(W - 6, 0, 2, H);
+  // gutter running along the eave (edge facing the porch) + a downpipe
+  ctx.fillStyle = '#c8c8c2'; ctx.fillRect(houseX - 5, 0, 6, H);
+  ctx.fillStyle = '#9a9a94'; ctx.fillRect(houseX - 5, 0, 2, H);
+  ctx.fillStyle = '#b0b0aa'; ctx.fillRect(houseX - 4, Math.round(H * 0.55), 4, Math.round(H * 0.45));
 
   // Barbecue (kettle grill) on the porch
   const bqx = splitX + Math.round((houseX - splitX) * 0.30), bqy = Math.round(H * 0.52);
@@ -1001,10 +999,8 @@ let gameTick = 0;
 let fishJumpTick = 0;
 
 // ─── Day/night seed from real clock ──────────────────────────────────────────
-const _dayNightSeed = (() => {
-  const d = new Date();
-  return (d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds()) / 86400 * 21600;
-})();
+// Day/night cycle always starts in the morning when the page is first opened
+const _dayNightSeed = 0.10 * 21600;   // ≈ early morning phase
 
 // ─── Screen shake ─────────────────────────────────────────────────────────────
 let _shakeTicks = 0, _shakeAmt = 0;
@@ -3099,66 +3095,59 @@ function tickParticles(arr) {
 function drawDynamicLighting() {
   const W = canvas.width, H = canvas.height;
   ctx.save();
-  if (gameMode === 'dog') {
-    const phase = ((gameTick + _dayNightSeed) / 21600) % 1;
-    let col, alpha;
-    if (phase < 0.06) {
-      alpha = 0.22 * (1 - phase / 0.06) + 0.04;
-      col = '#ff8844';
-    } else if (phase < 0.12) {
-      alpha = 0.04;
-      col = '#ffcc88';
-    } else if (phase < 0.45) {
-      alpha = 0.03;
-      col = '#ffeecc';
-    } else if (phase < 0.52) {
-      const t = (phase - 0.45) / 0.07;
-      alpha = 0.04 + 0.18 * t;
-      col = `rgb(255,${Math.round(80 - 50 * t)},10)`;
-    } else if (phase < 0.58) {
-      const t = (phase - 0.52) / 0.06;
-      alpha = 0.22 + 0.12 * t;
-      col = `rgb(${Math.round(180 - 150 * t)},30,${Math.round(80 + 80 * t)})`;
-    } else if (phase < 0.85) {
-      alpha = 0.34;
-      col = '#0a1450';
-    } else if (phase < 0.92) {
-      const t = (phase - 0.85) / 0.07;
-      alpha = 0.34 * (1 - t) + 0.18 * t;
-      col = '#442200';
-    } else {
-      const t = (phase - 0.92) / 0.08;
-      alpha = 0.18 * (1 - t) + 0.04;
-      col = '#ff8844';
-    }
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = col;
-    ctx.fillRect(0, 0, W, H);
-    if (phase >= 0.58 && phase < 0.88) {
-      const sa = phase < 0.62 ? (phase - 0.58) / 0.04
-               : phase > 0.84 ? (0.88 - phase) / 0.04 : 1;
-      ctx.globalAlpha = sa * 0.6;
-      ctx.fillStyle = '#eeeeff';
-      const STARS = [[0.12,0.07],[0.28,0.04],[0.45,0.10],[0.67,0.05],[0.82,0.08],[0.93,0.13],
-                     [0.05,0.17],[0.38,0.03],[0.55,0.14],[0.77,0.11],[0.20,0.21],[0.61,0.09]];
-      for (const [sx, sy] of STARS) ctx.fillRect(Math.round(sx * W), Math.round(sy * H), 2, 2);
-    }
-  } else if (gameMode === 'cat') {
-    const ambient = Math.sin(gameTick / 7200 * Math.PI);
-    ctx.globalAlpha = 0.035;
-    ctx.fillStyle = ambient >= 0 ? '#ffdd88' : '#aabbff';
-    ctx.fillRect(0, 0, W, H);
+  // Shared day/night cycle across all three modes (starts in the morning)
+  const phase = ((gameTick + _dayNightSeed) / 21600) % 1;
+  let col, alpha;
+  if (phase < 0.06) {
+    alpha = 0.22 * (1 - phase / 0.06) + 0.04;
+    col = '#ff8844';
+  } else if (phase < 0.12) {
+    alpha = 0.04;
+    col = '#ffcc88';
+  } else if (phase < 0.45) {
+    alpha = 0.03;
+    col = '#ffeecc';
+  } else if (phase < 0.52) {
+    const t = (phase - 0.45) / 0.07;
+    alpha = 0.04 + 0.18 * t;
+    col = `rgb(255,${Math.round(80 - 50 * t)},10)`;
+  } else if (phase < 0.58) {
+    const t = (phase - 0.52) / 0.06;
+    alpha = 0.22 + 0.12 * t;
+    col = `rgb(${Math.round(180 - 150 * t)},30,${Math.round(80 + 80 * t)})`;
+  } else if (phase < 0.85) {
+    alpha = 0.34;
+    col = '#0a1450';
+  } else if (phase < 0.92) {
+    const t = (phase - 0.85) / 0.07;
+    alpha = 0.34 * (1 - t) + 0.18 * t;
+    col = '#442200';
+  } else {
+    const t = (phase - 0.92) / 0.08;
+    alpha = 0.18 * (1 - t) + 0.04;
+    col = '#ff8844';
+  }
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = col;
+  ctx.fillRect(0, 0, W, H);
+  // stars at night — only over the outdoor dog scene
+  if (gameMode === 'dog' && phase >= 0.58 && phase < 0.88) {
+    const sa = phase < 0.62 ? (phase - 0.58) / 0.04
+             : phase > 0.84 ? (0.88 - phase) / 0.04 : 1;
+    ctx.globalAlpha = sa * 0.6;
+    ctx.fillStyle = '#eeeeff';
+    const STARS = [[0.12,0.07],[0.28,0.04],[0.45,0.10],[0.67,0.05],[0.82,0.08],[0.93,0.13],
+                   [0.05,0.17],[0.38,0.03],[0.55,0.14],[0.77,0.11],[0.20,0.21],[0.61,0.09]];
+    for (const [sx, sy] of STARS) ctx.fillRect(Math.round(sx * W), Math.round(sy * H), 2, 2);
+  }
+  // cat mode keeps its candle flicker on top of the ambient
+  if (gameMode === 'cat') {
     const flicker = Math.sin(gameTick * 0.04) * Math.sin(gameTick * 0.09);
     if (flicker > 0.88) {
       ctx.globalAlpha = (flicker - 0.88) * 0.25;
       ctx.fillStyle = '#ffffee';
       ctx.fillRect(0, 0, W, H);
     }
-  } else if (gameMode === 'rat') {
-    const a = 0.06 + 0.04 * Math.sin(gameTick * 0.018);
-    ctx.globalAlpha = a;
-    ctx.fillStyle = '#aa4400';
-    ctx.fillRect(0, 0, W, H);
   }
   ctx.restore();
 }
