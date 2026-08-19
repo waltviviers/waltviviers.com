@@ -136,16 +136,18 @@
     .popup .popup-err { color: #b0401f; font-size: 10px; margin: 4px 0 8px; }
     .popup .popup-success { color: #4f7a4a; font-size: 11px; line-height: 1.6; }
 
-    /* Catnip button (cat mode) — cream pill, sits above the corner mark */
+    /* Catnip button (cat mode) — icon above the FAB, bottom-left */
     #catnip-btn {
-      display: none; position: fixed; right: 18px; bottom: 60px; z-index: 210;
-      background: rgba(255,251,244,0.94); border: 2px solid rgba(90,60,40,0.22);
-      border-radius: 24px; color: #5a3a28;
-      font-family: monospace; font-weight: 700; font-size: 11px; letter-spacing: 0.04em;
-      padding: 9px 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-      transition: transform 0.15s ease, background 0.15s;
+      display: none; position: fixed; left: 16px; bottom: 172px; z-index: 260;
+      width: 66px; height: 66px; padding: 0; background: none; border: none; cursor: pointer;
+      transition: transform 0.18s ease;
     }
-    #catnip-btn:hover { background: #fff; transform: translateY(-2px); }
+    #catnip-btn:hover, #catnip-btn:active { transform: translateY(-3px) scale(1.07); }
+    #catnip-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
+    #catnip-btn .cn-over { opacity: 0; }
+    #catnip-btn:hover .cn-up, #catnip-btn:active .cn-up { opacity: 0; }
+    #catnip-btn:hover .cn-over, #catnip-btn:active .cn-over { opacity: 1; }
+    @media (max-width: 900px) { #catnip-btn { bottom: 90px; } }
 
     /* WALT logo — same top-left position as the main site header */
     .walt-logo {
@@ -209,7 +211,10 @@
     <button class="popup-close" id="name-confirm">Done</button>
   </div>
 </div>
-<button id="catnip-btn">Catnip</button>
+<button id="catnip-btn" aria-label="Catnip">
+  <img class="cn-up"   src="/apps/scritch-scratch/catnip_up.png"   alt="Catnip" width="66" height="66" />
+  <img class="cn-over" src="/apps/scritch-scratch/catnip_over.png" alt=""        aria-hidden="true" width="66" height="66" />
+</button>
 <div id="mode-pick">
   <h1>Scritch Scratch</h1>
   <button class="mode-btn-pick" data-mode="dog">Doggo Mode</button>
