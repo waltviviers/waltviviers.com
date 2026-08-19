@@ -2433,6 +2433,14 @@ function updateCatnipBtn() {
   document.getElementById('catnip-btn').style.display = gameMode === 'cat' ? 'block' : 'none';
 }
 
+function updateFab() {
+  const fab = document.querySelector('.scritch-fab');
+  if (!fab) return;
+  const isCat = gameMode === 'cat';
+  fab.querySelector('.ss-up').src   = isCat ? '/apps/scritch-scratch/ss-cat-up.png'   : '/apps/scritch-scratch/ss-up.webp';
+  fab.querySelector('.ss-over').src = isCat ? '/apps/scritch-scratch/ss-cat-over.png' : '/apps/scritch-scratch/ss-over.webp';
+}
+
 function enterRatMode() {
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'rat';
@@ -2453,6 +2461,7 @@ function enterRatMode() {
   }
   sndRatAmbient();
   updateCatnipBtn();
+  updateFab();
   persistSave();
 }
 
@@ -2474,6 +2483,7 @@ function enterDogMode() {
   if (!restoreDogState()) { dog.init(); }
   sndDogAmbient();
   updateCatnipBtn();
+  updateFab();
   persistSave();
 }
 
@@ -2497,6 +2507,7 @@ function enterCatMode() {
   }
   sndCatAmbient();
   updateCatnipBtn();
+  updateFab();
   persistSave();
 }
 
