@@ -110,6 +110,7 @@
     .scritch-fab:hover { transform: translateY(-3px) scale(1.07); }
     .scritch-fab:hover .ss-up { opacity: 0; }
     .scritch-fab:hover .ss-over { opacity: 1; }
+    @media (max-width: 900px) { .scritch-fab { bottom: 16px; } }
 
     /* Walt Viviers mark — bottom-right, shows during gameplay (sits below the title screen) */
     .game-mark {
@@ -463,11 +464,23 @@ const BED_SC = 4, BOWL_SC = 3;
 let dogBed = null, dogFoodBowl = null, dogWaterBowl = null;
 const poolRings = [];   // expanding rings, like dragonflies touching the water
 
+// Shared porch geometry — narrower house on small screens so it doesn't dominate
+function _dogLayout() {
+  const W = canvas.width;
+  const splitX = Math.round(W * 0.65);
+  const houseW = Math.min(W < 600 ? 44 : 74, Math.round((W - splitX) * (W < 600 ? 0.32 : 0.5)));
+  return { splitX, houseW, houseX: W - houseW };
+}
+
 function placeDogFurniture() {
-  const w = canvas.width, h = canvas.height;
-  dogBed = { x: w * 0.825 - DOG_BED_SPR[0].length * BED_SC / 2, y: h * 0.55 };
-  dogFoodBowl = { x: w * 0.85 - DOG_BOWL_SPR[0].length * BOWL_SC / 2, y: h * 0.8 };
-  dogWaterBowl = { x: w * 0.85 - DOG_BOWL_SPR[0].length * BOWL_SC / 2 + DOG_BOWL_SPR[0].length * BOWL_SC + 10, y: h * 0.8 };
+  const { splitX, houseX } = _dogLayout();
+  const h = canvas.height;
+  const porchCx = Math.round(splitX + (houseX - splitX) * 0.5);
+  const bedHW   = Math.round(DOG_BED_SPR[0].length  * BED_SC  / 2);
+  const bowlW   = DOG_BOWL_SPR[0].length * BOWL_SC;
+  dogBed       = { x: porchCx - bedHW, y: h * 0.55 };
+  dogFoodBowl  = { x: porchCx - bowlW - 5, y: h * 0.8 };
+  dogWaterBowl = { x: porchCx + 5,         y: h * 0.8 };
 }
 
 function dogPoolFloorY() {
@@ -577,8 +590,7 @@ function drawDogBackground() {
 
   // ── Yard scenery ────────────────────────────────────────────────────
   // Back of the house seen from above — tiled roof, ridge cap and eave gutter
-  const houseW = Math.min(74, Math.round((W - splitX) * 0.5));
-  const houseX = W - houseW;
+  const { houseW, houseX } = _dogLayout();
   ctx.fillStyle = '#a8542f';                               // terracotta roof base
   ctx.fillRect(houseX, 0, houseW, H);
   const tileH = 12, tileW = 14;                            // staggered tile courses
