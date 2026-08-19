@@ -110,6 +110,7 @@
     .scritch-fab:hover { transform: translateY(-3px) scale(1.07); }
     .scritch-fab:hover .ss-up { opacity: 0; }
     .scritch-fab:hover .ss-over { opacity: 1; }
+    @media (max-width: 900px) { .scritch-fab { bottom: 16px; } }
 
     /* Walt Viviers mark — bottom-right, shows during gameplay (sits below the title screen) */
     .game-mark {
@@ -149,7 +150,6 @@
     /* WALT logo — same top-left position as the main site header */
     .walt-logo {
       position: fixed; top: 32px; left: 48px; z-index: 450; display: block; line-height: 0;
-      filter: drop-shadow(0 0 2px rgba(0,0,0,0.7)) drop-shadow(0 1px 4px rgba(0,0,0,0.5));
     }
     .walt-logo img { height: 36px; width: auto; display: block; }
     @media (max-width: 900px), (orientation: portrait) {
@@ -177,7 +177,7 @@
     <h2>How to Play</h2>
     <ul>
       <li>Pick a mode from the start screen or menu</li>
-      <li>Doggo: tap to walk · hold to scritch (hold longer for tricks!) · tap ball or stick to throw · double-tap to dig · puppies appear after a while and grow up</li>
+      <li>Doggo: tap to walk · tap grass to dig · tap dog to scritch · tap ball or stick to throw · puppies appear after a while and grow up</li>
       <li>Ratty: tap rat to scritch · tap ground to place meal worms · rats breed freely · every 10th is a dumbo · every 16th is a naked rat · every 15th worm triggers a raid cat · rats use the exercise wheel</li>
       <li>Cat Lady: hold to purr and wake · tap ground for laser · tap Catnip button for zoomies · tap wool ball to roll it</li>
       <li>Happiness bar top-right tracks pet wellbeing — scritches, food, and treats raise it</li>
@@ -463,11 +463,23 @@ const BED_SC = 4, BOWL_SC = 3;
 let dogBed = null, dogFoodBowl = null, dogWaterBowl = null;
 const poolRings = [];   // expanding rings, like dragonflies touching the water
 
+// Shared porch geometry — narrower house on small screens so it doesn't dominate
+function _dogLayout() {
+  const W = canvas.width;
+  const splitX = Math.round(W * 0.65);
+  const houseW = Math.min(W < 600 ? 44 : 74, Math.round((W - splitX) * (W < 600 ? 0.32 : 0.5)));
+  return { splitX, houseW, houseX: W - houseW };
+}
+
 function placeDogFurniture() {
-  const w = canvas.width, h = canvas.height;
-  dogBed = { x: w * 0.825 - DOG_BED_SPR[0].length * BED_SC / 2, y: h * 0.55 };
-  dogFoodBowl = { x: w * 0.85 - DOG_BOWL_SPR[0].length * BOWL_SC / 2, y: h * 0.8 };
-  dogWaterBowl = { x: w * 0.85 - DOG_BOWL_SPR[0].length * BOWL_SC / 2 + DOG_BOWL_SPR[0].length * BOWL_SC + 10, y: h * 0.8 };
+  const { splitX, houseX } = _dogLayout();
+  const h = canvas.height;
+  const porchCx = Math.round(splitX + (houseX - splitX) * 0.5);
+  const bedHW   = Math.round(DOG_BED_SPR[0].length  * BED_SC  / 2);
+  const bowlW   = DOG_BOWL_SPR[0].length * BOWL_SC;
+  dogBed       = { x: porchCx - bedHW, y: h * 0.55 };
+  dogFoodBowl  = { x: porchCx - bowlW - 5, y: h * 0.8 };
+  dogWaterBowl = { x: porchCx + 5,         y: h * 0.8 };
 }
 
 function dogPoolFloorY() {
@@ -577,8 +589,7 @@ function drawDogBackground() {
 
   // ── Yard scenery ────────────────────────────────────────────────────
   // Back of the house seen from above — tiled roof, ridge cap and eave gutter
-  const houseW = Math.min(74, Math.round((W - splitX) * 0.5));
-  const houseX = W - houseW;
+  const { houseW, houseX } = _dogLayout();
   ctx.fillStyle = '#a8542f';                               // terracotta roof base
   ctx.fillRect(houseX, 0, houseW, H);
   const tileH = 12, tileW = 14;                            // staggered tile courses
@@ -2433,6 +2444,19 @@ function updateCatnipBtn() {
   document.getElementById('catnip-btn').style.display = gameMode === 'cat' ? 'block' : 'none';
 }
 
+function updateFab() {
+  const fab = document.querySelector('.scritch-fab');
+  if (!fab) return;
+  const icons = {
+    dog: ['/apps/scritch-scratch/ss-up.webp',       '/apps/scritch-scratch/ss-over.webp'],
+    cat: ['/apps/scritch-scratch/ss-cat-up.png',    '/apps/scritch-scratch/ss-cat-over.png'],
+    rat: ['/apps/scritch-scratch/ss-rat-up.png',    '/apps/scritch-scratch/ss-rat-over.png'],
+  };
+  const [up, over] = icons[gameMode] || icons.dog;
+  fab.querySelector('.ss-up').src   = up;
+  fab.querySelector('.ss-over').src = over;
+}
+
 function enterRatMode() {
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'rat';
@@ -2453,6 +2477,7 @@ function enterRatMode() {
   }
   sndRatAmbient();
   updateCatnipBtn();
+  updateFab();
   persistSave();
 }
 
@@ -2474,6 +2499,7 @@ function enterDogMode() {
   if (!restoreDogState()) { dog.init(); }
   sndDogAmbient();
   updateCatnipBtn();
+  updateFab();
   persistSave();
 }
 
@@ -2491,12 +2517,19 @@ function enterCatMode() {
   woolBall = { x: canvas.width * 0.6, y: woolRailY(), vx: 0, vy: 0 };
   placeCatFurniture();
   if (!restoreCatState()) {
-    // Main cat — always at index 0, never leaves
-    cats.push(new Cat({ isMain: true, color: CAT_COLORS[0],
-      x: canvas.width/2 - CPW/2, y: canvas.height/2 - CPH/2, birthCooldown: 0 }));
+    // Three starting cats — cream/golden, brown tabby, calico orange
+    const _startCols = ['#f0c878', '#9b7040', '#d06020'];
+    const _startXs   = [0.25, 0.48, 0.71];
+    _startCols.forEach((col, i) => {
+      cats.push(new Cat({ isMain: i === 0, color: col,
+        x: canvas.width * _startXs[i] - CPW / 2,
+        y: canvas.height * 0.55 - CPH / 2,
+        birthCooldown: i === 0 ? 0 : 60 * 30 }));
+    });
   }
   sndCatAmbient();
   updateCatnipBtn();
+  updateFab();
   persistSave();
 }
 
@@ -2556,7 +2589,6 @@ let cursorX = -200, cursorY = -200, cursorVisible = false;
 let lastTapTime = 0, lastTapX = 0, lastTapY = 0;
 
 canvas.addEventListener('pointerdown', e => {
-  if (e.button === 2) return; // right-click is handled by the contextmenu → menu
   e.preventDefault();
   // Close menu if open
   const drop = document.getElementById('menu-drop');
@@ -2683,18 +2715,6 @@ canvas.addEventListener('pointerdown', e => {
     return;
   }
 
-  // Double-tap anywhere in dog mode → dig immediately
-  const now = Date.now();
-  const doubleTap = now - lastTapTime < 300 && Math.hypot(px - lastTapX, py - lastTapY) < 60;
-  lastTapTime = now; lastTapX = px; lastTapY = py;
-  if (doubleTap && gameMode === 'dog') {
-    if (px < Math.round(canvas.width * 0.65)) {
-      dog.walkTo(px, py);
-      dog.digPending = true;
-    }
-    return;
-  }
-
   if (dog.hitTest(px, py)) {
     scritching = true; dog.pet();
     for (let i = 0; i < 4; i++) hearts.push(new Heart(dog.cx, dog.y));
@@ -2745,6 +2765,7 @@ canvas.addEventListener('pointerdown', e => {
   }
 
   dog.walkTo(px, py);
+  if (px < Math.round(canvas.width * 0.65)) dog.digPending = true;
 }, { passive: false });
 
 canvas.addEventListener('pointermove', e => {
@@ -3261,27 +3282,12 @@ function loop() {
     }
     for (const p of puppies) { p.update(); p.draw(); }
 
-    // Hold-scritch dog trick
-    if (scritching && !scritchCat) {
-      if (++_scritchHoldTicks === 90) {
-        dog.state = 'fidget'; dog.fidgetTimer = 60 * 3;
-        dog.fidgetType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
-        dog.frame = 0; dog.tick = 0;
-        const trickNames = { sit: 'Sit!', beg: 'Beg!', roll: 'Roll over!' };
-        labels.push(new Label(trickNames[dog.fidgetType], dog.cx, Math.max(20, dog.y - 8)));
-        unlockAchievement('dog_trick', 'Good dog!');
-        _scritchHoldTicks = 0;
-      }
-    } else {
-      _scritchHoldTicks = 0;
-    }
-
     if (Math.random() < 0.0015) sndBird();
 
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
       ctx.font = '11px monospace'; ctx.textAlign = 'center';
-      ctx.fillText('tap to walk · hold to scritch · tap items to throw · double-tap to dig',
+      ctx.fillText('tap to walk · tap grass to dig · tap dog to scritch · tap items to throw',
         canvas.width / 2, canvas.height - 18);
       ctx.restore();
     }
@@ -3448,13 +3454,6 @@ menuBtn.addEventListener('click', e => {
   menuBtn.classList.toggle('open', open);
 });
 
-// Right-click anywhere opens (toggles) the menu instead of the browser context menu
-window.addEventListener('contextmenu', e => {
-  e.preventDefault();
-  const open = menuDrop.classList.toggle('open');
-  menuBtn.classList.toggle('open', open);
-});
-
 document.addEventListener('click', e => {
   if (!menuDrop.contains(e.target) && e.target !== menuBtn) {
     menuDrop.classList.remove('open');
@@ -3561,11 +3560,6 @@ document.getElementById('catnip-btn').addEventListener('click', () => {
   sndLaser();
 });
 
-// Right-click anywhere returns to the play screen (title / mode picker)
-document.addEventListener('contextmenu', e => {
-  e.preventDefault();
-  window.location.href = 'https://waltviviers.com/apps/scritch-scratch/play/';
-});
 </script>
 <a href="https://waltviviers.com/" class="walt-logo" aria-label="Walt Viviers — home">
   <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
