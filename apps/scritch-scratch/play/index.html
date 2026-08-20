@@ -136,16 +136,18 @@
     .popup .popup-err { color: #b0401f; font-size: 10px; margin: 4px 0 8px; }
     .popup .popup-success { color: #4f7a4a; font-size: 11px; line-height: 1.6; }
 
-    /* Catnip button (cat mode) — cream pill, sits above the corner mark */
+    /* Catnip button (cat mode) — icon above the FAB, bottom-left */
     #catnip-btn {
-      display: none; position: fixed; right: 18px; bottom: 60px; z-index: 210;
-      background: rgba(255,251,244,0.94); border: 2px solid rgba(90,60,40,0.22);
-      border-radius: 24px; color: #5a3a28;
-      font-family: monospace; font-weight: 700; font-size: 11px; letter-spacing: 0.04em;
-      padding: 9px 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-      transition: transform 0.15s ease, background 0.15s;
+      display: none; position: fixed; left: 16px; bottom: 172px; z-index: 260;
+      width: 66px; height: 66px; padding: 0; background: none; border: none; cursor: pointer;
+      transition: transform 0.18s ease;
     }
-    #catnip-btn:hover { background: #fff; transform: translateY(-2px); }
+    #catnip-btn:hover, #catnip-btn:active { transform: translateY(-3px) scale(1.07); }
+    #catnip-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
+    #catnip-btn .cn-over { opacity: 0; }
+    #catnip-btn:hover .cn-up, #catnip-btn:active .cn-up { opacity: 0; }
+    #catnip-btn:hover .cn-over, #catnip-btn:active .cn-over { opacity: 1; }
+    @media (max-width: 900px) { #catnip-btn { bottom: 90px; } }
 
     /* WALT logo — same top-left position as the main site header */
     .walt-logo {
@@ -209,7 +211,10 @@
     <button class="popup-close" id="name-confirm">Done</button>
   </div>
 </div>
-<button id="catnip-btn">Catnip</button>
+<button id="catnip-btn" aria-label="Catnip">
+  <img class="cn-up"   src="/apps/scritch-scratch/catnip_up.png"   alt="Catnip" width="66" height="66" />
+  <img class="cn-over" src="/apps/scritch-scratch/catnip_over.png" alt=""        aria-hidden="true" width="66" height="66" />
+</button>
 <div id="mode-pick">
   <h1>Scritch Scratch</h1>
   <button class="mode-btn-pick" data-mode="dog">Doggo Mode</button>
@@ -587,7 +592,14 @@ function drawDogBackground() {
   ctx.fillStyle = '#3a7318';
   ctx.fillRect(splitX - 4, 0, 4, H);
 
-  // ── Yard scenery ────────────────────────────────────────────────────
+}
+
+function drawDogForeground() {
+  const W = canvas.width, H = canvas.height;
+  const splitX = Math.round(W * 0.65);
+  const poolFloor = dogPoolFloorY();
+
+  // ── Yard scenery (drawn after animals so they appear behind these) ───
   // Back of the house seen from above — tiled roof, ridge cap and eave gutter
   const { houseW, houseX } = _dogLayout();
   ctx.fillStyle = '#a8542f';                               // terracotta roof base
@@ -776,8 +788,10 @@ let catFoodBowl = null, catWaterBowl = null;
 
 function placeCatFurniture() {
   const w = canvas.width, h = canvas.height;
-  catFoodBowl  = { x: w * 0.10, y: h * 0.82 };
-  catWaterBowl = { x: w * 0.10 + DOG_BOWL_SPR[0].length * BOWL_SC + 12, y: h * 0.82 };
+  const bowlW = DOG_BOWL_SPR[0].length * BOWL_SC;
+  // Centre bowls in the lower floor area — kept away from the FAB (bottom-left corner)
+  catFoodBowl  = { x: Math.round(w * 0.40), y: Math.round(h * 0.82) };
+  catWaterBowl = { x: Math.round(w * 0.40) + bowlW + 12, y: Math.round(h * 0.82) };
 }
 
 function drawCatBackground() {
@@ -2058,7 +2072,7 @@ class Puppy {
   draw() {
     const spr = this.state === 'happy' ? HAPPY[this.frame] : this.state === 'walking' ? WALK[this.frame] : IDLE;
     const x = Math.round(this.x), y = Math.round(this.y), vs = this.vs;
-    const col = this.scritchTimer > 0 ? '#ffffcc' : this.color;
+    const col = this.color;
     for (let r = 0; r < DH; r++)
       for (let c = 0; c < DW; c++)
         if (spr[r][c]) {
@@ -2863,6 +2877,21 @@ function sndDogAmbient() { sndStopAmbient(); _startAmb(180, 0.7, 'lowpass', 0.05
 function sndCatAmbient() { sndStopAmbient(); _startAmb(60, 0.4, 'lowpass', 0.035); }
 function sndRatAmbient() { sndStopAmbient(); _startAmb(80, 0.3, 'lowpass', 0.025); }
 
+function sndPant() {
+  if (!_cool('pant', 28)) return;
+  const ac = _getAC(); const t = ac.currentTime;
+  const buf = _noise(ac, 0.16);
+  const src = ac.createBufferSource(); src.buffer = buf;
+  const filt = ac.createBiquadFilter(); filt.type = 'bandpass';
+  filt.frequency.value = 480; filt.Q.value = 1.0;
+  const g = ac.createGain();
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(0.18, t + 0.05);
+  g.gain.exponentialRampToValueAtTime(0.001, t + 0.16);
+  src.connect(filt); filt.connect(g); g.connect(_masterGain);
+  src.start(t); src.stop(t + 0.16);
+}
+
 function sndBark(small) {
   if (!_cool('bark', 18)) return;
   if (!small) triggerShake(2, 5);
@@ -3281,6 +3310,10 @@ function loop() {
       }
     }
     for (const p of puppies) { p.update(); p.draw(); }
+
+    drawDogForeground();
+
+    if (scritching && !scritchCat && gameTick % 45 === 0) sndPant();
 
     if (Math.random() < 0.0015) sndBird();
 
