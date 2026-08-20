@@ -232,12 +232,12 @@
   <img class="cn-over" src="/apps/scritch-scratch/catnip_over.png" alt=""        aria-hidden="true" width="66" height="66" />
 </button>
 <button id="trick-btn" aria-label="Perform Trick">
-  <img class="tb-up"   src="/apps/scritch-scratch/trick_up.png"   alt="Perform Trick" width="66" height="66" />
-  <img class="tb-over" src="/apps/scritch-scratch/trick_over.png" alt=""              aria-hidden="true" width="66" height="66" />
+  <img class="tb-up"   src="/apps/scritch-scratch/dogtrick_up.png"   alt="Perform Trick" width="66" height="66" />
+  <img class="tb-over" src="/apps/scritch-scratch/dogtrick_over.png" alt=""              aria-hidden="true" width="66" height="66" />
 </button>
 <button id="boggle-btn" aria-label="Boggle">
-  <img class="tb-up"   src="/apps/scritch-scratch/boggle_up.png"   alt="Boggle" width="66" height="66" />
-  <img class="tb-over" src="/apps/scritch-scratch/boggle_over.png" alt=""       aria-hidden="true" width="66" height="66" />
+  <img class="tb-up"   src="/apps/scritch-scratch/rat_up.png"   alt="Boggle" width="66" height="66" />
+  <img class="tb-over" src="/apps/scritch-scratch/rat_over.gif" alt=""       aria-hidden="true" width="66" height="66" />
 </button>
 <div id="mode-pick">
   <h1>Scritch Scratch</h1>
@@ -2531,7 +2531,7 @@ const dog = {
 
 // ─── Mode transitions ─────────────────────────────────────────────────────────
 function updateCatnipBtn() {
-  document.getElementById('catnip-btn').style.display = 'none'; // hidden until catnip images are committed
+  document.getElementById('catnip-btn').style.display = gameMode === 'cat' ? 'block' : 'none';
   document.getElementById('trick-btn').style.display  = gameMode === 'dog' ? '' : 'none';
   document.getElementById('boggle-btn').style.display = gameMode === 'rat' ? '' : 'none';
 }
