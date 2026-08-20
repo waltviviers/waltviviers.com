@@ -2532,8 +2532,8 @@ const dog = {
 // ─── Mode transitions ─────────────────────────────────────────────────────────
 function updateCatnipBtn() {
   document.getElementById('catnip-btn').style.display = gameMode === 'cat' ? 'block' : 'none';
-  document.getElementById('trick-btn').style.display  = gameMode === 'dog' ? '' : 'none';
-  document.getElementById('boggle-btn').style.display = gameMode === 'rat' ? '' : 'none';
+  document.getElementById('trick-btn').style.display  = gameMode === 'dog' ? 'block' : 'none';
+  document.getElementById('boggle-btn').style.display = gameMode === 'rat' ? 'block' : 'none';
 }
 
 function updateFab() {
