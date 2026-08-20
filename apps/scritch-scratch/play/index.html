@@ -1303,7 +1303,7 @@ const STRAW_W = STRAW_SPR[0].length * STRAW_SC;
 const STRAW_H = STRAW_SPR.length * STRAW_SC;
 const _STRAW_COLORS = ['','#e03030','#a01818','#fff070','#28a018','#186010'];
 function drawBigStrawberry() {
-  if (!bigStrawberry || bigStrawberry.eaten) return;
+  if (!bigStrawberry || bigStrawberry.bites <= 0) return;
   const x = Math.round(bigStrawberry.x), y = Math.round(bigStrawberry.y);
   const bob = Math.round(Math.sin(gameTick * 0.04) * 2);
   for (let r = 0; r < STRAW_SPR.length; r++)
@@ -1411,11 +1411,11 @@ class Rat {
 
     // Rat mode: seek big strawberry (priority over worms)
     let seekingCheese = false;
-    if (gameMode === 'rat' && bigStrawberry && !bigStrawberry.eaten) {
+    if (gameMode === 'rat' && bigStrawberry && bigStrawberry.bites > 0) {
       const sx = bigStrawberry.x + STRAW_W / 2, sy = bigStrawberry.y + STRAW_H / 2;
       const sd = Math.hypot(sx - (this.x + RAT_W / 2), sy - (this.y + RAT_H / 2));
       if (sd < 12) {
-        sndCrunch(); bigStrawberry.eaten = true;
+        sndCrunch(); bigStrawberry.bites--;
         this.scritch(); addHappiness(12);
         labels.push(new Label('Yum!!!', this.x + RAT_W / 2, Math.max(20, this.y - 6)));
       } else {
@@ -3409,7 +3409,7 @@ function loop() {
       if (cheeses[i].eaten) cheeses.splice(i, 1);
       else drawCheeseAt(cheeses[i].x, cheeses[i].y);
     }
-    if (bigStrawberry && bigStrawberry.eaten) bigStrawberry = null;
+    if (bigStrawberry && bigStrawberry.bites <= 0) bigStrawberry = null;
     drawBigStrawberry();
 
     for (let i = rats.length - 1; i >= 0; i--) {
@@ -3667,17 +3667,21 @@ nameInput.addEventListener('keydown', e => {
 document.getElementById('trick-btn').addEventListener('click', () => {
   if (gameMode !== 'dog') return;
   if (['fidget','digging'].includes(dog.state)) return;
-  dog.state = 'fidget'; dog.fidgetTimer = 60 * 3;
-  dog.fidgetType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
-  dog.frame = 0; dog.tick = 0;
   sndBark();
+  const trickType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
+  setTimeout(() => {
+    if (gameMode !== 'dog') return;
+    dog.state = 'fidget'; dog.fidgetTimer = 60 * 3;
+    dog.fidgetType = trickType;
+    dog.frame = 0; dog.tick = 0;
+  }, 600);
 });
 
 // ─── Boggle button (rat mode) ─────────────────────────────────────────────────
 document.getElementById('boggle-btn').addEventListener('click', () => {
   if (gameMode !== 'rat') return;
   // Drop a big strawberry in the centre of the cage
-  bigStrawberry = { x: canvas.width / 2 - STRAW_W / 2, y: canvas.height * 0.55 - STRAW_H / 2, eaten: false };
+  bigStrawberry = { x: canvas.width / 2 - STRAW_W / 2, y: canvas.height * 0.55 - STRAW_H / 2, bites: Math.max(3, rats.length) };
   // All live rats boggle for ~2.5 s
   for (const rat of rats) { rat.boggleTimer = 150; rat.vx = 0; rat.vy = 0; }
   for (const baby of babies) { /* babies are too small to boggle formally */ }
