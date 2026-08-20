@@ -140,7 +140,7 @@
     #catnip-btn {
       display: none; position: fixed; left: 16px; bottom: 172px; z-index: 260;
       width: 66px; height: 66px; padding: 0; background: none; border: none; cursor: pointer;
-      transition: transform 0.18s ease;
+      transition: transform 0.18s ease; overflow: hidden;
     }
     #catnip-btn:hover, #catnip-btn:active { transform: translateY(-3px) scale(1.07); }
     #catnip-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
@@ -148,6 +148,22 @@
     #catnip-btn:hover .cn-up, #catnip-btn:active .cn-up { opacity: 0; }
     #catnip-btn:hover .cn-over, #catnip-btn:active .cn-over { opacity: 1; }
     @media (max-width: 900px) { #catnip-btn { bottom: 90px; } }
+
+    /* Mode action icon buttons — Perform Trick (dog) and Boggle (rat) */
+    #trick-btn, #boggle-btn {
+      display: none; position: fixed; left: 16px; bottom: 172px; z-index: 260;
+      width: 66px; height: 66px; padding: 0; background: none; border: none; cursor: pointer;
+      transition: transform 0.18s ease;
+    }
+    #trick-btn:hover, #trick-btn:active,
+    #boggle-btn:hover, #boggle-btn:active { transform: translateY(-3px) scale(1.07); }
+    #trick-btn img, #boggle-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
+    #trick-btn .tb-over, #boggle-btn .tb-over { opacity: 0; }
+    #trick-btn:hover .tb-up, #trick-btn:active .tb-up,
+    #boggle-btn:hover .tb-up, #boggle-btn:active .tb-up { opacity: 0; }
+    #trick-btn:hover .tb-over, #trick-btn:active .tb-over,
+    #boggle-btn:hover .tb-over, #boggle-btn:active .tb-over { opacity: 1; }
+    @media (max-width: 900px) { #trick-btn, #boggle-btn { bottom: 90px; } }
 
     /* WALT logo — same top-left position as the main site header */
     .walt-logo {
@@ -179,8 +195,8 @@
     <h2>How to Play</h2>
     <ul>
       <li>Pick a mode from the start screen or menu</li>
-      <li>Doggo: tap to walk · tap grass to dig · tap dog to scritch · tap ball or stick to throw · puppies appear after a while and grow up</li>
-      <li>Ratty: tap rat to scritch · tap ground to place meal worms · rats breed freely · every 10th is a dumbo · every 16th is a naked rat · every 15th worm triggers a raid cat · rats use the exercise wheel</li>
+      <li>Doggo: tap to walk · tap grass to dig · tap dog to scritch · tap ball or stick to throw · Perform Trick button for tricks · puppies appear after a while and grow up</li>
+      <li>Ratty: tap rat to scritch · tap ground to place meal worms · Boggle button drops a strawberry and the rats go wild · rats breed freely · every 10th is a dumbo · every 16th is a naked rat · every 15th worm triggers a raid cat · rats use the exercise wheel</li>
       <li>Cat Lady: hold to purr and wake · tap ground for laser · tap Catnip button for zoomies · tap wool ball to roll it</li>
       <li>Happiness bar top-right tracks pet wellbeing — scritches, food, and treats raise it</li>
       <li>Name your pet via the menu · unlock achievements by playing</li>
@@ -214,6 +230,14 @@
 <button id="catnip-btn" aria-label="Catnip">
   <img class="cn-up"   src="/apps/scritch-scratch/catnip_up.png"   alt="Catnip" width="66" height="66" />
   <img class="cn-over" src="/apps/scritch-scratch/catnip_over.png" alt=""        aria-hidden="true" width="66" height="66" />
+</button>
+<button id="trick-btn" aria-label="Perform Trick">
+  <img class="tb-up"   src="/apps/scritch-scratch/dogtrick_up.png"   alt="Perform Trick" width="66" height="66" />
+  <img class="tb-over" src="/apps/scritch-scratch/dogtrick_over.png" alt=""              aria-hidden="true" width="66" height="66" />
+</button>
+<button id="boggle-btn" aria-label="Boggle">
+  <img class="tb-up"   src="/apps/scritch-scratch/rat_up.png"   alt="Boggle" width="66" height="66" />
+  <img class="tb-over" src="/apps/scritch-scratch/rat_over.gif" alt=""       aria-hidden="true" width="66" height="66" />
 </button>
 <div id="mode-pick">
   <h1>Scritch Scratch</h1>
@@ -1258,6 +1282,39 @@ let scritchCat = null;
 
 // ─── Meal Worm (Ratty Mode) ─────────────────────────────────────────────────────
 const cheeses = [];
+
+// ─── Big strawberry (boggle treat) ───────────────────────────────────────────
+let bigStrawberry = null; // { x, y, eaten }
+// 0=transparent 1=red 2=dark-red 3=seed-yellow 4=green 5=dark-green
+const STRAW_SPR = [
+  [0,0,4,5,4,0,0,0],
+  [0,4,5,4,5,4,0,0],
+  [4,5,4,0,4,5,4,0],
+  [0,1,1,1,1,1,1,0],
+  [1,1,3,1,1,3,1,1],
+  [1,1,1,1,1,1,1,1],
+  [1,3,1,2,1,1,3,1],
+  [0,1,1,1,2,1,1,0],
+  [0,0,1,1,1,1,0,0],
+  [0,0,0,1,1,0,0,0],
+];
+const STRAW_SC = 4;
+const STRAW_W = STRAW_SPR[0].length * STRAW_SC;
+const STRAW_H = STRAW_SPR.length * STRAW_SC;
+const _STRAW_COLORS = ['','#e03030','#a01818','#fff070','#28a018','#186010'];
+function drawBigStrawberry() {
+  if (!bigStrawberry || bigStrawberry.eaten) return;
+  const x = Math.round(bigStrawberry.x), y = Math.round(bigStrawberry.y);
+  const bob = Math.round(Math.sin(gameTick * 0.04) * 2);
+  for (let r = 0; r < STRAW_SPR.length; r++)
+    for (let c = 0; c < STRAW_SPR[0].length; c++) {
+      const v = STRAW_SPR[r][c];
+      if (!v) continue;
+      ctx.fillStyle = _STRAW_COLORS[v];
+      ctx.fillRect(x + c * STRAW_SC, y + r * STRAW_SC + bob, STRAW_SC, STRAW_SC);
+    }
+}
+
 // 1 = worm body, 2 = segment divider
 const CHEESE_SPR = [
   [0,1,2,1,1,2,1,1,2,1,0,0],
@@ -1294,6 +1351,7 @@ class Rat {
     this.tick = 0; this.frame = 0;
     this.dirTimer = 90 + Math.floor(Math.random() * 150);
     this.scritchTimer = 0;
+    this.boggleTimer = 0;
     this.fleeing = false;
     this.dead = false;
     // Rat mode
@@ -1345,11 +1403,28 @@ class Rat {
       return;
     }
 
+    // Boggle: freeze in place, vibrate
+    if (this.boggleTimer > 0) { --this.boggleTimer; return; }
+
     if (this.scritchTimer > 0) --this.scritchTimer;
     if (this.matingCooldown > 0) --this.matingCooldown;
 
-    // Rat mode: seek cheese
+    // Rat mode: seek big strawberry (priority over worms)
     let seekingCheese = false;
+    if (gameMode === 'rat' && bigStrawberry && !bigStrawberry.eaten) {
+      const sx = bigStrawberry.x + STRAW_W / 2, sy = bigStrawberry.y + STRAW_H / 2;
+      const sd = Math.hypot(sx - (this.x + RAT_W / 2), sy - (this.y + RAT_H / 2));
+      if (sd < 12) {
+        sndCrunch(); bigStrawberry.eaten = true;
+        this.scritch(); addHappiness(12);
+        labels.push(new Label('Yum!!!', this.x + RAT_W / 2, Math.max(20, this.y - 6)));
+      } else {
+        const dx = sx - (this.x + RAT_W / 2), dy = sy - (this.y + RAT_H / 2);
+        const d = Math.hypot(dx, dy);
+        this.vx = dx / d * 2.0; this.vy = dy / d * 0.8; this.right = this.vx > 0;
+        seekingCheese = true;
+      }
+    }
     if (gameMode === 'rat' && cheeses.length > 0) {
       let nearest = null, nearestDist = Infinity;
       for (const ch of cheeses) {
@@ -1523,7 +1598,8 @@ class Rat {
     if (this.dead) return;
     const sleeping = this.sleepTimer > 0;
     const spr = sleeping ? RAT_SLEEP_SPR : RAT_FRAMES[this.frame];
-    const x = Math.round(this.x), y = Math.round(this.y);
+    const shimmy = this.boggleTimer > 0 ? (gameTick % 2 === 0 ? 1 : -1) : 0;
+    const x = Math.round(this.x) + shimmy, y = Math.round(this.y);
     const bodyColor = this.scritchTimer > 0 ? '#ffbbcc' : this.bodyColor;
     const activePatch = this.scritchTimer > 0 ? '#ffaacc' : this.patchColor;
     if (!sleeping) {
@@ -2456,6 +2532,8 @@ const dog = {
 // ─── Mode transitions ─────────────────────────────────────────────────────────
 function updateCatnipBtn() {
   document.getElementById('catnip-btn').style.display = gameMode === 'cat' ? 'block' : 'none';
+  document.getElementById('trick-btn').style.display  = gameMode === 'dog' ? '' : 'none';
+  document.getElementById('boggle-btn').style.display = gameMode === 'rat' ? '' : 'none';
 }
 
 function updateFab() {
@@ -2482,7 +2560,7 @@ function enterRatMode() {
   hearts.length = 0; dirts.length = 0; labels.length = 0;
   thrownBall = null; marker = null; laserActive = false;
   scritchCat = null; interacted = false;
-  cheeseCount = 0; raidCats.length = 0; seedRespawnTimer = 0;
+  cheeseCount = 0; raidCats.length = 0; seedRespawnTimer = 0; bigStrawberry = null;
   placeRatFurniture();
   if (!restoreRatState()) {
     const cx = canvas.width / 2, cy = canvas.height / 2;
@@ -3331,6 +3409,8 @@ function loop() {
       if (cheeses[i].eaten) cheeses.splice(i, 1);
       else drawCheeseAt(cheeses[i].x, cheeses[i].y);
     }
+    if (bigStrawberry && bigStrawberry.eaten) bigStrawberry = null;
+    drawBigStrawberry();
 
     for (let i = rats.length - 1; i >= 0; i--) {
       rats[i].update();
@@ -3581,6 +3661,28 @@ nameOverlay.addEventListener('click', e => {
 });
 nameInput.addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('name-confirm').click();
+});
+
+// ─── Trick button (dog mode) ──────────────────────────────────────────────────
+document.getElementById('trick-btn').addEventListener('click', () => {
+  if (gameMode !== 'dog') return;
+  if (['fidget','digging'].includes(dog.state)) return;
+  dog.state = 'fidget'; dog.fidgetTimer = 60 * 3;
+  dog.fidgetType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
+  dog.frame = 0; dog.tick = 0;
+  sndBark();
+});
+
+// ─── Boggle button (rat mode) ─────────────────────────────────────────────────
+document.getElementById('boggle-btn').addEventListener('click', () => {
+  if (gameMode !== 'rat') return;
+  // Drop a big strawberry in the centre of the cage
+  bigStrawberry = { x: canvas.width / 2 - STRAW_W / 2, y: canvas.height * 0.55 - STRAW_H / 2, eaten: false };
+  // All live rats boggle for ~2.5 s
+  for (const rat of rats) { rat.boggleTimer = 150; rat.vx = 0; rat.vy = 0; }
+  for (const baby of babies) { /* babies are too small to boggle formally */ }
+  sndSqueak();
+  labels.push(new Label('Boggle!!!', canvas.width / 2, canvas.height * 0.38));
 });
 
 // ─── Catnip button ────────────────────────────────────────────────────────────
