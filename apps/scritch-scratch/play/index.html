@@ -149,20 +149,21 @@
     #catnip-btn:hover .cn-over, #catnip-btn:active .cn-over { opacity: 1; }
     @media (max-width: 900px) { #catnip-btn { bottom: 90px; } }
 
-    /* Mode action pill buttons — Perform Trick (dog) and Boggle (rat) */
-    .mode-action-btn {
+    /* Mode action icon buttons — Perform Trick (dog) and Boggle (rat) */
+    #trick-btn, #boggle-btn {
       display: none; position: fixed; left: 16px; bottom: 172px; z-index: 260;
-      padding: 0 14px; height: 44px; min-width: 130px;
-      background: rgba(255,251,244,0.92); color: #5a3a28;
-      border: 2px solid rgba(90,60,40,0.28); border-radius: 22px;
-      font-family: monospace; font-size: 12px; font-weight: 700; letter-spacing: 0.03em;
-      cursor: pointer; white-space: nowrap;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.18);
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      width: 66px; height: 66px; padding: 0; background: none; border: none; cursor: pointer;
+      transition: transform 0.18s ease;
     }
-    .mode-action-btn:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 5px 14px rgba(0,0,0,0.22); }
-    .mode-action-btn:active { transform: translateY(0); box-shadow: 0 2px 6px rgba(0,0,0,0.15); }
-    @media (max-width: 900px) { .mode-action-btn { bottom: 90px; } }
+    #trick-btn:hover, #trick-btn:active,
+    #boggle-btn:hover, #boggle-btn:active { transform: translateY(-3px) scale(1.07); }
+    #trick-btn img, #boggle-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
+    #trick-btn .tb-over, #boggle-btn .tb-over { opacity: 0; }
+    #trick-btn:hover .tb-up, #trick-btn:active .tb-up,
+    #boggle-btn:hover .tb-up, #boggle-btn:active .tb-up { opacity: 0; }
+    #trick-btn:hover .tb-over, #trick-btn:active .tb-over,
+    #boggle-btn:hover .tb-over, #boggle-btn:active .tb-over { opacity: 1; }
+    @media (max-width: 900px) { #trick-btn, #boggle-btn { bottom: 90px; } }
 
     /* WALT logo — same top-left position as the main site header */
     .walt-logo {
@@ -230,8 +231,14 @@
   <img class="cn-up"   src="/apps/scritch-scratch/catnip_up.png"   alt="Catnip" width="66" height="66" />
   <img class="cn-over" src="/apps/scritch-scratch/catnip_over.png" alt=""        aria-hidden="true" width="66" height="66" />
 </button>
-<button id="trick-btn"  class="mode-action-btn" aria-label="Perform Trick">Perform Trick</button>
-<button id="boggle-btn" class="mode-action-btn" aria-label="Boggle">Boggle!</button>
+<button id="trick-btn" aria-label="Perform Trick">
+  <img class="tb-up"   src="/apps/scritch-scratch/trick_up.png"   alt="Perform Trick" width="66" height="66" />
+  <img class="tb-over" src="/apps/scritch-scratch/trick_over.png" alt=""              aria-hidden="true" width="66" height="66" />
+</button>
+<button id="boggle-btn" aria-label="Boggle">
+  <img class="tb-up"   src="/apps/scritch-scratch/boggle_up.png"   alt="Boggle" width="66" height="66" />
+  <img class="tb-over" src="/apps/scritch-scratch/boggle_over.png" alt=""       aria-hidden="true" width="66" height="66" />
+</button>
 <div id="mode-pick">
   <h1>Scritch Scratch</h1>
   <button class="mode-btn-pick" data-mode="dog">Doggo Mode</button>
