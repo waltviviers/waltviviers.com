@@ -512,8 +512,9 @@
       width: 100%; height: 100%;
       object-fit: cover;
     }
-    /* Top-align the photography hero so people's heads aren't cropped */
-    #photo-feature .pf-hero-img img { object-position: center top; }
+    /* Bias the photography hero crop upward so heads aren't cropped,
+       without the awkward headroom of a hard top-align */
+    #photo-feature .pf-hero-img img { object-position: center 30%; }
     .pf-hero::after {
       content: "";
       position: absolute; inset: 0;
@@ -2604,7 +2605,7 @@
       var ALBUMS = [
         { img: '/images/800/garden.webp', hero: '/images/1600/garden.webp', title: 'Manifesto Wellness Africa — Burn Out to Balance Retreat', cap: 'Manifesto Wellness Africa', url: 'https://photos.app.goo.gl/yZNbUvQbBJcjaW2B6' },
         { img: '/images/800/chantal.webp', hero: '/images/1600/chantal.webp', title: 'Chantal @ Woodlands Spa', cap: 'Chantal @ Woodlands Spa', url: 'https://photos.app.goo.gl/kvpgbiE5KeBqGsv18' },
-        { img: '/images/800/the-farm.webp', hero: '/images/1600/the-farm.webp', title: 'The Farm', cap: 'The Farm', url: 'https://photos.app.goo.gl/GbPyGQkrKDQKqwgd6' },
+        { img: '/images/800/the-farm.webp', hero: '/images/1600/the-farm.webp', pos: '12%', title: 'The Farm', cap: 'The Farm', url: 'https://photos.app.goo.gl/GbPyGQkrKDQKqwgd6' },
         { img: '/images/800/unlimited.webp', hero: '/images/1600/unlimited.webp', title: 'Manifesto Wellness @ Unlimited Events Group', cap: 'Manifesto @ Unlimited Events', url: 'https://photos.app.goo.gl/D4QaKwYNPWjBYhXJ7' },
         { img: '/images/800/one-stop.webp', hero: '/images/1600/one-stop.webp', title: 'One Stop Wellness & Manifesto Wellness @ Woodlands Spa', cap: 'One Stop Wellness @ Woodlands Spa', url: 'https://photos.app.goo.gl/fjpzW417JGBTYsGi9' }
       ];
@@ -2614,6 +2615,7 @@
       if (heroImg) {
         heroImg.src = ALBUMS[0].hero || ALBUMS[0].img;
         heroImg.alt = ALBUMS[0].title;
+        heroImg.style.objectPosition = 'center ' + (ALBUMS[0].pos || '30%');
       }
       // …and show the remaining four albums below (never the one in the header).
       grid.innerHTML = ALBUMS.slice(1, 5).map(function (a) {
