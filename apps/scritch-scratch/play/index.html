@@ -142,12 +142,12 @@
       width: 66px; height: 66px; padding: 0; background: none; border: none; cursor: pointer;
       transition: transform 0.18s ease; overflow: hidden;
     }
-    #catnip-btn:hover, #catnip-btn:active { transform: translateY(-3px) scale(1.07); }
     #catnip-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
     #catnip-btn .cn-over { opacity: 0; }
-    #catnip-btn:hover .cn-up, #catnip-btn:active .cn-up { opacity: 0; }
-    #catnip-btn:hover .cn-over, #catnip-btn:active .cn-over { opacity: 1; }
-    @media (max-width: 900px) { #catnip-btn { bottom: 90px; } }
+    #catnip-btn.pressed { transform: translateY(-3px) scale(1.07); }
+    #catnip-btn.pressed .cn-up { opacity: 0; }
+    #catnip-btn.pressed .cn-over { opacity: 1; }
+    @media (max-width: 900px) { #catnip-btn { bottom: 110px; } }
 
     /* Mode action icon buttons — Perform Trick (dog) and Boggle (rat) */
     #trick-btn, #boggle-btn {
@@ -155,15 +155,12 @@
       width: 66px; height: 66px; padding: 0; background: none; border: none; cursor: pointer;
       transition: transform 0.18s ease;
     }
-    #trick-btn:hover, #trick-btn:active,
-    #boggle-btn:hover, #boggle-btn:active { transform: translateY(-3px) scale(1.07); }
     #trick-btn img, #boggle-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
     #trick-btn .tb-over, #boggle-btn .tb-over { opacity: 0; }
-    #trick-btn:hover .tb-up, #trick-btn:active .tb-up,
-    #boggle-btn:hover .tb-up, #boggle-btn:active .tb-up { opacity: 0; }
-    #trick-btn:hover .tb-over, #trick-btn:active .tb-over,
-    #boggle-btn:hover .tb-over, #boggle-btn:active .tb-over { opacity: 1; }
-    @media (max-width: 900px) { #trick-btn, #boggle-btn { bottom: 90px; } }
+    #trick-btn.pressed, #boggle-btn.pressed { transform: translateY(-3px) scale(1.07); }
+    #trick-btn.pressed .tb-up, #boggle-btn.pressed .tb-up { opacity: 0; }
+    #trick-btn.pressed .tb-over, #boggle-btn.pressed .tb-over { opacity: 1; }
+    @media (max-width: 900px) { #trick-btn, #boggle-btn { bottom: 110px; } }
 
     /* WALT logo — same top-left position as the main site header */
     .walt-logo {
@@ -3837,6 +3834,17 @@ document.getElementById('boggle-btn').addEventListener('click', () => {
   for (const baby of babies) { /* babies are too small to boggle formally */ }
   sndSqueak();
   labels.push(new Label('Boggle!!!', canvas.width / 2, canvas.height * 0.38));
+});
+
+// ─── Icon button press state (reliable on touch) ──────────────────────────────
+['trick-btn', 'boggle-btn', 'catnip-btn'].forEach(id => {
+  const btn = document.getElementById(id);
+  const on  = () => btn.classList.add('pressed');
+  const off = () => btn.classList.remove('pressed');
+  btn.addEventListener('pointerdown', on);
+  btn.addEventListener('pointerup',   off);
+  btn.addEventListener('pointerleave',off);
+  btn.addEventListener('pointercancel',off);
 });
 
 // ─── Catnip button ────────────────────────────────────────────────────────────
