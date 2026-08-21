@@ -3839,11 +3839,12 @@ document.getElementById('boggle-btn').addEventListener('click', () => {
 // ─── Icon button press state (reliable on touch) ──────────────────────────────
 ['trick-btn', 'boggle-btn', 'catnip-btn'].forEach(id => {
   const btn = document.getElementById(id);
-  const on  = () => btn.classList.add('pressed');
-  const off = () => btn.classList.remove('pressed');
-  btn.addEventListener('pointerdown', on);
-  btn.addEventListener('pointerup',   off);
-  btn.addEventListener('pointerleave',off);
+  let pressedTimer = null;
+  const on  = () => { clearTimeout(pressedTimer); btn.classList.add('pressed'); };
+  const off = () => { clearTimeout(pressedTimer); pressedTimer = setTimeout(() => btn.classList.remove('pressed'), 1000); };
+  btn.addEventListener('pointerdown',  on);
+  btn.addEventListener('pointerup',    off);
+  btn.addEventListener('pointerleave', off);
   btn.addEventListener('pointercancel',off);
 });
 
