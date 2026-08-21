@@ -46,10 +46,19 @@
       max-width: 300px; width: 88%; font-family: monospace; color: #5a3a28;
       box-shadow: 0 14px 40px rgba(0,0,0,0.35);
     }
-    .popup h2 { font-size: 13px; color: #5a3a28; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 12px; }
+    .popup h2 { font-size: 13px; color: #5a3a28; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 14px; }
     .popup ul { list-style: none; padding: 0; }
     .popup ul li { font-size: 11px; padding: 3px 0; line-height: 1.6; }
     .popup ul li::before { content: '· '; color: rgba(90,60,40,0.5); }
+    /* How-to-Play mode sections */
+    .htp-mode { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(90,60,40,0.1); }
+    .htp-mode:last-of-type { border-bottom: none; margin-bottom: 4px; }
+    .htp-icon { width: 38px; height: 38px; object-fit: contain; flex-shrink: 0; margin-top: 1px; }
+    .htp-mode-title { font-size: 11px; font-weight: 700; color: #5a3a28; margin-bottom: 4px; letter-spacing: 0.03em; }
+    .htp-tips { list-style: none; padding: 0; margin: 0; }
+    .htp-tips li { font-size: 10px; padding: 1px 0; line-height: 1.6; color: rgba(90,60,40,0.85); }
+    .htp-tips li::before { content: '· '; color: rgba(90,60,40,0.4); }
+    .htp-general { border-top: 1px solid rgba(90,60,40,0.1); padding-top: 10px; margin-bottom: 4px; }
     .popup-close {
       margin-top: 12px; display: block; width: 100%;
       background: rgba(255,251,244,0.82); border: 2px solid rgba(90,60,40,0.18);
@@ -190,15 +199,51 @@
 <div id="htp-overlay" class="overlay">
   <div class="popup">
     <h2>How to Play</h2>
-    <ul>
-      <li>Pick a mode from the start screen or menu</li>
-      <li>Doggo: tap to walk · tap grass to dig · tap dog to scritch · tap ball or stick to throw · Perform Trick button for tricks · puppies appear after a while and grow up</li>
-      <li>Ratty: tap rat to scritch · tap ground to place meal worms · Boggle button drops a strawberry and the rats go wild · rats breed freely · every 10th is a dumbo · every 16th is a naked rat · every 15th worm triggers a raid cat · rats use the exercise wheel</li>
-      <li>Cat Lady: hold to purr and wake · tap ground for laser · tap Catnip button for zoomies · tap wool ball to roll it</li>
-      <li>Happiness bar top-right tracks pet wellbeing — scritches, food, and treats raise it</li>
-      <li>Name your pet via the menu · unlock achievements by playing</li>
-      <li>Day/night in dog mode follows your real clock · visitor animals arrive now and then</li>
-    </ul>
+
+    <div class="htp-mode">
+      <img src="/apps/scritch-scratch/dogtrick_up.png" alt="" class="htp-icon" aria-hidden="true" />
+      <div>
+        <div class="htp-mode-title">Doggo</div>
+        <ul class="htp-tips">
+          <li>Tap to walk · tap grass to dig · tap dog to scritch</li>
+          <li>Tap ball or stick to throw</li>
+          <li>Perform Trick button for tricks</li>
+          <li>Puppies appear and grow up · day/night follows your clock</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="htp-mode">
+      <img src="/apps/scritch-scratch/rat_up.png" alt="" class="htp-icon" aria-hidden="true" />
+      <div>
+        <div class="htp-mode-title">Ratty</div>
+        <ul class="htp-tips">
+          <li>Tap rat to scritch · tap ground for meal worms</li>
+          <li>Boggle button drops a strawberry — rats go wild</li>
+          <li>Rats breed · every 10th is a dumbo · every 16th naked</li>
+          <li>Every 15th worm triggers a raid cat</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="htp-mode">
+      <img src="/apps/scritch-scratch/catnip_up.png" alt="" class="htp-icon" aria-hidden="true" />
+      <div>
+        <div class="htp-mode-title">Cat Lady</div>
+        <ul class="htp-tips">
+          <li>Hold to purr and wake · tap ground for laser</li>
+          <li>Catnip button for zoomies · tap wool ball to roll it</li>
+          <li>Old lady visits at night and opens a can of food</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="htp-general">
+      <ul class="htp-tips">
+        <li>Happiness bar top-right tracks wellbeing</li>
+        <li>Name your pet via the menu · unlock achievements by playing</li>
+      </ul>
+    </div>
     <button class="popup-close popup-cta" id="htp-suggest" type="button">Suggest a Feature</button>
     <button class="popup-close" id="htp-close">Close</button>
   </div>
