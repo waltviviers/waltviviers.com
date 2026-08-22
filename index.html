@@ -554,6 +554,12 @@
     .pf-btn-primary:hover { background: transparent; color: #FAF9F7; }
     .pf-btn-secondary { background: transparent; color: #FAF9F7; border: 1px solid rgba(250,249,247,0.5); }
     .pf-btn-secondary:hover { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+    /* On short mobile screens the bottom-aligned hero content was tucking the
+       eyebrow behind the fixed nav — raise the band and tighten the inner box. */
+    @media (max-width: 900px) {
+      .pf-hero { min-height: clamp(500px, 76vh, 620px); }
+      .pf-hero-inner { padding: 26px 24px; gap: 12px; }
+    }
     /* Fine-art intro band reuses the photography-hero styling (static cover, no parallax) */
     #art-intro { border-top: 1px solid var(--rule); }
     #art-intro .pf-hero-img img { height: 100%; top: 0; }
