@@ -208,7 +208,7 @@
           <li>Tap to walk · tap grass to dig · tap dog to scritch</li>
           <li>Tap ball or stick to throw</li>
           <li>Perform Trick button for tricks</li>
-          <li>Puppies appear and grow up · day/night follows your clock</li>
+          <li>Puppies appear and grow up · day/night cycles every few minutes</li>
         </ul>
       </div>
     </div>
@@ -232,15 +232,15 @@
         <div class="htp-mode-title">Cat Lady</div>
         <ul class="htp-tips">
           <li>Hold to purr and wake · tap ground for laser</li>
-          <li>Catnip button for zoomies · tap wool ball to roll it</li>
-          <li>Old lady visits at night and opens a can of food</li>
+          <li>Catnip button draws cats to roam · tap wool ball to roll it</li>
+          <li>Old lady visits periodically and opens a can of food</li>
         </ul>
       </div>
     </div>
 
     <div class="htp-general">
       <ul class="htp-tips">
-        <li>Happiness bar top-right tracks wellbeing</li>
+        <li>Happiness bar bottom-left tracks wellbeing</li>
         <li>Name your pet via the menu · unlock achievements by playing</li>
       </ul>
     </div>
@@ -3737,7 +3737,7 @@ function loop() {
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
       ctx.font = '11px monospace'; ctx.textAlign = 'center';
-      ctx.fillText('hold cat to purr · tap ground for laser · Catnip button for zoomies',
+      ctx.fillText('hold cat to purr · tap ground for laser · Catnip button to roam',
         canvas.width / 2, canvas.height - 18);
       ctx.restore();
     }
