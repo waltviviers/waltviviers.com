@@ -350,6 +350,11 @@ const ROLL_OVER = [
   [[0,0,0,0,0,0,0,0,1,0],[0,0,0,0,0,0,0,1,1,1],[0,1,1,1,1,1,1,1,1,0],[1,1,1,1,1,1,1,1,0,0],[0,1,1,1,1,1,1,0,0,0],[0,0,1,0,0,0,1,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],
   [[0,0,1,0,0,0,0,1,0,0],[0,0,1,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,0,1,0],[0,1,1,1,1,1,1,1,0,0],[1,1,1,1,1,1,1,1,1,0],[0,0,1,1,1,1,1,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]],
 ];
+// shake — sitting, front paw extended toward player (right side of sprite = front of dog)
+const SHAKE = [
+  [[0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1,1,0],[1,0,0,0,0,0,0,1,0,1],[1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,0,0],[0,0,1,1,1,1,0,0,0,1],[0,0,1,0,0,1,0,0,0,1],[0,0,0,0,0,0,0,0,0,0]],
+  [[0,0,0,0,0,0,0,0,1,1],[0,0,0,0,0,0,0,1,1,0],[1,0,0,0,0,0,0,1,0,1],[1,1,1,1,1,1,1,1,1,0],[0,1,1,1,1,1,1,1,0,0],[0,0,1,1,1,0,0,0,1,1],[0,0,1,0,0,0,0,0,1,0],[0,0,0,0,0,0,0,0,0,0]],
+];
 const DOG_SLEEP = [
   [0,0,0,0,0,0,0,0,1,1],
   [0,0,0,0,0,0,0,1,1,0],
@@ -2548,8 +2553,11 @@ const dog = {
       case 'digging': return DIG[this.frame];
       case 'sleep': return DOG_SLEEP;
       case 'fidget':
-        if (this.fidgetType === 'beg')  return BEG[this.frame];
-        if (this.fidgetType === 'roll') return ROLL_OVER[this.frame];
+        if (this.fidgetType === 'beg')   return BEG[this.frame];
+        if (this.fidgetType === 'roll')  return ROLL_OVER[this.frame];
+        if (this.fidgetType === 'shake') return SHAKE[this.frame];
+        if (this.fidgetType === 'spin')  return WALK[this.frame];
+        if (this.fidgetType === 'jump')  return WALK[this.frame];
         return SIT[this.frame];
       default: return IDLE;
     }
@@ -2561,14 +2569,19 @@ const dog = {
       const ix = this.right ? this.x + PW + 4 : this.x - w - 4;
       drawItem(this.foundItem, ix, this.y + PH - h);
     }
+    const isTrick = this.state === 'fidget';
+    const spinRight = isTrick && this.fidgetType === 'spin'
+      ? (this.frame === 0 ? this.right : !this.right)
+      : this.right;
+    const jumpDy = isTrick && this.fidgetType === 'jump' && this.frame === 0 ? -S * 2 : 0;
     const spr = this.sprite(), x = Math.round(this.x), y = Math.round(this.y);
     for (let r = 0; r < DH; r++)
       for (let c = 0; c < DW; c++)
         if (spr[r][c]) {
-          const dc = this.right ? c : DW - 1 - c;
+          const dc = spinRight ? c : DW - 1 - c;
           const isNose = r === 2 && c === 9;
           ctx.fillStyle = isNose ? '#ff99bb' : this.color;
-          ctx.fillRect(x + dc * S, y + r * S, S, S);
+          ctx.fillRect(x + dc * S, y + r * S + jumpDy, S, S);
         }
   },
 };
@@ -3860,12 +3873,15 @@ document.getElementById('trick-btn').addEventListener('click', () => {
   if (gameMode !== 'dog') return;
   if (['fidget','digging'].includes(dog.state)) return;
   sndBark();
-  const trickType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
+  const tricks = ['beg','roll','shake','spin','jump'];
+  const trickNames = { beg:'Beg!', roll:'Roll over!', shake:'Shake!', spin:'Spin!', jump:'Jump!' };
+  const trickType = tricks[Math.floor(Math.random() * tricks.length)];
   setTimeout(() => {
     if (gameMode !== 'dog') return;
     dog.state = 'fidget'; dog.fidgetTimer = 60 * 3;
     dog.fidgetType = trickType;
     dog.frame = 0; dog.tick = 0;
+    labels.push(new Label(trickNames[trickType], dog.cx, Math.max(20, dog.y - 10)));
   }, 600);
 });
 
