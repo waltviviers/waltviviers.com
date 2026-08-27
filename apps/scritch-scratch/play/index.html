@@ -108,7 +108,7 @@
     .mode-btn-sec:active { transform: translateY(0); }
 
     /* Floating dog button — matches the main site (bottom-left), reloads the game */
-    #menu-btn { display: none; }
+    /* #menu-btn shown in-game */
     .scritch-fab {
       position: fixed; left: 16px; bottom: 90px; z-index: 250;
       width: 66px; height: 66px; display: block;
@@ -429,7 +429,7 @@ function hitTestItem(placed, px, py) {
 }
 
 // ─── Particles ───────────────────────────────────────────────────────────────
-const hearts = [], dirts = [], labels = [];
+const hearts = [], dirts = [], labels = [], ripples = [];
 
 class Heart {
   constructor(x, y) {
@@ -483,6 +483,23 @@ class Label {
     ctx.restore();
   }
   get dead() { return this.life <= 0; }
+}
+
+class Ripple {
+  constructor(x, y) { this.x = x; this.y = y; this.r = 6; this.alpha = 0.7; }
+  update() { this.r += 4; this.alpha -= 0.09; }
+  draw() {
+    if (this.alpha <= 0) return;
+    ctx.save(); ctx.globalAlpha = this.alpha;
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+  }
+  get dead() { return this.alpha <= 0; }
+}
+function tapFeedback(x, y) {
+  ripples.push(new Ripple(x, y));
+  try { if (navigator.vibrate) navigator.vibrate(12); } catch(e) {}
 }
 
 // ─── Cat sprites (all facing RIGHT, head right, tail rear-left) ──────────────
@@ -2614,7 +2631,7 @@ function enterRatMode() {
   rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
   placedItems.length = 0;
-  hearts.length = 0; dirts.length = 0; labels.length = 0;
+  hearts.length = 0; dirts.length = 0; labels.length = 0; ripples.length = 0;
   thrownBall = null; marker = null; laserActive = false;
   scritchCat = null; interacted = false;
   cheeseCount = 0; raidCats.length = 0; seedRespawnTimer = 0; bigStrawberry = null;
@@ -2638,7 +2655,7 @@ function enterDogMode() {
   rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
   placedItems.length = 0;
-  hearts.length = 0; dirts.length = 0; labels.length = 0;
+  hearts.length = 0; dirts.length = 0; labels.length = 0; ripples.length = 0;
   thrownBall = null; marker = null; laserActive = false;
   scritchCat = null; interacted = false;
   itemIdx = 1;
@@ -2898,7 +2915,7 @@ canvas.addEventListener('pointerdown', e => {
     for (const cat of cats) {
       if (!cat.dead && !cat.isVisitor && cat.hitTest(px, py)) {
         scritching = true; scritchCat = cat; cat.scritch();
-        return;
+        tapFeedback(px, py); return;
       }
     }
     // Tap on a cat-rat → cats chase it (wakes sleeping cats)
@@ -2910,7 +2927,7 @@ canvas.addEventListener('pointerdown', e => {
             cat.chaseTarget = r; cat.state = 'chase';
           }
         }
-        return;
+        tapFeedback(px, py); return;
       }
     }
     // Tap fishbowl → fish jumps
@@ -2921,7 +2938,7 @@ canvas.addEventListener('pointerdown', e => {
       if (px >= fbCX - 16 && px <= fbCX + 16 && py >= fbTopY - 6 && py <= fbBotY + 6) {
         fishJumpTick = 60; sndBlub();
         labels.push(new Label('Blub!', fbCX, fbTopY - 12));
-        return;
+        tapFeedback(fbCX, fbBotY); return;
       }
     }
     // Tap wool ball → roll it and send a cat
@@ -2936,7 +2953,7 @@ canvas.addEventListener('pointerdown', e => {
           awake[0].wantWool = true;
           awake[0]._roamTo(woolBall.x + wbw / 2, woolBall.y + wbh / 2);
         }
-        return;
+        tapFeedback(woolBall.x + wbw / 2, woolBall.y + wbh / 2); return;
       }
     }
     // Tap cat bowls → send closest awake cat
@@ -2950,7 +2967,7 @@ canvas.addEventListener('pointerdown', e => {
           cat.furnitureTarget = 'food';
           cat._roamTo(catFoodBowl.x + bw / 2, catFoodBowl.y + bh / 2);
         }
-        return;
+        tapFeedback(catFoodBowl.x + bw / 2, catFoodBowl.y + bh / 2); return;
       }
       if (px >= catWaterBowl.x && px <= catWaterBowl.x + bw && py >= catWaterBowl.y && py <= catWaterBowl.y + bh) {
         const awake = cats.filter(c => !c.dead && !c.isVisitor && c.state !== 'sleep' && c.state !== 'leaving');
@@ -2960,7 +2977,7 @@ canvas.addEventListener('pointerdown', e => {
           cat.furnitureTarget = 'water';
           cat._roamTo(catWaterBowl.x + bw / 2, catWaterBowl.y + bh / 2);
         }
-        return;
+        tapFeedback(catWaterBowl.x + bw / 2, catWaterBowl.y + bh / 2); return;
       }
     }
     // Tap ground = laser pointer (only wakes awake cats, not sleeping ones)
@@ -2975,7 +2992,7 @@ canvas.addEventListener('pointerdown', e => {
 
   if (gameMode === 'rat') {
     for (const rat of rats) {
-      if (!rat.dead && rat.hitTest(px, py)) { rat.scritch(); return; }
+      if (!rat.dead && rat.hitTest(px, py)) { rat.scritch(); tapFeedback(px, py); return; }
     }
     // Tap on rat furniture → send closest rat
     function sendClosestRat(ftName) {
@@ -2988,19 +3005,19 @@ canvas.addEventListener('pointerdown', e => {
     if (ratBottle) {
       const bw = RAT_BOTTLE_SPR[0].length * RAT_BOTTLE_SC, bh = RAT_BOTTLE_SPR.length * RAT_BOTTLE_SC;
       if (px >= ratBottle.x && px <= ratBottle.x + bw && py >= ratBottle.y && py <= ratBottle.y + bh) {
-        sendClosestRat('bottle'); return;
+        sendClosestRat('bottle'); tapFeedback(ratBottle.x + bw / 2, ratBottle.y + bh / 2); return;
       }
     }
     if (ratFoodBowl) {
       const bw = RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, bh = RAT_RBOWL_SPR.length * RAT_BOWL_SC;
       if (px >= ratFoodBowl.x && px <= ratFoodBowl.x + bw && py >= ratFoodBowl.y && py <= ratFoodBowl.y + bh) {
-        sendClosestRat('bowl'); return;
+        sendClosestRat('bowl'); tapFeedback(ratFoodBowl.x + bw / 2, ratFoodBowl.y + bh / 2); return;
       }
     }
     if (ratBed) {
       const bw = RAT_BED_SPR[0].length * RAT_BED_SC, bh = RAT_BED_SPR.length * RAT_BED_SC;
       if (px >= ratBed.x && px <= ratBed.x + bw && py >= ratBed.y && py <= ratBed.y + bh) {
-        sendClosestRat('bed'); return;
+        sendClosestRat('bed'); tapFeedback(ratBed.x + bw / 2, ratBed.y + bh / 2); return;
       }
     }
     cheeses.push({ x: px - CHEESE_W / 2, y: py - CHEESE_H / 2, eaten: false });
@@ -3011,15 +3028,15 @@ canvas.addEventListener('pointerdown', e => {
   if (dog.hitTest(px, py)) {
     scritching = true; dog.pet();
     for (let i = 0; i < 4; i++) hearts.push(new Heart(dog.cx, dog.y));
-    return;
+    tapFeedback(px, py); return;
   }
 
   for (const p of puppies) {
-    if (p.hitTest(px, py)) { p.scritch(); return; }
+    if (p.hitTest(px, py)) { p.scritch(); tapFeedback(px, py); return; }
   }
 
   for (const rat of rats) {
-    if (!rat.dead && rat.hitTest(px, py)) { rat.scritch(); return; }
+    if (!rat.dead && rat.hitTest(px, py)) { rat.scritch(); tapFeedback(px, py); return; }
   }
 
   const bi = placedItems.findIndex(p => hitTestItem(p, px, py));
@@ -3034,7 +3051,7 @@ canvas.addEventListener('pointerdown', e => {
     thrownBall = new BallProjectile(bx, by, throwX, throwY, ball.item);
     sndWhoosh();
     dog.fetch(throwX, throwY);
-    return;
+    tapFeedback(bx, by); return;
   }
 
   if (gameMode === 'dog' && dogBed) {
@@ -3042,18 +3059,18 @@ canvas.addEventListener('pointerdown', e => {
     if (px >= dogBed.x && px <= dogBed.x + bedW && py >= dogBed.y && py <= dogBed.y + bedH) {
       dog.furnitureTarget = 'bed';
       dog._roamTo(dogBed.x + bedW / 2, dogBed.y + bedH / 2);
-      return;
+      tapFeedback(dogBed.x + bedW / 2, dogBed.y + bedH / 2); return;
     }
     const bowlW = DOG_BOWL_SPR[0].length * BOWL_SC, bowlH = DOG_BOWL_SPR.length * BOWL_SC;
     if (px >= dogFoodBowl.x && px <= dogFoodBowl.x + bowlW && py >= dogFoodBowl.y && py <= dogFoodBowl.y + bowlH) {
       dog.furnitureTarget = 'food';
       dog._roamTo(dogFoodBowl.x + bowlW / 2, dogFoodBowl.y + bowlH / 2);
-      return;
+      tapFeedback(dogFoodBowl.x + bowlW / 2, dogFoodBowl.y + bowlH / 2); return;
     }
     if (px >= dogWaterBowl.x && px <= dogWaterBowl.x + bowlW && py >= dogWaterBowl.y && py <= dogWaterBowl.y + bowlH) {
       dog.furnitureTarget = 'water';
       dog._roamTo(dogWaterBowl.x + bowlW / 2, dogWaterBowl.y + bowlH / 2);
-      return;
+      tapFeedback(dogWaterBowl.x + bowlW / 2, dogWaterBowl.y + bowlH / 2); return;
     }
   }
 
@@ -3562,6 +3579,7 @@ function loop() {
     tickParticles(dirts);
     tickParticles(hearts);
     tickParticles(labels);
+    tickParticles(ripples);
 
     if (marker && marker.alpha > 0) {
       ctx.save(); ctx.globalAlpha = marker.alpha; ctx.fillStyle = '#ffffff';
@@ -3650,6 +3668,7 @@ function loop() {
 
     tickParticles(hearts);
     tickParticles(labels);
+    tickParticles(ripples);
 
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
@@ -3730,6 +3749,7 @@ function loop() {
     tickParticles(dirts);
     tickParticles(hearts);
     tickParticles(labels);
+    tickParticles(ripples);
 
     if (scritchCat) sndStartPurr(); else sndStopPurr();
     if (Math.random() < 0.0007) sndClockTick();
