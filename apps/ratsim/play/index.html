@@ -174,9 +174,9 @@ function drawRoom() {
   drawWindow(-250, 90);
   drawDeskLamp(CX + CW + WALL + 60, VH - 72);
 
-  // Wall art + clock above cage
-  drawWallArt(CX + Math.floor(CW / 2) - 42, 10);
-  drawWallClock(CX + CW - 32, 14);
+  // Wall art (left of cage) and clock (right of cage)
+  drawWallArt(CX - WALL - 86, 140);
+  drawWallClock(CX + CW + WALL + 56, 150);
 
   // Left gutter: bookshelf beside window
   drawBookshelf(-180, VH - 72 - 140);
