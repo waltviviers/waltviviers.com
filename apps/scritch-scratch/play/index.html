@@ -10,22 +10,11 @@
     html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
     canvas { display: block; touch-action: none; cursor: none; }
 
-    #menu-btn {
-      position: fixed; top: 16px; left: 16px; z-index: 100;
-      background: none; border: none; cursor: pointer;
-      padding: 0; line-height: 0; width: 50px; height: 50px;
-      transition: transform 0.18s ease; filter: drop-shadow(0 4px 9px rgba(0,0,0,0.4));
-    }
-    #menu-btn:hover, #menu-btn.open { transform: scale(1.06); }
-    #menu-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s; }
-    #menu-btn .ss-over { opacity: 0; }
-    #menu-btn:hover .ss-up, #menu-btn.open .ss-up { opacity: 0; }
-    #menu-btn:hover .ss-over, #menu-btn.open .ss-over { opacity: 1; }
-
     #menu-drop {
-      display: none; position: fixed; top: 72px; left: 16px; z-index: 200;
+      display: none; position: fixed; bottom: 164px; left: 16px; z-index: 200;
       background: #0a0a0a; border: 1px solid #333; min-width: 140px;
     }
+    @media (max-width: 900px) { #menu-drop { bottom: 124px; } }
     #menu-drop.open { display: block; }
     #menu-drop a, #menu-drop button {
       display: block; width: 100%; text-align: left;
@@ -107,8 +96,8 @@
     .mode-btn-sec:hover { background: #fff; transform: translateY(-2px); }
     .mode-btn-sec:active { transform: translateY(0); }
 
-    /* Floating dog button — matches the main site (bottom-left), reloads the game */
-    /* #menu-btn shown in-game */
+    /* Floating dog button — matches the main site (bottom-left), opens the in-game menu */
+    /* menu accessed via FAB (bottom-left icon) */
     .scritch-fab {
       position: fixed; left: 16px; bottom: 90px; z-index: 250;
       width: 66px; height: 66px; display: block;
@@ -116,9 +105,9 @@
     }
     .scritch-fab img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
     .scritch-fab .ss-over { opacity: 0; }
-    .scritch-fab:hover { transform: translateY(-3px) scale(1.07); }
-    .scritch-fab:hover .ss-up { opacity: 0; }
-    .scritch-fab:hover .ss-over { opacity: 1; }
+    .scritch-fab:hover, .scritch-fab.open { transform: translateY(-3px) scale(1.07); }
+    .scritch-fab:hover .ss-up, .scritch-fab.open .ss-up { opacity: 0; }
+    .scritch-fab:hover .ss-over, .scritch-fab.open .ss-over { opacity: 1; }
     @media (max-width: 900px) { .scritch-fab { bottom: 50px; } }
 
     /* Walt Viviers mark — bottom-right, shows during gameplay (sits below the title screen) */
@@ -183,19 +172,19 @@
   </style>
 </head>
 <body>
-<button id="menu-btn" aria-label="Menu">
-  <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" />
-  <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" />
-</button>
 <div id="menu-drop">
   <a href="https://waltviviers.com/">Go To Main Site</a>
-  <a href="https://waltviviers.com/apps/">Apps &amp; Games</a>
+  <a href="https://waltviviers.com/apps/scritch-scratch/play/">Game Menu</a>
   <button id="htp-btn" class="sep">How to Play</button>
   <button id="rename-btn" class="sep">Rename Pet</button>
   <button class="sep mode-switch" data-mode="dog">Doggo Mode</button>
   <button class="mode-switch" data-mode="rat">Ratty Mode</button>
   <button class="mode-switch" data-mode="cat">Cat Lady Mode</button>
 </div>
+<button type="button" class="scritch-fab" aria-label="Menu">
+  <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" width="64" height="64" />
+  <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
+</button>
 <div id="htp-overlay" class="overlay">
   <div class="popup">
     <h2>How to Play</h2>
@@ -2904,7 +2893,7 @@ canvas.addEventListener('pointerdown', e => {
   const drop = document.getElementById('menu-drop');
   if (drop.classList.contains('open')) {
     drop.classList.remove('open');
-    document.getElementById('menu-btn').classList.remove('open');
+    document.querySelector('.scritch-fab').classList.remove('open');
     return;
   }
   interacted = true;
@@ -3782,7 +3771,7 @@ dog.init();
 loop();
 
 // ─── Menu ────────────────────────────────────────────────────────────────────
-const menuBtn  = document.getElementById('menu-btn');
+const menuBtn  = document.querySelector('.scritch-fab');
 const menuDrop = document.getElementById('menu-drop');
 const htpOverlay = document.getElementById('htp-overlay');
 
@@ -3942,10 +3931,6 @@ document.getElementById('catnip-btn').addEventListener('click', () => {
 </script>
 <a href="https://waltviviers.com/" class="walt-logo" aria-label="Walt Viviers — home">
   <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
-</a>
-<a href="https://waltviviers.com/apps/scritch-scratch/play/" class="scritch-fab" aria-label="Scritch Scratch">
-  <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Scritch Scratch" width="64" height="64" />
-  <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
 </a>
 <div class="game-mark" aria-hidden="true">
   <img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
