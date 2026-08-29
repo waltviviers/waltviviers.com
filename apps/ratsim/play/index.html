@@ -154,6 +154,18 @@ function drawRoom() {
     }
   }
 
+  // Crown moulding strip at ceiling
+  const cmY = Math.round(oy);
+  ctx.fillStyle = '#c8d8e4'; ctx.fillRect(0, cmY, canvas.width, Math.max(1, Math.ceil(2 * sc)));
+  ctx.fillStyle = '#b0c0cc'; ctx.fillRect(0, cmY + Math.max(1, Math.ceil(2 * sc)), canvas.width, Math.max(2, Math.ceil(5 * sc)));
+  ctx.fillStyle = '#98a8b4'; ctx.fillRect(0, cmY + Math.max(2, Math.ceil(6 * sc)), canvas.width, Math.max(1, Math.ceil(2 * sc)));
+
+  // Dado rail — lower wall divider
+  const dadoY = Math.round(oy + (VH - 72 - 58) * sc);
+  ctx.fillStyle = '#c8d8e4'; ctx.fillRect(0, dadoY, canvas.width, Math.max(1, Math.ceil(2 * sc)));
+  ctx.fillStyle = '#b0c0cc'; ctx.fillRect(0, dadoY + Math.max(1, Math.ceil(2 * sc)), canvas.width, Math.max(2, Math.ceil(4 * sc)));
+  ctx.fillStyle = '#98a8b4'; ctx.fillRect(0, dadoY + Math.max(2, Math.ceil(5 * sc)), canvas.width, Math.max(1, Math.ceil(2 * sc)));
+
   // Skirting board
   ctx.fillStyle = C.skirtn;
   ctx.fillRect(0, floorY - Math.round(3 * sc), canvas.width, Math.ceil(4 * sc));
@@ -161,6 +173,20 @@ function drawRoom() {
   // Window (left gutter) and floor lamp (right gutter) — visible on desktop
   drawWindow(-250, 90);
   drawDeskLamp(CX + CW + WALL + 60, VH - 72);
+
+  // Wall art + clock above cage
+  drawWallArt(CX + Math.floor(CW / 2) - 42, 10);
+  drawWallClock(CX + CW - 32, 14);
+
+  // Left gutter: bookshelf beside window
+  drawBookshelf(-180, VH - 72 - 140);
+
+  // Right gutter: books stacked on floor beside lamp
+  drawBooksOnFloor(CX + CW + WALL + 12, VH - 72);
+
+  // Windowsill props: candle and mini succulent
+  drawCandle(-248, 168);
+  drawWindowsillPlant(-216, 168);
 
   // Houseplants on either side of the cage
   drawHouseplant(CX - WALL - 36, VH - 72 - 52);
@@ -243,6 +269,101 @@ function drawDeskLamp(dx, dy) {
   fill(dx - 22, dy - 88,  8,  8, '#e0a030');
 }
 
+
+function drawWallArt(ax, ay) {
+  fill(ax, ay, 60, 36, '#4a3018');
+  fill(ax + 3, ay + 3, 54, 30, '#e0d8c8');
+  fill(ax + 6, ay + 6, 48, 24, '#5888a8');
+  fill(ax + 6, ay + 18, 48, 12, '#4a7030');
+  fill(ax + 8,  ay + 14, 14, 6, '#5a8040');
+  fill(ax + 28, ay + 15, 12, 5, '#4a7028');
+  fill(ax + 40, ay +  9,  5,  5, '#f0d040');
+  fill(ax + 40, ay +  9,  5,  2, '#f8e870');
+  fill(ax, ay,       60, 2, '#6a4820');
+  fill(ax, ay,        2, 36, '#6a4820');
+  fill(ax + 58, ay,   2, 36, '#382010');
+  fill(ax, ay + 34,  60, 2, '#382010');
+}
+
+function drawWallClock(cx, cy) {
+  fill(cx - 14, cy - 14, 28, 28, '#4a3018');
+  fill(cx - 16, cy - 10, 32, 20, '#4a3018');
+  fill(cx - 10, cy - 16, 20, 32, '#4a3018');
+  fill(cx - 13, cy - 13, 26, 26, '#f0e8d0');
+  fill(cx - 15, cy -  9, 30, 18, '#f0e8d0');
+  fill(cx -  9, cy - 15, 18, 30, '#f0e8d0');
+  fill(cx - 1, cy - 12, 2, 3, '#4a3018');
+  fill(cx - 1, cy +  9, 2, 3, '#4a3018');
+  fill(cx - 12, cy - 1, 3, 2, '#4a3018');
+  fill(cx +  9, cy - 1, 3, 2, '#4a3018');
+  const tp = (tick % 7200) / 7200;
+  const ha = tp * Math.PI * 4 - Math.PI / 2;
+  const ma = tp * Math.PI * 48 - Math.PI / 2;
+  for (let i = 1; i <= 7; i++)  fill(cx + Math.round(Math.cos(ha) * i) - 1, cy + Math.round(Math.sin(ha) * i) - 1, 2, 2, '#2a1a08');
+  for (let i = 1; i <= 11; i++) fill(cx + Math.round(Math.cos(ma) * i) - 1, cy + Math.round(Math.sin(ma) * i) - 1, 2, 2, '#2a1a08');
+  fill(cx - 1, cy - 1, 3, 3, '#2a1a08');
+}
+
+function drawBookshelf(bx, by) {
+  const bw = 52, bh = 130;
+  fill(bx, by, bw, bh, '#6a4828');
+  fill(bx - 2, by,            bw + 4, 5, '#8b5e28');
+  fill(bx - 2, by + bh - 5,  bw + 4, 5, '#8b5e28');
+  fill(bx - 2, by + 40,      bw + 4, 5, '#8b5e28');
+  fill(bx - 2, by + 83,      bw + 4, 5, '#8b5e28');
+  fill(bx - 2, by, 5, bh, '#7a5030');
+  fill(bx + bw - 3, by, 5, bh, '#7a5030');
+  const BC = ['#c04040','#4060c0','#40a040','#c0a028','#8040c0','#c06828','#3098b0','#b03060','#208060'];
+  const shelves = [by + 5, by + 45, by + 88];
+  const widths  = [7, 5, 8, 6, 7, 6];
+  const heights = [34, 28, 35, 30, 26, 32];
+  for (let s = 0; s < 3; s++) {
+    const sy = shelves[s];
+    let bkx = bx + 3;
+    for (let k = 0; k < widths.length; k++) {
+      if (bkx + widths[k] > bx + bw - 3) break;
+      const c = BC[(s * 3 + k) % BC.length];
+      const h = heights[(s + k) % heights.length];
+      fill(bkx, sy + 35 - h, widths[k], h, c);
+      fill(bkx, sy + 35 - h, widths[k], 2, '#ffffff18');
+      fill(bkx + widths[k] - 1, sy + 35 - h, 1, h, '#00000020');
+      bkx += widths[k] + 1;
+    }
+  }
+}
+
+function drawBooksOnFloor(bx, by) {
+  fill(bx,      by - 14, 38, 5, '#4060c0');
+  fill(bx + 1,  by - 14, 36, 1, '#6080e0');
+  fill(bx - 1,  by -  9, 40, 5, '#c04040');
+  fill(bx,      by -  9, 38, 1, '#e06060');
+  fill(bx + 2,  by -  4, 35, 4, '#20a050');
+  fill(bx + 3,  by -  4, 33, 1, '#40c070');
+}
+
+function drawCandle(cx, cy) {
+  fill(cx - 1, cy - 3, 10, 3, '#d4b870');
+  fill(cx + 1, cy - 17, 6, 14, '#f0e8c0');
+  fill(cx + 2, cy - 17, 4, 14, '#f8f0d0');
+  fill(cx + 3, cy - 19, 2,  3, '#5a4020');
+  const tp = (tick % 7200) / 7200;
+  if (tp > 0.62 || tp < 0.20) {
+    const fl = Math.floor(tick / 6) % 3;
+    fill(cx + 2 + (fl > 1 ? 1 : 0), cy - 28 + (fl > 0 ? 1 : 0), 4, 8, '#e05810');
+    fill(cx + 3, cy - 31 + fl, 2, 5, '#ffa020');
+    fill(cx + 3, cy - 33 + fl, 2, 3, '#fff070');
+  }
+}
+
+function drawWindowsillPlant(wx, wy) {
+  fill(wx,     wy - 8, 10, 8, '#c06838');
+  fill(wx + 1, wy - 8,  8, 2, '#d07848');
+  fill(wx + 2, wy - 6, 6, 2, '#3a2810');
+  fill(wx + 3, wy - 16, 4, 8, '#4a8030');
+  fill(wx + 1, wy - 14, 2, 5, '#4a8030');
+  fill(wx + 7, wy - 14, 2, 5, '#4a8030');
+  fill(wx + 3, wy - 18, 4, 3, '#5a9840');
+}
 
 // ── Cage ──────────────────────────────────────────────────────────────────────
 function drawCage() {
