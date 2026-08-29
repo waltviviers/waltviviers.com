@@ -99,6 +99,10 @@
     .footer-back:hover { border-color:var(--stone);color:var(--ink); }
     @media (max-width:900px) { nav { padding:0 24px; } .page-wrap { padding:calc(64px + 40px) 24px 80px; } .bio-grid { grid-template-columns:1fr; } .bio-col { padding:36px 28px 40px; } .pull-quote { padding:40px 28px; } .contact-strip { grid-template-columns:1fr 1fr; } footer { padding:40px 24px 32px;flex-direction:column;gap:20px; } .footer-back { position:static;transform:none;order:1; } }
     @media (max-width:560px) { .pull-quote { flex-direction:column;gap:12px; } .pull-quote-mark { font-size:3.5rem; } .contact-strip { grid-template-columns:1fr; } .page-head-top { flex-direction:column;gap:8px; } }
+    /* Custom hand pointer, site-wide */
+    html, body, body * { cursor: url('/images/pointer_up.png') 6 1, auto !important; }
+    body *:active { cursor: url('/images/pointer_down.png') 6 1, auto !important; }
+    input[type="text"], input[type="email"], input[type="search"], input[type="tel"], input[type="number"], input[type="url"], input[type="password"], textarea, [contenteditable="true"] { cursor: text !important; }
   </style>
 </head>
 <body>
