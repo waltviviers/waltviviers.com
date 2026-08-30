@@ -10,19 +10,10 @@
     html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
     canvas { display: block; touch-action: none; cursor: none; }
 
-    #menu-drop {
-      display: none; position: fixed; bottom: 164px; left: 16px; z-index: 200;
-      background: #0a0a0a; border: 1px solid #333; min-width: 140px;
-    }
-    @media (max-width: 900px) { #menu-drop { bottom: 124px; } }
-    #menu-drop.open { display: block; }
-    #menu-drop a, #menu-drop button {
-      display: block; width: 100%; text-align: left;
-      padding: 9px 14px; color: #ddd; background: none; border: none;
-      cursor: pointer; text-decoration: none; font-family: monospace; font-size: 11px;
-    }
-    #menu-drop a:hover, #menu-drop button:hover { background: #1a1a1a; color: #fff; }
-    #menu-drop .sep { border-top: 1px solid #333; }
+    /* Menu — reuses the centred cream How-to-Play popup style */
+    #menu-drop .popup { max-width: 280px; max-height: 86vh; overflow-y: auto; text-align: center; }
+    #menu-drop .popup h2 { text-align: center; margin-bottom: 6px; }
+    #menu-drop .popup-close { margin-top: 8px; }
 
     .overlay {
       display: none; position: fixed; inset: 0; z-index: 500;
@@ -172,14 +163,18 @@
   </style>
 </head>
 <body>
-<div id="menu-drop">
-  <a href="https://waltviviers.com/">Go To Main Site</a>
-  <a href="https://waltviviers.com/apps/scritch-scratch/play/">Game Menu</a>
-  <button id="htp-btn" class="sep">How to Play</button>
-  <button id="rename-btn" class="sep">Rename Pet</button>
-  <button class="sep mode-switch" data-mode="dog">Doggo Mode</button>
-  <button class="mode-switch" data-mode="rat">Ratty Mode</button>
-  <button class="mode-switch" data-mode="cat">Cat Lady Mode</button>
+<div id="menu-drop" class="overlay">
+  <div class="popup">
+    <h2>Menu</h2>
+    <button class="popup-close mode-switch" data-mode="dog" type="button">Doggo Mode</button>
+    <button class="popup-close mode-switch" data-mode="rat" type="button">Ratty Mode</button>
+    <button class="popup-close mode-switch" data-mode="cat" type="button">Cat Lady Mode</button>
+    <button class="popup-close" id="htp-btn" type="button">How to Play</button>
+    <button class="popup-close" id="rename-btn" type="button">Rename Pet</button>
+    <a href="https://waltviviers.com/apps/scritch-scratch/play/" class="popup-close">Game Menu</a>
+    <a href="https://waltviviers.com/" class="popup-close">Go To Main Site</a>
+    <button class="popup-close" id="menu-close" type="button">Close</button>
+  </div>
 </div>
 <button type="button" class="scritch-fab" aria-label="Menu">
   <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" width="64" height="64" />
@@ -3775,18 +3770,16 @@ const menuBtn  = document.querySelector('.scritch-fab');
 const menuDrop = document.getElementById('menu-drop');
 const htpOverlay = document.getElementById('htp-overlay');
 
+function closeMenu() { menuDrop.classList.remove('open'); menuBtn.classList.remove('open'); }
 menuBtn.addEventListener('click', e => {
   e.stopPropagation();
   const open = menuDrop.classList.toggle('open');
   menuBtn.classList.toggle('open', open);
 });
-
-document.addEventListener('click', e => {
-  if (!menuDrop.contains(e.target) && e.target !== menuBtn) {
-    menuDrop.classList.remove('open');
-    menuBtn.classList.remove('open');
-  }
-});
+// Click the dimmed backdrop (outside the popup) or the Close button to dismiss
+menuDrop.addEventListener('click', e => { if (e.target === menuDrop) closeMenu(); });
+document.getElementById('menu-close').addEventListener('click', closeMenu);
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMenu(); });
 
 document.getElementById('htp-btn').addEventListener('click', () => {
   menuDrop.classList.remove('open');
