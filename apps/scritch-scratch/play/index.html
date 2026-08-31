@@ -1142,12 +1142,17 @@ function catKitchenLayout() {
   const cabinetY = counterY + counterH, cabinetH = Math.round(H * 0.14);
   const sinkX = Math.round(W * 0.31), sinkW = Math.round(W * 0.15);
   const stoveX = Math.round(W * 0.66), stoveW = Math.round(W * 0.19);
+  const toastX = sinkX + sinkW + 14;
+  // Fit the kettle + can opener into the gap between the toaster and the stove
+  // (drop the decorative kettle on narrow screens so nothing overlaps).
+  const gapL = toastX + 32 + 6, gapR = stoveX - 6, gap = gapR - gapL;
+  const showKettle = gap >= 44;
+  const canX = showKettle ? Math.round(gapR - 10) : Math.round((gapL + gapR) / 2);
+  const kettleX = Math.round(gapL + 9);
   return {
     W, H, counterY, counterH, cabinetY, cabinetH, sinkX, sinkW, stoveX, stoveW,
-    toastX: sinkX + sinkW + 14,
-    plantX: Math.round(W * 0.06),
-    kettleX: Math.round(W * 0.545),
-    canX: Math.round(W * 0.615),
+    toastX, plantX: Math.round(W * 0.06),
+    kettleX, canX, showKettle,
     fridgeX: Math.round(W * 0.865), fridgeW: Math.round(W * 0.125),
   };
 }
@@ -1346,19 +1351,22 @@ function drawCatKitchenItems() {
     }
   }
 
-  // Kettle (between the toaster and the stove)
-  const kettleX = Math.round(W * 0.545);
-  ctx.fillStyle = '#a8332b'; ctx.fillRect(kettleX - 9, counterY - 16, 18, 16);
-  ctx.fillStyle = '#c14a3f'; ctx.fillRect(kettleX - 7, counterY - 14, 14, 12);
-  ctx.fillStyle = '#e08a80'; ctx.fillRect(kettleX - 5, counterY - 12, 4, 5);
-  ctx.fillStyle = '#7a241d'; ctx.fillRect(kettleX - 9, counterY - 3, 18, 3);
-  ctx.fillStyle = '#3a2a28'; ctx.fillRect(kettleX - 4, counterY - 20, 8, 2);
-  ctx.fillRect(kettleX - 5, counterY - 19, 2, 4); ctx.fillRect(kettleX + 3, counterY - 19, 2, 4);
-  ctx.fillStyle = '#a8332b'; ctx.fillRect(kettleX + 8, counterY - 13, 5, 3); ctx.fillRect(kettleX + 11, counterY - 15, 3, 3);
-  ctx.fillStyle = '#3a2a28'; ctx.fillRect(kettleX - 1, counterY - 18, 3, 2);
+  // Kettle + can opener sit in the gap between the toaster and the stove
+  const _ck = catKitchenLayout();
+  if (_ck.showKettle) {
+    const kettleX = _ck.kettleX;
+    ctx.fillStyle = '#a8332b'; ctx.fillRect(kettleX - 9, counterY - 16, 18, 16);
+    ctx.fillStyle = '#c14a3f'; ctx.fillRect(kettleX - 7, counterY - 14, 14, 12);
+    ctx.fillStyle = '#e08a80'; ctx.fillRect(kettleX - 5, counterY - 12, 4, 5);
+    ctx.fillStyle = '#7a241d'; ctx.fillRect(kettleX - 9, counterY - 3, 18, 3);
+    ctx.fillStyle = '#3a2a28'; ctx.fillRect(kettleX - 4, counterY - 20, 8, 2);
+    ctx.fillRect(kettleX - 5, counterY - 19, 2, 4); ctx.fillRect(kettleX + 3, counterY - 19, 2, 4);
+    ctx.fillStyle = '#a8332b'; ctx.fillRect(kettleX + 8, counterY - 13, 5, 3); ctx.fillRect(kettleX + 11, counterY - 15, 3, 3);
+    ctx.fillStyle = '#3a2a28'; ctx.fillRect(kettleX - 1, counterY - 18, 3, 2);
+  }
 
   // Electric can opener + cat-food can (tap it → all the cats come running)
-  const canX = Math.round(W * 0.615);
+  const canX = _ck.canX;
   ctx.fillStyle = '#9aa0a6'; ctx.fillRect(canX - 6, counterY - 15, 12, 15);
   ctx.fillStyle = '#b4bac0'; ctx.fillRect(canX - 4, counterY - 13, 8, 11);
   ctx.fillStyle = '#5c6066'; ctx.fillRect(canX - 6, counterY - 3, 12, 3);
