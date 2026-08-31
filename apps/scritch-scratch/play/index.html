@@ -10,25 +10,16 @@
     html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
     canvas { display: block; touch-action: none; cursor: none; }
 
-    #menu-drop {
-      display: none; position: fixed; bottom: 164px; left: 16px; z-index: 200;
-      background: #0a0a0a; border: 1px solid #333; min-width: 140px;
-    }
-    @media (max-width: 900px) { #menu-drop { bottom: 124px; } }
-    #menu-drop.open { display: block; }
-    #menu-drop a, #menu-drop button {
-      display: block; width: 100%; text-align: left;
-      padding: 9px 14px; color: #ddd; background: none; border: none;
-      cursor: pointer; text-decoration: none; font-family: monospace; font-size: 11px;
-    }
-    #menu-drop a:hover, #menu-drop button:hover { background: #1a1a1a; color: #fff; }
-    #menu-drop .sep { border-top: 1px solid #333; }
-
     .overlay {
       display: none; position: fixed; inset: 0; z-index: 500;
       background: rgba(0,0,0,0.55); align-items: center; justify-content: center;
     }
     .overlay.open { display: flex; }
+    /* Game menu popup — reuses the title-screen cream pill buttons, centred */
+    .game-menu-inner {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 12px; padding: 24px;
+    }
     .popup {
       background: rgba(255,251,244,0.97); border: 2px solid rgba(90,60,40,0.22);
       border-radius: 22px; padding: 24px 26px;
@@ -101,6 +92,7 @@
     .scritch-fab {
       position: fixed; left: 16px; bottom: 90px; z-index: 250;
       width: 66px; height: 66px; display: block;
+      background: none; border: none; padding: 0; -webkit-appearance: none; appearance: none;
       transition: transform 0.18s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.4));
     }
     .scritch-fab img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
@@ -172,20 +164,18 @@
   </style>
 </head>
 <body>
-<button type="button" class="scritch-fab" aria-label="Menu">
-  <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" width="64" height="64" />
-  <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
-</button>
-<div id="menu-drop">
-  <a href="https://waltviviers.com/">Go To Main Site</a>
-  <a href="https://waltviviers.com/apps/scritch-scratch/play/">Game Menu</a>
-  <button id="htp-btn" class="sep">How to Play</button>
-  <button id="rename-btn" class="sep">Rename Pet</button>
-  <button class="sep mode-switch" data-mode="dog">Doggo Mode</button>
-  <button class="mode-switch" data-mode="rat">Ratty Mode</button>
-  <button class="mode-switch" data-mode="cat">Cat Lady Mode</button>
+<div id="game-menu" class="overlay">
+  <div class="game-menu-inner">
+    <button class="mode-btn-pick" data-mode="dog" type="button">Doggo Mode</button>
+    <button class="mode-btn-pick" data-mode="rat" type="button">Ratty Mode</button>
+    <button class="mode-btn-pick" data-mode="cat" type="button">Cat Lady Mode</button>
+    <div class="mode-sec-row">
+      <button class="mode-btn-sec" id="menu-htp" type="button">How to Play</button>
+      <a class="mode-btn-sec" href="/">Back to Main Site</a>
+    </div>
+  </div>
 </div>
-<button type="button" class="scritch-fab" aria-label="Menu">
+<button type="button" class="scritch-fab" aria-label="Open menu">
   <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" width="64" height="64" />
   <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
 </button>
@@ -2893,13 +2883,6 @@ let lastTapTime = 0, lastTapX = 0, lastTapY = 0;
 
 canvas.addEventListener('pointerdown', e => {
   e.preventDefault();
-  // Close menu if open
-  const drop = document.getElementById('menu-drop');
-  if (drop.classList.contains('open')) {
-    drop.classList.remove('open');
-    document.querySelector('.scritch-fab').classList.remove('open');
-    return;
-  }
   interacted = true;
   const px = e.clientX, py = e.clientY;
   scritching = false;
@@ -3774,27 +3757,31 @@ persistLoad();
 dog.init();
 loop();
 
-// ─── Menu ────────────────────────────────────────────────────────────────────
+// ─── Game menu popup ─────────────────────────────────────────────────────────
 const menuBtn  = document.querySelector('.scritch-fab');
-const menuDrop = document.getElementById('menu-drop');
 const htpOverlay = document.getElementById('htp-overlay');
+const gameMenu = document.getElementById('game-menu');
+function closeGameMenu() { gameMenu.classList.remove('open'); }
 
+// The floating dog button opens a centred menu of the title-screen options
 menuBtn.addEventListener('click', e => {
   e.stopPropagation();
-  const open = menuDrop.classList.toggle('open');
-  menuBtn.classList.toggle('open', open);
+  gameMenu.classList.add('open');
 });
+gameMenu.addEventListener('click', e => { if (e.target === gameMenu) closeGameMenu(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGameMenu(); });
 
-document.addEventListener('click', e => {
-  if (!menuDrop.contains(e.target) && e.target !== menuBtn) {
-    menuDrop.classList.remove('open');
-    menuBtn.classList.remove('open');
-  }
+document.querySelectorAll('#game-menu .mode-btn-pick').forEach(btn => {
+  btn.addEventListener('click', () => {
+    closeGameMenu();
+    const m = btn.dataset.mode;
+    if (m === 'dog') enterDogMode();
+    else if (m === 'rat') enterRatMode();
+    else enterCatMode();
+  });
 });
-
-document.getElementById('htp-btn').addEventListener('click', () => {
-  menuDrop.classList.remove('open');
-  menuBtn.classList.remove('open');
+document.getElementById('menu-htp').addEventListener('click', () => {
+  closeGameMenu();
   htpOverlay.classList.add('open');
 });
 
@@ -3829,19 +3816,8 @@ document.getElementById('sf-form').addEventListener('submit', async e => {
   } catch (_) { err.textContent = 'Could not send. Please try again later.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
 });
 
-document.querySelectorAll('.mode-switch').forEach(btn => {
-  btn.addEventListener('click', () => {
-    menuDrop.classList.remove('open');
-    menuBtn.classList.remove('open');
-    const m = btn.dataset.mode;
-    if (m === 'dog') enterDogMode();
-    else if (m === 'rat') enterRatMode();
-    else enterCatMode();
-  });
-});
-
 const modePick = document.getElementById('mode-pick');
-document.querySelectorAll('.mode-btn-pick').forEach(btn => {
+document.querySelectorAll('#mode-pick .mode-btn-pick').forEach(btn => {
   btn.addEventListener('click', () => {
     modePick.style.display = 'none';
     const m = btn.dataset.mode;
@@ -3857,16 +3833,12 @@ const nameInput   = document.getElementById('name-input');
 const namePrompt  = document.getElementById('name-prompt');
 
 function showNameOverlay() {
-  menuDrop.classList.remove('open');
-  menuBtn.classList.remove('open');
   const modeLabel = gameMode === 'dog' ? 'dog' : gameMode === 'cat' ? 'cat' : 'rat';
   namePrompt.textContent = 'Name your ' + modeLabel;
   nameInput.value = petNames[gameMode] || '';
   nameOverlay.classList.add('open');
   setTimeout(() => nameInput.focus(), 50);
 }
-
-document.getElementById('rename-btn').addEventListener('click', showNameOverlay);
 
 document.getElementById('name-confirm').addEventListener('click', () => {
   petNames[gameMode] = nameInput.value.trim().slice(0, 12);
