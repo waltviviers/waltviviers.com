@@ -736,6 +736,85 @@ function drawDogForeground() {
   }
 }
 
+// ─── Yard birds (dog mode) — perch in the tree, fly off and come back ─────────
+function dogTreeAnchor() {
+  const W = canvas.width, H = canvas.height;
+  const splitX = Math.round(W * 0.65);
+  const poolFloor = dogPoolFloorY();
+  const treeX = Math.round(splitX * 0.26);
+  const treeBaseY = Math.round(poolFloor + (H - poolFloor) * 0.64);
+  return { x: treeX, y: treeBaseY - 50 };   // canopy centre (matches the tree)
+}
+
+const BIRD_COLORS  = ['#d95b3a', '#3f74c4', '#e6b23c', '#5b5b5b'];
+const BIRD_PERCHES = [[-14, -10], [12, -14], [-2, -22], [20, -6]];
+let birds = [];
+
+class Bird {
+  constructor(dx, dy, color) {
+    this.dx = dx; this.dy = dy; this.color = color;
+    this.state = 'perched';
+    const p = this.perch(); this.x = p.x; this.y = p.y;
+    this.flip = Math.random() < 0.5;
+    this.flap = 0;
+    this.timer = 300 + Math.random() * 900;
+  }
+  perch() { const a = dogTreeAnchor(); return { x: a.x + this.dx, y: a.y + this.dy }; }
+  flyOff(startled) {
+    this.state = 'flying';
+    const dir = this.x < canvas.width * 0.5 ? 1 : -1;   // head out over the yard
+    this.vx = dir * (1.4 + Math.random() * 1.4);
+    this.vy = -(1.6 + Math.random() * 1.2);
+    this.flip = dir < 0;
+    this.timer = (startled ? 200 : 150) + Math.random() * 180;
+    sndBird();
+  }
+  update() {
+    if (this.state === 'perched') {
+      const p = this.perch(); this.x = p.x; this.y = p.y; this.flap = 0;
+      if (--this.timer <= 0) this.flyOff(false);
+    } else if (this.state === 'flying') {
+      this.x += this.vx; this.y += this.vy; this.vy += 0.02; this.flap++;
+      if (--this.timer <= 0) this.state = 'returning';
+    } else { // returning
+      const p = this.perch();
+      const ddx = p.x - this.x, ddy = p.y - this.y, d = Math.hypot(ddx, ddy) || 1;
+      this.flip = ddx < 0; this.flap++;
+      if (d < 2.5) { this.state = 'perched'; this.x = p.x; this.y = p.y; this.timer = 400 + Math.random() * 900; }
+      else { this.x += ddx / d * 2.4; this.y += ddy / d * 2.4; }
+    }
+  }
+  hitTest(px, py) { return Math.abs(px - this.x) <= 8 && Math.abs(py - this.y) <= 8; }
+  draw() {
+    const x = Math.round(this.x), y = Math.round(this.y), f = this.flip ? -1 : 1;
+    ctx.fillStyle = this.color;
+    if (this.state === 'perched') {
+      ctx.fillRect(x - 3, y - 2, 6, 5);                                // body
+      ctx.fillRect(x + f * 3, y - 5, 3, 3);                            // head
+      ctx.fillRect(x - f * 4, y - 1, 3, 2);                            // tail
+      ctx.fillStyle = '#3a2a1a'; ctx.fillRect(x - 2, y + 3, 1, 2); ctx.fillRect(x + 1, y + 3, 1, 2); // legs
+      ctx.fillStyle = '#111';    ctx.fillRect(x + f * 4, y - 4, 1, 1); // eye
+      ctx.fillStyle = '#e8a23a'; ctx.fillRect(x + f * 6, y - 4, 2, 1); // beak
+    } else {
+      const up = (Math.floor(this.flap / 4) % 2) === 0, wy = up ? -4 : 2;
+      ctx.fillRect(x - 2, y - 1, 5, 3);                                // body
+      ctx.fillRect(x + f * 3, y - 2, 2, 2);                            // head
+      ctx.fillRect(x - 5, y + wy, 3, 2); ctx.fillRect(x + 2, y + wy, 3, 2); // wings
+      ctx.fillStyle = '#e8a23a'; ctx.fillRect(x + f * 5, y - 1, 2, 1); // beak
+    }
+  }
+}
+
+function spawnBirds() {
+  birds = [];
+  for (let i = 0; i < 3; i++) {
+    const [dx, dy] = BIRD_PERCHES[i % BIRD_PERCHES.length];
+    const b = new Bird(dx, dy, BIRD_COLORS[i % BIRD_COLORS.length]);
+    b.timer = 200 + Math.random() * 1000;   // stagger first flights
+    birds.push(b);
+  }
+}
+
 function drawDogFurniture() {
   if (!dogBed) return;
   // Bed
@@ -2650,6 +2729,7 @@ function enterDogMode() {
   puppies.length = 0; puppyTimer = 0; puppiesSpawned = false;
   visitorCooldown = 60 * (30 + Math.floor(Math.random() * 90));
   placeDogFurniture();
+  spawnBirds();
   if (!restoreDogState()) { dog.init(); }
   sndDogAmbient();
   updateCatnipBtn();
@@ -3004,6 +3084,16 @@ canvas.addEventListener('pointerdown', e => {
     cheeses.push({ x: px - CHEESE_W / 2, y: py - CHEESE_H / 2, eaten: false });
     if (++cheeseCount % 15 === 0 && rats.length > 0) raidCats.push(new RaidCat());
     return;
+  }
+
+  // Tap a bird → it flies off and the dog barks at it
+  for (const b of birds) {
+    if (b.hitTest(px, py)) {
+      b.flyOff(true);
+      sndBark(false);
+      labels.push(new Label('Woof!', dog.cx, Math.max(20, dog.y - 8)));
+      tapFeedback(px, py); return;
+    }
   }
 
   if (dog.hitTest(px, py)) {
@@ -3590,6 +3680,7 @@ function loop() {
     for (const p of puppies) { p.update(); p.draw(); }
 
     drawDogForeground();
+    for (const b of birds) { b.update(); b.draw(); }
 
     if (scritching && !scritchCat && gameTick % 45 === 0) sndPant();
 
