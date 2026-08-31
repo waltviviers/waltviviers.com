@@ -32,6 +32,11 @@
     a { color: inherit; text-decoration: none; }
     button { font: inherit; cursor: pointer; border: none; background: none; }
 
+    /* Custom hand cursor site-wide (matches the rest of the site) */
+    html, body, body * { cursor: url('/images/pointer_up.png') 3 1, auto !important; }
+    body *:active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
+    input[type="text"], input[type="email"], input[type="search"], input[type="password"], textarea { cursor: text !important; }
+
     :root {
       --black:  #0C0C0B;
       --white:  #FAF9F7;
