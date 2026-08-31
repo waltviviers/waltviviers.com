@@ -543,6 +543,74 @@ const BED_SC = 4, BOWL_SC = 3;
 let dogBed = null, dogFoodBowl = null, dogWaterBowl = null;
 const poolRings = [];   // expanding rings, like dragonflies touching the water
 
+// ─── Dog-yard extras: dragonfly, night lamp, BBQ lid ─────────────────────────
+let dragonfly = null;   // flits over the pool
+let dogBbqOpen = 0;     // BBQ lid-open (patties showing) timer
+function dogDayPhase() { return ((gameTick + _dayNightSeed) / 21600) % 1; }
+function dogIsNight() { const p = dogDayPhase(); return p >= 0.55 && p < 0.90; }
+function dogLampPos() {
+  const W = canvas.width, H = canvas.height;
+  const splitX = Math.round(W * 0.65), poolFloor = dogPoolFloorY();
+  const baseY = Math.round(poolFloor + (H - poolFloor) * 0.52);
+  return { x: splitX - 20, topY: baseY - Math.round(H * 0.30), baseY };
+}
+class Dragonfly {
+  constructor() { this.t = 0; this.right = true; this.reset(); }
+  _bounds() {
+    const W = canvas.width, splitX = Math.round(W * 0.65), poolFloor = dogPoolFloorY(), e = 10;
+    return { x0: e + 8, x1: splitX - e - 8, y0: 5, y1: poolFloor - e - 4 };
+  }
+  reset() {
+    const b = this._bounds();
+    this.x = b.x0 + Math.random() * (b.x1 - b.x0);
+    this.y = b.y0 + Math.random() * (b.y1 - b.y0);
+    this._newTarget();
+  }
+  _newTarget() {
+    const b = this._bounds();
+    this.tx = b.x0 + Math.random() * (b.x1 - b.x0);
+    this.dip = Math.random() < 0.35;
+    this.ty = this.dip ? b.y1 - 2 - Math.random() * 4 : b.y0 + Math.random() * (b.y1 - b.y0);
+  }
+  update() {
+    this.t++;
+    const dx = this.tx - this.x, dy = this.ty - this.y, d = Math.hypot(dx, dy) || 1;
+    if (d < 3) {
+      if (this.dip && poolRings.length < 4) poolRings.push({ x: this.x, y: Math.min(this.y, this._bounds().y1), age: 0 });
+      this._newTarget();
+    } else {
+      this.x += dx / d * 1.8; this.y += dy / d * 1.8 + Math.sin(this.t * 0.3) * 0.4;
+      this.right = dx >= 0;
+    }
+  }
+  draw() {
+    const x = Math.round(this.x), y = Math.round(this.y), f = this.right ? 1 : -1;
+    const wingUp = gameTick % 2 === 0;
+    ctx.fillStyle = 'rgba(205,238,248,0.6)';
+    ctx.fillRect(x - 1, y + (wingUp ? -4 : -1), 6, 2);
+    ctx.fillRect(x - 1, y + (wingUp ? 1 : -1), 6, 2);
+    ctx.fillStyle = '#1f8a72'; ctx.fillRect(x - f * 6, y - 1, 12, 2);
+    ctx.fillStyle = '#2ea888'; ctx.fillRect(x + f * 3, y - 1, 3, 2);
+    ctx.fillStyle = '#0e3b30'; ctx.fillRect(x + f * 6, y - 1, 2, 2);
+  }
+}
+function drawDogNightGlow() {
+  if (gameMode !== 'dog' || !dogIsNight()) return;
+  const L = dogLampPos();
+  const cx = L.x + 0.5, cy = L.topY - 4, r = Math.round(canvas.height * 0.24);
+  const g = ctx.createRadialGradient(cx, cy, 2, cx, cy, r);
+  g.addColorStop(0, 'rgba(255,214,120,0.42)');
+  g.addColorStop(0.5, 'rgba(255,190,90,0.15)');
+  g.addColorStop(1, 'rgba(255,190,90,0)');
+  ctx.save();
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+  ctx.globalAlpha = 0.85 + Math.sin(gameTick * 0.2) * 0.1;
+  ctx.fillStyle = '#fff0c0';
+  ctx.fillRect(L.x - 3, L.topY - 8, 7, 8);
+  ctx.restore();
+}
+
 // Shared porch geometry — narrower house on small screens so it doesn't dominate
 function _dogLayout() {
   const W = canvas.width;
@@ -667,10 +735,35 @@ function drawDogBackground() {
   ctx.fillStyle = '#3a7318';
   ctx.fillRect(splitX - 4, 0, 4, H);
 
+  // Fishpond in the yard
+  const pondCX = Math.round(splitX * 0.6);
+  const pondCY = Math.round(poolFloor + (H - poolFloor) * 0.82);
+  const pondRX = Math.round(splitX * 0.15), pondRY = Math.round(pondRX * 0.52);
+  ctx.fillStyle = '#736a5e';                                     // stone rim
+  ctx.beginPath(); ctx.ellipse(pondCX, pondCY, pondRX + 3, pondRY + 3, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#8a8074';
+  ctx.beginPath(); ctx.ellipse(pondCX, pondCY - 1, pondRX + 3, pondRY + 2, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#2f6f86';                                     // water
+  ctx.beginPath(); ctx.ellipse(pondCX, pondCY, pondRX, pondRY, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#3f88a0';
+  ctx.beginPath(); ctx.ellipse(pondCX, pondCY - 1, pondRX - 3, pondRY - 2, 0, 0, Math.PI * 2); ctx.fill();
+  const _psh = Math.sin(gameTick * 0.06);                        // shimmer
+  ctx.fillStyle = 'rgba(185,232,242,0.5)';
+  ctx.fillRect(pondCX - 6 + Math.round(_psh * 3), pondCY - 2, 8, 1);
+  ctx.fillRect(pondCX + 2 + Math.round(_psh * 2), pondCY + 2, 6, 1);
+  ctx.fillStyle = '#2e7d32';                                     // lily pads
+  ctx.beginPath(); ctx.ellipse(pondCX - pondRX * 0.4, pondCY - 1, 5, 3, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(pondCX + pondRX * 0.45, pondCY + 2, 4, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+  const koiX = pondCX + Math.round(Math.sin(gameTick * 0.03) * pondRX * 0.5);   // koi drifting
+  const koiY = pondCY + Math.round(Math.cos(gameTick * 0.05) * pondRY * 0.3);
+  ctx.fillStyle = '#e06a2a'; ctx.fillRect(koiX - 3, koiY - 1, 6, 2);
+  ctx.fillStyle = '#f0894a'; ctx.fillRect(koiX - 1, koiY - 1, 2, 2);
+
 }
 
 function drawDogForeground() {
   const W = canvas.width, H = canvas.height;
+  if (dogBbqOpen > 0) dogBbqOpen--;
   const splitX = Math.round(W * 0.65);
   const poolFloor = dogPoolFloorY();
 
@@ -698,20 +791,42 @@ function drawDogForeground() {
   ctx.fillStyle = '#9a9a94'; ctx.fillRect(houseX - 5, 0, 2, H);
   ctx.fillStyle = '#b0b0aa'; ctx.fillRect(houseX - 4, Math.round(H * 0.55), 4, Math.round(H * 0.45));
 
-  // Barbecue (kettle grill) on the porch
+  // Barbecue (kettle grill) on the porch — tap to lift the lid and reveal patties
   const bqx = splitX + Math.round((houseX - splitX) * 0.30), bqy = Math.round(H * 0.42);
+  const bbqLift = dogBbqOpen > 0 ? 11 : 0;
   ctx.fillStyle = '#2a2a2a';
   ctx.fillRect(bqx - 13, bqy + 6, 3, 22); ctx.fillRect(bqx + 11, bqy + 6, 3, 22); ctx.fillRect(bqx - 1, bqy + 8, 3, 20);
-  ctx.fillStyle = '#333'; ctx.fillRect(bqx - 16, bqy, 32, 11);
+  ctx.fillStyle = '#333'; ctx.fillRect(bqx - 16, bqy, 32, 11);       // bowl
   ctx.fillStyle = '#1e1e1e'; ctx.fillRect(bqx - 14, bqy + 8, 28, 4);
-  ctx.fillStyle = '#3d3d3d'; ctx.fillRect(bqx - 15, bqy - 8, 30, 9); ctx.fillRect(bqx - 11, bqy - 12, 22, 5);
-  ctx.fillStyle = '#111'; ctx.fillRect(bqx - 2, bqy - 16, 6, 4);
-  ctx.fillStyle = '#555'; ctx.fillRect(bqx - 11, bqy - 6, 5, 2);
+  if (dogBbqOpen > 0) {
+    ctx.fillStyle = 'rgba(255,110,30,0.35)'; ctx.fillRect(bqx - 13, bqy + 6, 26, 3);   // embers
+    ctx.fillStyle = '#5a5a5a';
+    for (let gx = -12; gx <= 12; gx += 4) ctx.fillRect(bqx + gx, bqy + 1, 1, 6);       // grate
+    for (const pxx of [bqx - 9, bqx + 2]) {                                            // burger patties
+      ctx.fillStyle = '#3a2416'; ctx.fillRect(pxx, bqy + 2, 9, 5);
+      ctx.fillStyle = '#5a3820'; ctx.fillRect(pxx + 1, bqy + 3, 7, 3);
+      ctx.fillStyle = '#2e1c10'; ctx.fillRect(pxx + 2, bqy + 4, 2, 1);
+      if (gameTick % 10 < 5) { ctx.fillStyle = 'rgba(255,225,180,0.6)'; ctx.fillRect(pxx + 3 + (gameTick % 3), bqy + 1, 1, 1); }
+    }
+  }
+  ctx.fillStyle = '#3d3d3d'; ctx.fillRect(bqx - 15, bqy - 8 - bbqLift, 30, 9); ctx.fillRect(bqx - 11, bqy - 12 - bbqLift, 22, 5);  // lid
+  ctx.fillStyle = '#111'; ctx.fillRect(bqx - 2, bqy - 16 - bbqLift, 6, 4);   // handle
+  ctx.fillStyle = '#555'; ctx.fillRect(bqx - 11, bqy - 6 - bbqLift, 5, 2);   // vent
   const _sm = Math.sin(gameTick * 0.05);
-  ctx.fillStyle = 'rgba(210,210,210,0.45)';
-  ctx.fillRect(bqx + Math.round(_sm * 2), bqy - 21, 3, 3);
-  ctx.fillRect(bqx + Math.round(_sm * 3) + 2, bqy - 27, 3, 3);
-  ctx.fillRect(bqx + Math.round(_sm) + 1, bqy - 33, 2, 2);
+  ctx.fillStyle = dogBbqOpen > 0 ? 'rgba(220,220,220,0.6)' : 'rgba(210,210,210,0.45)';
+  ctx.fillRect(bqx + Math.round(_sm * 2), bqy - 21 - bbqLift, 3, 3);
+  ctx.fillRect(bqx + Math.round(_sm * 3) + 2, bqy - 27 - bbqLift, 3, 3);
+  ctx.fillRect(bqx + Math.round(_sm) + 1, bqy - 33 - bbqLift, 2, 2);
+
+  // Garden lamp post (lights up at night)
+  const _lamp = dogLampPos(), _night = dogIsNight();
+  ctx.fillStyle = '#2a2a2a';
+  ctx.fillRect(_lamp.x - 1, _lamp.topY, 3, _lamp.baseY - _lamp.topY);           // post
+  ctx.fillRect(_lamp.x - 5, _lamp.baseY - 2, 11, 3);                            // base
+  ctx.fillStyle = '#1e1e1e'; ctx.fillRect(_lamp.x - 5, _lamp.topY - 9, 11, 10); // housing
+  ctx.fillStyle = '#141414'; ctx.fillRect(_lamp.x - 6, _lamp.topY - 12, 13, 3); // cap
+  ctx.fillStyle = _night ? '#ffd775' : '#96a2a6';
+  ctx.fillRect(_lamp.x - 3, _lamp.topY - 8, 7, 8);                              // glass
 
   // A leafy tree in the yard
   const treeX = Math.round(splitX * 0.26);
@@ -2822,6 +2937,8 @@ function enterDogMode() {
   visitorCooldown = 60 * (30 + Math.floor(Math.random() * 90));
   placeDogFurniture();
   spawnBirds();
+  dragonfly = new Dragonfly();
+  dogBbqOpen = 0;
   if (!restoreDogState()) { dog.init(); }
   sndDogAmbient();
   updateCatnipBtn();
@@ -3209,6 +3326,16 @@ canvas.addEventListener('pointerdown', e => {
     cheeses.push({ x: px - CHEESE_W / 2, y: py - CHEESE_H / 2, eaten: false });
     if (++cheeseCount % 15 === 0 && rats.length > 0) raidCats.push(new RaidCat());
     return;
+  }
+
+  // Tap the BBQ → lift the lid and show the patties cooking
+  {
+    const { splitX, houseX } = _dogLayout();
+    const bqx = splitX + Math.round((houseX - splitX) * 0.30), bqy = Math.round(canvas.height * 0.42);
+    if (px >= bqx - 17 && px <= bqx + 17 && py >= bqy - 30 && py <= bqy + 30) {
+      dogBbqOpen = 60 * 5;
+      tapFeedback(bqx, bqy); return;
+    }
   }
 
   // Tap a bird → it flies off and the dog barks at it
@@ -3832,6 +3959,7 @@ function loop() {
     for (const p of puppies) { p.update(); p.draw(); }
 
     drawDogForeground();
+    if (dragonfly) { dragonfly.update(); dragonfly.draw(); }
     for (const b of birds) { b.update(); b.draw(); }
 
     if (scritching && !scritchCat && gameTick % 45 === 0) sndPant();
@@ -3988,6 +4116,7 @@ function loop() {
   }
 
   drawDynamicLighting();
+  drawDogNightGlow();
   if (_shakeSave) ctx.restore();
 
   // Unshaken HUD
