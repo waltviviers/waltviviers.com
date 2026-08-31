@@ -15,6 +15,11 @@
       background: rgba(0,0,0,0.55); align-items: center; justify-content: center;
     }
     .overlay.open { display: flex; }
+    /* Game menu popup — reuses the title-screen cream pill buttons, centred */
+    .game-menu-inner {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 12px; padding: 24px;
+    }
     .popup {
       background: rgba(255,251,244,0.97); border: 2px solid rgba(90,60,40,0.22);
       border-radius: 22px; padding: 24px 26px;
@@ -159,7 +164,18 @@
   </style>
 </head>
 <body>
-<button type="button" class="scritch-fab" aria-label="Back to title screen">
+<div id="game-menu" class="overlay">
+  <div class="game-menu-inner">
+    <button class="mode-btn-pick" data-mode="dog" type="button">Doggo Mode</button>
+    <button class="mode-btn-pick" data-mode="rat" type="button">Ratty Mode</button>
+    <button class="mode-btn-pick" data-mode="cat" type="button">Cat Lady Mode</button>
+    <div class="mode-sec-row">
+      <button class="mode-btn-sec" id="menu-htp" type="button">How to Play</button>
+      <a class="mode-btn-sec" href="/">Back to Main Site</a>
+    </div>
+  </div>
+</div>
+<button type="button" class="scritch-fab" aria-label="Open menu">
   <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" width="64" height="64" />
   <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
 </button>
@@ -3741,14 +3757,32 @@ persistLoad();
 dog.init();
 loop();
 
-// ─── Title-screen button ─────────────────────────────────────────────────────
+// ─── Game menu popup ─────────────────────────────────────────────────────────
 const menuBtn  = document.querySelector('.scritch-fab');
 const htpOverlay = document.getElementById('htp-overlay');
+const gameMenu = document.getElementById('game-menu');
+function closeGameMenu() { gameMenu.classList.remove('open'); }
 
-// The floating dog button returns to the title / mode-picker screen
+// The floating dog button opens a centred menu of the title-screen options
 menuBtn.addEventListener('click', e => {
   e.stopPropagation();
-  document.getElementById('mode-pick').style.display = '';
+  gameMenu.classList.add('open');
+});
+gameMenu.addEventListener('click', e => { if (e.target === gameMenu) closeGameMenu(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGameMenu(); });
+
+document.querySelectorAll('#game-menu .mode-btn-pick').forEach(btn => {
+  btn.addEventListener('click', () => {
+    closeGameMenu();
+    const m = btn.dataset.mode;
+    if (m === 'dog') enterDogMode();
+    else if (m === 'rat') enterRatMode();
+    else enterCatMode();
+  });
+});
+document.getElementById('menu-htp').addEventListener('click', () => {
+  closeGameMenu();
+  htpOverlay.classList.add('open');
 });
 
 document.getElementById('pick-htp').addEventListener('click', () => {
@@ -3783,7 +3817,7 @@ document.getElementById('sf-form').addEventListener('submit', async e => {
 });
 
 const modePick = document.getElementById('mode-pick');
-document.querySelectorAll('.mode-btn-pick').forEach(btn => {
+document.querySelectorAll('#mode-pick .mode-btn-pick').forEach(btn => {
   btn.addEventListener('click', () => {
     modePick.style.display = 'none';
     const m = btn.dataset.mode;
