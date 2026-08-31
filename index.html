@@ -1578,13 +1578,15 @@
     [data-theme="light"] .gx-field input, [data-theme="light"] .gx-field textarea, [data-theme="light"] .gx-field select { background: #FAF9F7; border-color: #D5D1CB; color: #0C0C0B; }
     [data-theme="light"] .gx-submit { background: #0C0C0B; color: #FAF9F7; }
     /* Scritch Scratch floating button (dog badge, hover reaction) */
-    .scritch-fab { position: fixed; left: 16px; bottom: 90px; z-index: 150; width: 66px; height: 66px; display: block; transition: transform 0.18s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.35)); }
+    .scritch-fab { position: fixed; left: 16px; bottom: 90px; z-index: 150; width: 66px; height: 66px; display: block; transition: transform 0.18s ease, bottom 0.2s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.35)); }
     .scritch-fab img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
     .scritch-fab .ss-over { opacity: 0; }
     .scritch-fab:hover { transform: translateY(-3px) scale(1.07); }
     .scritch-fab:hover .ss-up { opacity: 0; }
     .scritch-fab:hover .ss-over { opacity: 1; }
     @media (max-width: 900px) { .scritch-fab { bottom: 16px; } } /* level with the Enquire FAB on mobile */
+    /* While the privacy notice is showing, lift the game icon clear above it */
+    body.privacy-visible .scritch-fab { bottom: max(90px, calc(var(--privacy-h, 48px) + 28px)); }
     /* Custom hand pointer, site-wide */
     html, body, body * { cursor: url('/images/pointer_up.png') 3 1, auto !important; }
     body *:active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
@@ -2711,6 +2713,7 @@
       display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: rgba(14,14,13,0.96); color: #EDECE8;
       border: 1px solid rgba(255,255,255,0.14); border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.4);
       font-family: var(--sans, system-ui, sans-serif); font-size: 12.5px; line-height: 1.5; }
+    .privacy-notice[hidden] { display: none; }
     .privacy-notice p { margin: 0; }
     .privacy-notice a { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
     .privacy-notice button { flex-shrink: 0; padding: 7px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.25);
@@ -2726,8 +2729,15 @@
       try { if (localStorage.getItem('wv-privacy-ack')) return; } catch(e){}
       var el = document.getElementById('privacy-notice'); if (!el) return;
       el.hidden = false;
+      document.body.classList.add('privacy-visible');
+      var setH = function(){ document.documentElement.style.setProperty('--privacy-h', el.offsetHeight + 'px'); };
+      setH(); window.addEventListener('resize', setH);
       var ok = document.getElementById('privacy-ok');
-      ok && ok.addEventListener('click', function(){ el.hidden = true; try { localStorage.setItem('wv-privacy-ack','1'); } catch(e){} });
+      ok && ok.addEventListener('click', function(){
+        el.hidden = true;
+        document.body.classList.remove('privacy-visible');
+        try { localStorage.setItem('wv-privacy-ack','1'); } catch(e){}
+      });
     })();
   </script>
 </body>
