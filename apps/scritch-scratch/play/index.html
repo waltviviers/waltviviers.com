@@ -229,7 +229,6 @@
     <div class="htp-general">
       <ul class="htp-tips">
         <li>Happiness bar bottom-left tracks wellbeing</li>
-        <li>Name your pet via the menu · unlock achievements by playing</li>
       </ul>
     </div>
     <button class="popup-close popup-cta" id="htp-suggest" type="button">Suggest a Feature</button>
@@ -981,8 +980,30 @@ function drawCatFurniture() {
       }
 }
 
+// Cat-mode interactive kitchen state (tap effects)
+let catOvenGlow = 0, catToastPop = 0, catPlantWiggle = 0, catCanTicks = 0;
+function catKitchenLayout() {
+  const W = canvas.width, H = canvas.height;
+  const counterY = Math.round(H * 0.26), counterH = 18;
+  const cabinetY = counterY + counterH, cabinetH = Math.round(H * 0.14);
+  const sinkX = Math.round(W * 0.31), sinkW = Math.round(W * 0.15);
+  const stoveX = Math.round(W * 0.66), stoveW = Math.round(W * 0.19);
+  return {
+    W, H, counterY, counterH, cabinetY, cabinetH, sinkX, sinkW, stoveX, stoveW,
+    toastX: sinkX + sinkW + 14,
+    plantX: Math.round(W * 0.06),
+    kettleX: Math.round(W * 0.545),
+    canX: Math.round(W * 0.615),
+    fridgeX: Math.round(W * 0.865), fridgeW: Math.round(W * 0.125),
+  };
+}
+
 function drawCatKitchenItems() {
   const W = canvas.width, H = canvas.height;
+  if (catOvenGlow > 0) catOvenGlow--;
+  if (catToastPop > 0) catToastPop--;
+  if (catPlantWiggle > 0) catPlantWiggle--;
+  if (catCanTicks > 0) catCanTicks--;
   const wallH = Math.round(H * 0.26);
   const counterY = wallH;
   const counterH = 18;
@@ -1093,6 +1114,18 @@ function drawCatKitchenItems() {
     ctx.fillStyle = '#383840';
     ctx.fillRect(kx - 1, cabinetY + 5, 2, 4);
   }
+  // Oven interior light — glows warm for a while when the oven is tapped
+  if (catOvenGlow > 0) {
+    const fl = 0.78 + Math.sin(gameTick * 0.3) * 0.06;
+    ctx.save();
+    ctx.globalAlpha = Math.min(1, catOvenGlow / 30) * fl;
+    ctx.fillStyle = '#ffb03a';
+    ctx.fillRect(stoveX + 10, cabinetY + 22, stoveW - 20, cabinetH - 37);
+    ctx.globalAlpha *= 0.6;
+    ctx.fillStyle = '#ffe0a0';
+    ctx.fillRect(stoveX + 13, cabinetY + 25, stoveW - 26, cabinetH - 43);
+    ctx.restore();
+  }
 
   // Sink (center-left)
   const sinkX = Math.round(W * 0.31);
@@ -1125,14 +1158,15 @@ function drawCatKitchenItems() {
   ctx.fillRect(plantX - 1, counterY - 18, 20, 4);
   ctx.fillStyle = '#422010';
   ctx.fillRect(plantX + 2, counterY - 9, 14, 6);
+  const pw = catPlantWiggle > 0 ? Math.round(Math.sin(catPlantWiggle * 0.6) * Math.min(3, catPlantWiggle / 6)) : 0;
   ctx.fillStyle = '#286414';
-  ctx.fillRect(plantX + 7, counterY - 30, 4, 14);
+  ctx.fillRect(plantX + 7 + pw, counterY - 30, 4, 14);
   ctx.fillStyle = '#247a10';
-  ctx.fillRect(plantX - 2, counterY - 36, 12, 8);
-  ctx.fillRect(plantX + 9, counterY - 40, 12, 8);
+  ctx.fillRect(plantX - 2 + pw, counterY - 36, 12, 8);
+  ctx.fillRect(plantX + 9 + pw, counterY - 40, 12, 8);
   ctx.fillStyle = '#38981e';
-  ctx.fillRect(plantX + 1, counterY - 34, 8, 5);
-  ctx.fillRect(plantX + 10, counterY - 38, 8, 5);
+  ctx.fillRect(plantX + 1 + pw, counterY - 34, 8, 5);
+  ctx.fillRect(plantX + 10 + pw, counterY - 38, 8, 5);
 
   // Toaster (right of sink)
   const toastX = sinkX + sinkW + 14;
@@ -1146,6 +1180,58 @@ function drawCatKitchenItems() {
   ctx.fillStyle = '#808070';
   ctx.fillRect(toastX + 29, counterY - 16, 4, 16);
   ctx.fillRect(toastX + 25, counterY - 11, 8, 6);
+
+  // Toast popping up when the toaster is tapped
+  if (catToastPop > 0) {
+    const up = Math.round(16 * Math.min(1, (90 - catToastPop) / 6));
+    for (const sx of [toastX + 4, toastX + 16]) {
+      const ty = counterY - 22 - up;
+      ctx.fillStyle = '#d9a441'; ctx.fillRect(sx, ty, 10, 12);
+      ctx.fillStyle = '#b9822c'; ctx.fillRect(sx, ty, 10, 2); ctx.fillRect(sx, ty + 10, 10, 2);
+      ctx.fillStyle = '#e8be6a'; ctx.fillRect(sx + 2, ty + 3, 6, 5);
+    }
+  }
+
+  // Kettle (between the toaster and the stove)
+  const kettleX = Math.round(W * 0.545);
+  ctx.fillStyle = '#a8332b'; ctx.fillRect(kettleX - 9, counterY - 16, 18, 16);
+  ctx.fillStyle = '#c14a3f'; ctx.fillRect(kettleX - 7, counterY - 14, 14, 12);
+  ctx.fillStyle = '#e08a80'; ctx.fillRect(kettleX - 5, counterY - 12, 4, 5);
+  ctx.fillStyle = '#7a241d'; ctx.fillRect(kettleX - 9, counterY - 3, 18, 3);
+  ctx.fillStyle = '#3a2a28'; ctx.fillRect(kettleX - 4, counterY - 20, 8, 2);
+  ctx.fillRect(kettleX - 5, counterY - 19, 2, 4); ctx.fillRect(kettleX + 3, counterY - 19, 2, 4);
+  ctx.fillStyle = '#a8332b'; ctx.fillRect(kettleX + 8, counterY - 13, 5, 3); ctx.fillRect(kettleX + 11, counterY - 15, 3, 3);
+  ctx.fillStyle = '#3a2a28'; ctx.fillRect(kettleX - 1, counterY - 18, 3, 2);
+
+  // Electric can opener + cat-food can (tap it → all the cats come running)
+  const canX = Math.round(W * 0.615);
+  ctx.fillStyle = '#9aa0a6'; ctx.fillRect(canX - 6, counterY - 15, 12, 15);
+  ctx.fillStyle = '#b4bac0'; ctx.fillRect(canX - 4, counterY - 13, 8, 11);
+  ctx.fillStyle = '#5c6066'; ctx.fillRect(canX - 6, counterY - 3, 12, 3);
+  ctx.fillStyle = '#3a3d42'; ctx.fillRect(canX - 2, counterY - 19, 4, 5);
+  ctx.fillStyle = '#7a7f85'; ctx.fillRect(canX + 4, counterY - 12, 3, 4);
+  ctx.fillStyle = '#c9a24a'; ctx.fillRect(canX - 4, counterY - 8, 8, 8);
+  ctx.fillStyle = '#e0bd6a'; ctx.fillRect(canX - 3, counterY - 7, 6, 6);
+  ctx.fillStyle = '#a07a30'; ctx.fillRect(canX - 4, counterY - 8, 8, 1);
+  if (catCanTicks > 0) {
+    const s = Math.sin(gameTick * 0.22);
+    ctx.fillStyle = 'rgba(200,180,120,0.5)';
+    ctx.fillRect(canX + Math.round(s * 2), counterY - 22, 2, 2);
+    ctx.fillRect(canX + Math.round(s * 3) + 2, counterY - 27, 2, 2);
+  }
+
+  // Fridge (next to the oven, on the right)
+  const fridgeX = Math.round(W * 0.865), fridgeW = Math.round(W * 0.125);
+  const fTop = 3, fBot = cabinetY + cabinetH;
+  ctx.fillStyle = '#e6e4de'; ctx.fillRect(fridgeX, fTop, fridgeW, fBot - fTop);
+  ctx.fillStyle = '#f2f0ea'; ctx.fillRect(fridgeX + 2, fTop + 2, fridgeW - 4, fBot - fTop - 4);
+  ctx.fillStyle = '#d4d2cc'; ctx.fillRect(fridgeX + fridgeW - 4, fTop, 4, fBot - fTop);
+  const fSplitY = fTop + Math.round((fBot - fTop) * 0.34);
+  ctx.fillStyle = '#cfcdc7'; ctx.fillRect(fridgeX + 2, fSplitY, fridgeW - 4, 2);
+  ctx.fillStyle = '#9a9a94';
+  ctx.fillRect(fridgeX + 5, fTop + 12, 3, Math.round((fSplitY - fTop) * 0.5));
+  ctx.fillRect(fridgeX + 5, fSplitY + 10, 3, Math.round((fBot - fSplitY) * 0.45));
+  ctx.fillStyle = '#c8c6c0'; ctx.fillRect(fridgeX, fTop, fridgeW, 2);
 
   // Fishbowl with animated goldfish (between plant and sink)
   const fbCX = Math.round(W * 0.21);
@@ -2022,7 +2108,13 @@ class Cat {
     if (this.state === 'walking' && this.tx !== null) {
       const arrived = this._stepToward();
       if (arrived) {
-        if (this.wantWool) {
+        if (this.wantCan) {
+          this.wantCan = false;
+          sndMeow();
+          labels.push(new Label('Meow!', this.cx, Math.max(20, this.y - 6)));
+          addHappiness(3);
+          this.state = 'happy'; this.lingerTicks = 60 * 3;
+        } else if (this.wantWool) {
           this.wantWool = false;
           if (woolBall) {
             woolBall.vx = (this.cx < woolBall.x + WOOL_SPR[0].length * WOOL_SC / 2 ? 1 : -1) * (4 + Math.random() * 4);
@@ -3002,6 +3094,39 @@ canvas.addEventListener('pointerdown', e => {
         tapFeedback(fbCX, fbBotY); return;
       }
     }
+    // Tap kitchen appliances
+    {
+      const L = catKitchenLayout();
+      // Can opener → all the cats come running and meowing
+      if (px >= L.canX - 9 && px <= L.canX + 9 && py >= L.counterY - 20 && py <= L.counterY + 2) {
+        sndCanOpener(); catCanTicks = 90;
+        const floorY = catKitchenFloorY();
+        let n = 0;
+        for (const cat of cats) {
+          if (cat.dead || cat.isVisitor || cat.state === 'leaving') continue;
+          if (cat.state === 'sleep') { cat.state = 'idle'; cat.idleTimer = 0; }
+          cat.wantCan = true;
+          cat._roamTo(L.canX + (Math.random() - 0.5) * (L.W * 0.12), floorY + CPH);
+          if (n++ < 2) labels.push(new Label('Meow!', cat.cx, Math.max(20, cat.y - 6)));
+        }
+        tapFeedback(L.canX, L.counterY - 10); return;
+      }
+      // Oven → interior light glows for a while
+      if (px >= L.stoveX && px <= L.stoveX + L.stoveW && py >= L.cabinetY && py <= L.cabinetY + L.cabinetH) {
+        catOvenGlow = 60 * 4;
+        tapFeedback(px, py); return;
+      }
+      // Toaster → toast pops up
+      if (px >= L.toastX && px <= L.toastX + 32 && py >= L.counterY - 24 && py <= L.counterY + 2) {
+        catToastPop = 90; sndToast();
+        tapFeedback(L.toastX + 16, L.counterY - 12); return;
+      }
+      // Plant → little wiggle
+      if (px >= L.plantX - 4 && px <= L.plantX + 22 && py >= L.counterY - 42 && py <= L.counterY + 2) {
+        catPlantWiggle = 40;
+        tapFeedback(L.plantX + 9, L.counterY - 20); return;
+      }
+    }
     // Tap wool ball → roll it and send a cat
     if (woolBall) {
       const wbw = WOOL_SPR[0].length * WOOL_SC, wbh = WOOL_SPR.length * WOOL_SC;
@@ -3272,6 +3397,33 @@ function sndBark(small) {
   gn.gain.setValueAtTime(0.18, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
   osc.connect(flt); flt.connect(gn); gn.connect(_masterGain);
   osc.start(t); osc.stop(t + 0.25);
+}
+
+function sndCanOpener() {
+  if (!_cool('can', 20)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const dur = 0.6;
+  const osc = ctx.createOscillator(); osc.type = 'square';
+  osc.frequency.setValueAtTime(140, t);
+  osc.frequency.linearRampToValueAtTime(120, t + dur);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = 900; flt.Q.value = 1.2;
+  const gn = ctx.createGain(); gn.gain.setValueAtTime(0.0001, t);
+  const steps = 14;
+  for (let i = 0; i <= steps; i++) gn.gain.setValueAtTime(i % 2 === 0 ? 0.09 : 0.02, t + (i / steps) * dur);
+  gn.gain.linearRampToValueAtTime(0.0001, t + dur + 0.05);
+  osc.connect(flt); flt.connect(gn); gn.connect(_masterGain);
+  osc.start(t); osc.stop(t + dur + 0.06);
+}
+
+function sndToast() {
+  if (!_cool('toast', 15)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const osc = ctx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 880;
+  const gn = ctx.createGain(); gn.gain.setValueAtTime(0.0001, t);
+  gn.gain.exponentialRampToValueAtTime(0.11, t + 0.01);
+  gn.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+  osc.connect(gn); gn.connect(_masterGain);
+  osc.start(t); osc.stop(t + 0.42);
 }
 
 function sndBird() {
