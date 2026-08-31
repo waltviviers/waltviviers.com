@@ -9,26 +9,22 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
     canvas { display: block; touch-action: none; cursor: none; }
-
-    #menu-drop {
-      display: none; position: fixed; bottom: 164px; left: 16px; z-index: 200;
-      background: #0a0a0a; border: 1px solid #333; min-width: 140px;
-    }
-    @media (max-width: 900px) { #menu-drop { bottom: 124px; } }
-    #menu-drop.open { display: block; }
-    #menu-drop a, #menu-drop button {
-      display: block; width: 100%; text-align: left;
-      padding: 9px 14px; color: #ddd; background: none; border: none;
-      cursor: pointer; text-decoration: none; font-family: monospace; font-size: 11px;
-    }
-    #menu-drop a:hover, #menu-drop button:hover { background: #1a1a1a; color: #fff; }
-    #menu-drop .sep { border-top: 1px solid #333; }
+    /* Custom hand cursor on all HTML UI (menus, buttons, overlays); the canvas
+       keeps cursor:none and draws its own in-game pointer. */
+    html, body, body *:not(canvas) { cursor: url('/images/pointer_up.png') 3 1, auto !important; }
+    body *:not(canvas):active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
+    input[type="text"], textarea { cursor: text !important; }
 
     .overlay {
       display: none; position: fixed; inset: 0; z-index: 500;
       background: rgba(0,0,0,0.55); align-items: center; justify-content: center;
     }
     .overlay.open { display: flex; }
+    /* Game menu popup — reuses the title-screen cream pill buttons, centred */
+    .game-menu-inner {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 12px; padding: 24px;
+    }
     .popup {
       background: rgba(255,251,244,0.97); border: 2px solid rgba(90,60,40,0.22);
       border-radius: 22px; padding: 24px 26px;
@@ -101,6 +97,7 @@
     .scritch-fab {
       position: fixed; left: 16px; bottom: 90px; z-index: 250;
       width: 66px; height: 66px; display: block;
+      background: none; border: none; padding: 0; -webkit-appearance: none; appearance: none;
       transition: transform 0.18s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.4));
     }
     .scritch-fab img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
@@ -142,9 +139,9 @@
     }
     #catnip-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
     #catnip-btn .cn-over { opacity: 0; }
-    #catnip-btn.pressed { transform: translateY(-3px) scale(1.07); }
-    #catnip-btn.pressed .cn-up { opacity: 0; }
-    #catnip-btn.pressed .cn-over { opacity: 1; }
+    #catnip-btn.pressed, #catnip-btn:hover { transform: translateY(-3px) scale(1.07); }
+    #catnip-btn.pressed .cn-up, #catnip-btn:hover .cn-up { opacity: 0; }
+    #catnip-btn.pressed .cn-over, #catnip-btn:hover .cn-over { opacity: 1; }
     @media (max-width: 900px) { #catnip-btn { bottom: 124px; } }
 
     /* Mode action icon buttons — Perform Trick (dog) and Boggle (rat) */
@@ -155,9 +152,9 @@
     }
     #trick-btn img, #boggle-btn img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
     #trick-btn .tb-over, #boggle-btn .tb-over { opacity: 0; }
-    #trick-btn.pressed, #boggle-btn.pressed { transform: translateY(-3px) scale(1.07); }
-    #trick-btn.pressed .tb-up, #boggle-btn.pressed .tb-up { opacity: 0; }
-    #trick-btn.pressed .tb-over, #boggle-btn.pressed .tb-over { opacity: 1; }
+    #trick-btn.pressed, #boggle-btn.pressed, #trick-btn:hover, #boggle-btn:hover { transform: translateY(-3px) scale(1.07); }
+    #trick-btn.pressed .tb-up, #boggle-btn.pressed .tb-up, #trick-btn:hover .tb-up, #boggle-btn:hover .tb-up { opacity: 0; }
+    #trick-btn.pressed .tb-over, #boggle-btn.pressed .tb-over, #trick-btn:hover .tb-over, #boggle-btn:hover .tb-over { opacity: 1; }
     @media (max-width: 900px) { #trick-btn, #boggle-btn { bottom: 124px; } }
 
     /* WALT logo — same top-left position as the main site header */
@@ -213,7 +210,7 @@
   <button class="mode-switch" data-mode="rat">Ratty Mode</button>
   <button class="mode-switch" data-mode="cat">Cat Lady Mode</button>
 </div>
-<button type="button" class="scritch-fab" aria-label="Menu">
+<button type="button" class="scritch-fab" aria-label="Open menu">
   <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" width="64" height="64" />
   <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
 </button>
@@ -262,7 +259,6 @@
     <div class="htp-general">
       <ul class="htp-tips">
         <li>Happiness bar bottom-left tracks wellbeing</li>
-        <li>Name your pet via the menu · unlock achievements by playing</li>
       </ul>
     </div>
     <button class="popup-close popup-cta" id="htp-suggest" type="button">Suggest a Feature</button>
@@ -579,6 +575,127 @@ const BED_SC = 4, BOWL_SC = 3;
 let dogBed = null, dogFoodBowl = null, dogWaterBowl = null;
 const poolRings = [];   // expanding rings, like dragonflies touching the water
 
+// ─── Dog-yard extras: dragonfly, night lamp, BBQ lid ─────────────────────────
+let dragonfly = null;   // flits over the pool
+let dogBbqOpen = 0;     // BBQ lid-open (patties showing) timer
+// Fishpond in the yard — koi swim around, and scatter when a dog runs through
+let pondFish = [];
+const pondSplashes = [];
+function dogPondPos() {
+  const W = canvas.width, H = canvas.height;
+  const splitX = Math.round(W * 0.65), poolFloor = dogPoolFloorY();
+  return {
+    cx: Math.round(splitX * 0.6),
+    cy: Math.round(poolFloor + (H - poolFloor) * 0.82),
+    rx: Math.round(splitX * 0.15),
+    ry: Math.round(splitX * 0.15 * 0.52),
+  };
+}
+const POND_FISH_COLORS = [
+  ['#e06a2a', '#f0894a'], ['#e0b020', '#f0d060'], ['#d84838', '#f07058'],
+  ['#dcdcdc', '#ffffff'], ['#c85a2a', '#e8b060'],
+];
+class PondFish {
+  constructor(i) {
+    const [c1, c2] = POND_FISH_COLORS[i % POND_FISH_COLORS.length];
+    this.c1 = c1; this.c2 = c2;
+    this.a = Math.random() * Math.PI * 2;
+    this.baseRR = 0.25 + Math.random() * 0.5;
+    this.rr = this.baseRR;
+    this.spd = 0.010 + Math.random() * 0.016;
+    this.dir = Math.random() < 0.5 ? 1 : -1;
+    this.flee = 0; this.x = 0; this.y = 0; this.right = true;
+  }
+  scatter() { this.flee = Math.max(this.flee, 36 + Math.floor(Math.random() * 24)); }
+  update() {
+    const p = dogPondPos(), prevX = this.x;
+    if (this.flee > 0) { this.flee--; this.a += this.dir * this.spd * 4; this.rr = Math.min(0.92, this.rr + 0.02); }
+    else { this.a += this.dir * this.spd; this.rr += (this.baseRR - this.rr) * 0.03; }
+    this.x = p.cx + Math.cos(this.a) * p.rx * this.rr;
+    this.y = p.cy + Math.sin(this.a) * p.ry * this.rr;
+    this.right = this.x >= prevX;
+  }
+  draw() {
+    const x = Math.round(this.x), y = Math.round(this.y), f = this.right ? 1 : -1;
+    ctx.fillStyle = this.c1; ctx.fillRect(x - 3, y - 1, 6, 2);
+    ctx.fillStyle = this.c2; ctx.fillRect(x - f, y - 1, 2, 2);
+    ctx.fillStyle = this.c1; ctx.fillRect(x - f * 4, y - 1, 2, 2);   // tail
+  }
+}
+function spawnPondFish() { pondFish = []; for (let i = 0; i < 5; i++) pondFish.push(new PondFish(i)); }
+class PondSplash {
+  constructor(x, y) { this.x = x; this.y = y; this.vx = (Math.random() - 0.5) * 3.2; this.vy = -1.6 - Math.random() * 2.2; this.life = 16 + Math.floor(Math.random() * 8); }
+  update() { this.x += this.vx; this.y += this.vy; this.vy += 0.35; this.life--; }
+  get dead() { return this.life <= 0; }
+  draw() { ctx.fillStyle = 'rgba(190,225,235,0.85)'; ctx.fillRect(Math.round(this.x), Math.round(this.y), 2, 2); }
+}
+// Splash + scatter when the dog (or a puppy) runs through the pond
+function dogPondInteract() {
+  if (!pondFish.length) return;
+  const p = dogPondPos();
+  let splashing = false;
+  const check = (d, cx, footY) => {
+    const nx = (cx - p.cx) / (p.rx + 8), ny = (footY - p.cy) / (p.ry + 8);
+    if (nx * nx + ny * ny <= 1) {
+      const moved = Math.hypot(cx - (d._ppx == null ? cx : d._ppx), footY - (d._ppy == null ? footY : d._ppy));
+      if (moved > 0.4) {
+        splashing = true;
+        if (gameTick % 3 === 0) {
+          ripples.push(new Ripple(cx + (Math.random() - 0.5) * 16, p.cy + (Math.random() - 0.5) * 6));
+          for (let i = 0; i < 3; i++) pondSplashes.push(new PondSplash(cx + (Math.random() - 0.5) * 10, p.cy - 2));
+        }
+      }
+    }
+    d._ppx = cx; d._ppy = footY;
+  };
+  check(dog, dog.cx, dog.y + PH);
+  for (const pup of puppies) check(pup, pup.cx, pup.y + DH * pup.vs);
+  if (splashing) {
+    for (const fsh of pondFish) fsh.scatter();
+    if (gameTick % 14 === 0) sndBlub();
+  }
+}
+class Dragonfly {
+  constructor() { this.t = 0; this.right = true; this.reset(); }
+  _bounds() {
+    const W = canvas.width, splitX = Math.round(W * 0.65), poolFloor = dogPoolFloorY(), e = 10;
+    return { x0: e + 8, x1: splitX - e - 8, y0: 5, y1: poolFloor - e - 4 };
+  }
+  reset() {
+    const b = this._bounds();
+    this.x = b.x0 + Math.random() * (b.x1 - b.x0);
+    this.y = b.y0 + Math.random() * (b.y1 - b.y0);
+    this._newTarget();
+  }
+  _newTarget() {
+    const b = this._bounds();
+    this.tx = b.x0 + Math.random() * (b.x1 - b.x0);
+    this.dip = Math.random() < 0.35;
+    this.ty = this.dip ? b.y1 - 2 - Math.random() * 4 : b.y0 + Math.random() * (b.y1 - b.y0);
+  }
+  update() {
+    this.t++;
+    const dx = this.tx - this.x, dy = this.ty - this.y, d = Math.hypot(dx, dy) || 1;
+    if (d < 3) {
+      if (this.dip && poolRings.length < 4) poolRings.push({ x: this.x, y: Math.min(this.y, this._bounds().y1), age: 0 });
+      this._newTarget();
+    } else {
+      this.x += dx / d * 1.8; this.y += dy / d * 1.8 + Math.sin(this.t * 0.3) * 0.4;
+      this.right = dx >= 0;
+    }
+  }
+  draw() {
+    const x = Math.round(this.x), y = Math.round(this.y), f = this.right ? 1 : -1;
+    const wingUp = gameTick % 2 === 0;
+    ctx.fillStyle = 'rgba(205,238,248,0.6)';
+    ctx.fillRect(x - 1, y + (wingUp ? -4 : -1), 6, 2);
+    ctx.fillRect(x - 1, y + (wingUp ? 1 : -1), 6, 2);
+    ctx.fillStyle = '#1f8a72'; ctx.fillRect(x - f * 6, y - 1, 12, 2);
+    ctx.fillStyle = '#2ea888'; ctx.fillRect(x + f * 3, y - 1, 3, 2);
+    ctx.fillStyle = '#0e3b30'; ctx.fillRect(x + f * 6, y - 1, 2, 2);
+  }
+}
+
 // Shared porch geometry — narrower house on small screens so it doesn't dominate
 function _dogLayout() {
   const W = canvas.width;
@@ -703,10 +820,32 @@ function drawDogBackground() {
   ctx.fillStyle = '#3a7318';
   ctx.fillRect(splitX - 4, 0, 4, H);
 
+  // Fishpond in the yard
+  const pondCX = Math.round(splitX * 0.6);
+  const pondCY = Math.round(poolFloor + (H - poolFloor) * 0.82);
+  const pondRX = Math.round(splitX * 0.15), pondRY = Math.round(pondRX * 0.52);
+  ctx.fillStyle = '#736a5e';                                     // stone rim
+  ctx.beginPath(); ctx.ellipse(pondCX, pondCY, pondRX + 3, pondRY + 3, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#8a8074';
+  ctx.beginPath(); ctx.ellipse(pondCX, pondCY - 1, pondRX + 3, pondRY + 2, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#2f6f86';                                     // water
+  ctx.beginPath(); ctx.ellipse(pondCX, pondCY, pondRX, pondRY, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#3f88a0';
+  ctx.beginPath(); ctx.ellipse(pondCX, pondCY - 1, pondRX - 3, pondRY - 2, 0, 0, Math.PI * 2); ctx.fill();
+  const _psh = Math.sin(gameTick * 0.06);                        // shimmer
+  ctx.fillStyle = 'rgba(185,232,242,0.5)';
+  ctx.fillRect(pondCX - 6 + Math.round(_psh * 3), pondCY - 2, 8, 1);
+  ctx.fillRect(pondCX + 2 + Math.round(_psh * 2), pondCY + 2, 6, 1);
+  ctx.fillStyle = '#2e7d32';                                     // lily pads
+  ctx.beginPath(); ctx.ellipse(pondCX - pondRX * 0.4, pondCY - 1, 5, 3, 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(pondCX + pondRX * 0.45, pondCY + 2, 4, 2.5, 0, 0, Math.PI * 2); ctx.fill();
+  // (koi are drawn as live entities in the game loop)
+
 }
 
 function drawDogForeground() {
   const W = canvas.width, H = canvas.height;
+  if (dogBbqOpen > 0) dogBbqOpen--;
   const splitX = Math.round(W * 0.65);
   const poolFloor = dogPoolFloorY();
 
@@ -734,20 +873,32 @@ function drawDogForeground() {
   ctx.fillStyle = '#9a9a94'; ctx.fillRect(houseX - 5, 0, 2, H);
   ctx.fillStyle = '#b0b0aa'; ctx.fillRect(houseX - 4, Math.round(H * 0.55), 4, Math.round(H * 0.45));
 
-  // Barbecue (kettle grill) on the porch
-  const bqx = splitX + Math.round((houseX - splitX) * 0.30), bqy = Math.round(H * 0.52);
+  // Barbecue (kettle grill) on the porch — tap to lift the lid and reveal patties
+  const bqx = splitX + Math.round((houseX - splitX) * 0.30), bqy = Math.round(H * 0.42);
+  const bbqLift = dogBbqOpen > 0 ? 11 : 0;
   ctx.fillStyle = '#2a2a2a';
   ctx.fillRect(bqx - 13, bqy + 6, 3, 22); ctx.fillRect(bqx + 11, bqy + 6, 3, 22); ctx.fillRect(bqx - 1, bqy + 8, 3, 20);
-  ctx.fillStyle = '#333'; ctx.fillRect(bqx - 16, bqy, 32, 11);
+  ctx.fillStyle = '#333'; ctx.fillRect(bqx - 16, bqy, 32, 11);       // bowl
   ctx.fillStyle = '#1e1e1e'; ctx.fillRect(bqx - 14, bqy + 8, 28, 4);
-  ctx.fillStyle = '#3d3d3d'; ctx.fillRect(bqx - 15, bqy - 8, 30, 9); ctx.fillRect(bqx - 11, bqy - 12, 22, 5);
-  ctx.fillStyle = '#111'; ctx.fillRect(bqx - 2, bqy - 16, 6, 4);
-  ctx.fillStyle = '#555'; ctx.fillRect(bqx - 11, bqy - 6, 5, 2);
+  if (dogBbqOpen > 0) {
+    ctx.fillStyle = 'rgba(255,110,30,0.35)'; ctx.fillRect(bqx - 13, bqy + 6, 26, 3);   // embers
+    ctx.fillStyle = '#5a5a5a';
+    for (let gx = -12; gx <= 12; gx += 4) ctx.fillRect(bqx + gx, bqy + 1, 1, 6);       // grate
+    for (const pxx of [bqx - 9, bqx + 2]) {                                            // burger patties
+      ctx.fillStyle = '#3a2416'; ctx.fillRect(pxx, bqy + 2, 9, 5);
+      ctx.fillStyle = '#5a3820'; ctx.fillRect(pxx + 1, bqy + 3, 7, 3);
+      ctx.fillStyle = '#2e1c10'; ctx.fillRect(pxx + 2, bqy + 4, 2, 1);
+      if (gameTick % 10 < 5) { ctx.fillStyle = 'rgba(255,225,180,0.6)'; ctx.fillRect(pxx + 3 + (gameTick % 3), bqy + 1, 1, 1); }
+    }
+  }
+  ctx.fillStyle = '#3d3d3d'; ctx.fillRect(bqx - 15, bqy - 8 - bbqLift, 30, 9); ctx.fillRect(bqx - 11, bqy - 12 - bbqLift, 22, 5);  // lid
+  ctx.fillStyle = '#111'; ctx.fillRect(bqx - 2, bqy - 16 - bbqLift, 6, 4);   // handle
+  ctx.fillStyle = '#555'; ctx.fillRect(bqx - 11, bqy - 6 - bbqLift, 5, 2);   // vent
   const _sm = Math.sin(gameTick * 0.05);
-  ctx.fillStyle = 'rgba(210,210,210,0.45)';
-  ctx.fillRect(bqx + Math.round(_sm * 2), bqy - 21, 3, 3);
-  ctx.fillRect(bqx + Math.round(_sm * 3) + 2, bqy - 27, 3, 3);
-  ctx.fillRect(bqx + Math.round(_sm) + 1, bqy - 33, 2, 2);
+  ctx.fillStyle = dogBbqOpen > 0 ? 'rgba(220,220,220,0.6)' : 'rgba(210,210,210,0.45)';
+  ctx.fillRect(bqx + Math.round(_sm * 2), bqy - 21 - bbqLift, 3, 3);
+  ctx.fillRect(bqx + Math.round(_sm * 3) + 2, bqy - 27 - bbqLift, 3, 3);
+  ctx.fillRect(bqx + Math.round(_sm) + 1, bqy - 33 - bbqLift, 2, 2);
 
   // A leafy tree in the yard
   const treeX = Math.round(splitX * 0.26);
@@ -768,6 +919,85 @@ function drawDogForeground() {
   ctx.fillStyle = '#1e4d12';                                           // shaded underside
   for (const [dx, dy, r] of [[15,11,10],[-19,9,8],[6,14,8]]) {
     ctx.beginPath(); ctx.arc(treeX + dx, canopyY + dy, r, 0, Math.PI * 2); ctx.fill();
+  }
+}
+
+// ─── Yard birds (dog mode) — perch in the tree, fly off and come back ─────────
+function dogTreeAnchor() {
+  const W = canvas.width, H = canvas.height;
+  const splitX = Math.round(W * 0.65);
+  const poolFloor = dogPoolFloorY();
+  const treeX = Math.round(splitX * 0.26);
+  const treeBaseY = Math.round(poolFloor + (H - poolFloor) * 0.64);
+  return { x: treeX, y: treeBaseY - 50 };   // canopy centre (matches the tree)
+}
+
+const BIRD_COLORS  = ['#d95b3a', '#3f74c4', '#e6b23c', '#5b5b5b'];
+const BIRD_PERCHES = [[-14, -10], [12, -14], [-2, -22], [20, -6]];
+let birds = [];
+
+class Bird {
+  constructor(dx, dy, color) {
+    this.dx = dx; this.dy = dy; this.color = color;
+    this.state = 'perched';
+    const p = this.perch(); this.x = p.x; this.y = p.y;
+    this.flip = Math.random() < 0.5;
+    this.flap = 0;
+    this.timer = 300 + Math.random() * 900;
+  }
+  perch() { const a = dogTreeAnchor(); return { x: a.x + this.dx, y: a.y + this.dy }; }
+  flyOff(startled) {
+    this.state = 'flying';
+    const dir = this.x < canvas.width * 0.5 ? 1 : -1;   // head out over the yard
+    this.vx = dir * (1.4 + Math.random() * 1.4);
+    this.vy = -(1.6 + Math.random() * 1.2);
+    this.flip = dir < 0;
+    this.timer = (startled ? 200 : 150) + Math.random() * 180;
+    sndBird();
+  }
+  update() {
+    if (this.state === 'perched') {
+      const p = this.perch(); this.x = p.x; this.y = p.y; this.flap = 0;
+      if (--this.timer <= 0) this.flyOff(false);
+    } else if (this.state === 'flying') {
+      this.x += this.vx; this.y += this.vy; this.vy += 0.02; this.flap++;
+      if (--this.timer <= 0) this.state = 'returning';
+    } else { // returning
+      const p = this.perch();
+      const ddx = p.x - this.x, ddy = p.y - this.y, d = Math.hypot(ddx, ddy) || 1;
+      this.flip = ddx < 0; this.flap++;
+      if (d < 2.5) { this.state = 'perched'; this.x = p.x; this.y = p.y; this.timer = 400 + Math.random() * 900; }
+      else { this.x += ddx / d * 2.4; this.y += ddy / d * 2.4; }
+    }
+  }
+  hitTest(px, py) { return Math.abs(px - this.x) <= 8 && Math.abs(py - this.y) <= 8; }
+  draw() {
+    const x = Math.round(this.x), y = Math.round(this.y), f = this.flip ? -1 : 1;
+    ctx.fillStyle = this.color;
+    if (this.state === 'perched') {
+      ctx.fillRect(x - 3, y - 2, 6, 5);                                // body
+      ctx.fillRect(x + f * 3, y - 5, 3, 3);                            // head
+      ctx.fillRect(x - f * 4, y - 1, 3, 2);                            // tail
+      ctx.fillStyle = '#3a2a1a'; ctx.fillRect(x - 2, y + 3, 1, 2); ctx.fillRect(x + 1, y + 3, 1, 2); // legs
+      ctx.fillStyle = '#111';    ctx.fillRect(x + f * 4, y - 4, 1, 1); // eye
+      ctx.fillStyle = '#e8a23a'; ctx.fillRect(x + f * 6, y - 4, 2, 1); // beak
+    } else {
+      const up = (Math.floor(this.flap / 4) % 2) === 0, wy = up ? -4 : 2;
+      ctx.fillRect(x - 2, y - 1, 5, 3);                                // body
+      ctx.fillRect(x + f * 3, y - 2, 2, 2);                            // head
+      ctx.fillRect(x - 5, y + wy, 3, 2); ctx.fillRect(x + 2, y + wy, 3, 2); // wings
+      ctx.fillStyle = '#e8a23a'; ctx.fillRect(x + f * 5, y - 1, 2, 1); // beak
+    }
+  }
+}
+
+function spawnBirds() {
+  birds = [];
+  for (let i = 0; i < 3; i++) {
+    const [dx, dy] = BIRD_PERCHES[i % BIRD_PERCHES.length];
+    const b = new Bird(dx, dy, BIRD_COLORS[i % BIRD_COLORS.length]);
+    b.timer = 200 + Math.random() * 1000;   // stagger first flights
+    birds.push(b);
   }
 }
 
@@ -826,6 +1056,7 @@ const RAT_BED_SPR = [
 const RAT_BED_SC = 6;
 
 let ratBottle = null, ratFoodBowl = null, ratBed = null;
+let ratTube = null, ratHouse = null, ratCarrot = null;
 let ratBirthCount = 0;
 
 function drawRatBackground() {
@@ -854,6 +1085,9 @@ function placeRatFurniture() {
   ratFoodBowl = { x: w * 0.88 - RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, y: h * 0.25 };
   ratBed = { x: w / 2 - RAT_BED_SPR[0].length * RAT_BED_SC / 2, y: h * 0.7 };
   ratWheel = { x: w * 0.5, y: h * 0.4 };
+  ratTube = { x: Math.round(w * 0.16), y: Math.round(h * 0.52), len: Math.round(w * 0.19), h: RAT_H + 8 };
+  ratHouse = { x: Math.round(w * 0.72), y: Math.round(h * 0.55), w: 34, h: 30 };
+  ratCarrot = { x: Math.round(w * 0.30), y: Math.round(h * 0.84), len: 16 };
   _wheelAngle = 0; _wheelSpeed = 0;
 }
 
@@ -884,6 +1118,41 @@ function drawRatFurniture() {
           ctx.fillStyle = r < 2 ? '#f0e8d0' : '#c8a878';
           ctx.fillRect(Math.round(ratBed.x + c * RAT_BED_SC), Math.round(ratBed.y + r * RAT_BED_SC), RAT_BED_SC, RAT_BED_SC);
         }
+  }
+
+  // Play tube — rats run through it
+  if (ratTube) {
+    const t = ratTube;
+    ctx.fillStyle = '#5aa0c8'; ctx.fillRect(t.x, t.y, t.len, t.h);
+    ctx.fillStyle = '#7ab8d8'; ctx.fillRect(t.x, t.y + 2, t.len, 3);
+    ctx.fillStyle = 'rgba(40,80,110,0.30)';
+    for (let rx = t.x + 7; rx < t.x + t.len - 4; rx += 8) ctx.fillRect(rx, t.y, 2, t.h);
+    ctx.fillStyle = '#3a6a88'; ctx.fillRect(t.x, t.y, 3, t.h); ctx.fillRect(t.x + t.len - 3, t.y, 3, t.h);
+    ctx.fillStyle = '#12242e'; ctx.fillRect(t.x + 3, t.y + 3, 4, t.h - 6); ctx.fillRect(t.x + t.len - 7, t.y + 3, 4, t.h - 6);
+  }
+
+  // Little house — rats pop inside for a bit
+  if (ratHouse) {
+    const hs = ratHouse;
+    ctx.fillStyle = '#8a5a3a'; ctx.fillRect(hs.x, hs.y + 8, hs.w, hs.h - 8);
+    ctx.fillStyle = '#7a4a2c'; ctx.fillRect(hs.x, hs.y + 8, hs.w, 3);
+    ctx.fillStyle = '#b83a2a';
+    ctx.beginPath(); ctx.moveTo(hs.x - 3, hs.y + 11); ctx.lineTo(hs.x + hs.w / 2, hs.y - 3); ctx.lineTo(hs.x + hs.w + 3, hs.y + 11); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#9a2e20';
+    ctx.beginPath(); ctx.moveTo(hs.x + hs.w / 2, hs.y - 3); ctx.lineTo(hs.x + hs.w + 3, hs.y + 11); ctx.lineTo(hs.x + hs.w / 2, hs.y + 11); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#12100a'; ctx.fillRect(hs.x + hs.w / 2 - 6, hs.y + hs.h - 13, 12, 13);
+    ctx.beginPath(); ctx.ellipse(hs.x + hs.w / 2, hs.y + hs.h - 13, 6, 5, 0, Math.PI, 0); ctx.fill();
+  }
+
+  // Carrot chew toy on the floor
+  if (ratCarrot) {
+    const cr = ratCarrot;
+    ctx.fillStyle = '#e07a20';
+    for (let i = 0; i < cr.len; i++) { const tt = (cr.len - i) / cr.len; const hh = Math.max(1, Math.round(1 + tt * 4)); ctx.fillRect(cr.x + i, cr.y - hh, 1, hh * 2); }
+    ctx.fillStyle = '#f0993a'; ctx.fillRect(cr.x + 3, cr.y - 2, cr.len - 6, 1);
+    ctx.fillStyle = 'rgba(150,70,10,0.5)'; for (let i = 4; i < cr.len - 2; i += 4) ctx.fillRect(cr.x + i, cr.y - 3, 1, 6);
+    ctx.fillStyle = '#3a9a30';
+    ctx.fillRect(cr.x + cr.len, cr.y - 4, 2, 3); ctx.fillRect(cr.x + cr.len + 1, cr.y - 7, 2, 5); ctx.fillRect(cr.x + cr.len + 2, cr.y - 4, 2, 3);
   }
 }
 
@@ -937,8 +1206,35 @@ function drawCatFurniture() {
       }
 }
 
+// Cat-mode interactive kitchen state (tap effects)
+let catOvenGlow = 0, catToastPop = 0, catPlantWiggle = 0, catCanTicks = 0;
+function catKitchenLayout() {
+  const W = canvas.width, H = canvas.height;
+  const counterY = Math.round(H * 0.26), counterH = 18;
+  const cabinetY = counterY + counterH, cabinetH = Math.round(H * 0.14);
+  const sinkX = Math.round(W * 0.31), sinkW = Math.round(W * 0.15);
+  const stoveX = Math.round(W * 0.66), stoveW = Math.round(W * 0.19);
+  const toastX = sinkX + sinkW + 14;
+  // Fit the kettle + can opener into the gap between the toaster and the stove
+  // (drop the decorative kettle on narrow screens so nothing overlaps).
+  const gapL = toastX + 32 + 6, gapR = stoveX - 6, gap = gapR - gapL;
+  const showKettle = gap >= 44;
+  const canX = showKettle ? Math.round(gapR - 10) : Math.round((gapL + gapR) / 2);
+  const kettleX = Math.round(gapL + 9);
+  return {
+    W, H, counterY, counterH, cabinetY, cabinetH, sinkX, sinkW, stoveX, stoveW,
+    toastX, plantX: Math.round(W * 0.06),
+    kettleX, canX, showKettle,
+    fridgeX: Math.round(W * 0.865), fridgeW: Math.round(W * 0.125),
+  };
+}
+
 function drawCatKitchenItems() {
   const W = canvas.width, H = canvas.height;
+  if (catOvenGlow > 0) catOvenGlow--;
+  if (catToastPop > 0) catToastPop--;
+  if (catPlantWiggle > 0) catPlantWiggle--;
+  if (catCanTicks > 0) catCanTicks--;
   const wallH = Math.round(H * 0.26);
   const counterY = wallH;
   const counterH = 18;
@@ -1049,6 +1345,18 @@ function drawCatKitchenItems() {
     ctx.fillStyle = '#383840';
     ctx.fillRect(kx - 1, cabinetY + 5, 2, 4);
   }
+  // Oven interior light — glows warm for a while when the oven is tapped
+  if (catOvenGlow > 0) {
+    const fl = 0.78 + Math.sin(gameTick * 0.3) * 0.06;
+    ctx.save();
+    ctx.globalAlpha = Math.min(1, catOvenGlow / 30) * fl;
+    ctx.fillStyle = '#ffb03a';
+    ctx.fillRect(stoveX + 10, cabinetY + 22, stoveW - 20, cabinetH - 37);
+    ctx.globalAlpha *= 0.6;
+    ctx.fillStyle = '#ffe0a0';
+    ctx.fillRect(stoveX + 13, cabinetY + 25, stoveW - 26, cabinetH - 43);
+    ctx.restore();
+  }
 
   // Sink (center-left)
   const sinkX = Math.round(W * 0.31);
@@ -1081,14 +1389,15 @@ function drawCatKitchenItems() {
   ctx.fillRect(plantX - 1, counterY - 18, 20, 4);
   ctx.fillStyle = '#422010';
   ctx.fillRect(plantX + 2, counterY - 9, 14, 6);
+  const pw = catPlantWiggle > 0 ? Math.round(Math.sin(catPlantWiggle * 0.6) * Math.min(3, catPlantWiggle / 6)) : 0;
   ctx.fillStyle = '#286414';
-  ctx.fillRect(plantX + 7, counterY - 30, 4, 14);
+  ctx.fillRect(plantX + 7 + pw, counterY - 30, 4, 14);
   ctx.fillStyle = '#247a10';
-  ctx.fillRect(plantX - 2, counterY - 36, 12, 8);
-  ctx.fillRect(plantX + 9, counterY - 40, 12, 8);
+  ctx.fillRect(plantX - 2 + pw, counterY - 36, 12, 8);
+  ctx.fillRect(plantX + 9 + pw, counterY - 40, 12, 8);
   ctx.fillStyle = '#38981e';
-  ctx.fillRect(plantX + 1, counterY - 34, 8, 5);
-  ctx.fillRect(plantX + 10, counterY - 38, 8, 5);
+  ctx.fillRect(plantX + 1 + pw, counterY - 34, 8, 5);
+  ctx.fillRect(plantX + 10 + pw, counterY - 38, 8, 5);
 
   // Toaster (right of sink)
   const toastX = sinkX + sinkW + 14;
@@ -1102,6 +1411,61 @@ function drawCatKitchenItems() {
   ctx.fillStyle = '#808070';
   ctx.fillRect(toastX + 29, counterY - 16, 4, 16);
   ctx.fillRect(toastX + 25, counterY - 11, 8, 6);
+
+  // Toast popping up when the toaster is tapped
+  if (catToastPop > 0) {
+    const up = Math.round(16 * Math.min(1, (90 - catToastPop) / 6));
+    for (const sx of [toastX + 4, toastX + 16]) {
+      const ty = counterY - 22 - up;
+      ctx.fillStyle = '#d9a441'; ctx.fillRect(sx, ty, 10, 12);
+      ctx.fillStyle = '#b9822c'; ctx.fillRect(sx, ty, 10, 2); ctx.fillRect(sx, ty + 10, 10, 2);
+      ctx.fillStyle = '#e8be6a'; ctx.fillRect(sx + 2, ty + 3, 6, 5);
+    }
+  }
+
+  // Kettle + can opener sit in the gap between the toaster and the stove
+  const _ck = catKitchenLayout();
+  if (_ck.showKettle) {
+    const kettleX = _ck.kettleX;
+    ctx.fillStyle = '#a8332b'; ctx.fillRect(kettleX - 9, counterY - 16, 18, 16);
+    ctx.fillStyle = '#c14a3f'; ctx.fillRect(kettleX - 7, counterY - 14, 14, 12);
+    ctx.fillStyle = '#e08a80'; ctx.fillRect(kettleX - 5, counterY - 12, 4, 5);
+    ctx.fillStyle = '#7a241d'; ctx.fillRect(kettleX - 9, counterY - 3, 18, 3);
+    ctx.fillStyle = '#3a2a28'; ctx.fillRect(kettleX - 4, counterY - 20, 8, 2);
+    ctx.fillRect(kettleX - 5, counterY - 19, 2, 4); ctx.fillRect(kettleX + 3, counterY - 19, 2, 4);
+    ctx.fillStyle = '#a8332b'; ctx.fillRect(kettleX + 8, counterY - 13, 5, 3); ctx.fillRect(kettleX + 11, counterY - 15, 3, 3);
+    ctx.fillStyle = '#3a2a28'; ctx.fillRect(kettleX - 1, counterY - 18, 3, 2);
+  }
+
+  // Electric can opener + cat-food can (tap it → all the cats come running)
+  const canX = _ck.canX;
+  ctx.fillStyle = '#9aa0a6'; ctx.fillRect(canX - 6, counterY - 15, 12, 15);
+  ctx.fillStyle = '#b4bac0'; ctx.fillRect(canX - 4, counterY - 13, 8, 11);
+  ctx.fillStyle = '#5c6066'; ctx.fillRect(canX - 6, counterY - 3, 12, 3);
+  ctx.fillStyle = '#3a3d42'; ctx.fillRect(canX - 2, counterY - 19, 4, 5);
+  ctx.fillStyle = '#7a7f85'; ctx.fillRect(canX + 4, counterY - 12, 3, 4);
+  ctx.fillStyle = '#c9a24a'; ctx.fillRect(canX - 4, counterY - 8, 8, 8);
+  ctx.fillStyle = '#e0bd6a'; ctx.fillRect(canX - 3, counterY - 7, 6, 6);
+  ctx.fillStyle = '#a07a30'; ctx.fillRect(canX - 4, counterY - 8, 8, 1);
+  if (catCanTicks > 0) {
+    const s = Math.sin(gameTick * 0.22);
+    ctx.fillStyle = 'rgba(200,180,120,0.5)';
+    ctx.fillRect(canX + Math.round(s * 2), counterY - 22, 2, 2);
+    ctx.fillRect(canX + Math.round(s * 3) + 2, counterY - 27, 2, 2);
+  }
+
+  // Fridge (next to the oven, on the right)
+  const fridgeX = Math.round(W * 0.865), fridgeW = Math.round(W * 0.125);
+  const fTop = 3, fBot = cabinetY + cabinetH;
+  ctx.fillStyle = '#e6e4de'; ctx.fillRect(fridgeX, fTop, fridgeW, fBot - fTop);
+  ctx.fillStyle = '#f2f0ea'; ctx.fillRect(fridgeX + 2, fTop + 2, fridgeW - 4, fBot - fTop - 4);
+  ctx.fillStyle = '#d4d2cc'; ctx.fillRect(fridgeX + fridgeW - 4, fTop, 4, fBot - fTop);
+  const fSplitY = fTop + Math.round((fBot - fTop) * 0.34);
+  ctx.fillStyle = '#cfcdc7'; ctx.fillRect(fridgeX + 2, fSplitY, fridgeW - 4, 2);
+  ctx.fillStyle = '#9a9a94';
+  ctx.fillRect(fridgeX + 5, fTop + 12, 3, Math.round((fSplitY - fTop) * 0.5));
+  ctx.fillRect(fridgeX + 5, fSplitY + 10, 3, Math.round((fBot - fSplitY) * 0.45));
+  ctx.fillStyle = '#c8c6c0'; ctx.fillRect(fridgeX, fTop, fridgeW, 2);
 
   // Fishbowl with animated goldfish (between plant and sink)
   const fbCX = Math.round(W * 0.21);
@@ -1459,6 +1823,7 @@ class Rat {
     this.pregnant = false;
     this.pregnancyTimer = 0;
     this.furnitureTarget = null;
+    this.tubeRun = null; this.hideTimer = 0;
     this.furnitureTimer = 60 * (10 + Math.floor(Math.random() * 15));
     this.sleepTimer = 0; this.sleepZTimer = 0;
   }
@@ -1494,6 +1859,20 @@ class Rat {
 
     // Boggle: freeze in place, vibrate
     if (this.boggleTimer > 0) { --this.boggleTimer; return; }
+
+    // Running through the tube (hidden until it pops out the far end)
+    if (this.tubeRun) {
+      const tr = this.tubeRun; tr.t++;
+      const p = Math.min(1, tr.t / tr.dur);
+      this.x = tr.x0 + (tr.x1 - tr.x0) * p; this.y = tr.y; this.right = tr.x1 >= tr.x0;
+      if (p >= 1) { this.tubeRun = null; this.furnitureTimer = 60 * (10 + Math.floor(Math.random() * 15)); }
+      return;
+    }
+    // Tucked inside the little house
+    if (this.hideTimer > 0) {
+      if (--this.hideTimer <= 0) { this.x = this._houseExitX; this.y = this._houseExitY; this.furnitureTimer = 60 * (10 + Math.floor(Math.random() * 15)); }
+      this.vx = 0; this.vy = 0; return;
+    }
 
     if (this.scritchTimer > 0) --this.scritchTimer;
     if (this.matingCooldown > 0) --this.matingCooldown;
@@ -1608,6 +1987,34 @@ class Rat {
           labels.push(new Label('z z z', this.x + RAT_W / 2, Math.max(20, this.y - 4)));
         }
       }
+    } else if (gameMode === 'rat' && !this.fleeing && !seekingCheese &&
+               (this.furnitureTarget === 'tube' || this.furnitureTarget === 'house' || this.furnitureTarget === 'carrot')) {
+      let ftx, fty;
+      if (this.furnitureTarget === 'tube') { ftx = ratTube.x + 6; fty = ratTube.y + ratTube.h - RAT_H / 2 - 2; }
+      else if (this.furnitureTarget === 'house') { ftx = ratHouse.x + ratHouse.w / 2; fty = ratHouse.y + ratHouse.h - 6; }
+      else { ftx = ratCarrot.x + ratCarrot.len / 2; fty = ratCarrot.y; }
+      const fdx = ftx - (this.x + RAT_W / 2), fdy = fty - (this.y + RAT_H / 2), fd = Math.hypot(fdx, fdy) || 1;
+      if (fd < 15) {
+        if (this.furnitureTarget === 'tube') {
+          let x0 = ratTube.x + 2, x1 = ratTube.x + ratTube.len - RAT_W - 2;
+          if (Math.random() < 0.5) { const a = x0; x0 = x1; x1 = a; }
+          this.tubeRun = { t: 0, dur: 42, x0, x1, y: ratTube.y + ratTube.h - RAT_H - 2 };
+        } else if (this.furnitureTarget === 'house') {
+          this.hideTimer = 60 * (3 + Math.floor(Math.random() * 4));
+          this._houseExitX = ratHouse.x + ratHouse.w / 2 - RAT_W / 2;
+          this._houseExitY = ratHouse.y + ratHouse.h - RAT_H;
+          addHappiness(2);
+        } else {
+          labels.push(new Label('Nibble!', this.x + RAT_W / 2, Math.max(20, this.y - 4)));
+          sndCrunch(); addHappiness(3);
+        }
+        this.furnitureTarget = null;
+        this.furnitureTimer = 60 * (12 + Math.floor(Math.random() * 18));
+      } else {
+        seekingFurniture = true;
+        this.vx = this.vx * 0.85 + (fdx / fd * 1.3) * 0.15;
+        this.vy = this.vy * 0.85 + (fdy / fd * 0.5) * 0.15;
+      }
     } else if (gameMode === 'rat' && !this.fleeing && !seekingCheese && this.furnitureTarget) {
       const ftgt = this.furnitureTarget === 'bottle' ? ratBottle
         : this.furnitureTarget === 'bowl' ? ratFoodBowl
@@ -1655,6 +2062,9 @@ class Rat {
         if (ratFoodBowl) avail.push('bowl');
         if (ratBed) avail.push('bed');
         if (ratWheel) avail.push('wheel');
+        if (ratTube) avail.push('tube');
+        if (ratHouse) avail.push('house');
+        if (ratCarrot) avail.push('carrot');
         if (avail.length && Math.random() < 0.4)
           this.furnitureTarget = avail[Math.floor(Math.random() * avail.length)];
         this.furnitureTimer = 60 * (12 + Math.floor(Math.random() * 18));
@@ -1684,7 +2094,7 @@ class Rat {
   }
 
   draw() {
-    if (this.dead) return;
+    if (this.dead || this.tubeRun || this.hideTimer > 0) return;
     const sleeping = this.sleepTimer > 0;
     const spr = sleeping ? RAT_SLEEP_SPR : RAT_FRAMES[this.frame];
     const shimmy = this.boggleTimer > 0 ? (gameTick % 2 === 0 ? 1 : -1) : 0;
@@ -1978,7 +2388,13 @@ class Cat {
     if (this.state === 'walking' && this.tx !== null) {
       const arrived = this._stepToward();
       if (arrived) {
-        if (this.wantWool) {
+        if (this.wantCan) {
+          this.wantCan = false;
+          sndMeow();
+          labels.push(new Label('Meow!', this.cx, Math.max(20, this.y - 6)));
+          addHappiness(3);
+          this.state = 'happy'; this.lingerTicks = 60 * 3;
+        } else if (this.wantWool) {
           this.wantWool = false;
           if (woolBall) {
             woolBall.vx = (this.cx < woolBall.x + WOOL_SPR[0].length * WOOL_SC / 2 ? 1 : -1) * (4 + Math.random() * 4);
@@ -2685,6 +3101,10 @@ function enterDogMode() {
   puppies.length = 0; puppyTimer = 0; puppiesSpawned = false;
   visitorCooldown = 60 * (30 + Math.floor(Math.random() * 90));
   placeDogFurniture();
+  spawnBirds();
+  spawnPondFish();
+  dragonfly = new Dragonfly();
+  dogBbqOpen = 0;
   if (!restoreDogState()) { dog.init(); }
   sndDogAmbient();
   updateCatnipBtn();
@@ -2923,13 +3343,6 @@ let lastTapTime = 0, lastTapX = 0, lastTapY = 0;
 
 canvas.addEventListener('pointerdown', e => {
   e.preventDefault();
-  // Close menu if open
-  const drop = document.getElementById('menu-drop');
-  if (drop.classList.contains('open')) {
-    drop.classList.remove('open');
-    document.querySelector('.scritch-fab').classList.remove('open');
-    return;
-  }
   interacted = true;
   const px = e.clientX, py = e.clientY;
   scritching = false;
@@ -2962,6 +3375,39 @@ canvas.addEventListener('pointerdown', e => {
         fishJumpTick = 60; sndBlub();
         labels.push(new Label('Blub!', fbCX, fbTopY - 12));
         tapFeedback(fbCX, fbBotY); return;
+      }
+    }
+    // Tap kitchen appliances
+    {
+      const L = catKitchenLayout();
+      // Can opener → all the cats come running and meowing
+      if (px >= L.canX - 9 && px <= L.canX + 9 && py >= L.counterY - 20 && py <= L.counterY + 2) {
+        sndCanOpener(); catCanTicks = 90;
+        const floorY = catKitchenFloorY();
+        let n = 0;
+        for (const cat of cats) {
+          if (cat.dead || cat.isVisitor || cat.state === 'leaving') continue;
+          if (cat.state === 'sleep') { cat.state = 'idle'; cat.idleTimer = 0; }
+          cat.wantCan = true;
+          cat._roamTo(L.canX + (Math.random() - 0.5) * (L.W * 0.12), floorY + CPH);
+          if (n++ < 2) labels.push(new Label('Meow!', cat.cx, Math.max(20, cat.y - 6)));
+        }
+        tapFeedback(L.canX, L.counterY - 10); return;
+      }
+      // Oven → interior light glows for a while
+      if (px >= L.stoveX && px <= L.stoveX + L.stoveW && py >= L.cabinetY && py <= L.cabinetY + L.cabinetH) {
+        catOvenGlow = 60 * 4;
+        tapFeedback(px, py); return;
+      }
+      // Toaster → toast pops up
+      if (px >= L.toastX && px <= L.toastX + 32 && py >= L.counterY - 24 && py <= L.counterY + 2) {
+        catToastPop = 90; sndToast();
+        tapFeedback(L.toastX + 16, L.counterY - 12); return;
+      }
+      // Plant → little wiggle
+      if (px >= L.plantX - 4 && px <= L.plantX + 22 && py >= L.counterY - 42 && py <= L.counterY + 2) {
+        catPlantWiggle = 40;
+        tapFeedback(L.plantX + 9, L.counterY - 20); return;
       }
     }
     // Tap wool ball → roll it and send a cat
@@ -3043,9 +3489,38 @@ canvas.addEventListener('pointerdown', e => {
         sendClosestRat('bed'); tapFeedback(ratBed.x + bw / 2, ratBed.y + bh / 2); return;
       }
     }
+    if (ratTube && px >= ratTube.x && px <= ratTube.x + ratTube.len && py >= ratTube.y - 2 && py <= ratTube.y + ratTube.h + 2) {
+      sendClosestRat('tube'); tapFeedback(ratTube.x + ratTube.len / 2, ratTube.y + ratTube.h / 2); return;
+    }
+    if (ratHouse && px >= ratHouse.x - 3 && px <= ratHouse.x + ratHouse.w + 3 && py >= ratHouse.y - 3 && py <= ratHouse.y + ratHouse.h) {
+      sendClosestRat('house'); tapFeedback(ratHouse.x + ratHouse.w / 2, ratHouse.y + ratHouse.h / 2); return;
+    }
+    if (ratCarrot && px >= ratCarrot.x - 2 && px <= ratCarrot.x + ratCarrot.len + 4 && py >= ratCarrot.y - 8 && py <= ratCarrot.y + 6) {
+      sendClosestRat('carrot'); tapFeedback(ratCarrot.x + ratCarrot.len / 2, ratCarrot.y); return;
+    }
     cheeses.push({ x: px - CHEESE_W / 2, y: py - CHEESE_H / 2, eaten: false });
     if (++cheeseCount % 15 === 0 && rats.length > 0) raidCats.push(new RaidCat());
     return;
+  }
+
+  // Tap the BBQ → lift the lid and show the patties cooking
+  {
+    const { splitX, houseX } = _dogLayout();
+    const bqx = splitX + Math.round((houseX - splitX) * 0.30), bqy = Math.round(canvas.height * 0.42);
+    if (px >= bqx - 17 && px <= bqx + 17 && py >= bqy - 30 && py <= bqy + 30) {
+      dogBbqOpen = 60 * 5;
+      tapFeedback(bqx, bqy); return;
+    }
+  }
+
+  // Tap a bird → it flies off and the dog barks at it
+  for (const b of birds) {
+    if (b.hitTest(px, py)) {
+      b.flyOff(true);
+      sndBark(false);
+      labels.push(new Label('Woof!', dog.cx, Math.max(20, dog.y - 8)));
+      tapFeedback(px, py); return;
+    }
   }
 
   if (dog.hitTest(px, py)) {
@@ -3224,6 +3699,33 @@ function sndBark(small) {
   gn.gain.setValueAtTime(0.18, t); gn.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
   osc.connect(flt); flt.connect(gn); gn.connect(_masterGain);
   osc.start(t); osc.stop(t + 0.25);
+}
+
+function sndCanOpener() {
+  if (!_cool('can', 20)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const dur = 0.6;
+  const osc = ctx.createOscillator(); osc.type = 'square';
+  osc.frequency.setValueAtTime(140, t);
+  osc.frequency.linearRampToValueAtTime(120, t + dur);
+  const flt = ctx.createBiquadFilter(); flt.type = 'bandpass'; flt.frequency.value = 900; flt.Q.value = 1.2;
+  const gn = ctx.createGain(); gn.gain.setValueAtTime(0.0001, t);
+  const steps = 14;
+  for (let i = 0; i <= steps; i++) gn.gain.setValueAtTime(i % 2 === 0 ? 0.09 : 0.02, t + (i / steps) * dur);
+  gn.gain.linearRampToValueAtTime(0.0001, t + dur + 0.05);
+  osc.connect(flt); flt.connect(gn); gn.connect(_masterGain);
+  osc.start(t); osc.stop(t + dur + 0.06);
+}
+
+function sndToast() {
+  if (!_cool('toast', 15)) return;
+  const ctx = _getAC(); const t = ctx.currentTime;
+  const osc = ctx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 880;
+  const gn = ctx.createGain(); gn.gain.setValueAtTime(0.0001, t);
+  gn.gain.exponentialRampToValueAtTime(0.11, t + 0.01);
+  gn.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+  osc.connect(gn); gn.connect(_masterGain);
+  osc.start(t); osc.stop(t + 0.42);
 }
 
 function sndBird() {
@@ -3592,6 +4094,8 @@ function loop() {
   if (gameMode === 'dog') {
     drawDogBackground();
     dog.update();
+    dogPondInteract();
+    for (const f of pondFish) { f.update(); f.draw(); }
     trySpawnVisitor();
 
     for (let i = visitors.length - 1; i >= 0; i--) {
@@ -3612,6 +4116,7 @@ function loop() {
     tickParticles(hearts);
     tickParticles(labels);
     tickParticles(ripples);
+    tickParticles(pondSplashes);
 
     if (marker && marker.alpha > 0) {
       ctx.save(); ctx.globalAlpha = marker.alpha; ctx.fillStyle = '#ffffff';
@@ -3641,6 +4146,8 @@ function loop() {
     for (const p of puppies) { p.update(); p.draw(); }
 
     drawDogForeground();
+    if (dragonfly) { dragonfly.update(); dragonfly.draw(); }
+    for (const b of birds) { b.update(); b.draw(); }
 
     if (scritching && !scritchCat && gameTick % 45 === 0) sndPant();
 
@@ -3813,27 +4320,31 @@ persistLoad();
 dog.init();
 loop();
 
-// ─── Menu ────────────────────────────────────────────────────────────────────
+// ─── Game menu popup ─────────────────────────────────────────────────────────
 const menuBtn  = document.querySelector('.scritch-fab');
-const menuDrop = document.getElementById('menu-drop');
 const htpOverlay = document.getElementById('htp-overlay');
+const gameMenu = document.getElementById('game-menu');
+function closeGameMenu() { gameMenu.classList.remove('open'); }
 
+// The floating dog button opens a centred menu of the title-screen options
 menuBtn.addEventListener('click', e => {
   e.stopPropagation();
-  const open = menuDrop.classList.toggle('open');
-  menuBtn.classList.toggle('open', open);
+  gameMenu.classList.add('open');
 });
+gameMenu.addEventListener('click', e => { if (e.target === gameMenu) closeGameMenu(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeGameMenu(); });
 
-document.addEventListener('click', e => {
-  if (!menuDrop.contains(e.target) && e.target !== menuBtn) {
-    menuDrop.classList.remove('open');
-    menuBtn.classList.remove('open');
-  }
+document.querySelectorAll('#game-menu .mode-btn-pick').forEach(btn => {
+  btn.addEventListener('click', () => {
+    closeGameMenu();
+    const m = btn.dataset.mode;
+    if (m === 'dog') enterDogMode();
+    else if (m === 'rat') enterRatMode();
+    else enterCatMode();
+  });
 });
-
-document.getElementById('htp-btn').addEventListener('click', () => {
-  menuDrop.classList.remove('open');
-  menuBtn.classList.remove('open');
+document.getElementById('menu-htp').addEventListener('click', () => {
+  closeGameMenu();
   htpOverlay.classList.add('open');
 });
 
@@ -3868,19 +4379,8 @@ document.getElementById('sf-form').addEventListener('submit', async e => {
   } catch (_) { err.textContent = 'Could not send. Please try again later.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
 });
 
-document.querySelectorAll('.mode-switch').forEach(btn => {
-  btn.addEventListener('click', () => {
-    menuDrop.classList.remove('open');
-    menuBtn.classList.remove('open');
-    const m = btn.dataset.mode;
-    if (m === 'dog') enterDogMode();
-    else if (m === 'rat') enterRatMode();
-    else enterCatMode();
-  });
-});
-
 const modePick = document.getElementById('mode-pick');
-document.querySelectorAll('.mode-btn-pick').forEach(btn => {
+document.querySelectorAll('#mode-pick .mode-btn-pick').forEach(btn => {
   btn.addEventListener('click', () => {
     modePick.style.display = 'none';
     const m = btn.dataset.mode;
@@ -3896,16 +4396,12 @@ const nameInput   = document.getElementById('name-input');
 const namePrompt  = document.getElementById('name-prompt');
 
 function showNameOverlay() {
-  menuDrop.classList.remove('open');
-  menuBtn.classList.remove('open');
   const modeLabel = gameMode === 'dog' ? 'dog' : gameMode === 'cat' ? 'cat' : 'rat';
   namePrompt.textContent = 'Name your ' + modeLabel;
   nameInput.value = petNames[gameMode] || '';
   nameOverlay.classList.add('open');
   setTimeout(() => nameInput.focus(), 50);
 }
-
-document.getElementById('rename-btn').addEventListener('click', showNameOverlay);
 
 document.getElementById('name-confirm').addEventListener('click', () => {
   petNames[gameMode] = nameInput.value.trim().slice(0, 12);
