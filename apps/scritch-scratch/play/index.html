@@ -1052,16 +1052,13 @@ function placeRatFurniture() {
   ratBottle = { x: w * 0.12, y: h * 0.25 };
   ratFoodBowl = { x: w * 0.88 - RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, y: h * 0.25 };
   ratBed = { x: w / 2 - RAT_BED_SPR[0].length * RAT_BED_SC / 2, y: h * 0.7 };
-  ratWheel = { x: w * 0.5, y: h * 0.4 };
   ratTube = { x: Math.round(w * 0.16), y: Math.round(h * 0.52), len: Math.round(w * 0.19), h: RAT_H + 8 };
   ratHouse = { x: Math.round(w * 0.72), y: Math.round(h * 0.55), w: 34, h: 30 };
   ratCarrot = { x: Math.round(w * 0.30), y: Math.round(h * 0.84), len: 16 };
-  _wheelAngle = 0; _wheelSpeed = 0;
 }
 
 function drawRatFurniture() {
   if (!ratBottle) return;
-  drawRatWheel();
   // Water bottle
   ctx.fillStyle = '#88ccee';
   for (let r = 0; r < RAT_BOTTLE_SPR.length; r++)
@@ -1540,9 +1537,6 @@ function unlockAchievement(key, text) {
 const catnips = [];
 
 // ─── Rat wheel ────────────────────────────────────────────────────────────────
-let ratWheel = null;
-const WHEEL_R = 26;
-let _wheelAngle = 0, _wheelSpeed = 0;
 
 // ─── Dog hold-scritch ─────────────────────────────────────────────────────────
 let _scritchHoldTicks = 0;
@@ -1985,13 +1979,10 @@ class Rat {
       }
     } else if (gameMode === 'rat' && !this.fleeing && !seekingCheese && this.furnitureTarget) {
       const ftgt = this.furnitureTarget === 'bottle' ? ratBottle
-        : this.furnitureTarget === 'bowl' ? ratFoodBowl
-        : this.furnitureTarget === 'wheel' ? ratWheel : ratBed;
+        : this.furnitureTarget === 'bowl' ? ratFoodBowl : ratBed;
       if (ftgt) {
         let ftx, fty;
-        if (this.furnitureTarget === 'wheel') {
-          ftx = ratWheel.x; fty = ratWheel.y + WHEEL_R;
-        } else {
+        {
           const tw = this.furnitureTarget === 'bottle' ? RAT_BOTTLE_SPR[0].length * RAT_BOTTLE_SC
             : this.furnitureTarget === 'bowl' ? RAT_RBOWL_SPR[0].length * RAT_BOWL_SC
             : RAT_BED_SPR[0].length * RAT_BED_SC;
@@ -2007,9 +1998,6 @@ class Rat {
             this.sleepTimer = 60 * (6 + Math.floor(Math.random() * 8));
             this.sleepZTimer = 60 * 2;
             this.vx = 0; this.vy = 0;
-          } else if (this.furnitureTarget === 'wheel') {
-            _wheelSpeed = Math.max(_wheelSpeed, 0.05 + Math.random() * 0.04);
-            addHappiness(3);
           } else {
             labels.push(new Label(this.furnitureTarget === 'bottle' ? 'Drink!' : 'Nom!',
               this.x + RAT_W / 2, Math.max(20, this.y - 4)));
@@ -2029,7 +2017,6 @@ class Rat {
         if (ratBottle) avail.push('bottle');
         if (ratFoodBowl) avail.push('bowl');
         if (ratBed) avail.push('bed');
-        if (ratWheel) avail.push('wheel');
         if (ratTube) avail.push('tube');
         if (ratHouse) avail.push('house');
         if (ratCarrot) avail.push('carrot');
@@ -3894,30 +3881,6 @@ function drawHappinessBar() {
   ctx.restore();
 }
 
-function drawRatWheel() {
-  if (!ratWheel) return;
-  const cx = Math.round(ratWheel.x), cy = Math.round(ratWheel.y);
-  const R = WHEEL_R;
-  ctx.fillStyle = '#6b4226';
-  ctx.fillRect(cx - R - 2, cy + R, 5, 10);
-  ctx.fillRect(cx + R - 3, cy + R, 5, 10);
-  ctx.fillRect(cx - R - 4, cy + R + 8, R * 2 + 8, 3);
-  ctx.fillStyle = '#a87040';
-  for (let a = 0; a < Math.PI * 2; a += 0.22) {
-    const rx = cx + Math.round(Math.cos(a) * R), ry = cy + Math.round(Math.sin(a) * R);
-    ctx.fillRect(rx - 2, ry - 2, 4, 4);
-  }
-  ctx.save(); ctx.translate(cx, cy); ctx.rotate(_wheelAngle);
-  ctx.fillStyle = '#8b6040';
-  for (let i = 0; i < 4; i++) {
-    ctx.save(); ctx.rotate(i * Math.PI / 2);
-    ctx.fillRect(-2, -R + 5, 4, R * 2 - 10);
-    ctx.restore();
-  }
-  ctx.fillStyle = '#6b4226'; ctx.fillRect(-4, -4, 8, 8);
-  ctx.restore();
-}
-
 function drawCatnips() {
   for (let i = catnips.length - 1; i >= 0; i--) {
     const cn = catnips[i];
@@ -4158,9 +4121,6 @@ function loop() {
       babies[i].update();
       if (babies[i].dead) babies.splice(i, 1); else babies[i].draw();
     }
-
-    _wheelAngle += _wheelSpeed;
-    _wheelSpeed *= 0.992;
 
     if (rats.length >= 10) unlockAchievement('rat_colony', '10 rats!');
 
