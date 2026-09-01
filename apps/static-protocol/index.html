@@ -3,45 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Apps &amp; Games — Walt Viviers</title>
-  <meta name="description" content="Apps &amp; games by Walt Viviers — South African fine artist and developer, based in Pretoria." />
-  <link rel="canonical" href="https://waltviviers.com/apps/" />
+  <title>Static Protocol — A cyberpunk interactive story</title>
+  <meta name="description" content="A browser-based cyberpunk interactive story by Walt Viviers. Five decisions, five live SYNC sequences, ten possible endings. No ads, no data collected, works offline." />
+  <link rel="canonical" href="https://waltviviers.com/apps/static-protocol/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
 
   <meta name="robots" content="index, follow" />
 
-  <!-- Hreflang -->
-  <link rel="alternate" hreflang="en" href="https://waltviviers.com/apps/" />
-  <link rel="alternate" hreflang="af" href="https://waltviviers.com/apps/" />
-  <link rel="alternate" hreflang="x-default" href="https://waltviviers.com/apps/" />
-
-  <!-- Geo -->
-  <meta name="geo.region" content="ZA-GP" />
-  <meta name="geo.placename" content="Pretoria, Gauteng, South Africa" />
-  <meta name="geo.position" content="-25.7479;28.2293" />
-  <meta name="ICBM" content="-25.7479, 28.2293" />
-
   <!-- Open Graph -->
-  <meta property="og:type"         content="website" />
-  <meta property="og:url"          content="https://waltviviers.com/apps/" />
-  <meta property="og:title"        content="Apps &amp; Games — Walt Viviers" />
-  <meta property="og:description"  content="Apps &amp; games by Walt Viviers — South African fine artist and developer." />
-  <meta property="og:image"        content="https://waltviviers.com/brushstrokes-bg.webp" />
-  <meta property="og:image:alt"    content="Walt Viviers — fine artist and developer" />
-  <meta property="og:image:type"   content="image/webp" />
-  <meta property="og:image:width"  content="2360" />
-  <meta property="og:image:height" content="590" />
-  <meta property="og:locale"       content="en_ZA" />
-  <meta property="og:site_name"    content="Walt Viviers" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://waltviviers.com/apps/static-protocol/" />
+  <meta property="og:title"       content="Static Protocol — A cyberpunk interactive story" />
+  <meta property="og:description" content="Five decisions. Five live SYNC sequences. Ten possible endings. Your choices — and your reflexes — write the story." />
+  <meta property="og:site_name"   content="Walt Viviers" />
 
   <!-- Twitter / X -->
-  <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:title"       content="Apps &amp; Games — Walt Viviers" />
-  <meta name="twitter:description" content="Apps &amp; games by Walt Viviers — South African fine artist and developer." />
-  <meta name="twitter:image"       content="https://waltviviers.com/brushstrokes-bg.webp" />
-  <meta name="twitter:image:alt"   content="Walt Viviers — fine artist and developer" />
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:title"       content="Static Protocol — A cyberpunk interactive story" />
+  <meta name="twitter:description" content="Five decisions. Five live SYNC sequences. Ten possible endings. Your choices — and your reflexes — write the story." />
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -49,22 +30,22 @@
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "CollectionPage",
-        "name": "Apps & Games — Walt Viviers",
-        "description": "Apps & games by Walt Viviers — South African fine artist and developer, based in Pretoria.",
-        "url": "https://waltviviers.com/apps/",
-        "author": {
-          "@type": "Person",
-          "name": "Walt Viviers",
-          "url": "https://waltviviers.com"
-        },
-        "breadcrumb": {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltviviers.com/" },
-            { "@type": "ListItem", "position": 2, "name": "Apps & Games", "item": "https://waltviviers.com/apps/" }
-          ]
-        }
+        "@type": "SoftwareApplication",
+        "name": "Static Protocol",
+        "description": "A browser-based cyberpunk interactive story. Five decisions, five live SYNC sequences, ten possible endings. Free, no ads, no data collected.",
+        "url": "https://waltviviers.com/apps/static-protocol/",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Any (runs in browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Walt Viviers", "url": "https://waltviviers.com" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltviviers.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://waltviviers.com/apps/" },
+          { "@type": "ListItem", "position": 3, "name": "Static Protocol", "item": "https://waltviviers.com/apps/static-protocol/" }
+        ]
       }
     ]
   }
@@ -122,7 +103,7 @@
     }
     nav.scrolled { height: 50px; }
     .nav-left { display: flex; align-items: center; gap: 14px; }
-.lang-slash { display: none; }
+    .lang-slash { display: none; }
     .lang-toggle { display: flex; align-items: center; gap: 14px; }
     .lang-group { display: flex; align-items: center; cursor: pointer; user-select: none; }
     .lang-label, .lang-code {
@@ -241,139 +222,283 @@
     [data-theme="light"] .footer-admin:hover { color: #0C0C0B; border-color: #6B6560; }
     [data-theme="light"] .footer-social .social-icons a:hover { color: var(--ink); }
 
-    /* ── Page ── */
-    .page-wrap {
-      padding: calc(100px + 64px) 48px 100px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .page-head {
-      margin-bottom: 64px;
-      padding-bottom: 32px;
-      border-bottom: 1px solid var(--rule);
+    /* ── Hero ── */
+    .hero {
+      padding-top: 100px;
+      padding-bottom: 100px;
+      min-height: 100vh;
       display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 16px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-left: 24px;
+      padding-right: 24px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
     }
 
-    .page-head h1 {
-      font-family: var(--serif);
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      font-weight: 400;
-      line-height: 1.1;
+    .app-back {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.10em;
+      text-transform: uppercase; color: var(--stone);
+      transition: color 0.2s; margin-bottom: 22px; display: inline-block;
     }
+    .app-back:hover { color: var(--ink); }
 
-    .page-intro {
-      max-width: 680px;
-      margin: -40px 0 56px;
-      font-size: clamp(15px, 1.9vw, 18px);
-      color: var(--stone);
-      line-height: 1.8;
-    }
-
-    .back-link {
+    .app-eyebrow {
       font-size: 11px;
-      letter-spacing: 0.10em;
+      font-weight: 500;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--stone);
-      transition: color 0.2s;
-    }
-    .back-link:hover { color: var(--ink); }
-
-    /* Testimonial pull-quote */
-    .pull-quote { background: var(--bg2); border: 1px solid var(--rule); padding: 56px 48px; margin-top: 40px; display: flex; align-items: flex-start; gap: 32px; }
-    .pull-quote-mark { font-family: var(--serif); font-size: 5rem; line-height: 0.7; color: var(--stone); opacity: 0.4; flex-shrink: 0; margin-top: 6px; }
-    .pull-quote-body { display: flex; flex-direction: column; gap: 20px; }
-    .pull-quote-text { font-family: var(--serif); font-size: clamp(1.15rem, 1.7vw, 1.5rem); font-style: italic; font-weight: 400; line-height: 1.5; color: var(--ink); }
-    .pull-quote-cite { font-size: 14px; line-height: 1.5; color: var(--stone); margin-top: 4px; }
-    .pull-quote-cite strong { color: var(--ink); font-weight: 500; }
-    .pull-quote-cite a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
-
-    /* ── App grid ── */
-    .apps-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1px;
-      background: var(--rule);
-      border: 1px solid var(--rule);
+      margin-bottom: 28px;
     }
 
-    .app-card {
-      background: var(--bg);
-      display: flex;
-      align-items: flex-start;
-      gap: 24px;
-      padding: 40px;
-      text-decoration: none;
-      transition: background 0.2s;
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
     }
-    .app-card:hover { background: var(--bg2); }
 
-    .app-card-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 16px;
-      background: #1A1A1A;
+    .hero-tagline {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      color: var(--stone);
+      margin-bottom: 28px;
+    }
+
+    .hero-desc {
+      font-size: clamp(15px, 2vw, 18px);
+      color: var(--stone);
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto 52px;
+    }
+
+    .app-icon {
+      width: 96px;
+      height: 96px;
+      border-radius: 22px;
+      background: #0A0A0A;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 40px;
+      border: 1px solid rgba(34,230,212,0.25);
+    }
+
+    .app-icon svg { width: 62%; height: 62%; }
+
+    .download-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+
+    .store-btn:hover {
+      border-color: var(--stone);
+      background: var(--bg2);
+    }
+
+    .store-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--ink);
       flex-shrink: 0;
     }
 
-    .app-card-icon svg,
-    .app-card-icon img {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
+    .store-btn-inner { display: flex; flex-direction: column; gap: 1px; text-align: left; }
+    .store-btn-sub { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); font-weight: 400; }
+    .store-btn-name { font-size: 15px; font-weight: 500; }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--stone);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
-    .app-card-body { flex: 1; min-width: 0; }
+    .hero-scroll svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--stone);
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      animation: bounce 2s ease-in-out infinite;
+    }
 
-    .app-card-name {
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(4px); }
+    }
+
+    /* ── How it works ── */
+    .how-it-works {
+      padding: 96px 48px;
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .how-it-works h2 {
       font-family: var(--serif);
-      font-size: 1.4rem;
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
       font-weight: 400;
       line-height: 1.2;
-      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+      margin-bottom: 28px;
     }
 
-    .app-card-desc {
-      font-size: 13px;
+    .how-it-works p {
+      font-size: clamp(15px, 1.8vw, 18px);
       color: var(--stone);
-      line-height: 1.65;
-      margin-bottom: 16px;
+      line-height: 1.8;
+      margin-bottom: 20px;
     }
 
-    .app-card-meta {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .app-platform {
-      font-size: 10px;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--stone);
-      padding: 3px 8px;
-      border: 1px solid var(--rule);
-    }
-
-    .app-card-link {
-      font-size: 11px;
+    .how-survive {
+      font-size: 14px;
+      font-weight: 500;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--stone);
-      transition: color 0.2s;
     }
-    .app-card:hover .app-card-link { color: var(--ink); }
 
-    /* ── Light mode ── */
-    [data-theme="light"] .app-card { background: #F5F3EF; }
-    [data-theme="light"] .app-card:hover { background: #EDEAE5; }
+    /* ── Three things ── */
+    .difficulty-section { border-bottom: 1px solid var(--rule); }
+    .difficulty-header {
+      padding: 64px 48px 0;
+      font-size: 11px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--stone);
+    }
+    .difficulty-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .difficulty-card { padding: 48px 56px 64px; border-right: 1px solid var(--rule); }
+    .difficulty-card:last-child { border-right: none; }
+    .diff-icon { width: 46px; height: 46px; margin-bottom: 22px; }
+    .diff-icon svg { width: 100%; height: 100%; display: block; }
+    .difficulty-card h3 { font-family: var(--serif); font-size: 22px; font-weight: 400; line-height: 1.2; margin-bottom: 14px; }
+    .difficulty-card p { font-size: 14px; color: var(--stone); line-height: 1.75; }
+
+    /* ── Privacy strip ── */
+    .privacy-strip {
+      padding: 80px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .privacy-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 20px;
+    }
+
+    .privacy-strip h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3vw, 44px);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .privacy-strip p {
+      font-size: 15px;
+      color: var(--stone);
+      line-height: 1.8;
+      margin-bottom: 32px;
+    }
+
+    .privacy-checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .privacy-checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      font-size: 14px;
+      color: var(--stone);
+      line-height: 1.5;
+    }
+
+    .privacy-checklist li svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      stroke: var(--stone);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin-top: 2px;
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 120px 48px;
+      text-align: center;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .cta-section h2 {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 400;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 48px;
+    }
+
+    .cta-section h2 em { font-style: italic; color: var(--stone); }
+
+    /* ── Light mode specifics ── */
+    [data-theme="light"] .app-icon { background: #0A0A0A; }
+    [data-theme="light"] .store-btn:hover { background: #EDEAE5; }
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
@@ -389,10 +514,21 @@
       .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
       .theme-toggle:hover .toggle-thumb .icon-moon,
       .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
-      .page-wrap { padding: calc(50px + 40px) 24px 80px; }
-      .pull-quote { padding: 40px 28px; }
-      .apps-grid { grid-template-columns: 1fr; }
-      .app-card { padding: 28px 24px; }
+
+      .hero { padding-top: 50px; min-height: auto; padding-top: calc(50px + 80px); padding-bottom: 80px; }
+      .hero-scroll { display: none; }
+
+      .how-it-works { padding: 64px 24px; }
+
+      .difficulty-header { padding: 48px 24px 0; }
+      .difficulty-grid { grid-template-columns: 1fr; }
+      .difficulty-card { border-right: none; border-bottom: 1px solid var(--rule); padding: 40px 24px; }
+      .difficulty-card:last-child { border-bottom: none; }
+
+      .privacy-strip { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
+
+      .cta-section { padding: 80px 24px; }
+
       footer { padding: 40px 24px 88px; flex-direction: column; gap: 28px; }
       .footer-admin { position: static; transform: none; order: 1; }
       .footer-social { order: 0; }
@@ -401,8 +537,6 @@
 
     @media (max-width: 560px) {
       .footer-admin { display: none; }
-      .pull-quote { flex-direction: column; gap: 12px; }
-      .pull-quote-mark { font-size: 3.5rem; }
     }
     /* Global Enquire modal + Book-a-Consultation FAB */
     .gx-fab { display: none; }
@@ -482,7 +616,7 @@
     html, body, body * { cursor: url('/images/pointer_up.png') 3 1, auto !important; }
     body *:active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
     input[type="text"], input[type="email"], input[type="search"], input[type="tel"], input[type="number"], input[type="url"], input[type="password"], textarea, [contenteditable="true"] { cursor: text !important; }
-  
+
     /* Smooth cross-page transitions (Chrome MPA view transitions; ignored elsewhere) */
     @view-transition { navigation: auto; }
     /* Respect the visitor's reduced-motion preference */
@@ -562,75 +696,103 @@
     </div>
   </div>
 
-  <div class="page-wrap">
-    <div class="page-head">
-      <h1 data-i18n="page-title">Apps &amp; Games</h1>
-      <a href="/" class="back-link" data-i18n="back-home">← Back to home</a>
-    </div>
+  <main>
 
-    <p class="page-intro" data-i18n="apps-intro">A corner of the site for the things I build when I'm not painting — browser games and small, genuinely useful apps. Everything here is made independently, free to use, and works without accounts or ads. Nothing is tracked. Have a play.</p>
-
-    <div class="apps-grid">
-      <a href="/apps/scritch-scratch/" class="app-card">
-        <div class="app-card-icon" aria-hidden="true">
-          <img src="/images/scritch-scratch-icon.webp" alt="" width="64" height="64" />
-        </div>
-        <div class="app-card-body">
-          <div class="app-card-name">Scritch Scratch</div>
-          <p class="app-card-desc" data-i18n="ss-desc">Three pixel pets in one. Play fetch with a dog, raise a colony of rats, or tease a cat with a laser pointer.</p>
-          <div class="app-card-meta">
-            <span class="app-card-link" data-i18n="view-ss">Learn more →</span>
-          </div>
-        </div>
-      </a>
-      <a href="/apps/billtipper/" class="app-card">
-        <div class="app-card-icon" aria-hidden="true">
-          <img src="/images/bill-tipper-icon.webp" alt="" width="64" height="64" />
-        </div>
-        <div class="app-card-body">
-          <div class="app-card-name">Bill Tipper</div>
-          <p class="app-card-desc" data-i18n="bt-desc">Split bills and calculate tips instantly. No ads, no tracking, works offline.</p>
-          <div class="app-card-meta">
-            <span class="app-card-link" data-i18n="view-app">Learn more →</span>
-          </div>
-        </div>
-      </a>
-      <a href="/apps/neurotracer/" class="app-card">
-        <div class="app-card-icon" aria-hidden="true">
-          <img src="/images/neurotrace-icon2.webp" alt="" width="64" height="64" />
-        </div>
-        <div class="app-card-body">
-          <div class="app-card-name">Neurotracer</div>
-          <p class="app-card-desc" data-i18n="nt-desc">A cyberpunk memory puzzle. Watch the sequence, repeat it back — and survive. No ads, no data collected, works offline.</p>
-          <div class="app-card-meta">
-            <span class="app-card-link" data-i18n="view-nt">Learn more →</span>
-          </div>
-        </div>
-      </a>
-      <a href="/apps/static-protocol/" class="app-card">
-        <div class="app-card-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="#22e6d4" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v12H10l-4 4v-4H4z"/><path d="M8 9h8M8 12.5h5"/></svg>
-        </div>
-        <div class="app-card-body">
-          <div class="app-card-name">Static Protocol</div>
-          <p class="app-card-desc" data-i18n="sp-desc">A cyberpunk interactive story. Five decisions, five live SYNC sequences, ten possible endings. No ads, no data collected, works offline.</p>
-          <div class="app-card-meta">
-            <span class="app-card-link" data-i18n="view-sp">Learn more →</span>
-          </div>
-        </div>
-      </a>
-    </div>
-
-    <div class="pull-quote">
-      <span class="pull-quote-mark">&ldquo;</span>
-      <div class="pull-quote-body">
-        <p class="pull-quote-text">I had the pleasure of working closely with Walt as our Creative Director at Menzies, and I cannot recommend him highly enough. Walt is a visionary in the field of design, particularly excelling in UI/UX, and his impact on our projects was truly outstanding.</p>
-        <p class="pull-quote-text">As a developer, I had the opportunity to collaborate with him on several projects, and his designs consistently exceeded expectations. His keen understanding of user experience and interface design not only made the development process smoother but also significantly enhanced the end-user engagement. Walt's ability to translate complex ideas into visually appealing and user-friendly interfaces is truly remarkable.</p>
-        <p class="pull-quote-text">What sets Walt apart is his unique blend of creativity and practicality. He not only has an eye for stunning design but also a deep understanding of the technical aspects of development. This made our collaboration seamless, as he was able to provide designs that were not only aesthetically pleasing but also practical and feasible to implement.</p>
-        <p class="pull-quote-cite"><a href="https://www.linkedin.com/in/humphrey-mukwenga-82062440/" target="_blank" rel="noopener"><strong>Humphrey Mukwenga</strong></a> — Lead Web Developer at LSi</p>
+    <!-- Hero -->
+    <section class="hero">
+      <a href="/apps/" class="app-back" data-i18n="back-apps">← Back to Apps and Games</a>
+      <p class="app-eyebrow" data-i18n="app-eyebrow">An interactive cyberpunk story for your browser</p>
+      <div class="app-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#22e6d4" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16v12H10l-4 4v-4H4z"/>
+          <path d="M8 9h8M8 12.5h5"/>
+        </svg>
       </div>
-    </div>
-  </div>
+      <h1>Static Protocol</h1>
+      <p class="hero-tagline" data-i18n="hero-tagline">Your choices — and your reflexes — write the story.</p>
+      <p class="hero-desc" data-i18n="hero-desc">A branching cyberpunk interactive story. Five decisions send you down the run. Five live SYNC sequences decide how each one actually plays out. Ten endings are waiting — no two runs land the same way twice.</p>
+      <div class="download-row">
+        <a href="/apps/static-protocol/play/" class="store-btn" aria-label="Play Static Protocol in your browser">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3" fill="var(--ink)" stroke="none"/></svg>
+          <span class="store-btn-inner">
+            <span class="store-btn-sub" data-i18n="play-sub">Play in your browser</span>
+            <span class="store-btn-name" data-i18n="play-name">Jack in</span>
+          </span>
+        </a>
+      </div>
+      <div class="hero-scroll" aria-hidden="true">
+        <span>Scroll</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works">
+      <h2 data-i18n="how-heading">How it works</h2>
+      <p data-i18n="how-desc">Every decision node throws up a SYNC sequence — a short run of timed glyph prompts styled like a hacking HUD. Nail it clean and your path goes exactly as planned. Scrape by and it costs you. Fumble it, and the run gets forced sideways — stealth becomes a firefight, a lie gets seen through — whether you meant it to or not.</p>
+      <p class="how-survive" data-i18n="how-survive">Five nodes. Ten endings. Same choices, different reflexes, different city you wake up in.</p>
+    </section>
+
+    <!-- Three things -->
+    <section class="difficulty-section">
+      <p class="difficulty-header" data-i18n="diff-heading">What decides the ending</p>
+      <div class="difficulty-grid">
+        <div class="difficulty-card">
+          <div class="diff-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#22e6d4" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </div>
+          <h3 data-i18n="diff-1">Five decisions</h3>
+          <p data-i18n="diff-1-desc">A rooftop extraction, a fixer's booth, a server room, a confrontation, and the choice that ends it. Every one bends the story a different way.</p>
+        </div>
+        <div class="difficulty-card">
+          <div class="diff-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#22e6d4" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h4l2-7 4 14 2-7h4"/></svg>
+          </div>
+          <h3 data-i18n="diff-2">Live SYNC sequences</h3>
+          <p data-i18n="diff-2-desc">Timed glyph prompts on every node — arrow keys, WASD, or tap. Clean, partial, or failed. Your hands matter as much as your choices.</p>
+        </div>
+        <div class="difficulty-card">
+          <div class="diff-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#22e6d4" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 3v18M4 7.5l8 4.5 8-4.5"/></svg>
+          </div>
+          <h3 data-i18n="diff-3">Ten endings</h3>
+          <p data-i18n="diff-3-desc">Ghost. Martyr. Merged. Hunted Down. Ten ways the run can end, tracked by who you trusted, how you fought, and how badly the city noticed.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- No nonsense -->
+    <section class="privacy-strip">
+      <div>
+        <p class="privacy-tag" data-i18n="privacy-tag">Built for replaying</p>
+        <h2><span data-i18n="priv-h1">No ads.</span><br/><span data-i18n="priv-h2">No data.</span><br/><span data-i18n="priv-h3">No install.</span></h2>
+        <p data-i18n="privacy-desc">Static Protocol runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you, the SYNC, and however many endings you're willing to chase.</p>
+      </div>
+      <ul class="privacy-checklist" aria-label="Privacy commitments">
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-1">No personal data collected</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-2">No account or sign-in required</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-3">Works fully offline once loaded</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-4">No ads or tracking of any kind</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-5">Works on keyboard, mouse, or touch</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span data-i18n="check-6">Free to play, every ending included</span></li>
+      </ul>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <h2><span data-i18n="cta-line1">Ten endings.</span><br/><em data-i18n="cta-line2">One run at a time.</em></h2>
+      <div class="download-row">
+        <a href="/apps/static-protocol/play/" class="store-btn" aria-label="Play Static Protocol in your browser">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3" fill="var(--ink)" stroke="none"/></svg>
+          <span class="store-btn-inner">
+            <span class="store-btn-sub" data-i18n="play-sub">Play in your browser</span>
+            <span class="store-btn-name" data-i18n="play-name">Jack in</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+  </main>
 
   <footer>
     <button class="footer-admin" id="admin-btn">Admin</button>
@@ -697,8 +859,8 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Fine Art & Illustration','nav-photography':'Photography & Video','nav-apps':'Apps & Games','nav-enquire':'Enquire','lp-desc':'Two best-friend rats live in your browser. Visit them in the morning.','view-lp':'Learn more →','rs-soon':'Coming soon','page-title':'Apps & Games','apps-intro':"A corner of the site for the things I build when I'm not painting — browser games and small, genuinely useful apps. Everything here is made independently, free to use, and works without accounts or ads. Nothing is tracked. Have a play.",'back-home':'← Back to home','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','bt-desc':'Split bills and calculate tips instantly. No ads, no tracking, works offline.','platform-android':'Android','view-app':'Learn more →','nt-desc':'A cyberpunk memory puzzle. Watch the sequence, repeat it back — and survive. No ads, no data collected, works offline.','view-nt':'Learn more →','ss-desc':'Three pixel pets in one. Play fetch with a dog, raise a colony of rats, or tease a cat with a laser pointer.','view-ss':'Learn more →','sp-desc':'A cyberpunk interactive story. Five decisions, five live SYNC sequences, ten possible endings. No ads, no data collected, works offline.','view-sp':'Learn more →' },
-        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Skone Kunste & Illustrasie','nav-photography':'Fotografie & Video','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','lp-desc':'Twee beste-vriendinne rotte woon in jou blaaier. Besoek hulle soggens.','view-lp':'Meer inligting →','rs-soon':'Binnekort beskikbaar','page-title':'Programme en Speletjies','apps-intro':'\'n Hoekie van die webwerf vir die goed wat ek bou wanneer ek nie skilder nie — blaaierspeletjies en klein, werklik nuttige programme. Alles hier is onafhanklik gemaak, gratis om te gebruik, en werk sonder rekeninge of advertensies. Niks word gevolg nie. Speel gerus rond.','back-home':'← Terug na tuis','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','bt-desc':'Verdeel rekeninge en bereken fooie onmiddellik. Geen advertensies, geen opsporing, werk vanlyn.','platform-android':'Android','view-app':'Meer inligting →','nt-desc':"'n Siberknip-geheuelegkaart. Kyk die volgorde, herhaal dit — en oorleef. Geen advertensies, geen data ingesamel nie, werk vanlyn.",'view-nt':'Meer inligting →','ss-desc':'Drie piksel-troeteldiere in een. Speel apportering met \'n hond, teel \'n kolonie rotte, of terg \'n kat met \'n laserpen.','view-ss':'Meer inligting →','sp-desc':"'n Cyberpunk-interaktiewe verhaal. Vyf besluite, vyf regstreekse SYNC-reekse, tien moontlike eindes. Geen advertensies, geen data ingesamel nie, werk vanlyn.",'view-sp':'Meer inligting →' }
+        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Fine Art & Illustration','nav-photography':'Photography & Video','nav-apps':'Apps & Games','back-apps':'← Back to Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','app-eyebrow':'An interactive cyberpunk story for your browser','hero-tagline':'Your choices — and your reflexes — write the story.','play-sub':'Play in your browser','play-name':'Jack in','how-heading':'How it works','how-desc':"Every decision node throws up a SYNC sequence — a short run of timed glyph prompts styled like a hacking HUD. Nail it clean and your path goes exactly as planned. Scrape by and it costs you. Fumble it, and the run gets forced sideways — stealth becomes a firefight, a lie gets seen through — whether you meant it to or not.",'how-survive':'Five nodes. Ten endings. Same choices, different reflexes, different city you wake up in.','diff-heading':'What decides the ending','diff-1':'Five decisions','diff-1-desc':'A rooftop extraction, a fixer\'s booth, a server room, a confrontation, and the choice that ends it. Every one bends the story a different way.','diff-2':'Live SYNC sequences','diff-2-desc':'Timed glyph prompts on every node — arrow keys, WASD, or tap. Clean, partial, or failed. Your hands matter as much as your choices.','diff-3':'Ten endings','diff-3-desc':'Ghost. Martyr. Merged. Hunted Down. Ten ways the run can end, tracked by who you trusted, how you fought, and how badly the city noticed.','privacy-tag':'Built for replaying','priv-h1':'No ads.','priv-h2':'No data.','priv-h3':'No install.','privacy-desc':"Static Protocol runs entirely in your browser. Nothing is stored, nothing is sent, nothing is tracked. Just you, the SYNC, and however many endings you're willing to chase.",'check-1':'No personal data collected','check-2':'No account or sign-in required','check-3':'Works fully offline once loaded','check-4':'No ads or tracking of any kind','check-5':'Works on keyboard, mouse, or touch','check-6':'Free to play, every ending included','cta-line1':'Ten endings.','cta-line2':'One run at a time.' },
+        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Skone Kunste & Illustrasie','nav-photography':'Fotografie & Video','nav-apps':'Programme en Speletjies','back-apps':'← Terug na Programme en Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','app-eyebrow':'\'n Interaktiewe cyberpunk-verhaal vir jou blaaier','hero-tagline':'Jou keuses — en jou reaksietyd — skryf die verhaal.','play-sub':'Speel in jou blaaier','play-name':'Skakel in','how-heading':'Hoe dit werk','how-desc':'Elke besluitpunt ontketen \'n SYNC-reeks — \'n kort stel getyde glief-opdragte, gestileer soos \'n inbraak-HUD. Kry dit perfek reg en jou pad verloop presies soos beplan. Skraap net-net deur en dit kos jou iets. Faal dit, en die missie word skeefgetrek — sluipwerk word \'n vuurgeveg, \'n leuen word deurgesien — of jy dit so bedoel het of nie.','how-survive':'Vyf punte. Tien eindes. Dieselfde keuses, ander reaksietyd, \'n ander stad waarin jy wakker word.','diff-heading':'Wat die einde bepaal','diff-1':'Vyf besluite','diff-1-desc':'\'n Dakonttrekking, \'n handelaar se kajuit, \'n bedienerkamer, \'n konfrontasie, en die keuse wat dit beëindig. Elkeen boots die verhaal \'n ander kant toe.','diff-2':'Regstreekse SYNC-reekse','diff-2-desc':'Getyde glief-opdragte by elke punt — pyltjiesleutels, WASD, of tik. Skoon, gedeeltelik, of gefaal. Jou hande tel ewe veel soos jou keuses.','diff-3':'Tien eindes','diff-3-desc':'Gees. Martelaar. Saamgesmelt. Opgejaag. Tien maniere waarop dit kan eindig, bepaal deur wie jy vertrou het, hoe jy geveg het, en hoe erg die stad opgemerk het.','privacy-tag':'Gebou om te herspeel','priv-h1':'Geen advertensies.','priv-h2':'Geen data.','priv-h3':'Geen installasie.','privacy-desc':'Static Protocol loop heeltemal in jou blaaier. Niks word gestoor, gestuur of gevolg nie. Net jy, die SYNC, en hoeveel eindes jy ook al wil najaag.','check-1':'Geen persoonlike data ingesamel','check-2':'Geen rekening of aanmelding benodig','check-3':'Werk volledig vanlyn sodra dit gelaai is','check-4':'Geen advertensies of opsporing','check-5':'Werk met sleutelbord, muis, of aanraking','check-6':'Gratis om te speel, elke einde ingesluit','cta-line1':'Tien eindes.','cta-line2':'Een lopie op \'n slag.' }
       };
       var lang = localStorage.getItem('wv-lang') || 'en';
       function applyLang(l) {

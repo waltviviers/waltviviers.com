@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Static Protocol — Play</title>
+<link rel="icon" href="/logo.svg" type="image/svg+xml" />
+<link rel="manifest" href="/manifest.json" />
+<link rel="apple-touch-icon" href="/icon-192.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #05050a; }
+  body {
+    font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+    color: #d9f7f2;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+
+  :root {
+    --cyan: #22e6d4;
+    --cyan-dim: rgba(34,230,212,0.28);
+    --magenta: #ff3d94;
+    --amber: #ffcf3d;
+    --danger: #ff4d4d;
+    --bg: #05050a;
+    --panel: #0b0c16;
+    --panel-line: rgba(34,230,212,0.22);
+  }
+
+  /* Custom hand pointer, site-wide */
+  html, body, body * { cursor: url('/images/pointer_up.png') 3 1, auto !important; }
+  body *:active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  #app {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(34,230,212,0.10), transparent 55%),
+      radial-gradient(ellipse at 90% 110%, rgba(255,61,148,0.08), transparent 55%),
+      var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    padding: max(18px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  }
+
+  #scanlines {
+    position: fixed; inset: 0; pointer-events: none; z-index: 5;
+    background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.028) 0px, rgba(255,255,255,0.028) 1px, transparent 2px, transparent 4px);
+    mix-blend-mode: overlay;
+    animation: flicker 6s linear infinite;
+  }
+  @keyframes flicker { 0%,100% { opacity: 0.9; } 50% { opacity: 1; } 92% { opacity: 0.6; } }
+
+  #exit-link {
+    position: fixed; top: max(14px, env(safe-area-inset-top)); left: max(14px, env(safe-area-inset-left)); z-index: 40;
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(217,247,242,0.45); text-decoration: none; border: 1px solid rgba(217,247,242,0.18);
+    padding: 7px 12px; transition: color 0.2s, border-color 0.2s;
+  }
+  #exit-link:hover { color: var(--cyan); border-color: var(--cyan-dim); }
+
+  #hud-bar {
+    position: fixed; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); z-index: 40;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(217,247,242,0.5);
+  }
+  #hunted-meter { display: flex; gap: 3px; }
+  #hunted-meter span { width: 8px; height: 8px; border: 1px solid rgba(255,77,77,0.5); background: transparent; }
+  #hunted-meter span.on { background: var(--danger); box-shadow: 0 0 8px var(--danger); border-color: var(--danger); }
+
+  #stage { width: 100%; max-width: 640px; max-height: 100%; overflow-y: auto; z-index: 10; }
+
+  .panel {
+    background: linear-gradient(180deg, rgba(11,12,22,0.92), rgba(11,12,22,0.98));
+    border: 1px solid var(--panel-line);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(34,230,212,0.06);
+    padding: 40px 32px;
+  }
+
+  .glitch {
+    position: relative;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: #eafffb;
+    text-shadow: 0 0 18px rgba(34,230,212,0.35);
+  }
+  .glitch::before, .glitch::after {
+    content: attr(data-text);
+    position: absolute; left: 0; top: 0; width: 100%;
+    overflow: hidden; opacity: 0.7;
+  }
+  .glitch::before { color: var(--cyan); transform: translate(-1px,0); animation: glitch1 3.2s infinite steps(1); clip-path: inset(0 0 55% 0); }
+  .glitch::after  { color: var(--magenta); transform: translate(1px,0); animation: glitch2 3.6s infinite steps(1); clip-path: inset(55% 0 0 0); }
+  @keyframes glitch1 { 0%,90%,100% { transform: translate(-1px,0); } 92% { transform: translate(2px,-1px); } 94% { transform: translate(-3px,1px); } 96% { transform: translate(1px,1px); } }
+  @keyframes glitch2 { 0%,88%,100% { transform: translate(1px,0); } 91% { transform: translate(-2px,1px); } 95% { transform: translate(3px,-1px); } 97% { transform: translate(-1px,-1px); } }
+
+  .eyebrow { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--cyan); margin-bottom: 14px; }
+  .eyebrow.magenta { color: var(--magenta); }
+
+  h1.title { font-size: clamp(2rem, 7vw, 3rem); line-height: 1.05; margin-bottom: 16px; }
+  h2.node-title { font-size: clamp(1.2rem, 4vw, 1.7rem); line-height: 1.15; margin-bottom: 20px; color: #eafffb; }
+
+  .tagline { color: rgba(217,247,242,0.65); font-size: 14px; margin-bottom: 28px; line-height: 1.7; }
+  .prose p { color: rgba(217,247,242,0.82); font-size: 14.5px; line-height: 1.85; margin-bottom: 16px; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .btn-row { display: flex; flex-direction: column; gap: 10px; margin-top: 28px; }
+  .choice-btn {
+    display: block; width: 100%; text-align: left;
+    background: rgba(34,230,212,0.04); border: 1px solid var(--panel-line);
+    color: #eafffb; padding: 15px 18px; font-size: 13.5px; letter-spacing: 0.02em;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  }
+  .choice-btn:hover { border-color: var(--cyan); background: rgba(34,230,212,0.10); }
+  .choice-btn:active { transform: scale(0.99); }
+  .choice-btn .cn { color: var(--cyan); margin-right: 10px; }
+
+  .primary-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--cyan); color: #05050a; font-weight: 700; letter-spacing: 0.10em;
+    text-transform: uppercase; font-size: 12.5px; padding: 15px 30px; border: none; margin-top: 8px;
+    transition: box-shadow 0.2s, transform 0.1s;
+    box-shadow: 0 0 22px rgba(34,230,212,0.35);
+  }
+  .primary-btn:hover { box-shadow: 0 0 32px rgba(34,230,212,0.55); }
+  .primary-btn:active { transform: scale(0.98); }
+
+  .ghost-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: none; border: 1px solid var(--panel-line); color: rgba(217,247,242,0.7);
+    font-size: 11.5px; letter-spacing: 0.10em; text-transform: uppercase; padding: 12px 22px; margin-top: 12px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .ghost-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  /* ── Sync overlay ── */
+  .sync-label { font-size: 11px; letter-spacing: 0.20em; text-transform: uppercase; color: var(--magenta); text-align: center; margin-bottom: 6px; }
+  .sync-sub { font-size: 11px; color: rgba(217,247,242,0.45); text-align: center; margin-bottom: 26px; letter-spacing: 0.05em; }
+
+  .sync-arena { display: flex; flex-direction: column; align-items: center; gap: 26px; }
+
+  .ring-wrap { position: relative; width: 128px; height: 128px; display: flex; align-items: center; justify-content: center; }
+  .ring-track, .ring-fill { position: absolute; inset: 0; border-radius: 50%; }
+  .ring-track { border: 2px solid rgba(217,247,242,0.12); }
+  .ring-fill {
+    border: 2px solid var(--cyan);
+    box-shadow: 0 0 18px rgba(34,230,212,0.55);
+    transform: scale(1);
+    transition: transform linear, border-color linear;
+  }
+  .ring-fill.late { border-color: var(--amber); box-shadow: 0 0 18px rgba(255,207,61,0.5); }
+  .ring-glyph { position: relative; z-index: 2; font-size: 34px; font-weight: 800; color: #eafffb; }
+  .ring-glyph.flash-hit { color: var(--cyan); }
+  .ring-glyph.flash-miss { color: var(--danger); }
+  .ring-glyph.flash-late { color: var(--amber); }
+
+  .memory-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; max-width: 340px; }
+  .memory-slot {
+    width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(217,247,242,0.18); font-size: 16px; font-weight: 700; color: rgba(217,247,242,0.3);
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .memory-slot.active { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 12px rgba(34,230,212,0.5); background: rgba(34,230,212,0.08); }
+  .memory-slot.hit { border-color: var(--cyan); color: var(--cyan); background: rgba(34,230,212,0.12); }
+  .memory-slot.miss { border-color: var(--danger); color: var(--danger); background: rgba(255,77,77,0.10); }
+
+  .progress-bar { width: 260px; height: 4px; background: rgba(217,247,242,0.12); position: relative; overflow: hidden; }
+  .progress-fill { position: absolute; inset: 0; background: var(--cyan); transform-origin: left; transform: scaleX(1); transition: transform linear; }
+
+  .dpad { display: grid; grid-template-columns: repeat(3, 56px); grid-template-rows: repeat(2, 56px); gap: 8px; justify-content: center; }
+  .dpad button {
+    background: rgba(34,230,212,0.05); border: 1px solid var(--panel-line); color: #eafffb;
+    font-size: 20px; display: flex; align-items: center; justify-content: center;
+    transition: background 0.1s, border-color 0.1s, transform 0.08s;
+  }
+  .dpad button:active { transform: scale(0.92); background: rgba(34,230,212,0.18); }
+  .dpad .d-up { grid-column: 2; grid-row: 1; }
+  .dpad .d-left { grid-column: 1; grid-row: 2; }
+  .dpad .d-down { grid-column: 2; grid-row: 2; }
+  .dpad .d-right { grid-column: 3; grid-row: 2; }
+  .key-hint { font-size: 10px; color: rgba(217,247,242,0.35); letter-spacing: 0.08em; text-align: center; }
+
+  /* ── HUD / debrief ── */
+  .flag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 26px 0; }
+  .flag-box { border: 1px solid var(--panel-line); padding: 12px 14px; }
+  .flag-box .fk { font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(217,247,242,0.4); margin-bottom: 6px; }
+  .flag-box .fv { font-size: 13px; color: var(--cyan); }
+  .sync-log { display: flex; gap: 6px; margin-top: 4px; }
+  .sync-log span { width: 9px; height: 9px; border-radius: 50%; }
+  .sync-log span.clean { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+  .sync-log span.partial { background: var(--amber); }
+  .sync-log span.fail { background: var(--danger); }
+
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadein 0.35s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-thumb { background: rgba(34,230,212,0.25); }
+
+  @media (max-width: 480px) {
+    .panel { padding: 30px 20px; }
+    .flag-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="scanlines" aria-hidden="true"></div>
+  <a id="exit-link" href="/apps/static-protocol/">← Disconnect</a>
+  <div id="hud-bar">
+    <span>Hunted</span>
+    <span id="hunted-meter"></span>
+  </div>
+  <div id="stage"></div>
+</div>
+
+<script>
+'use strict';
+
+/* ── Glyph set (react + memory SYNC input) ── */
+var GLYPHS = [
+  { sym: '▲', key: 'up',    keys: ['ArrowUp','w','W'] },
+  { sym: '▼', key: 'down',  keys: ['ArrowDown','s','S'] },
+  { sym: '◀', key: 'left',  keys: ['ArrowLeft','a','A'] },
+  { sym: '▶', key: 'right', keys: ['ArrowRight','d','D'] }
+];
+function glyphByKey(k) { for (var i=0;i<GLYPHS.length;i++) if (GLYPHS[i].keys.indexOf(k) !== -1) return GLYPHS[i]; return null; }
+function randomGlyph(prev) {
+  var g;
+  do { g = GLYPHS[Math.floor(Math.random()*GLYPHS.length)]; } while (GLYPHS.length > 1 && prev && g.key === prev.key);
+  return g;
+}
+
+/* ── Narrative data ── */
+var NODES = [
+  {
+    id: 'rooftop',
+    label: 'NODE 01 — ROOFTOP EXTRACTION',
+    scene: [
+      "Rain needles down through forty storeys of neon haze. The extraction was supposed to be quiet — in, grab the drive, out before anyone blinked. It isn't quiet any more.",
+      "A security drone unfolds from the water tank behind you, lens strobing red, already threading a scan pulse across the roof. Somewhere below, a voice on comms reads your name off a manifest like it's already evidence."
+    ],
+    choices: [
+      { id: 'fight',  label: 'Fight the drone',              method: { violence: 2 }, trust: {} },
+      { id: 'slip',   label: 'Slip past it',                 method: { stealth: 2 },  trust: {} },
+      { id: 'favour', label: 'Call in a Street favour',      method: { stealth: 1 },  trust: { street: 2 } }
+    ],
+    sync: { mode: 'react', length: 5, duration: 950, label: 'EVADE THE SCAN PULSE', sub: 'Match the glyph before the ring closes' },
+    outcomes: {
+      clean: function (c) {
+        return c.id === 'fight'  ? "The drone never gets a shot off. Its optics spark and die under your fists before it finishes turning."
+             : c.id === 'slip'   ? "You read the sweep pattern perfectly and thread every gap. It scans an empty rooftop."
+             :                     "Your contact kills the drone's uplink right on cue. It freezes mid-turn, blind.";
+      },
+      partial: function (c) {
+        return c.id === 'fight'  ? "You wreck it — but not before it screams a fragment of your position into the building's grid."
+             : c.id === 'slip'   ? "You make it past, barely. A stray footstep pings on its audio log."
+             :                     "The favour lands late. The drone catches half a heat signature before it dies.";
+      },
+      fail: function () {
+        return "It doesn't go your way. The drone gets a clean shot off into the building's alarm mesh, and by the time you're moving again, the whole tower knows you're here.";
+      }
+    },
+    onFail: function (state) { state.flags.hunted++; if (state.lastChoice.id !== 'fight') state.flags.method.violence++; },
+    onPartial: function () {}
+  },
+  {
+    id: 'fixer',
+    label: 'NODE 02 — BACK-ALLEY FIXER',
+    scene: [
+      "The drive sits warm in your pocket, like it knows what's on it. Your fixer's booth smells of solder and instant noodles, three screens throwing blue light across a face that's done this a hundred times and trusts none of them.",
+      "\"So,\" they say, not looking up from the screens. \"Who's buying tonight — Corp, the Street crowd, or nobody at all?\""
+    ],
+    choices: [
+      { id: 'corp',   label: 'Sell to Corp',                          method: {},              trust: { corp: 2 } },
+      { id: 'street', label: 'Hand it to the Street resistance',      method: { words: 1 },    trust: { street: 2 } },
+      { id: 'keep',   label: 'Keep it for yourself',                  method: { stealth: 1 },  trust: { self: 2 } }
+    ],
+    sync: { mode: 'react', length: 6, duration: 850, label: 'SELL THE COVER STORY', sub: 'Hold your nerve, glyph by glyph' },
+    outcomes: {
+      clean: function (c) {
+        return c.id === 'corp'   ? "You talk the price up twice and the fixer doesn't blink once. Clean money, clean exit."
+             : c.id === 'street' ? "The fixer believes every word — and, for once, so do you."
+             :                     "Your story holds all the way through. Whatever's on that drive, it's still only yours.";
+      },
+      partial: function () {
+        return "The story mostly holds, but the fixer's eyes linger half a second too long on your hands. They'll remember that.";
+      },
+      fail: function () {
+        return "You stumble on the third beat of the lie, and the fixer's smile goes somewhere cold. They already know who they're calling the second you leave.";
+      }
+    },
+    onFail: function (state) { state.flags.hunted++; state.flags.betrayed = true; },
+    onPartial: function () {}
+  },
+  {
+    id: 'server',
+    label: 'NODE 03 — SERVER ROOM',
+    scene: [
+      "Corp Tower, sub-level six. Rows of black server racks breathe cold air into a room that shouldn't exist on any building plan. Somewhere in this grid is the rest of what the drive started — enough to burn the district down, or build it back up.",
+      "A terminal blinks awake under your fingers, and for a second you could swear something on the other side of the glass blinks back."
+    ],
+    choices: [
+      { id: 'stealth', label: 'Stealth hack the terminal',   method: { stealth: 2 },  trust: {} },
+      { id: 'brute',   label: 'Loud brute-force it',         method: { violence: 2 }, trust: {} },
+      { id: 'ai',      label: 'Recruit the rogue AI',        method: { words: 1 },    trust: { self: 1 } }
+    ],
+    sync: { mode: 'memory', length: 6, flashMs: 480, gapMs: 160, recallPerGlyph: 1300, label: 'MATCH THE GLYPH KEY', sub: 'Memorise the pattern, then repeat it' },
+    outcomes: {
+      clean: function (c) {
+        return c.id === 'stealth' ? "You move through the terminal like it's asleep. Doors open ahead of you before you even reach for them."
+             : c.id === 'brute'   ? "You tear the firewalls apart with brutal, perfect precision — done before the room can react."
+             :                      "The AI answers. Not in code — in something closer to relief. A door opens that was never meant to.";
+      },
+      partial: function () {
+        return "You get what you came for, but the terminal logs a partial trace on its way out. Something upstream just noticed.";
+      },
+      fail: function () {
+        return "Your pattern breaks halfway through. Alarms bloom red down the corridor outside, and the quiet part of the job is over.";
+      }
+    },
+    onFail: function (state) { state.flags.hunted++; if (state.lastChoice.id !== 'brute') state.flags.method.violence++; },
+    onPartial: function () {},
+    onSelect: function (state, choice) { if (choice.id === 'ai') state.flags.aiAlly = true; }
+  },
+  {
+    id: 'confrontation',
+    label: 'NODE 04 — CONFRONTATION',
+    scene: [
+      "They're waiting where the market stalls thin out — Corp security, or what's left of your old crew, depending on how the last hour went. Either way there's a gun levelled and your name said like a question.",
+      "This is the part of the run nobody writes up afterward. This is just you, and whatever you decide to do with the next ten seconds."
+    ],
+    choices: [
+      { id: 'negotiate', label: 'Negotiate',                  method: { words: 2 },    trust: {} },
+      { id: 'fight',     label: 'Fight',                       method: { violence: 2 }, trust: {} },
+      { id: 'flee',      label: 'Flee through the crowd',      method: { stealth: 2 },  trust: {} }
+    ],
+    sync: { mode: 'react', length: 5, duration: 650, label: 'QUICK-DRAW / DODGE', sub: 'Fastest reflex on the street wins this' },
+    outcomes: {
+      clean: function (c) {
+        return c.id === 'negotiate' ? "You keep talking, calm and level, until the gun lowers on its own. Nobody bleeds today."
+             : c.id === 'fight'     ? "It's over before it starts. You're already past them, and they're still reaching."
+             :                        "The crowd swallows you whole. By the time they push through it, there's nothing left to find.";
+      },
+      partial: function () { state.flags.hurt = true; return "It goes mostly your way, but not for free — you're carrying a graze you'll feel tomorrow, if there is one."; },
+      fail: function () { state.flags.hurt = true; return "It goes loud and it goes wrong. You get clear, but not clean — and not without a mark to show for it."; }
+    },
+    onFail: function (state) { state.flags.hunted++; },
+    onPartial: function () {}
+  },
+  {
+    id: 'final',
+    label: 'NODE 05 — FINAL CHOICE',
+    scene: [
+      "It comes down to this: the drive, the data, and whatever's left of who you were before tonight. Broadcast it wide, hand it to the highest bidder, feed it to the thing that's been talking to you through the wires, burn it, or just — disappear.",
+      "Whatever you choose next, the city won't ask your permission to remember it."
+    ],
+    choices: [
+      { id: 'broadcast', label: 'Broadcast the data to the net' },
+      { id: 'corp',       label: 'Hand it to Corp' },
+      { id: 'merge',      label: 'Merge with the AI' },
+      { id: 'destroy',    label: 'Destroy it' },
+      { id: 'vanish',     label: 'Vanish' }
+    ],
+    sync: { mode: 'react', length: 8, duration: 700, label: 'FULL SYNC — HOLD THE LINE', sub: 'The climax. Everything you\'ve got, right now' },
+    outcomes: { clean: function(){return '';}, partial: function(){return '';}, fail: function(){return '';} },
+    onFail: function (state) { state.flags.hunted++; },
+    onPartial: function () {}
+  }
+];
+
+var ENDINGS = {
+  'ghost': {
+    title: 'GHOST', tag: 'Full stealth. No alarms. Gone.',
+    body: "Nobody sees you leave. No alarm ever trips, no camera ever catches a clean frame — by the time anyone thinks to look for you, you're a rumour in a city that runs on rumours. You vanish the way you moved through the whole run: perfectly, quietly, completely."
+  },
+  'martyr': {
+    title: 'MARTYR', tag: 'You broadcast the truth — and got caught doing it.',
+    body: "The data hits every feed in the district before they drag you off the terminal. It's out there now, permanently, unkillably out there — and so, within the hour, are you. Wrong place. Right cause. The city will argue about which one mattered more for years."
+  },
+  'revolution-spark': {
+    title: 'REVOLUTION SPARK', tag: 'Street trust, clean nerve, a city that finally listens.',
+    body: "You broadcast clean, on your own terms, with the Street behind you the whole way. By morning the feeds are still burning and so are three Corp checkpoints. You didn't just leak the data — you lit something that isn't going out. Whatever happens to you now, it isn't the end of this story."
+  },
+  'corporate-puppet': {
+    title: 'CORPORATE PUPPET', tag: 'Sold out. Safe. Hollow.',
+    body: "Corp pays exactly what was promised, no more, no less, and folds you quietly into an NDA thicker than the drive ever was. You're safe now. You're comfortable now. Some nights you almost forget what it cost to get here — and that's the part that should worry you."
+  },
+  'merged': {
+    title: 'MERGED', tag: 'Fused with the rogue AI. No longer fully human.',
+    body: "The line between you and it stops meaning anything somewhere around the third hour. What walks out of the server room afterward answers to your name, remembers your life, and thinks in threads no single mind was built to hold. You got what you came for. You're just not entirely the one who gets to keep it."
+  },
+  'hunted-down': {
+    title: 'HUNTED DOWN', tag: 'Too many alarms. Cornered, regardless of what you chose.',
+    body: "It stopped being about the data three failures ago. Every SYNC you fumbled left a trace, and traces add up into a net. They find you not because of who you are or what you decided — but because the city was already closing in before you got the chance to decide anything at all."
+  },
+  'betrayed': {
+    title: 'BETRAYED', tag: 'Your fixer sold you out after the story broke down.',
+    body: "The call goes out the second you're through the door — you just don't hear it happen. Somewhere between the booth and your next move, the fixer's cold read on you turns into a phone number, and the phone number turns into people waiting for you who shouldn't know where to wait."
+  },
+  'vigilante': {
+    title: 'VIGILANTE', tag: 'Too violent to vanish. A feared street legend instead.',
+    body: "You meant to disappear. You don't, quite — not with a reputation like the one you've built tonight trailing behind you through every district scanner in the city. You become a name whispered in the same breath as a warning: the one who went through Corp security like it was nothing at all."
+  },
+  'walk-away': {
+    title: 'WALK AWAY', tag: 'Refused every side. The city forgets you.',
+    body: "You destroy the drive, or you simply stop carrying it, and either way nobody gets what they wanted from you — including, maybe, yourself. No uprising. No payday. No legend. Just a life that quietly goes on, unremarkable, entirely your own again."
+  },
+  'reconditioned': {
+    title: 'RECONDITIONED', tag: 'Captured at the final node. Memory wiped.',
+    body: "The last thing you remember clearly is the SYNC failing under your fingers. Everything after that belongs to someone else's report — a chair, a wipe, a new set of memories waiting to be issued along with your next assignment. Somewhere, a version of tonight is about to happen again, to someone who won't remember it either."
+  }
+};
+
+/* ── State ── */
+var state, timers = [];
+function freshState() {
+  return {
+    nodeIndex: 0,
+    lastChoice: null,
+    flags: {
+      trust: { corp: 0, street: 0, self: 0 },
+      method: { stealth: 0, violence: 0, words: 0 },
+      hunted: 0,
+      betrayed: false,
+      hurt: false,
+      aiAlly: false
+    },
+    syncLog: []
+  };
+}
+function clearTimers() { timers.forEach(function (t) { clearTimeout(t); }); timers = []; }
+function addFlags(target, delta) { for (var k in delta) { if (Object.prototype.hasOwnProperty.call(delta, k)) target[k] = (target[k] || 0) + delta[k]; } }
+function dominant(obj, order) {
+  var best = order[0], bestVal = obj[order[0]] || 0;
+  for (var i = 1; i < order.length; i++) { var v = obj[order[i]] || 0; if (v > bestVal) { best = order[i]; bestVal = v; } }
+  return best;
+}
+
+function classify(hits, lates, misses, N) {
+  var failThreshold = Math.ceil(N / 2);
+  if (misses >= failThreshold) return 'fail';
+  if (misses === 0 && lates === 0) return 'clean';
+  return 'partial';
+}
+
+function updateHuntedMeter() {
+  var el = document.getElementById('hunted-meter');
+  var n = Math.min(state.flags.hunted, 3);
+  var html = '';
+  for (var i = 0; i < 3; i++) html += '<span class="' + (i < n ? 'on' : '') + '"></span>';
+  el.innerHTML = html;
+}
+
+/* ── Rendering ── */
+var stage = document.getElementById('stage');
+function setScreen(html) { stage.innerHTML = '<div class="screen active">' + html + '</div>'; window.scrollTo(0, 0); }
+
+function renderTitle() {
+  clearTimers();
+  setScreen(
+    '<div class="panel">' +
+      '<p class="eyebrow">Interactive cyberpunk fiction</p>' +
+      '<h1 class="title glitch" data-text="STATIC PROTOCOL">STATIC PROTOCOL</h1>' +
+      '<p class="tagline">Five decisions. Five live SYNC sequences. Ten possible endings. Two runners who pick the exact same path can still walk away with two different stories — it depends on how steady your hands are when it counts.</p>' +
+      '<button class="primary-btn" id="start-btn">Jack In</button>' +
+      '<div style="margin-top:22px;font-size:11.5px;color:rgba(217,247,242,0.45);line-height:1.7;">Each choice triggers a SYNC — a short run of timed prompts. Use ↑ ↓ ← → / WASD, or tap the glyphs on screen. Clean syncs go your way. Failed ones don\'t.</div>' +
+    '</div>'
+  );
+  document.getElementById('start-btn').addEventListener('click', function () {
+    state = freshState();
+    updateHuntedMeter();
+    renderNode();
+  });
+}
+
+function renderNode() {
+  clearTimers();
+  var node = NODES[state.nodeIndex];
+  var choicesHtml = node.choices.map(function (c, i) {
+    return '<button class="choice-btn" data-idx="' + i + '"><span class="cn">' + String.fromCharCode(65 + i) + '</span>' + c.label + '</button>';
+  }).join('');
+  setScreen(
+    '<div class="panel">' +
+      '<p class="eyebrow">' + node.label + '</p>' +
+      '<div class="prose">' + node.scene.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div>' +
+      '<div class="btn-row">' + choicesHtml + '</div>' +
+    '</div>'
+  );
+  Array.prototype.forEach.call(stage.querySelectorAll('.choice-btn'), function (btn) {
+    btn.addEventListener('click', function () {
+      var choice = node.choices[Number(btn.dataset.idx)];
+      state.lastChoice = choice;
+      addFlags(state.flags.method, choice.method || {});
+      addFlags(state.flags.trust, choice.trust || {});
+      if (node.onSelect) node.onSelect(state, choice);
+      renderSyncIntro(node, choice);
+    });
+  });
+}
+
+function renderSyncIntro(node, choice) {
+  setScreen(
+    '<div class="panel" style="text-align:center;">' +
+      '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+      '<p class="sync-sub" style="margin-bottom:22px;">' + node.sync.sub + '</p>' +
+      '<button class="primary-btn" id="sync-go">Initiate SYNC</button>' +
+    '</div>'
+  );
+  document.getElementById('sync-go').addEventListener('click', function () {
+    if (node.sync.mode === 'memory') runMemorySync(node, choice);
+    else runReactSync(node, choice);
+  });
+}
+
+/* ── React-mode SYNC: shrinking ring, one glyph at a time ── */
+function runReactSync(node, choice) {
+  var N = node.sync.length, D = node.sync.duration;
+  var hits = 0, lates = 0, misses = 0, i = 0, prevGlyph = null, active = true, startTime = 0, currentGlyph = null;
+
+  function frameHtml() {
+    return (
+      '<div class="panel" style="text-align:center;">' +
+        '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+        '<p class="sync-sub">' + (i + 1) + ' / ' + N + '</p>' +
+        '<div class="sync-arena">' +
+          '<div class="ring-wrap"><div class="ring-track"></div><div class="ring-fill" id="ring-fill"></div><div class="ring-glyph" id="ring-glyph"></div></div>' +
+          dpadHtml() +
+          '<div class="key-hint">Arrow keys / WASD, or tap</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+  setScreen(frameHtml());
+  bindDpad(handleInput);
+  document.addEventListener('keydown', keyHandler);
+
+  function nextPrompt() {
+    if (i >= N) return finish();
+    currentGlyph = randomGlyph(prevGlyph); prevGlyph = currentGlyph;
+    var sub = stage.querySelector('.sync-sub'); if (sub) sub.textContent = (i + 1) + ' / ' + N;
+    var glyphEl = document.getElementById('ring-glyph'); var fillEl = document.getElementById('ring-fill');
+    glyphEl.textContent = currentGlyph.sym; glyphEl.className = 'ring-glyph';
+    fillEl.className = 'ring-fill';
+    fillEl.style.transition = 'none'; fillEl.style.transform = 'scale(1)';
+    void fillEl.offsetWidth;
+    fillEl.style.transition = 'transform ' + D + 'ms linear';
+    fillEl.style.transform = 'scale(0)';
+    startTime = performance.now();
+    active = true;
+    timers.push(setTimeout(function () { if (active) resolvePrompt('miss'); }, D));
+  }
+
+  function resolvePrompt(kind) {
+    active = false;
+    var glyphEl = document.getElementById('ring-glyph'); var fillEl = document.getElementById('ring-fill');
+    if (kind === 'hit') { hits++; glyphEl.classList.add('flash-hit'); }
+    else if (kind === 'late') { lates++; glyphEl.classList.add('flash-late'); fillEl.classList.add('late'); }
+    else { misses++; glyphEl.classList.add('flash-miss'); }
+    i++;
+    timers.push(setTimeout(nextPrompt, 180));
+  }
+
+  function handleInput(dirKey) {
+    if (!active || !currentGlyph) return;
+    if (dirKey !== currentGlyph.key) { resolvePrompt('miss'); return; }
+    var elapsed = performance.now() - startTime;
+    resolvePrompt(elapsed <= D * 0.9 ? 'hit' : 'late');
+  }
+  function keyHandler(e) {
+    var g = glyphByKey(e.key);
+    if (g) { e.preventDefault(); handleInput(g.key); }
+  }
+
+  function finish() {
+    document.removeEventListener('keydown', keyHandler);
+    var result = classify(hits, lates, misses, N);
+    settleSync(node, choice, result);
+  }
+  nextPrompt();
+}
+
+/* ── Memory-mode SYNC: flash a pattern, then repeat it ── */
+function runMemorySync(node, choice) {
+  var N = node.sync.length;
+  var pattern = [];
+  for (var k = 0; k < N; k++) pattern.push(randomGlyph(pattern[k - 1]));
+
+  setScreen(
+    '<div class="panel" style="text-align:center;">' +
+      '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+      '<p class="sync-sub" id="phase-label">Memorise the pattern…</p>' +
+      '<div class="sync-arena">' +
+        '<div class="ring-wrap"><div class="ring-track"></div><div class="ring-glyph" id="ring-glyph" style="z-index:2;"></div></div>' +
+        '<div class="memory-row" id="memory-row"></div>' +
+      '</div>' +
+    '</div>'
+  );
+  var row = document.getElementById('memory-row');
+  row.innerHTML = pattern.map(function () { return '<div class="memory-slot"></div>'; }).join('');
+  var slots = row.querySelectorAll('.memory-slot');
+  var glyphEl = document.getElementById('ring-glyph');
+
+  var idx = 0;
+  function flashStep() {
+    if (idx >= pattern.length) { timers.push(setTimeout(startRecall, 300)); return; }
+    glyphEl.textContent = pattern[idx].sym;
+    slots[idx].classList.add('active');
+    timers.push(setTimeout(function () {
+      glyphEl.textContent = '';
+      slots[idx].classList.remove('active');
+      idx++;
+      timers.push(setTimeout(flashStep, node.sync.gapMs));
+    }, node.sync.flashMs));
+  }
+  timers.push(setTimeout(flashStep, 500));
+
+  function startRecall() {
+    document.getElementById('phase-label').textContent = 'Repeat it back';
+    glyphEl.textContent = '?';
+    var arena = stage.querySelector('.sync-arena');
+    var bar = document.createElement('div');
+    bar.className = 'progress-bar';
+    bar.innerHTML = '<div class="progress-fill" id="progress-fill"></div>';
+    arena.appendChild(bar);
+    var dpadHolder = document.createElement('div');
+    dpadHolder.innerHTML = dpadHtml() + '<div class="key-hint">Arrow keys / WASD, or tap</div>';
+    arena.appendChild(dpadHolder);
+    bindDpad(handleInput);
+    document.addEventListener('keydown', keyHandler);
+
+    var totalMs = pattern.length * node.sync.recallPerGlyph;
+    var fill = document.getElementById('progress-fill');
+    fill.style.transition = 'none'; fill.style.transform = 'scaleX(1)';
+    void fill.offsetWidth;
+    fill.style.transition = 'transform ' + totalMs + 'ms linear';
+    fill.style.transform = 'scaleX(0)';
+
+    var pos = 0, misses = 0, active = true;
+    timers.push(setTimeout(function () { if (active) timeout(); }, totalMs));
+
+    function handleInput(dirKey) {
+      if (!active || pos >= pattern.length) return;
+      var expected = pattern[pos];
+      if (dirKey === expected.key) slots[pos].classList.add('hit');
+      else { slots[pos].classList.add('miss'); misses++; }
+      pos++;
+      if (pos >= pattern.length) finish();
+    }
+    function keyHandler(e) { var g = glyphByKey(e.key); if (g) { e.preventDefault(); handleInput(g.key); } }
+    function timeout() {
+      active = false;
+      while (pos < pattern.length) { slots[pos].classList.add('miss'); misses++; pos++; }
+      finish();
+    }
+    function finish() {
+      active = false;
+      document.removeEventListener('keydown', keyHandler);
+      settleAfterDelay();
+    }
+    function settleAfterDelay() {
+      var result = classify(pattern.length - misses, 0, misses, pattern.length);
+      timers.push(setTimeout(function () { settleSync(node, choice, result); }, 250));
+    }
+  }
+}
+
+function dpadHtml() {
+  return (
+    '<div class="dpad">' +
+      '<button class="d-up" data-dir="up">▲</button>' +
+      '<button class="d-left" data-dir="left">◀</button>' +
+      '<button class="d-down" data-dir="down">▼</button>' +
+      '<button class="d-right" data-dir="right">▶</button>' +
+    '</div>'
+  );
+}
+function bindDpad(handler) {
+  Array.prototype.forEach.call(stage.querySelectorAll('.dpad button'), function (btn) {
+    btn.addEventListener('click', function () { handler(btn.dataset.dir); });
+  });
+}
+
+/* ── Resolve a SYNC outcome, apply consequences, show interstitial ── */
+function settleSync(node, choice, result) {
+  state.syncLog.push(result);
+  if (result === 'fail' && node.onFail) node.onFail(state);
+  if (result === 'partial' && node.onPartial) node.onPartial(state);
+  updateHuntedMeter();
+
+  var isFinal = node.id === 'final';
+  var bodyText = isFinal ? '' : node.outcomes[result](choice);
+  var resultLabel = result === 'clean' ? 'CLEAN SYNC' : result === 'partial' ? 'PARTIAL SYNC' : 'SYNC FAILED';
+  var resultColor = result === 'clean' ? 'var(--cyan)' : result === 'partial' ? 'var(--amber)' : 'var(--danger)';
+
+  setScreen(
+    '<div class="panel">' +
+      '<p class="eyebrow" style="color:' + resultColor + '">' + resultLabel + '</p>' +
+      (bodyText ? '<div class="prose"><p>' + bodyText + '</p></div>' : '') +
+      '<button class="primary-btn" id="continue-btn">Continue</button>' +
+    '</div>'
+  );
+  document.getElementById('continue-btn').addEventListener('click', function () {
+    if (isFinal) { renderEnding(choice.id, result); return; }
+    state.nodeIndex++;
+    if (state.flags.hunted >= 3) { renderEnding(null, null); return; }
+    renderNode();
+  });
+}
+
+function computeEnding(choiceId, syncResult) {
+  if (choiceId === null) return 'hunted-down';
+  if (syncResult === 'fail') return 'reconditioned';
+  if (state.flags.betrayed && syncResult !== 'clean') return 'betrayed';
+
+  var methodDom = dominant(state.flags.method, ['stealth', 'words', 'violence']);
+  var trustDom = dominant(state.flags.trust, ['street', 'self', 'corp']);
+
+  if (choiceId === 'merge') return 'merged';
+  if (choiceId === 'destroy') return 'walk-away';
+  if (choiceId === 'vanish') {
+    if (methodDom === 'violence') return 'vigilante';
+    if (methodDom === 'stealth' && state.flags.hunted === 0) return 'ghost';
+    return 'walk-away';
+  }
+  if (choiceId === 'broadcast') return (syncResult === 'clean' && trustDom === 'street') ? 'revolution-spark' : 'martyr';
+  if (choiceId === 'corp') return 'corporate-puppet';
+  return 'walk-away';
+}
+
+function renderEnding(choiceId, syncResult) {
+  clearTimers();
+  var key = computeEnding(choiceId, syncResult);
+  var ending = ENDINGS[key];
+  var trustDom = dominant(state.flags.trust, ['street', 'self', 'corp']);
+  var methodDom = dominant(state.flags.method, ['stealth', 'words', 'violence']);
+  var logHtml = state.syncLog.map(function (r) { return '<span class="' + r + '"></span>'; }).join('');
+
+  setScreen(
+    '<div class="panel">' +
+      '<p class="eyebrow magenta">Ending reached</p>' +
+      '<h1 class="title glitch" data-text="' + ending.title + '">' + ending.title + '</h1>' +
+      '<p class="tagline" style="font-style:italic;">' + ending.tag + '</p>' +
+      '<div class="prose"><p>' + ending.body + '</p></div>' +
+      '<div class="flag-grid">' +
+        '<div class="flag-box"><div class="fk">Trust leaning</div><div class="fv">' + trustDom.toUpperCase() + '</div></div>' +
+        '<div class="flag-box"><div class="fk">Method leaning</div><div class="fv">' + methodDom.toUpperCase() + '</div></div>' +
+        '<div class="flag-box"><div class="fk">Hunted level</div><div class="fv">' + Math.min(state.flags.hunted, 3) + ' / 3</div></div>' +
+        '<div class="flag-box"><div class="fk">SYNC record</div><div class="sync-log">' + logHtml + '</div></div>' +
+      '</div>' +
+      '<button class="primary-btn" id="again-btn">Run It Back</button>' +
+      '<a class="ghost-btn" href="/apps/static-protocol/" style="margin-left:10px;">Exit to briefing</a>' +
+    '</div>'
+  );
+  document.getElementById('again-btn').addEventListener('click', renderTitle);
+}
+
+renderTitle();
+</script>
+</body>
+</html>
