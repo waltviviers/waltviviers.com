@@ -9,6 +9,8 @@
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://waltviviers.com/graphic-design-portfolio/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
 
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
@@ -1140,5 +1142,6 @@
   <script>
   (function(){var s=[['ss-up.webp','ss-over.webp'],['ss-cat-up.png','ss-cat-over.png'],['ss-rat-up.png','ss-rat-over.png']];var p=s[Math.floor(Math.random()*s.length)];var f=document.querySelector('.scritch-fab');f.querySelector('.ss-up').src='/apps/scritch-scratch/'+p[0];f.querySelector('.ss-over').src='/apps/scritch-scratch/'+p[1];})();
   </script>
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>

@@ -9,6 +9,8 @@
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://waltviviers.com/artist-bio/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
 
   <meta property="og:type"        content="profile" />
   <meta property="og:url"         content="https://waltviviers.com/artist-bio/" />
@@ -197,5 +199,6 @@
   </footer>
   <script>(function(){document.getElementById('theme-toggle').addEventListener('click',function(){var html=document.documentElement;var next=html.dataset.theme==='light'?'dark':'light';html.dataset.theme=next;localStorage.setItem('wv-theme',next);});})();</script>
   <script>(function(){var a=document.getElementById('admin-btn');if(a)a.addEventListener('click',function(){window.location.href='https://waltviviers.com/admin-index/';});})();</script>
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>
