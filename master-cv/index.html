@@ -101,7 +101,28 @@
     html, body, body * { cursor: url('/images/pointer_up.png') 3 1, auto !important; }
     body *:active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
     input[type="text"], input[type="email"], input[type="search"], input[type="tel"], input[type="number"], input[type="url"], input[type="password"], textarea, [contenteditable="true"] { cursor: text !important; }
-  </style>
+  
+    /* ── Standard site footer (ported for consistency) ─────────────── */
+    footer { padding: 40px 48px; border-top: 1px solid var(--rule,#2A2826); display: flex; justify-content: center; align-items: center; position: relative; }
+    .footer-admin { position: absolute; top: 50%; transform: translateY(-50%); left: 48px; font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; color: var(--stone,#9A9890); padding: 7px 16px; border: 1px solid var(--rule,#2A2826); transition: border-color 0.2s, color 0.2s; background: none; cursor: pointer; }
+    .footer-admin:hover { border-color: var(--stone,#9A9890); color: var(--ink,#FAF9F7); }
+    .footer-social { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .footer-social .social-icons { display: flex; align-items: center; gap: 24px; }
+    .footer-social .social-icons a { color: var(--stone,#9A9890); }
+    .footer-social .social-icons a:hover { color: var(--white,#FAF9F7); }
+    .footer-social .social-icons svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .footer-copy { font-size: 11px; color: var(--stone,#9A9890); letter-spacing: 0.06em; text-align: center; margin: 0; }
+    .footer-mark { position: absolute; top: 50%; right: 0; transform: translateY(-50%); line-height: 0; }
+    .footer-mark img { display: block; }
+    [data-theme="light"] .footer-mark img { filter: invert(1); }
+    @media (max-width: 900px) {
+      footer { padding: 40px 24px 88px; flex-direction: column; gap: 28px; }
+      .footer-admin { position: static; transform: none; order: 1; }
+      .footer-social { order: 0; }
+      .footer-mark { position: static; transform: none; order: 2; }
+    }
+    @media (max-width: 560px) { .footer-admin { display: none; } }
+</style>
 </head>
 <body>
   <nav>
@@ -253,11 +274,25 @@
     </div>
   </div>
   <footer>
-    <a href="/" class="footer-back">&#8592; Back to site</a>
-    <p class="footer-copy">&#169; 2026 Walt Viviers. All rights reserved.</p>
+    <button class="footer-admin" id="admin-btn">Admin</button>
+    <div class="footer-social">
+      <div class="social-icons">
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg></a>
+        <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg></a>
+        <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" aria-label="Behance"><svg viewBox="0 0 24 24"><path d="M3 4v16M3 4h5a3 3 0 0 1 0 6H3m0 0h5.5a3.5 3.5 0 0 1 0 7H3"/><line x1="14" y1="7" x2="20" y2="7"/><line x1="13.5" y1="13.5" x2="22" y2="13.5"/><path d="M21 12a3.5 3.5 0 1 0 0 3"/></svg></a>
+        <a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
+        <a href="mailto:artist@waltviviers.com" aria-label="Email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg></a>
+      </div>
+      <p class="footer-copy">&#169; 2026 Walt Viviers. All rights reserved.</p>
     <a href="/privacy/" class="footer-privacy" style="display:inline-block;margin-top:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);">Privacy</a>
-    <span class="footer-credit" style="display:inline-block;margin-top:8px;margin-left:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);">· Made with &#9829; by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Cat&#39;s Creations</a></span>
+    <span class="footer-credit" style="display:inline-block;margin-top:8px;margin-left:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);">&#183; Made with &#9829; by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Cat&#39;s Creations</a></span>
+    </div>
+    <div class="footer-mark">
+      <img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
+    </div>
   </footer>
   <script>(function(){document.getElementById('theme-toggle').addEventListener('click',function(){var html=document.documentElement;var next=html.dataset.theme==='light'?'dark':'light';html.dataset.theme=next;localStorage.setItem('wv-theme',next);});})();</script>
+  <script>(function(){var a=document.getElementById('admin-btn');if(a)a.addEventListener('click',function(){window.location.href='https://waltviviers.com/admin-index/';});})();</script>
 </body>
 </html>
