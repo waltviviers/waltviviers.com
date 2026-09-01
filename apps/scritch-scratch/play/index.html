@@ -30,20 +30,20 @@
       border-radius: 22px; padding: 24px 26px;
       max-width: 420px; width: 88%; font-family: monospace; color: #5a3a28;
       box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+      max-height: 88vh; overflow-y: auto;
     }
     .popup h2 { font-size: 13px; color: #5a3a28; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 14px; }
     .popup ul { list-style: none; padding: 0; }
     .popup ul li { font-size: 11px; padding: 3px 0; line-height: 1.6; }
     .popup ul li::before { content: '· '; color: rgba(90,60,40,0.5); }
-    /* How-to-Play mode sections */
-    .htp-mode { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(90,60,40,0.1); }
-    .htp-mode:last-of-type { border-bottom: none; margin-bottom: 4px; }
-    .htp-icon { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; margin-top: 2px; border-radius: 50%; }
-    .htp-mode-title { font-size: 11px; font-weight: 700; color: #5a3a28; margin-bottom: 4px; letter-spacing: 0.03em; }
-    .htp-tips { list-style: none; padding: 0; margin: 0; }
-    .htp-tips li { font-size: 10px; padding: 1px 0; line-height: 1.6; color: rgba(90,60,40,0.85); }
-    .htp-tips li::before { content: '· '; color: rgba(90,60,40,0.4); }
-    .htp-general { border-top: 1px solid rgba(90,60,40,0.1); padding-top: 10px; margin-bottom: 4px; }
+    /* How-to-Play mode sections — a short, friendly paragraph per mode */
+    .htp-mode { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid rgba(90,60,40,0.12); }
+    .htp-mode:last-of-type { border-bottom: none; margin-bottom: 6px; }
+    .htp-icon { width: 56px; height: 56px; object-fit: contain; flex-shrink: 0; border-radius: 50%; box-shadow: 0 2px 6px rgba(90,60,40,0.18); }
+    .htp-mode-title { font-size: 13px; font-weight: 700; color: #5a3a28; margin-bottom: 5px; letter-spacing: 0.03em; }
+    .htp-copy { font-size: 11.5px; line-height: 1.7; color: rgba(90,60,40,0.9); margin: 0; }
+    .htp-general { font-size: 11px; line-height: 1.7; color: rgba(90,60,40,0.8); border-top: 1px solid rgba(90,60,40,0.12); padding-top: 12px; margin: 0 0 6px; }
+    @media (max-width: 380px) { .htp-icon { width: 46px; height: 46px; } .htp-mode { gap: 11px; } }
     .popup-close {
       margin-top: 12px; display: block; width: 100%;
       background: rgba(255,251,244,0.82); border: 2px solid rgba(90,60,40,0.18);
@@ -192,15 +192,7 @@
       <img src="/apps/scritch-scratch/ss-up.webp" alt="" class="htp-icon" aria-hidden="true" />
       <div>
         <div class="htp-mode-title">Doggo</div>
-        <ul class="htp-tips">
-          <li>Tap to walk</li>
-          <li>Tap grass to dig</li>
-          <li>Tap the dog to scritch</li>
-          <li>Tap a ball or stick to throw</li>
-          <li>Perform Trick button for tricks</li>
-          <li>Puppies appear and grow up</li>
-          <li>Day/night cycles every few minutes</li>
-        </ul>
+        <p class="htp-copy">Just hang out with your golden pup. Tap anywhere to send them trotting over, tap the grass to dig up little surprises, and give the dog a tap for happy scritches. Toss a ball or stick for a game of fetch, hit Perform Trick to show off, and watch puppies turn up and grow as the yard drifts from day to night. No score, no rush — pure good company.</p>
       </div>
     </div>
 
@@ -208,15 +200,7 @@
       <img src="/apps/scritch-scratch/ss-rat-up.png" alt="" class="htp-icon" aria-hidden="true" />
       <div>
         <div class="htp-mode-title">Ratty</div>
-        <ul class="htp-tips">
-          <li>Tap a rat to scritch</li>
-          <li>Tap the ground for meal worms</li>
-          <li>Boggle button drops a strawberry — rats go wild</li>
-          <li>Rats breed as they roam</li>
-          <li>Every 10th rat is a dumbo</li>
-          <li>Every 16th rat is naked</li>
-          <li>Every 15th worm triggers a raid cat</li>
-        </ul>
+        <p class="htp-copy">A cosy little rat den to potter about in. Tap a rat for a scritch, tap the ground to scatter meal worms, or press Boggle to drop a strawberry and send everyone scurrying. Leave them to it and they’ll breed and roam — keep an eye out for the odd dumbo or naked one, and the occasional cat raid to keep things lively. Poke around and enjoy the little world.</p>
       </div>
     </div>
 
@@ -224,21 +208,11 @@
       <img src="/apps/scritch-scratch/ss-cat-up.png" alt="" class="htp-icon" aria-hidden="true" />
       <div>
         <div class="htp-mode-title">Cat Lady</div>
-        <ul class="htp-tips">
-          <li>Hold a cat to purr and wake it</li>
-          <li>Tap the ground for the laser</li>
-          <li>Catnip button draws cats to roam</li>
-          <li>Tap the wool ball to roll it</li>
-          <li>Old lady visits periodically and opens a can of food</li>
-        </ul>
+        <p class="htp-copy">Pure cat-lady bliss. Hold a cat to hear it purr, tap the ground to tease everyone with the laser dot, and press Catnip to send the whole clowder roaming. Roll the wool ball for a chase, and now and then the old lady drops by to crack open a tin. Sit back and let the chaos purr along.</p>
       </div>
     </div>
 
-    <div class="htp-general">
-      <ul class="htp-tips">
-        <li>Happiness bar bottom-left tracks wellbeing</li>
-      </ul>
-    </div>
+    <p class="htp-general">There’s nothing to win here — the happiness bar in the bottom-left is just a gentle nudge that your critters are content. Otherwise, tap around, make a mess, and enjoy the calm.</p>
     <button class="popup-close popup-cta" id="htp-suggest" type="button">Suggest a Feature</button>
     <button class="popup-close" id="htp-close">Close</button>
   </div>
