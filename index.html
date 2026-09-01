@@ -2726,7 +2726,15 @@
     [data-theme="light"] .privacy-notice a { color: #111; }
     [data-theme="light"] .privacy-notice button { background: #111; color: #fff; }
     @media (max-width: 560px) { .privacy-notice { flex-direction: column; align-items: stretch; text-align: center; gap: 10px; } }
-  </style>
+  
+    /* Smooth cross-page transitions (Chrome MPA view transitions; ignored elsewhere) */
+    @view-transition { navigation: auto; }
+    /* Respect the visitor's reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+    }
+</style>
   <script>
     (function(){
       try { if (localStorage.getItem('wv-privacy-ack')) return; } catch(e){}

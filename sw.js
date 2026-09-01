@@ -1,6 +1,6 @@
 /* Walt Viviers — minimal service worker for PWA installability + basic offline */
-const CACHE = 'wv-cache-v1';
-const PRECACHE = ['/', '/logo.svg', '/icon-192.png', '/icon-512.png'];
+const CACHE = 'wv-cache-v2';
+const PRECACHE = ['/', '/offline.html', '/logo.svg', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -33,7 +33,12 @@ self.addEventListener('fetch', (event) => {
       }
       return res;
     }).catch(() =>
-      caches.match(req).then((cached) => cached || caches.match('/'))
+      caches.match(req).then((cached) => {
+        if (cached) return cached;
+        // A page navigation with nothing cached → show the branded offline page.
+        if (req.mode === 'navigate') return caches.match('/offline.html');
+        return caches.match('/');
+      })
     )
   );
 });

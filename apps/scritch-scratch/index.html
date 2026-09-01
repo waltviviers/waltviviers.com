@@ -634,7 +634,15 @@
       .burger-btn { display: flex; }
       nav .social-icons { display: none; }
     }
-  </style>
+  
+    /* Smooth cross-page transitions (Chrome MPA view transitions; ignored elsewhere) */
+    @view-transition { navigation: auto; }
+    /* Respect the visitor's reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+    }
+</style>
 </head>
 <body>
 

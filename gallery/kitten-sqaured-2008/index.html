@@ -491,7 +491,15 @@
     html, body, body * { cursor: url('/images/pointer_up.png') 3 1, auto !important; }
     body *:active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
     input[type="text"], input[type="email"], input[type="search"], input[type="tel"], input[type="number"], input[type="url"], input[type="password"], textarea, [contenteditable="true"] { cursor: text !important; }
-  </style>
+  
+    /* Smooth cross-page transitions (Chrome MPA view transitions; ignored elsewhere) */
+    @view-transition { navigation: auto; }
+    /* Respect the visitor's reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+    }
+</style>
   <script defer src="/js/currency.js"></script>
 </head>
 <body>
@@ -590,6 +598,7 @@
     <div class="artwork-actions">
       <button class="btn btn-primary" onclick="toggleForm()" data-i18n="btn-enquire">Enquire about this work</button>
       <a href="/gallery/" class="btn btn-secondary" data-i18n="btn-all-works">View all works</a>
+      <button type="button" class="btn btn-secondary" onclick="shareArtwork(this)">Share</button>
     </div>
     
     <div class="artwork-desc">
@@ -811,5 +820,12 @@
   (function(){var s=[['ss-up.webp','ss-over.webp'],['ss-cat-up.png','ss-cat-over.png'],['ss-rat-up.png','ss-rat-over.png']];var p=s[Math.floor(Math.random()*s.length)];var f=document.querySelector('.scritch-fab');f.querySelector('.ss-up').src='/apps/scritch-scratch/'+p[0];f.querySelector('.ss-over').src='/apps/scritch-scratch/'+p[1];})();
   </script>
   <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+  <script>
+  function shareArtwork(btn){
+    var data={title:document.title,text:document.title,url:location.href};
+    if(navigator.share){navigator.share(data).catch(function(){});}
+    else if(navigator.clipboard){navigator.clipboard.writeText(location.href).then(function(){var o=btn.textContent;btn.textContent='Link copied!';setTimeout(function(){btn.textContent=o;},1500);});}
+  }
+  </script>
 </body>
 </html>
