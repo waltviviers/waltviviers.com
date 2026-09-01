@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Offline — Walt Viviers</title>
+  <meta name="theme-color" content="#0C0C0B" />
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 20px; padding: 24px; text-align: center;
+      background: #0C0C0B; color: #FAF9F7;
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+    }
+    img { width: 148px; height: auto; }
+    h1 { font-size: 16px; font-weight: 500; letter-spacing: 0.05em; margin: 4px 0 0; }
+    p { font-size: 13px; line-height: 1.65; color: #9A9890; max-width: 330px; margin: 0; }
+    button {
+      margin-top: 8px; font: inherit; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #FAF9F7; background: none; border: 1px solid #2A2826; padding: 11px 22px; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    button:hover { border-color: #9A9890; }
+  
+    /* Smooth cross-page transitions (Chrome MPA view transitions; ignored elsewhere) */
+    @view-transition { navigation: auto; }
+    /* Respect the visitor's reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+    }
+</style>
+</head>
+<body>
+  <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" onerror="this.style.display='none'" />
+  <h1>You’re offline</h1>
+  <p>There’s no connection right now. Check your network and try again — pages you’ve already visited will still open.</p>
+  <button type="button" onclick="location.reload()">Try again</button>
+</body>
+</html>

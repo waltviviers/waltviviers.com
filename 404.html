@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Page not found — Walt Viviers</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <meta name="theme-color" content="#0C0C0B" />
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 18px; padding: 24px; text-align: center;
+      background: #0C0C0B; color: #FAF9F7;
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+    }
+    img { width: 140px; height: auto; margin-bottom: 6px; }
+    .code { font-size: 12px; letter-spacing: 0.28em; text-transform: uppercase; color: #9A9890; }
+    h1 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; font-size: clamp(1.6rem, 6vw, 2.4rem); margin: 0; }
+    p { font-size: 13px; line-height: 1.65; color: #9A9890; max-width: 340px; margin: 0; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 8px; }
+    .btn {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #FAF9F7; text-decoration: none; border: 1px solid #2A2826; padding: 11px 22px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn:hover { border-color: #9A9890; }
+    .btn-primary { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+    .btn-primary:hover { opacity: 0.85; }
+  
+    /* Smooth cross-page transitions (Chrome MPA view transitions; ignored elsewhere) */
+    @view-transition { navigation: auto; }
+    /* Respect the visitor's reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+    }
+</style>
+</head>
+<body>
+  <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+  <div class="code">Error 404</div>
+  <h1>This page wandered off</h1>
+  <p>The page you’re looking for doesn’t exist or has moved. Let’s get you back to the art.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="/">Back to home</a>
+    <a class="btn" href="/gallery/">Browse the gallery</a>
+  </div>
+</body>
+</html>
