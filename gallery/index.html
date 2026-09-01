@@ -7,6 +7,8 @@
   <meta name="description" content="Fine art &amp; illustration by Walt Viviers — South African fine artist working in acrylic and mixed media, based in Pretoria." />
   <link rel="canonical" href="https://waltviviers.com/gallery/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
 
   <meta name="robots" content="index, follow, max-image-preview:large" />
 
@@ -1018,5 +1020,6 @@
   <script>
   (function(){var s=[['ss-up.webp','ss-over.webp'],['ss-cat-up.png','ss-cat-over.png'],['ss-rat-up.png','ss-rat-over.png']];var p=s[Math.floor(Math.random()*s.length)];var f=document.querySelector('.scritch-fab');f.querySelector('.ss-up').src='/apps/scritch-scratch/'+p[0];f.querySelector('.ss-over').src='/apps/scritch-scratch/'+p[1];})();
   </script>
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>

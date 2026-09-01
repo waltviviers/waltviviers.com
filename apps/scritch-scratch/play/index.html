@@ -167,6 +167,8 @@
       .walt-logo img { height: 28px; }
     }
   </style>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
 </head>
 <body>
 <div id="game-menu" class="overlay">
@@ -4364,5 +4366,6 @@ document.getElementById('catnip-btn').addEventListener('click', () => {
 <div class="game-mark" aria-hidden="true">
   <img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
 </div>
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>

@@ -7,6 +7,8 @@
   <meta name="description" content="Three pixel pets in one browser. Scritch a dog and play fetch, raise a colony of rats, or tease a cat with a laser pointer. Free, no install, no account required." />
   <link rel="canonical" href="https://waltviviers.com/apps/scritch-scratch/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
 
   <meta name="robots" content="index, follow" />
 
@@ -1032,5 +1034,6 @@
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
     })();
   </script>
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>
