@@ -44,13 +44,26 @@
 
   #app {
     position: fixed; inset: 0;
-    background:
-      radial-gradient(ellipse at 50% -10%, rgba(34,230,212,0.10), transparent 55%),
-      radial-gradient(ellipse at 90% 110%, rgba(255,61,148,0.08), transparent 55%),
-      var(--bg);
+    background: var(--bg);
     display: flex; align-items: center; justify-content: center;
     padding: max(18px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
   }
+
+  /* ── Scene backdrop: the current scene's art fills the whole screen; the panel floats over it ── */
+  #scene-backdrop {
+    position: fixed; inset: 0; z-index: 1;
+    opacity: 0; transition: opacity 0.5s ease;
+  }
+  #scene-backdrop svg { width: 100%; height: 100%; display: block; }
+  #scene-backdrop::after {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(34,230,212,0.10), transparent 55%),
+      radial-gradient(ellipse at 90% 110%, rgba(255,61,148,0.08), transparent 55%),
+      linear-gradient(180deg, rgba(5,5,10,0.25) 0%, rgba(5,5,10,0.4) 60%, rgba(5,5,10,0.7) 100%);
+  }
+  .scene-rain { animation: rainfall 3.4s linear infinite; }
+  @keyframes rainfall { from { transform: translate(0, -18px); } to { transform: translate(-5px, 18px); } }
 
   #scanlines {
     position: fixed; inset: 0; pointer-events: none; z-index: 5;
@@ -80,20 +93,12 @@
   #stage { width: 100%; max-width: 640px; max-height: 100%; overflow-y: auto; z-index: 10; }
 
   .panel {
-    background: linear-gradient(180deg, rgba(11,12,22,0.92), rgba(11,12,22,0.98));
+    background: rgba(9,10,18,0.62);
+    backdrop-filter: blur(18px) saturate(1.3);
+    -webkit-backdrop-filter: blur(18px) saturate(1.3);
     border: 1px solid var(--panel-line);
     box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(34,230,212,0.06);
     padding: 40px 32px;
-  }
-
-  /* ── Scene art: skyline banner bled to the panel edges ── */
-  .scene-art { position: relative; margin: -40px -32px 26px; height: clamp(110px, 22vw, 160px); overflow: hidden; border-bottom: 1px solid var(--panel-line); background: #05050a; }
-  .scene-art svg { width: 100%; height: 100%; display: block; }
-  .scene-art::after { content: ''; position: absolute; inset: auto 0 0 0; height: 55%; background: linear-gradient(to bottom, transparent, var(--panel)); pointer-events: none; }
-  .scene-rain { animation: rainfall 3.4s linear infinite; }
-  @keyframes rainfall { from { transform: translate(0, -18px); } to { transform: translate(-5px, 18px); } }
-  @media (max-width: 480px) {
-    .scene-art { margin: -30px -20px 20px; }
   }
 
   .glitch {
@@ -225,6 +230,7 @@
 </head>
 <body>
 <div id="app">
+  <div id="scene-backdrop" aria-hidden="true"></div>
   <div id="scanlines" aria-hidden="true"></div>
   <a id="exit-link" href="/apps/static-protocol/">← Disconnect</a>
   <div id="hud-bar">
@@ -299,7 +305,19 @@ function skylineSvg(accent, motif, tall) {
     '</svg>'
   );
 }
-function sceneArt(accent, motif, tall) { return '<div class="scene-art">' + skylineSvg(accent, motif, tall) + '</div>'; }
+var backdropEl = document.getElementById('scene-backdrop');
+var currentBackdropKey = null, backdropFadeTimer = null;
+function setBackdrop(accent, motif, tall) {
+  var key = accent + '|' + motif + '|' + tall;
+  if (key === currentBackdropKey) return;
+  currentBackdropKey = key;
+  if (backdropFadeTimer) clearTimeout(backdropFadeTimer);
+  backdropEl.style.opacity = '0.4';
+  backdropFadeTimer = setTimeout(function () {
+    backdropEl.innerHTML = skylineSvg(accent, motif, tall);
+    backdropEl.style.opacity = '1';
+  }, 260);
+}
 
 /* ── Narrative data ── */
 var NODES = [
@@ -543,9 +561,9 @@ function setScreen(html) { stage.innerHTML = '<div class="screen active">' + htm
 
 function renderTitle() {
   clearTimers();
+  setBackdrop('#22e6d4', 'tower', true);
   setScreen(
     '<div class="panel">' +
-      sceneArt('#22e6d4', 'tower', true) +
       '<p class="eyebrow">Interactive cyberpunk fiction</p>' +
       '<h1 class="title glitch" data-text="STATIC PROTOCOL">STATIC PROTOCOL</h1>' +
       '<p class="tagline">Five decisions. Five live SYNC sequences. Ten possible endings. Two runners who pick the exact same path can still walk away with two different stories — it depends on how steady your hands are when it counts.</p>' +
@@ -563,12 +581,12 @@ function renderTitle() {
 function renderNode() {
   clearTimers();
   var node = NODES[state.nodeIndex];
+  setBackdrop(node.art.accent, node.art.motif, true);
   var choicesHtml = node.choices.map(function (c, i) {
     return '<button class="choice-btn" data-idx="' + i + '"><span class="cn">' + String.fromCharCode(65 + i) + '</span>' + c.label + '</button>';
   }).join('');
   setScreen(
     '<div class="panel">' +
-      sceneArt(node.art.accent, node.art.motif) +
       '<p class="eyebrow">' + node.label + '</p>' +
       '<div class="prose">' + node.scene.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div>' +
       '<div class="btn-row">' + choicesHtml + '</div>' +
@@ -780,10 +798,10 @@ function settleSync(node, choice, result) {
   var resultLabel = result === 'clean' ? 'CLEAN SYNC' : result === 'partial' ? 'PARTIAL SYNC' : 'SYNC FAILED';
   var resultColor = result === 'clean' ? 'var(--cyan)' : result === 'partial' ? 'var(--amber)' : 'var(--danger)';
   var resultAccent = result === 'clean' ? '#22e6d4' : result === 'partial' ? '#ffcf3d' : '#ff4d4d';
+  setBackdrop(resultAccent, node.art.motif, true);
 
   setScreen(
     '<div class="panel">' +
-      sceneArt(resultAccent, node.art.motif) +
       '<p class="eyebrow" style="color:' + resultColor + '">' + resultLabel + '</p>' +
       (bodyText ? '<div class="prose"><p>' + bodyText + '</p></div>' : '') +
       '<button class="primary-btn" id="continue-btn">Continue</button>' +
@@ -821,13 +839,13 @@ function renderEnding(choiceId, syncResult) {
   clearTimers();
   var key = computeEnding(choiceId, syncResult);
   var ending = ENDINGS[key];
+  setBackdrop(ending.art.accent, ending.art.motif, true);
   var trustDom = dominant(state.flags.trust, ['street', 'self', 'corp']);
   var methodDom = dominant(state.flags.method, ['stealth', 'words', 'violence']);
   var logHtml = state.syncLog.map(function (r) { return '<span class="' + r + '"></span>'; }).join('');
 
   setScreen(
     '<div class="panel">' +
-      sceneArt(ending.art.accent, ending.art.motif, true) +
       '<p class="eyebrow magenta">Ending reached</p>' +
       '<h1 class="title glitch" data-text="' + ending.title + '">' + ending.title + '</h1>' +
       '<p class="tagline" style="font-style:italic;">' + ending.tag + '</p>' +
