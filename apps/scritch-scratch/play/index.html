@@ -167,10 +167,10 @@
       .walt-logo img { height: 28px; }
     }
 
-    /* Time-of-day dial — sun/moon next to WALT logo */
+    /* Time-of-day dial — sun/moon next to WALT logo (hidden until a game mode starts) */
     #time-dial {
       position: fixed; top: 39px; left: 134px; z-index: 450;
-      width: 20px; height: 20px; pointer-events: none;
+      width: 20px; height: 20px; pointer-events: none; display: none;
     }
     #dial-sun, #dial-moon { position: absolute; top: 0; left: 0; }
     @media (max-width: 900px), (orientation: portrait) {
@@ -201,19 +201,17 @@
     <path d="M17 10.67A7 7 0 1 1 9.33 3 5.5 5.5 0 0 0 17 10.67z" fill="#C8D8FF"/>
   </svg>
 </div>
-<div id="menu-drop">
-  <a href="https://waltviviers.com/">Go To Main Site</a>
-  <a href="https://waltviviers.com/apps/scritch-scratch/play/">Game Menu</a>
-  <button id="htp-btn" class="sep">How to Play</button>
-  <button id="rename-btn" class="sep">Rename Pet</button>
-  <button class="sep mode-switch" data-mode="dog">Doggo Mode</button>
-  <button class="mode-switch" data-mode="rat">Ratty Mode</button>
-  <button class="mode-switch" data-mode="cat">Cat Lady Mode</button>
+<div id="game-menu" class="overlay">
+  <div class="game-menu-inner">
+    <button class="mode-btn-pick" data-mode="dog" type="button">Doggo Mode</button>
+    <button class="mode-btn-pick" data-mode="rat" type="button">Ratty Mode</button>
+    <button class="mode-btn-pick" data-mode="cat" type="button">Cat Lady Mode</button>
+    <div class="mode-sec-row">
+      <button class="mode-btn-sec" id="menu-htp" type="button">How to Play</button>
+      <a class="mode-btn-sec" href="/">Back to Main Site</a>
+    </div>
+  </div>
 </div>
-<button type="button" class="scritch-fab" aria-label="Open menu">
-  <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" width="64" height="64" />
-  <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
-</button>
 <div id="htp-overlay" class="overlay">
   <div class="popup">
     <h2>How to Play</h2>
@@ -3006,6 +3004,7 @@ function updateFab() {
 }
 
 function enterRatMode() {
+  _dialSun.closest('#time-dial').style.display = 'block';
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'rat';
   happiness = 80;
@@ -3030,6 +3029,7 @@ function enterRatMode() {
 }
 
 function enterDogMode() {
+  _dialSun.closest('#time-dial').style.display = 'block';
   if (gameMode === 'rat') saveRatState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'dog';
   happiness = 80;
@@ -3056,6 +3056,7 @@ function enterDogMode() {
 }
 
 function enterCatMode() {
+  _dialSun.closest('#time-dial').style.display = 'block';
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'rat') saveRatState();
   gameMode = 'cat';
   happiness = 80;
