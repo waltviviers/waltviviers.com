@@ -166,29 +166,49 @@
       .walt-logo { top: 11px; left: 24px; }
       .walt-logo img { height: 28px; }
     }
-  
-    /* Smooth cross-page transitions (Chrome MPA view transitions; ignored elsewhere) */
-    @view-transition { navigation: auto; }
-    /* Respect the visitor's reduced-motion preference */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
-      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+
+    /* Time-of-day dial — sun/moon next to WALT logo */
+    #time-dial {
+      position: fixed; top: 39px; left: 134px; z-index: 450;
+      width: 20px; height: 20px; pointer-events: none;
     }
-</style>
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="apple-touch-icon" href="/icon-192.png" />
+    #dial-sun, #dial-moon { position: absolute; top: 0; left: 0; }
+    @media (max-width: 900px), (orientation: portrait) {
+      #time-dial { top: 15px; left: 100px; width: 16px; height: 16px; }
+    }
+  </style>
 </head>
 <body>
-<div id="game-menu" class="overlay">
-  <div class="game-menu-inner">
-    <button class="mode-btn-pick" data-mode="dog" type="button">Doggo Mode</button>
-    <button class="mode-btn-pick" data-mode="rat" type="button">Ratty Mode</button>
-    <button class="mode-btn-pick" data-mode="cat" type="button">Cat Lady Mode</button>
-    <div class="mode-sec-row">
-      <button class="mode-btn-sec" id="menu-htp" type="button">How to Play</button>
-      <a class="mode-btn-sec" href="/">Back to Main Site</a>
-    </div>
-  </div>
+<button type="button" class="scritch-fab" aria-label="Menu">
+  <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" width="64" height="64" />
+  <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
+</button>
+<div id="time-dial" aria-hidden="true">
+  <svg id="dial-sun" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="10" cy="10" r="4" fill="#FFD000"/>
+    <g stroke="#FFD000" stroke-width="1.5" stroke-linecap="round">
+      <line x1="10" y1="1" x2="10" y2="3.2"/>
+      <line x1="10" y1="16.8" x2="10" y2="19"/>
+      <line x1="1" y1="10" x2="3.2" y2="10"/>
+      <line x1="16.8" y1="10" x2="19" y2="10"/>
+      <line x1="3.64" y1="3.64" x2="5.2" y2="5.2"/>
+      <line x1="14.8" y1="14.8" x2="16.36" y2="16.36"/>
+      <line x1="16.36" y1="3.64" x2="14.8" y2="5.2"/>
+      <line x1="5.2" y1="14.8" x2="3.64" y2="16.36"/>
+    </g>
+  </svg>
+  <svg id="dial-moon" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg" style="opacity:0">
+    <path d="M17 10.67A7 7 0 1 1 9.33 3 5.5 5.5 0 0 0 17 10.67z" fill="#C8D8FF"/>
+  </svg>
+</div>
+<div id="menu-drop">
+  <a href="https://waltviviers.com/">Go To Main Site</a>
+  <a href="https://waltviviers.com/apps/scritch-scratch/play/">Game Menu</a>
+  <button id="htp-btn" class="sep">How to Play</button>
+  <button id="rename-btn" class="sep">Rename Pet</button>
+  <button class="sep mode-switch" data-mode="dog">Doggo Mode</button>
+  <button class="mode-switch" data-mode="rat">Ratty Mode</button>
+  <button class="mode-switch" data-mode="cat">Cat Lady Mode</button>
 </div>
 <button type="button" class="scritch-fab" aria-label="Open menu">
   <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" width="64" height="64" />
@@ -277,6 +297,8 @@
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
+const _dialSun  = document.getElementById('dial-sun');
+const _dialMoon = document.getElementById('dial-moon');
 
 const S = 5;
 const DW = 10, DH = 8;
@@ -3908,6 +3930,15 @@ function drawDynamicLighting() {
   ctx.save();
   // Shared day/night cycle across all three modes (starts in the morning)
   const phase = ((gameTick + _dayNightSeed) / 21600) % 1;
+  // Update sun/moon dial opacity based on phase
+  {
+    const sunO  = phase < 0.42 ? 1 : phase < 0.54 ? 1 - (phase - 0.42) / 0.12
+                : phase < 0.88 ? 0 : Math.min((phase - 0.88) / 0.10, 1);
+    const moonO = phase < 0.42 ? 0 : phase < 0.54 ? (phase - 0.42) / 0.12
+                : phase < 0.88 ? 1 : Math.max(1 - (phase - 0.88) / 0.10, 0);
+    _dialSun.style.opacity = sunO;
+    _dialMoon.style.opacity = moonO;
+  }
   let col, alpha;
   if (phase < 0.06) {
     alpha = 0.22 * (1 - phase / 0.06) + 0.04;
