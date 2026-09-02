@@ -39,6 +39,8 @@
   <meta name="twitter:image:alt"   content="Walt Viviers, Venom Cat, 2019, Acrylic on Canvas" />
 
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
   <link rel="preload" as="image" href="/images/800/venom-cat-acrylic-canvas-walt-viviers-2019.webp" type="image/webp" fetchpriority="high" />
 
   <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://waltviviers.com/"},{"@type":"ListItem","position":2,"name":"Artworks","item":"https://waltviviers.com/gallery/"},{"@type":"ListItem","position":3,"name":"Venom Cat","item":"https://waltviviers.com/gallery/venom-cat-2019/"}]},{"@type":"VisualArtwork","name":"Venom Cat","dateCreated":"2019","image":"https://waltviviers.com/images/venom-cat-acrylic-canvas-walt-viviers-2019.webp","url":"https://waltviviers.com/gallery/venom-cat-2019/","description":"Venom Cat is one of Walt Viviers' most popular works — a 20 × 20 cm acrylic on canvas completed in 2019. The painting merges the instantly recognisable aesthetic of Marvel's Venom with a cat, a combination that proved immediately compelling when first shared online. Featured in an interview with Pixelsmith Studios, Venom Cat helped establish Viviers as a South African fine artist with a distinctive voice: one that moves fluidly between painterly technique and popular culture without sacrificing either. The small square format packs considerable visual punch, the subject's high-contrast markings lending themselves naturally to Viviers' bold, confident brushwork. The original is available for acquisition.","creator":{"@type":"Person","name":"Walt Viviers","url":"https://waltviviers.com","address":{"@type":"PostalAddress","addressLocality":"Pretoria","addressRegion":"Gauteng","addressCountry":"ZA"}},"artMedium":"Acrylic on Canvas","size":"20 x 20 x 5 cm"}]}</script>
@@ -261,7 +263,7 @@
       .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
       .theme-toggle:hover .toggle-thumb .icon-moon,
       .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
-      footer { padding: 40px 24px 32px; flex-direction: column; gap: 28px; }
+      footer { padding: 40px 24px 88px; flex-direction: column; gap: 28px; }
       .footer-admin { position: static; transform: none; order: 1; }
       .footer-social { order: 0; }
       .footer-mark { position: static; transform: none; order: 2; }
@@ -409,7 +411,15 @@
       .artwork-actions { flex-direction: row; }
       .btn { width: auto; flex: 1; }
     }
-  </style>
+  
+    /* Smooth cross-page transitions (Chrome MPA view transitions; ignored elsewhere) */
+    @view-transition { navigation: auto; }
+    /* Respect the visitor's reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+    }
+</style>
 </head>
 <body>
 
@@ -634,5 +644,6 @@
       }
     });
   </script>
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>

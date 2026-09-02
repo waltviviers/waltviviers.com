@@ -6,6 +6,8 @@
   <title>Site Index — Admin · Walt Viviers</title>
   <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
 
   <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
   <script>
@@ -356,7 +358,15 @@
     }
     .gate-btn:hover { background: var(--bg2); border-color: var(--stone); }
     .gate-error { font-size: 11px; color: #E07070; letter-spacing: 0.06em; min-height: 16px; }
-  </style>
+  
+    /* Smooth cross-page transitions (Chrome MPA view transitions; ignored elsewhere) */
+    @view-transition { navigation: auto; }
+    /* Respect the visitor's reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+    }
+</style>
 </head>
 <body>
 
@@ -816,5 +826,6 @@
   })();
   </script>
 
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>
