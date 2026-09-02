@@ -4285,8 +4285,10 @@ document.getElementById('sf-form').addEventListener('submit', async e => {
   const err = form.querySelector('.popup-err'), success = sfOverlay.querySelector('.popup-success');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = '…'; err.hidden = true;
+  const data = new FormData(form);
+  if (!(data.get('email') || '').trim()) data.delete('email');  // email is optional — omit it if blank so Formspree doesn't reject it
   try {
-    const res = await fetch('https://formspree.io/f/mrevzark', { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+    const res = await fetch('https://formspree.io/f/mrevzark', { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
     if (res.ok) { form.hidden = true; success.hidden = false; }
     else { err.textContent = 'Something went wrong. Please try again.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
   } catch (_) { err.textContent = 'Could not send. Please try again later.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
