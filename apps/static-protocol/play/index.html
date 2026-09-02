@@ -22,6 +22,7 @@
     -webkit-font-smoothing: antialiased;
   }
   button { font: inherit; color: inherit; cursor: pointer; }
+  svg { display: block; }
 
   :root {
     --cyan: #22e6d4;
@@ -42,232 +43,248 @@
     *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
   }
 
-  #app {
+  /* ── The device: everything lives inside this phone, on purpose ── */
+  .device-wrap {
     position: fixed; inset: 0;
-    background: var(--bg);
+    background: radial-gradient(ellipse at 50% 15%, #0d0e1a 0%, #030304 72%);
     display: flex; align-items: center; justify-content: center;
-    padding: max(18px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(18px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+    padding: max(20px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
   }
+  .phone {
+    position: relative;
+    width: min(94vw, 400px, calc((100vh - 60px) * 0.4615));
+    aspect-ratio: 9 / 19.5;
+    background: #05050a;
+    border-radius: 42px;
+    border: 10px solid #16171f;
+    box-shadow: 0 0 0 1px rgba(34,230,212,0.15), 0 40px 100px rgba(0,0,0,0.7), 0 0 70px rgba(34,230,212,0.06);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .notch {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 38%; height: 20px; background: #16171f; border-radius: 0 0 14px 14px; z-index: 80;
+  }
+  .status-bar {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between;
+    padding: 13px 20px 6px; font-size: 11.5px; letter-spacing: 0.02em; position: relative; z-index: 60;
+  }
+  .status-right { display: flex; align-items: center; gap: 7px; }
+  .signal-bars { display: flex; align-items: flex-end; gap: 2px; height: 10px; }
+  .signal-bars i { width: 3px; display: block; background: rgba(217,247,242,0.22); border-radius: 1px; }
+  .signal-bars i:nth-child(1) { height: 4px; } .signal-bars i:nth-child(2) { height: 7px; } .signal-bars i:nth-child(3) { height: 10px; }
+  .signal-bars i.on { background: var(--danger); box-shadow: 0 0 4px var(--danger); }
+  .battery { width: 21px; height: 10px; border: 1px solid rgba(217,247,242,0.4); border-radius: 2px; padding: 1.5px; position: relative; }
+  .battery::after { content: ''; position: absolute; right: -3px; top: 3px; width: 2px; height: 4px; background: rgba(217,247,242,0.4); border-radius: 0 1px 1px 0; }
+  .battery-fill { height: 100%; background: var(--cyan); border-radius: 0.5px; }
 
-  /* ── Scene backdrop: the current scene's art fills the whole screen; the panel floats over it ── */
-  #scene-backdrop {
-    position: fixed; inset: 0; z-index: 1;
-    opacity: 0; transition: opacity 0.5s ease;
-  }
-  #scene-backdrop svg { width: 100%; height: 100%; display: block; }
-  #scene-backdrop::after {
-    content: ''; position: absolute; inset: 0; pointer-events: none;
-    background:
-      radial-gradient(ellipse at 50% -10%, rgba(34,230,212,0.10), transparent 55%),
-      radial-gradient(ellipse at 90% 110%, rgba(255,61,148,0.08), transparent 55%),
-      linear-gradient(180deg, rgba(5,5,10,0.25) 0%, rgba(5,5,10,0.4) 60%, rgba(5,5,10,0.7) 100%);
-  }
-  .scene-rain { animation: rainfall 3.4s linear infinite; }
-  @keyframes rainfall { from { transform: translate(0, -18px); } to { transform: translate(-5px, 18px); } }
-
-  /* ── Hand prop: your own gloved hand, always in frame, reaches for whatever you interact with ── */
-  .hand-prop {
-    position: fixed; right: -18px; bottom: -22px; z-index: 3; width: clamp(150px, 34vw, 220px);
-    pointer-events: none; filter: drop-shadow(0 -6px 20px rgba(34,230,212,0.18));
-    transform-origin: 78% 90%;
-    animation: handIdle 3.4s ease-in-out infinite;
-    transition: transform 0.3s cubic-bezier(0.3,0,0.4,1);
-    opacity: 0;
-  }
-  .hand-prop.visible { opacity: 1; transition: opacity 0.6s ease, transform 0.3s cubic-bezier(0.3,0,0.4,1); }
-  .hand-prop svg { width: 100%; height: 100%; display: block; }
-  @keyframes handIdle { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-5px) rotate(-1.2deg); } }
-  .hand-prop.peek-left   { animation: none; transform: translate(-70px, -50px) rotate(-10deg); }
-  .hand-prop.peek-center { animation: none; transform: translate(-30px, -64px) rotate(-4deg); }
-  .hand-prop.peek-right  { animation: none; transform: translate(6px, -58px) rotate(3deg); }
-  .hand-prop.reach-left   { animation: none; transition: transform 0.26s cubic-bezier(0.3,0,0.5,1); transform: translate(-130px, -110px) rotate(-16deg) scale(1.05); }
-  .hand-prop.reach-center { animation: none; transition: transform 0.26s cubic-bezier(0.3,0,0.5,1); transform: translate(-60px, -140px) rotate(-6deg) scale(1.05); }
-  .hand-prop.reach-right  { animation: none; transition: transform 0.26s cubic-bezier(0.3,0,0.5,1); transform: translate(14px, -125px) rotate(5deg) scale(1.05); }
-
-  /* ── Hotspots: interactive targets drawn inside the scene SVG itself ── */
-  .hotspot-group { cursor: pointer; outline: none; }
-  .hotspot-ring { fill: rgba(255,255,255,0.02); stroke-width: 2; animation: hotspotPulse 2.2s ease-in-out infinite; transition: stroke-width 0.15s, fill 0.15s; }
-  .hotspot-group:hover .hotspot-ring, .hotspot-group.is-hovered .hotspot-ring { stroke-width: 3.5; fill: rgba(255,255,255,0.06); }
-  .hotspot-icon { transition: transform 0.15s ease; transform-box: fill-box; transform-origin: center; }
-  .hotspot-group:hover .hotspot-icon, .hotspot-group.is-hovered .hotspot-icon { transform: scale(1.12); }
-  @keyframes hotspotPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
-
-  /* ── Scene caption: a slim docked strip instead of a full card, so the scene stays primary ── */
-  .scene-caption {
-    position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translateX(-50%);
-    width: calc(100% - 32px); max-width: 640px; z-index: 20;
-    background: rgba(9,10,18,0.68); backdrop-filter: blur(16px) saturate(1.3); -webkit-backdrop-filter: blur(16px) saturate(1.3);
-    border: 1px solid var(--panel-line); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    padding: 16px 20px; max-height: 42vh; overflow-y: auto;
-  }
-  .scene-caption .prose p { font-size: 13px; line-height: 1.65; margin-bottom: 10px; }
-  .hover-hint { margin-top: 4px; font-size: 12px; color: var(--cyan); letter-spacing: 0.03em; min-height: 16px; }
-  .hover-hint.idle { color: rgba(217,247,242,0.4); }
-
-  #scanlines {
-    position: fixed; inset: 0; pointer-events: none; z-index: 5;
-    background: repeating-linear-gradient(to bottom, rgba(255,255,255,0.028) 0px, rgba(255,255,255,0.028) 1px, transparent 2px, transparent 4px);
-    mix-blend-mode: overlay;
-    animation: flicker 6s linear infinite;
-  }
-  @keyframes flicker { 0%,100% { opacity: 0.9; } 50% { opacity: 1; } 92% { opacity: 0.6; } }
+  #phone-screen { flex: 1 1 auto; overflow-y: auto; position: relative; }
+  .home-indicator { flex: 0 0 auto; display: flex; justify-content: center; padding: 8px 0 12px; }
+  .home-indicator span { width: 110px; height: 4px; border-radius: 3px; background: rgba(217,247,242,0.28); }
 
   #exit-link {
-    position: fixed; top: max(14px, env(safe-area-inset-top)); left: max(14px, env(safe-area-inset-left)); z-index: 40;
+    position: fixed; top: max(14px, env(safe-area-inset-top)); left: max(14px, env(safe-area-inset-left)); z-index: 100;
     font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: rgba(217,247,242,0.45); text-decoration: none; border: 1px solid rgba(217,247,242,0.18);
+    color: rgba(217,247,242,0.4); text-decoration: none; border: 1px solid rgba(217,247,242,0.16);
     padding: 7px 12px; transition: color 0.2s, border-color 0.2s;
   }
   #exit-link:hover { color: var(--cyan); border-color: var(--cyan-dim); }
 
-  #hud-bar {
-    position: fixed; top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right)); z-index: 40;
-    display: flex; align-items: center; gap: 12px;
-    font-size: 10px; letter-spacing: 0.10em; text-transform: uppercase; color: rgba(217,247,242,0.5);
-  }
-  #hunted-meter { display: flex; gap: 3px; }
-  #hunted-meter span { width: 8px; height: 8px; border: 1px solid rgba(255,77,77,0.5); background: transparent; }
-  #hunted-meter span.on { background: var(--danger); box-shadow: 0 0 8px var(--danger); border-color: var(--danger); }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-thumb { background: rgba(34,230,212,0.25); }
 
-  #stage { width: 100%; max-width: 640px; max-height: 100%; overflow-y: auto; z-index: 10; }
+  /* ── Lock screen ── */
+  .lock-screen { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+  .lock-time { font-size: 46px; font-weight: 300; margin-bottom: 4px; letter-spacing: -0.02em; }
+  .lock-date { font-size: 11px; color: rgba(217,247,242,0.45); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 46px; }
+  .lock-brand { font-size: 1.3rem; font-weight: 800; letter-spacing: 0.06em; margin-bottom: 10px; }
+  .lock-copy { font-size: 11.5px; color: rgba(217,247,242,0.5); max-width: 240px; line-height: 1.7; }
+  .lock-hint { font-size: 10.5px; color: rgba(217,247,242,0.4); letter-spacing: 0.14em; text-transform: uppercase; margin-top: 56px; animation: hintPulse 2s ease-in-out infinite; }
+  @keyframes hintPulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 0.9; } }
 
-  .panel {
-    background: rgba(9,10,18,0.62);
-    backdrop-filter: blur(18px) saturate(1.3);
-    -webkit-backdrop-filter: blur(18px) saturate(1.3);
-    border: 1px solid var(--panel-line);
-    box-shadow: 0 0 0 1px rgba(0,0,0,0.4), 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(34,230,212,0.06);
-    padding: 40px 32px;
+  /* ── Home screen ── */
+  .home-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 10px; padding: 30px 18px 10px; }
+  .app-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: none; color: inherit; position: relative; }
+  .app-icon .tile {
+    width: 52px; height: 52px; border-radius: 15px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center; transition: transform 0.1s;
   }
+  .app-icon .tile svg { width: 24px; height: 24px; stroke: var(--accent, rgba(217,247,242,0.65)); color: var(--accent, rgba(217,247,242,0.65)); }
+  .app-icon.is-active .tile { border-color: var(--accent, var(--cyan)); animation: tilePulse 1.8s ease-in-out infinite; }
+  .app-icon:active .tile { transform: scale(0.94); }
+  .app-icon .label { font-size: 9.5px; letter-spacing: 0.03em; color: rgba(217,247,242,0.55); }
+  .app-icon .badge {
+    position: absolute; top: -3px; right: 6px; min-width: 15px; height: 15px; padding: 0 3px; border-radius: 8px;
+    background: var(--danger); color: #fff; font-size: 8.5px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 8px rgba(255,77,77,0.6);
+  }
+  @keyframes tilePulse { 0%, 100% { box-shadow: 0 0 14px var(--accent-glow, rgba(34,230,212,0.35)); } 50% { box-shadow: 0 0 24px var(--accent-glow, rgba(34,230,212,0.6)); } }
+
+  /* ── Notification banner ── */
+  .notif-banner {
+    position: absolute; top: 8px; left: 8px; right: 8px; z-index: 90;
+    background: rgba(16,17,26,0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 10px 12px;
+    display: flex; gap: 10px; align-items: flex-start;
+    transform: translateY(-140%); transition: transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .notif-banner.show { transform: translateY(0); }
+  .notif-banner .nicon { width: 26px; height: 26px; border-radius: 8px; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .notif-banner .nicon svg { width: 15px; height: 15px; }
+  .notif-banner .nbody b { display: block; font-size: 11px; letter-spacing: 0.02em; }
+  .notif-banner .nbody span { font-size: 10.5px; color: rgba(217,247,242,0.65); }
+
+  /* ── App chrome ── */
+  .app-screen { min-height: 100%; display: flex; flex-direction: column; }
+  .app-header { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); flex: 0 0 auto; }
+  .app-header .aicon { width: 28px; height: 28px; border-radius: 8px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .app-header .aicon svg { width: 16px; height: 16px; }
+  .app-header .aname { font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .back-btn { background: none; border: none; color: inherit; font-size: 16px; padding: 0 4px 0 0; line-height: 1; }
+  .app-body { padding: 16px 18px 26px; flex: 1 1 auto; }
+
+  /* ── Messages ── */
+  .bubble-row { display: flex; margin-bottom: 10px; }
+  .bubble-row.out { justify-content: flex-end; }
+  .bubble { max-width: 80%; padding: 10px 13px; border-radius: 16px; font-size: 12.5px; line-height: 1.55; }
+  .bubble-row.in .bubble { background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.14); border-bottom-left-radius: 4px; }
+  .bubble-row.out .bubble { background: var(--cyan); color: #05050a; border-bottom-right-radius: 4px; }
+  .quick-replies { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+  .quick-reply { text-align: left; padding: 11px 14px; border-radius: 14px; border: 1px solid rgba(34,230,212,0.45); background: rgba(34,230,212,0.10); font-size: 12.5px; }
+  .quick-reply:active { background: rgba(34,230,212,0.12); }
+
+  /* ── Tracker ── */
+  .radar-wrap { display: flex; justify-content: center; padding: 6px 0 20px; }
+  .radar { position: relative; width: 148px; height: 148px; border-radius: 50%; border: 1px solid rgba(34,230,212,0.25); background: radial-gradient(circle, rgba(34,230,212,0.06), transparent 70%); }
+  .radar::before, .radar::after { content: ''; position: absolute; border: 1px solid rgba(34,230,212,0.12); border-radius: 50%; }
+  .radar::before { inset: 24px; } .radar::after { inset: 48px; }
+  .radar .you { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+  .radar .blip { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--danger); box-shadow: 0 0 10px var(--danger); animation: blipPing 1.6s ease-in-out infinite; }
+  @keyframes blipPing { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.55; } }
+  .log-line { font-size: 12px; line-height: 1.75; color: rgba(217,247,242,0.72); margin-bottom: 8px; }
+  .log-line::before { content: '> '; color: var(--cyan); }
+
+  /* ── Breach terminal ── */
+  .terminal { background: #020203; border: 1px solid rgba(34,230,212,0.2); border-radius: 8px; padding: 12px 14px; font-size: 11.5px; line-height: 1.75; color: var(--cyan); margin-bottom: 18px; }
+  .terminal .tline::before { content: '$ '; opacity: 0.55; }
+
+  /* ── Generic action list (tracker / breach / transmit / call) ── */
+  .action-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; width: 100%; }
+  .action-row { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.07); text-align: left; font-size: 12.5px; }
+  .action-row .aicon2 { width: 30px; height: 30px; border-radius: 9px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .action-row .aicon2 svg { width: 30px; height: 30px; }
+  .action-row:active { background: rgba(34,230,212,0.1); }
+
+  /* ── Call screen ── */
+  .call-screen { display: flex; flex-direction: column; align-items: center; padding: 44px 20px 22px; min-height: 100%; }
+  .call-avatar { width: 88px; height: 88px; border-radius: 50%; background: rgba(255,77,77,0.12); border: 1px solid rgba(255,77,77,0.4); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; animation: ringPulse 1.4s ease-in-out infinite; }
+  .call-avatar svg { width: 34px; height: 34px; stroke: var(--danger); }
+  @keyframes ringPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,77,0.4); } 50% { box-shadow: 0 0 0 14px rgba(255,77,77,0); } }
+  .call-name { font-size: 14px; letter-spacing: 0.05em; margin-bottom: 3px; }
+  .call-sub { font-size: 10.5px; color: rgba(217,247,242,0.5); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 18px; }
+  .call-copy { font-size: 12px; line-height: 1.7; color: rgba(217,247,242,0.7); text-align: center; max-width: 280px; margin-bottom: 22px; }
+
+  /* ── Result dialog ── */
+  .dialog-overlay { position: absolute; inset: 0; background: rgba(2,2,4,0.74); display: flex; align-items: center; justify-content: center; padding: 22px; z-index: 95; }
+  .dialog-card { width: 100%; background: #12131c; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 22px 20px; text-align: center; }
+  .dialog-card .dtitle { font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px; }
+  .dialog-card .dbody { font-size: 12.5px; line-height: 1.7; color: rgba(217,247,242,0.8); margin-bottom: 18px; }
+  .dialog-ok { width: 100%; padding: 12px; border-radius: 10px; background: var(--cyan); color: #05050a; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11.5px; border: none; }
 
   .glitch {
-    position: relative;
-    font-weight: 800;
-    letter-spacing: 0.02em;
-    color: #eafffb;
+    position: relative; font-weight: 800; letter-spacing: 0.02em; color: #eafffb;
     text-shadow: 0 0 18px rgba(34,230,212,0.35);
   }
-  .glitch::before, .glitch::after {
-    content: attr(data-text);
-    position: absolute; left: 0; top: 0; width: 100%;
-    overflow: hidden; opacity: 0.7;
-  }
+  .glitch::before, .glitch::after { content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%; overflow: hidden; opacity: 0.7; }
   .glitch::before { color: var(--cyan); transform: translate(-1px,0); animation: glitch1 3.2s infinite steps(1); clip-path: inset(0 0 55% 0); }
   .glitch::after  { color: var(--magenta); transform: translate(1px,0); animation: glitch2 3.6s infinite steps(1); clip-path: inset(55% 0 0 0); }
   @keyframes glitch1 { 0%,90%,100% { transform: translate(-1px,0); } 92% { transform: translate(2px,-1px); } 94% { transform: translate(-3px,1px); } 96% { transform: translate(1px,1px); } }
   @keyframes glitch2 { 0%,88%,100% { transform: translate(1px,0); } 91% { transform: translate(-2px,1px); } 95% { transform: translate(3px,-1px); } 97% { transform: translate(-1px,-1px); } }
 
-  .eyebrow { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--cyan); margin-bottom: 14px; }
+  .eyebrow { font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cyan); margin-bottom: 12px; }
   .eyebrow.magenta { color: var(--magenta); }
-
-  h1.title { font-size: clamp(2rem, 7vw, 3rem); line-height: 1.05; margin-bottom: 16px; }
-  h2.node-title { font-size: clamp(1.2rem, 4vw, 1.7rem); line-height: 1.15; margin-bottom: 20px; color: #eafffb; }
-
-  .tagline { color: rgba(217,247,242,0.65); font-size: 14px; margin-bottom: 28px; line-height: 1.7; }
-  .prose p { color: rgba(217,247,242,0.82); font-size: 14.5px; line-height: 1.85; margin-bottom: 16px; }
+  h1.title { font-size: 1.7rem; line-height: 1.1; margin-bottom: 12px; }
+  .tagline { color: rgba(217,247,242,0.65); font-size: 12.5px; margin-bottom: 20px; line-height: 1.6; }
+  .prose p { color: rgba(217,247,242,0.82); font-size: 12.5px; line-height: 1.75; margin-bottom: 14px; }
   .prose p:last-child { margin-bottom: 0; }
 
   .primary-btn {
-    display: inline-flex; align-items: center; justify-content: center;
+    display: flex; width: 100%; align-items: center; justify-content: center;
     background: var(--cyan); color: #05050a; font-weight: 700; letter-spacing: 0.10em;
-    text-transform: uppercase; font-size: 12.5px; padding: 15px 30px; border: none; margin-top: 8px;
-    transition: box-shadow 0.2s, transform 0.1s;
-    box-shadow: 0 0 22px rgba(34,230,212,0.35);
+    text-transform: uppercase; font-size: 12px; padding: 14px; border: none; margin-top: 6px;
+    box-shadow: 0 0 20px rgba(34,230,212,0.3);
   }
-  .primary-btn:hover { box-shadow: 0 0 32px rgba(34,230,212,0.55); }
   .primary-btn:active { transform: scale(0.98); }
-
   .ghost-btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    background: none; border: 1px solid var(--panel-line); color: rgba(217,247,242,0.7);
-    font-size: 11.5px; letter-spacing: 0.10em; text-transform: uppercase; padding: 12px 22px; margin-top: 12px;
-    transition: border-color 0.2s, color 0.2s;
+    display: block; text-align: center; background: none; border: 1px solid var(--panel-line); color: rgba(217,247,242,0.7);
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; padding: 12px; margin-top: 10px; text-decoration: none;
   }
-  .ghost-btn:hover { border-color: var(--cyan); color: var(--cyan); }
 
-  /* ── Sync overlay ── */
-  .sync-label { font-size: 11px; letter-spacing: 0.20em; text-transform: uppercase; color: var(--magenta); text-align: center; margin-bottom: 6px; }
-  .sync-sub { font-size: 11px; color: rgba(217,247,242,0.45); text-align: center; margin-bottom: 26px; letter-spacing: 0.05em; }
-
-  .sync-arena { display: flex; flex-direction: column; align-items: center; gap: 26px; }
-
-  .ring-wrap { position: relative; width: 128px; height: 128px; display: flex; align-items: center; justify-content: center; }
+  /* ── Sync arena (reused across every node's SYNC moment) ── */
+  .sync-label { font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--magenta); text-align: center; margin-bottom: 6px; }
+  .sync-sub { font-size: 10.5px; color: rgba(217,247,242,0.45); text-align: center; margin-bottom: 22px; letter-spacing: 0.05em; }
+  .sync-arena { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+  .ring-wrap { position: relative; width: 116px; height: 116px; display: flex; align-items: center; justify-content: center; }
   .ring-track, .ring-fill { position: absolute; inset: 0; border-radius: 50%; }
   .ring-track { border: 2px solid rgba(217,247,242,0.12); }
-  .ring-fill {
-    border: 2px solid var(--cyan);
-    box-shadow: 0 0 18px rgba(34,230,212,0.55);
-    transform: scale(1);
-    transition: transform linear, border-color linear;
-  }
-  .ring-fill.late { border-color: var(--amber); box-shadow: 0 0 18px rgba(255,207,61,0.5); }
-  .ring-glyph { position: relative; z-index: 2; font-size: 34px; font-weight: 800; color: #eafffb; }
+  .ring-fill { border: 2px solid var(--cyan); box-shadow: 0 0 16px rgba(34,230,212,0.5); transform: scale(1); transition: transform linear, border-color linear; }
+  .ring-fill.late { border-color: var(--amber); box-shadow: 0 0 16px rgba(255,207,61,0.5); }
+  .ring-glyph { position: relative; z-index: 2; font-size: 30px; font-weight: 800; color: #eafffb; }
   .ring-glyph.flash-hit { color: var(--cyan); }
   .ring-glyph.flash-miss { color: var(--danger); }
   .ring-glyph.flash-late { color: var(--amber); }
 
-  .memory-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; max-width: 340px; }
+  .memory-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; max-width: 300px; }
   .memory-slot {
-    width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
-    border: 1px solid rgba(217,247,242,0.18); font-size: 16px; font-weight: 700; color: rgba(217,247,242,0.3);
-    transition: border-color 0.15s, color 0.15s, background 0.15s;
+    width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(217,247,242,0.18); font-size: 14px; font-weight: 700; color: rgba(217,247,242,0.3);
   }
-  .memory-slot.active { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 12px rgba(34,230,212,0.5); background: rgba(34,230,212,0.08); }
+  .memory-slot.active { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 10px rgba(34,230,212,0.5); background: rgba(34,230,212,0.08); }
   .memory-slot.hit { border-color: var(--cyan); color: var(--cyan); background: rgba(34,230,212,0.12); }
   .memory-slot.miss { border-color: var(--danger); color: var(--danger); background: rgba(255,77,77,0.10); }
 
-  .progress-bar { width: 260px; height: 4px; background: rgba(217,247,242,0.12); position: relative; overflow: hidden; }
+  .progress-bar { width: 230px; height: 4px; background: rgba(217,247,242,0.12); position: relative; overflow: hidden; }
   .progress-fill { position: absolute; inset: 0; background: var(--cyan); transform-origin: left; transform: scaleX(1); transition: transform linear; }
 
-  .dpad { display: grid; grid-template-columns: repeat(3, 56px); grid-template-rows: repeat(2, 56px); gap: 8px; justify-content: center; }
-  .dpad button {
-    background: rgba(34,230,212,0.05); border: 1px solid var(--panel-line); color: #eafffb;
-    font-size: 20px; display: flex; align-items: center; justify-content: center;
-    transition: background 0.1s, border-color 0.1s, transform 0.08s;
-  }
+  .dpad { display: grid; grid-template-columns: repeat(3, 50px); grid-template-rows: repeat(2, 50px); gap: 7px; justify-content: center; }
+  .dpad button { background: rgba(34,230,212,0.05); border: 1px solid var(--panel-line); color: #eafffb; font-size: 18px; display: flex; align-items: center; justify-content: center; }
   .dpad button:active { transform: scale(0.92); background: rgba(34,230,212,0.18); }
   .dpad .d-up { grid-column: 2; grid-row: 1; }
   .dpad .d-left { grid-column: 1; grid-row: 2; }
   .dpad .d-down { grid-column: 2; grid-row: 2; }
   .dpad .d-right { grid-column: 3; grid-row: 2; }
-  .key-hint { font-size: 10px; color: rgba(217,247,242,0.35); letter-spacing: 0.08em; text-align: center; }
+  .key-hint { font-size: 9.5px; color: rgba(217,247,242,0.35); letter-spacing: 0.06em; text-align: center; }
 
-  /* ── HUD / debrief ── */
-  .flag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 26px 0; }
-  .flag-box { border: 1px solid var(--panel-line); padding: 12px 14px; }
-  .flag-box .fk { font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(217,247,242,0.4); margin-bottom: 6px; }
-  .flag-box .fv { font-size: 13px; color: var(--cyan); }
-  .sync-log { display: flex; gap: 6px; margin-top: 4px; }
-  .sync-log span { width: 9px; height: 9px; border-radius: 50%; }
+  .flag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+  .flag-box { border: 1px solid var(--panel-line); padding: 10px 12px; }
+  .flag-box .fk { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(217,247,242,0.4); margin-bottom: 5px; }
+  .flag-box .fv { font-size: 12px; color: var(--cyan); }
+  .sync-log { display: flex; gap: 5px; margin-top: 2px; }
+  .sync-log span { width: 8px; height: 8px; border-radius: 50%; }
   .sync-log span.clean { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
   .sync-log span.partial { background: var(--amber); }
   .sync-log span.fail { background: var(--danger); }
 
-  .screen { display: none; }
-  .screen.active { display: block; animation: fadein 0.35s ease; }
-  @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-thumb { background: rgba(34,230,212,0.25); }
-
-  @media (max-width: 480px) {
-    .panel { padding: 30px 20px; }
-    .flag-grid { grid-template-columns: 1fr; }
-  }
+  .screen { display: block; animation: fadein 0.3s ease; }
+  @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
 </style>
 </head>
 <body>
-<div id="app">
-  <div id="scene-backdrop" aria-hidden="true"></div>
-  <div class="hand-prop" id="hand-prop" aria-hidden="true"></div>
-  <div id="scanlines" aria-hidden="true"></div>
-  <a id="exit-link" href="/apps/static-protocol/">← Disconnect</a>
-  <div id="hud-bar">
-    <span>Hunted</span>
-    <span id="hunted-meter"></span>
+<div class="device-wrap">
+  <div class="phone">
+    <div class="notch" aria-hidden="true"></div>
+    <div class="status-bar">
+      <span id="clock-time">23:47</span>
+      <div class="status-right">
+        <div class="signal-bars" id="signal-bars" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="battery" aria-hidden="true"><div class="battery-fill" id="battery-fill" style="width:100%"></div></div>
+      </div>
+    </div>
+    <div id="phone-screen"></div>
+    <div class="home-indicator" aria-hidden="true"><span></span></div>
   </div>
-  <div id="stage"></div>
 </div>
+<a id="exit-link" href="/apps/static-protocol/">← Disconnect</a>
 
 <script>
 'use strict';
@@ -286,18 +303,7 @@ function randomGlyph(prev) {
   return g;
 }
 
-/* ── Scene art: one reusable skyline, recoloured + a small motif per scene ── */
-var svgIdCounter = 0;
-var MOTIFS = {
-  drone: function (a) { return '<g transform="translate(300,34)" fill="none" stroke="' + a + '" stroke-width="2"><rect x="-15" y="-5" width="30" height="9" rx="3"/><circle cx="-15" cy="-0.5" r="3" fill="' + a + '"/><circle cx="15" cy="-0.5" r="3" fill="' + a + '"/><line x1="0" y1="4" x2="0" y2="12"/></g>'; },
-  door: function (a) { return '<g transform="translate(300,32)" fill="none" stroke="' + a + '" stroke-width="2"><rect x="-16" y="-20" width="32" height="42" rx="2"/><line x1="-16" y1="2" x2="16" y2="2"/><line x1="0" y1="-20" x2="0" y2="22"/></g>'; },
-  circuit: function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><path d="M270 20 h20 v16 h24 v14"/><circle cx="270" cy="20" r="3" fill="' + a + '"/><circle cx="314" cy="50" r="3" fill="' + a + '"/><path d="M330 16 h-14 v20 h-18"/><circle cx="330" cy="16" r="3" fill="' + a + '"/><circle cx="298" cy="36" r="3" fill="' + a + '"/></g>'; },
-  warning: function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2" stroke-linejoin="round"><polygon points="300,14 318,44 282,44"/><line x1="300" y1="23" x2="300" y2="35"/><circle cx="300" cy="39.5" r="1.7" fill="' + a + '" stroke="none"/></g>'; },
-  tower: function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><line x1="300" y1="10" x2="300" y2="48"/><line x1="292" y1="48" x2="308" y2="48"/><path d="M288 26 a17 17 0 0 1 24 0" stroke-opacity="0.7"/><path d="M282 18 a26 26 0 0 1 36 0" stroke-opacity="0.4"/></g>'; },
-  none: function () { return ''; }
-};
-
-/* ── Hotspot icons: the objects/people you can reach for inside a scene ── */
+/* ── Choice icons: the object/person each option is about ── */
 var ICONS = {
   drone:  function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><rect x="-15" y="-5" width="30" height="9" rx="3"/><circle cx="-15" cy="-0.5" r="3" fill="' + a + '"/><circle cx="15" cy="-0.5" r="3" fill="' + a + '"/><line x1="0" y1="4" x2="0" y2="12"/></g>'; },
   door:   function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><rect x="-16" y="-20" width="32" height="42" rx="2"/><line x1="-16" y1="2" x2="16" y2="2"/><line x1="0" y1="-20" x2="0" y2="22"/></g>'; },
@@ -312,179 +318,47 @@ var ICONS = {
   figure: function (a) { return '<g fill="' + a + '" opacity="0.92"><circle cx="0" cy="-15" r="6.5"/><path d="M-10,20 L-7,-4 L7,-4 L10,20 Z"/></g>'; },
   flame:  function (a) { return '<path d="M0,-19 C9,-9 9,2 0,11 C-9,2 -9,-9 0,-19 Z M0,-3 C4,2 3,8 0,11 C-3,8 -4,2 0,-3 Z" fill="' + a + '"/>'; }
 };
-function sceneIcon(name, accent) { return ICONS[name] ? ICONS[name](accent) : ''; }
+function choiceIconSvg(name, accent) { return '<svg viewBox="-24 -24 48 48">' + (ICONS[name] ? ICONS[name](accent) : '') + '</svg>'; }
 
-function skylineSvg(accent, motif, tall) {
-  var id = 'sc' + (svgIdCounter++);
-  var h = tall ? 220 : 170;
-  return (
-    '<svg viewBox="0 0 600 ' + h + '" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">' +
-      '<defs>' +
-        '<linearGradient id="sky' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a14"/><stop offset="100%" stop-color="#050508"/></linearGradient>' +
-        '<radialGradient id="glow' + id + '" cx="72%" cy="15%" r="65%"><stop offset="0%" stop-color="' + accent + '" stop-opacity="0.35"/><stop offset="100%" stop-color="' + accent + '" stop-opacity="0"/></radialGradient>' +
-      '</defs>' +
-      '<rect width="600" height="' + h + '" fill="url(#sky' + id + ')"/>' +
-      '<rect width="600" height="' + h + '" fill="url(#glow' + id + ')"/>' +
-      '<g fill="#12131c">' +
-        '<rect x="0" y="' + (h - 78) + '" width="34" height="78"/><rect x="38" y="' + (h - 96) + '" width="24" height="96"/>' +
-        '<rect x="66" y="' + (h - 66) + '" width="30" height="66"/><rect x="100" y="' + (h - 110) + '" width="20" height="110"/>' +
-        '<rect x="124" y="' + (h - 82) + '" width="36" height="82"/><rect x="450" y="' + (h - 90) + '" width="26" height="90"/>' +
-        '<rect x="480" y="' + (h - 60) + '" width="34" height="60"/><rect x="518" y="' + (h - 118) + '" width="22" height="118"/>' +
-        '<rect x="544" y="' + (h - 74) + '" width="30" height="74"/><rect x="576" y="' + (h - 100) + '" width="24" height="100"/>' +
-      '</g>' +
-      '<g fill="' + accent + '" opacity="0.20">' +
-        '<rect x="8" y="' + (h - 60) + '" width="4" height="4"/><rect x="18" y="' + (h - 50) + '" width="4" height="4"/><rect x="106" y="' + (h - 90) + '" width="4" height="4"/>' +
-        '<rect x="130" y="' + (h - 60) + '" width="4" height="4"/><rect x="458" y="' + (h - 70) + '" width="4" height="4"/><rect x="524" y="' + (h - 96) + '" width="4" height="4"/>' +
-        '<rect x="552" y="' + (h - 54) + '" width="4" height="4"/><rect x="584" y="' + (h - 80) + '" width="4" height="4"/>' +
-      '</g>' +
-      '<g fill="#090910">' +
-        '<polygon points="150,' + h + ' 150,' + (h - 130) + ' 190,' + (h - 150) + ' 230,' + (h - 130) + ' 230,' + h + '"/>' +
-        '<polygon points="380,' + h + ' 380,' + (h - 150) + ' 410,' + (h - 168) + ' 440,' + (h - 150) + ' 440,' + h + '"/>' +
-      '</g>' +
-      '<g stroke="' + accent + '" stroke-width="2" opacity="0.85">' +
-        '<line x1="190" y1="' + (h - 148) + '" x2="190" y2="' + h + '"/><line x1="410" y1="' + (h - 166) + '" x2="410" y2="' + h + '"/>' +
-      '</g>' +
-      '<g class="scene-rain" stroke="#ffffff" stroke-opacity="0.10" stroke-width="1">' +
-        '<line x1="60" y1="0" x2="48" y2="' + h + '"/><line x1="160" y1="0" x2="148" y2="' + h + '"/><line x1="260" y1="0" x2="248" y2="' + h + '"/>' +
-        '<line x1="360" y1="0" x2="348" y2="' + h + '"/><line x1="460" y1="0" x2="448" y2="' + h + '"/><line x1="540" y1="0" x2="528" y2="' + h + '"/>' +
-      '</g>' +
-      (MOTIFS[motif] ? MOTIFS[motif](accent) : '') +
-    '</svg>'
-  );
-}
-var backdropEl = document.getElementById('scene-backdrop');
-var currentBackdropKey = null, backdropFadeTimer = null;
-function setBackdropHTML(key, html, onSet) {
-  if (key === currentBackdropKey) { if (onSet) onSet(); return; }
-  currentBackdropKey = key;
-  if (backdropFadeTimer) clearTimeout(backdropFadeTimer);
-  backdropEl.style.opacity = '0.4';
-  backdropFadeTimer = setTimeout(function () {
-    backdropEl.innerHTML = html;
-    backdropEl.style.opacity = '1';
-    if (onSet) onSet();
-  }, 260);
-}
-function setBackdrop(accent, motif, tall) {
-  setBackdropHTML(accent + '|' + motif + '|' + tall, skylineSvg(accent, motif, tall));
-}
+/* ── App icons (home grid + headers) ── */
+var APP_ICONS = {
+  messages: function () { return '<path d="M4 5h16v12H9l-4 4V5z" fill="none" stroke="currentColor" stroke-width="1.6"/><line x1="8" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.3"/><line x1="8" y1="13" x2="13" y2="13" stroke="currentColor" stroke-width="1.3"/>'; },
+  tracker:  function () { return '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><line x1="12" y1="2" x2="12" y2="5" stroke="currentColor" stroke-width="1.4"/>'; },
+  breach:   function () { return '<path d="M4 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="18" x2="20" y2="18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'; },
+  transmit: function () { return '<path d="M12 4v13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7 9l5-5 5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 17v3h14v-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'; },
+  camera:   function () { return '<rect x="3" y="7" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="13.5" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l1.5-2.5h5L16 7" fill="none" stroke="currentColor" stroke-width="1.5"/>'; },
+  notes:    function () { return '<rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="8" x2="16" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="1.3"/><line x1="8" y1="16" x2="13" y2="16" stroke="currentColor" stroke-width="1.3"/>'; },
+  status:   function () { return '<path d="M12 3l7 3.5v5c0 5-3 8.5-7 9.5-4-1-7-4.5-7-9.5v-5L12 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'; }
+};
+function appIconSvg(id) { return '<svg viewBox="0 0 24 24">' + (APP_ICONS[id] ? APP_ICONS[id]() : '') + '</svg>'; }
 
-/* ── First-person scene: atmosphere + a perspective floor + interactive hotspots ── */
-function buildSceneSVG(node) {
-  var id = 'ps' + (svgIdCounter++);
-  var accent = node.art.accent;
-  var h = 900;
-  var hotspotsHtml = node.hotspots.map(function (hs, i) {
-    return (
-      '<g class="hotspot-group" data-choice-idx="' + i + '" data-zone="' + hs.zone + '" tabindex="0" role="button" aria-label="' + hs.label + '">' +
-        '<circle class="hotspot-ring" cx="' + hs.x + '" cy="' + hs.y + '" r="36" stroke="' + accent + '"/>' +
-        '<g class="hotspot-icon" transform="translate(' + hs.x + ',' + hs.y + ')">' + sceneIcon(hs.icon, accent) + '</g>' +
-      '</g>'
-    );
-  }).join('');
-  return (
-    '<svg viewBox="0 0 600 ' + h + '" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">' +
-      '<defs>' +
-        '<linearGradient id="sky' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a14"/><stop offset="55%" stop-color="#08080f"/><stop offset="100%" stop-color="#050508"/></linearGradient>' +
-        '<radialGradient id="glow' + id + '" cx="50%" cy="30%" r="60%"><stop offset="0%" stop-color="' + accent + '" stop-opacity="0.28"/><stop offset="100%" stop-color="' + accent + '" stop-opacity="0"/></radialGradient>' +
-      '</defs>' +
-      '<rect width="600" height="' + h + '" fill="url(#sky' + id + ')"/>' +
-      '<rect width="600" height="' + h + '" fill="url(#glow' + id + ')"/>' +
-      '<g fill="#12131c">' +
-        '<rect x="-20" y="260" width="90" height="' + (h - 260) + '"/><rect x="80" y="200" width="60" height="' + (h - 200) + '"/>' +
-        '<rect x="460" y="220" width="70" height="' + (h - 220) + '"/><rect x="540" y="170" width="80" height="' + (h - 170) + '"/>' +
-      '</g>' +
-      '<g class="scene-rain" stroke="#ffffff" stroke-opacity="0.09" stroke-width="1.5">' +
-        '<line x1="90" y1="0" x2="60" y2="' + h + '"/><line x1="220" y1="0" x2="190" y2="' + h + '"/><line x1="360" y1="0" x2="330" y2="' + h + '"/>' +
-        '<line x1="500" y1="0" x2="470" y2="' + h + '"/>' +
-      '</g>' +
-      '<g stroke="' + accent + '" stroke-opacity="0.3" stroke-width="2" fill="none">' +
-        '<line x1="0" y1="' + h + '" x2="255" y2="470"/><line x1="600" y1="' + h + '" x2="345" y2="470"/>' +
-        '<line x1="0" y1="' + (h - 40) + '" x2="600" y2="' + (h - 40) + '" stroke-opacity="0.15"/>' +
-      '</g>' +
-      hotspotsHtml +
-    '</svg>'
-  );
-}
-function bindHotspots(node) {
-  var groups = backdropEl.querySelectorAll('.hotspot-group');
-  Array.prototype.forEach.call(groups, function (g) {
-    var idx = Number(g.dataset.choiceIdx);
-    var zone = g.dataset.zone;
-    var label = node.choices[idx].label;
-    function showHint() {
-      g.classList.add('is-hovered');
-      setHoverHint(label, false);
-      peekHand(zone);
-    }
-    function hideHint() {
-      g.classList.remove('is-hovered');
-      setHoverHint(null, true);
-      peekHand(null);
-    }
-    g.addEventListener('mouseenter', showHint);
-    g.addEventListener('mouseleave', hideHint);
-    g.addEventListener('focus', showHint);
-    g.addEventListener('blur', hideHint);
-    g.addEventListener('click', function () { activateChoice(node, idx, zone); });
-  });
-}
+var APPS = [
+  { id: 'messages', name: 'Messages', icon: 'messages', color: '#22e6d4' },
+  { id: 'tracker',  name: 'Tracker',  icon: 'tracker',  color: '#22e6d4' },
+  { id: 'breach',   name: 'BREACH',   icon: 'breach',   color: '#22e6d4' },
+  { id: 'transmit', name: 'Transmit', icon: 'transmit', color: '#ff3d94' },
+  { id: 'camera',   name: 'Cam',      icon: 'camera',   color: '#8b909a' },
+  { id: 'notes',    name: 'Notes',    icon: 'notes',    color: '#8b909a' },
+  { id: 'status',   name: 'Status',   icon: 'status',   color: '#8b909a' }
+];
+function appById(id) { for (var i = 0; i < APPS.length; i++) if (APPS[i].id === id) return APPS[i]; return null; }
 
-/* ── Hand prop: a persistent, idling character hand that reaches for whatever you pick ── */
-var handEl = document.getElementById('hand-prop');
-handEl.innerHTML =
-  '<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">' +
-    '<g transform="translate(30,26) rotate(14)">' +
-      '<path d="M22 158 C10 118 14 68 34 38 C44 22 64 13 78 19 C88 8 104 11 108 24 C118 16 131 23 130 37 C141 33 149 44 145 56 L148 128 C148 154 128 175 92 178 C58 181 30 175 22 158 Z" fill="#14151f" stroke="#22e6d4" stroke-width="2" opacity="0.96"/>' +
-      '<path d="M34 38 C39 60 41 86 39 112" stroke="#22e6d4" stroke-width="1.3" opacity="0.5" fill="none"/>' +
-      '<path d="M78 19 C80 46 80 72 76 98" stroke="#22e6d4" stroke-width="1.3" opacity="0.5" fill="none"/>' +
-      '<path d="M108 24 C110 50 108 74 102 95" stroke="#22e6d4" stroke-width="1.3" opacity="0.5" fill="none"/>' +
-      '<path d="M130 37 C132 58 128 78 120 92" stroke="#22e6d4" stroke-width="1.3" opacity="0.5" fill="none"/>' +
-      '<circle cx="90" cy="150" r="4" fill="#22e6d4"/>' +
-    '</g>' +
-  '</svg>';
-handEl.classList.add('visible');
-function peekHand(zone) {
-  handEl.classList.remove('peek-left', 'peek-center', 'peek-right');
-  if (zone) handEl.classList.add('peek-' + zone);
-}
-var handReachTimer = null;
-function playHandReach(zone, cb) {
-  handEl.classList.remove('peek-left', 'peek-center', 'peek-right', 'reach-left', 'reach-center', 'reach-right');
-  void handEl.offsetWidth;
-  handEl.classList.add('reach-' + zone);
-  if (handReachTimer) clearTimeout(handReachTimer);
-  handReachTimer = setTimeout(function () {
-    handEl.classList.remove('reach-' + zone);
-    cb();
-  }, 480);
-}
-function setHoverHint(label, idle) {
-  var el = document.getElementById('hover-hint');
-  if (!el) return;
-  el.textContent = label || 'Choose your move.';
-  el.classList.toggle('idle', !!idle);
-}
-
-/* ── Narrative data ── */
+/* ── Narrative data (unchanged from earlier drafts — the engine is solid) ── */
 var NODES = [
   {
     id: 'rooftop',
-    art: { accent: '#22e6d4', motif: 'drone' },
+    art: { accent: '#22e6d4' },
+    app: 'tracker',
+    notif: { title: 'Tracker', body: 'Contact closing on your position' },
     label: 'NODE 01 — ROOFTOP EXTRACTION',
     scene: [
       "Rain needles down through forty storeys of neon haze. The extraction was supposed to be quiet — in, grab the drive, out before anyone blinked. It isn't quiet any more.",
       "A security drone unfolds from the water tank behind you, lens strobing red, already threading a scan pulse across the roof. Somewhere below, a voice on comms reads your name off a manifest like it's already evidence."
     ],
     choices: [
-      { id: 'fight',  label: 'Fight the drone',              method: { violence: 2 }, trust: {} },
-      { id: 'slip',   label: 'Slip past it',                 method: { stealth: 2 },  trust: {} },
-      { id: 'favour', label: 'Call in a Street favour',      method: { stealth: 1 },  trust: { street: 2 } }
-    ],
-    hotspots: [
-      { icon: 'drone',  x: 150, y: 430, zone: 'left',   label: 'Fight the drone' },
-      { icon: 'shadow', x: 300, y: 460, zone: 'center', label: 'Slip past it' },
-      { icon: 'signal', x: 450, y: 430, zone: 'right',  label: 'Call in a Street favour' }
+      { id: 'fight',  icon: 'drone',  label: 'Fight the drone',              method: { violence: 2 }, trust: {} },
+      { id: 'slip',   icon: 'shadow', label: 'Slip past it',                 method: { stealth: 2 },  trust: {} },
+      { id: 'favour', icon: 'signal', label: 'Call in a Street favour',      method: { stealth: 1 },  trust: { street: 2 } }
     ],
     sync: { mode: 'react', length: 5, duration: 950, label: 'EVADE THE SCAN PULSE', sub: 'Match the glyph before the ring closes' },
     outcomes: {
@@ -507,21 +381,19 @@ var NODES = [
   },
   {
     id: 'fixer',
-    art: { accent: '#ffcf3d', motif: 'door' },
+    art: { accent: '#ffcf3d' },
+    app: 'messages',
+    sender: 'FIXER',
+    notif: { title: 'Messages', body: 'FIXER sent you a message' },
     label: 'NODE 02 — BACK-ALLEY FIXER',
     scene: [
       "The drive sits warm in your pocket, like it knows what's on it. Your fixer's booth smells of solder and instant noodles, three screens throwing blue light across a face that's done this a hundred times and trusts none of them.",
       "\"So,\" they say, not looking up from the screens. \"Who's buying tonight — Corp, the Street crowd, or nobody at all?\""
     ],
     choices: [
-      { id: 'corp',   label: 'Sell to Corp',                          method: {},              trust: { corp: 2 } },
-      { id: 'street', label: 'Hand it to the Street resistance',      method: { words: 1 },    trust: { street: 2 } },
-      { id: 'keep',   label: 'Keep it for yourself',                  method: { stealth: 1 },  trust: { self: 2 } }
-    ],
-    hotspots: [
-      { icon: 'seal',   x: 150, y: 430, zone: 'left',   label: 'Sell to Corp' },
-      { icon: 'signal', x: 300, y: 460, zone: 'center', label: 'Hand it to the Street resistance' },
-      { icon: 'drive',  x: 450, y: 430, zone: 'right',  label: 'Keep it for yourself' }
+      { id: 'corp',   icon: 'seal',   label: 'Sell to Corp',                          method: {},              trust: { corp: 2 } },
+      { id: 'street', icon: 'signal', label: 'Hand it to the Street resistance',      method: { words: 1 },    trust: { street: 2 } },
+      { id: 'keep',   icon: 'drive',  label: 'Keep it for yourself',                  method: { stealth: 1 },  trust: { self: 2 } }
     ],
     sync: { mode: 'react', length: 6, duration: 850, label: 'SELL THE COVER STORY', sub: 'Hold your nerve, glyph by glyph' },
     outcomes: {
@@ -542,21 +414,18 @@ var NODES = [
   },
   {
     id: 'server',
-    art: { accent: '#22e6d4', motif: 'circuit' },
+    art: { accent: '#22e6d4' },
+    app: 'breach',
+    notif: { title: 'BREACH', body: 'Terminal in range — signal locked' },
     label: 'NODE 03 — SERVER ROOM',
     scene: [
       "Corp Tower, sub-level six. Rows of black server racks breathe cold air into a room that shouldn't exist on any building plan. Somewhere in this grid is the rest of what the drive started — enough to burn the district down, or build it back up.",
       "A terminal blinks awake under your fingers, and for a second you could swear something on the other side of the glass blinks back."
     ],
     choices: [
-      { id: 'stealth', label: 'Stealth hack the terminal',   method: { stealth: 2 },  trust: {} },
-      { id: 'brute',   label: 'Loud brute-force it',         method: { violence: 2 }, trust: {} },
-      { id: 'ai',      label: 'Recruit the rogue AI',        method: { words: 1 },    trust: { self: 1 } }
-    ],
-    hotspots: [
-      { icon: 'terminal', x: 150, y: 430, zone: 'left',   label: 'Stealth hack the terminal' },
-      { icon: 'door',     x: 300, y: 460, zone: 'center', label: 'Loud brute-force it' },
-      { icon: 'eye',      x: 450, y: 430, zone: 'right',  label: 'Recruit the rogue AI' }
+      { id: 'stealth', icon: 'terminal', label: 'Stealth hack the terminal',   method: { stealth: 2 },  trust: {} },
+      { id: 'brute',   icon: 'door',     label: 'Loud brute-force it',         method: { violence: 2 }, trust: {} },
+      { id: 'ai',      icon: 'eye',      label: 'Recruit the rogue AI',        method: { words: 1 },    trust: { self: 1 } }
     ],
     sync: { mode: 'memory', length: 6, flashMs: 480, gapMs: 160, recallPerGlyph: 1300, label: 'MATCH THE GLYPH KEY', sub: 'Memorise the pattern, then repeat it' },
     outcomes: {
@@ -578,21 +447,18 @@ var NODES = [
   },
   {
     id: 'confrontation',
-    art: { accent: '#ff4d4d', motif: 'warning' },
+    art: { accent: '#ff4d4d' },
+    app: 'call',
+    caller: 'UNKNOWN',
     label: 'NODE 04 — CONFRONTATION',
     scene: [
       "They're waiting where the market stalls thin out — Corp security, or what's left of your old crew, depending on how the last hour went. Either way there's a gun levelled and your name said like a question.",
       "This is the part of the run nobody writes up afterward. This is just you, and whatever you decide to do with the next ten seconds."
     ],
     choices: [
-      { id: 'negotiate', label: 'Negotiate',                  method: { words: 2 },    trust: {} },
-      { id: 'fight',     label: 'Fight',                       method: { violence: 2 }, trust: {} },
-      { id: 'flee',      label: 'Flee through the crowd',      method: { stealth: 2 },  trust: {} }
-    ],
-    hotspots: [
-      { icon: 'talk',   x: 150, y: 430, zone: 'left',   label: 'Negotiate' },
-      { icon: 'figure', x: 300, y: 450, zone: 'center', label: 'Fight' },
-      { icon: 'shadow', x: 450, y: 430, zone: 'right',  label: 'Flee through the crowd' }
+      { id: 'negotiate', icon: 'talk',   label: 'Negotiate',                  method: { words: 2 },    trust: {} },
+      { id: 'fight',     icon: 'figure', label: 'Fight',                       method: { violence: 2 }, trust: {} },
+      { id: 'flee',      icon: 'shadow', label: 'Flee through the crowd',      method: { stealth: 2 },  trust: {} }
     ],
     sync: { mode: 'react', length: 5, duration: 650, label: 'QUICK-DRAW / DODGE', sub: 'Fastest reflex on the street wins this' },
     outcomes: {
@@ -601,33 +467,28 @@ var NODES = [
              : c.id === 'fight'     ? "It's over before it starts. You're already past them, and they're still reaching."
              :                        "The crowd swallows you whole. By the time they push through it, there's nothing left to find.";
       },
-      partial: function () { state.flags.hurt = true; return "It goes mostly your way, but not for free — you're carrying a graze you'll feel tomorrow, if there is one."; },
-      fail: function () { state.flags.hurt = true; return "It goes loud and it goes wrong. You get clear, but not clean — and not without a mark to show for it."; }
+      partial: function (state) { state.flags.hurt = true; return "It goes mostly your way, but not for free — you're carrying a graze you'll feel tomorrow, if there is one."; },
+      fail: function (state) { state.flags.hurt = true; return "It goes loud and it goes wrong. You get clear, but not clean — and not without a mark to show for it."; }
     },
     onFail: function (state) { state.flags.hunted++; },
     onPartial: function () {}
   },
   {
     id: 'final',
-    art: { accent: '#ff3d94', motif: 'tower' },
+    art: { accent: '#ff3d94' },
+    app: 'transmit',
+    notif: { title: 'Transmit', body: 'Package ready — awaiting destination' },
     label: 'NODE 05 — FINAL CHOICE',
     scene: [
       "It comes down to this: the drive, the data, and whatever's left of who you were before tonight. Broadcast it wide, hand it to the highest bidder, feed it to the thing that's been talking to you through the wires, burn it, or just — disappear.",
       "Whatever you choose next, the city won't ask your permission to remember it."
     ],
     choices: [
-      { id: 'broadcast', label: 'Broadcast the data to the net' },
-      { id: 'corp',       label: 'Hand it to Corp' },
-      { id: 'merge',      label: 'Merge with the AI' },
-      { id: 'destroy',    label: 'Destroy it' },
-      { id: 'vanish',     label: 'Vanish' }
-    ],
-    hotspots: [
-      { icon: 'tower',  x: 180, y: 370, zone: 'left',   label: 'Broadcast the data to the net' },
-      { icon: 'seal',   x: 420, y: 370, zone: 'right',  label: 'Hand it to Corp' },
-      { icon: 'eye',    x: 300, y: 430, zone: 'center', label: 'Merge with the AI' },
-      { icon: 'flame',  x: 220, y: 520, zone: 'left',   label: 'Destroy it' },
-      { icon: 'shadow', x: 380, y: 520, zone: 'right',  label: 'Vanish' }
+      { id: 'broadcast', icon: 'tower',  label: 'Broadcast the data to the net' },
+      { id: 'corp',       icon: 'seal',   label: 'Hand it to Corp' },
+      { id: 'merge',      icon: 'eye',    label: 'Merge with the AI' },
+      { id: 'destroy',    icon: 'flame',  label: 'Destroy it' },
+      { id: 'vanish',     icon: 'shadow', label: 'Vanish' }
     ],
     sync: { mode: 'react', length: 8, duration: 700, label: 'FULL SYNC — HOLD THE LINE', sub: 'The climax. Everything you\'ve got, right now' },
     outcomes: { clean: function(){return '';}, partial: function(){return '';}, fail: function(){return '';} },
@@ -638,52 +499,42 @@ var NODES = [
 
 var ENDINGS = {
   'ghost': {
-    art: { accent: '#22e6d4', motif: 'none' },
     title: 'GHOST', tag: 'Full stealth. No alarms. Gone.',
     body: "Nobody sees you leave. No alarm ever trips, no camera ever catches a clean frame — by the time anyone thinks to look for you, you're a rumour in a city that runs on rumours. You vanish the way you moved through the whole run: perfectly, quietly, completely."
   },
   'martyr': {
-    art: { accent: '#ff3d94', motif: 'tower' },
     title: 'MARTYR', tag: 'You broadcast the truth — and got caught doing it.',
     body: "The data hits every feed in the district before they drag you off the terminal. It's out there now, permanently, unkillably out there — and so, within the hour, are you. Wrong place. Right cause. The city will argue about which one mattered more for years."
   },
   'revolution-spark': {
-    art: { accent: '#ff3d94', motif: 'tower' },
     title: 'REVOLUTION SPARK', tag: 'Street trust, clean nerve, a city that finally listens.',
     body: "You broadcast clean, on your own terms, with the Street behind you the whole way. By morning the feeds are still burning and so are three Corp checkpoints. You didn't just leak the data — you lit something that isn't going out. Whatever happens to you now, it isn't the end of this story."
   },
   'corporate-puppet': {
-    art: { accent: '#ffcf3d', motif: 'door' },
     title: 'CORPORATE PUPPET', tag: 'Sold out. Safe. Hollow.',
     body: "Corp pays exactly what was promised, no more, no less, and folds you quietly into an NDA thicker than the drive ever was. You're safe now. You're comfortable now. Some nights you almost forget what it cost to get here — and that's the part that should worry you."
   },
   'merged': {
-    art: { accent: '#a855f7', motif: 'circuit' },
     title: 'MERGED', tag: 'Fused with the rogue AI. No longer fully human.',
     body: "The line between you and it stops meaning anything somewhere around the third hour. What walks out of the server room afterward answers to your name, remembers your life, and thinks in threads no single mind was built to hold. You got what you came for. You're just not entirely the one who gets to keep it."
   },
   'hunted-down': {
-    art: { accent: '#ff4d4d', motif: 'warning' },
     title: 'HUNTED DOWN', tag: 'Too many alarms. Cornered, regardless of what you chose.',
     body: "It stopped being about the data three failures ago. Every SYNC you fumbled left a trace, and traces add up into a net. They find you not because of who you are or what you decided — but because the city was already closing in before you got the chance to decide anything at all."
   },
   'betrayed': {
-    art: { accent: '#ff7a3d', motif: 'door' },
     title: 'BETRAYED', tag: 'Your fixer sold you out after the story broke down.',
     body: "The call goes out the second you're through the door — you just don't hear it happen. Somewhere between the booth and your next move, the fixer's cold read on you turns into a phone number, and the phone number turns into people waiting for you who shouldn't know where to wait."
   },
   'vigilante': {
-    art: { accent: '#ff4d4d', motif: 'warning' },
     title: 'VIGILANTE', tag: 'Too violent to vanish. A feared street legend instead.',
     body: "You meant to disappear. You don't, quite — not with a reputation like the one you've built tonight trailing behind you through every district scanner in the city. You become a name whispered in the same breath as a warning: the one who went through Corp security like it was nothing at all."
   },
   'walk-away': {
-    art: { accent: '#7de3d6', motif: 'none' },
     title: 'WALK AWAY', tag: 'Refused every side. The city forgets you.',
     body: "You destroy the drive, or you simply stop carrying it, and either way nobody gets what they wanted from you — including, maybe, yourself. No uprising. No payday. No legend. Just a life that quietly goes on, unremarkable, entirely your own again."
   },
   'reconditioned': {
-    art: { accent: '#ff4d4d', motif: 'circuit' },
     title: 'RECONDITIONED', tag: 'Captured at the final node. Memory wiped.',
     body: "The last thing you remember clearly is the SYNC failing under your fingers. Everything after that belongs to someone else's report — a chair, a wipe, a new set of memories waiting to be issued along with your next assignment. Somewhere, a version of tonight is about to happen again, to someone who won't remember it either."
   }
@@ -713,6 +564,7 @@ function dominant(obj, order) {
   for (var i = 1; i < order.length; i++) { var v = obj[order[i]] || 0; if (v > bestVal) { best = order[i]; bestVal = v; } }
   return best;
 }
+function allZero(obj) { for (var k in obj) if (obj[k]) return false; return true; }
 
 function classify(hits, lates, misses, N) {
   var failThreshold = Math.ceil(N / 2);
@@ -721,67 +573,209 @@ function classify(hits, lates, misses, N) {
   return 'partial';
 }
 
-function updateHuntedMeter() {
-  var el = document.getElementById('hunted-meter');
-  var n = Math.min(state.flags.hunted, 3);
-  var html = '';
-  for (var i = 0; i < 3; i++) html += '<span class="' + (i < n ? 'on' : '') + '"></span>';
-  el.innerHTML = html;
+/* ── Status bar (persistent — signal bars double as the Hunted meter) ── */
+function updateStatusBar() {
+  var hunted = state ? Math.min(state.flags.hunted, 3) : 0;
+  var bars = '';
+  for (var i = 0; i < 3; i++) bars += '<i class="' + (i < hunted ? 'on' : '') + '"></i>';
+  var sb = document.getElementById('signal-bars'); if (sb) sb.innerHTML = bars;
+  var batt = document.getElementById('battery-fill'); if (batt) batt.style.width = batteryPct() + '%';
+}
+function batteryPct() { var idx = state ? state.nodeIndex : 0; return Math.max(14, 100 - idx * 17); }
+function tickClock() {
+  function paint() {
+    var el = document.getElementById('clock-time');
+    if (el) el.textContent = new Date().toTimeString().slice(0, 5);
+  }
+  paint();
+  setInterval(paint, 15000);
+}
+function formattedDate() {
+  var d = new Date();
+  return d.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' }).toUpperCase();
 }
 
 /* ── Rendering ── */
-var stage = document.getElementById('stage');
-function setScreen(html) { stage.innerHTML = '<div class="screen active">' + html + '</div>'; window.scrollTo(0, 0); }
+var phoneScreen = document.getElementById('phone-screen');
+function setPhoneScreen(html) { phoneScreen.innerHTML = '<div class="screen">' + html + '</div>'; phoneScreen.scrollTop = 0; }
 
-function renderTitle() {
-  clearTimers();
-  setBackdrop('#22e6d4', 'tower', true);
-  setScreen(
-    '<div class="panel">' +
-      '<p class="eyebrow">Interactive cyberpunk fiction</p>' +
-      '<h1 class="title glitch" data-text="STATIC PROTOCOL">STATIC PROTOCOL</h1>' +
-      '<p class="tagline">Five decisions. Five live SYNC sequences. Ten possible endings. Two runners who pick the exact same path can still walk away with two different stories — it depends on how steady your hands are when it counts.</p>' +
-      '<button class="primary-btn" id="start-btn">Jack In</button>' +
-      '<div style="margin-top:22px;font-size:11.5px;color:rgba(217,247,242,0.45);line-height:1.7;">Each choice triggers a SYNC — a short run of timed prompts. Use ↑ ↓ ← → / WASD, or tap the glyphs on screen. Clean syncs go your way. Failed ones don\'t.</div>' +
-    '</div>'
-  );
-  document.getElementById('start-btn').addEventListener('click', function () {
-    state = freshState();
-    updateHuntedMeter();
-    renderNode();
+function appHeaderHtml(appDef) {
+  return '<div class="app-header"><span class="aicon" style="color:' + appDef.color + '">' + appIconSvg(appDef.icon) + '</span><span class="aname">' + appDef.name + '</span></div>';
+}
+function screenHeaderHtml(node) {
+  if (node.app === 'call') {
+    return '<div class="app-header"><span class="aicon" style="color:' + node.art.accent + '">' + appIconSvg('tracker') + '</span><span class="aname">Call — ' + node.caller + '</span></div>';
+  }
+  return appHeaderHtml(appById(node.app));
+}
+function actionListHtml(node) {
+  return '<div class="action-list">' + node.choices.map(function (c, i) {
+    return '<button class="action-row" data-idx="' + i + '"><span class="aicon2" style="color:' + node.art.accent + '">' + choiceIconSvg(c.icon, node.art.accent) + '</span>' + c.label + '</button>';
+  }).join('') + '</div>';
+}
+function bindChoiceControls(node) {
+  Array.prototype.forEach.call(phoneScreen.querySelectorAll('.quick-reply, .action-row'), function (btn) {
+    btn.addEventListener('click', function () { activateChoice(node, Number(btn.dataset.idx)); });
   });
 }
 
-function renderNode() {
+function renderLock() {
   clearTimers();
-  var node = NODES[state.nodeIndex];
-  peekHand(null);
-  setScreen(
-    '<div class="scene-caption">' +
-      '<p class="eyebrow">' + node.label + '</p>' +
-      '<div class="prose">' + node.scene.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div>' +
-      '<p class="hover-hint idle" id="hover-hint">Look around — reach for something in the scene.</p>' +
+  setPhoneScreen(
+    '<div class="lock-screen">' +
+      '<div class="lock-time" id="lock-time-face">--:--</div>' +
+      '<div class="lock-date">' + formattedDate() + '</div>' +
+      '<div class="lock-brand glitch" data-text="STATIC PROTOCOL">STATIC PROTOCOL</div>' +
+      '<div class="lock-copy">This is the runner\'s phone. Five jobs come through tonight — however you handle them, on this screen, is however this goes.</div>' +
+      '<div class="lock-hint">Tap to unlock</div>' +
     '</div>'
   );
-  setBackdropHTML('node:' + node.id, buildSceneSVG(node), function () { bindHotspots(node); });
+  var lf = document.getElementById('lock-time-face'); if (lf) lf.textContent = new Date().toTimeString().slice(0, 5);
+  phoneScreen.querySelector('.lock-screen').addEventListener('click', function () {
+    state = freshState();
+    updateStatusBar();
+    renderHome();
+    queueNotification(state.nodeIndex);
+  });
 }
 
-function activateChoice(node, idx, zone) {
+function renderHome() {
+  clearTimers();
+  updateStatusBar();
+  var activeApp = (state && state.nodeIndex < NODES.length) ? NODES[state.nodeIndex].app : null;
+  var iconsHtml = APPS.map(function (a) {
+    var isActive = a.id === activeApp;
+    return (
+      '<button class="app-icon' + (isActive ? ' is-active' : '') + '" data-app="' + a.id + '" style="--accent:' + a.color + '; --accent-glow:' + a.color + '55;">' +
+        '<span class="tile">' + appIconSvg(a.icon) + (isActive ? '<span class="badge">1</span>' : '') + '</span>' +
+        '<span class="label">' + a.name + '</span>' +
+      '</button>'
+    );
+  }).join('');
+  setPhoneScreen('<div class="home-screen"><div class="home-grid">' + iconsHtml + '</div></div>');
+  Array.prototype.forEach.call(phoneScreen.querySelectorAll('.app-icon'), function (btn) {
+    btn.addEventListener('click', function () {
+      var id = btn.dataset.app;
+      if (id === activeApp) { openCurrentNode(); }
+      else if (id === 'status') { renderStatusApp(); }
+      else if (id === 'camera') { renderInert('Camera', 'No photos yet. Nothing on this roll — you\'ve been busy.'); }
+      else if (id === 'notes') { renderInert('Notes', 'STEAL DRIVE. DON\'T DIE.\n\nJob notes, from the last time you thought you could plan for this.'); }
+    });
+  });
+}
+
+function renderInert(title, body) {
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-header"><button class="back-btn" id="back-home">←</button><span class="aname">' + title + '</span></div>' +
+      '<div class="app-body"><p style="font-size:12.5px;line-height:1.8;color:rgba(217,247,242,0.7);white-space:pre-line;">' + body + '</p></div>' +
+    '</div>'
+  );
+  document.getElementById('back-home').addEventListener('click', renderHome);
+}
+
+function renderStatusApp() {
+  var trustDom = allZero(state.flags.trust) ? 'UNASSIGNED' : dominant(state.flags.trust, ['street', 'self', 'corp']).toUpperCase();
+  var methodDom = allZero(state.flags.method) ? 'UNASSIGNED' : dominant(state.flags.method, ['stealth', 'words', 'violence']).toUpperCase();
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-header"><button class="back-btn" id="back-home">←</button><span class="aname">Status</span></div>' +
+      '<div class="app-body">' +
+        '<div class="flag-grid" style="grid-template-columns:1fr;">' +
+          '<div class="flag-box"><div class="fk">Network Affinity</div><div class="fv">' + trustDom + '</div></div>' +
+          '<div class="flag-box"><div class="fk">Behaviour Profile</div><div class="fv">' + methodDom + '</div></div>' +
+          '<div class="flag-box"><div class="fk">Threat Detection</div><div class="fv">' + Math.min(state.flags.hunted, 3) + ' / 3</div></div>' +
+          '<div class="flag-box"><div class="fk">Battery</div><div class="fv">' + batteryPct() + '%</div></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>'
+  );
+  document.getElementById('back-home').addEventListener('click', renderHome);
+}
+
+/* ── Notifications route the player into the right app for the current node ── */
+function showBanner(appDef, title, body, onTap) {
+  var home = phoneScreen.querySelector('.home-screen');
+  if (!home) return;
+  var el = document.createElement('div');
+  el.className = 'notif-banner';
+  el.innerHTML = '<span class="nicon" style="color:' + appDef.color + '">' + appIconSvg(appDef.icon) + '</span><span class="nbody"><b>' + title + '</b><span>' + body + '</span></span>';
+  phoneScreen.appendChild(el);
+  requestAnimationFrame(function () { el.classList.add('show'); });
+  el.addEventListener('click', function () { el.remove(); onTap(); });
+  timers.push(setTimeout(function () {
+    el.classList.remove('show');
+    timers.push(setTimeout(function () { el.remove(); }, 400));
+  }, 4500));
+}
+function queueNotification(nodeIndex) {
+  if (nodeIndex >= NODES.length) return;
+  var node = NODES[nodeIndex];
+  if (node.app === 'call') {
+    timers.push(setTimeout(function () { renderCall(node); }, 1400));
+    return;
+  }
+  var appDef = appById(node.app);
+  timers.push(setTimeout(function () { showBanner(appDef, node.notif.title, node.notif.body, openCurrentNode); }, 700));
+}
+function openCurrentNode() {
+  var node = NODES[state.nodeIndex];
+  if (node.app === 'call') { renderCall(node); return; }
+  renderAppChoice(node);
+}
+
+function renderAppChoice(node) {
+  clearTimers();
+  var bodyHtml = '';
+  if (node.app === 'messages') {
+    bodyHtml =
+      node.scene.map(function (p) { return '<div class="bubble-row in"><div class="bubble">' + p + '</div></div>'; }).join('') +
+      '<div class="quick-replies">' + node.choices.map(function (c, i) { return '<button class="quick-reply" data-idx="' + i + '">' + c.label + '</button>'; }).join('') + '</div>';
+  } else if (node.app === 'tracker') {
+    bodyHtml =
+      '<div class="radar-wrap"><div class="radar"><span class="you"></span><span class="blip" style="top:16%;left:68%;"></span></div></div>' +
+      node.scene.map(function (p) { return '<div class="log-line">' + p + '</div>'; }).join('') +
+      '<div style="height:16px;"></div>' + actionListHtml(node);
+  } else if (node.app === 'breach') {
+    bodyHtml = '<div class="terminal">' + node.scene.map(function (p) { return '<div class="tline">' + p + '</div>'; }).join('') + '</div>' + actionListHtml(node);
+  } else if (node.app === 'transmit') {
+    bodyHtml = '<p style="font-size:12.5px;line-height:1.75;color:rgba(217,247,242,0.8);margin-bottom:18px;">' + node.scene.join(' ') + '</p>' + actionListHtml(node);
+  }
+  setPhoneScreen('<div class="app-screen">' + screenHeaderHtml(node) + '<div class="app-body">' + bodyHtml + '</div></div>');
+  bindChoiceControls(node);
+}
+
+function renderCall(node) {
+  clearTimers();
+  setPhoneScreen(
+    '<div class="call-screen">' +
+      '<div class="call-avatar">' + appIconSvg('tracker') + '</div>' +
+      '<div class="call-name">' + node.caller + '</div>' +
+      '<div class="call-sub">Incoming call</div>' +
+      '<p class="call-copy">' + node.scene.join(' ') + '</p>' +
+      actionListHtml(node) +
+    '</div>'
+  );
+  bindChoiceControls(node);
+}
+
+function activateChoice(node, idx) {
   var choice = node.choices[idx];
   state.lastChoice = choice;
   addFlags(state.flags.method, choice.method || {});
   addFlags(state.flags.trust, choice.trust || {});
   if (node.onSelect) node.onSelect(state, choice);
-  Array.prototype.forEach.call(backdropEl.querySelectorAll('.hotspot-group'), function (g) { g.style.pointerEvents = 'none'; });
-  playHandReach(zone, function () { renderSyncIntro(node, choice); });
+  renderSyncIntro(node, choice);
 }
 
 function renderSyncIntro(node, choice) {
-  setScreen(
-    '<div class="panel" style="text-align:center;">' +
-      '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
-      '<p class="sync-sub" style="margin-bottom:22px;">' + node.sync.sub + '</p>' +
-      '<button class="primary-btn" id="sync-go">Initiate SYNC</button>' +
+  setPhoneScreen(
+    '<div class="app-screen">' + screenHeaderHtml(node) +
+      '<div class="app-body" style="text-align:center;">' +
+        '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+        '<p class="sync-sub" style="margin-bottom:20px;">' + node.sync.sub + '</p>' +
+        '<button class="primary-btn" id="sync-go">Initiate SYNC</button>' +
+      '</div>' +
     '</div>'
   );
   document.getElementById('sync-go').addEventListener('click', function () {
@@ -797,25 +791,27 @@ function runReactSync(node, choice) {
 
   function frameHtml() {
     return (
-      '<div class="panel" style="text-align:center;">' +
-        '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
-        '<p class="sync-sub">' + (i + 1) + ' / ' + N + '</p>' +
-        '<div class="sync-arena">' +
-          '<div class="ring-wrap"><div class="ring-track"></div><div class="ring-fill" id="ring-fill"></div><div class="ring-glyph" id="ring-glyph"></div></div>' +
-          dpadHtml() +
-          '<div class="key-hint">Arrow keys / WASD, or tap</div>' +
+      '<div class="app-screen">' + screenHeaderHtml(node) +
+        '<div class="app-body" style="text-align:center;">' +
+          '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+          '<p class="sync-sub">' + (i + 1) + ' / ' + N + '</p>' +
+          '<div class="sync-arena">' +
+            '<div class="ring-wrap"><div class="ring-track"></div><div class="ring-fill" id="ring-fill"></div><div class="ring-glyph" id="ring-glyph"></div></div>' +
+            dpadHtml() +
+            '<div class="key-hint">Arrow keys / WASD, or tap</div>' +
+          '</div>' +
         '</div>' +
       '</div>'
     );
   }
-  setScreen(frameHtml());
+  setPhoneScreen(frameHtml());
   bindDpad(handleInput);
   document.addEventListener('keydown', keyHandler);
 
   function nextPrompt() {
     if (i >= N) return finish();
     currentGlyph = randomGlyph(prevGlyph); prevGlyph = currentGlyph;
-    var sub = stage.querySelector('.sync-sub'); if (sub) sub.textContent = (i + 1) + ' / ' + N;
+    var sub = phoneScreen.querySelector('.sync-sub'); if (sub) sub.textContent = (i + 1) + ' / ' + N;
     var glyphEl = document.getElementById('ring-glyph'); var fillEl = document.getElementById('ring-fill');
     glyphEl.textContent = currentGlyph.sym; glyphEl.className = 'ring-glyph';
     fillEl.className = 'ring-fill';
@@ -863,13 +859,15 @@ function runMemorySync(node, choice) {
   var pattern = [];
   for (var k = 0; k < N; k++) pattern.push(randomGlyph(pattern[k - 1]));
 
-  setScreen(
-    '<div class="panel" style="text-align:center;">' +
-      '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
-      '<p class="sync-sub" id="phase-label">Memorise the pattern…</p>' +
-      '<div class="sync-arena">' +
-        '<div class="ring-wrap"><div class="ring-track"></div><div class="ring-glyph" id="ring-glyph" style="z-index:2;"></div></div>' +
-        '<div class="memory-row" id="memory-row"></div>' +
+  setPhoneScreen(
+    '<div class="app-screen">' + screenHeaderHtml(node) +
+      '<div class="app-body" style="text-align:center;">' +
+        '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+        '<p class="sync-sub" id="phase-label">Memorise the pattern…</p>' +
+        '<div class="sync-arena">' +
+          '<div class="ring-wrap"><div class="ring-track"></div><div class="ring-glyph" id="ring-glyph" style="z-index:2;"></div></div>' +
+          '<div class="memory-row" id="memory-row"></div>' +
+        '</div>' +
       '</div>' +
     '</div>'
   );
@@ -895,7 +893,7 @@ function runMemorySync(node, choice) {
   function startRecall() {
     document.getElementById('phase-label').textContent = 'Repeat it back';
     glyphEl.textContent = '?';
-    var arena = stage.querySelector('.sync-arena');
+    var arena = phoneScreen.querySelector('.sync-arena');
     var bar = document.createElement('div');
     bar.className = 'progress-bar';
     bar.innerHTML = '<div class="progress-fill" id="progress-fill"></div>';
@@ -953,37 +951,38 @@ function dpadHtml() {
   );
 }
 function bindDpad(handler) {
-  Array.prototype.forEach.call(stage.querySelectorAll('.dpad button'), function (btn) {
+  Array.prototype.forEach.call(phoneScreen.querySelectorAll('.dpad button'), function (btn) {
     btn.addEventListener('click', function () { handler(btn.dataset.dir); });
   });
 }
 
-/* ── Resolve a SYNC outcome, apply consequences, show interstitial ── */
+/* ── Resolve a SYNC outcome as a system dialog, then move to the next job ── */
 function settleSync(node, choice, result) {
   state.syncLog.push(result);
   if (result === 'fail' && node.onFail) node.onFail(state);
   if (result === 'partial' && node.onPartial) node.onPartial(state);
-  updateHuntedMeter();
+  updateStatusBar();
 
   var isFinal = node.id === 'final';
   var bodyText = isFinal ? '' : node.outcomes[result](choice);
   var resultLabel = result === 'clean' ? 'CLEAN SYNC' : result === 'partial' ? 'PARTIAL SYNC' : 'SYNC FAILED';
   var resultColor = result === 'clean' ? 'var(--cyan)' : result === 'partial' ? 'var(--amber)' : 'var(--danger)';
-  var resultAccent = result === 'clean' ? '#22e6d4' : result === 'partial' ? '#ffcf3d' : '#ff4d4d';
-  setBackdrop(resultAccent, node.art.motif, true);
 
-  setScreen(
-    '<div class="panel">' +
-      '<p class="eyebrow" style="color:' + resultColor + '">' + resultLabel + '</p>' +
-      (bodyText ? '<div class="prose"><p>' + bodyText + '</p></div>' : '') +
-      '<button class="primary-btn" id="continue-btn">Continue</button>' +
-    '</div>'
-  );
-  document.getElementById('continue-btn').addEventListener('click', function () {
+  var overlay = document.createElement('div');
+  overlay.className = 'dialog-overlay';
+  overlay.innerHTML =
+    '<div class="dialog-card">' +
+      '<p class="dtitle" style="color:' + resultColor + '">' + resultLabel + '</p>' +
+      (bodyText ? '<p class="dbody">' + bodyText + '</p>' : '') +
+      '<button class="dialog-ok" id="dialog-ok">Continue</button>' +
+    '</div>';
+  phoneScreen.appendChild(overlay);
+  document.getElementById('dialog-ok').addEventListener('click', function () {
     if (isFinal) { renderEnding(choice.id, result); return; }
     state.nodeIndex++;
     if (state.flags.hunted >= 3) { renderEnding(null, null); return; }
-    renderNode();
+    renderHome();
+    queueNotification(state.nodeIndex);
   });
 }
 
@@ -1011,31 +1010,34 @@ function renderEnding(choiceId, syncResult) {
   clearTimers();
   var key = computeEnding(choiceId, syncResult);
   var ending = ENDINGS[key];
-  setBackdrop(ending.art.accent, ending.art.motif, true);
-  var trustDom = dominant(state.flags.trust, ['street', 'self', 'corp']);
-  var methodDom = dominant(state.flags.method, ['stealth', 'words', 'violence']);
+  updateStatusBar();
+  var trustDom = allZero(state.flags.trust) ? 'NONE' : dominant(state.flags.trust, ['street', 'self', 'corp']).toUpperCase();
+  var methodDom = allZero(state.flags.method) ? 'NONE' : dominant(state.flags.method, ['stealth', 'words', 'violence']).toUpperCase();
   var logHtml = state.syncLog.map(function (r) { return '<span class="' + r + '"></span>'; }).join('');
 
-  setScreen(
-    '<div class="panel">' +
-      '<p class="eyebrow magenta">Ending reached</p>' +
-      '<h1 class="title glitch" data-text="' + ending.title + '">' + ending.title + '</h1>' +
-      '<p class="tagline" style="font-style:italic;">' + ending.tag + '</p>' +
-      '<div class="prose"><p>' + ending.body + '</p></div>' +
-      '<div class="flag-grid">' +
-        '<div class="flag-box"><div class="fk">Trust leaning</div><div class="fv">' + trustDom.toUpperCase() + '</div></div>' +
-        '<div class="flag-box"><div class="fk">Method leaning</div><div class="fv">' + methodDom.toUpperCase() + '</div></div>' +
-        '<div class="flag-box"><div class="fk">Hunted level</div><div class="fv">' + Math.min(state.flags.hunted, 3) + ' / 3</div></div>' +
-        '<div class="flag-box"><div class="fk">SYNC record</div><div class="sync-log">' + logHtml + '</div></div>' +
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-body" style="padding-top:26px;">' +
+        '<p class="eyebrow magenta">Connection terminated</p>' +
+        '<h1 class="title glitch" data-text="' + ending.title + '">' + ending.title + '</h1>' +
+        '<p class="tagline" style="font-style:italic;">' + ending.tag + '</p>' +
+        '<div class="prose"><p>' + ending.body + '</p></div>' +
+        '<div class="flag-grid">' +
+          '<div class="flag-box"><div class="fk">Trust leaning</div><div class="fv">' + trustDom + '</div></div>' +
+          '<div class="flag-box"><div class="fk">Method leaning</div><div class="fv">' + methodDom + '</div></div>' +
+          '<div class="flag-box"><div class="fk">Hunted level</div><div class="fv">' + Math.min(state.flags.hunted, 3) + ' / 3</div></div>' +
+          '<div class="flag-box"><div class="fk">SYNC record</div><div class="sync-log">' + logHtml + '</div></div>' +
+        '</div>' +
+        '<button class="primary-btn" id="again-btn">Run It Back</button>' +
+        '<a class="ghost-btn" href="/apps/static-protocol/">Exit to briefing</a>' +
       '</div>' +
-      '<button class="primary-btn" id="again-btn">Run It Back</button>' +
-      '<a class="ghost-btn" href="/apps/static-protocol/" style="margin-left:10px;">Exit to briefing</a>' +
     '</div>'
   );
-  document.getElementById('again-btn').addEventListener('click', renderTitle);
+  document.getElementById('again-btn').addEventListener('click', renderLock);
 }
 
-renderTitle();
+tickClock();
+renderLock();
 </script>
 </body>
 </html>
