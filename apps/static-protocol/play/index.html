@@ -86,6 +86,16 @@
     padding: 40px 32px;
   }
 
+  /* ── Scene art: skyline banner bled to the panel edges ── */
+  .scene-art { position: relative; margin: -40px -32px 26px; height: clamp(110px, 22vw, 160px); overflow: hidden; border-bottom: 1px solid var(--panel-line); background: #05050a; }
+  .scene-art svg { width: 100%; height: 100%; display: block; }
+  .scene-art::after { content: ''; position: absolute; inset: auto 0 0 0; height: 55%; background: linear-gradient(to bottom, transparent, var(--panel)); pointer-events: none; }
+  .scene-rain { animation: rainfall 3.4s linear infinite; }
+  @keyframes rainfall { from { transform: translate(0, -18px); } to { transform: translate(-5px, 18px); } }
+  @media (max-width: 480px) {
+    .scene-art { margin: -30px -20px 20px; }
+  }
+
   .glitch {
     position: relative;
     font-weight: 800;
@@ -241,10 +251,61 @@ function randomGlyph(prev) {
   return g;
 }
 
+/* ── Scene art: one reusable skyline, recoloured + a small motif per scene ── */
+var svgIdCounter = 0;
+var MOTIFS = {
+  drone: function (a) { return '<g transform="translate(300,34)" fill="none" stroke="' + a + '" stroke-width="2"><rect x="-15" y="-5" width="30" height="9" rx="3"/><circle cx="-15" cy="-0.5" r="3" fill="' + a + '"/><circle cx="15" cy="-0.5" r="3" fill="' + a + '"/><line x1="0" y1="4" x2="0" y2="12"/></g>'; },
+  door: function (a) { return '<g transform="translate(300,32)" fill="none" stroke="' + a + '" stroke-width="2"><rect x="-16" y="-20" width="32" height="42" rx="2"/><line x1="-16" y1="2" x2="16" y2="2"/><line x1="0" y1="-20" x2="0" y2="22"/></g>'; },
+  circuit: function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><path d="M270 20 h20 v16 h24 v14"/><circle cx="270" cy="20" r="3" fill="' + a + '"/><circle cx="314" cy="50" r="3" fill="' + a + '"/><path d="M330 16 h-14 v20 h-18"/><circle cx="330" cy="16" r="3" fill="' + a + '"/><circle cx="298" cy="36" r="3" fill="' + a + '"/></g>'; },
+  warning: function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2" stroke-linejoin="round"><polygon points="300,14 318,44 282,44"/><line x1="300" y1="23" x2="300" y2="35"/><circle cx="300" cy="39.5" r="1.7" fill="' + a + '" stroke="none"/></g>'; },
+  tower: function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><line x1="300" y1="10" x2="300" y2="48"/><line x1="292" y1="48" x2="308" y2="48"/><path d="M288 26 a17 17 0 0 1 24 0" stroke-opacity="0.7"/><path d="M282 18 a26 26 0 0 1 36 0" stroke-opacity="0.4"/></g>'; },
+  none: function () { return ''; }
+};
+function skylineSvg(accent, motif, tall) {
+  var id = 'sc' + (svgIdCounter++);
+  var h = tall ? 220 : 170;
+  return (
+    '<svg viewBox="0 0 600 ' + h + '" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs>' +
+        '<linearGradient id="sky' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a14"/><stop offset="100%" stop-color="#050508"/></linearGradient>' +
+        '<radialGradient id="glow' + id + '" cx="72%" cy="15%" r="65%"><stop offset="0%" stop-color="' + accent + '" stop-opacity="0.35"/><stop offset="100%" stop-color="' + accent + '" stop-opacity="0"/></radialGradient>' +
+      '</defs>' +
+      '<rect width="600" height="' + h + '" fill="url(#sky' + id + ')"/>' +
+      '<rect width="600" height="' + h + '" fill="url(#glow' + id + ')"/>' +
+      '<g fill="#12131c">' +
+        '<rect x="0" y="' + (h - 78) + '" width="34" height="78"/><rect x="38" y="' + (h - 96) + '" width="24" height="96"/>' +
+        '<rect x="66" y="' + (h - 66) + '" width="30" height="66"/><rect x="100" y="' + (h - 110) + '" width="20" height="110"/>' +
+        '<rect x="124" y="' + (h - 82) + '" width="36" height="82"/><rect x="450" y="' + (h - 90) + '" width="26" height="90"/>' +
+        '<rect x="480" y="' + (h - 60) + '" width="34" height="60"/><rect x="518" y="' + (h - 118) + '" width="22" height="118"/>' +
+        '<rect x="544" y="' + (h - 74) + '" width="30" height="74"/><rect x="576" y="' + (h - 100) + '" width="24" height="100"/>' +
+      '</g>' +
+      '<g fill="' + accent + '" opacity="0.20">' +
+        '<rect x="8" y="' + (h - 60) + '" width="4" height="4"/><rect x="18" y="' + (h - 50) + '" width="4" height="4"/><rect x="106" y="' + (h - 90) + '" width="4" height="4"/>' +
+        '<rect x="130" y="' + (h - 60) + '" width="4" height="4"/><rect x="458" y="' + (h - 70) + '" width="4" height="4"/><rect x="524" y="' + (h - 96) + '" width="4" height="4"/>' +
+        '<rect x="552" y="' + (h - 54) + '" width="4" height="4"/><rect x="584" y="' + (h - 80) + '" width="4" height="4"/>' +
+      '</g>' +
+      '<g fill="#090910">' +
+        '<polygon points="150,' + h + ' 150,' + (h - 130) + ' 190,' + (h - 150) + ' 230,' + (h - 130) + ' 230,' + h + '"/>' +
+        '<polygon points="380,' + h + ' 380,' + (h - 150) + ' 410,' + (h - 168) + ' 440,' + (h - 150) + ' 440,' + h + '"/>' +
+      '</g>' +
+      '<g stroke="' + accent + '" stroke-width="2" opacity="0.85">' +
+        '<line x1="190" y1="' + (h - 148) + '" x2="190" y2="' + h + '"/><line x1="410" y1="' + (h - 166) + '" x2="410" y2="' + h + '"/>' +
+      '</g>' +
+      '<g class="scene-rain" stroke="#ffffff" stroke-opacity="0.10" stroke-width="1">' +
+        '<line x1="60" y1="0" x2="48" y2="' + h + '"/><line x1="160" y1="0" x2="148" y2="' + h + '"/><line x1="260" y1="0" x2="248" y2="' + h + '"/>' +
+        '<line x1="360" y1="0" x2="348" y2="' + h + '"/><line x1="460" y1="0" x2="448" y2="' + h + '"/><line x1="540" y1="0" x2="528" y2="' + h + '"/>' +
+      '</g>' +
+      (MOTIFS[motif] ? MOTIFS[motif](accent) : '') +
+    '</svg>'
+  );
+}
+function sceneArt(accent, motif, tall) { return '<div class="scene-art">' + skylineSvg(accent, motif, tall) + '</div>'; }
+
 /* ── Narrative data ── */
 var NODES = [
   {
     id: 'rooftop',
+    art: { accent: '#22e6d4', motif: 'drone' },
     label: 'NODE 01 — ROOFTOP EXTRACTION',
     scene: [
       "Rain needles down through forty storeys of neon haze. The extraction was supposed to be quiet — in, grab the drive, out before anyone blinked. It isn't quiet any more.",
@@ -276,6 +337,7 @@ var NODES = [
   },
   {
     id: 'fixer',
+    art: { accent: '#ffcf3d', motif: 'door' },
     label: 'NODE 02 — BACK-ALLEY FIXER',
     scene: [
       "The drive sits warm in your pocket, like it knows what's on it. Your fixer's booth smells of solder and instant noodles, three screens throwing blue light across a face that's done this a hundred times and trusts none of them.",
@@ -305,6 +367,7 @@ var NODES = [
   },
   {
     id: 'server',
+    art: { accent: '#22e6d4', motif: 'circuit' },
     label: 'NODE 03 — SERVER ROOM',
     scene: [
       "Corp Tower, sub-level six. Rows of black server racks breathe cold air into a room that shouldn't exist on any building plan. Somewhere in this grid is the rest of what the drive started — enough to burn the district down, or build it back up.",
@@ -335,6 +398,7 @@ var NODES = [
   },
   {
     id: 'confrontation',
+    art: { accent: '#ff4d4d', motif: 'warning' },
     label: 'NODE 04 — CONFRONTATION',
     scene: [
       "They're waiting where the market stalls thin out — Corp security, or what's left of your old crew, depending on how the last hour went. Either way there's a gun levelled and your name said like a question.",
@@ -360,6 +424,7 @@ var NODES = [
   },
   {
     id: 'final',
+    art: { accent: '#ff3d94', motif: 'tower' },
     label: 'NODE 05 — FINAL CHOICE',
     scene: [
       "It comes down to this: the drive, the data, and whatever's left of who you were before tonight. Broadcast it wide, hand it to the highest bidder, feed it to the thing that's been talking to you through the wires, burn it, or just — disappear.",
@@ -381,42 +446,52 @@ var NODES = [
 
 var ENDINGS = {
   'ghost': {
+    art: { accent: '#22e6d4', motif: 'none' },
     title: 'GHOST', tag: 'Full stealth. No alarms. Gone.',
     body: "Nobody sees you leave. No alarm ever trips, no camera ever catches a clean frame — by the time anyone thinks to look for you, you're a rumour in a city that runs on rumours. You vanish the way you moved through the whole run: perfectly, quietly, completely."
   },
   'martyr': {
+    art: { accent: '#ff3d94', motif: 'tower' },
     title: 'MARTYR', tag: 'You broadcast the truth — and got caught doing it.',
     body: "The data hits every feed in the district before they drag you off the terminal. It's out there now, permanently, unkillably out there — and so, within the hour, are you. Wrong place. Right cause. The city will argue about which one mattered more for years."
   },
   'revolution-spark': {
+    art: { accent: '#ff3d94', motif: 'tower' },
     title: 'REVOLUTION SPARK', tag: 'Street trust, clean nerve, a city that finally listens.',
     body: "You broadcast clean, on your own terms, with the Street behind you the whole way. By morning the feeds are still burning and so are three Corp checkpoints. You didn't just leak the data — you lit something that isn't going out. Whatever happens to you now, it isn't the end of this story."
   },
   'corporate-puppet': {
+    art: { accent: '#ffcf3d', motif: 'door' },
     title: 'CORPORATE PUPPET', tag: 'Sold out. Safe. Hollow.',
     body: "Corp pays exactly what was promised, no more, no less, and folds you quietly into an NDA thicker than the drive ever was. You're safe now. You're comfortable now. Some nights you almost forget what it cost to get here — and that's the part that should worry you."
   },
   'merged': {
+    art: { accent: '#a855f7', motif: 'circuit' },
     title: 'MERGED', tag: 'Fused with the rogue AI. No longer fully human.',
     body: "The line between you and it stops meaning anything somewhere around the third hour. What walks out of the server room afterward answers to your name, remembers your life, and thinks in threads no single mind was built to hold. You got what you came for. You're just not entirely the one who gets to keep it."
   },
   'hunted-down': {
+    art: { accent: '#ff4d4d', motif: 'warning' },
     title: 'HUNTED DOWN', tag: 'Too many alarms. Cornered, regardless of what you chose.',
     body: "It stopped being about the data three failures ago. Every SYNC you fumbled left a trace, and traces add up into a net. They find you not because of who you are or what you decided — but because the city was already closing in before you got the chance to decide anything at all."
   },
   'betrayed': {
+    art: { accent: '#ff7a3d', motif: 'door' },
     title: 'BETRAYED', tag: 'Your fixer sold you out after the story broke down.',
     body: "The call goes out the second you're through the door — you just don't hear it happen. Somewhere between the booth and your next move, the fixer's cold read on you turns into a phone number, and the phone number turns into people waiting for you who shouldn't know where to wait."
   },
   'vigilante': {
+    art: { accent: '#ff4d4d', motif: 'warning' },
     title: 'VIGILANTE', tag: 'Too violent to vanish. A feared street legend instead.',
     body: "You meant to disappear. You don't, quite — not with a reputation like the one you've built tonight trailing behind you through every district scanner in the city. You become a name whispered in the same breath as a warning: the one who went through Corp security like it was nothing at all."
   },
   'walk-away': {
+    art: { accent: '#7de3d6', motif: 'none' },
     title: 'WALK AWAY', tag: 'Refused every side. The city forgets you.',
     body: "You destroy the drive, or you simply stop carrying it, and either way nobody gets what they wanted from you — including, maybe, yourself. No uprising. No payday. No legend. Just a life that quietly goes on, unremarkable, entirely your own again."
   },
   'reconditioned': {
+    art: { accent: '#ff4d4d', motif: 'circuit' },
     title: 'RECONDITIONED', tag: 'Captured at the final node. Memory wiped.',
     body: "The last thing you remember clearly is the SYNC failing under your fingers. Everything after that belongs to someone else's report — a chair, a wipe, a new set of memories waiting to be issued along with your next assignment. Somewhere, a version of tonight is about to happen again, to someone who won't remember it either."
   }
@@ -470,6 +545,7 @@ function renderTitle() {
   clearTimers();
   setScreen(
     '<div class="panel">' +
+      sceneArt('#22e6d4', 'tower', true) +
       '<p class="eyebrow">Interactive cyberpunk fiction</p>' +
       '<h1 class="title glitch" data-text="STATIC PROTOCOL">STATIC PROTOCOL</h1>' +
       '<p class="tagline">Five decisions. Five live SYNC sequences. Ten possible endings. Two runners who pick the exact same path can still walk away with two different stories — it depends on how steady your hands are when it counts.</p>' +
@@ -492,6 +568,7 @@ function renderNode() {
   }).join('');
   setScreen(
     '<div class="panel">' +
+      sceneArt(node.art.accent, node.art.motif) +
       '<p class="eyebrow">' + node.label + '</p>' +
       '<div class="prose">' + node.scene.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div>' +
       '<div class="btn-row">' + choicesHtml + '</div>' +
@@ -702,9 +779,11 @@ function settleSync(node, choice, result) {
   var bodyText = isFinal ? '' : node.outcomes[result](choice);
   var resultLabel = result === 'clean' ? 'CLEAN SYNC' : result === 'partial' ? 'PARTIAL SYNC' : 'SYNC FAILED';
   var resultColor = result === 'clean' ? 'var(--cyan)' : result === 'partial' ? 'var(--amber)' : 'var(--danger)';
+  var resultAccent = result === 'clean' ? '#22e6d4' : result === 'partial' ? '#ffcf3d' : '#ff4d4d';
 
   setScreen(
     '<div class="panel">' +
+      sceneArt(resultAccent, node.art.motif) +
       '<p class="eyebrow" style="color:' + resultColor + '">' + resultLabel + '</p>' +
       (bodyText ? '<div class="prose"><p>' + bodyText + '</p></div>' : '') +
       '<button class="primary-btn" id="continue-btn">Continue</button>' +
@@ -748,6 +827,7 @@ function renderEnding(choiceId, syncResult) {
 
   setScreen(
     '<div class="panel">' +
+      sceneArt(ending.art.accent, ending.art.motif, true) +
       '<p class="eyebrow magenta">Ending reached</p>' +
       '<h1 class="title glitch" data-text="' + ending.title + '">' + ending.title + '</h1>' +
       '<p class="tagline" style="font-style:italic;">' + ending.tag + '</p>' +
