@@ -56,7 +56,7 @@
   }
   #scene-backdrop svg { width: 100%; height: 100%; display: block; }
   #scene-backdrop::after {
-    content: ''; position: absolute; inset: 0;
+    content: ''; position: absolute; inset: 0; pointer-events: none;
     background:
       radial-gradient(ellipse at 50% -10%, rgba(34,230,212,0.10), transparent 55%),
       radial-gradient(ellipse at 90% 110%, rgba(255,61,148,0.08), transparent 55%),
@@ -64,6 +64,45 @@
   }
   .scene-rain { animation: rainfall 3.4s linear infinite; }
   @keyframes rainfall { from { transform: translate(0, -18px); } to { transform: translate(-5px, 18px); } }
+
+  /* ── Hand prop: your own gloved hand, always in frame, reaches for whatever you interact with ── */
+  .hand-prop {
+    position: fixed; right: -18px; bottom: -22px; z-index: 3; width: clamp(150px, 34vw, 220px);
+    pointer-events: none; filter: drop-shadow(0 -6px 20px rgba(34,230,212,0.18));
+    transform-origin: 78% 90%;
+    animation: handIdle 3.4s ease-in-out infinite;
+    transition: transform 0.3s cubic-bezier(0.3,0,0.4,1);
+    opacity: 0;
+  }
+  .hand-prop.visible { opacity: 1; transition: opacity 0.6s ease, transform 0.3s cubic-bezier(0.3,0,0.4,1); }
+  .hand-prop svg { width: 100%; height: 100%; display: block; }
+  @keyframes handIdle { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-5px) rotate(-1.2deg); } }
+  .hand-prop.peek-left   { animation: none; transform: translate(-70px, -50px) rotate(-10deg); }
+  .hand-prop.peek-center { animation: none; transform: translate(-30px, -64px) rotate(-4deg); }
+  .hand-prop.peek-right  { animation: none; transform: translate(6px, -58px) rotate(3deg); }
+  .hand-prop.reach-left   { animation: none; transition: transform 0.26s cubic-bezier(0.3,0,0.5,1); transform: translate(-130px, -110px) rotate(-16deg) scale(1.05); }
+  .hand-prop.reach-center { animation: none; transition: transform 0.26s cubic-bezier(0.3,0,0.5,1); transform: translate(-60px, -140px) rotate(-6deg) scale(1.05); }
+  .hand-prop.reach-right  { animation: none; transition: transform 0.26s cubic-bezier(0.3,0,0.5,1); transform: translate(14px, -125px) rotate(5deg) scale(1.05); }
+
+  /* ── Hotspots: interactive targets drawn inside the scene SVG itself ── */
+  .hotspot-group { cursor: pointer; outline: none; }
+  .hotspot-ring { fill: rgba(255,255,255,0.02); stroke-width: 2; animation: hotspotPulse 2.2s ease-in-out infinite; transition: stroke-width 0.15s, fill 0.15s; }
+  .hotspot-group:hover .hotspot-ring, .hotspot-group.is-hovered .hotspot-ring { stroke-width: 3.5; fill: rgba(255,255,255,0.06); }
+  .hotspot-icon { transition: transform 0.15s ease; transform-box: fill-box; transform-origin: center; }
+  .hotspot-group:hover .hotspot-icon, .hotspot-group.is-hovered .hotspot-icon { transform: scale(1.12); }
+  @keyframes hotspotPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+
+  /* ── Scene caption: a slim docked strip instead of a full card, so the scene stays primary ── */
+  .scene-caption {
+    position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translateX(-50%);
+    width: calc(100% - 32px); max-width: 640px; z-index: 20;
+    background: rgba(9,10,18,0.68); backdrop-filter: blur(16px) saturate(1.3); -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    border: 1px solid var(--panel-line); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    padding: 16px 20px; max-height: 42vh; overflow-y: auto;
+  }
+  .scene-caption .prose p { font-size: 13px; line-height: 1.65; margin-bottom: 10px; }
+  .hover-hint { margin-top: 4px; font-size: 12px; color: var(--cyan); letter-spacing: 0.03em; min-height: 16px; }
+  .hover-hint.idle { color: rgba(217,247,242,0.4); }
 
   #scanlines {
     position: fixed; inset: 0; pointer-events: none; z-index: 5;
@@ -127,17 +166,6 @@
   .tagline { color: rgba(217,247,242,0.65); font-size: 14px; margin-bottom: 28px; line-height: 1.7; }
   .prose p { color: rgba(217,247,242,0.82); font-size: 14.5px; line-height: 1.85; margin-bottom: 16px; }
   .prose p:last-child { margin-bottom: 0; }
-
-  .btn-row { display: flex; flex-direction: column; gap: 10px; margin-top: 28px; }
-  .choice-btn {
-    display: block; width: 100%; text-align: left;
-    background: rgba(34,230,212,0.04); border: 1px solid var(--panel-line);
-    color: #eafffb; padding: 15px 18px; font-size: 13.5px; letter-spacing: 0.02em;
-    transition: border-color 0.15s, background 0.15s, transform 0.1s;
-  }
-  .choice-btn:hover { border-color: var(--cyan); background: rgba(34,230,212,0.10); }
-  .choice-btn:active { transform: scale(0.99); }
-  .choice-btn .cn { color: var(--cyan); margin-right: 10px; }
 
   .primary-btn {
     display: inline-flex; align-items: center; justify-content: center;
@@ -231,6 +259,7 @@
 <body>
 <div id="app">
   <div id="scene-backdrop" aria-hidden="true"></div>
+  <div class="hand-prop" id="hand-prop" aria-hidden="true"></div>
   <div id="scanlines" aria-hidden="true"></div>
   <a id="exit-link" href="/apps/static-protocol/">← Disconnect</a>
   <div id="hud-bar">
@@ -267,6 +296,24 @@ var MOTIFS = {
   tower: function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><line x1="300" y1="10" x2="300" y2="48"/><line x1="292" y1="48" x2="308" y2="48"/><path d="M288 26 a17 17 0 0 1 24 0" stroke-opacity="0.7"/><path d="M282 18 a26 26 0 0 1 36 0" stroke-opacity="0.4"/></g>'; },
   none: function () { return ''; }
 };
+
+/* ── Hotspot icons: the objects/people you can reach for inside a scene ── */
+var ICONS = {
+  drone:  function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><rect x="-15" y="-5" width="30" height="9" rx="3"/><circle cx="-15" cy="-0.5" r="3" fill="' + a + '"/><circle cx="15" cy="-0.5" r="3" fill="' + a + '"/><line x1="0" y1="4" x2="0" y2="12"/></g>'; },
+  door:   function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><rect x="-16" y="-20" width="32" height="42" rx="2"/><line x1="-16" y1="2" x2="16" y2="2"/><line x1="0" y1="-20" x2="0" y2="22"/></g>'; },
+  tower:  function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><line x1="0" y1="-24" x2="0" y2="14"/><line x1="-8" y1="14" x2="8" y2="14"/><path d="M-12 -4 a17 17 0 0 1 24 0" stroke-opacity="0.75"/><path d="M-18 -12 a26 26 0 0 1 36 0" stroke-opacity="0.45"/></g>'; },
+  shadow: function (a) { return '<g><circle r="22" fill="#05050a" opacity="0.55"/><path d="M-9,-7 L0,8 L9,-7" stroke="' + a + '" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>'; },
+  signal: function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><circle cx="0" cy="6" r="3.4" fill="' + a + '" stroke="none"/><path d="M-11 -1 a15 15 0 0 1 22 0" opacity="0.85"/><path d="M-18 -8 a24 24 0 0 1 36 0" opacity="0.5"/></g>'; },
+  seal:   function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><polygon points="0,-19 16,-9.5 16,9.5 0,19 -16,9.5 -16,-9.5"/><circle cx="0" cy="0" r="5" fill="' + a + '" stroke="none"/></g>'; },
+  drive:  function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><rect x="-15" y="-9" width="30" height="19" rx="2"/><line x1="-8" y1="10" x2="-8" y2="16"/><line x1="0" y1="10" x2="0" y2="16"/><line x1="8" y1="10" x2="8" y2="16"/></g>'; },
+  terminal: function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><rect x="-17" y="-13" width="34" height="23" rx="1.5"/><line x1="-17" y1="15" x2="17" y2="15"/><line x1="-8" y1="15" x2="-10" y2="21"/><line x1="8" y1="15" x2="10" y2="21"/><line x1="-9" y1="-3" x2="3" y2="-3"/></g>'; },
+  eye:    function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><circle r="14"/><circle r="5" fill="' + a + '" stroke="none"/><line x1="-21" y1="0" x2="-15" y2="0"/><line x1="15" y1="0" x2="21" y2="0"/><line x1="0" y1="-21" x2="0" y2="-15"/></g>'; },
+  talk:   function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2" stroke-linecap="round"><path d="M-15,-9 q-7,9 0,18"/><path d="M15,-9 q7,9 0,18"/><circle cx="0" cy="0" r="3" fill="' + a + '" stroke="none"/></g>'; },
+  figure: function (a) { return '<g fill="' + a + '" opacity="0.92"><circle cx="0" cy="-15" r="6.5"/><path d="M-10,20 L-7,-4 L7,-4 L10,20 Z"/></g>'; },
+  flame:  function (a) { return '<path d="M0,-19 C9,-9 9,2 0,11 C-9,2 -9,-9 0,-19 Z M0,-3 C4,2 3,8 0,11 C-3,8 -4,2 0,-3 Z" fill="' + a + '"/>'; }
+};
+function sceneIcon(name, accent) { return ICONS[name] ? ICONS[name](accent) : ''; }
+
 function skylineSvg(accent, motif, tall) {
   var id = 'sc' + (svgIdCounter++);
   var h = tall ? 220 : 170;
@@ -307,16 +354,116 @@ function skylineSvg(accent, motif, tall) {
 }
 var backdropEl = document.getElementById('scene-backdrop');
 var currentBackdropKey = null, backdropFadeTimer = null;
-function setBackdrop(accent, motif, tall) {
-  var key = accent + '|' + motif + '|' + tall;
-  if (key === currentBackdropKey) return;
+function setBackdropHTML(key, html, onSet) {
+  if (key === currentBackdropKey) { if (onSet) onSet(); return; }
   currentBackdropKey = key;
   if (backdropFadeTimer) clearTimeout(backdropFadeTimer);
   backdropEl.style.opacity = '0.4';
   backdropFadeTimer = setTimeout(function () {
-    backdropEl.innerHTML = skylineSvg(accent, motif, tall);
+    backdropEl.innerHTML = html;
     backdropEl.style.opacity = '1';
+    if (onSet) onSet();
   }, 260);
+}
+function setBackdrop(accent, motif, tall) {
+  setBackdropHTML(accent + '|' + motif + '|' + tall, skylineSvg(accent, motif, tall));
+}
+
+/* ── First-person scene: atmosphere + a perspective floor + interactive hotspots ── */
+function buildSceneSVG(node) {
+  var id = 'ps' + (svgIdCounter++);
+  var accent = node.art.accent;
+  var h = 900;
+  var hotspotsHtml = node.hotspots.map(function (hs, i) {
+    return (
+      '<g class="hotspot-group" data-choice-idx="' + i + '" data-zone="' + hs.zone + '" tabindex="0" role="button" aria-label="' + hs.label + '">' +
+        '<circle class="hotspot-ring" cx="' + hs.x + '" cy="' + hs.y + '" r="36" stroke="' + accent + '"/>' +
+        '<g class="hotspot-icon" transform="translate(' + hs.x + ',' + hs.y + ')">' + sceneIcon(hs.icon, accent) + '</g>' +
+      '</g>'
+    );
+  }).join('');
+  return (
+    '<svg viewBox="0 0 600 ' + h + '" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs>' +
+        '<linearGradient id="sky' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0a14"/><stop offset="55%" stop-color="#08080f"/><stop offset="100%" stop-color="#050508"/></linearGradient>' +
+        '<radialGradient id="glow' + id + '" cx="50%" cy="30%" r="60%"><stop offset="0%" stop-color="' + accent + '" stop-opacity="0.28"/><stop offset="100%" stop-color="' + accent + '" stop-opacity="0"/></radialGradient>' +
+      '</defs>' +
+      '<rect width="600" height="' + h + '" fill="url(#sky' + id + ')"/>' +
+      '<rect width="600" height="' + h + '" fill="url(#glow' + id + ')"/>' +
+      '<g fill="#12131c">' +
+        '<rect x="-20" y="260" width="90" height="' + (h - 260) + '"/><rect x="80" y="200" width="60" height="' + (h - 200) + '"/>' +
+        '<rect x="460" y="220" width="70" height="' + (h - 220) + '"/><rect x="540" y="170" width="80" height="' + (h - 170) + '"/>' +
+      '</g>' +
+      '<g class="scene-rain" stroke="#ffffff" stroke-opacity="0.09" stroke-width="1.5">' +
+        '<line x1="90" y1="0" x2="60" y2="' + h + '"/><line x1="220" y1="0" x2="190" y2="' + h + '"/><line x1="360" y1="0" x2="330" y2="' + h + '"/>' +
+        '<line x1="500" y1="0" x2="470" y2="' + h + '"/>' +
+      '</g>' +
+      '<g stroke="' + accent + '" stroke-opacity="0.3" stroke-width="2" fill="none">' +
+        '<line x1="0" y1="' + h + '" x2="255" y2="470"/><line x1="600" y1="' + h + '" x2="345" y2="470"/>' +
+        '<line x1="0" y1="' + (h - 40) + '" x2="600" y2="' + (h - 40) + '" stroke-opacity="0.15"/>' +
+      '</g>' +
+      hotspotsHtml +
+    '</svg>'
+  );
+}
+function bindHotspots(node) {
+  var groups = backdropEl.querySelectorAll('.hotspot-group');
+  Array.prototype.forEach.call(groups, function (g) {
+    var idx = Number(g.dataset.choiceIdx);
+    var zone = g.dataset.zone;
+    var label = node.choices[idx].label;
+    function showHint() {
+      g.classList.add('is-hovered');
+      setHoverHint(label, false);
+      peekHand(zone);
+    }
+    function hideHint() {
+      g.classList.remove('is-hovered');
+      setHoverHint(null, true);
+      peekHand(null);
+    }
+    g.addEventListener('mouseenter', showHint);
+    g.addEventListener('mouseleave', hideHint);
+    g.addEventListener('focus', showHint);
+    g.addEventListener('blur', hideHint);
+    g.addEventListener('click', function () { activateChoice(node, idx, zone); });
+  });
+}
+
+/* ── Hand prop: a persistent, idling character hand that reaches for whatever you pick ── */
+var handEl = document.getElementById('hand-prop');
+handEl.innerHTML =
+  '<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">' +
+    '<g transform="translate(30,26) rotate(14)">' +
+      '<path d="M22 158 C10 118 14 68 34 38 C44 22 64 13 78 19 C88 8 104 11 108 24 C118 16 131 23 130 37 C141 33 149 44 145 56 L148 128 C148 154 128 175 92 178 C58 181 30 175 22 158 Z" fill="#14151f" stroke="#22e6d4" stroke-width="2" opacity="0.96"/>' +
+      '<path d="M34 38 C39 60 41 86 39 112" stroke="#22e6d4" stroke-width="1.3" opacity="0.5" fill="none"/>' +
+      '<path d="M78 19 C80 46 80 72 76 98" stroke="#22e6d4" stroke-width="1.3" opacity="0.5" fill="none"/>' +
+      '<path d="M108 24 C110 50 108 74 102 95" stroke="#22e6d4" stroke-width="1.3" opacity="0.5" fill="none"/>' +
+      '<path d="M130 37 C132 58 128 78 120 92" stroke="#22e6d4" stroke-width="1.3" opacity="0.5" fill="none"/>' +
+      '<circle cx="90" cy="150" r="4" fill="#22e6d4"/>' +
+    '</g>' +
+  '</svg>';
+handEl.classList.add('visible');
+function peekHand(zone) {
+  handEl.classList.remove('peek-left', 'peek-center', 'peek-right');
+  if (zone) handEl.classList.add('peek-' + zone);
+}
+var handReachTimer = null;
+function playHandReach(zone, cb) {
+  handEl.classList.remove('peek-left', 'peek-center', 'peek-right', 'reach-left', 'reach-center', 'reach-right');
+  void handEl.offsetWidth;
+  handEl.classList.add('reach-' + zone);
+  if (handReachTimer) clearTimeout(handReachTimer);
+  handReachTimer = setTimeout(function () {
+    handEl.classList.remove('reach-' + zone);
+    cb();
+  }, 480);
+}
+function setHoverHint(label, idle) {
+  var el = document.getElementById('hover-hint');
+  if (!el) return;
+  el.textContent = label || 'Choose your move.';
+  el.classList.toggle('idle', !!idle);
 }
 
 /* ── Narrative data ── */
@@ -333,6 +480,11 @@ var NODES = [
       { id: 'fight',  label: 'Fight the drone',              method: { violence: 2 }, trust: {} },
       { id: 'slip',   label: 'Slip past it',                 method: { stealth: 2 },  trust: {} },
       { id: 'favour', label: 'Call in a Street favour',      method: { stealth: 1 },  trust: { street: 2 } }
+    ],
+    hotspots: [
+      { icon: 'drone',  x: 150, y: 430, zone: 'left',   label: 'Fight the drone' },
+      { icon: 'shadow', x: 300, y: 460, zone: 'center', label: 'Slip past it' },
+      { icon: 'signal', x: 450, y: 430, zone: 'right',  label: 'Call in a Street favour' }
     ],
     sync: { mode: 'react', length: 5, duration: 950, label: 'EVADE THE SCAN PULSE', sub: 'Match the glyph before the ring closes' },
     outcomes: {
@@ -366,6 +518,11 @@ var NODES = [
       { id: 'street', label: 'Hand it to the Street resistance',      method: { words: 1 },    trust: { street: 2 } },
       { id: 'keep',   label: 'Keep it for yourself',                  method: { stealth: 1 },  trust: { self: 2 } }
     ],
+    hotspots: [
+      { icon: 'seal',   x: 150, y: 430, zone: 'left',   label: 'Sell to Corp' },
+      { icon: 'signal', x: 300, y: 460, zone: 'center', label: 'Hand it to the Street resistance' },
+      { icon: 'drive',  x: 450, y: 430, zone: 'right',  label: 'Keep it for yourself' }
+    ],
     sync: { mode: 'react', length: 6, duration: 850, label: 'SELL THE COVER STORY', sub: 'Hold your nerve, glyph by glyph' },
     outcomes: {
       clean: function (c) {
@@ -395,6 +552,11 @@ var NODES = [
       { id: 'stealth', label: 'Stealth hack the terminal',   method: { stealth: 2 },  trust: {} },
       { id: 'brute',   label: 'Loud brute-force it',         method: { violence: 2 }, trust: {} },
       { id: 'ai',      label: 'Recruit the rogue AI',        method: { words: 1 },    trust: { self: 1 } }
+    ],
+    hotspots: [
+      { icon: 'terminal', x: 150, y: 430, zone: 'left',   label: 'Stealth hack the terminal' },
+      { icon: 'door',     x: 300, y: 460, zone: 'center', label: 'Loud brute-force it' },
+      { icon: 'eye',      x: 450, y: 430, zone: 'right',  label: 'Recruit the rogue AI' }
     ],
     sync: { mode: 'memory', length: 6, flashMs: 480, gapMs: 160, recallPerGlyph: 1300, label: 'MATCH THE GLYPH KEY', sub: 'Memorise the pattern, then repeat it' },
     outcomes: {
@@ -427,6 +589,11 @@ var NODES = [
       { id: 'fight',     label: 'Fight',                       method: { violence: 2 }, trust: {} },
       { id: 'flee',      label: 'Flee through the crowd',      method: { stealth: 2 },  trust: {} }
     ],
+    hotspots: [
+      { icon: 'talk',   x: 150, y: 430, zone: 'left',   label: 'Negotiate' },
+      { icon: 'figure', x: 300, y: 450, zone: 'center', label: 'Fight' },
+      { icon: 'shadow', x: 450, y: 430, zone: 'right',  label: 'Flee through the crowd' }
+    ],
     sync: { mode: 'react', length: 5, duration: 650, label: 'QUICK-DRAW / DODGE', sub: 'Fastest reflex on the street wins this' },
     outcomes: {
       clean: function (c) {
@@ -454,6 +621,13 @@ var NODES = [
       { id: 'merge',      label: 'Merge with the AI' },
       { id: 'destroy',    label: 'Destroy it' },
       { id: 'vanish',     label: 'Vanish' }
+    ],
+    hotspots: [
+      { icon: 'tower',  x: 180, y: 370, zone: 'left',   label: 'Broadcast the data to the net' },
+      { icon: 'seal',   x: 420, y: 370, zone: 'right',  label: 'Hand it to Corp' },
+      { icon: 'eye',    x: 300, y: 430, zone: 'center', label: 'Merge with the AI' },
+      { icon: 'flame',  x: 220, y: 520, zone: 'left',   label: 'Destroy it' },
+      { icon: 'shadow', x: 380, y: 520, zone: 'right',  label: 'Vanish' }
     ],
     sync: { mode: 'react', length: 8, duration: 700, label: 'FULL SYNC — HOLD THE LINE', sub: 'The climax. Everything you\'ve got, right now' },
     outcomes: { clean: function(){return '';}, partial: function(){return '';}, fail: function(){return '';} },
@@ -581,27 +755,25 @@ function renderTitle() {
 function renderNode() {
   clearTimers();
   var node = NODES[state.nodeIndex];
-  setBackdrop(node.art.accent, node.art.motif, true);
-  var choicesHtml = node.choices.map(function (c, i) {
-    return '<button class="choice-btn" data-idx="' + i + '"><span class="cn">' + String.fromCharCode(65 + i) + '</span>' + c.label + '</button>';
-  }).join('');
+  peekHand(null);
   setScreen(
-    '<div class="panel">' +
+    '<div class="scene-caption">' +
       '<p class="eyebrow">' + node.label + '</p>' +
       '<div class="prose">' + node.scene.map(function (p) { return '<p>' + p + '</p>'; }).join('') + '</div>' +
-      '<div class="btn-row">' + choicesHtml + '</div>' +
+      '<p class="hover-hint idle" id="hover-hint">Look around — reach for something in the scene.</p>' +
     '</div>'
   );
-  Array.prototype.forEach.call(stage.querySelectorAll('.choice-btn'), function (btn) {
-    btn.addEventListener('click', function () {
-      var choice = node.choices[Number(btn.dataset.idx)];
-      state.lastChoice = choice;
-      addFlags(state.flags.method, choice.method || {});
-      addFlags(state.flags.trust, choice.trust || {});
-      if (node.onSelect) node.onSelect(state, choice);
-      renderSyncIntro(node, choice);
-    });
-  });
+  setBackdropHTML('node:' + node.id, buildSceneSVG(node), function () { bindHotspots(node); });
+}
+
+function activateChoice(node, idx, zone) {
+  var choice = node.choices[idx];
+  state.lastChoice = choice;
+  addFlags(state.flags.method, choice.method || {});
+  addFlags(state.flags.trust, choice.trust || {});
+  if (node.onSelect) node.onSelect(state, choice);
+  Array.prototype.forEach.call(backdropEl.querySelectorAll('.hotspot-group'), function (g) { g.style.pointerEvents = 'none'; });
+  playHandReach(zone, function () { renderSyncIntro(node, choice); });
 }
 
 function renderSyncIntro(node, choice) {
