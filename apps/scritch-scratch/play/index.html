@@ -4049,7 +4049,7 @@ function loop() {
     if (!puppiesSpawned) {
       if (++puppyTimer >= 60 * 90) {
         puppiesSpawned = true;
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0, _litter = 1 + Math.floor(Math.random() * 3); i < _litter; i++) {
           const col = DOG_COLORS[Math.floor(Math.random() * DOG_COLORS.length)];
           puppies.push(new Puppy(
             dog.x + (Math.random() - 0.5) * 40,
