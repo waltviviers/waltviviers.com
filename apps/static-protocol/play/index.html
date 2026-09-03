@@ -65,10 +65,31 @@
     position: absolute; top: 0; left: 50%; transform: translateX(-50%);
     width: 38%; height: 20px; background: #16171f; border-radius: 0 0 14px 14px; z-index: 80;
   }
+  /* On an actual phone, a drawn bezel is a phone showing a picture of a phone — pointless. Go edge-to-edge and let the real device be the device. */
+  @media (max-width: 480px) {
+    .device-wrap { padding: 0; background: var(--bg); }
+    .phone {
+      width: 100vw; height: 100vh; height: 100dvh;
+      max-width: none; aspect-ratio: unset;
+      border: none; border-radius: 0; box-shadow: none;
+    }
+    .notch { display: none; }
+    .status-bar {
+      padding-top: max(13px, env(safe-area-inset-top));
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+    }
+    .home-indicator { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  }
   .status-bar {
     flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between;
-    padding: 13px 20px 6px; font-size: 11.5px; letter-spacing: 0.02em; position: relative; z-index: 60;
+    padding: 24px 20px 6px; font-size: 11.5px; letter-spacing: 0.02em; position: relative; z-index: 60;
   }
+  .status-exit {
+    font-size: 9.5px; letter-spacing: 0.10em; text-transform: uppercase;
+    color: rgba(217,247,242,0.4); text-decoration: none; transition: color 0.2s;
+  }
+  .status-exit:hover { color: var(--cyan); }
   .status-right { display: flex; align-items: center; gap: 7px; }
   .signal-bars { display: flex; align-items: flex-end; gap: 2px; height: 10px; }
   .signal-bars i { width: 3px; display: block; background: rgba(217,247,242,0.22); border-radius: 1px; }
@@ -81,14 +102,6 @@
   #phone-screen { flex: 1 1 auto; overflow-y: auto; position: relative; }
   .home-indicator { flex: 0 0 auto; display: flex; justify-content: center; padding: 8px 0 12px; }
   .home-indicator span { width: 110px; height: 4px; border-radius: 3px; background: rgba(217,247,242,0.28); }
-
-  #exit-link {
-    position: fixed; top: max(14px, env(safe-area-inset-top)); left: max(14px, env(safe-area-inset-left)); z-index: 100;
-    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
-    color: rgba(217,247,242,0.4); text-decoration: none; border: 1px solid rgba(217,247,242,0.16);
-    padding: 7px 12px; transition: color 0.2s, border-color 0.2s;
-  }
-  #exit-link:hover { color: var(--cyan); border-color: var(--cyan-dim); }
 
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-thumb { background: rgba(34,230,212,0.25); }
@@ -274,6 +287,7 @@
   <div class="phone">
     <div class="notch" aria-hidden="true"></div>
     <div class="status-bar">
+      <a href="/apps/static-protocol/" class="status-exit">← Exit</a>
       <span id="clock-time">23:47</span>
       <div class="status-right">
         <div class="signal-bars" id="signal-bars" aria-hidden="true"><i></i><i></i><i></i></div>
@@ -284,7 +298,6 @@
     <div class="home-indicator" aria-hidden="true"><span></span></div>
   </div>
 </div>
-<a id="exit-link" href="/apps/static-protocol/">← Disconnect</a>
 
 <script>
 'use strict';
