@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Walt Viviers — Journal</title>
+    <link>https://waltviviers.com/blog/</link>
+    <atom:link href="https://waltviviers.com/feed.xml" rel="self" type="application/rss+xml" />
+    <description>Written essays by South African fine artist Walt Viviers.</description>
+    <language>en-ZA</language>
+    <lastBuildDate>Thu, 03 Sep 2026 00:00:00 +0200</lastBuildDate>
+    <item>
+      <title>On Beginning to Write</title>
+      <link>https://waltviviers.com/blog/on-beginning-to-write/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/on-beginning-to-write/</guid>
+      <pubDate>Thu, 03 Sep 2026 00:00:00 +0200</pubDate>
+      <description>A short note on why I'm starting to keep a written journal alongside the paintings.</description>
+    </item>
+  </channel>
+</rss>

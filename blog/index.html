@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Journal — Walt Viviers</title>
+  <meta name="description" content="Written essays by South African fine artist Walt Viviers — on making art, the studio, and the life around the work." />
+  <meta name="author" content="Walt Viviers" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://waltviviers.com/blog/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://waltviviers.com/blog/" />
+  <meta property="og:title" content="Journal — Walt Viviers" />
+  <meta property="og:description" content="Written essays by South African fine artist Walt Viviers." />
+  <meta property="og:site_name" content="Walt Viviers — Fine Art" />
+
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <link rel="alternate" type="application/rss+xml" title="Walt Viviers — Journal" href="/feed.xml" />
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#F5F3EF" media="(prefers-color-scheme: light)" />
+  <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"Walt Viviers — Journal","url":"https://waltviviers.com/blog/","author":{"@type":"Person","name":"Walt Viviers","url":"https://waltviviers.com"},"blogPost":[{"@type":"BlogPosting","headline":"On Beginning to Write","datePublished":"2026-09-03","url":"https://waltviviers.com/blog/on-beginning-to-write/"}]}</script>
+
+  <style>
+    
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+
+    :root {
+      --black:  #0C0C0B; --white: #FAF9F7; --ink: #FAF9F7;
+      --stone:  #9A9890; --rule:  #2A2826; --bg:  #000000; --bg2: #0D0D0D;
+      --serif:  'EB Garamond', Georgia, serif;
+      --sans:   'Inter', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--sans); background: var(--bg); color: var(--ink);
+      font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh;
+    }
+
+    /* Nav */
+    nav {
+      position: fixed; inset: 0 0 auto 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 100px; background: rgba(0,0,0,0.95);
+      backdrop-filter: blur(16px); border-bottom: 1px solid var(--rule);
+      transition: height 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    nav.scrolled { height: 50px; }
+    .nav-left { display: flex; align-items: center; gap: 14px; }
+    .nav-logo img { height: 36px; width: auto; transition: height 0.4s cubic-bezier(0.4,0,0.2,1); }
+    nav.scrolled .nav-logo img { height: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-family: var(--sans); font-size: 12px; font-weight: 400;
+      letter-spacing: 0.10em; text-transform: uppercase; color: var(--stone); transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    [data-theme="light"] .nav-links a:hover, [data-theme="light"] .nav-links a.active { color: var(--ink); }
+
+    .social-icons { display: flex; align-items: center; gap: 16px; }
+    .social-icons a {
+      display: flex; align-items: center; justify-content: center; color: var(--stone); transition: color 0.2s;
+    }
+    .social-icons a:hover { color: var(--white); }
+    .social-icons svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+    .theme-toggle {
+      position: relative; width: 60px; height: 32px; border-radius: 16px;
+      border: 1.5px solid #4A4844; background: transparent; cursor: pointer; padding: 0; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .toggle-thumb {
+      position: absolute; top: 4px; left: 4px; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--ink); display: flex; align-items: center; justify-content: center;
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    [data-theme="light"] .toggle-thumb { transform: translateX(28px); }
+    .toggle-thumb .icon-moon, .toggle-thumb .icon-sun {
+      width: 12px; height: 12px; fill: none; stroke: var(--bg); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+    }
+    .toggle-thumb .icon-moon { display: block; } .toggle-thumb .icon-sun { display: none; }
+    [data-theme="light"] .toggle-thumb .icon-moon { display: none; } [data-theme="light"] .toggle-thumb .icon-sun { display: block; }
+    nav.scrolled .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
+    nav.scrolled .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
+    nav.scrolled .toggle-thumb .icon-moon, nav.scrolled .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
+
+    /* Footer */
+    footer { padding: 40px 48px; border-top: 1px solid var(--rule); display: flex; justify-content: center; align-items: center; position: relative; }
+    .footer-social { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .footer-social .social-icons { gap: 24px; }
+    .footer-social .social-icons svg { width: 22px; height: 22px; }
+    .footer-legal { margin-top: 8px; font-size: 11px; letter-spacing: 0.06em; color: var(--stone); line-height: 1.7; text-align: center; }
+
+    /* Light mode */
+    [data-theme="light"] { --ink: #0C0C0B; --stone: #6B6560; --rule: #D5D1CB; --bg: #F5F3EF; --bg2: #EDEAE5; }
+    [data-theme="light"] body { background: #F5F3EF; }
+    [data-theme="light"] nav { background: rgba(245,243,239,0.95); }
+    [data-theme="light"] .nav-logo img { filter: invert(1); }
+    [data-theme="light"] .theme-toggle { border-color: #D5D1CB; }
+    [data-theme="light"] .social-icons a:hover { color: var(--ink); }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; height: 50px; }
+      .nav-logo img { height: 28px; }
+      .nav-links { gap: 20px; }
+      .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
+      .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
+      .toggle-thumb .icon-moon, .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
+      footer { padding: 40px 24px 32px; }
+    }
+  
+
+    .journal-wrap { max-width: 720px; margin: 0 auto; padding: calc(100px + 56px) 24px 96px; }
+    .journal-head { margin-bottom: 56px; }
+    .journal-title { font-family: var(--serif); font-weight: 400; font-size: clamp(2.4rem, 8vw, 4rem); line-height: 1.05; margin-bottom: 16px; }
+    .journal-sub { font-family: var(--serif); font-size: 1.25rem; font-style: italic; color: var(--stone); }
+    .journal-rss { display: inline-block; margin-top: 20px; font-family: var(--sans); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); border: 1px solid var(--rule); padding: 8px 16px; transition: border-color 0.2s, color 0.2s; }
+    .journal-rss:hover { border-color: var(--stone); color: var(--ink); }
+
+    .post-list { display: flex; flex-direction: column; }
+    .post-card { display: block; padding: 32px 0; border-top: 1px solid var(--rule); transition: opacity 0.2s; }
+    .post-card:last-child { border-bottom: 1px solid var(--rule); }
+    .post-card:hover { opacity: 0.72; }
+    .post-card-date { font-family: var(--sans); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); margin-bottom: 10px; }
+    .post-card-title { font-family: var(--serif); font-weight: 400; font-size: 1.85rem; line-height: 1.15; margin-bottom: 10px; }
+    .post-card-desc { font-family: var(--serif); font-size: 1.1rem; line-height: 1.6; color: var(--stone); margin-bottom: 14px; }
+    .post-card-more { font-family: var(--sans); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); }
+
+    .journal-empty { font-family: var(--serif); font-size: 1.2rem; font-style: italic; color: var(--stone); padding: 40px 0; border-top: 1px solid var(--rule); }
+
+    @media (max-width: 900px) { .journal-wrap { padding: calc(50px + 40px) 22px 72px; } .post-card-title { font-size: 1.55rem; } }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-left">
+      <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
+        <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+      </a>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/#works">Artworks</a></li>
+      <li><a href="/#about">About</a></li>
+      <li><a href="/blog/" class="active">Journal</a></li>
+      <li>
+        <div class="social-icons">
+          <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="mailto:artist@waltviviers.com" aria-label="Email">
+            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+          </a>
+        </div>
+      </li>
+      <li>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
+          <span class="toggle-thumb">
+            <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+
+  <main class="journal-wrap">
+    <header class="journal-head">
+      <h1 class="journal-title">Journal</h1>
+      <p class="journal-sub">Written essays from the studio and the life around the work.</p>
+      <a class="journal-rss" href="/feed.xml">Subscribe via RSS</a>
+    </header>
+    <div class="post-list">
+
+      <a class="post-card" href="/blog/on-beginning-to-write/">
+        <div class="post-card-date">3 September 2026</div>
+        <h2 class="post-card-title">On Beginning to Write</h2>
+        <p class="post-card-desc">A short note on why I'm starting to keep a written journal alongside the paintings.</p>
+        <span class="post-card-more">Read →</span>
+      </a>
+    </div>
+  </main>
+
+
+  <footer>
+    <div class="footer-social">
+      <div class="social-icons">
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="mailto:artist@waltviviers.com" aria-label="Email">
+          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+        </a>
+      </div>
+      <div class="footer-legal">
+        <span>© 2026 Walt Viviers. All rights reserved.</span>
+        <a href="/privacy/" style="color:inherit;">Privacy Policy.</a>
+        <span>Made with <span style="color:#e0607e">&#9829;</span> by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Cat&#39;s Creations</a></span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var html = document.documentElement;
+      document.getElementById('theme-toggle').addEventListener('click', function () {
+        var next = html.dataset.theme === 'light' ? 'dark' : 'light';
+        html.dataset.theme = next;
+        localStorage.setItem('wv-theme', next);
+      });
+      var nav = document.querySelector('nav'); var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) { requestAnimationFrame(function () { nav.classList.toggle('scrolled', window.scrollY > 40); ticking = false; }); ticking = true; }
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
