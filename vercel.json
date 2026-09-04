@@ -6,8 +6,8 @@
     { "source": "/apps/neurotrace/privacy-policy/", "destination": "/apps/neurotracer/privacy-policy/", "permanent": true },
     { "source": "/apps/bill_tipper/", "destination": "/apps/billtipper/", "permanent": true },
     { "source": "/apps/bill_tipper/privacy-policy/", "destination": "/apps/billtipper/privacy-policy/", "permanent": true },
-    { "source": "/staticprotocol", "destination": "https://waltviviers.github.io/Static-Protocol/", "permanent": false },
-    { "source": "/staticprotocol/", "destination": "https://waltviviers.github.io/Static-Protocol/", "permanent": false }
+    { "source": "/apps/static-protocol/play", "destination": "https://waltviviers.github.io/Static-Protocol/", "permanent": false },
+    { "source": "/apps/static-protocol/play/", "destination": "https://waltviviers.github.io/Static-Protocol/", "permanent": false }
   ],
   "headers": [
     {
