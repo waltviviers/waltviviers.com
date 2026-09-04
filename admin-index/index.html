@@ -460,6 +460,15 @@
       <div class="page-table" id="table-core"></div>
     </div>
 
+    <!-- Journal -->
+    <div class="section" id="section-blog">
+      <div class="section-head">
+        <span class="section-title">Journal</span>
+        <span class="section-count">2 pages</span>
+      </div>
+      <div class="page-table" id="table-blog"></div>
+    </div>
+
     <!-- Document pages -->
     <div class="section" id="section-docs">
       <div class="section-head">
@@ -473,7 +482,7 @@
     <div class="section" id="section-apps">
       <div class="section-head">
         <span class="section-title">Apps</span>
-        <span class="section-count">9 pages</span>
+        <span class="section-count">10 pages</span>
       </div>
       <div class="page-table" id="table-apps"></div>
     </div>
@@ -520,6 +529,10 @@
         { path: '/photography/', title: 'Photography', desc: 'Photo albums — open in Google Photos', robots: 'index, follow', file: 'photography/index.html' },
         { path: '/gallery/', title: 'Artworks Index', desc: 'All works collection page', robots: 'index, follow', file: 'gallery/index.html' },
       ],
+      blog: [
+        { path: '/blog/', title: 'Journal', desc: 'Blog index — writing on art, process, and practice', robots: 'index, follow', file: 'blog/index.html' },
+        { path: '/blog/on-beginning-to-write/', title: 'On Beginning to Write', desc: 'Blog post', robots: 'index, follow, max-image-preview:large', file: 'blog/on-beginning-to-write/index.html' },
+      ],
       docs: [
         { path: '/master-cv/', title: 'Master CV', desc: 'Full career CV — PDF viewer', robots: 'noindex, follow', file: 'master-cv/index.html' },
         { path: '/budtender-cv/', title: 'Budtender CV', desc: 'Cannabis dispensary CV', robots: 'noindex, follow', file: 'budtender-cv/index.html' },
@@ -537,6 +550,7 @@
         { path: '/apps/neurotracer/privacy-policy/', title: 'Neurotracer — Privacy', desc: 'Privacy policy', robots: 'noindex, follow', file: 'apps/neurotracer/privacy-policy/index.html' },
         { path: '/apps/ratsim/', title: 'Pet Rat Simulator', desc: 'Pet rat game (coming soon)', robots: 'noindex, follow', file: 'apps/ratsim/index.html' },
         { path: '/apps/ratsim/play/', title: 'Pet Rat Simulator — Play', desc: 'The playable browser game', robots: 'no-meta', file: 'apps/ratsim/play/index.html' },
+        { path: '/apps/static-protocol/play/', title: 'Static Protocol', desc: 'Cyberpunk data-heist interactive story — redirects to GitHub Pages', robots: 'no-meta', file: 'vercel.json' },
       ],
       works: [
         { path: '/gallery/apocalypse-meow-2017/', title: 'Apocalypse Meow (2017)', robots: 'index, follow', file: 'gallery/apocalypse-meow-2017/index.html' },
@@ -673,6 +687,7 @@
 
     function renderAll() {
       renderTable('table-core', pages.core);
+      renderTable('table-blog', pages.blog);
       renderTable('table-docs', pages.docs);
       renderTable('table-apps', pages.apps);
       renderTable('table-works', pages.works);
@@ -694,7 +709,7 @@
     function renderChanges() {
       var banner = document.getElementById('changes-banner');
       var list = document.getElementById('change-list');
-      var allPages = [].concat(pages.core, pages.docs, pages.apps, pages.works, pages.admin);
+      var allPages = [].concat(pages.core, pages.blog, pages.docs, pages.apps, pages.works, pages.admin);
       var changed = [];
 
       allPages.forEach(function (p) {
@@ -743,7 +758,7 @@
 
     /* ── Generate Claude request ── */
     document.getElementById('apply-btn').addEventListener('click', function () {
-      var allPages = [].concat(pages.core, pages.docs, pages.apps, pages.works, pages.admin);
+      var allPages = [].concat(pages.core, pages.blog, pages.docs, pages.apps, pages.works, pages.admin);
       var pending = [];
       allPages.forEach(function (p) {
         var key = p.path;
