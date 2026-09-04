@@ -1420,14 +1420,13 @@
 
       .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
-      .toggle-thumb .icon-moon,
-      .toggle-thumb .icon-sun { font-size: 17px; }
-      /* mobile: hide the line icons, show the day/night emoji per theme */
-      .toggle-thumb svg.icon-moon, .toggle-thumb svg.icon-sun { display: none !important; }
-      .toggle-thumb .emoji-moon { display: block; font-size: 17px; line-height: 1; }
-      .toggle-thumb .emoji-sun { display: none; font-size: 17px; line-height: 1; }
-      [data-theme="light"] .toggle-thumb .emoji-moon { display: none; }
-      [data-theme="light"] .toggle-thumb .emoji-sun { display: block; }
+      /* mobile: use the line icons (the thumb has no background here, so stroke in --stone) */
+      .toggle-thumb svg.icon-moon,
+      .toggle-thumb svg.icon-sun { width: 18px; height: 18px; stroke: var(--stone); }
+      .theme-toggle:hover svg.icon-moon,
+      .theme-toggle:hover svg.icon-sun { stroke: var(--ink); }
+      .toggle-thumb .emoji-moon,
+      .toggle-thumb .emoji-sun { display: none !important; }
 
       .hero {
         min-height: clamp(480px, 76vh, 680px);
