@@ -178,8 +178,8 @@
   }
   </script>
 
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" /></noscript>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" /></noscript>
   <style>
 
     /* ── Skip nav ───────────────────────────────── */
@@ -328,6 +328,20 @@
       color: var(--black) !important;
       border-color: var(--white) !important;
     }
+
+    /* Journal — handwritten accent, sits to the right of Enquire */
+    .nav-links a.nav-journal {
+      font-family: 'Caveat', 'Segoe Script', cursive;
+      font-size: 22px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.01em !important;
+      text-transform: none !important;
+      color: var(--white);
+      line-height: 1;
+    }
+    .nav-links a.nav-journal:hover { color: var(--stone); }
+    [data-theme="light"] .nav-links a.nav-journal { color: var(--ink); }
+    [data-theme="light"] .nav-links a.nav-journal:hover { color: var(--stone); }
 
     /* ── Hero / Featured Work ────────────────────── */
     /* ── Fine-art hero (full-bleed, overlaid) ── */
@@ -1531,6 +1545,8 @@
     .mobile-menu-link-cta { color: var(--ink); margin-top: 4px; }
     .mobile-menu-link-cta:hover { color: var(--stone); }
     .mobile-menu-arrow { font-size: 1.4rem; opacity: 0.4; }
+    .mobile-menu-journal { font-family: 'Caveat', 'Segoe Script', cursive; font-weight: 600; color: var(--ink); }
+    .mobile-menu-journal:hover { color: var(--stone); }
 
     .mobile-menu-foot {
       padding-top: 32px;
@@ -1638,8 +1654,8 @@
       <li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography &amp; Video</a></li>
       <li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-works">Fine Art &amp; Illustration</a></li>
       <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>
-      <li class="nav-link-hide"><a href="/blog/" data-i18n="nav-journal">Journal</a></li>
       <li class="nav-link-hide"><a href="#enquire" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
+      <li class="nav-link-hide"><a href="/blog/" class="nav-journal" data-i18n="nav-journal">Journal</a></li>
       <li>
         <div class="social-icons">
           <a href="https://instagram.com/waltviviers" target="_blank" aria-label="Instagram">
@@ -1678,8 +1694,8 @@
       <a href="/photography/" class="mobile-menu-link" data-i18n="nav-photography">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>
       <a href="/gallery/" class="mobile-menu-link" data-i18n="nav-works">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>
       <a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio &amp; Statement <span class="mobile-menu-arrow">↗</span></a>
-      <a href="/blog/" class="mobile-menu-link" data-i18n="nav-journal">Journal <span class="mobile-menu-arrow">↗</span></a>
       <a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/blog/" class="mobile-menu-link mobile-menu-journal" data-i18n="nav-journal">Journal <span class="mobile-menu-arrow">↗</span></a>
     </div>
     <div class="mobile-menu-foot">
       <a href="/admin-index/" class="mobile-admin-btn">Admin</a>
