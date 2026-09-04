@@ -1578,7 +1578,7 @@
     /* Global Enquire modal + Book-a-Consultation FAB */
     .gx-fab { display: none; }
     @media (max-width: 900px) {
-      .gx-fab { display: inline-block; position: fixed; right: 16px; bottom: 16px; z-index: 250; background: var(--ink); color: var(--bg); border: none; padding: 13px 22px; border-radius: 40px; font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; cursor: pointer; box-shadow: 0 6px 22px rgba(0,0,0,0.4); }
+      .gx-fab { display: inline-block; position: fixed; right: 16px; bottom: 26px; z-index: 250; background: var(--ink); color: var(--bg); border: none; padding: 13px 22px; border-radius: 40px; font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; cursor: pointer; box-shadow: 0 6px 22px rgba(0,0,0,0.4); }
     }
     .gx-modal { position: fixed; inset: 0; z-index: 400; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); padding: 24px; }
     .gx-modal.open { display: flex; }
@@ -1621,6 +1621,8 @@
     @media (max-width: 900px) { .scritch-fab { bottom: 16px; } } /* level with the Enquire FAB on mobile */
     /* While the privacy notice is showing, lift the game icon clear above it */
     body.privacy-visible .scritch-fab { bottom: max(90px, calc(var(--privacy-h, 48px) + 28px)); }
+    /* Lift the Enquire FAB with the notice too, level with the game icons */
+    body.privacy-visible .gx-fab { bottom: max(101px, calc(var(--privacy-h, 48px) + 39px)); }
     /* Custom hand pointer, site-wide */
     html, body, body * { cursor: url('/images/pointer_up.png') 3 1, auto !important; }
     body *:active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
