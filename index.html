@@ -1521,6 +1521,10 @@
     }
     .mobile-menu.is-open { opacity: 1; pointer-events: auto; }
     body.menu-open { overflow: hidden; }
+    /* Keep the floating buttons under the open menu, not over it */
+    body.menu-open .gx-fab,
+    body.menu-open .game-fab,
+    body.menu-open .scritch-fab { display: none !important; }
 
     .mobile-menu-links {
       display: flex; flex-direction: column;
