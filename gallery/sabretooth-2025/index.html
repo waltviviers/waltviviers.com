@@ -483,12 +483,17 @@
     .game-fab {
       position: fixed; left: 16px; bottom: 170px; z-index: 150; width: 56px; height: 56px;
       display: flex; align-items: center; justify-content: center; border-radius: 50%;
-      background: rgba(6, 20, 18, 0.55); border: 1.5px solid rgba(34, 230, 212, 0.75);
-      box-shadow: 0 5px 10px rgba(0,0,0,0.35);
-      transition: transform 0.18s ease, bottom 0.2s ease;
+      background: rgba(6, 20, 18, 0.55); border: 1px solid rgba(34, 230, 212, 0.35);
+      box-shadow: 0 0 16px rgba(34,230,212,0.45), 0 0 32px rgba(34,230,212,0.25), 0 5px 10px rgba(0,0,0,0.35);
+      transition: transform 0.18s ease, bottom 0.2s ease, box-shadow 0.2s ease;
+      animation: gameFabGlow 2.6s ease-in-out infinite;
     }
     .game-fab svg { width: 22px; height: 22px; }
     .game-fab:hover { transform: translateY(-3px) scale(1.07); }
+    @keyframes gameFabGlow {
+      0%, 100% { box-shadow: 0 0 16px rgba(34,230,212,0.45), 0 0 32px rgba(34,230,212,0.25), 0 5px 10px rgba(0,0,0,0.35); }
+      50% { box-shadow: 0 0 24px rgba(34,230,212,0.75), 0 0 48px rgba(34,230,212,0.42), 0 5px 10px rgba(0,0,0,0.35); }
+    }
     @media (max-width: 900px) { .game-fab { bottom: 96px; } }
     body.privacy-visible .game-fab { bottom: max(170px, calc(var(--privacy-h, 48px) + 108px)); }
     /* Scritch Scratch floating button (dog badge, hover reaction) */
