@@ -788,13 +788,6 @@
   </div>
 
   <div class="page-wrap">
-    <div class="page-head">
-      <div class="page-head-meta">
-        <span class="works-count" id="works-count"></span>
-        <a href="/" class="back-link" data-i18n="back-home">← Back to home</a>
-      </div>
-    </div>
-
     <div class="sort-bar" id="sort-bar">
       <button class="sort-btn" data-sort="az"><span class="sort-emoji">✋ </span>A→Z</button>
       <button class="sort-btn" data-sort="za"><span class="sort-emoji">🖖 </span>Z→A</button>
@@ -963,8 +956,6 @@
         .then(function (r) { return r.json(); })
         .then(function (data) {
           allWorks = data.artworks;
-          document.getElementById('works-count').textContent =
-            allWorks.length + ' work' + (allWorks.length !== 1 ? 's' : '');
           renderGrid(allWorks);
 
           document.querySelectorAll('.sort-btn').forEach(function (btn) {
