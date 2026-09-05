@@ -32,6 +32,7 @@
   <link rel="me" href="https://www.instagram.com/waltviviers" />
   <link rel="me" href="https://www.linkedin.com/in/waltviviers" />
   <link rel="me" href="mailto:artist@waltviviers.com" />
+  <link rel="alternate" type="application/rss+xml" href="/feed.xml" title="Walt Viviers — Journal" />
   <link rel="alternate" type="application/json" href="/data/artworks.json" />
   <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM summary" />
   <link rel="alternate" type="text/plain" href="/llms-full.txt" title="LLM full reference" />
@@ -177,8 +178,8 @@
   }
   </script>
 
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" /></noscript>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" /></noscript>
   <style>
 
     /* ── Skip nav ───────────────────────────────── */
@@ -327,6 +328,20 @@
       color: var(--black) !important;
       border-color: var(--white) !important;
     }
+
+    /* Journal — handwritten accent, sits to the right of Enquire */
+    .nav-links a.nav-journal {
+      font-family: 'Caveat', 'Segoe Script', cursive;
+      font-size: 22px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.01em !important;
+      text-transform: none !important;
+      color: var(--white);
+      line-height: 1;
+    }
+    .nav-links a.nav-journal:hover { color: var(--stone); }
+    [data-theme="light"] .nav-links a.nav-journal { color: var(--ink); }
+    [data-theme="light"] .nav-links a.nav-journal:hover { color: var(--stone); }
 
     /* ── Hero / Featured Work ────────────────────── */
     /* ── Fine-art hero (full-bleed, overlaid) ── */
@@ -1405,14 +1420,13 @@
 
       .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
-      .toggle-thumb .icon-moon,
-      .toggle-thumb .icon-sun { font-size: 17px; }
-      /* mobile: hide the line icons, show the day/night emoji per theme */
-      .toggle-thumb svg.icon-moon, .toggle-thumb svg.icon-sun { display: none !important; }
-      .toggle-thumb .emoji-moon { display: block; font-size: 17px; line-height: 1; }
-      .toggle-thumb .emoji-sun { display: none; font-size: 17px; line-height: 1; }
-      [data-theme="light"] .toggle-thumb .emoji-moon { display: none; }
-      [data-theme="light"] .toggle-thumb .emoji-sun { display: block; }
+      /* mobile: use the line icons (the thumb has no background here, so stroke in --stone) */
+      .toggle-thumb svg.icon-moon,
+      .toggle-thumb svg.icon-sun { width: 18px; height: 18px; stroke: var(--stone); }
+      .theme-toggle:hover svg.icon-moon,
+      .theme-toggle:hover svg.icon-sun { stroke: var(--ink); }
+      .toggle-thumb .emoji-moon,
+      .toggle-thumb .emoji-sun { display: none !important; }
 
       .hero {
         min-height: clamp(480px, 76vh, 680px);
@@ -1506,6 +1520,10 @@
     }
     .mobile-menu.is-open { opacity: 1; pointer-events: auto; }
     body.menu-open { overflow: hidden; }
+    /* Keep the floating buttons under the open menu, not over it */
+    body.menu-open .gx-fab,
+    body.menu-open .game-fab,
+    body.menu-open .scritch-fab { display: none !important; }
 
     .mobile-menu-links {
       display: flex; flex-direction: column;
@@ -1530,6 +1548,8 @@
     .mobile-menu-link-cta { color: var(--ink); margin-top: 4px; }
     .mobile-menu-link-cta:hover { color: var(--stone); }
     .mobile-menu-arrow { font-size: 1.4rem; opacity: 0.4; }
+    .mobile-menu-journal { font-family: 'Caveat', 'Segoe Script', cursive; font-weight: 600; color: var(--ink); }
+    .mobile-menu-journal:hover { color: var(--stone); }
 
     .mobile-menu-foot {
       padding-top: 32px;
@@ -1558,7 +1578,7 @@
     /* Global Enquire modal + Book-a-Consultation FAB */
     .gx-fab { display: none; }
     @media (max-width: 900px) {
-      .gx-fab { display: inline-block; position: fixed; right: 16px; bottom: 16px; z-index: 250; background: var(--ink); color: var(--bg); border: none; padding: 13px 22px; border-radius: 40px; font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; cursor: pointer; box-shadow: 0 6px 22px rgba(0,0,0,0.4); }
+      .gx-fab { display: inline-block; position: fixed; right: 16px; bottom: 26px; z-index: 250; background: var(--ink); color: var(--bg); border: none; padding: 13px 22px; border-radius: 40px; font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; cursor: pointer; box-shadow: 0 6px 22px rgba(0,0,0,0.4); }
     }
     .gx-modal { position: fixed; inset: 0; z-index: 400; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); padding: 24px; }
     .gx-modal.open { display: flex; }
@@ -1579,6 +1599,18 @@
     [data-theme="light"] .gx-box { background: #F5F3EF; }
     [data-theme="light"] .gx-field input, [data-theme="light"] .gx-field textarea, [data-theme="light"] .gx-field select { background: #FAF9F7; border-color: #D5D1CB; color: #0C0C0B; }
     [data-theme="light"] .gx-submit { background: #0C0C0B; color: #FAF9F7; }
+    /* Static Protocol floating button (turquoise glowing triangle, opens the game) */
+    .game-fab {
+      position: fixed; left: 94px; bottom: 95px; z-index: 150; width: 56px; height: 56px;
+      display: flex; align-items: center; justify-content: center; border-radius: 50%;
+      background: rgba(6, 20, 18, 0.55); border: 1px solid rgba(34, 230, 212, 0.35);
+      box-shadow: 0 0 16px rgba(34,230,212,0.45), 0 0 32px rgba(34,230,212,0.25), 0 5px 10px rgba(0,0,0,0.35);
+      transition: transform 0.18s ease, bottom 0.2s ease, box-shadow 0.2s ease;
+    }
+    .game-fab svg { width: 22px; height: 22px; }
+    .game-fab:hover { transform: translateY(-3px) scale(1.07); }
+    @media (max-width: 900px) { .game-fab { bottom: 21px; } }
+    body.privacy-visible .game-fab { bottom: max(95px, calc(var(--privacy-h, 48px) + 33px)); }
     /* Scritch Scratch floating button (dog badge, hover reaction) */
     .scritch-fab { position: fixed; left: 16px; bottom: 90px; z-index: 150; width: 66px; height: 66px; display: block; transition: transform 0.18s ease, bottom 0.2s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.35)); }
     .scritch-fab img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
@@ -1589,6 +1621,8 @@
     @media (max-width: 900px) { .scritch-fab { bottom: 16px; } } /* level with the Enquire FAB on mobile */
     /* While the privacy notice is showing, lift the game icon clear above it */
     body.privacy-visible .scritch-fab { bottom: max(90px, calc(var(--privacy-h, 48px) + 28px)); }
+    /* Lift the Enquire FAB with the notice too, level with the game icons */
+    body.privacy-visible .gx-fab { bottom: max(101px, calc(var(--privacy-h, 48px) + 39px)); }
     /* Custom hand pointer, site-wide */
     html, body, body * { cursor: url('/images/pointer_up.png') 3 1, auto !important; }
     body *:active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
@@ -1621,6 +1655,7 @@
       <li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-works">Fine Art &amp; Illustration</a></li>
       <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>
       <li class="nav-link-hide"><a href="#enquire" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
+      <li class="nav-link-hide"><a href="/blog/" class="nav-journal" data-i18n="nav-journal">Journal</a></li>
       <li>
         <div class="social-icons">
           <a href="https://instagram.com/waltviviers" target="_blank" aria-label="Instagram">
@@ -1660,6 +1695,7 @@
       <a href="/gallery/" class="mobile-menu-link" data-i18n="nav-works">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>
       <a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio &amp; Statement <span class="mobile-menu-arrow">↗</span></a>
       <a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/blog/" class="mobile-menu-link mobile-menu-journal" data-i18n="nav-journal">Journal <span class="mobile-menu-arrow">↗</span></a>
     </div>
     <div class="mobile-menu-foot">
       <a href="/admin-index/" class="mobile-admin-btn">Admin</a>
@@ -1970,7 +2006,7 @@
   (function () {
     var T = {
       en: {
-        'nav-works': 'Fine Art & Illustration', 'nav-photography': 'Photography & Video', 'nav-apps': 'Apps & Games', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-enquire': 'Enquire',
+        'nav-works': 'Fine Art & Illustration', 'nav-photography': 'Photography & Video', 'nav-apps': 'Apps & Games', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-journal': 'Journal', 'nav-enquire': 'Enquire',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on', 'view-gallery': 'View Gallery ↗',
         'art-intro-eyebrow': 'Fine Art & Illustration', 'art-intro-headline': 'Bold originals — from the iconic to the unexpected', 'art-intro-desc': 'Acrylic and mixed-media paintings that read with clarity from across the room and reveal expressive, unmistakable brushwork up close — held in private collections across South Africa and abroad.',
@@ -2014,7 +2050,7 @@
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.'
       },
       af: {
-        'nav-works': 'Skone Kunste & Illustrasie', 'nav-photography': 'Fotografie & Video', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-enquire': 'Navraag',
+        'nav-works': 'Skone Kunste & Illustrasie', 'nav-photography': 'Fotografie & Video', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-journal': 'Joernaal', 'nav-enquire': 'Navraag',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
         'art-intro-eyebrow': 'Skone Kunste & Illustrasie', 'art-intro-headline': 'Gedurfde oorspronklikes — van die ikoniese tot die onverwagte', 'art-intro-desc': 'Akriel- en gemengde-media skilderye wat met helderheid van oorkant die kamer lees en van naby uitdrukkingsvolle, onmiskenbare kwaswerk openbaar — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
@@ -2698,6 +2734,9 @@
     })();
   </script>
   <!-- Scritch Scratch floating icon -->
+  <a href="/apps/static-protocol/play/" class="game-fab" aria-label="Play Static Protocol">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6l6 6-6 6" stroke="#22e6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="18" x2="20" y2="18" stroke="#22e6d4" stroke-width="2" stroke-linecap="round"/></svg>
+  </a>
   <a href="https://waltviviers.com/apps/scritch-scratch/play/" class="scritch-fab" aria-label="Play Scritch Scratch">
     <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Scritch Scratch" width="64" height="64" loading="lazy" />
     <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" loading="lazy" />
