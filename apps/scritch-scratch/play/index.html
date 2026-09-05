@@ -168,14 +168,21 @@
       .walt-logo img { height: 28px; }
     }
 
-    /* Time-of-day dial — sun/moon next to WALT logo (hidden until a game mode starts) */
+    /* Time-of-day dial — sun/moon + phase label next to WALT logo (hidden until a game mode starts) */
     #time-dial {
       position: fixed; top: 39px; left: 134px; z-index: 450;
-      width: 20px; height: 20px; pointer-events: none; display: none;
+      display: none; align-items: center; gap: 6px; pointer-events: none;
     }
+    #dial-icon { position: relative; width: 20px; height: 20px; flex-shrink: 0; }
     #dial-sun, #dial-moon { position: absolute; top: 0; left: 0; }
+    #dial-label {
+      font: 700 8px/1 monospace; letter-spacing: 0.06em; text-transform: uppercase;
+      white-space: nowrap; color: rgba(255,255,255,0.82); text-shadow: 0 1px 3px rgba(0,0,0,0.75);
+    }
     @media (max-width: 900px), (orientation: portrait) {
-      #time-dial { top: 15px; left: 100px; width: 16px; height: 16px; }
+      #time-dial { top: 15px; left: 100px; gap: 5px; }
+      #dial-icon { width: 16px; height: 16px; }
+      #dial-label { font-size: 7px; }
     }
   </style>
 </head>
@@ -185,22 +192,25 @@
   <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
 </button>
 <div id="time-dial" aria-hidden="true">
-  <svg id="dial-sun" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="10" cy="10" r="4" fill="#FFD000"/>
-    <g stroke="#FFD000" stroke-width="1.5" stroke-linecap="round">
-      <line x1="10" y1="1" x2="10" y2="3.2"/>
-      <line x1="10" y1="16.8" x2="10" y2="19"/>
-      <line x1="1" y1="10" x2="3.2" y2="10"/>
-      <line x1="16.8" y1="10" x2="19" y2="10"/>
-      <line x1="3.64" y1="3.64" x2="5.2" y2="5.2"/>
-      <line x1="14.8" y1="14.8" x2="16.36" y2="16.36"/>
-      <line x1="16.36" y1="3.64" x2="14.8" y2="5.2"/>
-      <line x1="5.2" y1="14.8" x2="3.64" y2="16.36"/>
-    </g>
-  </svg>
-  <svg id="dial-moon" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg" style="opacity:0">
-    <path d="M17 10.67A7 7 0 1 1 9.33 3 5.5 5.5 0 0 0 17 10.67z" fill="#C8D8FF"/>
-  </svg>
+  <span id="dial-icon">
+    <svg id="dial-sun" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="10" cy="10" r="4" fill="#FFD000"/>
+      <g stroke="#FFD000" stroke-width="1.5" stroke-linecap="round">
+        <line x1="10" y1="1" x2="10" y2="3.2"/>
+        <line x1="10" y1="16.8" x2="10" y2="19"/>
+        <line x1="1" y1="10" x2="3.2" y2="10"/>
+        <line x1="16.8" y1="10" x2="19" y2="10"/>
+        <line x1="3.64" y1="3.64" x2="5.2" y2="5.2"/>
+        <line x1="14.8" y1="14.8" x2="16.36" y2="16.36"/>
+        <line x1="16.36" y1="3.64" x2="14.8" y2="5.2"/>
+        <line x1="5.2" y1="14.8" x2="3.64" y2="16.36"/>
+      </g>
+    </svg>
+    <svg id="dial-moon" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg" style="opacity:0">
+      <path d="M17 10.67A7 7 0 1 1 9.33 3 5.5 5.5 0 0 0 17 10.67z" fill="#C8D8FF"/>
+    </svg>
+  </span>
+  <span id="dial-label">Morning</span>
 </div>
 <div id="game-menu" class="overlay">
   <div class="game-menu-inner">
@@ -296,8 +306,9 @@
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
-const _dialSun  = document.getElementById('dial-sun');
-const _dialMoon = document.getElementById('dial-moon');
+const _dialSun   = document.getElementById('dial-sun');
+const _dialMoon  = document.getElementById('dial-moon');
+const _dialLabel = document.getElementById('dial-label');
 
 const S = 5;
 const DW = 10, DH = 8;
@@ -3005,7 +3016,7 @@ function updateFab() {
 }
 
 function enterRatMode() {
-  _dialSun.closest('#time-dial').style.display = 'block';
+  _dialSun.closest('#time-dial').style.display = 'flex';
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'rat';
   happiness = 80;
@@ -3030,7 +3041,7 @@ function enterRatMode() {
 }
 
 function enterDogMode() {
-  _dialSun.closest('#time-dial').style.display = 'block';
+  _dialSun.closest('#time-dial').style.display = 'flex';
   if (gameMode === 'rat') saveRatState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'dog';
   happiness = 80;
@@ -3057,7 +3068,7 @@ function enterDogMode() {
 }
 
 function enterCatMode() {
-  _dialSun.closest('#time-dial').style.display = 'block';
+  _dialSun.closest('#time-dial').style.display = 'flex';
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'rat') saveRatState();
   gameMode = 'cat';
   happiness = 80;
@@ -3940,6 +3951,7 @@ function drawDynamicLighting() {
                 : phase < 0.88 ? 1 : Math.max(1 - (phase - 0.88) / 0.10, 0);
     _dialSun.style.opacity = sunO;
     _dialMoon.style.opacity = moonO;
+    _dialLabel.textContent = phase < 0.25 ? 'Morning' : phase < 0.45 ? 'Afternoon' : phase < 0.70 ? 'Evening' : 'Night';
   }
   let col, alpha;
   if (phase < 0.06) {
