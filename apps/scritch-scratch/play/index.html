@@ -1047,6 +1047,9 @@ const RAT_BOTTLE_SPR = [
   [1,1,1,1,1],
   [1,1,1,1,1],
   [1,1,1,1,1],
+  [1,1,1,1,1],
+  [1,1,1,1,1],
+  [1,1,1,1,1],
   [0,0,1,0,0],
 ];
 const RAT_RBOWL_SPR = [
@@ -1055,7 +1058,7 @@ const RAT_RBOWL_SPR = [
   [1,1,1,1],
   [0,1,1,0],
 ];
-const RAT_BOTTLE_SC = 5, RAT_BOWL_SC = 5;
+const RAT_BOTTLE_SC = 5, RAT_BOWL_SC = 7;
 const RAT_BED_SPR = [
   [0,0,0,1,1,1,1,1,1,1,1,0,0,0],
   [0,0,1,1,0,0,0,1,0,0,1,1,0,0],
@@ -1066,7 +1069,7 @@ const RAT_BED_SPR = [
 const RAT_BED_SC = 6;
 
 let ratBottle = null, ratFoodBowl = null, ratBed = null;
-let ratHouse = null, ratCarrot = null;
+let ratHouse = null, ratHouse2 = null, ratCarrot = null;
 let ratBirthCount = 0;
 
 function drawRatBackground() {
@@ -1095,7 +1098,8 @@ function placeRatFurniture() {
   ratFoodBowl = { x: w * 0.88 - RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, y: h * 0.25 };
   ratBed = { x: w / 2 - RAT_BED_SPR[0].length * RAT_BED_SC / 2, y: h * 0.7 };
   ratHouse = { x: Math.round(w * 0.72), y: Math.round(h * 0.55), w: 34, h: 30 };
-  ratCarrot = { x: Math.round(w * 0.30), y: Math.round(h * 0.84), len: 16 };
+  ratHouse2 = { x: Math.round(w * 0.15), y: Math.round(h * 0.50), w: 34, h: 30 };
+  ratCarrot = { x: Math.round(w * 0.30), y: Math.round(h * 0.84), len: 20 };
 }
 
 function drawRatFurniture() {
@@ -1127,8 +1131,8 @@ function drawRatFurniture() {
   }
 
   // Little house — rats pop inside for a bit
-  if (ratHouse) {
-    const hs = ratHouse;
+  for (const hs of [ratHouse, ratHouse2]) {
+    if (!hs) continue;
     ctx.fillStyle = '#8a5a3a'; ctx.fillRect(hs.x, hs.y + 8, hs.w, hs.h - 8);
     ctx.fillStyle = '#7a4a2c'; ctx.fillRect(hs.x, hs.y + 8, hs.w, 3);
     ctx.fillStyle = '#b83a2a';
@@ -1143,11 +1147,11 @@ function drawRatFurniture() {
   if (ratCarrot) {
     const cr = ratCarrot;
     ctx.fillStyle = '#e07a20';
-    for (let i = 0; i < cr.len; i++) { const tt = (cr.len - i) / cr.len; const hh = Math.max(1, Math.round(1 + tt * 4)); ctx.fillRect(cr.x + i, cr.y - hh, 1, hh * 2); }
-    ctx.fillStyle = '#f0993a'; ctx.fillRect(cr.x + 3, cr.y - 2, cr.len - 6, 1);
-    ctx.fillStyle = 'rgba(150,70,10,0.5)'; for (let i = 4; i < cr.len - 2; i += 4) ctx.fillRect(cr.x + i, cr.y - 3, 1, 6);
+    for (let i = 0; i < cr.len; i++) { const tt = (cr.len - i) / cr.len; const hh = Math.max(2, Math.round(2 + tt * 8)); ctx.fillRect(cr.x + i * 2, cr.y - hh, 2, hh * 2); }
+    ctx.fillStyle = '#f0993a'; ctx.fillRect(cr.x + 6, cr.y - 4, (cr.len - 6) * 2, 2);
+    ctx.fillStyle = 'rgba(150,70,10,0.5)'; for (let i = 4; i < cr.len - 2; i += 4) ctx.fillRect(cr.x + i * 2, cr.y - 6, 2, 12);
     ctx.fillStyle = '#3a9a30';
-    ctx.fillRect(cr.x + cr.len, cr.y - 4, 2, 3); ctx.fillRect(cr.x + cr.len + 1, cr.y - 7, 2, 5); ctx.fillRect(cr.x + cr.len + 2, cr.y - 4, 2, 3);
+    ctx.fillRect(cr.x + cr.len * 2, cr.y - 8, 3, 6); ctx.fillRect(cr.x + cr.len * 2 + 2, cr.y - 14, 3, 10); ctx.fillRect(cr.x + cr.len * 2 + 4, cr.y - 8, 3, 6);
   }
 }
 
@@ -1972,16 +1976,17 @@ class Rat {
         }
       }
     } else if (gameMode === 'rat' && !this.fleeing && !seekingCheese &&
-               (this.furnitureTarget === 'house' || this.furnitureTarget === 'carrot')) {
+               (this.furnitureTarget === 'house' || this.furnitureTarget === 'house2' || this.furnitureTarget === 'carrot')) {
       let ftx, fty;
-      if (this.furnitureTarget === 'house') { ftx = ratHouse.x + ratHouse.w / 2; fty = ratHouse.y + ratHouse.h - 6; }
-      else { ftx = ratCarrot.x + ratCarrot.len / 2; fty = ratCarrot.y; }
+      const _hs = this.furnitureTarget === 'house' ? ratHouse : this.furnitureTarget === 'house2' ? ratHouse2 : null;
+      if (_hs) { ftx = _hs.x + _hs.w / 2; fty = _hs.y + _hs.h - 6; }
+      else { ftx = ratCarrot.x + ratCarrot.len; fty = ratCarrot.y; }
       const fdx = ftx - (this.x + RAT_W / 2), fdy = fty - (this.y + RAT_H / 2), fd = Math.hypot(fdx, fdy) || 1;
       if (fd < 15) {
-        if (this.furnitureTarget === 'house') {
+        if (_hs) {
           this.hideTimer = 60 * (3 + Math.floor(Math.random() * 4));
-          this._houseExitX = ratHouse.x + ratHouse.w / 2 - RAT_W / 2;
-          this._houseExitY = ratHouse.y + ratHouse.h - RAT_H;
+          this._houseExitX = _hs.x + _hs.w / 2 - RAT_W / 2;
+          this._houseExitY = _hs.y + _hs.h - RAT_H;
           addHappiness(2);
         } else {
           labels.push(new Label('Nibble!', this.x + RAT_W / 2, Math.max(20, this.y - 4)));
@@ -2035,6 +2040,7 @@ class Rat {
         if (ratFoodBowl) avail.push('bowl');
         if (ratBed) avail.push('bed');
         if (ratHouse) avail.push('house');
+        if (ratHouse2) avail.push('house2');
         if (ratCarrot) avail.push('carrot');
         if (avail.length && Math.random() < 0.4)
           this.furnitureTarget = avail[Math.floor(Math.random() * avail.length)];
@@ -3466,8 +3472,11 @@ canvas.addEventListener('pointerdown', e => {
     if (ratHouse && px >= ratHouse.x - 3 && px <= ratHouse.x + ratHouse.w + 3 && py >= ratHouse.y - 3 && py <= ratHouse.y + ratHouse.h) {
       sendClosestRat('house'); tapFeedback(ratHouse.x + ratHouse.w / 2, ratHouse.y + ratHouse.h / 2); return;
     }
-    if (ratCarrot && px >= ratCarrot.x - 2 && px <= ratCarrot.x + ratCarrot.len + 4 && py >= ratCarrot.y - 8 && py <= ratCarrot.y + 6) {
-      sendClosestRat('carrot'); tapFeedback(ratCarrot.x + ratCarrot.len / 2, ratCarrot.y); return;
+    if (ratHouse2 && px >= ratHouse2.x - 3 && px <= ratHouse2.x + ratHouse2.w + 3 && py >= ratHouse2.y - 3 && py <= ratHouse2.y + ratHouse2.h) {
+      sendClosestRat('house2'); tapFeedback(ratHouse2.x + ratHouse2.w / 2, ratHouse2.y + ratHouse2.h / 2); return;
+    }
+    if (ratCarrot && px >= ratCarrot.x - 2 && px <= ratCarrot.x + ratCarrot.len * 2 + 8 && py >= ratCarrot.y - 16 && py <= ratCarrot.y + 8) {
+      sendClosestRat('carrot'); tapFeedback(ratCarrot.x + ratCarrot.len, ratCarrot.y); return;
     }
     cheeses.push({ x: px - CHEESE_W / 2, y: py - CHEESE_H / 2, eaten: false });
     if (++cheeseCount % 15 === 0 && rats.length > 0) raidCats.push(new RaidCat());
