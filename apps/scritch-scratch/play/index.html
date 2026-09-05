@@ -2711,7 +2711,7 @@ class Visitor {
         } else {
           this.behavior = 'fidget';
           this.behaviorTimer = 60 * (1.5 + Math.random() * 2);
-          this.visFidgetType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
+          this.visFidgetType = ['sit','roll'][Math.floor(Math.random() * 2)];
           this.frame = 0; this.tick = 0;
         }
       }
@@ -2930,7 +2930,7 @@ const dog = {
           this.state = 'sleep'; this.sleepTimer = 60 * (5 + Math.floor(Math.random() * 8)); this.sleepZTimer = 60 * 2;
         } else {
           this.state = 'fidget'; this.fidgetTimer = FIDGET_DURATION;
-          this.fidgetType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
+          this.fidgetType = ['sit','roll'][Math.floor(Math.random() * 2)];
           this.frame = 0; this.tick = 0;
         }
       }
@@ -4376,7 +4376,7 @@ document.getElementById('trick-btn').addEventListener('click', () => {
   if (gameMode !== 'dog') return;
   if (['fidget','digging'].includes(dog.state)) return;
   sndBark();
-  const tricks = ['beg','roll','shake','spin','jump'];
+  const tricks = ['roll','shake','spin','jump'];
   const trickNames = { beg:'Beg!', roll:'Roll over!', shake:'Shake!', spin:'Spin!', jump:'Jump!' };
   const trickType = tricks[Math.floor(Math.random() * tricks.length)];
   setTimeout(() => {
