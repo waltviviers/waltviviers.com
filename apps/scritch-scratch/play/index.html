@@ -3489,7 +3489,7 @@ canvas.addEventListener('pointerdown', e => {
     const { splitX, houseX } = _dogLayout();
     const bqx = splitX + Math.round((houseX - splitX) * 0.30), bqy = Math.round(canvas.height * 0.42);
     if (px >= bqx - 17 && px <= bqx + 17 && py >= bqy - 30 && py <= bqy + 30) {
-      dogBbqOpen = 60 * 5;
+      dogBbqOpen = dogBbqOpen > 0 ? 0 : 60 * 5;
       tapFeedback(bqx, bqy); return;
     }
   }
