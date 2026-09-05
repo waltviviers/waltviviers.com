@@ -1052,13 +1052,8 @@ const RAT_BOTTLE_SPR = [
   [1,1,1,1,1],
   [0,0,1,0,0],
 ];
-const RAT_RBOWL_SPR = [
-  [0,1,1,0],
-  [1,0,0,1],
-  [1,1,1,1],
-  [0,1,1,0],
-];
-const RAT_BOTTLE_SC = 5, RAT_BOWL_SC = 7;
+const RAT_BOTTLE_SC = 5;
+const RAT_SEEDS_W = 26, RAT_SEEDS_H = 14;
 const RAT_BED_SPR = [
   [0,0,0,1,1,1,1,1,1,1,1,0,0,0],
   [0,0,1,1,0,0,0,1,0,0,1,1,0,0],
@@ -1095,7 +1090,7 @@ function drawRatBackground() {
 function placeRatFurniture() {
   const w = canvas.width, h = canvas.height;
   ratBottle = { x: w * 0.12, y: h * 0.25 };
-  ratFoodBowl = { x: w * 0.88 - RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, y: h * 0.25 };
+  ratFoodBowl = { x: w * 0.88 - RAT_SEEDS_W, y: h * 0.25 };
   ratBed = { x: w / 2 - RAT_BED_SPR[0].length * RAT_BED_SC / 2, y: h * 0.7 };
   ratHouse = { x: Math.round(w * 0.72), y: Math.round(h * 0.55), w: 34, h: 30 };
   ratHouse2 = { x: Math.round(w * 0.15), y: Math.round(h * 0.50), w: 34, h: 30 };
@@ -1112,14 +1107,21 @@ function drawRatFurniture() {
         ctx.fillStyle = r < 2 ? '#aaaaaa' : '#88ccee';
         ctx.fillRect(Math.round(ratBottle.x + c * RAT_BOTTLE_SC), Math.round(ratBottle.y + r * RAT_BOTTLE_SC), RAT_BOTTLE_SC, RAT_BOTTLE_SC);
       }
-  // Food bowl
-  ctx.fillStyle = '#aaaaaa';
-  for (let r = 0; r < RAT_RBOWL_SPR.length; r++)
-    for (let c = 0; c < RAT_RBOWL_SPR[r].length; c++)
-      if (RAT_RBOWL_SPR[r][c]) {
-        ctx.fillStyle = r === 1 ? '#ddcc88' : '#aaaaaa';
-        ctx.fillRect(Math.round(ratFoodBowl.x + c * RAT_BOWL_SC), Math.round(ratFoodBowl.y + r * RAT_BOWL_SC), RAT_BOWL_SC, RAT_BOWL_SC);
-      }
+  // Seed pile
+  if (ratFoodBowl) {
+    const sx = ratFoodBowl.x, sy = ratFoodBowl.y + RAT_SEEDS_H;
+    // seeds: [dx, dy, rx, ry, angle, color]
+    const seeds = [
+      [1,0,3,1.2,0.4,'#d4a850'],[7,1,3,1.2,-0.3,'#c8963c'],[13,0,3,1.2,0.2,'#e8c870'],[19,1,2.5,1.2,-0.4,'#d4a850'],
+      [3,-4,3,1.2,0.5,'#e8c870'],[9,-3,3,1.2,-0.2,'#d4a850'],[15,-4,3,1.2,0.3,'#c8963c'],
+      [5,-7,2.5,1.2,-0.4,'#d4a850'],[11,-6,2.5,1.2,0.3,'#e8c870'],
+      [7,-9,2.5,1.2,0.2,'#c8963c'],
+    ];
+    for (const [dx, dy, rx, ry, ang, col] of seeds) {
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.ellipse(sx + dx, sy + dy, rx, ry, ang, 0, Math.PI * 2); ctx.fill();
+    }
+  }
   // Rat bed
   if (ratBed) {
     for (let r = 0; r < RAT_BED_SPR.length; r++)
@@ -2006,10 +2008,10 @@ class Rat {
         let ftx, fty;
         {
           const tw = this.furnitureTarget === 'bottle' ? RAT_BOTTLE_SPR[0].length * RAT_BOTTLE_SC
-            : this.furnitureTarget === 'bowl' ? RAT_RBOWL_SPR[0].length * RAT_BOWL_SC
+            : this.furnitureTarget === 'bowl' ? RAT_SEEDS_W
             : RAT_BED_SPR[0].length * RAT_BED_SC;
           const th = this.furnitureTarget === 'bottle' ? RAT_BOTTLE_SPR.length * RAT_BOTTLE_SC
-            : this.furnitureTarget === 'bowl' ? RAT_RBOWL_SPR.length * RAT_BOWL_SC
+            : this.furnitureTarget === 'bowl' ? RAT_SEEDS_H
             : RAT_BED_SPR.length * RAT_BED_SC;
           ftx = ftgt.x + tw / 2; fty = ftgt.y + th / 2;
         }
@@ -3458,9 +3460,8 @@ canvas.addEventListener('pointerdown', e => {
       }
     }
     if (ratFoodBowl) {
-      const bw = RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, bh = RAT_RBOWL_SPR.length * RAT_BOWL_SC;
-      if (px >= ratFoodBowl.x && px <= ratFoodBowl.x + bw && py >= ratFoodBowl.y && py <= ratFoodBowl.y + bh) {
-        sendClosestRat('bowl'); tapFeedback(ratFoodBowl.x + bw / 2, ratFoodBowl.y + bh / 2); return;
+      if (px >= ratFoodBowl.x - 2 && px <= ratFoodBowl.x + RAT_SEEDS_W + 2 && py >= ratFoodBowl.y && py <= ratFoodBowl.y + RAT_SEEDS_H) {
+        sendClosestRat('bowl'); tapFeedback(ratFoodBowl.x + RAT_SEEDS_W / 2, ratFoodBowl.y + RAT_SEEDS_H / 2); return;
       }
     }
     if (ratBed) {
