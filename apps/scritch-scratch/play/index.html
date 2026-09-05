@@ -174,7 +174,7 @@
       display: none; align-items: center; gap: 6px; pointer-events: none;
     }
     #dial-icon { position: relative; width: 20px; height: 20px; flex-shrink: 0; }
-    #dial-sun, #dial-moon { position: absolute; top: 0; left: 0; }
+    #dial-icon > svg { position: absolute; top: 0; left: 0; display: none; }
     #dial-label {
       font: 700 8px/1 monospace; letter-spacing: 0.06em; text-transform: uppercase;
       white-space: nowrap; color: rgba(255,255,255,0.82); text-shadow: 0 1px 3px rgba(0,0,0,0.75);
@@ -193,9 +193,20 @@
 </button>
 <div id="time-dial" aria-hidden="true">
   <span id="dial-icon">
-    <svg id="dial-sun" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="10" cy="10" r="4" fill="#FFD000"/>
-      <g stroke="#FFD000" stroke-width="1.5" stroke-linecap="round">
+    <!-- Morning: sun rising above horizon -->
+    <svg id="icon-morning" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 14 A4 4 0 0 1 14 14Z" fill="#FFB300"/>
+      <line x1="2" y1="14" x2="18" y2="14" stroke="#FFB300" stroke-width="1.2" stroke-linecap="round"/>
+      <g stroke="#FFB300" stroke-width="1.5" stroke-linecap="round">
+        <line x1="10" y1="2" x2="10" y2="5"/>
+        <line x1="4.2" y1="5.8" x2="6.2" y2="7.8"/>
+        <line x1="15.8" y1="5.8" x2="13.8" y2="7.8"/>
+      </g>
+    </svg>
+    <!-- Afternoon: full sun -->
+    <svg id="icon-afternoon" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="10" cy="10" r="4" fill="#FFD700"/>
+      <g stroke="#FFD700" stroke-width="1.5" stroke-linecap="round">
         <line x1="10" y1="1" x2="10" y2="3.2"/>
         <line x1="10" y1="16.8" x2="10" y2="19"/>
         <line x1="1" y1="10" x2="3.2" y2="10"/>
@@ -206,7 +217,18 @@
         <line x1="5.2" y1="14.8" x2="3.64" y2="16.36"/>
       </g>
     </svg>
-    <svg id="dial-moon" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg" style="opacity:0">
+    <!-- Evening: sun setting below horizon -->
+    <svg id="icon-evening" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7 11 A3 3 0 0 1 13 11Z" fill="#FF7043"/>
+      <line x1="2" y1="11" x2="18" y2="11" stroke="#FF7043" stroke-width="1.2" stroke-linecap="round"/>
+      <g stroke="#FF7043" stroke-width="1.5" stroke-linecap="round">
+        <line x1="10" y1="3" x2="10" y2="6"/>
+        <line x1="3" y1="7" x2="5" y2="8.8"/>
+        <line x1="17" y1="7" x2="15" y2="8.8"/>
+      </g>
+    </svg>
+    <!-- Night: crescent moon -->
+    <svg id="icon-night" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
       <path d="M17 10.67A7 7 0 1 1 9.33 3 5.5 5.5 0 0 0 17 10.67z" fill="#C8D8FF"/>
     </svg>
   </span>
@@ -306,9 +328,12 @@
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
-const _dialSun   = document.getElementById('dial-sun');
-const _dialMoon  = document.getElementById('dial-moon');
-const _dialLabel = document.getElementById('dial-label');
+const _timeDial       = document.getElementById('time-dial');
+const _iconMorning    = document.getElementById('icon-morning');
+const _iconAfternoon  = document.getElementById('icon-afternoon');
+const _iconEvening    = document.getElementById('icon-evening');
+const _iconNight      = document.getElementById('icon-night');
+const _dialLabel      = document.getElementById('dial-label');
 
 const S = 5;
 const DW = 10, DH = 8;
@@ -3016,7 +3041,7 @@ function updateFab() {
 }
 
 function enterRatMode() {
-  _dialSun.closest('#time-dial').style.display = 'flex';
+  _timeDial.style.display = 'flex';
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'rat';
   happiness = 80;
@@ -3041,7 +3066,7 @@ function enterRatMode() {
 }
 
 function enterDogMode() {
-  _dialSun.closest('#time-dial').style.display = 'flex';
+  _timeDial.style.display = 'flex';
   if (gameMode === 'rat') saveRatState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'dog';
   happiness = 80;
@@ -3068,7 +3093,7 @@ function enterDogMode() {
 }
 
 function enterCatMode() {
-  _dialSun.closest('#time-dial').style.display = 'flex';
+  _timeDial.style.display = 'flex';
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'rat') saveRatState();
   gameMode = 'cat';
   happiness = 80;
@@ -3943,15 +3968,14 @@ function drawDynamicLighting() {
   ctx.save();
   // Shared day/night cycle across all three modes (starts in the morning)
   const phase = ((gameTick + _dayNightSeed) / 21600) % 1;
-  // Update sun/moon dial opacity based on phase
+  // Update time-of-day dial icon + label
   {
-    const sunO  = phase < 0.42 ? 1 : phase < 0.54 ? 1 - (phase - 0.42) / 0.12
-                : phase < 0.88 ? 0 : Math.min((phase - 0.88) / 0.10, 1);
-    const moonO = phase < 0.42 ? 0 : phase < 0.54 ? (phase - 0.42) / 0.12
-                : phase < 0.88 ? 1 : Math.max(1 - (phase - 0.88) / 0.10, 0);
-    _dialSun.style.opacity = sunO;
-    _dialMoon.style.opacity = moonO;
-    _dialLabel.textContent = phase < 0.25 ? 'Morning' : phase < 0.45 ? 'Afternoon' : phase < 0.70 ? 'Evening' : 'Night';
+    const pi = phase < 0.25 ? 0 : phase < 0.45 ? 1 : phase < 0.70 ? 2 : 3;
+    _iconMorning.style.display   = pi === 0 ? 'block' : 'none';
+    _iconAfternoon.style.display = pi === 1 ? 'block' : 'none';
+    _iconEvening.style.display   = pi === 2 ? 'block' : 'none';
+    _iconNight.style.display     = pi === 3 ? 'block' : 'none';
+    _dialLabel.textContent = ['Morning','Afternoon','Evening','Night'][pi];
   }
   let col, alpha;
   if (phase < 0.06) {
