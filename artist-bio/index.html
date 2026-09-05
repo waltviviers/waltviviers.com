@@ -95,6 +95,18 @@
     .contact-value { font-family:var(--serif);font-size:1.1rem;font-weight:400;line-height:1.3; }
     a.contact-item .contact-value { transition:color 0.2s; }
     a.contact-item:hover .contact-value { color:var(--stone); }
+    /* ── Digital Experiments ── */
+    .digital { background:var(--bg);border:1px solid var(--rule);border-top:none;padding:48px; }
+    .digital .col-label { margin-bottom:24px; }
+    .digital-intro { font-family:var(--serif);font-size:clamp(1.3rem,2.6vw,1.9rem);font-style:italic;line-height:1.4;color:var(--ink);max-width:820px;margin-bottom:40px; }
+    .digital-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule); }
+    .digital-card { background:var(--bg);padding:32px;display:flex;flex-direction:column;gap:14px;transition:background 0.2s; }
+    .digital-card:hover { background:var(--bg2); }
+    .digital-title { font-family:var(--serif);font-size:clamp(1.4rem,2.2vw,1.75rem);font-weight:400;line-height:1.1; }
+    .digital-desc { font-family:var(--serif);font-size:clamp(1rem,1.4vw,1.1rem);line-height:1.7;color:var(--stone);flex-grow:1; }
+    .digital-cta { font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);transition:color 0.2s; }
+    .digital-card:hover .digital-cta { color:var(--ink); }
+    @media (max-width:900px) { .digital { padding:36px 28px; } .digital-grid { grid-template-columns:1fr; } }
     footer { padding:40px 48px;border-top:1px solid var(--rule);margin-top:80px;display:flex;justify-content:center;align-items:center;position:relative; }
     .footer-copy { font-size:11px;color:var(--stone);letter-spacing:0.06em; }
     .footer-back { position:absolute;left:48px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);padding:7px 16px;border:1px solid var(--rule);transition:border-color 0.2s,color 0.2s; }
@@ -173,12 +185,29 @@
           <p>I've always painted what catches my eye and won't let go. That image that sits somewhere between the real and the heightened, the everyday seen in a way that somehow feels like a sign.</p>
           <p>My work draws from the Realist and Pop traditions, but my influences reach further. Chinese brushwork taught me about economy and intention, how a single mark can carry weight and direction, as well as a fascination with Rembrandt's use of light. Sequential art taught me about pacing and visual narrative, how one image leads the eye into the next. I bring all of these sensibilities into paintings that are, on the surface, still and singular.</p>
           <p>I stepped away from showing work in galleries for about a decade, but coming back to painting during the pandemic reminded me why it matters. Some things you can put down for a while and pick up again and find they've been waiting for you, and never really left.</p>
+          <p>That gap wasn't empty. Through those years I was building a career in advertising and design, work I still do under waltviviers.com, and somewhere along the way the same restlessness that puts me in front of a canvas started showing up in code, and more recently in AI-assisted tools. I don't experience these as separate lives. A painting has to hold up from across the room and reward you up close; a well-built interactive piece works the same way, there's a shape you take in at a glance, and detail that only shows itself once you start touching it. Faith, family, and creativity are still the core of everything I make, whether the tool is a brush or a build.</p>
           <p>Making art is something my family has done for generations, and I see that same instinct in my daughter. It tells me this isn't just what I do; it's who we are.</p>
           <p>Being self-taught and guided by my family has shaped how I see things. I didn't just learn the rules first. I also learned their philosophies, which means I've had to figure out what actually matters to me: presence. Paintings that hold their own in a room, that reward the time you give them (for both the creator and the observer).</p>
         </div>
       </div>
     </div>
     <div class="pull-quote"><span class="pull-quote-mark">&ldquo;</span><p class="pull-quote-text">For me, making art is therapy; I create to express myself, and in doing so I also find myself.</p></div>
+    <section class="digital" aria-label="Digital Experiments">
+      <p class="col-label">Digital Experiments</p>
+      <p class="digital-intro">Alongside the paintings, I build small interactive pieces, mostly with AI-assisted tools, as another way of chasing the same instinct: make something, then see who it moves.</p>
+      <div class="digital-grid">
+        <a class="digital-card" href="/apps/static-protocol/play/">
+          <h2 class="digital-title">Static Protocol</h2>
+          <p class="digital-desc">A cyberpunk data-heist story built for mobile. Five decisions, five live hacking sequences, ten possible endings. However you handle the jobs is however it goes.</p>
+          <span class="digital-cta">Play &#8594;</span>
+        </a>
+        <a class="digital-card" href="/apps/scritch-scratch/play/">
+          <h2 class="digital-title">Scritch Scratch</h2>
+          <p class="digital-desc">The opposite kind of experiment: an interactive pet app with three relaxed modes (dogs, rats, cats) and nothing to win. Tap around, make a mess, enjoy the calm.</p>
+          <span class="digital-cta">Play &#8594;</span>
+        </a>
+      </div>
+    </section>
     <div class="contact-strip">
       <a href="https://waltviviers.com/" class="contact-item"><span class="contact-label">Web</span><span class="contact-value">waltviviers.com</span></a>
       <a href="mailto:artist@waltviviers.com" class="contact-item"><span class="contact-label">Email</span><span class="contact-value">artist@waltviviers.com</span></a>
