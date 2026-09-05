@@ -175,14 +175,9 @@
     }
     #dial-icon { position: relative; width: 20px; height: 20px; flex-shrink: 0; }
     #dial-icon > svg { position: absolute; top: 0; left: 0; display: none; }
-    #dial-label {
-      font: 700 8px/1 monospace; letter-spacing: 0.06em; text-transform: uppercase;
-      white-space: nowrap; color: rgba(255,255,255,0.82); text-shadow: 0 1px 3px rgba(0,0,0,0.75);
-    }
     @media (max-width: 900px), (orientation: portrait) {
-      #time-dial { top: 15px; left: 100px; gap: 5px; }
+      #time-dial { top: 15px; left: 100px; }
       #dial-icon { width: 16px; height: 16px; }
-      #dial-label { font-size: 7px; }
     }
   </style>
 </head>
@@ -232,7 +227,6 @@
       <path d="M17 10.67A7 7 0 1 1 9.33 3 5.5 5.5 0 0 0 17 10.67z" fill="#C8D8FF"/>
     </svg>
   </span>
-  <span id="dial-label">Morning</span>
 </div>
 <div id="game-menu" class="overlay">
   <div class="game-menu-inner">
@@ -333,7 +327,6 @@ const _iconMorning    = document.getElementById('icon-morning');
 const _iconAfternoon  = document.getElementById('icon-afternoon');
 const _iconEvening    = document.getElementById('icon-evening');
 const _iconNight      = document.getElementById('icon-night');
-const _dialLabel      = document.getElementById('dial-label');
 
 const S = 5;
 const DW = 10, DH = 8;
@@ -3975,7 +3968,6 @@ function drawDynamicLighting() {
     _iconAfternoon.style.display = pi === 1 ? 'block' : 'none';
     _iconEvening.style.display   = pi === 2 ? 'block' : 'none';
     _iconNight.style.display     = pi === 3 ? 'block' : 'none';
-    _dialLabel.textContent = ['Morning','Afternoon','Evening','Night'][pi];
   }
   let col, alpha;
   if (phase < 0.06) {
