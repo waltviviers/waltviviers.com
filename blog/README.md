@@ -1,9 +1,22 @@
 # Journal (blog)
 
 Written essays for waltviviers.com. Authored in Markdown, published as static
-HTML — no build step runs on the live site.
+HTML. There are two ways to work with posts.
 
-## Add a new essay
+## Option A — the admin (recommended)
+
+Open **/admin** and choose **Journal**. From there you can:
+
+- **Create** a post, **edit** any existing post, or delete one.
+- Keep it as a **Draft** (the toggle is on by default) — drafts are saved but
+  never appear on the site or in the RSS feed.
+- **Publish** by un-ticking Draft and saving.
+
+Saving commits the post to `blog/posts/`, and a GitHub Action
+(`.github/workflows/generate-blog-pages.yml`) automatically rebuilds the
+journal pages and the RSS feed, then Vercel redeploys. No commands to run.
+
+## Option B — by hand
 
 1. Create `blog/posts/my-essay-title.md` with front-matter:
 
@@ -12,6 +25,7 @@ HTML — no build step runs on the live site.
    title: My Essay Title
    date: 2026-09-15
    description: One-sentence summary used for previews, SEO, and the RSS feed.
+   draft: false
    ---
 
    Your essay in Markdown. Headings (##, ###), **bold**, *italic*,
@@ -20,7 +34,8 @@ HTML — no build step runs on the live site.
    ```
 
    - `title` and `date` (YYYY-MM-DD) are required; `description` is recommended.
-   - `slug` is optional — by default it's derived from the title
+   - `draft: true` keeps a post hidden; `draft: false` (or omitting it) publishes.
+   - `slug` is optional — by default the address is derived from the title
      (e.g. `blog/my-essay-title/`).
 
 2. Regenerate the pages and feed:
@@ -29,12 +44,11 @@ HTML — no build step runs on the live site.
    node scripts/generate-blog.js
    ```
 
-   This writes `blog/<slug>/index.html`, rebuilds `blog/index.html`, and
-   updates `/feed.xml`.
+   This writes `blog/<slug>/index.html` for each **published** post, rebuilds
+   `blog/index.html`, updates `/feed.xml`, and removes the page of any post
+   that has been drafted or deleted.
 
-3. Add the new post's URL to `sitemap.xml` (one `<url>` block under the
-   Journal section).
-
-4. Commit the `.md` source **and** the generated HTML + `feed.xml`, then push.
+3. Commit the `.md` source **and** the generated HTML + `feed.xml`, then push.
+   (Pushing the `.md` alone is enough — the Action regenerates the rest.)
 
 Posts are sorted newest-first automatically by their `date`.
