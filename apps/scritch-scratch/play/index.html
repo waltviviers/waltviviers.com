@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="robots" content="index, follow" />
   <title>Scritch Scratch</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><ellipse cx='16' cy='21' rx='8' ry='7' fill='%23FF8C42'/><ellipse cx='8' cy='13' rx='3.5' ry='4' fill='%23FF8C42'/><ellipse cx='14' cy='10' rx='3.5' ry='4' fill='%23FF8C42'/><ellipse cx='20' cy='10' rx='3.5' ry='4' fill='%23FF8C42'/><ellipse cx='26' cy='13' rx='3.5' ry='4' fill='%23FF8C42'/></svg>">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
@@ -133,7 +134,7 @@
 
     /* Catnip button (cat mode) — icon above the FAB, bottom-left */
     #catnip-btn {
-      display: none; position: fixed; left: 16px; bottom: 172px; z-index: 260;
+      display: none; position: fixed; left: 16px; bottom: 164px; z-index: 260;
       width: 66px; height: 66px; padding: 0; background: none; border: none; cursor: pointer;
       transition: transform 0.18s ease; overflow: hidden;
     }
@@ -142,11 +143,11 @@
     #catnip-btn.pressed, #catnip-btn:hover { transform: translateY(-3px) scale(1.07); }
     #catnip-btn.pressed .cn-up, #catnip-btn:hover .cn-up { opacity: 0; }
     #catnip-btn.pressed .cn-over, #catnip-btn:hover .cn-over { opacity: 1; }
-    @media (max-width: 900px) { #catnip-btn { bottom: 124px; } }
+    @media (max-width: 900px) { #catnip-btn { bottom: 120px; } }
 
     /* Mode action icon buttons — Perform Trick (dog) and Boggle (rat) */
     #trick-btn, #boggle-btn {
-      display: none; position: fixed; left: 16px; bottom: 172px; z-index: 260;
+      display: none; position: fixed; left: 16px; bottom: 164px; z-index: 260;
       width: 66px; height: 66px; padding: 0; background: none; border: none; cursor: pointer;
       transition: transform 0.18s ease;
     }
@@ -155,7 +156,7 @@
     #trick-btn.pressed, #boggle-btn.pressed, #trick-btn:hover, #boggle-btn:hover { transform: translateY(-3px) scale(1.07); }
     #trick-btn.pressed .tb-up, #boggle-btn.pressed .tb-up, #trick-btn:hover .tb-up, #boggle-btn:hover .tb-up { opacity: 0; }
     #trick-btn.pressed .tb-over, #boggle-btn.pressed .tb-over, #trick-btn:hover .tb-over, #boggle-btn:hover .tb-over { opacity: 1; }
-    @media (max-width: 900px) { #trick-btn, #boggle-btn { bottom: 124px; } }
+    @media (max-width: 900px) { #trick-btn, #boggle-btn { bottom: 120px; } }
 
     /* WALT logo — same top-left position as the main site header */
     .walt-logo {
@@ -166,19 +167,67 @@
       .walt-logo { top: 11px; left: 24px; }
       .walt-logo img { height: 28px; }
     }
-  
-    /* Smooth cross-page transitions (Chrome MPA view transitions; ignored elsewhere) */
-    @view-transition { navigation: auto; }
-    /* Respect the visitor's reduced-motion preference */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
-      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+
+    /* Time-of-day dial — sun/moon + phase label next to WALT logo (hidden until a game mode starts) */
+    #time-dial {
+      position: fixed; top: 39px; left: 134px; z-index: 450;
+      display: none; align-items: center; gap: 6px; pointer-events: none;
     }
-</style>
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="apple-touch-icon" href="/icon-192.png" />
+    #dial-icon { position: relative; width: 20px; height: 20px; flex-shrink: 0; }
+    #dial-icon > svg { position: absolute; top: 0; left: 0; display: none; }
+    @media (max-width: 900px), (orientation: portrait) {
+      #time-dial { top: 15px; left: 100px; }
+      #dial-icon { width: 16px; height: 16px; }
+    }
+  </style>
 </head>
 <body>
+<button type="button" class="scritch-fab" aria-label="Menu">
+  <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" width="64" height="64" />
+  <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
+</button>
+<div id="time-dial" aria-hidden="true">
+  <span id="dial-icon">
+    <!-- Morning: sun rising above horizon -->
+    <svg id="icon-morning" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 14 A4 4 0 0 1 14 14Z" fill="#FFB300"/>
+      <line x1="2" y1="14" x2="18" y2="14" stroke="#FFB300" stroke-width="1.2" stroke-linecap="round"/>
+      <g stroke="#FFB300" stroke-width="1.5" stroke-linecap="round">
+        <line x1="10" y1="2" x2="10" y2="5"/>
+        <line x1="4.2" y1="5.8" x2="6.2" y2="7.8"/>
+        <line x1="15.8" y1="5.8" x2="13.8" y2="7.8"/>
+      </g>
+    </svg>
+    <!-- Afternoon: full sun -->
+    <svg id="icon-afternoon" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="10" cy="10" r="4" fill="#FFD700"/>
+      <g stroke="#FFD700" stroke-width="1.5" stroke-linecap="round">
+        <line x1="10" y1="1" x2="10" y2="3.2"/>
+        <line x1="10" y1="16.8" x2="10" y2="19"/>
+        <line x1="1" y1="10" x2="3.2" y2="10"/>
+        <line x1="16.8" y1="10" x2="19" y2="10"/>
+        <line x1="3.64" y1="3.64" x2="5.2" y2="5.2"/>
+        <line x1="14.8" y1="14.8" x2="16.36" y2="16.36"/>
+        <line x1="16.36" y1="3.64" x2="14.8" y2="5.2"/>
+        <line x1="5.2" y1="14.8" x2="3.64" y2="16.36"/>
+      </g>
+    </svg>
+    <!-- Evening: sun setting below horizon -->
+    <svg id="icon-evening" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7 11 A3 3 0 0 1 13 11Z" fill="#FF7043"/>
+      <line x1="2" y1="11" x2="18" y2="11" stroke="#FF7043" stroke-width="1.2" stroke-linecap="round"/>
+      <g stroke="#FF7043" stroke-width="1.5" stroke-linecap="round">
+        <line x1="10" y1="3" x2="10" y2="6"/>
+        <line x1="3" y1="7" x2="5" y2="8.8"/>
+        <line x1="17" y1="7" x2="15" y2="8.8"/>
+      </g>
+    </svg>
+    <!-- Night: crescent moon -->
+    <svg id="icon-night" viewBox="0 0 20 20" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17 10.67A7 7 0 1 1 9.33 3 5.5 5.5 0 0 0 17 10.67z" fill="#C8D8FF"/>
+    </svg>
+  </span>
+</div>
 <div id="game-menu" class="overlay">
   <div class="game-menu-inner">
     <button class="mode-btn-pick" data-mode="dog" type="button">Doggo Mode</button>
@@ -190,10 +239,6 @@
     </div>
   </div>
 </div>
-<button type="button" class="scritch-fab" aria-label="Open menu">
-  <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Menu" width="64" height="64" />
-  <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" />
-</button>
 <div id="htp-overlay" class="overlay">
   <div class="popup">
     <h2>How to Play</h2>
@@ -277,6 +322,11 @@
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
+const _timeDial       = document.getElementById('time-dial');
+const _iconMorning    = document.getElementById('icon-morning');
+const _iconAfternoon  = document.getElementById('icon-afternoon');
+const _iconEvening    = document.getElementById('icon-evening');
+const _iconNight      = document.getElementById('icon-night');
 
 const S = 5;
 const DW = 10, DH = 8;
@@ -961,6 +1011,83 @@ function spawnBirds() {
   }
 }
 
+// ─── Bunny ───────────────────────────────────────────────────────────────────
+let bunny = null;
+class Bunny {
+  constructor() {
+    const W = canvas.width, H = canvas.height;
+    const splitX = Math.round(W * 0.65), pf = dogPoolFloorY();
+    this.x = splitX * 0.2 + Math.random() * splitX * 0.55;
+    this.y = pf + 20 + Math.random() * (H - pf - 40);
+    this.vx = 0; this.vy = 0; this.flip = false;
+    this.state = 'grazing'; this.timer = 90 + Math.random() * 180;
+    this.hopT = 0; this.hopH = 0;
+  }
+  _bounds() {
+    const W = canvas.width, H = canvas.height;
+    return { x0: 12, x1: Math.round(W * 0.65) - 14, y0: dogPoolFloorY() + 12, y1: H - 8 };
+  }
+  update() {
+    const b = this._bounds();
+    // flee from dog
+    if (dog) {
+      const ddx = this.x - dog.x, ddy = this.y - dog.y, dd = Math.hypot(ddx, ddy);
+      if (dd < 70 && dd > 0) {
+        this.state = 'hopping'; this.timer = 80;
+        this.vx = (ddx / dd) * 2.8; this.vy = (ddy / dd) * 1.6;
+      }
+    }
+    if (this.state === 'grazing') {
+      this.hopH = 0;
+      if (--this.timer <= 0) {
+        if (Math.random() < 0.35) { this.state = 'sitting'; this.timer = 80 + Math.random() * 120; }
+        else {
+          this.state = 'hopping'; this.timer = 35 + Math.random() * 50;
+          const a = Math.random() * Math.PI * 2;
+          this.vx = Math.cos(a) * 1.3; this.vy = Math.sin(a) * 0.9;
+        }
+      }
+    } else if (this.state === 'sitting') {
+      this.hopH = 0;
+      if (--this.timer <= 0) { this.state = 'grazing'; this.timer = 100 + Math.random() * 160; }
+    } else {
+      this.x += this.vx; this.y += this.vy;
+      this.hopT++; this.hopH = -Math.abs(Math.sin(this.hopT * 0.45)) * 5;
+      if (this.vx !== 0) this.flip = this.vx < 0;
+      if (this.x < b.x0) { this.x = b.x0; this.vx = Math.abs(this.vx); }
+      if (this.x > b.x1) { this.x = b.x1; this.vx = -Math.abs(this.vx); }
+      if (this.y < b.y0) { this.y = b.y0; this.vy = Math.abs(this.vy); }
+      if (this.y > b.y1) { this.y = b.y1; this.vy = -Math.abs(this.vy); }
+      if (--this.timer <= 0) { this.state = 'grazing'; this.timer = 100 + Math.random() * 150; this.vx = 0; this.vy = 0; this.hopH = 0; }
+    }
+  }
+  draw() {
+    const x = Math.round(this.x), y = Math.round(this.y + this.hopH), f = this.flip ? -1 : 1;
+    // body
+    ctx.fillStyle = '#e2ded8'; ctx.fillRect(x - 5, y - 4, 11, 7);
+    // fluffy tail
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(x - f * 7, y - 3, 4, 4);
+    // head
+    ctx.fillStyle = '#e2ded8'; ctx.fillRect(x + f * 4, y - 8, 6, 6);
+    // ears
+    ctx.fillStyle = '#e2ded8';
+    ctx.fillRect(x + f * 5, y - 17, 2, 10); ctx.fillRect(x + f * 8, y - 15, 2, 8);
+    ctx.fillStyle = '#f0b8c0';
+    ctx.fillRect(x + f * 5, y - 16, 1, 8);  ctx.fillRect(x + f * 8, y - 14, 1, 6);
+    // eye
+    ctx.fillStyle = '#cc3366'; ctx.fillRect(x + f * 8, y - 6, 1, 1);
+    // nose
+    ctx.fillStyle = '#f0a0b0'; ctx.fillRect(x + f * 9, y - 4, 1, 1);
+    // feet
+    ctx.fillStyle = '#ccc8c4';
+    if (this.state === 'hopping') {
+      ctx.fillRect(x - 4, y + 3, 5, 2); ctx.fillRect(x + 2, y + 3, 5, 2);
+    } else {
+      ctx.fillRect(x - 3, y + 3, 4, 2); ctx.fillRect(x + 2, y + 3, 4, 2);
+    }
+  }
+}
+
 function drawDogFurniture() {
   if (!dogBed) return;
   // Bed
@@ -997,15 +1124,13 @@ const RAT_BOTTLE_SPR = [
   [1,1,1,1,1],
   [1,1,1,1,1],
   [1,1,1,1,1],
+  [1,1,1,1,1],
+  [1,1,1,1,1],
+  [1,1,1,1,1],
   [0,0,1,0,0],
 ];
-const RAT_RBOWL_SPR = [
-  [0,1,1,0],
-  [1,0,0,1],
-  [1,1,1,1],
-  [0,1,1,0],
-];
-const RAT_BOTTLE_SC = 5, RAT_BOWL_SC = 5;
+const RAT_BOTTLE_SC = 5;
+const RAT_SEEDS_W = 26, RAT_SEEDS_H = 14;
 const RAT_BED_SPR = [
   [0,0,0,1,1,1,1,1,1,1,1,0,0,0],
   [0,0,1,1,0,0,0,1,0,0,1,1,0,0],
@@ -1016,7 +1141,7 @@ const RAT_BED_SPR = [
 const RAT_BED_SC = 6;
 
 let ratBottle = null, ratFoodBowl = null, ratBed = null;
-let ratHouse = null, ratCarrot = null;
+let ratHouse = null, ratHouse2 = null, ratCarrot = null;
 let ratBirthCount = 0;
 
 function drawRatBackground() {
@@ -1042,10 +1167,11 @@ function drawRatBackground() {
 function placeRatFurniture() {
   const w = canvas.width, h = canvas.height;
   ratBottle = { x: w * 0.12, y: h * 0.25 };
-  ratFoodBowl = { x: w * 0.88 - RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, y: h * 0.25 };
+  ratFoodBowl = { x: w * 0.88 - RAT_SEEDS_W, y: h * 0.25 };
   ratBed = { x: w / 2 - RAT_BED_SPR[0].length * RAT_BED_SC / 2, y: h * 0.7 };
   ratHouse = { x: Math.round(w * 0.72), y: Math.round(h * 0.55), w: 34, h: 30 };
-  ratCarrot = { x: Math.round(w * 0.30), y: Math.round(h * 0.84), len: 16 };
+  ratHouse2 = { x: Math.round(w * 0.15), y: Math.round(h * 0.50), w: 34, h: 30 };
+  ratCarrot = { x: Math.round(w * 0.30), y: Math.round(h * 0.84), len: 20 };
 }
 
 function drawRatFurniture() {
@@ -1058,14 +1184,21 @@ function drawRatFurniture() {
         ctx.fillStyle = r < 2 ? '#aaaaaa' : '#88ccee';
         ctx.fillRect(Math.round(ratBottle.x + c * RAT_BOTTLE_SC), Math.round(ratBottle.y + r * RAT_BOTTLE_SC), RAT_BOTTLE_SC, RAT_BOTTLE_SC);
       }
-  // Food bowl
-  ctx.fillStyle = '#aaaaaa';
-  for (let r = 0; r < RAT_RBOWL_SPR.length; r++)
-    for (let c = 0; c < RAT_RBOWL_SPR[r].length; c++)
-      if (RAT_RBOWL_SPR[r][c]) {
-        ctx.fillStyle = r === 1 ? '#ddcc88' : '#aaaaaa';
-        ctx.fillRect(Math.round(ratFoodBowl.x + c * RAT_BOWL_SC), Math.round(ratFoodBowl.y + r * RAT_BOWL_SC), RAT_BOWL_SC, RAT_BOWL_SC);
-      }
+  // Seed pile
+  if (ratFoodBowl) {
+    const sx = ratFoodBowl.x, sy = ratFoodBowl.y + RAT_SEEDS_H;
+    // seeds: [dx, dy, rx, ry, angle, color]
+    const seeds = [
+      [1,0,3,1.2,0.4,'#d4a850'],[7,1,3,1.2,-0.3,'#c8963c'],[13,0,3,1.2,0.2,'#e8c870'],[19,1,2.5,1.2,-0.4,'#d4a850'],
+      [3,-4,3,1.2,0.5,'#e8c870'],[9,-3,3,1.2,-0.2,'#d4a850'],[15,-4,3,1.2,0.3,'#c8963c'],
+      [5,-7,2.5,1.2,-0.4,'#d4a850'],[11,-6,2.5,1.2,0.3,'#e8c870'],
+      [7,-9,2.5,1.2,0.2,'#c8963c'],
+    ];
+    for (const [dx, dy, rx, ry, ang, col] of seeds) {
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.ellipse(sx + dx, sy + dy, rx, ry, ang, 0, Math.PI * 2); ctx.fill();
+    }
+  }
   // Rat bed
   if (ratBed) {
     for (let r = 0; r < RAT_BED_SPR.length; r++)
@@ -1077,8 +1210,8 @@ function drawRatFurniture() {
   }
 
   // Little house — rats pop inside for a bit
-  if (ratHouse) {
-    const hs = ratHouse;
+  for (const hs of [ratHouse, ratHouse2]) {
+    if (!hs) continue;
     ctx.fillStyle = '#8a5a3a'; ctx.fillRect(hs.x, hs.y + 8, hs.w, hs.h - 8);
     ctx.fillStyle = '#7a4a2c'; ctx.fillRect(hs.x, hs.y + 8, hs.w, 3);
     ctx.fillStyle = '#b83a2a';
@@ -1093,11 +1226,11 @@ function drawRatFurniture() {
   if (ratCarrot) {
     const cr = ratCarrot;
     ctx.fillStyle = '#e07a20';
-    for (let i = 0; i < cr.len; i++) { const tt = (cr.len - i) / cr.len; const hh = Math.max(1, Math.round(1 + tt * 4)); ctx.fillRect(cr.x + i, cr.y - hh, 1, hh * 2); }
-    ctx.fillStyle = '#f0993a'; ctx.fillRect(cr.x + 3, cr.y - 2, cr.len - 6, 1);
-    ctx.fillStyle = 'rgba(150,70,10,0.5)'; for (let i = 4; i < cr.len - 2; i += 4) ctx.fillRect(cr.x + i, cr.y - 3, 1, 6);
+    for (let i = 0; i < cr.len; i++) { const tt = (cr.len - i) / cr.len; const hh = Math.max(2, Math.round(2 + tt * 8)); ctx.fillRect(cr.x + i * 2, cr.y - hh, 2, hh * 2); }
+    ctx.fillStyle = '#f0993a'; ctx.fillRect(cr.x + 6, cr.y - 4, (cr.len - 6) * 2, 2);
+    ctx.fillStyle = 'rgba(150,70,10,0.5)'; for (let i = 4; i < cr.len - 2; i += 4) ctx.fillRect(cr.x + i * 2, cr.y - 6, 2, 12);
     ctx.fillStyle = '#3a9a30';
-    ctx.fillRect(cr.x + cr.len, cr.y - 4, 2, 3); ctx.fillRect(cr.x + cr.len + 1, cr.y - 7, 2, 5); ctx.fillRect(cr.x + cr.len + 2, cr.y - 4, 2, 3);
+    ctx.fillRect(cr.x + cr.len * 2, cr.y - 8, 3, 6); ctx.fillRect(cr.x + cr.len * 2 + 2, cr.y - 14, 3, 10); ctx.fillRect(cr.x + cr.len * 2 + 4, cr.y - 8, 3, 6);
   }
 }
 
@@ -1922,16 +2055,17 @@ class Rat {
         }
       }
     } else if (gameMode === 'rat' && !this.fleeing && !seekingCheese &&
-               (this.furnitureTarget === 'house' || this.furnitureTarget === 'carrot')) {
+               (this.furnitureTarget === 'house' || this.furnitureTarget === 'house2' || this.furnitureTarget === 'carrot')) {
       let ftx, fty;
-      if (this.furnitureTarget === 'house') { ftx = ratHouse.x + ratHouse.w / 2; fty = ratHouse.y + ratHouse.h - 6; }
-      else { ftx = ratCarrot.x + ratCarrot.len / 2; fty = ratCarrot.y; }
+      const _hs = this.furnitureTarget === 'house' ? ratHouse : this.furnitureTarget === 'house2' ? ratHouse2 : null;
+      if (_hs) { ftx = _hs.x + _hs.w / 2; fty = _hs.y + _hs.h - 6; }
+      else { ftx = ratCarrot.x + ratCarrot.len; fty = ratCarrot.y; }
       const fdx = ftx - (this.x + RAT_W / 2), fdy = fty - (this.y + RAT_H / 2), fd = Math.hypot(fdx, fdy) || 1;
       if (fd < 15) {
-        if (this.furnitureTarget === 'house') {
+        if (_hs) {
           this.hideTimer = 60 * (3 + Math.floor(Math.random() * 4));
-          this._houseExitX = ratHouse.x + ratHouse.w / 2 - RAT_W / 2;
-          this._houseExitY = ratHouse.y + ratHouse.h - RAT_H;
+          this._houseExitX = _hs.x + _hs.w / 2 - RAT_W / 2;
+          this._houseExitY = _hs.y + _hs.h - RAT_H;
           addHappiness(2);
         } else {
           labels.push(new Label('Nibble!', this.x + RAT_W / 2, Math.max(20, this.y - 4)));
@@ -1951,10 +2085,10 @@ class Rat {
         let ftx, fty;
         {
           const tw = this.furnitureTarget === 'bottle' ? RAT_BOTTLE_SPR[0].length * RAT_BOTTLE_SC
-            : this.furnitureTarget === 'bowl' ? RAT_RBOWL_SPR[0].length * RAT_BOWL_SC
+            : this.furnitureTarget === 'bowl' ? RAT_SEEDS_W
             : RAT_BED_SPR[0].length * RAT_BED_SC;
           const th = this.furnitureTarget === 'bottle' ? RAT_BOTTLE_SPR.length * RAT_BOTTLE_SC
-            : this.furnitureTarget === 'bowl' ? RAT_RBOWL_SPR.length * RAT_BOWL_SC
+            : this.furnitureTarget === 'bowl' ? RAT_SEEDS_H
             : RAT_BED_SPR.length * RAT_BED_SC;
           ftx = ftgt.x + tw / 2; fty = ftgt.y + th / 2;
         }
@@ -1985,6 +2119,7 @@ class Rat {
         if (ratFoodBowl) avail.push('bowl');
         if (ratBed) avail.push('bed');
         if (ratHouse) avail.push('house');
+        if (ratHouse2) avail.push('house2');
         if (ratCarrot) avail.push('carrot');
         if (avail.length && Math.random() < 0.4)
           this.furnitureTarget = avail[Math.floor(Math.random() * avail.length)];
@@ -2653,7 +2788,7 @@ class Visitor {
         } else {
           this.behavior = 'fidget';
           this.behaviorTimer = 60 * (1.5 + Math.random() * 2);
-          this.visFidgetType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
+          this.visFidgetType = ['sit','roll'][Math.floor(Math.random() * 2)];
           this.frame = 0; this.tick = 0;
         }
       }
@@ -2872,7 +3007,7 @@ const dog = {
           this.state = 'sleep'; this.sleepTimer = 60 * (5 + Math.floor(Math.random() * 8)); this.sleepZTimer = 60 * 2;
         } else {
           this.state = 'fidget'; this.fidgetTimer = FIDGET_DURATION;
-          this.fidgetType = ['sit','beg','roll'][Math.floor(Math.random() * 3)];
+          this.fidgetType = ['sit','roll'][Math.floor(Math.random() * 2)];
           this.frame = 0; this.tick = 0;
         }
       }
@@ -2984,6 +3119,7 @@ function updateFab() {
 }
 
 function enterRatMode() {
+  _timeDial.style.display = 'flex';
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'rat';
   happiness = 80;
@@ -3008,6 +3144,7 @@ function enterRatMode() {
 }
 
 function enterDogMode() {
+  _timeDial.style.display = 'flex';
   if (gameMode === 'rat') saveRatState(); else if (gameMode === 'cat') saveCatState();
   gameMode = 'dog';
   happiness = 80;
@@ -3025,6 +3162,7 @@ function enterDogMode() {
   spawnBirds();
   spawnPondFish();
   dragonfly = new Dragonfly();
+  bunny = new Bunny();
   dogBbqOpen = 0;
   if (!restoreDogState()) { dog.init(); }
   sndDogAmbient();
@@ -3034,6 +3172,7 @@ function enterDogMode() {
 }
 
 function enterCatMode() {
+  _timeDial.style.display = 'flex';
   if (gameMode === 'dog') saveDogState(); else if (gameMode === 'rat') saveRatState();
   gameMode = 'cat';
   happiness = 80;
@@ -3399,9 +3538,8 @@ canvas.addEventListener('pointerdown', e => {
       }
     }
     if (ratFoodBowl) {
-      const bw = RAT_RBOWL_SPR[0].length * RAT_BOWL_SC, bh = RAT_RBOWL_SPR.length * RAT_BOWL_SC;
-      if (px >= ratFoodBowl.x && px <= ratFoodBowl.x + bw && py >= ratFoodBowl.y && py <= ratFoodBowl.y + bh) {
-        sendClosestRat('bowl'); tapFeedback(ratFoodBowl.x + bw / 2, ratFoodBowl.y + bh / 2); return;
+      if (px >= ratFoodBowl.x - 2 && px <= ratFoodBowl.x + RAT_SEEDS_W + 2 && py >= ratFoodBowl.y && py <= ratFoodBowl.y + RAT_SEEDS_H) {
+        sendClosestRat('bowl'); tapFeedback(ratFoodBowl.x + RAT_SEEDS_W / 2, ratFoodBowl.y + RAT_SEEDS_H / 2); return;
       }
     }
     if (ratBed) {
@@ -3413,8 +3551,11 @@ canvas.addEventListener('pointerdown', e => {
     if (ratHouse && px >= ratHouse.x - 3 && px <= ratHouse.x + ratHouse.w + 3 && py >= ratHouse.y - 3 && py <= ratHouse.y + ratHouse.h) {
       sendClosestRat('house'); tapFeedback(ratHouse.x + ratHouse.w / 2, ratHouse.y + ratHouse.h / 2); return;
     }
-    if (ratCarrot && px >= ratCarrot.x - 2 && px <= ratCarrot.x + ratCarrot.len + 4 && py >= ratCarrot.y - 8 && py <= ratCarrot.y + 6) {
-      sendClosestRat('carrot'); tapFeedback(ratCarrot.x + ratCarrot.len / 2, ratCarrot.y); return;
+    if (ratHouse2 && px >= ratHouse2.x - 3 && px <= ratHouse2.x + ratHouse2.w + 3 && py >= ratHouse2.y - 3 && py <= ratHouse2.y + ratHouse2.h) {
+      sendClosestRat('house2'); tapFeedback(ratHouse2.x + ratHouse2.w / 2, ratHouse2.y + ratHouse2.h / 2); return;
+    }
+    if (ratCarrot && px >= ratCarrot.x - 2 && px <= ratCarrot.x + ratCarrot.len * 2 + 8 && py >= ratCarrot.y - 16 && py <= ratCarrot.y + 8) {
+      sendClosestRat('carrot'); tapFeedback(ratCarrot.x + ratCarrot.len, ratCarrot.y); return;
     }
     cheeses.push({ x: px - CHEESE_W / 2, y: py - CHEESE_H / 2, eaten: false });
     if (++cheeseCount % 15 === 0 && rats.length > 0) raidCats.push(new RaidCat());
@@ -3426,7 +3567,7 @@ canvas.addEventListener('pointerdown', e => {
     const { splitX, houseX } = _dogLayout();
     const bqx = splitX + Math.round((houseX - splitX) * 0.30), bqy = Math.round(canvas.height * 0.42);
     if (px >= bqx - 17 && px <= bqx + 17 && py >= bqy - 30 && py <= bqy + 30) {
-      dogBbqOpen = 60 * 5;
+      dogBbqOpen = dogBbqOpen > 0 ? 0 : 60 * 5;
       tapFeedback(bqx, bqy); return;
     }
   }
@@ -3908,6 +4049,14 @@ function drawDynamicLighting() {
   ctx.save();
   // Shared day/night cycle across all three modes (starts in the morning)
   const phase = ((gameTick + _dayNightSeed) / 21600) % 1;
+  // Update time-of-day dial icon + label
+  {
+    const pi = phase < 0.25 ? 0 : phase < 0.45 ? 1 : phase < 0.70 ? 2 : 3;
+    _iconMorning.style.display   = pi === 0 ? 'block' : 'none';
+    _iconAfternoon.style.display = pi === 1 ? 'block' : 'none';
+    _iconEvening.style.display   = pi === 2 ? 'block' : 'none';
+    _iconNight.style.display     = pi === 3 ? 'block' : 'none';
+  }
   let col, alpha;
   if (phase < 0.06) {
     alpha = 0.22 * (1 - phase / 0.06) + 0.04;
@@ -4016,7 +4165,7 @@ function loop() {
     if (!puppiesSpawned) {
       if (++puppyTimer >= 60 * 90) {
         puppiesSpawned = true;
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0, _litter = 1 + Math.floor(Math.random() * 3); i < _litter; i++) {
           const col = DOG_COLORS[Math.floor(Math.random() * DOG_COLORS.length)];
           puppies.push(new Puppy(
             dog.x + (Math.random() - 0.5) * 40,
@@ -4033,6 +4182,7 @@ function loop() {
     drawDogForeground();
     if (dragonfly) { dragonfly.update(); dragonfly.draw(); }
     for (const b of birds) { b.update(); b.draw(); }
+    if (bunny) { bunny.update(); bunny.draw(); }
 
     if (scritching && !scritchCat && gameTick % 45 === 0) sndPant();
 
@@ -4254,8 +4404,10 @@ document.getElementById('sf-form').addEventListener('submit', async e => {
   const err = form.querySelector('.popup-err'), success = sfOverlay.querySelector('.popup-success');
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = '…'; err.hidden = true;
+  const data = new FormData(form);
+  if (!(data.get('email') || '').trim()) data.delete('email');  // email is optional — omit it if blank so Formspree doesn't reject it
   try {
-    const res = await fetch('https://formspree.io/f/mrevzark', { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+    const res = await fetch('https://formspree.io/f/mrevzark', { method: 'POST', body: data, headers: { 'Accept': 'application/json' } });
     if (res.ok) { form.hidden = true; success.hidden = false; }
     else { err.textContent = 'Something went wrong. Please try again.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
   } catch (_) { err.textContent = 'Could not send. Please try again later.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
@@ -4303,7 +4455,7 @@ document.getElementById('trick-btn').addEventListener('click', () => {
   if (gameMode !== 'dog') return;
   if (['fidget','digging'].includes(dog.state)) return;
   sndBark();
-  const tricks = ['beg','roll','shake','spin','jump'];
+  const tricks = ['roll','shake','spin','jump'];
   const trickNames = { beg:'Beg!', roll:'Roll over!', shake:'Shake!', spin:'Spin!', jump:'Jump!' };
   const trickType = tricks[Math.floor(Math.random() * tricks.length)];
   setTimeout(() => {

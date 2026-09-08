@@ -81,3 +81,39 @@ collections:
                 widget: text
                 required: false
                 hint: "Afrikaans translation of the artwork description."
+
+  - name: journal
+    label: Journal
+    label_singular: Post
+    description: "Written essays. Leave Draft ticked to keep a post hidden; untick it to publish. Pages and the RSS feed rebuild automatically after you save."
+    folder: blog/posts
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    slug: "{{title}}"
+    identifier_field: title
+    sortable_fields: [date, title]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: date
+        label: Date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        hint: "Posts are shown newest first."
+      - name: description
+        label: "Summary"
+        widget: text
+        required: false
+        hint: "One or two sentences shown on the Journal list and in the RSS feed."
+      - name: draft
+        label: "Draft (hidden from the site until unticked)"
+        widget: boolean
+        default: true
+      - name: slug
+        label: "Custom URL slug (optional)"
+        widget: string
+        required: false
+        hint: "Leave blank to build the address from the title."
+      - { name: body, label: "Body", widget: markdown }

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Graphic Design Portfolio — Walt Viviers</title>
-  <meta name="description" content="Graphic design portfolio of Walt Viviers — Creative Director based in Pretoria, South Africa. Twenty years of brand identity, web design, e-commerce, and digital marketing for major South African and international brands. MEA Business Award winner. 4,343% ROI for Kaizer Chiefs." />
+  <meta name="description" content="Graphic design portfolio of Walt Viviers — Creative Director based in Pretoria, South Africa. Brand identity, web design, e-commerce, and digital marketing for major South African and international brands. MEA Business Award winner. 4,343% ROI for Kaizer Chiefs." />
   <meta name="author" content="Walt Viviers" />
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://waltviviers.com/graphic-design-portfolio/" />
@@ -16,7 +16,7 @@
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://waltviviers.com/graphic-design-portfolio/" />
   <meta property="og:title"       content="Graphic Design Portfolio — Walt Viviers" />
-  <meta property="og:description" content="Creative Director based in Pretoria. Twenty years of brand, web, and digital work for Kaizer Chiefs, Alpha Industries, Kappa, Sebago, Superga and more. MEA Business Award winner." />
+  <meta property="og:description" content="Creative Director based in Pretoria. Brand, web, and digital work for Kaizer Chiefs, Alpha Industries, Kappa, Sebago, Superga and more. MEA Business Award winner." />
   <meta property="og:image"       content="https://waltviviers.com/brushstrokes-bg.webp" />
   <meta property="og:image:type"  content="image/webp" />
   <meta property="og:locale"      content="en_ZA" />
@@ -25,7 +25,7 @@
   <!-- Twitter / X -->
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="Graphic Design Portfolio — Walt Viviers" />
-  <meta name="twitter:description" content="Creative Director based in Pretoria. Twenty years of brand, web, and digital work." />
+  <meta name="twitter:description" content="Creative Director based in Pretoria. Brand, web, and digital work." />
   <meta name="twitter:image"       content="https://waltviviers.com/brushstrokes-bg.webp" />
 
   <!-- Structured data -->
@@ -36,7 +36,7 @@
       {
         "@type": "CollectionPage",
         "name": "Graphic Design Portfolio — Walt Viviers",
-        "description": "Creative Director and graphic design portfolio. Twenty years of brand identity, web design, e-commerce, and digital marketing.",
+        "description": "Creative Director and graphic design portfolio. Brand identity, web design, e-commerce, and digital marketing.",
         "url": "https://waltviviers.com/graphic-design-portfolio/",
         "author": {
           "@type": "Person",
@@ -644,6 +644,18 @@
       .profile-cta-name { font-size: 1.5rem; }
       .footer-admin { display: none; }
     }
+    /* Static Protocol floating button (turquoise glowing triangle, opens the game) */
+    .game-fab {
+      position: fixed; left: 21px; bottom: 20px; z-index: 150; width: 56px; height: 56px;
+      display: flex; align-items: center; justify-content: center; border-radius: 50%;
+      background: rgba(6, 20, 18, 0.55); border: 1px solid rgba(34, 230, 212, 0.35);
+      box-shadow: 0 0 16px rgba(34,230,212,0.45), 0 0 32px rgba(34,230,212,0.25), 0 5px 10px rgba(0,0,0,0.35);
+      transition: transform 0.18s ease, bottom 0.2s ease, box-shadow 0.2s ease;
+    }
+    .game-fab svg { width: 22px; height: 22px; }
+    .game-fab:hover { transform: translateY(-3px) scale(1.07); }
+    @media (max-width: 900px) { .game-fab { left: 94px; bottom: 21px; } }
+    body.privacy-visible .game-fab { bottom: max(95px, calc(var(--privacy-h, 48px) + 33px)); }
     /* Scritch Scratch floating button (dog badge, hover reaction) */
     .scritch-fab { position: fixed; left: 16px; bottom: 90px; z-index: 150; width: 66px; height: 66px; display: block; transition: transform 0.18s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.35)); }
     .scritch-fab img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
@@ -712,7 +724,7 @@
         <a href="/" class="back-link">← Back to fine art</a>
       </div>
       <p class="page-intro">
-        Twenty years of creative practice — from Junior Designer to Creative Director at a leading South African digital agency. Brand identity, web design, Shopify e-commerce, motion graphics, and performance digital marketing for major SA and international brands. MEA Business Award winner. Full project case studies on Behance; shots on Dribbble.
+        Creative practice — from Junior Designer to Creative Director at a leading South African digital agency. Brand identity, web design, Shopify e-commerce, motion graphics, and performance digital marketing for major SA and international brands. MEA Business Award winner. Full project case studies on Behance; shots on Dribbble.
       </p>
     </div>
 
@@ -1077,7 +1089,7 @@
         <div class="profile-cta-body">
           <p class="profile-cta-label">Professional history</p>
           <p class="profile-cta-name">LinkedIn</p>
-          <p class="profile-cta-desc">Twenty years of experience, client endorsements, and the full career timeline.</p>
+          <p class="profile-cta-desc">Client endorsements, career highlights, and the full timeline.</p>
         </div>
         <span class="profile-cta-arrow">↗</span>
       </a>
@@ -1105,9 +1117,7 @@
           <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
         </a>
       </div>
-      <p class="footer-copy">© 2026 Walt Viviers. All rights reserved.</p>
-    <a href="/privacy/" class="footer-privacy" style="display:inline-block;margin-top:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);">Privacy</a>
-    <span class="footer-credit" style="display:inline-block;margin-top:8px;margin-left:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);">· Made with &#9829; by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">Cat&#39;s Creations</a></span>
+      <div class="footer-legal" style="margin-top:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);line-height:1.7;text-align:center;"><span class="footer-copy">© 2026 Walt Viviers. All rights reserved.</span> <a href="/privacy/" class="footer-privacy" style="color:inherit;">Privacy Policy.</a> <span class="footer-credit">Made with <span style="color:#e0607e">&#9829;</span> by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Cat&#39;s Creations</a></span></div>
     </div>
     <a href="/admin-index/" class="footer-mark" aria-label="Admin">
       <img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
@@ -1143,6 +1153,9 @@
   </script>
 
   <!-- Scritch Scratch floating icon -->
+  <a href="/apps/static-protocol/play/" class="game-fab" aria-label="Play Static Protocol">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6l6 6-6 6" stroke="#22e6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="18" x2="20" y2="18" stroke="#22e6d4" stroke-width="2" stroke-linecap="round"/></svg>
+  </a>
   <a href="https://waltviviers.com/apps/scritch-scratch/play/" class="scritch-fab" aria-label="Play Scritch Scratch">
     <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Scritch Scratch" width="64" height="64" loading="lazy" />
     <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" loading="lazy" />
