@@ -79,38 +79,57 @@
     nav {
       position: fixed; inset: 0 0 auto 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
-      padding: 0 48px; height: 56px;
+      padding: 0 48px; height: 100px;
       background: rgba(0,0,0,0.97); backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--rule);
+      transition: height 0.4s cubic-bezier(0.4,0,0.2,1);
     }
-    .nav-logo img { height: 24px; width: auto; }
-    .nav-right { display: flex; align-items: center; gap: 24px; }
-    .nav-label {
-      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone);
-    }
-    .nav-links-group { display: flex; align-items: center; gap: 16px; }
-    .nav-link {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase;
-      color: var(--stone); padding: 6px 14px; border: 1px solid var(--rule);
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .nav-link:hover { border-color: var(--stone); color: var(--ink); }
+    nav.scrolled { height: 50px; }
+    .nav-logo img { height: 36px; width: auto; transition: height 0.4s cubic-bezier(0.4,0,0.2,1); }
+    nav.scrolled .nav-logo img { height: 28px; }
+    .nav-links { display: flex; align-items: center; gap: 26px; list-style: none; margin: 0; padding: 0; }
+    .nav-links a { font-family: var(--sans); font-size: 11px; font-weight: 400; letter-spacing: 0.10em; text-transform: uppercase; white-space: nowrap; color: var(--stone); transition: color 0.2s; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta { color: var(--ink); padding: 7px 18px; border: 1px solid #4A4844; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+    .nav-cta:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .nav-social { display: flex; align-items: center; gap: 16px; }
+    .nav-social a { display: flex; color: var(--stone); transition: color 0.2s; }
+    .nav-social a:hover { color: var(--ink); }
+    .nav-social svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
     .theme-toggle {
-      padding: 4px; background: none; cursor: pointer;
+      padding: 4px; background: none; cursor: pointer; border: none;
       display: flex; align-items: center; justify-content: center;
     }
     .toggle-thumb { display: flex; align-items: center; justify-content: center; }
     .toggle-thumb .icon-moon, .toggle-thumb .icon-sun {
-      width: 16px; height: 16px; fill: none; stroke: var(--stone);
+      width: 17px; height: 17px; fill: none; stroke: var(--stone);
       stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
     }
     .toggle-thumb .icon-moon { display: block; }
     .toggle-thumb .icon-sun  { display: none; }
     .theme-toggle:hover .toggle-thumb svg { stroke: var(--ink); }
+    .burger-btn { display: none; background: none; border: none; cursor: pointer; font-size: 20px; line-height: 1; padding: 2px; }
+    .burger-btn .burger-close { display: none; font-style: normal; }
+    .burger-btn.is-open .burger-icon { display: none; }
+    .burger-btn.is-open .burger-close { display: inline; }
+    .mobile-menu { position: fixed; inset: 0; z-index: 190; background: var(--bg); display: flex; flex-direction: column; justify-content: center; padding: 80px 32px 48px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .mobile-menu.is-open { opacity: 1; pointer-events: auto; }
+    body.menu-open { overflow: hidden; }
+    .mobile-menu-link { display: flex; align-items: center; justify-content: space-between; padding: 20px 0; border-bottom: 1px solid var(--rule); font-family: var(--serif); font-size: clamp(1.8rem, 8vw, 3rem); font-weight: 400; color: var(--stone); transition: color 0.2s; }
+    .mobile-menu-link:hover { color: var(--ink); }
+    .mobile-menu-link-cta { color: var(--ink); }
+    .mobile-menu-arrow { font-size: 1.2rem; opacity: 0.4; }
+    [data-theme="light"] .nav-cta { color: #0C0C0B; border-color: #D5D1CB; }
+    [data-theme="light"] .nav-cta:hover { background: #0C0C0B; color: #FAF9F7; border-color: #0C0C0B; }
+    @media (max-width: 900px) {
+      .nav-link-hide { display: none; }
+      .nav-social { display: none; }
+      .burger-btn { display: inline-flex; align-items: center; }
+    }
 
     /* ── Page wrap ── */
     .page-wrap {
-      padding: calc(56px + 48px) 48px 80px;
+      padding: calc(100px + 48px) 48px 80px;
       max-width: 1400px;
       margin: 0 auto;
     }
@@ -324,8 +343,9 @@
 
     /* Responsive */
     @media (max-width: 900px) {
-      nav { padding: 0 20px; }
-      .page-wrap { padding: calc(56px + 32px) 20px 64px; }
+      nav { padding: 0 20px; height: 50px; }
+      .nav-logo img { height: 28px; }
+      .page-wrap { padding: calc(50px + 32px) 20px 64px; }
       .page-row { grid-template-columns: 1fr auto auto; }
       .cell-desc { display: none; }
       .cell-actions { display: none; }
@@ -382,23 +402,43 @@
   <div id="page-content">
 
   <nav>
-    <a href="/admin-index/" class="nav-logo" aria-label="Admin Index">
+    <a href="/" class="nav-logo" aria-label="Home">
       <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
     </a>
-    <div class="nav-right">
-      <span class="nav-label">Site Admin</span>
-      <div class="nav-links-group">
-        <a href="/" class="nav-link">← Site</a>
-        <a href="/admin/" class="nav-link">CMS ↗</a>
-      </div>
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
-        <span class="toggle-thumb">
-          <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="icon-sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </span>
-      </button>
-    </div>
+    <ul class="nav-links">
+      <li class="nav-link-hide"><a href="/photography/">Photography &amp; Video</a></li>
+      <li class="nav-link-hide"><a href="/gallery/">Fine Art &amp; Illustration</a></li>
+      <li class="nav-link-hide"><a href="/artist-bio/">Bio &amp; Statement</a></li>
+      <li class="nav-link-hide"><a href="/blog/">Journal</a></li>
+      <li class="nav-link-hide"><a href="/#enquire" class="nav-cta">Enquire</a></li>
+      <li>
+        <div class="nav-social">
+          <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg></a>
+          <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="mailto:artist@waltviviers.com" aria-label="Email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg></a>
+        </div>
+      </li>
+      <li>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
+          <span class="toggle-thumb">
+            <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </span>
+        </button>
+      </li>
+      <li>
+        <button class="burger-btn" id="burger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><span class="burger-icon">🍔</span><em class="burger-close">🌭</em></button>
+      </li>
+    </ul>
   </nav>
+  <!-- Mobile menu overlay -->
+  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Navigation menu">
+    <a href="/photography/" class="mobile-menu-link">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>
+    <a href="/gallery/" class="mobile-menu-link">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>
+    <a href="/artist-bio/" class="mobile-menu-link">Bio &amp; Statement <span class="mobile-menu-arrow">↗</span></a>
+    <a href="/blog/" class="mobile-menu-link">Journal <span class="mobile-menu-arrow">↗</span></a>
+    <a href="/#enquire" class="mobile-menu-link mobile-menu-link-cta">Enquire <span class="mobile-menu-arrow">↗</span></a>
+  </div>
 
   <div class="page-wrap">
 
@@ -517,6 +557,20 @@
       html.dataset.theme = next;
       localStorage.setItem('wv-theme', next);
     });
+
+    /* ── Nav: scroll-shrink + mobile burger menu ── */
+    (function () {
+      var nav = document.querySelector('nav'), ticking = false;
+      window.addEventListener('scroll', function () {
+        if (!ticking) { requestAnimationFrame(function () { nav.classList.toggle('scrolled', window.scrollY > 40); ticking = false; }); ticking = true; }
+      }, { passive: true });
+      var burger = document.getElementById('burger-btn'), menu = document.getElementById('mobile-menu');
+      if (burger && menu) {
+        function close() { burger.classList.remove('is-open'); burger.setAttribute('aria-expanded', 'false'); menu.classList.remove('is-open'); document.body.classList.remove('menu-open'); }
+        burger.addEventListener('click', function () { menu.classList.contains('is-open') ? close() : (burger.classList.add('is-open'), burger.setAttribute('aria-expanded', 'true'), menu.classList.add('is-open'), document.body.classList.add('menu-open')); });
+        menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', close); });
+      }
+    })();
 
     /* ── Page registry ── */
     var GH_BASE = 'https://github.com/waltviviers/waltviviers.com/edit/main';
