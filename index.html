@@ -1610,7 +1610,8 @@
     .game-fab svg { width: 22px; height: 22px; }
     .game-fab:hover { transform: translateY(-3px) scale(1.07); }
     @media (max-width: 900px) { .game-fab { left: 94px; bottom: 21px; } }
-    body.privacy-visible .game-fab { bottom: max(95px, calc(var(--privacy-h, 48px) + 33px)); }
+    /* Desktop: lift the triangle just above the notice, staying under the dog badge */
+    body.privacy-visible .game-fab { bottom: max(20px, calc(var(--privacy-h, 48px) + 14px)); }
     /* Scritch Scratch floating button (dog badge, hover reaction) */
     .scritch-fab { position: fixed; left: 16px; bottom: 90px; z-index: 150; width: 66px; height: 66px; display: block; transition: transform 0.18s ease, bottom 0.2s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.35)); }
     .scritch-fab img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
@@ -1619,10 +1620,15 @@
     .scritch-fab:hover .ss-up { opacity: 0; }
     .scritch-fab:hover .ss-over { opacity: 1; }
     @media (max-width: 900px) { .scritch-fab { bottom: 16px; } } /* level with the Enquire FAB on mobile */
-    /* While the privacy notice is showing, lift the game icon clear above it */
-    body.privacy-visible .scritch-fab { bottom: max(90px, calc(var(--privacy-h, 48px) + 28px)); }
+    /* Desktop: lift the dog badge high enough to keep the triangle stacked beneath it, clear of the notice */
+    body.privacy-visible .scritch-fab { bottom: max(90px, calc(var(--privacy-h, 48px) + 84px)); }
     /* Lift the Enquire FAB with the notice too, level with the game icons */
     body.privacy-visible .gx-fab { bottom: max(101px, calc(var(--privacy-h, 48px) + 39px)); }
+    /* Mobile keeps the side-by-side layout, so both icons lift together, level with each other */
+    @media (max-width: 900px) {
+      body.privacy-visible .scritch-fab { bottom: max(90px, calc(var(--privacy-h, 48px) + 28px)); }
+      body.privacy-visible .game-fab { bottom: max(95px, calc(var(--privacy-h, 48px) + 33px)); }
+    }
     /* Custom hand pointer, site-wide */
     html, body, body * { cursor: url('/images/pointer_up.png') 3 1, auto !important; }
     body *:active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
