@@ -1281,6 +1281,19 @@
     }
 
     /* ── Instagram feed ─────────────────────────── */
+    /* ── Digital Experiments ── */
+    .digital { border-top: 1px solid var(--rule); padding: 64px 48px 72px; }
+    .digital-label { font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--stone);margin-bottom:24px; }
+    .digital-intro { font-family:var(--serif);font-size:clamp(1.3rem,2.6vw,1.9rem);font-style:italic;line-height:1.4;color:var(--ink);max-width:820px;margin-bottom:40px; }
+    .digital-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule); }
+    .digital-card { background:var(--bg);padding:32px;display:flex;flex-direction:column;gap:14px;transition:background 0.2s; }
+    .digital-card:hover { background:var(--bg2); }
+    .digital-title { font-family:var(--serif);font-size:clamp(1.4rem,2.2vw,1.75rem);font-weight:400;line-height:1.1; }
+    .digital-desc { font-family:var(--serif);font-size:clamp(1rem,1.4vw,1.1rem);line-height:1.7;color:var(--stone);flex-grow:1; }
+    .digital-cta { font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);transition:color 0.2s; }
+    .digital-card:hover .digital-cta { color:var(--ink); }
+    @media (max-width:900px) { .digital { padding:48px 24px 56px; } .digital-grid { grid-template-columns:1fr; } }
+
     #instagram {
       border-top: 1px solid var(--rule);
     }
@@ -1862,6 +1875,24 @@
     <div class="instagram-grid" id="instagram-grid"></div>
   </section>
 
+  <!-- Digital Experiments -->
+  <section class="digital" aria-label="Digital Experiments">
+    <p class="digital-label" data-i18n="digital-label">Digital Experiments</p>
+    <p class="digital-intro" data-i18n="digital-intro">Alongside the paintings, I build small interactive pieces, mostly with AI-assisted tools, as another way of chasing the same instinct: make something, then see who it moves.</p>
+    <div class="digital-grid">
+      <a class="digital-card" href="/apps/static-protocol/play/">
+        <h2 class="digital-title">Static Protocol</h2>
+        <p class="digital-desc" data-i18n="digital-sp-desc">A cyberpunk data-heist story built for mobile. Five decisions, five live hacking sequences, ten possible endings. However you handle the jobs is however it goes.</p>
+        <span class="digital-cta" data-i18n="digital-play">Play &#8594;</span>
+      </a>
+      <a class="digital-card" href="/apps/scritch-scratch/play/">
+        <h2 class="digital-title">Scritch Scratch</h2>
+        <p class="digital-desc" data-i18n="digital-ss-desc">The opposite kind of experiment: an interactive pet app with three relaxed modes (dogs, rats, cats) and nothing to win. Tap around, make a mess, enjoy the calm.</p>
+        <span class="digital-cta" data-i18n="digital-play">Play &#8594;</span>
+      </a>
+    </div>
+  </section>
+
   <!-- Enquiry Modal -->
   <div class="modal-backdrop" id="enquiry-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="enquiry-modal-title">
     <div class="modal">
@@ -2010,6 +2041,7 @@
         'art-intro-eyebrow': 'Fine Art & Illustration', 'art-intro-headline': 'Bold originals — from the iconic to the unexpected', 'art-intro-desc': 'Acrylic and mixed-media paintings that read with clarity from across the room and reveal expressive, unmistakable brushwork up close — held in private collections across South Africa and abroad.',
         'explore-photo-title': 'Photography & Video', 'explore-photo-desc': 'Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist\'s eye. Each album opens in Google Photos.', 'explore-photo-cta': 'View albums →', 'pf-headline': 'Portraits, events & retreats — through a fine artist\'s eye', 'pf-book': 'Book a session',
         'explore-apps-title': 'Apps & Games', 'explore-apps-desc': 'A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.', 'explore-apps-cta': 'Explore →',
+        'digital-label': 'Digital Experiments', 'digital-intro': 'Alongside the paintings, I build small interactive pieces, mostly with AI-assisted tools, as another way of chasing the same instinct: make something, then see who it moves.', 'digital-sp-desc': 'A cyberpunk data-heist story built for mobile. Five decisions, five live hacking sequences, ten possible endings. However you handle the jobs is however it goes.', 'digital-ss-desc': 'The opposite kind of experiment: an interactive pet app with three relaxed modes (dogs, rats, cats) and nothing to win. Tap around, make a mess, enjoy the calm.', 'digital-play': 'Play →',
         'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
         'photo-about-title-html': 'A Painter\'s Eye<br/><em>Behind the Lens</em>',
         'photo-about-p1': 'Photography and video are an extension of the same practice — the same instinct for light, composition, and the quiet moment that says everything. I bring a fine artist\'s eye to every frame.',
@@ -2054,6 +2086,7 @@
         'art-intro-eyebrow': 'Skone Kunste & Illustrasie', 'art-intro-headline': 'Gedurfde oorspronklikes — van die ikoniese tot die onverwagte', 'art-intro-desc': 'Akriel- en gemengde-media skilderye wat met helderheid van oorkant die kamer lees en van naby uitdrukkingsvolle, onmiskenbare kwaswerk openbaar — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
         'explore-photo-title': 'Fotografie & Video', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — vasgevang in foto en video met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →', 'pf-headline': 'Portrette, geleenthede & toevlugte — deur \'n kunstenaar se oog', 'pf-book': 'Bespreek \'n sessie',
         'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': '\'n Groeiende versameling blaaierspeletjies en klein, private programme wat vanlyn werk — van \'n drie-troeteldier-speelding tot \'n handige fooi-sakrekenaar. Geen advertensies, geen opsporing.', 'explore-apps-cta': 'Verken →',
+        'digital-label': 'Digitale Eksperimente', 'digital-intro': 'Naas die skilderye bou ek klein interaktiewe stukke, meestal met KI-ondersteunde gereedskap, as nog \'n manier om dieselfde instink na te jaag: maak iets, en kyk dan wie dit roer.', 'digital-sp-desc': '\'n Kuberpunk-data-roof-storie gebou vir mobiel. Vyf besluite, vyf lewendige inbraak-reekse, tien moontlike eindes. Hoe jy die werk hanteer, is hoe dit uitdraai.', 'digital-ss-desc': 'Die teenoorgestelde soort eksperiment: \'n interaktiewe troeteldier-toepassing met drie ontspanne modusse (honde, rotte, katte) en niks om te wen nie. Tik rond, maak \'n gemors, geniet die kalmte.', 'digital-play': 'Speel →',
         'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
         'photo-about-title-html': '\'n Skildersoog<br/><em>Agter die Lens</em>',
         'photo-about-p1': 'Fotografie en video is \'n verlengstuk van dieselfde praktyk — dieselfde instink vir lig, komposisie en die stil oomblik wat alles sê. Ek bring \'n kunstenaar se oog na elke raam.',
