@@ -1,0 +1,14 @@
+# Files that don't need to ship with the deployed site.
+# They stay in the Git repo; they're just not uploaded to Vercel,
+# so every deployment is smaller.
+
+.github/
+scripts/
+blog/posts/
+README.md
+screenshot-wide.png
+screenshot-mobile.png
+
+# /works/<slug>/ is 301-redirected to /gallery/<slug>/ in vercel.json,
+# so these files are never served.
+works/
