@@ -12,6 +12,7 @@
   <link rel="manifest" href="/manifest.json" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
   <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
+  <script defer src="/chrome.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -134,19 +135,6 @@
 </style>
 </head>
 <body>
-  <nav>
-    <a href="/" class="nav-logo" aria-label="Home"><img src="/logo.svg" alt="Walt Viviers" width="379" height="185" /></a>
-    <div class="nav-right">
-      <a href="/" class="back-link">&#8592; Home</a>
-      <a href="/artist-gallery-agreement/Artist-Gallery_Agreement.pdf" target="_blank" rel="noopener" class="download-btn">Download PDF</a>
-      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
-        <span class="toggle-thumb">
-          <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <svg class="icon-sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </span>
-      </button>
-    </div>
-  </nav>
   <div class="page-wrap">
     <div class="page-head">
       <div class="page-head-top"><h1>Artist-Gallery Agreement</h1><span class="page-head-sub">Walt Viviers Fine Art</span></div>
@@ -244,25 +232,6 @@
       <div class="contact-item"><span class="contact-label">Location</span><span class="contact-value">Pretoria, Gauteng<br/>South Africa</span></div>
     </div>
   </div>
-  <footer>
-    <button class="footer-admin" id="admin-btn">Admin</button>
-    <div class="footer-social">
-      <div class="social-icons">
-        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg></a>
-        <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-        <a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg></a>
-        <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" aria-label="Behance"><svg viewBox="0 0 24 24"><path d="M3 4v16M3 4h5a3 3 0 0 1 0 6H3m0 0h5.5a3.5 3.5 0 0 1 0 7H3"/><line x1="14" y1="7" x2="20" y2="7"/><line x1="13.5" y1="13.5" x2="22" y2="13.5"/><path d="M21 12a3.5 3.5 0 1 0 0 3"/></svg></a>
-        <a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg></a>
-        <a href="mailto:artist@waltviviers.com" aria-label="Email"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg></a>
-      </div>
-      <div class="footer-legal" style="margin-top:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);line-height:1.7;text-align:center;"><span class="footer-copy">&#169; 2026 Walt Viviers. All rights reserved.</span> <a href="/privacy/" class="footer-privacy" style="color:inherit;">Privacy Policy.</a> <span class="footer-credit">Made with <span style="color:#e0607e">&#9829;</span> by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Cat&#39;s Creations</a></span></div>
-    </div>
-    <div class="footer-mark">
-      <img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
-    </div>
-  </footer>
-  <script>(function(){document.getElementById('theme-toggle').addEventListener('click',function(){var html=document.documentElement;var next=html.dataset.theme==='light'?'dark':'light';html.dataset.theme=next;localStorage.setItem('wv-theme',next);});})();</script>
-  <script>(function(){var a=document.getElementById('admin-btn');if(a)a.addEventListener('click',function(){window.location.href='https://waltviviers.com/admin-index/';});})();</script>
   <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>
