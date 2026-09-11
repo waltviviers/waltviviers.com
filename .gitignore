@@ -1,0 +1,52 @@
+# Local / OS / tooling
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+
+# Unreferenced source originals & stray uploads (kept in history, not shipped)
+images/1ad6bd14761993.56288b067354b.jpg
+images/800/1ad6bd14761993.56288b067354b.jpg
+images/800/IMG_20161020_082021.jpg
+images/800/IMG_20170520_153314_672.jpg
+images/800/IMG_20190322_201754.jpg
+images/800/IMG_8939.jpg
+images/800/IMG_8992.jpg
+images/800/IMG_8993.jpg
+images/800/IMG_8997.jpg
+images/800/IMG_9032.jpg
+images/800/IMG_9409.jpg
+images/800/QVZoTm9KaElkRk1heDluSmZhb0w2SkJE.png
+images/800/Screenshot 2026-06-12 131121.png
+images/IMG_20161020_082021.jpg
+images/IMG_20170520_153314_672.jpg
+images/IMG_20190322_201754.jpg
+images/IMG_8939.jpg
+images/IMG_8992.jpg
+images/IMG_8993.jpg
+images/IMG_8997.jpg
+images/IMG_9032.jpg
+images/IMG_9409.jpg
+images/QVZoTm9KaElkRk1heDluSmZhb0w2SkJE.png
+images/Screenshot 2026-06-12 131121.png
+images/thumbs/1ad6bd14761993.56288b067354b.jpg
+images/thumbs/IMG_20161020_082021.jpg
+images/thumbs/IMG_20170520_153314_672.jpg
+images/thumbs/IMG_20190322_201754.jpg
+images/thumbs/IMG_8939.jpg
+images/thumbs/IMG_8992.jpg
+images/thumbs/IMG_8993.jpg
+images/thumbs/IMG_8997.jpg
+images/thumbs/IMG_9032.jpg
+images/thumbs/IMG_9409.jpg
+images/thumbs/QVZoTm9KaElkRk1heDluSmZhb0w2SkJE.png
+images/thumbs/Screenshot 2026-06-12 131121.png
+photography/Chantal.jpg
+photography/Garden.jpg
+photography/One Stop.jpg
+photography/The Farm.jpg
+photography/Unlimited.jpg
+images/800/pointer_up.png
+images/800/pointer_down.png
+images/thumbs/pointer_up.png
+images/thumbs/pointer_down.png
