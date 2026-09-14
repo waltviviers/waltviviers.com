@@ -1,0 +1,59 @@
+
+
+
+
+
+  <script>
+    (function() {
+      var LANG = {
+        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Fine Art & Illustration','nav-photography':'Photography & Video','nav-apps':'Apps & Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
+        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Skone Kunste & Illustrasie','nav-photography':'Fotografie & Video','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+      };
+      var lang = localStorage.getItem('wv-lang') || 'en';
+      function applyLang(l) {
+        lang = l; localStorage.setItem('wv-lang', l);
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          var k = el.dataset.i18n;
+          if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
+        });
+        document.querySelectorAll('[data-i18n-href]').forEach(function(el) {
+          var k = el.dataset.i18nHref;
+          if (LANG[l] && LANG[l][k] !== undefined) el.href = LANG[l][k];
+        });
+        var descEl = document.getElementById('artwork-description');
+        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
+      }
+      window.wvApplyLang = applyLang;
+      applyLang(lang);
+    })();
+  </script>
+
+  <script>
+    function toggleForm() {
+      var sec = document.getElementById('enquiry-section');
+      sec.hidden = !sec.hidden;
+    }
+    document.getElementById('enquiry-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      var btn = document.getElementById('submit-btn');
+      var errEl = document.getElementById('form-error');
+      btn.disabled = true; btn.textContent = '…'; errEl.hidden = true;
+      try {
+        var res = await fetch('https://formspree.io/f/mrevzark', {
+          method: 'POST', body: new FormData(this), headers: { Accept: 'application/json' }
+        });
+        if (res.ok) {
+          this.hidden = true;
+          document.getElementById('form-success').hidden = false;
+        } else {
+          var d = await res.json();
+          errEl.textContent = (d.errors||[]).map(function(x){return x.message;}).join(', ') || 'Something went wrong.';
+          errEl.hidden = false; btn.disabled = false; btn.textContent = 'Send enquiry';
+        }
+      } catch(_) {
+        errEl.textContent = (LANG[lang] && LANG[lang]['email-fallback']) || 'Could not send. Email artist@waltviviers.com directly.';
+        errEl.hidden = false; btn.disabled = false; btn.textContent = 'Send enquiry';
+      }
+    });
+  </script>
+  <!-- Global: floating Enquire button + Enquire modal -->
