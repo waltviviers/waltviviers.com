@@ -20,9 +20,9 @@
   <!-- Microsoft Clarity -->
   <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","x0prpd6frb");</script>
 
-  <title>Walt Viviers — Fine Artist | Pretoria, South Africa</title>
-  <meta name="description" content="Walt Viviers is a South African fine artist based in Pretoria, working in acrylic and mixed media. Professional creative practice behind the canvas. Original works represented on Saatchi Art. Commissions welcome." />
-  <meta name="keywords" content="Walt Viviers, fine art, Pretoria artist, Pretoria painter, Gauteng artist, South African artist, acrylic painting, original art, art commission Pretoria, contemporary art South Africa, art for sale Pretoria, figurative art, mixed media art" />
+  <title>Walt Viviers — Content Creator | Pretoria, South Africa</title>
+  <meta name="description" content="Walt Viviers is a Pretoria-based content creator and creative polymath, offering traditional and digital creative services — photography &amp; video, fine art &amp; illustration, graphic &amp; web design, and AI-assisted apps and content — to individuals and businesses across South Africa and beyond." />
+  <meta name="keywords" content="Walt Viviers, content creator, creative polymath, Pretoria, South Africa, photography, video, fine art, illustration, graphic design, web design, creative director, AI-assisted content, freelance creative" />
   <meta name="author" content="Walt Viviers" />
   <meta http-equiv="content-language" content="en" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -49,11 +49,11 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://waltviviers.com/" />
-  <meta property="og:site_name" content="Walt Viviers — Fine Art" />
-  <meta property="og:title" content="Walt Viviers — Fine Artist | Pretoria, South Africa" />
-  <meta property="og:description" content="South African fine artist based in Pretoria. Creative practice behind the canvas. Original works represented on Saatchi Art. Commissions welcome." />
+  <meta property="og:site_name" content="Walt Viviers" />
+  <meta property="og:title" content="Walt Viviers — Content Creator | Pretoria, South Africa" />
+  <meta property="og:description" content="Pretoria-based content creator and creative polymath — photography &amp; video, fine art &amp; illustration, graphic &amp; web design, and AI-assisted work. For individuals and businesses." />
   <meta property="og:image" content="https://waltviviers.com/brushstrokes-bg.webp" />
-  <meta property="og:image:alt" content="Walt Viviers — South African Fine Artist" />
+  <meta property="og:image:alt" content="Walt Viviers — Content Creator &amp; creative polymath" />
   <meta property="og:image:type" content="image/webp" />
   <meta property="og:image:width" content="2360" />
   <meta property="og:image:height" content="590" />
@@ -61,10 +61,10 @@
 
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Walt Viviers — Fine Artist | Pretoria, South Africa" />
-  <meta name="twitter:description" content="South African fine artist based in Pretoria. Creative practice behind the canvas. Original works represented on Saatchi Art. Commissions welcome." />
+  <meta name="twitter:title" content="Walt Viviers — Content Creator | Pretoria, South Africa" />
+  <meta name="twitter:description" content="Pretoria-based content creator and creative polymath — photography &amp; video, fine art, illustration, graphic &amp; web design, and AI-assisted work." />
   <meta name="twitter:image" content="https://waltviviers.com/brushstrokes-bg.webp" />
-  <meta name="twitter:image:alt" content="Walt Viviers — South African Fine Artist" />
+  <meta name="twitter:image:alt" content="Walt Viviers — Content Creator &amp; creative polymath" />
 
   <!-- Hreflang -->
   <link rel="alternate" hreflang="en" href="https://waltviviers.com/" />
@@ -577,6 +577,98 @@
       .pf-hero { min-height: clamp(500px, 76vh, 620px); }
       .pf-hero-inner { padding: 26px 24px; gap: 12px; }
     }
+
+    /* ── Content Creator hero ── */
+    .cc-hero {
+      position: relative; min-height: clamp(560px, 88vh, 860px);
+      display: flex; align-items: center; overflow: hidden;
+      background: var(--bg); border-bottom: 1px solid var(--rule);
+    }
+    .cc-hero-bg {
+      position: absolute; inset: 0; opacity: 0.14;
+      background-position: center bottom; background-size: cover; background-repeat: no-repeat;
+    }
+    [data-theme="light"] .cc-hero-bg { opacity: 0.10; filter: invert(1); }
+    .cc-hero::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(to top, var(--bg) 0%, rgba(0,0,0,0) 55%);
+    }
+    .cc-hero-inner {
+      position: relative; z-index: 2; width: 100%; max-width: 1000px;
+      padding: clamp(96px, 11vw, 140px) clamp(24px, 6vw, 72px) clamp(56px, 7vw, 90px);
+      display: flex; flex-direction: column; gap: 22px;
+    }
+    .cc-eyebrow {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--stone);
+    }
+    .cc-title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(2.4rem, 6.4vw, 4.9rem); line-height: 1.03;
+      letter-spacing: -0.015em; color: var(--ink); max-width: 16ch;
+    }
+    .cc-title em { font-style: italic; color: var(--stone); }
+    .cc-lead {
+      font-size: clamp(15px, 1.55vw, 18px); line-height: 1.75;
+      color: var(--stone); max-width: 640px;
+    }
+    .cc-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+    .cc-btn {
+      font-family: var(--sans); font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      padding: 14px 28px; cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .cc-btn-primary { background: var(--ink); color: var(--bg); border: 1px solid var(--ink); }
+    .cc-btn-primary:hover { background: transparent; color: var(--ink); }
+    .cc-btn-secondary { background: transparent; color: var(--ink); border: 1px solid var(--rule); }
+    .cc-btn-secondary:hover { border-color: var(--ink); }
+
+    /* ── What I do — disciplines ── */
+    .disc {
+      max-width: 1400px; margin: 0 auto;
+      padding: clamp(64px, 8vw, 110px) clamp(24px, 6vw, 72px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .disc-head { margin-bottom: clamp(34px, 5vw, 54px); }
+    .disc-eyebrow {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--stone); margin-bottom: 14px;
+    }
+    .disc-title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(1.8rem, 3.6vw, 2.8rem); line-height: 1.12;
+      letter-spacing: -0.01em; color: var(--ink); max-width: 720px;
+    }
+    .disc-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      background: var(--rule); border: 1px solid var(--rule);
+    }
+    .disc-card {
+      background: var(--bg); padding: clamp(28px, 3vw, 40px);
+      display: flex; flex-direction: column; gap: 12px; min-height: 210px;
+      transition: background 0.2s;
+    }
+    .disc-card:hover { background: var(--bg2); }
+    .disc-card-num { font-size: 11px; letter-spacing: 0.16em; color: var(--stone); }
+    .disc-card-title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(1.4rem, 2.4vw, 1.9rem); line-height: 1.1; color: var(--ink);
+    }
+    .disc-card-desc { font-size: 14px; line-height: 1.7; color: var(--stone); flex-grow: 1; }
+    .disc-card-cta {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--stone); transition: color 0.2s;
+    }
+    .disc-card:hover .disc-card-cta { color: var(--ink); }
+    @media (max-width: 760px) { .disc-grid { grid-template-columns: 1fr; } }
+    .disc-also {
+      margin-top: clamp(28px, 3vw, 40px);
+      font-family: var(--serif); font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+      font-style: italic; line-height: 1.6; color: var(--stone); max-width: 760px;
+    }
+    .disc-also a { color: var(--ink); border-bottom: 1px solid var(--rule); transition: border-color 0.2s; }
+    .disc-also a:hover { border-color: var(--ink); }
     /* Fine-art intro band reuses the photography-hero styling (static cover, no parallax) */
     #art-intro { border-top: 1px solid var(--rule); }
     #art-intro .pf-hero-img img { height: 100%; top: 0; }
@@ -1725,6 +1817,55 @@
 
   <main id="main" role="main">
 
+  <!-- Content Creator hero -->
+  <section class="cc-hero" aria-label="Walt Viviers — Content Creator">
+    <div class="cc-hero-bg" style="background-image:url('/brushstrokes-bg.webp')"></div>
+    <div class="cc-hero-inner">
+      <p class="cc-eyebrow" data-i18n="cc-eyebrow">Walt Viviers · Content Creator</p>
+      <h1 class="cc-title" data-i18n-html="cc-title-html">Tinkerer, maker,<br/><em>chronic curiosity chaser.</em></h1>
+      <p class="cc-lead" data-i18n="cc-lead">A creative polymath from Pretoria. I paint and illustrate, shoot photography and video, design brands, build small apps and write — and lately I've been chasing video and social, in front of the camera as much as behind it. Artist, designer, photographer, writer, the occasional musician and editor: at the core, it's still people and art.</p>
+      <div class="cc-actions">
+        <button type="button" class="cc-btn cc-btn-primary gx-open" data-i18n="cc-cta-work">Get in touch</button>
+        <a href="#what-i-do" class="cc-btn cc-btn-secondary" data-i18n="cc-cta-see">See the work ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- What I do — the disciplines -->
+  <section id="what-i-do" class="disc" aria-label="The work">
+    <div class="disc-head">
+      <p class="disc-eyebrow" data-i18n="disc-eyebrow">The work</p>
+      <h2 class="disc-title" data-i18n="disc-title">One creator, many crafts — pick a thread and follow it.</h2>
+    </div>
+    <div class="disc-grid">
+      <a class="disc-card" href="/photography/">
+        <span class="disc-card-num">01</span>
+        <h3 class="disc-card-title" data-i18n="disc-photo-title">Photography &amp; Video</h3>
+        <p class="disc-card-desc" data-i18n="disc-photo-desc">Portraits, events and wellness retreats — and, increasingly, social video: short-form storytelling in front of and behind the camera.</p>
+        <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+      </a>
+      <a class="disc-card" href="/gallery/">
+        <span class="disc-card-num">02</span>
+        <h3 class="disc-card-title" data-i18n="disc-art-title">Fine Art &amp; Illustration</h3>
+        <p class="disc-card-desc" data-i18n="disc-art-desc">Acrylic and mixed-media originals — from the iconic to the unexpected — held in private collections across South Africa and abroad.</p>
+        <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+      </a>
+      <a class="disc-card" href="/graphic-design-portfolio/">
+        <span class="disc-card-num">03</span>
+        <h3 class="disc-card-title" data-i18n="disc-design-title">Graphic &amp; Web Design</h3>
+        <p class="disc-card-desc" data-i18n="disc-design-desc">A Creative Director's toolkit, hands-on again: brand identity, web and e-commerce, motion and campaigns for brands big and small.</p>
+        <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+      </a>
+      <a class="disc-card" href="/apps/">
+        <span class="disc-card-num">04</span>
+        <h3 class="disc-card-title" data-i18n="disc-apps-title">Apps &amp; Games</h3>
+        <p class="disc-card-desc" data-i18n="disc-apps-desc">Small browser games and genuinely useful apps, built independently and sharpened with AI tools — made for the joy of making.</p>
+        <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+      </a>
+    </div>
+    <p class="disc-also" data-i18n-html="disc-also-html">And along the way: writing in the <a href="/blog/">Journal</a>, music, and the odd bit of video editing — a content creator wears every hat.</p>
+  </section>
+
   <!-- Photography & Video — feature -->
   <section id="photo-feature" aria-label="Photography & Video">
     <div class="pf-hero">
@@ -1792,15 +1933,15 @@
   <section id="about">
     <div class="about-left">
       <h2 class="about-title" data-i18n-html="about-title-html">
-        Created in South Africa<br/><em>Available to the World</em>
+        People and Art<br/><em>at the Core</em>
       </h2>
       <a href="/artist-bio/" class="about-bio-btn" data-i18n="about-bio-btn">Bio &amp; Statement ↗</a>
     </div>
     <div class="about-body">
-      <p data-i18n="about-p1">I am a South African fine artist working in acrylic and mixed media. Professional creative practice — across design, art direction, and brand — has sharpened a painter's eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.</p>
-      <p data-i18n="about-p2">Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.</p>
-      <p data-i18n="about-p3">For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.</p>
-      <p data-i18n="about-p4">My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.</p>
+      <p data-i18n="about-p1">My path has always been creative and service-minded — early studies in directing and design, then apprenticeships and freelance work, always focused on making things and serving the people who need them.</p>
+      <p data-i18n="about-p2">I've worked bars and boardrooms, apprenticed as a tattoo artist and body piercer, and built a long career that led to Creative Director — running small businesses on the side and painting, illustrating and photographing the whole way through.</p>
+      <p data-i18n="about-p3">After a lifetime in design and marketing, I made a deliberate choice to step back from managing others and return to making things myself. I'm a creative polymath at heart, and with the rise of AI I think every creative will end up working across disciplines rather than just directing them.</p>
+      <p data-i18n="about-p4">That shift started in lockdown, when remote work let me bring hands-on making back into the mix — painting, photography, writing, video. Now I'm doing it full-time: exploring what AI-assisted tools can add, and following whatever curiosity pulls me next.</p>
       <button type="button" class="read-more-btn" data-i18n="read-more">Read more ↓</button>
     </div>
   </section>
@@ -2037,23 +2178,33 @@
     var T = {
       en: {
         'nav-works': 'Fine Art & Illustration', 'nav-photography': 'Photography & Video', 'nav-apps': 'Apps & Games', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-journal': 'Journal', 'nav-enquire': 'Enquire',
+        'cc-eyebrow': 'Walt Viviers · Content Creator',
+        'cc-title-html': 'Tinkerer, maker,<br/><em>chronic curiosity chaser.</em>',
+        'cc-lead': "A creative polymath from Pretoria. I paint and illustrate, shoot photography and video, design brands, build small apps and write — and lately I've been chasing video and social, in front of the camera as much as behind it. Artist, designer, photographer, writer, the occasional musician and editor: at the core, it's still people and art.",
+        'cc-cta-work': 'Get in touch', 'cc-cta-see': 'See the work ↓',
+        'disc-eyebrow': 'The work', 'disc-title': 'One creator, many crafts — pick a thread and follow it.', 'disc-view': 'Explore →',
+        'disc-photo-title': 'Photography & Video', 'disc-photo-desc': 'Portraits, events and wellness retreats — and, increasingly, social video: short-form storytelling in front of and behind the camera.',
+        'disc-art-title': 'Fine Art & Illustration', 'disc-art-desc': 'Acrylic and mixed-media originals — from the iconic to the unexpected — held in private collections across South Africa and abroad.',
+        'disc-design-title': 'Graphic & Web Design', 'disc-design-desc': "A Creative Director's toolkit, hands-on again: brand identity, web and e-commerce, motion and campaigns for brands big and small.",
+        'disc-apps-title': 'Apps & Games', 'disc-apps-desc': 'Small browser games and genuinely useful apps, built independently and sharpened with AI tools — made for the joy of making.',
+        'disc-also-html': 'And along the way: writing in the <a href="/blog/">Journal</a>, music, and the odd bit of video editing — a content creator wears every hat.',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on', 'view-gallery': 'View Gallery ↗',
         'art-intro-eyebrow': 'Fine Art & Illustration', 'art-intro-headline': 'Bold originals — from the iconic to the unexpected', 'art-intro-desc': 'Acrylic and mixed-media paintings that read with clarity from across the room and reveal expressive, unmistakable brushwork up close — held in private collections across South Africa and abroad.',
         'explore-photo-title': 'Photography & Video', 'explore-photo-desc': 'Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist\'s eye. Each album opens in Google Photos.', 'explore-photo-cta': 'View albums →', 'pf-headline': 'Portraits, events & retreats — through a fine artist\'s eye', 'pf-book': 'Book a session',
         'explore-apps-title': 'Apps & Games', 'explore-apps-desc': 'A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.', 'explore-apps-cta': 'Explore →',
         'digital-label': 'Digital Experiments', 'digital-intro': 'Alongside the paintings, I build small interactive pieces, mostly with AI-assisted tools, as another way of chasing the same instinct: make something, then see who it moves.', 'digital-sp-desc': 'A cyberpunk data-heist story built for mobile. Five decisions, five live hacking sequences, ten possible endings. However you handle the jobs is however it goes.', 'digital-ss-desc': 'The opposite kind of experiment: an interactive pet app with three relaxed modes (dogs, rats, cats) and nothing to win. Tap around, make a mess, enjoy the calm.', 'digital-play': 'Play →',
-        'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
+        'about-title-html': 'People and Art<br/><em>at the Core</em>',
         'photo-about-title-html': 'A Painter\'s Eye<br/><em>Behind the Lens</em>',
         'photo-about-p1': 'Photography and video are an extension of the same practice — the same instinct for light, composition, and the quiet moment that says everything. I bring a fine artist\'s eye to every frame.',
         'photo-about-p2': 'I work with people first: portrait sessions, events, and wellness retreats where the aim is to capture something true rather than posed — unhurried, comfortable, and attentive to the story unfolding in front of the camera.',
         'photo-about-p3': 'Based in Pretoria and available across South Africa and beyond, I shoot in both photo and video, and every session is delivered as a private online album.',
         'photo-about-p4': 'Whether it\'s a single portrait or a multi-day retreat, tell me what you have in mind and I\'ll shape the session around it.',
         'read-more': 'Read more ↓',
-        'about-p1': 'I am a South African fine artist working in acrylic and mixed media. Professional creative practice — across design, art direction, and brand — has sharpened a painter\'s eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.',
-        'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
-        'about-p3': 'For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.',
-        'about-p4': 'My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.',
+        'about-p1': 'My path has always been creative and service-minded — early studies in directing and design, then apprenticeships and freelance work, always focused on making things and serving the people who need them.',
+        'about-p2': "I've worked bars and boardrooms, apprenticed as a tattoo artist and body piercer, and built a long career that led to Creative Director — running small businesses on the side and painting, illustrating and photographing the whole way through.",
+        'about-p3': "After a lifetime in design and marketing, I made a deliberate choice to step back from managing others and return to making things myself. I'm a creative polymath at heart, and with the rise of AI I think every creative will end up working across disciplines rather than just directing them.",
+        'about-p4': "That shift started in lockdown, when remote work let me bring hands-on making back into the mix — painting, photography, writing, video. Now I'm doing it full-time: exploring what AI-assisted tools can add, and following whatever curiosity pulls me next.",
         'about-bio-btn': 'Bio & Statement ↗',
         'ig-follow': 'Follow on Instagram ↗', 'ig-follow-me': 'Follow me on Instagram',
         'commission-tag': 'For collectors', 'commission-title-html': 'Commission<br/>a new work',
@@ -2082,23 +2233,33 @@
       },
       af: {
         'nav-works': 'Skone Kunste & Illustrasie', 'nav-photography': 'Fotografie & Video', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-journal': 'Joernaal', 'nav-enquire': 'Navraag',
+        'cc-eyebrow': 'Walt Viviers · Inhoudskepper',
+        'cc-title-html': 'Knutselaar, maker,<br/><em>chroniese nuuskierigheidsjagter.</em>',
+        'cc-lead': "'n Kreatiewe alleskunstenaar van Pretoria. Ek skilder en illustreer, neem foto's en video, ontwerp handelsmerke, bou klein programme en skryf — en die laaste tyd jaag ek video en sosiale media, voor die kamera net soveel as daaragter. Kunstenaar, ontwerper, fotograaf, skrywer, die af-en-toe musikant en redigeerder: in die kern bly dit mense en kuns.",
+        'cc-cta-work': 'Kom gesels', 'cc-cta-see': 'Sien die werk ↓',
+        'disc-eyebrow': 'Die werk', 'disc-title': "Een skepper, baie ambagte — kies 'n draad en volg dit.", 'disc-view': 'Verken →',
+        'disc-photo-title': 'Fotografie & Video', 'disc-photo-desc': 'Portrette, geleenthede en welstand-toevlugte — en al hoe meer sosiale video: kortvorm-storievertelling voor en agter die kamera.',
+        'disc-art-title': 'Skone Kunste & Illustrasie', 'disc-art-desc': 'Akriel- en gemengde-media oorspronklikes — van die ikoniese tot die onverwagse — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
+        'disc-design-title': 'Grafiese & Web-ontwerp', 'disc-design-desc': "'n Kreatiewe Direkteur se gereedskap, weer hands-on: handelsmerk-identiteit, web en e-handel, beweging en veldtogte vir handelsmerke groot en klein.",
+        'disc-apps-title': 'Programme & Speletjies', 'disc-apps-desc': 'Klein blaaierspeletjies en werklik nuttige programme, onafhanklik gebou en met KI-gereedskap verskerp — gemaak vir die vreugde van maak.',
+        'disc-also-html': 'En langs die pad: skryfwerk in die <a href="/blog/">Joernaal</a>, musiek, en die af-en-toe bietjie video-redigering — ’n inhoudskepper dra elke hoed.',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
         'art-intro-eyebrow': 'Skone Kunste & Illustrasie', 'art-intro-headline': 'Gedurfde oorspronklikes — van die ikoniese tot die onverwagte', 'art-intro-desc': 'Akriel- en gemengde-media skilderye wat met helderheid van oorkant die kamer lees en van naby uitdrukkingsvolle, onmiskenbare kwaswerk openbaar — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
         'explore-photo-title': 'Fotografie & Video', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — vasgevang in foto en video met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →', 'pf-headline': 'Portrette, geleenthede & toevlugte — deur \'n kunstenaar se oog', 'pf-book': 'Bespreek \'n sessie',
         'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': '\'n Groeiende versameling blaaierspeletjies en klein, private programme wat vanlyn werk — van \'n drie-troeteldier-speelding tot \'n handige fooi-sakrekenaar. Geen advertensies, geen opsporing.', 'explore-apps-cta': 'Verken →',
         'digital-label': 'Digitale Eksperimente', 'digital-intro': 'Naas die skilderye bou ek klein interaktiewe stukke, meestal met KI-ondersteunde gereedskap, as nog \'n manier om dieselfde instink na te jaag: maak iets, en kyk dan wie dit roer.', 'digital-sp-desc': '\'n Kuberpunk-data-roof-storie gebou vir mobiel. Vyf besluite, vyf lewendige inbraak-reekse, tien moontlike eindes. Hoe jy die werk hanteer, is hoe dit uitdraai.', 'digital-ss-desc': 'Die teenoorgestelde soort eksperiment: \'n interaktiewe troeteldier-toepassing met drie ontspanne modusse (honde, rotte, katte) en niks om te wen nie. Tik rond, maak \'n gemors, geniet die kalmte.', 'digital-play': 'Speel →',
-        'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
+        'about-title-html': 'Mense en Kuns<br/><em>in die Kern</em>',
         'photo-about-title-html': '\'n Skildersoog<br/><em>Agter die Lens</em>',
         'photo-about-p1': 'Fotografie en video is \'n verlengstuk van dieselfde praktyk — dieselfde instink vir lig, komposisie en die stil oomblik wat alles sê. Ek bring \'n kunstenaar se oog na elke raam.',
         'photo-about-p2': 'Ek werk eers met mense: portret-sessies, geleenthede en welstand-toevlugte waar die doel is om iets waar vas te vang eerder as poserend — ontspanne, gemaklik en aandagtig vir die storie wat voor die kamera ontvou.',
         'photo-about-p3': 'Gebaseer in Pretoria en beskikbaar regoor Suid-Afrika en verder, skiet ek in beide foto en video, en elke sessie word as \'n privaat aanlyn album gelewer.',
         'photo-about-p4': 'Of dit \'n enkele portret of \'n multi-dag toevlug is, laat weet my wat jy in gedagte het en ek sal die sessie daarom vorm.',
         'read-more': 'Lees meer ↓',
-        'about-p1': 'Ek is ‘n Suid-Afrikaanse kunstenaar wat in akriel en gemengde media werk. Professionele kreatiewe praktyk — deur ontwerp, kunsdireksie en handelsmerk — het ‘n skilder se oog geslyp wat die spanning tussen die poësie en musiek van ‘n beeld vind: van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.',
-        'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
-        'about-p3': 'Vir my is kunsmaak terapie: ‘n manier om jouself uit te druk om jouself te vind. Geloof, familie en kreatiwiteit lê aan die hart van alles wat ek maak.',
-        'about-p4': 'My werk word op Saatchi Art verteenwoordig en in privaat versamelings regoor Suid-Afrika en oorsee gehou. Opdragte en galery-navrae is welkom.',
+        'about-p1': 'My pad was nog altyd kreatief en diensgerig — vroeë studies in regie en ontwerp, toe vakleerlingskappe en vryskutwerk, altyd gefokus op dinge maak en die mense bedien wat dit nodig het.',
+        'about-p2': "Ek het kroeë en direksiekamers gewerk, as tatoeëerkunstenaar en lyfdeurboorder vakleerling gestaan, en 'n lang loopbaan gebou wat tot Kreatiewe Direkteur gelei het — kleinsake-ondernemings aan die kant bestuur en die hele pad deur geskilder, geïllustreer en gefotografeer.",
+        'about-p3': "Ná 'n leeftyd in ontwerp en bemarking het ek 'n doelbewuste keuse gemaak om terug te tree van ander bestuur en terug te keer na self dinge maak. Ek is 'n kreatiewe alleskunstenaar in murg en been, en met die opkoms van KI dink ek elke kreatiewe mens sal uiteindelik oor dissiplines heen werk eerder as om net te rig.",
+        'about-p4': "Daardie verskuiwing het in grendeltyd begin, toe afgeleë werk my toegelaat het om hands-on maak terug in die mengsel te bring — skilder, fotografie, skryf, video. Nou doen ek dit voltyds: ek verken wat KI-ondersteunde gereedskap kan byvoeg, en volg watter nuuskierigheid ook al my volgende trek.",
         'about-bio-btn': 'Bio & Verklaring ↗',
         'ig-follow': 'Volg op Instagram ↗', 'ig-follow-me': 'Volg my op Instagram',
         'commission-tag': 'Vir versamelaars', 'commission-title-html': 'Bestel<br/>‘n nuwe werk',
