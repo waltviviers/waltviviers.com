@@ -1384,6 +1384,7 @@
     .digital-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule); }
     .digital-card { background:var(--bg);padding:32px;display:flex;flex-direction:column;gap:14px;transition:background 0.2s; }
     .digital-card:hover { background:var(--bg2); }
+    .digital-card-num { font-size:11px;letter-spacing:0.16em;color:var(--stone); }
     .digital-title { font-family:var(--serif);font-size:clamp(1.4rem,2.2vw,1.75rem);font-weight:400;line-height:1.1; }
     .digital-desc { font-family:var(--serif);font-size:clamp(1rem,1.4vw,1.1rem);line-height:1.7;color:var(--stone);flex-grow:1; }
     .digital-cta { font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);transition:color 0.2s; }
@@ -1957,35 +1958,6 @@
     </div>
   </section>
 
-  <!-- Hero: Featured Work -->
-    <section class="hero" id="hero">
-    <div class="hero-image-wrap" id="hero-image">
-      <img src="images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
-           srcset="images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
-           sizes="100vw"
-           alt="Walt Viviers, T-Rex, 2020, Acrylic on Canvas"
-           loading="lazy"
-           width="1600" height="1067" />
-    </div>
-    <div class="hero-detail">
-      <div class="hero-work-info">
-        <p class="hero-work-number" id="hero-number">Featured work</p>
-        <h1 class="hero-work-title" id="hero-title">Walt Viviers</h1>
-        <p class="hero-work-year"  id="hero-year"></p>
-        <div class="work-meta-table" id="hero-meta"></div>
-        <div class="hero-actions">
-          <button class="btn-primary" id="inquire-btn" data-i18n="hero-inquire">Enquire about this work</button>
-          <a href="#gallery-rep" class="btn-secondary" data-i18n="hero-gallery-rep">Gallery representation</a>
-        </div>
-        <div class="gallery-nav">
-          <button class="gn-btn" id="gn-prev" aria-label="Previous work">&#8592;</button>
-          <div class="gn-dots" id="gn-dots"></div>
-          <button class="gn-btn" id="gn-next" aria-label="Next work">&#8594;</button>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Works Index -->
   <section id="works">
     <div class="section-head" style="align-items:flex-start;">
@@ -2012,27 +1984,48 @@
     <a href="/gallery/" class="view-gallery-btn" data-i18n="view-gallery">View Gallery ↗</a>
   </section>
 
+  <!-- About -->
+  <section id="about">
+    <div class="about-left">
+      <h2 class="about-title" data-i18n-html="about-title-html">
+        People and Art<br/><em>at the Core</em>
+      </h2>
+      <a href="/artist-bio/" class="about-bio-btn" data-i18n="about-bio-btn">Bio &amp; Statement ↗</a>
+    </div>
+    <div class="about-body">
+      <p data-i18n="about-p1">My path has always been creative and service-minded — early studies in directing and design, then apprenticeships and freelance work, always focused on making things and serving the people who need them.</p>
+      <p data-i18n="about-p2">I've worked bars and boardrooms, apprenticed as a tattoo artist and body piercer, and built a long career that led to Creative Director — running small businesses on the side and painting, illustrating and photographing the whole way through.</p>
+      <p data-i18n="about-p3">After a lifetime in design and marketing, I made a deliberate choice to step back from managing others and return to making things myself. I'm a creative polymath at heart, and with the rise of AI I think every creative will end up working across disciplines rather than just directing them.</p>
+      <p data-i18n="about-p4">That shift started in lockdown, when remote work let me bring hands-on making back into the mix — painting, photography, writing, video. Now I'm doing it full-time: exploring what AI-assisted tools can add, and following whatever curiosity pulls me next.</p>
+      <button type="button" class="read-more-btn" data-i18n="read-more">Read more ↓</button>
+    </div>
+  </section>
+
   <!-- PILLAR 3 — Design & Digital -->
   <section class="digital" id="design-digital" aria-label="Design & Digital">
     <p class="digital-label">Design &amp; Digital</p>
     <p class="digital-intro">A Creative Director's toolkit, hands-on again — brand identity, websites and e-commerce, illustration and pixel art, motion and campaigns. And, for the joy of it, small browser games and genuinely useful apps, sharpened with AI-assisted tools.</p>
     <div class="digital-grid">
       <a class="digital-card" href="/graphic-design-portfolio/">
+        <span class="digital-card-num">01</span>
         <h2 class="digital-title">Brand, Web &amp; Campaigns</h2>
         <p class="digital-desc">Identity systems, websites and online stores, illustration, motion and marketing — a full-service portfolio for brands big and small.</p>
         <span class="digital-cta">View the portfolio &#8594;</span>
       </a>
       <a class="digital-card" href="/apps/">
+        <span class="digital-card-num">02</span>
         <h2 class="digital-title">Apps &amp; Games</h2>
         <p class="digital-desc">Small, independent browser games and offline-friendly apps — built for the joy of making. No ads, no tracking.</p>
         <span class="digital-cta">Explore &#8594;</span>
       </a>
       <a class="digital-card" href="/apps/static-protocol/play/">
+        <span class="digital-card-num">03</span>
         <h2 class="digital-title">Static Protocol</h2>
         <p class="digital-desc">A cyberpunk data-heist story built for mobile — five decisions, five live hacking sequences, ten possible endings.</p>
         <span class="digital-cta">Play &#8594;</span>
       </a>
       <a class="digital-card" href="/apps/scritch-scratch/play/">
+        <span class="digital-card-num">04</span>
         <h2 class="digital-title">Scritch Scratch</h2>
         <p class="digital-desc">An interactive pet app with three relaxed modes and nothing to win. Tap around, make a mess, enjoy the calm.</p>
         <span class="digital-cta">Play &#8594;</span>
@@ -2056,23 +2049,6 @@
     <div class="essays-actions">
       <a class="cc-btn cc-btn-secondary" href="/blog/">Read the essays &amp; articles &#8594;</a>
       <a class="essays-rss" href="/feed.xml">Subscribe via RSS</a>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section id="about">
-    <div class="about-left">
-      <h2 class="about-title" data-i18n-html="about-title-html">
-        People and Art<br/><em>at the Core</em>
-      </h2>
-      <a href="/artist-bio/" class="about-bio-btn" data-i18n="about-bio-btn">Bio &amp; Statement ↗</a>
-    </div>
-    <div class="about-body">
-      <p data-i18n="about-p1">My path has always been creative and service-minded — early studies in directing and design, then apprenticeships and freelance work, always focused on making things and serving the people who need them.</p>
-      <p data-i18n="about-p2">I've worked bars and boardrooms, apprenticed as a tattoo artist and body piercer, and built a long career that led to Creative Director — running small businesses on the side and painting, illustrating and photographing the whole way through.</p>
-      <p data-i18n="about-p3">After a lifetime in design and marketing, I made a deliberate choice to step back from managing others and return to making things myself. I'm a creative polymath at heart, and with the rise of AI I think every creative will end up working across disciplines rather than just directing them.</p>
-      <p data-i18n="about-p4">That shift started in lockdown, when remote work let me bring hands-on making back into the mix — painting, photography, writing, video. Now I'm doing it full-time: exploring what AI-assisted tools can add, and following whatever curiosity pulls me next.</p>
-      <button type="button" class="read-more-btn" data-i18n="read-more">Read more ↓</button>
     </div>
   </section>
 
@@ -2394,6 +2370,7 @@
 
       /* ── Render hero panel ── */
       function renderHero(index) {
+        if (!document.getElementById('hero-image')) return;
         const w = works[index];
         if (!w) return;
 
@@ -2445,6 +2422,7 @@
         const half    = Math.floor(visible / 2);
         const start   = Math.max(0, Math.min(index - half, total - visible));
         const container = document.getElementById('gn-dots');
+        if (!container) return;
         container.innerHTML = '';
         for (var i = start; i < start + visible; i++) {
           const d   = document.createElement('div');
@@ -2496,10 +2474,12 @@
 
         grid.querySelectorAll('.work-thumb').forEach(card => {
           card.addEventListener('click', e => {
+            var _h = document.getElementById('hero');
+            if (!_h) return; // no carousel on this page — let the link navigate
             e.preventDefault();
             current = +card.dataset.index;
             renderHero(current);
-            document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+            _h.scrollIntoView({ behavior: 'smooth' });
             pauseAutoplay();
           });
         });
@@ -2544,8 +2524,9 @@
 
       /* ── Show loading / error state ── */
       function setHeroState(msg) {
-        document.getElementById('hero-image').innerHTML =
-          `<div class="placeholder">${msg}</div>`;
+        var _hi = document.getElementById('hero-image');
+        if (!_hi) return;
+        _hi.innerHTML = `<div class="placeholder">${msg}</div>`;
         document.getElementById('hero-title').textContent = '';
         document.getElementById('hero-number').textContent = '';
       }
@@ -2557,6 +2538,7 @@
       var RESUME_MS     = 6000;
 
       function startAutoplay() {
+        if (!document.getElementById('hero')) return;
         stopAutoplay();
         autoplayTimer = setInterval(function () {
           current = (current + 1) % works.length;
@@ -2576,12 +2558,14 @@
       }
 
       var heroEl = document.getElementById('hero');
+      if (heroEl) {
       heroEl.addEventListener('mouseenter', stopAutoplay);
       heroEl.addEventListener('mouseleave', function () {
         clearTimeout(resumeTimer);
         startAutoplay();
       });
       heroEl.addEventListener('touchstart', pauseAutoplay, { passive: true });
+      }
 
       /* ── Prev / Next ── */
       function goPrev() {
@@ -2596,12 +2580,13 @@
         renderHero(current);
         pauseAutoplay();
       }
-      document.getElementById('gn-prev').addEventListener('click', goPrev);
-      document.getElementById('gn-next').addEventListener('click', goNext);
+      var _gp = document.getElementById('gn-prev'); if (_gp) _gp.addEventListener('click', goPrev);
+      var _gnx = document.getElementById('gn-next'); if (_gnx) _gnx.addEventListener('click', goNext);
 
       /* ── Swipe left / right on the hero image ── */
       (function () {
         var wrap = document.getElementById('hero-image');
+        if (!wrap) return;
         var sx = 0, sy = 0, st = 0, tracking = false;
         wrap.addEventListener('touchstart', function (e) {
           var t = e.changedTouches[0];
@@ -2771,7 +2756,8 @@
 
       // ── Artwork enquiry modal ──
       const workName = document.getElementById('modal-work-name');
-      document.getElementById('inquire-btn').addEventListener('click', function () {
+      var _ib = document.getElementById('inquire-btn');
+      if (_ib) _ib.addEventListener('click', function () {
         var title = document.getElementById('hero-title').textContent;
         workName.textContent = title;
         document.querySelector('#enquiry-form [name="artwork"]').value = title;
