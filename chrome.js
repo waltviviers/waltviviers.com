@@ -166,17 +166,13 @@
   var NAV_HTML =
     '<div class="nav-left">' +
       '<a href="/" class="nav-logo" aria-label="Home"><img src="/logo.svg" alt="Walt Viviers" width="379" height="185" /></a>' +
-      '<div class="lang-toggle lang-switch" id="wv-lang-toggle">' +
-        '<div class="lang-group active" data-lang="en">English</div>' +
-        '<button type="button" class="lang-track" aria-label="Toggle language"><span class="lang-knob"></span></button>' +
-        '<div class="lang-group" data-lang="af">Afrikaans</div>' +
-      '</div>' +
     '</div>' +
     '<ul class="nav-links">' +
-      '<li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography &amp; Video</a></li>' +
-      '<li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-works">Fine Art &amp; Illustration</a></li>' +
-      '<li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>' +
-      '<li class="nav-link-hide"><a href="/gallery/#commission" class="nav-cta" id="wv-enquire" data-i18n="nav-enquire">Enquire</a></li>' +
+      '<li class="nav-link-hide"><a href="/photography/">Photography &amp; Video</a></li>' +
+      '<li class="nav-link-hide"><a href="/gallery/">Fine Art &amp; Illustration</a></li>' +
+      '<li class="nav-link-hide"><a href="/graphic-design-portfolio/">Design &amp; Digital</a></li>' +
+      '<li class="nav-link-hide"><a href="/blog/">Essays</a></li>' +
+      '<li class="nav-link-hide"><a href="/gallery/#commission" class="nav-cta" id="wv-enquire">Enquire</a></li>' +
       '<li><div class="social-icons">' +
         '<a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">' + IG + '</a>' +
         '<a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">' + LI + '</a>' +
@@ -192,10 +188,11 @@
 
   var MENU_HTML =
     '<div class="mobile-menu-links">' +
-      '<a href="/photography/" class="mobile-menu-link" data-i18n="nav-photography">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>' +
-      '<a href="/gallery/" class="mobile-menu-link" data-i18n="nav-works">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>' +
-      '<a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio &amp; Statement <span class="mobile-menu-arrow">↗</span></a>' +
-      '<a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/photography/" class="mobile-menu-link">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/gallery/" class="mobile-menu-link">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/graphic-design-portfolio/" class="mobile-menu-link">Design &amp; Digital <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/blog/" class="mobile-menu-link">Essays <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta">Enquire <span class="mobile-menu-arrow">↗</span></a>' +
     '</div>' +
     '<div class="mobile-menu-foot">' +
       '<a href="/admin-index/" class="mobile-admin-btn">Admin</a>' +
@@ -269,7 +266,7 @@
 
   /* ── Language ─────────────────────────────────────────────────────────── */
   function readLang() {
-    try { return localStorage.getItem('wv-lang') || 'en'; } catch (e) { return 'en'; }
+    return 'en'; /* language toggle retired — site is English-only */
   }
 
   function applyLang(lang, initial) {
