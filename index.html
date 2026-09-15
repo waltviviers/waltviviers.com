@@ -646,14 +646,15 @@
     }
     .disc-card {
       background: var(--bg);
-      display: flex; flex-direction: column;
+      display: flex; flex-direction: row; align-items: flex-start;
+      gap: clamp(16px, 2vw, 24px); padding: clamp(24px, 2.8vw, 36px);
       transition: background 0.2s; overflow: hidden;
     }
     .disc-card:hover { background: var(--bg2); }
-    .disc-card-thumb { aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg2); }
+    .disc-card-thumb { flex: 0 0 auto; width: clamp(76px, 9vw, 108px); aspect-ratio: 1 / 1; overflow: hidden; background: var(--bg2); }
     .disc-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
     .disc-card:hover .disc-card-thumb img { transform: scale(1.05); }
-    .disc-card-body { padding: clamp(26px, 2.8vw, 38px); display: flex; flex-direction: column; gap: 12px; flex-grow: 1; min-height: 200px; }
+    .disc-card-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
     .disc-card-num { font-size: 11px; letter-spacing: 0.16em; color: var(--stone); }
     .disc-card-title {
       font-family: var(--serif); font-weight: 400;
