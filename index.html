@@ -536,8 +536,8 @@
       content: "";
       position: absolute; inset: 0;
       background:
-        linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.5) 36%, rgba(0,0,0,0.22) 64%, rgba(0,0,0,0.05) 100%),
-        linear-gradient(to right, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.08) 52%, rgba(0,0,0,0) 78%);
+        linear-gradient(to top, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.33) 36%, rgba(0,0,0,0.14) 64%, rgba(0,0,0,0.03) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0.05) 52%, rgba(0,0,0,0) 78%);
       pointer-events: none;
     }
     .pf-eyebrow, .pf-title, .pf-desc { text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
@@ -645,11 +645,15 @@
       background: var(--rule); border: 1px solid var(--rule);
     }
     .disc-card {
-      background: var(--bg); padding: clamp(28px, 3vw, 40px);
-      display: flex; flex-direction: column; gap: 12px; min-height: 210px;
-      transition: background 0.2s;
+      background: var(--bg);
+      display: flex; flex-direction: column;
+      transition: background 0.2s; overflow: hidden;
     }
     .disc-card:hover { background: var(--bg2); }
+    .disc-card-thumb { aspect-ratio: 16 / 10; overflow: hidden; background: var(--bg2); }
+    .disc-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
+    .disc-card:hover .disc-card-thumb img { transform: scale(1.05); }
+    .disc-card-body { padding: clamp(26px, 2.8vw, 38px); display: flex; flex-direction: column; gap: 12px; flex-grow: 1; min-height: 200px; }
     .disc-card-num { font-size: 11px; letter-spacing: 0.16em; color: var(--stone); }
     .disc-card-title {
       font-family: var(--serif); font-weight: 400;
@@ -1852,31 +1856,42 @@
     </div>
     <div class="disc-grid">
       <a class="disc-card" href="/photography/">
-        <span class="disc-card-num">01</span>
-        <h3 class="disc-card-title" data-i18n="disc-photo-title">Photography &amp; Video</h3>
-        <p class="disc-card-desc" data-i18n="disc-photo-desc">Portraits, events and wellness retreats — and, increasingly, social video: short-form storytelling in front of and behind the camera.</p>
-        <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        <div class="disc-card-thumb"><img src="/images/800/garden.webp" alt="Walt Viviers photography — wellness retreat portrait" loading="lazy" width="800" height="500" /></div>
+        <div class="disc-card-body">
+          <span class="disc-card-num">01</span>
+          <h3 class="disc-card-title" data-i18n="disc-photo-title">Photography &amp; Video</h3>
+          <p class="disc-card-desc" data-i18n="disc-photo-desc">Portraits, events and wellness retreats — and, increasingly, social video: short-form storytelling in front of and behind the camera.</p>
+          <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        </div>
       </a>
       <a class="disc-card" href="/gallery/">
-        <span class="disc-card-num">02</span>
-        <h3 class="disc-card-title" data-i18n="disc-art-title">Fine Art &amp; Illustration</h3>
-        <p class="disc-card-desc" data-i18n="disc-art-desc">Acrylic and mixed-media originals — from the iconic to the unexpected — held in private collections across South Africa and abroad.</p>
-        <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        <div class="disc-card-thumb"><img src="/images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp" alt="Walt Viviers — T-Rex, acrylic on canvas" loading="lazy" width="800" height="533" /></div>
+        <div class="disc-card-body">
+          <span class="disc-card-num">02</span>
+          <h3 class="disc-card-title" data-i18n="disc-art-title">Fine Art &amp; Illustration</h3>
+          <p class="disc-card-desc" data-i18n="disc-art-desc">Acrylic and mixed-media originals — from the iconic to the unexpected — held in private collections across South Africa and abroad.</p>
+          <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        </div>
       </a>
       <a class="disc-card" href="/graphic-design-portfolio/">
-        <span class="disc-card-num">03</span>
-        <h3 class="disc-card-title" data-i18n="disc-design-title">Design &amp; Digital</h3>
-        <p class="disc-card-desc" data-i18n="disc-design-desc">A Creative Director's toolkit, hands-on again: brand identity, websites and e-commerce, illustration, motion and campaigns — plus small apps and browser games, built for the joy of it.</p>
-        <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        <div class="disc-card-thumb"><img src="/images/800/Neurotrace.webp" alt="Walt Viviers — digital product and app design" loading="lazy" width="800" height="500" /></div>
+        <div class="disc-card-body">
+          <span class="disc-card-num">03</span>
+          <h3 class="disc-card-title" data-i18n="disc-design-title">Design &amp; Digital</h3>
+          <p class="disc-card-desc" data-i18n="disc-design-desc">A Creative Director's toolkit, hands-on again: brand identity, websites and e-commerce, illustration, motion and campaigns — plus small apps and browser games, built for the joy of it.</p>
+          <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        </div>
       </a>
       <a class="disc-card" href="/blog/">
-        <span class="disc-card-num">04</span>
-        <h3 class="disc-card-title" data-i18n="disc-essays-title">Essays &amp; Articles</h3>
-        <p class="disc-card-desc" data-i18n="disc-essays-desc">Longer-form writing — essays and articles on the craft, the tools, and the life around a creative practice.</p>
-        <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        <div class="disc-card-thumb"><img src="/images/800/books-acrylic-canvas-walt-viviers-2010.webp" alt="Walt Viviers — Books, acrylic on canvas" loading="lazy" width="800" height="533" /></div>
+        <div class="disc-card-body">
+          <span class="disc-card-num">04</span>
+          <h3 class="disc-card-title" data-i18n="disc-essays-title">Essays &amp; Articles</h3>
+          <p class="disc-card-desc" data-i18n="disc-essays-desc">Longer-form writing — essays and articles on the craft, the tools, and the life around a creative practice.</p>
+          <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        </div>
       </a>
     </div>
-    <p class="disc-also" data-i18n-html="disc-also-html">And along the way: <a href="/blog/">essays</a> and music — and, more and more, video creation and editing. A content creator wears every hat.</p>
   </section>
 
   <!-- Photography & Video — feature -->
@@ -1914,22 +1929,6 @@
       <p data-i18n="photo-about-p4">Whether it's a single portrait or a multi-day retreat, tell me what you have in mind and I'll shape the session around it.</p>
       <button type="button" class="read-more-btn" data-i18n="read-more">Read more ↓</button>
     </div>
-  </section>
-
-  <!-- Instagram feed -->
-  <section id="instagram">
-    <div class="instagram-head">
-      <div class="instagram-handle">
-        <div class="ig-lead-row">
-          <span class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</span>
-          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
-        </div>
-        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="instagram-handle-row">
-          <h2 class="section-title">@waltviviers</h2>
-        </a>
-      </div>
-    </div>
-    <div class="instagram-grid" id="instagram-grid"></div>
   </section>
 
   <!-- Brush divider -->
@@ -2075,6 +2074,22 @@
       <p data-i18n="about-p4">That shift started in lockdown, when remote work let me bring hands-on making back into the mix — painting, photography, writing, video. Now I'm doing it full-time: exploring what AI-assisted tools can add, and following whatever curiosity pulls me next.</p>
       <button type="button" class="read-more-btn" data-i18n="read-more">Read more ↓</button>
     </div>
+  </section>
+
+  <!-- Instagram feed -->
+  <section id="instagram">
+    <div class="instagram-head">
+      <div class="instagram-handle">
+        <div class="ig-lead-row">
+          <span class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</span>
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+        </div>
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="instagram-handle-row">
+          <h2 class="section-title">@waltviviers</h2>
+        </a>
+      </div>
+    </div>
+    <div class="instagram-grid" id="instagram-grid"></div>
   </section>
 
   <!-- Enquiry Modal -->
