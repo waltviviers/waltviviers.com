@@ -1386,6 +1386,22 @@
     .digital-card:hover .digital-cta { color:var(--ink); }
     @media (max-width:900px) { .digital { padding:48px 24px 56px; } .digital-grid { grid-template-columns:1fr; } }
 
+    /* ── Essays & Articles pillar ── */
+    .essays { max-width: 900px; margin: 0 auto; padding: clamp(64px,8vw,110px) clamp(24px,6vw,72px); border-top: 1px solid var(--rule); }
+    .essays-head { margin-bottom: clamp(32px,4vw,44px); }
+    .essays-eyebrow { font-size:12px; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:var(--stone); margin-bottom:14px; }
+    .essays-title { font-family:var(--serif); font-weight:400; font-size:clamp(1.8rem,3.6vw,2.8rem); line-height:1.12; letter-spacing:-0.01em; color:var(--ink); max-width:760px; }
+    .essays-lead { margin-top:16px; font-size:clamp(15px,1.5vw,17px); line-height:1.7; color:var(--stone); max-width:640px; }
+    .essays-post { display:block; padding:28px 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule); transition:opacity 0.2s; }
+    .essays-post:hover { opacity:0.72; }
+    .essays-post-date { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--stone); }
+    .essays-post-title { font-family:var(--serif); font-weight:400; font-size:clamp(1.5rem,2.4vw,1.9rem); line-height:1.15; margin:10px 0; color:var(--ink); }
+    .essays-post-desc { font-family:var(--serif); font-size:1.1rem; line-height:1.6; color:var(--stone); margin-bottom:12px; }
+    .essays-post-more { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--stone); }
+    .essays-actions { margin-top:32px; display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+    .essays-rss { font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--stone); border-bottom:1px solid var(--rule); transition:color 0.2s,border-color 0.2s; }
+    .essays-rss:hover { color:var(--ink); border-color:var(--ink); }
+
     #instagram {
       border-top: 1px solid var(--rule);
     }
@@ -1849,14 +1865,14 @@
       </a>
       <a class="disc-card" href="/graphic-design-portfolio/">
         <span class="disc-card-num">03</span>
-        <h3 class="disc-card-title" data-i18n="disc-design-title">Graphic &amp; Web Design</h3>
-        <p class="disc-card-desc" data-i18n="disc-design-desc">A Creative Director's toolkit, hands-on again: brand identity, web and e-commerce, motion and campaigns for brands big and small.</p>
+        <h3 class="disc-card-title" data-i18n="disc-design-title">Design &amp; Digital</h3>
+        <p class="disc-card-desc" data-i18n="disc-design-desc">A Creative Director's toolkit, hands-on again: brand identity, websites and e-commerce, illustration, motion and campaigns — plus small apps and browser games, built for the joy of it.</p>
         <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
       </a>
-      <a class="disc-card" href="/apps/">
+      <a class="disc-card" href="/blog/">
         <span class="disc-card-num">04</span>
-        <h3 class="disc-card-title" data-i18n="disc-apps-title">Apps &amp; Games</h3>
-        <p class="disc-card-desc" data-i18n="disc-apps-desc">Small browser games and genuinely useful apps, built independently and sharpened with AI tools — made for the joy of making.</p>
+        <h3 class="disc-card-title" data-i18n="disc-essays-title">Essays &amp; Articles</h3>
+        <p class="disc-card-desc" data-i18n="disc-essays-desc">Longer-form writing — essays and articles on the craft, the tools, and the life around a creative practice.</p>
         <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
       </a>
     </div>
@@ -1900,6 +1916,22 @@
     </div>
   </section>
 
+  <!-- Instagram feed -->
+  <section id="instagram">
+    <div class="instagram-head">
+      <div class="instagram-handle">
+        <div class="ig-lead-row">
+          <span class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</span>
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+        </div>
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="instagram-handle-row">
+          <h2 class="section-title">@waltviviers</h2>
+        </a>
+      </div>
+    </div>
+    <div class="instagram-grid" id="instagram-grid"></div>
+  </section>
+
   <!-- Brush divider -->
   <div class="brush-divider" aria-hidden="true">
     <img src="/brushstrokes-bg.webp" alt="Walt Viviers — South African fine artist, acrylic and mixed media" loading="lazy" width="2360" height="590" />
@@ -1923,23 +1955,6 @@
           <button type="button" class="pf-btn pf-btn-secondary gx-open" data-i18n="nav-enquire">Enquire</button>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section id="about">
-    <div class="about-left">
-      <h2 class="about-title" data-i18n-html="about-title-html">
-        People and Art<br/><em>at the Core</em>
-      </h2>
-      <a href="/artist-bio/" class="about-bio-btn" data-i18n="about-bio-btn">Bio &amp; Statement ↗</a>
-    </div>
-    <div class="about-body">
-      <p data-i18n="about-p1">My path has always been creative and service-minded — early studies in directing and design, then apprenticeships and freelance work, always focused on making things and serving the people who need them.</p>
-      <p data-i18n="about-p2">I've worked bars and boardrooms, apprenticed as a tattoo artist and body piercer, and built a long career that led to Creative Director — running small businesses on the side and painting, illustrating and photographing the whole way through.</p>
-      <p data-i18n="about-p3">After a lifetime in design and marketing, I made a deliberate choice to step back from managing others and return to making things myself. I'm a creative polymath at heart, and with the rise of AI I think every creative will end up working across disciplines rather than just directing them.</p>
-      <p data-i18n="about-p4">That shift started in lockdown, when remote work let me bring hands-on making back into the mix — painting, photography, writing, video. Now I'm doing it full-time: exploring what AI-assisted tools can add, and following whatever curiosity pulls me next.</p>
-      <button type="button" class="read-more-btn" data-i18n="read-more">Read more ↓</button>
     </div>
   </section>
 
@@ -1998,37 +2013,67 @@
     <a href="/gallery/" class="view-gallery-btn" data-i18n="view-gallery">View Gallery ↗</a>
   </section>
 
-  <!-- Instagram feed -->
-  <section id="instagram">
-    <div class="instagram-head">
-      <div class="instagram-handle">
-        <div class="ig-lead-row">
-          <span class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</span>
-          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
-        </div>
-        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="instagram-handle-row">
-          <h2 class="section-title">@waltviviers</h2>
-        </a>
-      </div>
-    </div>
-    <div class="instagram-grid" id="instagram-grid"></div>
-  </section>
-
-  <!-- Digital Experiments -->
-  <section class="digital" aria-label="Digital Experiments">
-    <p class="digital-label" data-i18n="digital-label">Digital Experiments</p>
-    <p class="digital-intro" data-i18n="digital-intro">Alongside the paintings, I build small interactive pieces, mostly with AI-assisted tools, as another way of chasing the same instinct: make something, then see who it moves.</p>
+  <!-- PILLAR 3 — Design & Digital -->
+  <section class="digital" id="design-digital" aria-label="Design & Digital">
+    <p class="digital-label">Design &amp; Digital</p>
+    <p class="digital-intro">A Creative Director's toolkit, hands-on again — brand identity, websites and e-commerce, illustration and pixel art, motion and campaigns. And, for the joy of it, small browser games and genuinely useful apps, sharpened with AI-assisted tools.</p>
     <div class="digital-grid">
+      <a class="digital-card" href="/graphic-design-portfolio/">
+        <h2 class="digital-title">Brand, Web &amp; Campaigns</h2>
+        <p class="digital-desc">Identity systems, websites and online stores, illustration, motion and marketing — a full-service portfolio for brands big and small.</p>
+        <span class="digital-cta">View the portfolio &#8594;</span>
+      </a>
+      <a class="digital-card" href="/apps/">
+        <h2 class="digital-title">Apps &amp; Games</h2>
+        <p class="digital-desc">Small, independent browser games and offline-friendly apps — built for the joy of making. No ads, no tracking.</p>
+        <span class="digital-cta">Explore &#8594;</span>
+      </a>
       <a class="digital-card" href="/apps/static-protocol/play/">
         <h2 class="digital-title">Static Protocol</h2>
-        <p class="digital-desc" data-i18n="digital-sp-desc">A cyberpunk data-heist story built for mobile. Five decisions, five live hacking sequences, ten possible endings. However you handle the jobs is however it goes.</p>
-        <span class="digital-cta" data-i18n="digital-play">Play &#8594;</span>
+        <p class="digital-desc">A cyberpunk data-heist story built for mobile — five decisions, five live hacking sequences, ten possible endings.</p>
+        <span class="digital-cta">Play &#8594;</span>
       </a>
       <a class="digital-card" href="/apps/scritch-scratch/play/">
         <h2 class="digital-title">Scritch Scratch</h2>
-        <p class="digital-desc" data-i18n="digital-ss-desc">The opposite kind of experiment: an interactive pet app with three relaxed modes (dogs, rats, cats) and nothing to win. Tap around, make a mess, enjoy the calm.</p>
-        <span class="digital-cta" data-i18n="digital-play">Play &#8594;</span>
+        <p class="digital-desc">An interactive pet app with three relaxed modes and nothing to win. Tap around, make a mess, enjoy the calm.</p>
+        <span class="digital-cta">Play &#8594;</span>
       </a>
+    </div>
+  </section>
+
+  <!-- PILLAR 4 — Essays & Articles -->
+  <section class="essays" id="essays" aria-label="Essays & Articles">
+    <div class="essays-head">
+      <p class="essays-eyebrow">Essays &amp; Articles</p>
+      <h2 class="essays-title">Words on making, curiosity, and the work behind the work</h2>
+      <p class="essays-lead">Longer-form writing — essays and articles on the craft, the tools, and the life around a creative practice.</p>
+    </div>
+    <a class="essays-post" href="/blog/on-beginning-to-write/">
+      <span class="essays-post-date">3 September 2026</span>
+      <h3 class="essays-post-title">On Beginning to Write</h3>
+      <p class="essays-post-desc">A short note on why I'm starting to keep written essays alongside the making.</p>
+      <span class="essays-post-more">Read &#8594;</span>
+    </a>
+    <div class="essays-actions">
+      <a class="cc-btn cc-btn-secondary" href="/blog/">Read the essays &amp; articles &#8594;</a>
+      <a class="essays-rss" href="/feed.xml">Subscribe via RSS</a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="about-left">
+      <h2 class="about-title" data-i18n-html="about-title-html">
+        People and Art<br/><em>at the Core</em>
+      </h2>
+      <a href="/artist-bio/" class="about-bio-btn" data-i18n="about-bio-btn">Bio &amp; Statement ↗</a>
+    </div>
+    <div class="about-body">
+      <p data-i18n="about-p1">My path has always been creative and service-minded — early studies in directing and design, then apprenticeships and freelance work, always focused on making things and serving the people who need them.</p>
+      <p data-i18n="about-p2">I've worked bars and boardrooms, apprenticed as a tattoo artist and body piercer, and built a long career that led to Creative Director — running small businesses on the side and painting, illustrating and photographing the whole way through.</p>
+      <p data-i18n="about-p3">After a lifetime in design and marketing, I made a deliberate choice to step back from managing others and return to making things myself. I'm a creative polymath at heart, and with the rise of AI I think every creative will end up working across disciplines rather than just directing them.</p>
+      <p data-i18n="about-p4">That shift started in lockdown, when remote work let me bring hands-on making back into the mix — painting, photography, writing, video. Now I'm doing it full-time: exploring what AI-assisted tools can add, and following whatever curiosity pulls me next.</p>
+      <button type="button" class="read-more-btn" data-i18n="read-more">Read more ↓</button>
     </div>
   </section>
 
@@ -2182,9 +2227,9 @@
         'disc-eyebrow': 'The work', 'disc-title': 'One creator, many crafts — pick a thread and follow it.', 'disc-view': 'Explore →',
         'disc-photo-title': 'Photography & Video', 'disc-photo-desc': 'Portraits, events and wellness retreats — and, increasingly, social video: short-form storytelling in front of and behind the camera.',
         'disc-art-title': 'Fine Art & Illustration', 'disc-art-desc': 'Acrylic and mixed-media originals — from the iconic to the unexpected — held in private collections across South Africa and abroad.',
-        'disc-design-title': 'Graphic & Web Design', 'disc-design-desc': "A Creative Director's toolkit, hands-on again: brand identity, web and e-commerce, motion and campaigns for brands big and small.",
-        'disc-apps-title': 'Apps & Games', 'disc-apps-desc': 'Small browser games and genuinely useful apps, built independently and sharpened with AI tools — made for the joy of making.',
-        'disc-also-html': 'And along the way: <a href="/blog/">essays</a>, music, and the odd bit of video editing — a content creator wears every hat.',
+        'disc-design-title': 'Design & Digital', 'disc-design-desc': "A Creative Director's toolkit, hands-on again: brand identity, websites and e-commerce, illustration, motion and campaigns — plus small apps and browser games, built for the joy of it.",
+        'disc-essays-title': 'Essays & Articles', 'disc-essays-desc': 'Longer-form writing — essays and articles on the craft, the tools, and the life around a creative practice.',
+        'disc-also-html': 'And along the way: music, the odd side project, and whatever curiosity pulls me next — a content creator wears every hat.',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on', 'view-gallery': 'View Gallery ↗',
         'art-intro-eyebrow': 'Fine Art & Illustration', 'art-intro-headline': 'Bold originals — from the iconic to the unexpected', 'art-intro-desc': 'Acrylic and mixed-media paintings that read with clarity from across the room and reveal expressive, unmistakable brushwork up close — held in private collections across South Africa and abroad.',
@@ -2237,9 +2282,9 @@
         'disc-eyebrow': 'Die werk', 'disc-title': "Een skepper, baie ambagte — kies 'n draad en volg dit.", 'disc-view': 'Verken →',
         'disc-photo-title': 'Fotografie & Video', 'disc-photo-desc': 'Portrette, geleenthede en welstand-toevlugte — en al hoe meer sosiale video: kortvorm-storievertelling voor en agter die kamera.',
         'disc-art-title': 'Skone Kunste & Illustrasie', 'disc-art-desc': 'Akriel- en gemengde-media oorspronklikes — van die ikoniese tot die onverwagse — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
-        'disc-design-title': 'Grafiese & Web-ontwerp', 'disc-design-desc': "'n Kreatiewe Direkteur se gereedskap, weer hands-on: handelsmerk-identiteit, web en e-handel, beweging en veldtogte vir handelsmerke groot en klein.",
-        'disc-apps-title': 'Programme & Speletjies', 'disc-apps-desc': 'Klein blaaierspeletjies en werklik nuttige programme, onafhanklik gebou en met KI-gereedskap verskerp — gemaak vir die vreugde van maak.',
-        'disc-also-html': 'En langs die pad: skryfwerk in die <a href="/blog/">Joernaal</a>, musiek, en die af-en-toe bietjie video-redigering — ’n inhoudskepper dra elke hoed.',
+        'disc-design-title': 'Ontwerp & Digitaal', 'disc-design-desc': "'n Kreatiewe Direkteur se gereedskap, weer hands-on: handelsmerk-identiteit, webwerwe en e-handel, illustrasie, beweging en veldtogte — plus klein programme en blaaierspeletjies, gebou vir die vreugde daarvan.",
+        'disc-essays-title': 'Essays & Artikels', 'disc-essays-desc': 'Langer skryfwerk — essays en artikels oor die ambag, die gereedskap, en die lewe rondom \'n kreatiewe praktyk.',
+        'disc-also-html': 'En langs die pad: musiek, die af-en-toe kantprojek, en waarheen nuuskierigheid ook al lei — ’n inhoudskepper dra elke hoed.',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
         'art-intro-eyebrow': 'Skone Kunste & Illustrasie', 'art-intro-headline': 'Gedurfde oorspronklikes — van die ikoniese tot die onverwagte', 'art-intro-desc': 'Akriel- en gemengde-media skilderye wat met helderheid van oorkant die kamer lees en van naby uitdrukkingsvolle, onmiskenbare kwaswerk openbaar — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
