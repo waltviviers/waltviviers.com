@@ -161,6 +161,8 @@
   var DR = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>';
   var BE = '<svg viewBox="0 0 24 24"><path d="M3 4v16M3 4h5a3 3 0 0 1 0 6H3m0 0h5.5a3.5 3.5 0 0 1 0 7H3"/><line x1="14" y1="7" x2="20" y2="7"/><line x1="13.5" y1="13.5" x2="22" y2="13.5"/><path d="M21 12a3.5 3.5 0 1 0 0 3"/></svg>';
   var GH = '<svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>';
+  var TT = '<svg viewBox="0 0 24 24"><path d="M14 3v11a4 4 0 1 1-3-3.87"/><path d="M14 3c0 2.8 2.2 5 5 5"/></svg>';
+  var FB = '<svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>';
   var EM = '<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>';
 
   var NAV_HTML =
@@ -175,6 +177,8 @@
       '<li class="nav-link-hide"><a href="/gallery/#commission" class="nav-cta" id="wv-enquire">Enquire</a></li>' +
       '<li><div class="social-icons">' +
         '<a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">' + IG + '</a>' +
+        '<a href="https://www.tiktok.com/@waltviviers" target="_blank" rel="noopener" aria-label="TikTok">' + TT + '</a>' +
+        '<a href="https://www.facebook.com/waltviviers/" target="_blank" rel="noopener" aria-label="Facebook">' + FB + '</a>' +
         '<a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">' + LI + '</a>' +
         '<a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">' + EM + '</a>' +
       '</div></li>' +
@@ -197,6 +201,8 @@
     '<div class="mobile-menu-foot">' +
       '<a href="/admin-index/" class="mobile-admin-btn">Admin</a>' +
       '<a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">' + IG + '</a>' +
+        '<a href="https://www.tiktok.com/@waltviviers" target="_blank" rel="noopener" aria-label="TikTok">' + TT + '</a>' +
+        '<a href="https://www.facebook.com/waltviviers/" target="_blank" rel="noopener" aria-label="Facebook">' + FB + '</a>' +
       '<a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">' + LI + '</a>' +
       '<a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">' + DR + '</a>' +
     '</div>';
@@ -206,6 +212,8 @@
     '<div class="footer-social">' +
       '<div class="social-icons">' +
         '<a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">' + IG + '</a>' +
+        '<a href="https://www.tiktok.com/@waltviviers" target="_blank" rel="noopener" aria-label="TikTok">' + TT + '</a>' +
+        '<a href="https://www.facebook.com/waltviviers/" target="_blank" rel="noopener" aria-label="Facebook">' + FB + '</a>' +
         '<a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">' + LI + '</a>' +
         '<a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">' + DR + '</a>' +
         '<a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" aria-label="Behance">' + BE + '</a>' +
