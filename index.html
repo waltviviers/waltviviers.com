@@ -660,9 +660,9 @@
       transition: background 0.2s; overflow: hidden;
     }
     .disc-card:hover { background: var(--bg2); }
-    .disc-card-thumb { flex: 0 0 auto; width: clamp(76px, 9vw, 108px); aspect-ratio: 1 / 1; overflow: hidden; background: var(--bg2); }
-    .disc-card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s cubic-bezier(0.4,0,0.2,1); }
-    .disc-card:hover .disc-card-thumb img { transform: scale(1.05); }
+    .disc-card-icon { flex: 0 0 auto; width: clamp(40px, 4vw, 52px); height: clamp(40px, 4vw, 52px); color: var(--stone); transition: color 0.2s; }
+    .disc-card-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .disc-card:hover .disc-card-icon { color: var(--ink); }
     .disc-card-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
     .disc-card-num { font-size: 11px; letter-spacing: 0.16em; color: var(--stone); }
     .disc-card-title {
@@ -1885,7 +1885,7 @@
     </div>
     <div class="disc-grid">
       <a class="disc-card" href="/photography/">
-        <div class="disc-card-thumb"><img src="/images/800/garden.webp" alt="Walt Viviers photography — wellness retreat portrait" loading="lazy" width="800" height="500" /></div>
+        <div class="disc-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
         <div class="disc-card-body">
           <span class="disc-card-num">01</span>
           <h3 class="disc-card-title" data-i18n="disc-photo-title">Photography &amp; Video</h3>
@@ -1894,7 +1894,7 @@
         </div>
       </a>
       <a class="disc-card" href="/gallery/">
-        <div class="disc-card-thumb"><img src="/images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp" alt="Walt Viviers — T-Rex, acrylic on canvas" loading="lazy" width="800" height="533" /></div>
+        <div class="disc-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.06 11.9l8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/></svg></div>
         <div class="disc-card-body">
           <span class="disc-card-num">02</span>
           <h3 class="disc-card-title" data-i18n="disc-art-title">Fine Art &amp; Illustration</h3>
@@ -1903,7 +1903,7 @@
         </div>
       </a>
       <a class="disc-card" href="/graphic-design-portfolio/">
-        <div class="disc-card-thumb"><img src="/images/800/Neurotrace.webp" alt="Walt Viviers — digital product and app design" loading="lazy" width="800" height="500" /></div>
+        <div class="disc-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></div>
         <div class="disc-card-body">
           <span class="disc-card-num">03</span>
           <h3 class="disc-card-title" data-i18n="disc-design-title">Design &amp; Digital</h3>
@@ -1912,7 +1912,7 @@
         </div>
       </a>
       <a class="disc-card" href="/blog/">
-        <div class="disc-card-thumb"><img src="/images/800/books-acrylic-canvas-walt-viviers-2010.webp" alt="Walt Viviers — Books, acrylic on canvas" loading="lazy" width="800" height="533" /></div>
+        <div class="disc-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
         <div class="disc-card-body">
           <span class="disc-card-num">04</span>
           <h3 class="disc-card-title" data-i18n="disc-essays-title">Essays &amp; Articles</h3>
