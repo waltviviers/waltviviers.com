@@ -1400,6 +1400,17 @@
     .digital-cta { font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);transition:color 0.2s; }
     .digital-card:hover .digital-cta { color:var(--ink); }
     @media (max-width:900px) { .digital { padding:48px 24px 56px; } .digital-grid { grid-template-columns:1fr; } }
+    /* Apps & Games sub-items (nested under Design & Digital) */
+    .digital-sub { margin-top: clamp(18px,2.2vw,28px); }
+    .digital-sub-label { font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);margin:0 0 14px 2px; }
+    .digital-sub-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule); }
+    .digital-sub-card { background:var(--bg2);padding:22px 28px;display:flex;flex-direction:column;gap:8px;transition:background 0.2s; }
+    .digital-sub-card:hover { background:var(--bg); }
+    .digital-sub-title { font-family:var(--serif);font-size:clamp(1.1rem,1.6vw,1.3rem);font-weight:400;line-height:1.15; }
+    .digital-sub-desc { font-size:13px;line-height:1.6;color:var(--stone);flex-grow:1; }
+    .digital-sub-cta { font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);transition:color 0.2s; }
+    .digital-sub-card:hover .digital-sub-cta { color:var(--ink); }
+    @media (max-width:760px) { .digital-sub-grid { grid-template-columns:1fr; } }
 
 
     #instagram {
@@ -2042,18 +2053,21 @@
         <p class="digital-desc">Small, independent browser games and offline-friendly apps — built for the joy of making. No ads, no tracking.</p>
         <span class="digital-cta">Explore &#8594;</span>
       </a>
-      <a class="digital-card" href="/apps/static-protocol/play/">
-        <span class="digital-card-num">03</span>
-        <h2 class="digital-title">Static Protocol</h2>
-        <p class="digital-desc">A cyberpunk data-heist story built for mobile — five decisions, five live hacking sequences, ten possible endings.</p>
-        <span class="digital-cta">Play &#8594;</span>
-      </a>
-      <a class="digital-card" href="/apps/scritch-scratch/play/">
-        <span class="digital-card-num">04</span>
-        <h2 class="digital-title">Scritch Scratch</h2>
-        <p class="digital-desc">An interactive pet app with three relaxed modes and nothing to win. Tap around, make a mess, enjoy the calm.</p>
-        <span class="digital-cta">Play &#8594;</span>
-      </a>
+    </div>
+    <div class="digital-sub">
+      <p class="digital-sub-label">From the Apps &amp; Games shelf — play in your browser</p>
+      <div class="digital-sub-grid">
+        <a class="digital-sub-card" href="/apps/static-protocol/play/">
+          <span class="digital-sub-title">Static Protocol</span>
+          <span class="digital-sub-desc">A cyberpunk data-heist story built for mobile — five decisions, five live hacking sequences, ten possible endings.</span>
+          <span class="digital-sub-cta">Play &#8594;</span>
+        </a>
+        <a class="digital-sub-card" href="/apps/scritch-scratch/play/">
+          <span class="digital-sub-title">Scritch Scratch</span>
+          <span class="digital-sub-desc">An interactive pet app with three relaxed modes and nothing to win. Tap around, make a mess, enjoy the calm.</span>
+          <span class="digital-sub-cta">Play &#8594;</span>
+        </a>
+      </div>
     </div>
   </section>
 
