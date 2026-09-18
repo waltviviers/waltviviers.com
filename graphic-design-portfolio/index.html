@@ -213,10 +213,19 @@
 
     /* ── Page header ── */
     .page-head {
+      position: relative; z-index: 0; overflow: hidden;
       margin-bottom: 64px;
-      padding-bottom: 40px;
-      border-bottom: 1px solid var(--rule);
+      padding: clamp(36px, 5vw, 64px) clamp(28px, 4vw, 56px);
+      border: 1px solid var(--rule);
+      background: #0C0C0B;
     }
+    .page-head::before {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background: url('/brushstrokes-bg.webp') center/cover no-repeat; opacity: 0.22;
+    }
+    [data-theme="light"] .page-head { background: #EDEAE5; }
+    [data-theme="light"] .page-head::before { filter: invert(1); opacity: 0.16; }
+    .page-head h1, .page-head .page-intro { position: relative; }
     .page-head-top {
       display: flex;
       justify-content: space-between;

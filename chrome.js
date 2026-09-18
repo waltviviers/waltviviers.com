@@ -152,7 +152,25 @@
       '.burger-btn{display:flex;}' +
       'nav .social-icons{display:none;}' +
     '}',
-    '@media (max-width:560px){.footer-admin{display:none;}}'
+    '@media (max-width:560px){.footer-admin{display:none;}}',
+    /* Injected Enquire modal (only added when a page has none of its own) */
+    '.wvx-modal{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);padding:24px;}',
+    '.wvx-modal.open{display:flex;}',
+    '.wvx-box{background:var(--bg2);border:1px solid var(--rule);width:100%;max-width:480px;padding:44px 40px 40px;position:relative;max-height:90vh;overflow-y:auto;}',
+    '[data-theme="light"] .wvx-box{background:#F5F3EF;}',
+    '.wvx-close{position:absolute;top:12px;right:16px;font-size:28px;line-height:1;color:var(--stone);background:none;border:none;cursor:pointer;}',
+    '.wvx-close:hover{color:var(--ink);}',
+    '.wvx-box h2{font-family:var(--serif);font-size:2rem;font-weight:400;line-height:1.1;margin-bottom:10px;}',
+    '.wvx-sub{color:var(--stone);font-size:14px;line-height:1.6;margin-bottom:24px;}',
+    '.wvx-field{margin-bottom:16px;}',
+    '.wvx-field label{display:block;font-size:11px;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);margin-bottom:8px;}',
+    '.wvx-field input,.wvx-field textarea,.wvx-field select{width:100%;background:var(--bg);border:1px solid var(--rule);color:var(--ink);padding:12px 14px;font:inherit;font-size:14px;border-radius:0;}',
+    '.wvx-field input:focus,.wvx-field textarea:focus,.wvx-field select:focus{border-color:var(--stone);outline:none;}',
+    '.wvx-submit{display:block;width:100%;text-align:center;padding:14px;margin-top:8px;background:var(--ink);color:var(--bg);font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;border:1px solid var(--ink);cursor:pointer;transition:background 0.2s,color 0.2s;}',
+    '.wvx-submit:hover{background:transparent;color:var(--ink);}',
+    '.wvx-err{color:#c0392b;font-size:0.82rem;margin-top:10px;text-align:center;}',
+    '.wvx-success{text-align:center;}',
+    '.wvx-success p{color:var(--stone);margin-bottom:22px;}'
   ].join('\n');
 
   /* ── Markup ───────────────────────────────────────────────────────────── */
@@ -377,17 +395,64 @@
       window.location.href = 'https://waltviviers.com/admin-index/';
     });
 
-    /* Enquire — open the global modal if present, else follow the link */
+    /* Enquire — always open a popup (the page's own modal, or an injected fallback) */
+    var gxModal = document.getElementById('gx-enquire') || injectEnquireModal();
+    function openEnquire(e) {
+      if (!gxModal) return;
+      if (e) e.preventDefault();
+      gxModal.classList.add('open');
+      gxModal.removeAttribute('aria-hidden');
+      document.body.style.overflow = 'hidden';
+    }
     var enquire = nav.querySelector('#wv-enquire');
-    if (enquire) enquire.addEventListener('click', function (e) {
-      var m = document.getElementById('gx-enquire');
-      if (m) {
-        e.preventDefault();
-        m.classList.add('open');
-        m.removeAttribute('aria-hidden');
-        document.body.style.overflow = 'hidden';
-      }
+    if (enquire) enquire.addEventListener('click', openEnquire);
+    var menuCta = document.querySelector('.mobile-menu-link-cta');
+    if (menuCta) menuCta.addEventListener('click', openEnquire);
+    document.querySelectorAll('.gx-open').forEach(function (a) { a.addEventListener('click', openEnquire); });
+  }
+
+  /* Inject a fallback Enquire modal on pages that don't ship their own */
+  function injectEnquireModal() {
+    if (document.getElementById('gx-enquire')) return document.getElementById('gx-enquire');
+    if (document.getElementById('wvx-enquire')) return document.getElementById('wvx-enquire');
+    var m = document.createElement('div');
+    m.className = 'wvx-modal'; m.id = 'wvx-enquire';
+    m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true');
+    m.setAttribute('aria-hidden', 'true'); m.setAttribute('aria-label', 'Enquire');
+    m.innerHTML =
+      '<div class="wvx-box">' +
+        '<button class="wvx-close" type="button" aria-label="Close">&times;</button>' +
+        '<h2>Enquire</h2>' +
+        '<p class="wvx-sub">Commissions, artworks, photography &amp; video, design &amp; digital, gallery representation — tell me what you have in mind and I\'ll be in touch.</p>' +
+        '<form class="wvx-form">' +
+          '<input type="hidden" name="_subject" value="Website Enquiry" />' +
+          '<div class="wvx-field"><label>Name</label><input name="name" type="text" required placeholder="Your name" /></div>' +
+          '<div class="wvx-field"><label>Email</label><input name="email" type="email" required placeholder="your@email.com" /></div>' +
+          '<div class="wvx-field"><label>Message</label><textarea name="message" rows="4" placeholder="Tell me what you have in mind…"></textarea></div>' +
+          '<p class="wvx-err" hidden></p>' +
+          '<button type="submit" class="wvx-submit">Send enquiry</button>' +
+        '</form>' +
+        '<div class="wvx-success" hidden><p>Thank you — your message has been sent. Walt will be in touch shortly.</p><button type="button" class="wvx-submit wvx-close">Close</button></div>' +
+      '</div>';
+    document.body.appendChild(m);
+    var form = m.querySelector('.wvx-form');
+    var success = m.querySelector('.wvx-success');
+    var err = m.querySelector('.wvx-err');
+    var btn = form.querySelector('[type="submit"]');
+    var orig = btn.textContent;
+    function closeM() { m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; form.hidden = false; success.hidden = true; err.hidden = true; btn.disabled = false; btn.textContent = orig; }
+    m.addEventListener('click', function (e) { if (e.target === m) closeM(); });
+    m.querySelectorAll('.wvx-close').forEach(function (b) { b.addEventListener('click', closeM); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && m.classList.contains('open')) closeM(); });
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault(); btn.disabled = true; btn.textContent = '…'; err.hidden = true;
+      try {
+        var res = await fetch('https://formspree.io/f/mrevzark', { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+        if (res.ok) { form.hidden = true; success.hidden = false; }
+        else { var d = await res.json(); err.textContent = (d.errors || []).map(function (x) { return x.message; }).join(', ') || 'Something went wrong. Please try again.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
+      } catch (_) { err.textContent = 'Could not send. Email artist@waltviviers.com directly.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
     });
+    return m;
   }
 
   if (document.body) mount();
