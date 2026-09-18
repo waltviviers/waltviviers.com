@@ -2750,6 +2750,18 @@
           injectArtworkSchema();
           startAutoplay();
 
+          // Randomise the Fine Art intro band background (like the photography band)
+          (function () {
+            var artImg = document.querySelector('#art-intro .pf-hero-img img');
+            if (!artImg || !works.length) return;
+            var a = works[Math.floor(Math.random() * works.length)];
+            var img800 = a.image.indexOf('images/') === 0 ? a.image.replace('images/', '/images/800/') : a.image;
+            artImg.src = '/' + a.image;
+            artImg.srcset = img800 + ' 800w, /' + a.image + ' 1600w';
+            artImg.sizes = '100vw';
+            artImg.alt = 'Walt Viviers, ' + a.title + ', ' + a.year + (a.medium ? ', ' + a.medium : '');
+          })();
+
           window._gallery = {
             refresh: function() {
               var _t = window._t || function(k){return k;};
