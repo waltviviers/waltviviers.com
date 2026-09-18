@@ -220,13 +220,6 @@
     }
 
     /* ── Nav ─────────────────────────────────────── */
-    .top-strip {
-      position: fixed; top: 100px; left: 0; right: 0; height: 30px; z-index: 190;
-      background: #0D0D0D 50% 50% / cover no-repeat; pointer-events: none;
-      transition: top 0.4s cubic-bezier(0.4,0,0.2,1);
-    }
-    body:has(nav.scrolled) .top-strip { top: 50px; }
-    @media (max-width: 900px) { .top-strip { top: 50px; } }
     nav {
       position: fixed;
       inset: 0 0 auto 0;
@@ -554,8 +547,8 @@
     .pf-eyebrow, .pf-title, .pf-desc { text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
     .pf-hero-inner {
       position: relative; z-index: 2;
-      padding: clamp(32px, 5vw, 68px);
-      max-width: 780px;
+      padding: clamp(32px, 5vw, 68px) clamp(32px, 5vw, 68px) clamp(32px, 5vw, 68px) clamp(96px, 9vw, 108px);
+      max-width: 808px;
       display: flex; flex-direction: column; gap: 16px;
     }
     .pf-eyebrow {
@@ -586,7 +579,7 @@
        eyebrow behind the fixed nav — raise the band and tighten the inner box. */
     @media (max-width: 900px) {
       .pf-hero { min-height: clamp(500px, 76vh, 620px); }
-      .pf-hero-inner { padding: 26px 24px; gap: 12px; }
+      .pf-hero-inner { padding: 26px 24px 100px; gap: 12px; }
     }
 
     /* ── Content Creator hero ── */
@@ -606,10 +599,9 @@
     }
     .cc-hero-inner {
       position: relative; z-index: 2; width: 100%; max-width: 1320px;
-      padding: clamp(150px, 13vw, 172px) clamp(24px, 6vw, 72px) clamp(56px, 7vw, 90px);
+      padding: clamp(96px, 11vw, 140px) clamp(24px, 6vw, 72px) clamp(56px, 7vw, 90px);
       display: flex; flex-direction: column; gap: 22px;
     }
-    @media (max-width: 900px) { .cc-hero-inner { padding-top: 108px; } }
     .cc-eyebrow {
       font-size: 12px; font-weight: 500; letter-spacing: 0.22em;
       text-transform: uppercase; color: var(--stone);
@@ -1787,22 +1779,6 @@
 
   <a href="#main" class="skip-nav">Skip to main content</a>
 
-  <!-- Decorative random-artwork top strip -->
-  <div class="top-strip" id="top-strip" aria-hidden="true"></div>
-  <script>
-  (function(){var s=document.getElementById('top-strip');if(!s)return;
-    var fb=['/images/800/crow-acrylic-canvas-walt-viviers-2025.webp','/images/800/garden.webp','/images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp'];
-    function set(u){s.style.backgroundImage="url('"+u+"')";}
-    set(fb[Math.floor(Math.random()*fb.length)]);
-    fetch('/data/artworks.json').then(function(r){return r.json();}).then(function(d){
-      var a=(d.artworks||[]).filter(function(w){return w.image;});
-      if(!a.length)return;
-      var w=a[Math.floor(Math.random()*a.length)];
-      set(w.image.indexOf('images/')===0?w.image.replace('images/','/images/800/'):('/'+w.image));
-    }).catch(function(){});
-  })();
-  </script>
-
   <!-- Nav -->
   <nav>
     <div class="nav-left">
@@ -2072,15 +2048,14 @@
   <section class="digital" id="design-digital" aria-label="Design & Digital">
     <div class="pf-hero">
       <div class="pf-hero-img">
-        <img src="/images/Neurotrace.webp"
-             srcset="/images/800/Neurotrace.webp 800w, /images/Neurotrace.webp 1600w"
+        <img src="/apps/scritch-scratch/ScritchScratch_Walt_desktop.jpg"
              sizes="100vw"
-             alt="Walt Viviers — digital product and app design" loading="lazy" width="1600" height="1000" />
+             alt="Walt Viviers — Scritch Scratch, an interactive pet app" loading="lazy" width="1600" height="1000" />
       </div>
       <div class="pf-hero-inner">
         <p class="pf-eyebrow">Design &amp; Digital</p>
-        <h2 class="pf-title">A Creative Director's toolkit, hands-on again</h2>
-        <p class="pf-desc">Brand identity, websites and e-commerce, illustration and pixel art, motion and campaigns — and, for the joy of it, small browser games and genuinely useful apps, sharpened with AI-assisted tools.</p>
+        <h2 class="pf-title">Brands, websites, apps &amp; games</h2>
+        <p class="pf-desc">A Creative Director's full toolkit — brand identity, websites and online stores, illustration, motion and marketing for brands big and small. Plus small browser games and genuinely useful apps I build for the fun of it.</p>
         <div class="pf-actions">
           <a href="/graphic-design-portfolio/" class="pf-btn pf-btn-primary">View the portfolio ↗</a>
           <button type="button" class="pf-btn pf-btn-secondary gx-open">Enquire</button>
