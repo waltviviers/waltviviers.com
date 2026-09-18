@@ -254,7 +254,6 @@
         '<a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">' + DR + '</a>' +
         '<a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" aria-label="Behance">' + BE + '</a>' +
         '<a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub">' + GH + '</a>' +
-        '<a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">' + EM + '</a>' +
       '</div>' +
       '<div class="footer-legal" style="margin-top:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);line-height:1.7;text-align:center;"><span class="footer-copy" data-i18n="footer-copy">© 2026 Walt Viviers. All rights reserved.</span> <a href="/privacy/" class="footer-privacy" style="color:inherit;">Privacy Policy.</a> <span class="footer-credit">Made with <span style="color:#e0607e">♥</span> by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Cat&#39;s Creations</a></span></div>' +
     '</div>' +
