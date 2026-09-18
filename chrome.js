@@ -489,8 +489,11 @@
   /* Inject a closing "quote + enquiry form" section above the footer */
   function injectClosing() {
     if (document.querySelector('.wv-closing')) return;
-    /* If the page already ships its own enquiry form, show the quote only. */
+    /* If the page already ships its own enquiry form, show the quote only;
+       if it also has its own quote, skip the closing section entirely. */
     var hasOwnForm = !!document.querySelector('#photo-enquiry-form, .enquiry form');
+    var hasOwnQuote = !!document.querySelector('.pull-quote-text, .pull-quote, .testimonial blockquote');
+    if (hasOwnForm && hasOwnQuote) return;
     var s = document.createElement('section');
     s.className = 'wv-closing';
     s.setAttribute('aria-label', 'Get in touch');
