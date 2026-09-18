@@ -2176,6 +2176,57 @@
 
   </main>
 
+  <!-- Closing: quote + enquiry form -->
+  <style>
+    .wv-closing{max-width:1400px;margin:0 auto;padding:clamp(60px,7vw,100px) clamp(24px,6vw,72px);border-top:1px solid var(--rule);display:flex;flex-direction:column;gap:clamp(48px,6vw,76px);}
+    .wv-quote{max-width:880px;margin:0 auto;text-align:center;}
+    .wv-quote blockquote{font-family:var(--serif);font-size:clamp(1.4rem,3vw,2rem);line-height:1.5;font-style:italic;color:var(--ink);margin:0 0 24px;}
+    .wv-quote-name{font-family:var(--sans);font-size:0.95rem;font-weight:500;letter-spacing:0.04em;color:var(--ink);margin-bottom:8px;}
+    .wv-quote-role{font-family:var(--sans);font-size:0.82rem;line-height:1.6;color:var(--stone);max-width:640px;margin:0 auto;}
+    .wv-enq{max-width:620px;margin:0 auto;width:100%;}
+    .wv-enq-eyebrow{font-size:11px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--stone);margin-bottom:16px;}
+    .wv-enq-title{font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.1;margin-bottom:12px;color:var(--ink);}
+    .wv-enq-sub{color:var(--stone);font-size:15px;line-height:1.7;margin-bottom:32px;}
+    .wv-enq-field{margin-bottom:18px;}
+    .wv-enq-field label{display:block;font-size:11px;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);margin-bottom:8px;}
+    .wv-enq-field input,.wv-enq-field textarea{width:100%;background:var(--bg);border:1px solid var(--rule);color:var(--ink);padding:13px 15px;font:inherit;font-size:14px;}
+    .wv-enq-field input:focus,.wv-enq-field textarea:focus{border-color:var(--stone);outline:none;}
+    .wv-enq-submit{display:block;width:100%;text-align:center;padding:15px;margin-top:8px;background:var(--ink);color:var(--bg);font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;border:1px solid var(--ink);cursor:pointer;transition:background 0.2s,color 0.2s;}
+    .wv-enq-submit:hover{background:transparent;color:var(--ink);}
+    .wv-enq-err{color:#c0392b;font-size:0.82rem;margin-top:10px;}
+    .wv-enq-success{color:var(--stone);}
+  </style>
+  <section class="wv-closing" aria-label="Get in touch">
+    <div class="wv-quote">
+      <blockquote>&ldquo;Walt is a highly professional and creative person. When he starts a project he will finish it magnificently! Highly recommend him.&rdquo;</blockquote>
+      <div class="wv-quote-name">Roslynn O&rsquo;Moore</div>
+      <div class="wv-quote-role">Lead Buyer, Pepkor Lifestyle Division &mdash; Hi-Fi Corp, Incredible Connection, Boardmans, Russells, Bradlows, Rochester, OK, House &amp; Home</div>
+    </div>
+    <div class="wv-enq">
+      <p class="wv-enq-eyebrow">Enquiries</p>
+      <h2 class="wv-enq-title">Start a conversation</h2>
+      <p class="wv-enq-sub">Commissions, original artwork, photography &amp; video, design &amp; digital, or just an idea &mdash; tell me what you have in mind and I&rsquo;ll be in touch.</p>
+      <form class="wv-enq-form">
+        <input type="hidden" name="_subject" value="Website Enquiry" />
+        <div class="wv-enq-field"><label>Name</label><input name="name" type="text" required placeholder="Your name" /></div>
+        <div class="wv-enq-field"><label>Email</label><input name="email" type="email" required placeholder="your@email.com" /></div>
+        <div class="wv-enq-field"><label>Message</label><textarea name="message" rows="4" placeholder="I&rsquo;d like to enquire about&hellip;"></textarea></div>
+        <p class="wv-enq-err" hidden></p>
+        <button type="submit" class="wv-enq-submit">Send enquiry</button>
+      </form>
+      <div class="wv-enq-success" hidden><p>Thank you &mdash; your message has been sent. Walt will be in touch shortly.</p></div>
+    </div>
+  </section>
+  <script>
+  (function(){var form=document.querySelector('.wv-enq-form');if(!form)return;var s=form.closest('.wv-enq'),success=s.querySelector('.wv-enq-success'),err=s.querySelector('.wv-enq-err'),btn=form.querySelector('[type="submit"]'),orig=btn.textContent;
+    form.addEventListener('submit',async function(e){e.preventDefault();btn.disabled=true;btn.textContent='…';err.hidden=true;
+      try{var res=await fetch('https://formspree.io/f/mrevzark',{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
+        if(res.ok){form.hidden=true;success.hidden=false;}else{var d=await res.json();err.textContent=(d.errors||[]).map(function(x){return x.message;}).join(', ')||'Something went wrong. Please try again.';err.hidden=false;btn.disabled=false;btn.textContent=orig;}
+      }catch(_){err.textContent='Could not send. Email artist@waltviviers.com directly.';err.hidden=false;btn.disabled=false;btn.textContent=orig;}
+    });
+  })();
+  </script>
+
   <!-- Footer -->
   <footer>
     <button class="footer-admin" id="admin-btn">Admin</button>
