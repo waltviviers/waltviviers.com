@@ -477,15 +477,18 @@
   /* Inject a closing "quote + enquiry form" section above the footer */
   function injectClosing() {
     if (document.querySelector('.wv-closing')) return;
+    /* If the page already ships its own enquiry form, show the quote only. */
+    var hasOwnForm = !!document.querySelector('#photo-enquiry-form, .enquiry form');
     var s = document.createElement('section');
     s.className = 'wv-closing';
     s.setAttribute('aria-label', 'Get in touch');
-    s.innerHTML =
+    var quoteHTML =
       '<div class="wv-quote">' +
         '<blockquote>“Walt is a highly professional and creative person. When he starts a project he will finish it magnificently! Highly recommend him.”</blockquote>' +
         '<div class="wv-quote-name">Roslynn O’Moore</div>' +
         '<div class="wv-quote-role">Lead Buyer, Pepkor Lifestyle Division — Hi-Fi Corp, Incredible Connection, Boardmans, Russells, Bradlows, Rochester, OK, House &amp; Home</div>' +
-      '</div>' +
+      '</div>';
+    var enqHTML =
       '<div class="wv-enq">' +
         '<p class="wv-enq-eyebrow">Enquiries</p>' +
         '<h2 class="wv-enq-title">Start a conversation</h2>' +
@@ -500,8 +503,10 @@
         '</form>' +
         '<div class="wv-enq-success" hidden><p>Thank you — your message has been sent. Walt will be in touch shortly.</p></div>' +
       '</div>';
+    s.innerHTML = quoteHTML + (hasOwnForm ? '' : enqHTML);
     document.body.appendChild(s);
     var form = s.querySelector('.wv-enq-form');
+    if (!form) return;
     var success = s.querySelector('.wv-enq-success');
     var err = s.querySelector('.wv-enq-err');
     var btn = form.querySelector('[type="submit"]');
