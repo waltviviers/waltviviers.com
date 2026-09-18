@@ -474,6 +474,18 @@
     return m;
   }
 
+  /* Testimonials (LinkedIn recommendations) — one is shown at random */
+  var WV_QUOTES = [
+    { q: '“Walt is a highly professional and creative person. When he starts a project he will finish it magnificently! Highly recommend him.”', n: 'Roslynn O’Moore', r: 'Lead Buyer, Pepkor Lifestyle Division — Hi-Fi Corp, Incredible Connection, Boardmans, Russells, Bradlows, Rochester, OK, House &amp; Home' },
+    { q: '“I had the pleasure of working closely with Walt as our Creative Director at Menzies, and I cannot recommend him highly enough. Walt is a visionary in the field of design, particularly excelling in UI/UX.”', n: 'Humphrey Mukwenga', r: 'Lead Developer at LSi Ltd' },
+    { q: '“Walt is an inspirational, down-to-earth and logical voice within the chaotic realms of creativity. With his creative and art direction, the work produced is of stellar quality — far above the standards of today.”', n: 'Neal Strydom', r: 'All-Rounder Creative — Motion, Graphic &amp; Multimedia Design' },
+    { q: '“Walt is an incredible creative, and has always gone over and above. His brain is really unique and it shows in the work he produces. I have always enjoyed working with Walt and hope it may long continue.”', n: 'Kieran Pearce', r: 'Head of Digital at Waypoint Digital' },
+    { q: '“Walt maintained the highest degree of professionalism managing his staff. His combination of creativity, intellectual ability, and people skills make him an invaluable asset to any company.”', n: 'Maxime de Montbron', r: 'Worked under Walt, Creative Art Director at Menzies Media' },
+    { q: '“I confidently recommend Walt. I genuinely enjoyed working with him — he is a great teacher, a dedicated and knowledgeable Creative Director, and an all-around great person.”', n: 'Unarine Munzhedzi Sinwamali', r: 'Image Architect &amp; Wardrobe Stylist' },
+    { q: '“One of the most creative minds I’ve ever met — with a wide skillset to boot!”', n: 'Andre Levi Chasqueira', r: 'Tattoo Artist at Smokin’ Aces Tattoo' },
+    { q: '“Walt has expertise in many fields including design, UX, animation and creative direction. He is incredibly creative and able to produce high-quality concepts and designs under pressure.”', n: 'Leigh Munro', r: 'Graphic Designer at Paragon Banking Group PLC' }
+  ];
+
   /* Inject a closing "quote + enquiry form" section above the footer */
   function injectClosing() {
     if (document.querySelector('.wv-closing')) return;
@@ -482,11 +494,12 @@
     var s = document.createElement('section');
     s.className = 'wv-closing';
     s.setAttribute('aria-label', 'Get in touch');
+    var qq = WV_QUOTES[Math.floor(Math.random() * WV_QUOTES.length)];
     var quoteHTML =
       '<div class="wv-quote">' +
-        '<blockquote>“Walt is a highly professional and creative person. When he starts a project he will finish it magnificently! Highly recommend him.”</blockquote>' +
-        '<div class="wv-quote-name">Roslynn O’Moore</div>' +
-        '<div class="wv-quote-role">Lead Buyer, Pepkor Lifestyle Division — Hi-Fi Corp, Incredible Connection, Boardmans, Russells, Bradlows, Rochester, OK, House &amp; Home</div>' +
+        '<blockquote>' + qq.q + '</blockquote>' +
+        '<div class="wv-quote-name">' + qq.n + '</div>' +
+        '<div class="wv-quote-role">' + qq.r + '</div>' +
       '</div>';
     var enqHTML =
       '<div class="wv-enq">' +

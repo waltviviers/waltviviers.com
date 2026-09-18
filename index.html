@@ -2218,7 +2218,20 @@
     </div>
   </section>
   <script>
-  (function(){var form=document.querySelector('.wv-enq-form');if(!form)return;var s=form.closest('.wv-enq'),success=s.querySelector('.wv-enq-success'),err=s.querySelector('.wv-enq-err'),btn=form.querySelector('[type="submit"]'),orig=btn.textContent;
+  (function(){
+    var WV_Q=[
+      {q:'“Walt is a highly professional and creative person. When he starts a project he will finish it magnificently! Highly recommend him.”',n:'Roslynn O’Moore',r:'Lead Buyer, Pepkor Lifestyle Division — Hi-Fi Corp, Incredible Connection, Boardmans, Russells, Bradlows, Rochester, OK, House &amp; Home'},
+      {q:'“I had the pleasure of working closely with Walt as our Creative Director at Menzies, and I cannot recommend him highly enough. Walt is a visionary in the field of design, particularly excelling in UI/UX.”',n:'Humphrey Mukwenga',r:'Lead Developer at LSi Ltd'},
+      {q:'“Walt is an inspirational, down-to-earth and logical voice within the chaotic realms of creativity. With his creative and art direction, the work produced is of stellar quality — far above the standards of today.”',n:'Neal Strydom',r:'All-Rounder Creative — Motion, Graphic &amp; Multimedia Design'},
+      {q:'“Walt is an incredible creative, and has always gone over and above. His brain is really unique and it shows in the work he produces. I have always enjoyed working with Walt and hope it may long continue.”',n:'Kieran Pearce',r:'Head of Digital at Waypoint Digital'},
+      {q:'“Walt maintained the highest degree of professionalism managing his staff. His combination of creativity, intellectual ability, and people skills make him an invaluable asset to any company.”',n:'Maxime de Montbron',r:'Worked under Walt, Creative Art Director at Menzies Media'},
+      {q:'“I confidently recommend Walt. I genuinely enjoyed working with him — he is a great teacher, a dedicated and knowledgeable Creative Director, and an all-around great person.”',n:'Unarine Munzhedzi Sinwamali',r:'Image Architect &amp; Wardrobe Stylist'},
+      {q:'“One of the most creative minds I’ve ever met — with a wide skillset to boot!”',n:'Andre Levi Chasqueira',r:'Tattoo Artist at Smokin’ Aces Tattoo'},
+      {q:'“Walt has expertise in many fields including design, UX, animation and creative direction. He is incredibly creative and able to produce high-quality concepts and designs under pressure.”',n:'Leigh Munro',r:'Graphic Designer at Paragon Banking Group PLC'}
+    ];
+    var qEl=document.querySelector('.wv-closing .wv-quote');
+    if(qEl){var _q=WV_Q[Math.floor(Math.random()*WV_Q.length)];qEl.innerHTML='<blockquote>'+_q.q+'</blockquote><div class="wv-quote-name">'+_q.n+'</div><div class="wv-quote-role">'+_q.r+'</div>';}
+    var form=document.querySelector('.wv-enq-form');if(!form)return;var s=form.closest('.wv-enq'),success=s.querySelector('.wv-enq-success'),err=s.querySelector('.wv-enq-err'),btn=form.querySelector('[type="submit"]'),orig=btn.textContent;
     form.addEventListener('submit',async function(e){e.preventDefault();btn.disabled=true;btn.textContent='…';err.hidden=true;
       try{var res=await fetch('https://formspree.io/f/mrevzark',{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
         if(res.ok){form.hidden=true;success.hidden=false;}else{var d=await res.json();err.textContent=(d.errors||[]).map(function(x){return x.message;}).join(', ')||'Something went wrong. Please try again.';err.hidden=false;btn.disabled=false;btn.textContent=orig;}
