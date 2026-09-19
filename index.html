@@ -2090,11 +2090,21 @@
     </div>
     <div class="about-body">
       <p>Longer-form writing — essays and articles on the craft, the tools, and the life around a creative practice. New pieces go up as they're written; subscribe via <a href="/feed.xml" style="text-decoration:underline;text-underline-offset:3px">RSS</a> to follow along.</p>
-      <ul class="essays-list">
+      <ul class="essays-list" id="essays-list">
         <li><a href="/blog/on-beginning-to-write/"><span class="essays-list-title">On Beginning to Write</span><span class="essays-list-date">3 Sep 2026</span></a></li>
       </ul>
     </div>
   </section>
+  <script>
+  (function(){var ul=document.getElementById('essays-list');if(!ul)return;
+    fetch('/data/essays.json').then(function(r){return r.json();}).then(function(list){
+      if(!Array.isArray(list)||!list.length)return;
+      ul.innerHTML=list.slice(0,6).map(function(p){
+        return '<li><a href="'+p.url+'"><span class="essays-list-title">'+p.title+'</span><span class="essays-list-date">'+p.date+'</span></a></li>';
+      }).join('');
+    }).catch(function(){});
+  })();
+  </script>
 
   <!-- Enquiry Modal -->
   <div class="modal-backdrop" id="enquiry-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="enquiry-modal-title">
