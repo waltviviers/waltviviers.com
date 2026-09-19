@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Graphic Design Portfolio — Walt Viviers</title>
-  <meta name="description" content="Graphic design portfolio of Walt Viviers — Creative Director based in Pretoria, South Africa. Brand identity, web design, e-commerce, and digital marketing for major South African and international brands. MEA Business Award winner. 4,343% ROI for Kaizer Chiefs." />
+  <title>Design &amp; Digital — Walt Viviers</title>
+  <meta name="description" content="Design &amp; digital portfolio of Walt Viviers — Creative Director based in Pretoria, South Africa. Brand identity, web design, e-commerce, and digital marketing for major South African and international brands. MEA Business Award winner. 4,343% ROI for Kaizer Chiefs." />
   <meta name="author" content="Walt Viviers" />
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://waltviviers.com/graphic-design-portfolio/" />
@@ -15,7 +15,7 @@
   <!-- Open Graph -->
   <meta property="og:type"        content="website" />
   <meta property="og:url"         content="https://waltviviers.com/graphic-design-portfolio/" />
-  <meta property="og:title"       content="Graphic Design Portfolio — Walt Viviers" />
+  <meta property="og:title"       content="Design &amp; Digital — Walt Viviers" />
   <meta property="og:description" content="Creative Director based in Pretoria. Brand, web, and digital work for Kaizer Chiefs, Alpha Industries, Kappa, Sebago, Superga and more. MEA Business Award winner." />
   <meta property="og:image"       content="https://waltviviers.com/brushstrokes-bg.webp" />
   <meta property="og:image:type"  content="image/webp" />
@@ -24,7 +24,7 @@
 
   <!-- Twitter / X -->
   <meta name="twitter:card"        content="summary_large_image" />
-  <meta name="twitter:title"       content="Graphic Design Portfolio — Walt Viviers" />
+  <meta name="twitter:title"       content="Design &amp; Digital — Walt Viviers" />
   <meta name="twitter:description" content="Creative Director based in Pretoria. Brand, web, and digital work." />
   <meta name="twitter:image"       content="https://waltviviers.com/brushstrokes-bg.webp" />
 
@@ -213,10 +213,19 @@
 
     /* ── Page header ── */
     .page-head {
+      position: relative; z-index: 0; overflow: hidden;
       margin-bottom: 64px;
-      padding-bottom: 40px;
-      border-bottom: 1px solid var(--rule);
+      padding: clamp(36px, 5vw, 64px) clamp(28px, 4vw, 56px);
+      border: 1px solid var(--rule);
+      background: #0C0C0B;
     }
+    .page-head::before {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background: url('/brushstrokes-bg.webp') center/cover no-repeat; opacity: 0.22;
+    }
+    [data-theme="light"] .page-head { background: #EDEAE5; }
+    [data-theme="light"] .page-head::before { filter: invert(1); opacity: 0.16; }
+    .page-head h1, .page-head .page-intro { position: relative; }
     .page-head-top {
       display: flex;
       justify-content: space-between;
@@ -687,8 +696,8 @@
     <!-- Page header -->
     <div class="page-head">
       <div class="page-head-top">
-        <h1>Graphic Design<br/>&amp; Creative Direction</h1>
-        <a href="/" class="back-link">← Back to fine art</a>
+        <h1>Design<br/>&amp; Digital</h1>
+        <a href="/" class="back-link">← Back to home</a>
       </div>
       <p class="page-intro">
         Creative practice — from Junior Designer to Creative Director at a leading South African digital agency. Brand identity, web design, Shopify e-commerce, motion graphics, and performance digital marketing for major SA and international brands. MEA Business Award winner. Full project case studies on Behance; shots on Dribbble.
@@ -991,16 +1000,30 @@
           </div>
         </a>
 
-        <a href="https://waltviviers.com/" class="app-card">
-          <div class="app-icon" style="background: #0C0C0B; display: flex; align-items: center; justify-content: center; padding: 14px;">
-            <img src="/logo.svg" alt="waltviviers.com" width="44" height="21" />
+        <a href="/apps/static-protocol/play/" class="app-card">
+          <div class="app-icon" style="background: #0C0C0B; display: flex; align-items: center; justify-content: center;">
+            <svg viewBox="0 0 24 24" fill="none" width="34" height="34" aria-hidden="true"><path d="M4 6l6 6-6 6" stroke="#22e6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="18" x2="20" y2="18" stroke="#22e6d4" stroke-width="2" stroke-linecap="round"/></svg>
           </div>
           <div class="app-body">
-            <p class="app-tag">Fine Art · Portfolio · Website</p>
-            <h3 class="app-name">waltviviers.com</h3>
-            <p class="app-tagline">Personal fine art portfolio built from scratch in HTML/CSS. Dark mode, bilingual (EN/AF), Saatchi Art integration, and a custom artwork gallery.</p>
+            <p class="app-tag">Game · Browser · Mobile</p>
+            <h3 class="app-name">Static Protocol</h3>
+            <p class="app-tagline">A cyberpunk data-heist story built for mobile — five decisions, five live hacking sequences, ten possible endings.</p>
             <div class="app-links">
-              <span class="app-link">Visit site ↗</span>
+              <span class="app-link">Play ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="/apps/scritch-scratch/play/" class="app-card">
+          <div class="app-icon">
+            <img src="/images/scritch-scratch-icon.webp" alt="Scritch Scratch icon" width="72" height="72" loading="lazy" />
+          </div>
+          <div class="app-body">
+            <p class="app-tag">Toy · Browser · Mobile</p>
+            <h3 class="app-name">Scritch Scratch</h3>
+            <p class="app-tagline">An interactive pet app with three relaxed modes — dogs, cats, rats — and nothing to win. Tap around, make a mess, enjoy the calm.</p>
+            <div class="app-links">
+              <span class="app-link">Play ↗</span>
             </div>
           </div>
         </a>

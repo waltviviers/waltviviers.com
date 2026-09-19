@@ -2,7 +2,7 @@
 title: Let me introduce myself.
 date: 2018-08-12
 description: Hi, nice to meet you. My name is Walt Viviers, I was born in South Africa in 1985. Nine years before apartheid was over. It’s been 32 years since I was born. I…
-draft: true
+draft: false
 ---
 ### Hi, nice to meet you.
 

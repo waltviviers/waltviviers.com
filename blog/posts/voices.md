@@ -2,7 +2,7 @@
 title: Voices
 date: 2019-02-08
 description: A voice in your head Telling you what to do Dictating the rules For both me and you You call this voice our god Because your ego is so immense deifying your ow…
-draft: true
+draft: false
 ---
 A voice in your head Telling you what to do Dictating the rules For both me and you
 

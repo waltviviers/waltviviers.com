@@ -261,7 +261,7 @@
     .gh-hero-img img { width: 100%; height: 100%; object-fit: cover; }
     .gh-hero::after {
       content: ""; position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 46%, rgba(0,0,0,0.14) 100%);
+      background: linear-gradient(to top, rgba(0,0,0,0.62) 0%, rgba(0,0,0,0.32) 46%, rgba(0,0,0,0.08) 100%);
     }
     .gh-hero-inner {
       position: relative; z-index: 2;
@@ -755,6 +755,45 @@
       *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
       ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
     }
+    /* ── Featured Work carousel (ported from homepage) ── */
+    .hero { position: relative; min-height: clamp(460px, 70vh, 720px); display: flex; align-items: flex-end; overflow: hidden; background: #0D0D0D; border-bottom: 1px solid var(--rule); }
+    .hero-image-wrap { position: absolute; inset: 0; background: #0D0D0D; overflow: hidden; }
+    .hero-image-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: center; transition: opacity 0.6s; display: block; }
+    .hero-image-wrap .placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 14px; color: var(--stone); letter-spacing: 0.05em; }
+    .hero::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.2) 36%, rgba(0,0,0,0.06) 64%, rgba(0,0,0,0) 100%), linear-gradient(to right, rgba(0,0,0,0.26) 0%, rgba(0,0,0,0.05) 52%, rgba(0,0,0,0) 76%); pointer-events: none; }
+    .hero-detail { position: relative; z-index: 2; padding: clamp(32px, 5vw, 68px); max-width: 720px; }
+    .hero-work-number, .hero-work-title, .hero-work-year, .work-meta-table { text-shadow: 0 1px 4px rgba(0,0,0,0.65), 0 2px 20px rgba(0,0,0,0.5); }
+    .hero-work-info { display: flex; flex-direction: column; gap: 14px; }
+    .hero-work-number { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: #CDCAC2; }
+    .hero-work-title { font-family: var(--serif); font-size: clamp(2rem, 5vw, 3.8rem); font-weight: 400; line-height: 1.04; letter-spacing: -0.01em; color: #FAF9F7; }
+    .hero-work-year { font-family: var(--serif); font-size: clamp(1.1rem, 2vw, 1.6rem); font-style: italic; color: #E7E4DD; margin-top: -8px; }
+    .work-meta-table { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: clamp(13px, 1.3vw, 15px); color: #E7E4DD; margin-top: 4px; }
+    .work-meta-item { display: inline-flex; align-items: center; gap: 6px; }
+    .work-meta-item + .work-meta-item::before { content: "·"; color: rgba(231,228,221,0.55); margin-right: 8px; }
+    .work-meta-value { font-weight: 500; color: #F4F2EC; }
+    .work-meta-value a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+    .availability-badge { display: inline-block; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
+    .availability-badge.available { background: #1A2E1B; color: #6AAE70; }
+    .availability-badge.sold      { background: #2E1A1A; color: #AE6A6A; }
+    .availability-badge.enquire   { background: #28251E; color: #AE9E6A; }
+    .availability-badge.on-show   { background: #1A2438; color: #8FB4E4; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; }
+    .hero-btn { display: inline-block; text-align: center; padding: 14px 24px; font-size: 12px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+    .hero-btn-primary { background: #FAF9F7; color: #0C0C0B; border: 1px solid #FAF9F7; }
+    .hero-btn-primary:hover { background: transparent; color: #FAF9F7; }
+    .hero-btn-secondary { background: transparent; color: #FAF9F7; border: 1px solid rgba(250,249,247,0.5); }
+    .hero-btn-secondary:hover { background: #FAF9F7; color: #0C0C0B; border-color: #FAF9F7; }
+    .gallery-nav { display: flex; align-items: center; gap: 2px; margin-top: 18px; }
+    .gn-btn { width: 40px; height: 40px; border: 1px solid rgba(250,249,247,0.4); display: flex; align-items: center; justify-content: center; cursor: pointer; color: #E7E4DD; font-size: 16px; background: transparent; transition: border-color 0.2s, color 0.2s; }
+    .gn-btn:hover { border-color: #fff; color: #fff; }
+    .gn-dots { display: flex; gap: 6px; padding: 0 16px; overflow: hidden; }
+    .gn-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(250,249,247,0.35); cursor: pointer; transition: background 0.2s; }
+    .gn-dot.active { background: #fff; }
+    @media (max-width: 900px) { #hero { display: none; } }
+    /* Gallery page tweaks */
+    .nav-links a { color: var(--ink) !important; }
+    .sort-bar { justify-content: center; }
+    .sort-btn { font-size: 13px; padding: 10px 22px; }
 </style>
 </head>
 <body>
@@ -777,11 +816,10 @@
 
   <div class="page-wrap">
     <section class="gh-hero" aria-label="Fine Art & Illustration">
-      <div class="gh-hero-img">
-        <img src="/images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
-             srcset="/images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, /images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
+      <div class="gh-hero-img" style="background:#0C0C0B">
+        <img src="/brushstrokes-bg.webp" style="opacity:0.34;object-position:center bottom"
              sizes="100vw"
-             alt="Walt Viviers — acrylic and mixed-media painting" width="1600" height="1067" />
+             alt="Walt Viviers — brushstroke texture" width="2360" height="590" />
       </div>
       <div class="gh-hero-inner">
         <p class="gh-eyebrow" data-af="Skone Kunste &amp; Illustrasie">Fine Art &amp; Illustration</p>
@@ -793,6 +831,29 @@
         </div>
       </div>
     </section>
+
+    <!-- Featured Work carousel -->
+    <section class="hero" id="hero" aria-label="Featured work">
+      <div class="hero-image-wrap" id="hero-image"></div>
+      <div class="hero-detail">
+        <div class="hero-work-info">
+          <p class="hero-work-number" id="hero-number"></p>
+          <h2 class="hero-work-title" id="hero-title"></h2>
+          <p class="hero-work-year" id="hero-year"></p>
+          <div class="work-meta-table" id="hero-meta"></div>
+          <div class="hero-actions">
+            <button type="button" class="hero-btn hero-btn-primary gx-open">Enquire about this work</button>
+            <a class="hero-btn hero-btn-secondary" id="hero-view-link" href="#">View artwork page ↗</a>
+          </div>
+          <div class="gallery-nav">
+            <button class="gn-btn" id="gn-prev" aria-label="Previous work">&#8592;</button>
+            <div class="gn-dots" id="gn-dots"></div>
+            <button class="gn-btn" id="gn-next" aria-label="Next work">&#8594;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div class="sort-bar" id="sort-bar">
       <button class="sort-btn" data-sort="az"><span class="sort-emoji">✋ </span>A→Z</button>
       <button class="sort-btn" data-sort="za"><span class="sort-emoji">🖖 </span>Z→A</button>
@@ -808,13 +869,6 @@
       <div class="skeleton"><div class="skeleton-info"><div class="skeleton-line" style="width:40%"></div><div class="skeleton-line" style="width:22%"></div></div><div class="skeleton-img"></div></div>
     </main>
   </div>
-
-  <!-- Testimonial -->
-  <section class="testimonial" aria-label="Testimonial" style="max-width:760px;margin:0 auto;padding:76px 24px 96px;text-align:center;border-top:1px solid var(--rule);">
-    <blockquote style="font-family:var(--serif);font-size:clamp(1.45rem,3.4vw,1.95rem);line-height:1.5;font-style:italic;color:var(--ink);margin:0 0 30px;">&ldquo;Walt is a highly professional and creative person. When he starts a project he will finish it magnificently! Highly recommend him.&rdquo;</blockquote>
-    <div style="font-family:var(--sans);font-size:0.95rem;font-weight:500;letter-spacing:0.04em;color:var(--ink);margin-bottom:8px;">Roslynn O&rsquo;Moore</div>
-    <div style="font-family:var(--sans);font-size:0.78rem;line-height:1.65;letter-spacing:0.03em;color:var(--stone);max-width:560px;margin:0 auto;">Lead Buyer for Pepkor Lifestyle Division of Pepkor &mdash; Hi-Fi Corp, Incredible Connection, Boardmans, Russells, Bradlows, Rochester, OK, House &amp; Home</div>
-  </section>
 
 
   <script>
@@ -887,6 +941,78 @@
             '<p style="padding:48px;color:var(--stone);grid-column:1/-1">Could not load artworks.</p>';
         });
     })();
+  </script>
+
+  <!-- Featured Work carousel -->
+  <script>
+  (function () {
+    var works = [], current = 0, timer = null, resume = null;
+    var heroEl = document.getElementById('hero');
+    if (!heroEl) return;
+    function slugify(t, y){ return t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') + '-' + y; }
+    function badge(w){
+      if (w.available === true)      return '<span class="availability-badge available">Available</span>';
+      if (w.available === false)     return '<span class="availability-badge sold">Sold</span>';
+      if (w.available === 'on_show') return '<span class="availability-badge on-show">On Show</span>';
+      return '<span class="availability-badge enquire">Enquire</span>';
+    }
+    function render(i){
+      var w = works[i]; if(!w) return;
+      var wrap = document.getElementById('hero-image');
+      var alt = 'Walt Viviers, ' + w.title + ', ' + w.year + (w.medium ? ', ' + w.medium : '');
+      var img800 = w.image.indexOf('images/')===0 ? w.image.replace('images/','/images/800/') : w.image;
+      var srcset = img800 + ' 800w, /' + w.image + ' 1600w';
+      var ex = wrap.querySelector('img');
+      if (ex) {
+        if (ex.getAttribute('src') === '/'+w.image) { ex.alt = alt; }
+        else { ex.style.opacity='0'; setTimeout(function(){ ex.src='/'+w.image; ex.srcset=srcset; ex.sizes='100vw'; ex.alt=alt; ex.style.opacity='1'; }, 150); }
+      } else {
+        wrap.innerHTML = '<img src="/'+w.image+'" srcset="'+srcset+'" sizes="100vw" alt="'+alt+'" loading="lazy" />';
+      }
+      document.getElementById('hero-number').textContent = 'Work ' + String(i+1).padStart(2,'0') + ' / ' + String(works.length).padStart(2,'0');
+      document.getElementById('hero-title').textContent = w.title;
+      document.getElementById('hero-year').textContent = w.year;
+      var mi = function(v){ return '<span class="work-meta-item"><span class="work-meta-value">'+v+'</span></span>'; };
+      document.getElementById('hero-meta').innerHTML =
+        (w.medium ? mi(w.medium) : '') + (w.dimensions ? mi(w.dimensions) : '') + (w.price ? mi(w.price) : '') +
+        '<span class="work-meta-item">'+badge(w)+'</span>';
+      var vl = document.getElementById('hero-view-link'); if (vl) vl.href = '/gallery/' + slugify(w.title, w.year) + '/';
+      dots(i);
+    }
+    function dots(i){
+      var total = works.length, vis = Math.min(9, total), half = Math.floor(vis/2);
+      var start = Math.max(0, Math.min(i-half, total-vis));
+      var c = document.getElementById('gn-dots'); c.innerHTML = '';
+      for (var k=start;k<start+vis;k++){ (function(idx){ var d=document.createElement('div'); d.className='gn-dot'+(idx===i?' active':''); d.addEventListener('click',function(){current=idx;render(idx);pause();}); c.appendChild(d); })(k); }
+    }
+    function play(){ stop(); timer = setInterval(function(){ current=(current+1)%works.length; render(current); }, 4000); }
+    function stop(){ clearInterval(timer); timer=null; }
+    function pause(){ stop(); clearTimeout(resume); resume=setTimeout(play, 6000); }
+    function prev(){ if(!works.length)return; current=(current-1+works.length)%works.length; render(current); pause(); }
+    function next(){ if(!works.length)return; current=(current+1)%works.length; render(current); pause(); }
+    document.getElementById('gn-prev').addEventListener('click', prev);
+    document.getElementById('gn-next').addEventListener('click', next);
+    heroEl.addEventListener('mouseenter', stop);
+    heroEl.addEventListener('mouseleave', function(){ clearTimeout(resume); play(); });
+    heroEl.addEventListener('touchstart', pause, {passive:true});
+    (function(){ var wrap=document.getElementById('hero-image'), sx=0,sy=0,st=0,tr=false;
+      wrap.addEventListener('touchstart',function(e){var t=e.changedTouches[0];sx=t.clientX;sy=t.clientY;st=Date.now();tr=true;},{passive:true});
+      wrap.addEventListener('touchend',function(e){ if(!tr)return; tr=false; var t=e.changedTouches[0], dx=t.clientX-sx, dy=t.clientY-sy;
+        if(Math.abs(dx)>45 && Math.abs(dx)>Math.abs(dy)*1.5 && (Date.now()-st)<800){ if(dx<0)next(); else prev(); } },{passive:true});
+    })();
+    document.getElementById('hero-image').innerHTML = '<div class="placeholder">Loading…</div>';
+    fetch('/data/artworks.json').then(function(r){return r.json();}).then(function(data){
+      works = (data.artworks||[]).map(function(w){ return {
+        image:w.image, title:w.title||'—', year:w.year||'—', medium:w.medium||'', dimensions:w.dimensions||'', price:w.price||'',
+        available: w.available==='available'?true : w.available==='sold'?false : w.available==='on_show'?'on_show' : null,
+        featured: w.featured||false }; });
+      works.sort(function(a,b){ return Number(b.year)-Number(a.year); });
+      if(!works.length){ document.getElementById('hero-image').innerHTML='<div class="placeholder">No artworks yet</div>'; return; }
+      var fi = works.findIndex(function(w){return w.featured;});
+      current = fi>=0?fi:Math.floor(Math.random()*works.length);
+      render(current); play();
+    }).catch(function(){ document.getElementById('hero-image').innerHTML='<div class="placeholder">Could not load</div>'; });
+  })();
   </script>
 
   <!-- Global: floating Enquire button + Enquire modal -->
