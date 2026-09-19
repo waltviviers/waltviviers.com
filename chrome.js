@@ -188,7 +188,10 @@
     '.wv-enq-submit{display:block;width:100%;text-align:center;padding:15px;margin-top:8px;background:var(--ink);color:var(--bg);font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;border:1px solid var(--ink);cursor:pointer;transition:background 0.2s,color 0.2s;}',
     '.wv-enq-submit:hover{background:transparent;color:var(--ink);}',
     '.wv-enq-err{color:#c0392b;font-size:0.82rem;margin-top:10px;}',
-    '.wv-enq-success{color:var(--stone);}'
+    '.wv-enq-success{color:var(--stone);}',
+    /* Tuck the floating game buttons into the bottom-left corner so they stop overlapping copy */
+    '.game-fab{left:92px;bottom:20px;}',
+    '.scritch-fab{left:16px;bottom:16px;}'
   ].join('\n');
 
   /* ── Markup ───────────────────────────────────────────────────────────── */
@@ -213,8 +216,6 @@
       '<li class="nav-link-hide"><a href="/gallery/#commission" class="nav-cta" id="wv-enquire">Enquire</a></li>' +
       '<li><div class="social-icons">' +
         '<a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">' + IG + '</a>' +
-        '<a href="https://www.tiktok.com/@waltviviers" target="_blank" rel="noopener" aria-label="TikTok">' + TT + '</a>' +
-        '<a href="https://www.facebook.com/waltviviers/" target="_blank" rel="noopener" aria-label="Facebook">' + FB + '</a>' +
         '<a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">' + LI + '</a>' +
         '<a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">' + EM + '</a>' +
       '</div></li>' +
@@ -237,8 +238,6 @@
     '<div class="mobile-menu-foot">' +
       '<a href="/admin-index/" class="mobile-admin-btn">Admin</a>' +
       '<a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">' + IG + '</a>' +
-        '<a href="https://www.tiktok.com/@waltviviers" target="_blank" rel="noopener" aria-label="TikTok">' + TT + '</a>' +
-        '<a href="https://www.facebook.com/waltviviers/" target="_blank" rel="noopener" aria-label="Facebook">' + FB + '</a>' +
       '<a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">' + LI + '</a>' +
       '<a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">' + DR + '</a>' +
     '</div>';
