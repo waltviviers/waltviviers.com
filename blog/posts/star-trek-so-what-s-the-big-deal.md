@@ -2,7 +2,7 @@
 title: Star Trek, so what’s the big deal?
 date: 2018-10-16
 description: I am a Trekkie But what does that really mean? Star Trek is a huge franchise with a lot of different types of fans. This is the story of my personal journey wi…
-draft: true
+draft: false
 ---
 ### I am a Trekkie
 

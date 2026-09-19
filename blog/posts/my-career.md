@@ -2,7 +2,7 @@
 title: My Career
 date: 2019-02-26
 description: "Hobbies Drawing / Reading / Design / Animation First Job Tattoo Millennium: Piercing Apprenticeship Tattoo Apprenticeship Tattoo Flash Illustrator Graphic Desi…"
-draft: true
+draft: false
 ---
 - - - - - - - - - - - - - - - - - - -
 
