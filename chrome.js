@@ -23,8 +23,12 @@
   if (window.__wvChromeLoaded) return;
   window.__wvChromeLoaded = true;
 
-  /* ── Google Tag Manager (loads on every page that uses this chrome) ────── */
-  if (!window.__gtmLoaded && !window.google_tag_manager) {
+  /* ── Analytics opt-out: the /apps/ pages promise "no tracking", so no
+     GTM / Meta Pixel is injected on any page under /apps/. ──────────────── */
+  var WV_NO_TRACK = /^\/apps(\/|$)/.test(location.pathname);
+
+  /* ── Google Tag Manager (loads on every non-/apps/ page using this chrome) */
+  if (!WV_NO_TRACK && !window.__gtmLoaded && !window.google_tag_manager) {
     window.__gtmLoaded = true;
     (function (w, d, s, l, i) {
       w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
@@ -34,8 +38,8 @@
     })(window, document, 'script', 'dataLayer', 'GTM-P8DPSSC9');
   }
 
-  /* ── Meta Pixel (loads on every page that uses this chrome) ───────────── */
-  if (!window.fbq) {
+  /* ── Meta Pixel (loads on every non-/apps/ page using this chrome) ────── */
+  if (!WV_NO_TRACK && !window.fbq) {
     !function (f, b, e, v, n, t, s) {
       if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) };
       if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
