@@ -1,5 +1,7 @@
 {
   "redirects": [
+    { "source": "/works/zombie-vs-cat-2017", "destination": "/gallery/apocalypse-meow-2017/", "permanent": true },
+    { "source": "/works/zombie-vs-cat-2017/", "destination": "/gallery/apocalypse-meow-2017/", "permanent": true },
     { "source": "/works/", "destination": "/gallery/", "permanent": true },
     { "source": "/works/:slug/", "destination": "/gallery/:slug/", "permanent": true },
     { "source": "/apps/neurotrace/", "destination": "/apps/neurotracer/", "permanent": true },
