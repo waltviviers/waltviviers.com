@@ -2658,7 +2658,10 @@
       var RESUME_MS     = 6000;
 
       function startAutoplay() {
-        if (!document.getElementById('hero')) return;
+        var h = document.getElementById('hero');
+        // Skip when the carousel is hidden (mobile): cycling would keep fetching
+        // off-screen images for no benefit and adds main-thread work.
+        if (!h || h.offsetParent === null) return;
         stopAutoplay();
         autoplayTimer = setInterval(function () {
           current = (current + 1) % works.length;
@@ -3020,14 +3023,24 @@
       ];
       for (var i = ALBUMS.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = ALBUMS[i]; ALBUMS[i] = ALBUMS[j]; ALBUMS[j] = tmp; }
       // Rotate the header image through a random album on each visit…
+      // …EXCEPT on phones: swapping the pre-loaded fetchpriority=high header image
+      // hands Lighthouse a second, late "largest paint" and wrecks mobile LCP. On
+      // phones we keep the HTML default (/images/1600/garden.webp) as the single,
+      // stable LCP candidate; desktop still gets a random header.
       var heroImg = document.querySelector('#photo-feature .pf-hero-img img');
-      if (heroImg) {
-        heroImg.src = ALBUMS[0].hero || ALBUMS[0].img;
+      var isPhone = window.matchMedia('(max-width: 767px)').matches;
+      var HEADER_DEFAULT = '/images/1600/garden.webp';
+      var headerHero = HEADER_DEFAULT;
+      if (heroImg && !isPhone) {
+        headerHero = ALBUMS[0].hero || ALBUMS[0].img;
+        heroImg.src = headerHero;
         heroImg.alt = ALBUMS[0].title;
         heroImg.style.objectPosition = 'center ' + (ALBUMS[0].pos || '30%');
       }
-      // …and show the remaining four albums below (never the one in the header).
-      grid.innerHTML = ALBUMS.slice(1, 5).map(function (a) {
+      // …and show four albums below — never the one currently in the header.
+      grid.innerHTML = ALBUMS.filter(function (a) {
+        return (a.hero || a.img) !== headerHero;
+      }).slice(0, 4).map(function (a) {
         return '<a class="explore-album" href="' + esc(a.url) + '" target="_blank" rel="noopener" aria-label="' + esc(a.title) + ' — open album">' +
           '<span class="explore-album-img"><img src="' + a.img + '" alt="' + esc(a.title) + '" loading="lazy" width="1200" height="800" /></span>' +
           '<span class="explore-album-cap">' + esc(a.cap) + '</span></a>';
@@ -3043,7 +3056,7 @@
     <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" loading="lazy" />
   </a>
   <script>
-  (function(){var s=[['ss-up.webp','ss-over.webp'],['ss-cat-up.png','ss-cat-over.png'],['ss-rat-up.png','ss-rat-over.png']];var p=s[Math.floor(Math.random()*s.length)];var f=document.querySelector('.scritch-fab');if(!f)return;f.querySelector('.ss-up').src='/apps/scritch-scratch/'+p[0];f.querySelector('.ss-over').src='/apps/scritch-scratch/'+p[1];})();
+  (function(){var s=[['ss-up.webp','ss-over.webp'],['ss-cat-up.webp','ss-cat-over.webp'],['ss-rat-up.webp','ss-rat-over.webp']];var p=s[Math.floor(Math.random()*s.length)];var f=document.querySelector('.scritch-fab');if(!f)return;f.querySelector('.ss-up').src='/apps/scritch-scratch/'+p[0];f.querySelector('.ss-over').src='/apps/scritch-scratch/'+p[1];})();
   </script>
 
   <!-- Global: floating Enquire button + Enquire modal -->
