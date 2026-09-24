@@ -315,8 +315,18 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 40px;
+      gap: 24px;
       list-style: none;
+    }
+
+    /* Collapse the text nav to the burger before the row can overflow
+       (5 disciplines + Enquire only fit comfortably above ~1200px).
+       Uses `nav .burger-btn` so it beats the base `.burger-btn{display:none}`
+       that appears later in the stylesheet. */
+    @media (max-width: 1200px) {
+      nav .nav-link-hide { display: none; }
+      nav .burger-btn { display: flex; }
+      nav .social-icons { display: none; }
     }
 
     .nav-links a {
@@ -1811,6 +1821,7 @@
       <li class="nav-link-hide"><a href="/photography/">Photography &amp; Video</a></li>
       <li class="nav-link-hide"><a href="/gallery/">Fine Art &amp; Illustration</a></li>
       <li class="nav-link-hide"><a href="/graphic-design-portfolio/">Design &amp; Digital</a></li>
+      <li class="nav-link-hide"><a href="/apps/">Apps &amp; Games</a></li>
       <li class="nav-link-hide"><a href="/blog/">Essays &amp; Articles</a></li>
       <li class="nav-link-hide"><a href="#enquire" class="nav-cta gx-open">Enquire</a></li>
       <li>
@@ -1851,6 +1862,7 @@
       <a href="/photography/" class="mobile-menu-link">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>
       <a href="/gallery/" class="mobile-menu-link">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>
       <a href="/graphic-design-portfolio/" class="mobile-menu-link">Design &amp; Digital <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/apps/" class="mobile-menu-link">Apps &amp; Games <span class="mobile-menu-arrow">↗</span></a>
       <a href="/blog/" class="mobile-menu-link">Essays &amp; Articles <span class="mobile-menu-arrow">↗</span></a>
       <a href="#enquire" class="mobile-menu-link mobile-menu-link-cta gx-open">Enquire <span class="mobile-menu-arrow">↗</span></a>
     </div>
@@ -2126,6 +2138,52 @@
     }).catch(function(){});
   })();
   </script>
+
+  <!-- Work with me — closing CTA -->
+  <style>
+    .workwith { position: relative; overflow: hidden; background: var(--bg); border-top: 1px solid var(--rule); }
+    .workwith-bg {
+      position: absolute; inset: 0; opacity: 0.20;
+      background-position: center; background-size: cover; background-repeat: no-repeat;
+    }
+    [data-theme="light"] .workwith-bg { opacity: 0.12; filter: invert(1); }
+    .workwith::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(to bottom, var(--bg) 0%, rgba(0,0,0,0) 26%, rgba(0,0,0,0) 74%, var(--bg) 100%);
+    }
+    .workwith-inner {
+      position: relative; z-index: 2; max-width: 860px; margin: 0 auto; text-align: center;
+      padding: clamp(64px, 9vw, 120px) clamp(24px, 6vw, 72px);
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    .workwith-eyebrow {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--stone);
+    }
+    .workwith-title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.08;
+      letter-spacing: -0.015em; color: var(--ink); text-wrap: balance;
+    }
+    .workwith-title em { font-style: italic; color: var(--stone); }
+    .workwith-lead {
+      font-size: clamp(15px, 1.5vw, 18px); line-height: 1.75;
+      color: var(--ink); max-width: 660px;
+    }
+    .workwith-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 10px; }
+  </style>
+  <section class="workwith" id="work-with-me" aria-label="Work with me">
+    <div class="workwith-bg" style="background-image:url('/brushstrokes-bg.webp')"></div>
+    <div class="workwith-inner">
+      <p class="workwith-eyebrow">Work with me</p>
+      <h2 class="workwith-title">Let's make something —<br/><em>on camera, on brand, on screen.</em></h2>
+      <p class="workwith-lead">Available for photography &amp; video, short-form social content, brand &amp; web design, and creative collaborations — for individuals and businesses in Pretoria, across South Africa, and happily beyond. In front of the camera as much as behind it.</p>
+      <div class="workwith-actions">
+        <button type="button" class="cc-btn cc-btn-primary gx-open">Get in touch</button>
+        <a href="/photography/" class="cc-btn cc-btn-secondary">Photography &amp; video ↗</a>
+      </div>
+    </div>
+  </section>
 
   <!-- Enquiry Modal -->
   <div class="modal-backdrop" id="enquiry-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="enquiry-modal-title">

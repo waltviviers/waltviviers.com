@@ -87,7 +87,7 @@
     '[data-theme="light"] .lang-track{border-color:#D5D1CB;}',
     '.nav-logo img{height:36px;width:auto;transition:height 0.4s cubic-bezier(0.4,0,0.2,1);}',
     'nav.scrolled .nav-logo img{height:28px;}',
-    '.nav-links{display:flex;align-items:center;gap:40px;list-style:none;margin:0;padding:0;}',
+    '.nav-links{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0;}',
     '.nav-links a{font-family:var(--sans);font-size:11px;font-weight:400;letter-spacing:0.04em;text-transform:uppercase;white-space:nowrap;color:var(--stone);transition:color 0.2s;}',
     '.nav-links a:hover{color:var(--white);}',
     '.nav-cta{font-size:12px !important;font-weight:500 !important;letter-spacing:0.08em !important;color:var(--white) !important;padding:7px 18px;border:1px solid #4A4844;transition:background 0.2s,color 0.2s,border-color 0.2s !important;}',
@@ -159,6 +159,8 @@
     '.mobile-admin-btn:hover{border-color:var(--stone);color:var(--ink);}',
     '[data-theme="light"] .mobile-menu{background:#F5F3EF;}',
     /* Responsive */
+    /* Collapse text nav to burger before the row overflows (5 disciplines + Enquire). */
+    '@media (max-width:1200px){.nav-link-hide{display:none;}.burger-btn{display:flex;}nav .social-icons{display:none;}}',
     '@media (max-width:900px){' +
       'nav{padding:0 24px;height:50px;}' +
       '.nav-logo img{height:28px;}' +
@@ -240,6 +242,7 @@
       '<li class="nav-link-hide"><a href="/photography/">Photography &amp; Video</a></li>' +
       '<li class="nav-link-hide"><a href="/gallery/">Fine Art &amp; Illustration</a></li>' +
       '<li class="nav-link-hide"><a href="/graphic-design-portfolio/">Design &amp; Digital</a></li>' +
+      '<li class="nav-link-hide"><a href="/apps/">Apps &amp; Games</a></li>' +
       '<li class="nav-link-hide"><a href="/blog/">Essays &amp; Articles</a></li>' +
       '<li class="nav-link-hide"><a href="/gallery/#commission" class="nav-cta" id="wv-enquire">Enquire</a></li>' +
       '<li><div class="social-icons">' +
@@ -260,6 +263,7 @@
       '<a href="/photography/" class="mobile-menu-link">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>' +
       '<a href="/gallery/" class="mobile-menu-link">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>' +
       '<a href="/graphic-design-portfolio/" class="mobile-menu-link">Design &amp; Digital <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/apps/" class="mobile-menu-link">Apps &amp; Games <span class="mobile-menu-arrow">↗</span></a>' +
       '<a href="/blog/" class="mobile-menu-link">Essays &amp; Articles <span class="mobile-menu-arrow">↗</span></a>' +
       '<a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta">Enquire <span class="mobile-menu-arrow">↗</span></a>' +
     '</div>' +
