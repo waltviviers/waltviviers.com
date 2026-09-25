@@ -27,17 +27,6 @@
      GTM / Meta Pixel is injected on any page under /apps/. ──────────────── */
   var WV_NO_TRACK = /^\/apps(\/|$)/.test(location.pathname);
 
-  /* ── Google Tag Manager (loads on every non-/apps/ page using this chrome) */
-  if (!WV_NO_TRACK && !window.__gtmLoaded && !window.google_tag_manager) {
-    window.__gtmLoaded = true;
-    (function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-      var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-      j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-P8DPSSC9');
-  }
-
   /* ── Meta Pixel (loads on every non-/apps/ page using this chrome) ────── */
   if (!WV_NO_TRACK && !window.fbq) {
     !function (f, b, e, v, n, t, s) {
@@ -49,6 +38,18 @@
     }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
     fbq('init', '1046039254921742');
     fbq('track', 'PageView');
+  }
+
+  /* ── Google Tag Manager (GTM-P8DPSSC9) — same opt-out as above. The home page
+        loads GTM inline, so skip if it is already present. ────────────── */
+  if (!WV_NO_TRACK && !(window.google_tag_manager && window.google_tag_manager['GTM-P8DPSSC9']) &&
+      !document.querySelector('script[src*="googletagmanager.com/gtm.js"]')) {
+    (function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+      j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-P8DPSSC9');
   }
 
   /* ── Chrome-only translations (nav + footer strings) ──────────────────── */
