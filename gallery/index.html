@@ -458,6 +458,8 @@
 
     .sort-btn:hover { color: var(--ink); border-color: var(--stone); }
     .sort-btn.is-active { color: var(--ink); border-color: var(--stone); background: var(--bg2); }
+    .sort-sep { width: 1px; align-self: stretch; background: var(--rule); margin: 4px 6px; }
+    @media (max-width: 600px) { .sort-sep { display: none; } }
     .sort-emoji { display: none; }
     @media (max-width: 600px) { .sort-emoji { display: inline; } }
 
@@ -855,6 +857,9 @@
     </section>
 
     <div class="sort-bar" id="sort-bar">
+      <button class="sort-btn filter-btn is-active" data-filter="all">All</button>
+      <button class="sort-btn filter-btn" data-filter="available">Available</button>
+      <span class="sort-sep" aria-hidden="true"></span>
       <button class="sort-btn" data-sort="az"><span class="sort-emoji">✋ </span>A→Z</button>
       <button class="sort-btn" data-sort="za"><span class="sort-emoji">🖖 </span>Z→A</button>
       <button class="sort-btn" data-sort="oldest"><span class="sort-emoji">🥚 </span>Old</button>
@@ -914,15 +919,23 @@
         }).join('');
       }
 
-      function applySort(mode) {
-        var sorted = allWorks.slice();
-        if (mode === 'az')     sorted.sort(function (a, b) { return a.title.localeCompare(b.title); });
-        if (mode === 'za')     sorted.sort(function (a, b) { return b.title.localeCompare(a.title); });
-        if (mode === 'oldest') sorted.sort(function (a, b) { return a.year - b.year; });
-        if (mode === 'newest') sorted.sort(function (a, b) { return b.year - a.year; });
-        renderGrid(sorted);
-        document.querySelectorAll('.sort-btn').forEach(function (btn) {
-          btn.classList.toggle('is-active', btn.dataset.sort === mode);
+      var currentFilter = 'all';   // 'all' | 'available'
+      var currentSort   = null;    // null (source order) | 'az' | 'za' | 'oldest' | 'newest'
+
+      function apply() {
+        var list = allWorks.filter(function (w) {
+          return currentFilter === 'all' || w.available === 'available';
+        });
+        if (currentSort === 'az')     list.sort(function (a, b) { return a.title.localeCompare(b.title); });
+        if (currentSort === 'za')     list.sort(function (a, b) { return b.title.localeCompare(a.title); });
+        if (currentSort === 'oldest') list.sort(function (a, b) { return a.year - b.year; });
+        if (currentSort === 'newest') list.sort(function (a, b) { return b.year - a.year; });
+        renderGrid(list);
+        document.querySelectorAll('.filter-btn').forEach(function (btn) {
+          btn.classList.toggle('is-active', btn.dataset.filter === currentFilter);
+        });
+        document.querySelectorAll('.sort-btn[data-sort]').forEach(function (btn) {
+          btn.classList.toggle('is-active', btn.dataset.sort === currentSort);
         });
       }
 
@@ -930,10 +943,13 @@
         .then(function (r) { return r.json(); })
         .then(function (data) {
           allWorks = data.artworks;
-          renderGrid(allWorks);
+          apply();
 
-          document.querySelectorAll('.sort-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () { applySort(btn.dataset.sort); });
+          document.querySelectorAll('.filter-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () { currentFilter = btn.dataset.filter; apply(); });
+          });
+          document.querySelectorAll('.sort-btn[data-sort]').forEach(function (btn) {
+            btn.addEventListener('click', function () { currentSort = btn.dataset.sort; apply(); });
           });
         })
         .catch(function () {
