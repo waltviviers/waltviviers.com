@@ -547,7 +547,7 @@
         '</form>' +
         '<div class="wv-enq-success" hidden><p>Thank you — your message has been sent. Walt will be in touch shortly.</p></div>' +
       '</div>';
-    s.innerHTML = quoteHTML + (hasOwnForm ? '' : enqHTML);
+    s.innerHTML = (hasOwnForm ? '' : enqHTML) + quoteHTML;
     document.body.appendChild(s);
     var form = s.querySelector('.wv-enq-form');
     if (!form) return;
