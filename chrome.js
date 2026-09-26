@@ -24,7 +24,7 @@
   window.__wvChromeLoaded = true;
 
   /* ── Analytics opt-out: the /apps/ pages promise "no tracking", so no
-     Meta Pixel / analytics is injected on any page under /apps/. ────────── */
+     GTM / Meta Pixel is injected on any page under /apps/. ──────────────── */
   var WV_NO_TRACK = /^\/apps(\/|$)/.test(location.pathname);
 
   /* ── Cookie consent (opt-in). GTM + Meta Pixel load ONLY after the visitor
@@ -138,7 +138,7 @@
     '[data-theme="light"] .lang-track{border-color:#D5D1CB;}',
     '.nav-logo img{height:36px;width:auto;transition:height 0.4s cubic-bezier(0.4,0,0.2,1);}',
     'nav.scrolled .nav-logo img{height:28px;}',
-    '.nav-links{display:flex;align-items:center;gap:40px;list-style:none;margin:0;padding:0;}',
+    '.nav-links{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0;}',
     '.nav-links a{font-family:var(--sans);font-size:11px;font-weight:400;letter-spacing:0.04em;text-transform:uppercase;white-space:nowrap;color:var(--stone);transition:color 0.2s;}',
     '.nav-links a:hover{color:var(--white);}',
     '.nav-cta{font-size:12px !important;font-weight:500 !important;letter-spacing:0.08em !important;color:var(--white) !important;padding:7px 18px;border:1px solid #4A4844;transition:background 0.2s,color 0.2s,border-color 0.2s !important;}',
@@ -210,6 +210,8 @@
     '.mobile-admin-btn:hover{border-color:var(--stone);color:var(--ink);}',
     '[data-theme="light"] .mobile-menu{background:#F5F3EF;}',
     /* Responsive */
+    /* Collapse text nav to burger before the row overflows (5 disciplines + Enquire). */
+    '@media (max-width:1200px){.nav-link-hide{display:none;}.burger-btn{display:flex;}nav .social-icons{display:none;}}',
     '@media (max-width:900px){' +
       'nav{padding:0 24px;height:50px;}' +
       '.nav-logo img{height:28px;}' +
@@ -231,7 +233,46 @@
       '.burger-btn{display:flex;}' +
       'nav .social-icons{display:none;}' +
     '}',
-    '@media (max-width:560px){.footer-admin{display:none;}}'
+    '@media (max-width:560px){.footer-admin{display:none;}}',
+    /* Injected Enquire modal (only added when a page has none of its own) */
+    '.wvx-modal{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);padding:24px;}',
+    '.wvx-modal.open{display:flex;}',
+    '.wvx-box{background:var(--bg2);border:1px solid var(--rule);width:100%;max-width:480px;padding:44px 40px 40px;position:relative;max-height:90vh;overflow-y:auto;}',
+    '[data-theme="light"] .wvx-box{background:#F5F3EF;}',
+    '.wvx-close{position:absolute;top:12px;right:16px;font-size:28px;line-height:1;color:var(--stone);background:none;border:none;cursor:pointer;}',
+    '.wvx-close:hover{color:var(--ink);}',
+    '.wvx-box h2{font-family:var(--serif);font-size:2rem;font-weight:400;line-height:1.1;margin-bottom:10px;}',
+    '.wvx-sub{color:var(--stone);font-size:14px;line-height:1.6;margin-bottom:24px;}',
+    '.wvx-field{margin-bottom:16px;}',
+    '.wvx-field label{display:block;font-size:11px;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);margin-bottom:8px;}',
+    '.wvx-field input,.wvx-field textarea,.wvx-field select{width:100%;background:var(--bg);border:1px solid var(--rule);color:var(--ink);padding:12px 14px;font:inherit;font-size:14px;border-radius:0;}',
+    '.wvx-field input:focus,.wvx-field textarea:focus,.wvx-field select:focus{border-color:var(--stone);outline:none;}',
+    '.wvx-submit{display:block;width:100%;text-align:center;padding:14px;margin-top:8px;background:var(--ink);color:var(--bg);font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;border:1px solid var(--ink);cursor:pointer;transition:background 0.2s,color 0.2s;}',
+    '.wvx-submit:hover{background:transparent;color:var(--ink);}',
+    '.wvx-err{color:#c0392b;font-size:0.82rem;margin-top:10px;text-align:center;}',
+    '.wvx-success{text-align:center;}',
+    '.wvx-success p{color:var(--stone);margin-bottom:22px;}',
+    /* Injected closing section: testimonial quote + enquiry form */
+    '.wv-closing{max-width:1400px;margin:0 auto;padding:clamp(60px,7vw,100px) clamp(24px,6vw,72px);border-top:1px solid var(--rule);display:flex;flex-direction:column;gap:clamp(48px,6vw,76px);}',
+    '.wv-quote{max-width:880px;margin:0 auto;text-align:center;}',
+    '.wv-quote blockquote{font-family:var(--serif);font-size:clamp(1.4rem,3vw,2rem);line-height:1.5;font-style:italic;color:var(--ink);margin:0 0 24px;}',
+    '.wv-quote-name{font-family:var(--sans);font-size:0.95rem;font-weight:500;letter-spacing:0.04em;color:var(--ink);margin-bottom:8px;}',
+    '.wv-quote-role{font-family:var(--sans);font-size:0.82rem;line-height:1.6;color:var(--stone);max-width:640px;margin:0 auto;}',
+    '.wv-enq{max-width:620px;margin:0 auto;width:100%;}',
+    '.wv-enq-eyebrow{font-size:11px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--stone);margin-bottom:16px;}',
+    '.wv-enq-title{font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.1;margin-bottom:12px;color:var(--ink);}',
+    '.wv-enq-sub{color:var(--stone);font-size:15px;line-height:1.7;margin-bottom:32px;}',
+    '.wv-enq-field{margin-bottom:18px;}',
+    '.wv-enq-field label{display:block;font-size:11px;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);margin-bottom:8px;}',
+    '.wv-enq-field input,.wv-enq-field textarea{width:100%;background:var(--bg);border:1px solid var(--rule);color:var(--ink);padding:13px 15px;font:inherit;font-size:14px;border-radius:0;}',
+    '.wv-enq-field input:focus,.wv-enq-field textarea:focus{border-color:var(--stone);outline:none;}',
+    '.wv-enq-submit{display:block;width:100%;text-align:center;padding:15px;margin-top:8px;background:var(--ink);color:var(--bg);font-size:12px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;border:1px solid var(--ink);cursor:pointer;transition:background 0.2s,color 0.2s;}',
+    '.wv-enq-submit:hover{background:transparent;color:var(--ink);}',
+    '.wv-enq-err{color:#c0392b;font-size:0.82rem;margin-top:10px;}',
+    '.wv-enq-success{color:var(--stone);}',
+    /* Tuck the floating game buttons into the bottom-left corner so they stop overlapping copy */
+    '.game-fab{left:92px;bottom:20px;}',
+    '.scritch-fab{left:16px;bottom:16px;}'
   ].join('\n');
 
   /* ── Markup ───────────────────────────────────────────────────────────── */
@@ -240,22 +281,21 @@
   var DR = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>';
   var BE = '<svg viewBox="0 0 24 24"><path d="M3 4v16M3 4h5a3 3 0 0 1 0 6H3m0 0h5.5a3.5 3.5 0 0 1 0 7H3"/><line x1="14" y1="7" x2="20" y2="7"/><line x1="13.5" y1="13.5" x2="22" y2="13.5"/><path d="M21 12a3.5 3.5 0 1 0 0 3"/></svg>';
   var GH = '<svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>';
+  var TT = '<svg viewBox="0 0 24 24"><path d="M14 3v11a4 4 0 1 1-3-3.87"/><path d="M14 3c0 2.8 2.2 5 5 5"/></svg>';
+  var FB = '<svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>';
   var EM = '<svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>';
 
   var NAV_HTML =
     '<div class="nav-left">' +
       '<a href="/" class="nav-logo" aria-label="Home"><img src="/logo.svg" alt="Walt Viviers" width="379" height="185" /></a>' +
-      '<div class="lang-toggle lang-switch" id="wv-lang-toggle">' +
-        '<div class="lang-group active" data-lang="en">English</div>' +
-        '<button type="button" class="lang-track" aria-label="Toggle language"><span class="lang-knob"></span></button>' +
-        '<div class="lang-group" data-lang="af">Afrikaans</div>' +
-      '</div>' +
     '</div>' +
     '<ul class="nav-links">' +
-      '<li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography &amp; Video</a></li>' +
-      '<li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-works">Fine Art &amp; Illustration</a></li>' +
-      '<li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>' +
-      '<li class="nav-link-hide"><a href="/gallery/#commission" class="nav-cta" id="wv-enquire" data-i18n="nav-enquire">Enquire</a></li>' +
+      '<li class="nav-link-hide"><a href="/photography/">Photography &amp; Video</a></li>' +
+      '<li class="nav-link-hide"><a href="/gallery/">Fine Art &amp; Illustration</a></li>' +
+      '<li class="nav-link-hide"><a href="/graphic-design-portfolio/">Design &amp; Digital</a></li>' +
+      '<li class="nav-link-hide"><a href="/apps/">Apps &amp; Games</a></li>' +
+      '<li class="nav-link-hide"><a href="/blog/">Essays &amp; Articles</a></li>' +
+      '<li class="nav-link-hide"><a href="/gallery/#commission" class="nav-cta" id="wv-enquire">Enquire</a></li>' +
       '<li><div class="social-icons">' +
         '<a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">' + IG + '</a>' +
         '<a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">' + LI + '</a>' +
@@ -271,10 +311,12 @@
 
   var MENU_HTML =
     '<div class="mobile-menu-links">' +
-      '<a href="/photography/" class="mobile-menu-link" data-i18n="nav-photography">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>' +
-      '<a href="/gallery/" class="mobile-menu-link" data-i18n="nav-works">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>' +
-      '<a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio &amp; Statement <span class="mobile-menu-arrow">↗</span></a>' +
-      '<a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/photography/" class="mobile-menu-link">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/gallery/" class="mobile-menu-link">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/graphic-design-portfolio/" class="mobile-menu-link">Design &amp; Digital <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/apps/" class="mobile-menu-link">Apps &amp; Games <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/blog/" class="mobile-menu-link">Essays &amp; Articles <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta">Enquire <span class="mobile-menu-arrow">↗</span></a>' +
     '</div>' +
     '<div class="mobile-menu-foot">' +
       '<a href="/admin-index/" class="mobile-admin-btn">Admin</a>' +
@@ -288,11 +330,12 @@
     '<div class="footer-social">' +
       '<div class="social-icons">' +
         '<a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">' + IG + '</a>' +
+        '<a href="https://www.tiktok.com/@waltviviers" target="_blank" rel="noopener" aria-label="TikTok">' + TT + '</a>' +
+        '<a href="https://www.facebook.com/waltviviers/" target="_blank" rel="noopener" aria-label="Facebook">' + FB + '</a>' +
         '<a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">' + LI + '</a>' +
         '<a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">' + DR + '</a>' +
         '<a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" aria-label="Behance">' + BE + '</a>' +
         '<a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub">' + GH + '</a>' +
-        '<a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">' + EM + '</a>' +
       '</div>' +
       '<div class="footer-legal" style="margin-top:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);line-height:1.7;text-align:center;"><span class="footer-copy" data-i18n="footer-copy">© 2026 Walt Viviers. All rights reserved.</span> <a href="/privacy/" class="footer-privacy" style="color:inherit;">Privacy Policy.</a> <a href="/privacy/" class="footer-cookie" style="color:inherit;" onclick="if(window.wvConsent){event.preventDefault();wvConsent.reopen();}">Cookie settings.</a> <span class="footer-credit">Made with <span style="color:#e0607e">♥</span> by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Cat&#39;s Creations</a></span></div>' +
     '</div>' +
@@ -326,6 +369,7 @@
 
     document.body.insertBefore(nav, document.body.firstChild);
     nav.parentNode.insertBefore(menu, nav.nextSibling);
+    try { injectClosing(footer); } catch (e) {}
     document.body.appendChild(footer);
 
     wire();
@@ -348,7 +392,7 @@
 
   /* ── Language ─────────────────────────────────────────────────────────── */
   function readLang() {
-    try { return localStorage.getItem('wv-lang') || 'en'; } catch (e) { return 'en'; }
+    return 'en'; /* language toggle retired — site is English-only */
   }
 
   function applyLang(lang, initial) {
@@ -451,16 +495,123 @@
       window.location.href = 'https://waltviviers.com/admin-index/';
     });
 
-    /* Enquire — open the global modal if present, else follow the link */
+    /* Enquire — always open a popup (the page's own modal, or an injected fallback) */
+    var gxModal = document.getElementById('gx-enquire') || injectEnquireModal();
+    function openEnquire(e) {
+      if (!gxModal) return;
+      if (e) e.preventDefault();
+      gxModal.classList.add('open');
+      gxModal.removeAttribute('aria-hidden');
+      document.body.style.overflow = 'hidden';
+    }
     var enquire = nav.querySelector('#wv-enquire');
-    if (enquire) enquire.addEventListener('click', function (e) {
-      var m = document.getElementById('gx-enquire');
-      if (m) {
-        e.preventDefault();
-        m.classList.add('open');
-        m.removeAttribute('aria-hidden');
-        document.body.style.overflow = 'hidden';
-      }
+    if (enquire) enquire.addEventListener('click', openEnquire);
+    var menuCta = document.querySelector('.mobile-menu-link-cta');
+    if (menuCta) menuCta.addEventListener('click', openEnquire);
+    document.querySelectorAll('.gx-open').forEach(function (a) { a.addEventListener('click', openEnquire); });
+  }
+
+  /* Inject a fallback Enquire modal on pages that don't ship their own */
+  function injectEnquireModal() {
+    if (document.getElementById('gx-enquire')) return document.getElementById('gx-enquire');
+    if (document.getElementById('wvx-enquire')) return document.getElementById('wvx-enquire');
+    var m = document.createElement('div');
+    m.className = 'wvx-modal'; m.id = 'wvx-enquire';
+    m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true');
+    m.setAttribute('aria-hidden', 'true'); m.setAttribute('aria-label', 'Enquire');
+    m.innerHTML =
+      '<div class="wvx-box">' +
+        '<button class="wvx-close" type="button" aria-label="Close">&times;</button>' +
+        '<h2>Enquire</h2>' +
+        '<p class="wvx-sub">Commissions, artworks, photography &amp; video, design &amp; digital, gallery representation — tell me what you have in mind and I\'ll be in touch.</p>' +
+        '<form class="wvx-form">' +
+          '<input type="hidden" name="_subject" value="Website Enquiry" />' +
+          '<div class="wvx-field"><label>Name</label><input name="name" type="text" required placeholder="Your name" /></div>' +
+          '<div class="wvx-field"><label>Email</label><input name="email" type="email" required placeholder="your@email.com" /></div>' +
+          '<div class="wvx-field"><label>Message</label><textarea name="message" rows="4" placeholder="Tell me what you have in mind…"></textarea></div>' +
+          '<p class="wvx-err" hidden></p>' +
+          '<button type="submit" class="wvx-submit">Send enquiry</button>' +
+        '</form>' +
+        '<div class="wvx-success" hidden><p>Thank you — your message has been sent. Walt will be in touch shortly.</p><button type="button" class="wvx-submit wvx-close">Close</button></div>' +
+      '</div>';
+    document.body.appendChild(m);
+    var form = m.querySelector('.wvx-form');
+    var success = m.querySelector('.wvx-success');
+    var err = m.querySelector('.wvx-err');
+    var btn = form.querySelector('[type="submit"]');
+    var orig = btn.textContent;
+    function closeM() { m.classList.remove('open'); m.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; form.hidden = false; success.hidden = true; err.hidden = true; btn.disabled = false; btn.textContent = orig; }
+    m.addEventListener('click', function (e) { if (e.target === m) closeM(); });
+    m.querySelectorAll('.wvx-close').forEach(function (b) { b.addEventListener('click', closeM); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && m.classList.contains('open')) closeM(); });
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault(); btn.disabled = true; btn.textContent = '…'; err.hidden = true;
+      try {
+        var res = await fetch('https://formspree.io/f/mrevzark', { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+        if (res.ok) { form.hidden = true; success.hidden = false; }
+        else { var d = await res.json(); err.textContent = (d.errors || []).map(function (x) { return x.message; }).join(', ') || 'Something went wrong. Please try again.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
+      } catch (_) { err.textContent = 'Could not send. Email artist@waltviviers.com directly.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
+    });
+    return m;
+  }
+
+  /* Testimonials (LinkedIn recommendations) — one is shown at random */
+  var WV_QUOTES = [
+    { q: '“Walt is a highly professional and creative person. When he starts a project he will finish it magnificently! Highly recommend him.”', n: 'Roslynn O’Moore', r: 'Lead Buyer, Pepkor Lifestyle Division — Hi-Fi Corp, Incredible Connection, Boardmans, Russells, Bradlows, Rochester, OK, House &amp; Home' },
+    { q: '“I had the pleasure of working closely with Walt as our Creative Director at Menzies, and I cannot recommend him highly enough. Walt is a visionary in the field of design, particularly excelling in UI/UX.”', n: 'Humphrey Mukwenga', r: 'Lead Developer at LSi Ltd' },
+    { q: '“Walt is an inspirational, down-to-earth and logical voice within the chaotic realms of creativity. With his creative and art direction, the work produced is of stellar quality — far above the standards of today.”', n: 'Neal Strydom', r: 'All-Rounder Creative — Motion, Graphic &amp; Multimedia Design' },
+    { q: '“Walt is an incredible creative, and has always gone over and above. His brain is really unique and it shows in the work he produces. I have always enjoyed working with Walt and hope it may long continue.”', n: 'Kieran Pearce', r: 'Head of Digital at Waypoint Digital' },
+    { q: '“Walt maintained the highest degree of professionalism managing his staff. His combination of creativity, intellectual ability, and people skills make him an invaluable asset to any company.”', n: 'Maxime de Montbron', r: 'Worked under Walt, Creative Art Director at Menzies Media' },
+    { q: '“I confidently recommend Walt. I genuinely enjoyed working with him — he is a great teacher, a dedicated and knowledgeable Creative Director, and an all-around great person.”', n: 'Unarine Munzhedzi Sinwamali', r: 'Image Architect &amp; Wardrobe Stylist' },
+    { q: '“One of the most creative minds I’ve ever met — with a wide skillset to boot!”', n: 'Andre Levi Chasqueira', r: 'Tattoo Artist at Smokin’ Aces Tattoo' },
+    { q: '“Walt has expertise in many fields including design, UX, animation and creative direction. He is incredibly creative and able to produce high-quality concepts and designs under pressure.”', n: 'Leigh Munro', r: 'Graphic Designer at Paragon Banking Group PLC' }
+  ];
+
+  /* Inject a closing "quote + enquiry form" section above the footer */
+  function injectClosing() {
+    if (document.querySelector('.wv-closing')) return;
+    /* If the page already ships its own enquiry form, show the quote only. */
+    var hasOwnForm = !!document.querySelector('#photo-enquiry-form, .enquiry form');
+    var s = document.createElement('section');
+    s.className = 'wv-closing';
+    s.setAttribute('aria-label', 'Get in touch');
+    var qq = WV_QUOTES[Math.floor(Math.random() * WV_QUOTES.length)];
+    var quoteHTML =
+      '<div class="wv-quote">' +
+        '<blockquote>' + qq.q + '</blockquote>' +
+        '<div class="wv-quote-name">' + qq.n + '</div>' +
+        '<div class="wv-quote-role">' + qq.r + '</div>' +
+      '</div>';
+    var enqHTML =
+      '<div class="wv-enq">' +
+        '<p class="wv-enq-eyebrow">Enquiries</p>' +
+        '<h2 class="wv-enq-title">Start a conversation</h2>' +
+        '<p class="wv-enq-sub">Commissions, original artwork, photography &amp; video, design &amp; digital, or just an idea — tell me what you have in mind and I’ll be in touch.</p>' +
+        '<form class="wv-enq-form">' +
+          '<input type="hidden" name="_subject" value="Website Enquiry" />' +
+          '<div class="wv-enq-field"><label>Name</label><input name="name" type="text" required placeholder="Your name" /></div>' +
+          '<div class="wv-enq-field"><label>Email</label><input name="email" type="email" required placeholder="your@email.com" /></div>' +
+          '<div class="wv-enq-field"><label>Message</label><textarea name="message" rows="4" placeholder="I’d like to enquire about…"></textarea></div>' +
+          '<p class="wv-enq-err" hidden></p>' +
+          '<button type="submit" class="wv-enq-submit">Send enquiry</button>' +
+        '</form>' +
+        '<div class="wv-enq-success" hidden><p>Thank you — your message has been sent. Walt will be in touch shortly.</p></div>' +
+      '</div>';
+    s.innerHTML = (hasOwnForm ? '' : enqHTML) + quoteHTML;
+    document.body.appendChild(s);
+    var form = s.querySelector('.wv-enq-form');
+    if (!form) return;
+    var success = s.querySelector('.wv-enq-success');
+    var err = s.querySelector('.wv-enq-err');
+    var btn = form.querySelector('[type="submit"]');
+    var orig = btn.textContent;
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault(); btn.disabled = true; btn.textContent = '…'; err.hidden = true;
+      try {
+        var res = await fetch('https://formspree.io/f/mrevzark', { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } });
+        if (res.ok) { form.hidden = true; success.hidden = false; }
+        else { var d = await res.json(); err.textContent = (d.errors || []).map(function (x) { return x.message; }).join(', ') || 'Something went wrong. Please try again.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
+      } catch (_) { err.textContent = 'Could not send. Email artist@waltviviers.com directly.'; err.hidden = false; btn.disabled = false; btn.textContent = orig; }
     });
   }
 

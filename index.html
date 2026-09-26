@@ -60,9 +60,9 @@
 
 
 
-  <title>Walt Viviers — Fine Artist | Pretoria, South Africa</title>
-  <meta name="description" content="Walt Viviers is a South African fine artist based in Pretoria, working in acrylic and mixed media. Professional creative practice behind the canvas. Original works represented on Saatchi Art. Commissions welcome." />
-  <meta name="keywords" content="Walt Viviers, fine art, Pretoria artist, Pretoria painter, Gauteng artist, South African artist, acrylic painting, original art, art commission Pretoria, contemporary art South Africa, art for sale Pretoria, figurative art, mixed media art" />
+  <title>Walt Viviers — Content Creator | Pretoria, South Africa</title>
+  <meta name="description" content="Walt Viviers is a Pretoria-based content creator and creative polymath, offering traditional and digital creative services — photography &amp; video, fine art &amp; illustration, graphic &amp; web design, and AI-assisted apps and content — to individuals and businesses across South Africa and beyond." />
+  <meta name="keywords" content="Walt Viviers, content creator, creative polymath, Pretoria, South Africa, photography, video, fine art, illustration, graphic design, web design, creative director, AI-assisted content, freelance creative" />
   <meta name="author" content="Walt Viviers" />
   <meta http-equiv="content-language" content="en" />
   <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -70,6 +70,8 @@
 
   <!-- Identity -->
   <link rel="me" href="https://www.instagram.com/waltviviers" />
+  <link rel="me" href="https://www.tiktok.com/@waltviviers" />
+  <link rel="me" href="https://www.facebook.com/waltviviers/" />
   <link rel="me" href="https://www.linkedin.com/in/waltviviers" />
   <link rel="me" href="mailto:artist@waltviviers.com" />
   <link rel="alternate" type="application/rss+xml" href="/feed.xml" title="Walt Viviers — Journal" />
@@ -89,11 +91,11 @@
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://waltviviers.com/" />
-  <meta property="og:site_name" content="Walt Viviers — Fine Art" />
-  <meta property="og:title" content="Walt Viviers — Fine Artist | Pretoria, South Africa" />
-  <meta property="og:description" content="South African fine artist based in Pretoria. Creative practice behind the canvas. Original works represented on Saatchi Art. Commissions welcome." />
+  <meta property="og:site_name" content="Walt Viviers" />
+  <meta property="og:title" content="Walt Viviers — Content Creator | Pretoria, South Africa" />
+  <meta property="og:description" content="Pretoria-based content creator and creative polymath — photography &amp; video, fine art &amp; illustration, graphic &amp; web design, and AI-assisted work. For individuals and businesses." />
   <meta property="og:image" content="https://waltviviers.com/brushstrokes-bg.webp" />
-  <meta property="og:image:alt" content="Walt Viviers — South African Fine Artist" />
+  <meta property="og:image:alt" content="Walt Viviers — Content Creator &amp; creative polymath" />
   <meta property="og:image:type" content="image/webp" />
   <meta property="og:image:width" content="2360" />
   <meta property="og:image:height" content="590" />
@@ -101,10 +103,10 @@
 
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Walt Viviers — Fine Artist | Pretoria, South Africa" />
-  <meta name="twitter:description" content="South African fine artist based in Pretoria. Creative practice behind the canvas. Original works represented on Saatchi Art. Commissions welcome." />
+  <meta name="twitter:title" content="Walt Viviers — Content Creator | Pretoria, South Africa" />
+  <meta name="twitter:description" content="Pretoria-based content creator and creative polymath — photography &amp; video, fine art, illustration, graphic &amp; web design, and AI-assisted work." />
   <meta name="twitter:image" content="https://waltviviers.com/brushstrokes-bg.webp" />
-  <meta name="twitter:image:alt" content="Walt Viviers — South African Fine Artist" />
+  <meta name="twitter:image:alt" content="Walt Viviers — Content Creator &amp; creative polymath" />
 
   <!-- Hreflang -->
   <link rel="alternate" hreflang="en" href="https://waltviviers.com/" />
@@ -182,6 +184,8 @@
         },
         "sameAs": [
           "https://www.instagram.com/waltviviers",
+          "https://www.tiktok.com/@waltviviers",
+          "https://www.facebook.com/waltviviers/",
           "https://www.linkedin.com/in/waltviviers",
           "https://dribbble.com/waltviviers",
           "https://www.behance.net/waltviviers",
@@ -336,8 +340,18 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 40px;
+      gap: 24px;
       list-style: none;
+    }
+
+    /* Collapse the text nav to the burger before the row can overflow
+       (5 disciplines + Enquire only fit comfortably above ~1200px).
+       Uses `nav .burger-btn` so it beats the base `.burger-btn{display:none}`
+       that appears later in the stylesheet. */
+    @media (max-width: 1200px) {
+      nav .nav-link-hide { display: none; }
+      nav .burger-btn { display: flex; }
+      nav .social-icons { display: none; }
     }
 
     .nav-links a {
@@ -576,15 +590,15 @@
       content: "";
       position: absolute; inset: 0;
       background:
-        linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.5) 36%, rgba(0,0,0,0.22) 64%, rgba(0,0,0,0.05) 100%),
-        linear-gradient(to right, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.08) 52%, rgba(0,0,0,0) 78%);
+        linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.56) 40%, rgba(0,0,0,0.3) 68%, rgba(0,0,0,0.1) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.52) 0%, rgba(0,0,0,0.16) 55%, rgba(0,0,0,0) 82%);
       pointer-events: none;
     }
-    .pf-eyebrow, .pf-title, .pf-desc { text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
+    .pf-eyebrow, .pf-title, .pf-desc { text-shadow: 0 1px 3px rgba(0,0,0,0.7), 0 2px 22px rgba(0,0,0,0.6); }
     .pf-hero-inner {
       position: relative; z-index: 2;
-      padding: clamp(32px, 5vw, 68px);
-      max-width: 780px;
+      padding: clamp(32px, 5vw, 68px) clamp(32px, 5vw, 68px) clamp(32px, 5vw, 68px) clamp(96px, 9vw, 108px);
+      max-width: 808px;
       display: flex; flex-direction: column; gap: 16px;
     }
     .pf-eyebrow {
@@ -615,8 +629,105 @@
        eyebrow behind the fixed nav — raise the band and tighten the inner box. */
     @media (max-width: 900px) {
       .pf-hero { min-height: clamp(500px, 76vh, 620px); }
-      .pf-hero-inner { padding: 26px 24px; gap: 12px; }
+      .pf-hero-inner { padding: 26px 24px 100px; gap: 12px; }
     }
+
+    /* ── Content Creator hero ── */
+    .cc-hero {
+      position: relative; min-height: clamp(560px, 88vh, 860px);
+      display: flex; align-items: center; overflow: hidden;
+      background: var(--bg); border-bottom: 1px solid var(--rule);
+    }
+    .cc-hero-bg {
+      position: absolute; inset: 0; opacity: 0.30;
+      background-position: center bottom; background-size: cover; background-repeat: no-repeat;
+    }
+    [data-theme="light"] .cc-hero-bg { opacity: 0.16; filter: invert(1); }
+    .cc-hero::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(to top, var(--bg) 0%, rgba(0,0,0,0) 42%);
+    }
+    .cc-hero-inner {
+      position: relative; z-index: 2; width: 100%; max-width: 1320px;
+      padding: clamp(96px, 11vw, 140px) clamp(24px, 6vw, 72px) clamp(56px, 7vw, 90px);
+      display: flex; flex-direction: column; gap: 22px;
+    }
+    .cc-eyebrow {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--stone);
+    }
+    .cc-title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(2.4rem, 5.6vw, 4.6rem); line-height: 1.05;
+      letter-spacing: -0.015em; color: var(--ink); max-width: none; text-wrap: balance;
+    }
+    .cc-title em { font-style: italic; color: var(--stone); }
+    .cc-lead {
+      font-size: clamp(15px, 1.55vw, 18px); line-height: 1.75;
+      color: var(--ink); max-width: 820px;
+    }
+    .cc-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 8px; }
+    .cc-btn {
+      font-family: var(--sans); font-size: 12px; font-weight: 500;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      padding: 14px 28px; cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .cc-btn-primary { background: var(--ink); color: var(--bg); border: 1px solid var(--ink); }
+    .cc-btn-primary:hover { background: transparent; color: var(--ink); }
+    .cc-btn-secondary { background: transparent; color: var(--ink); border: 1px solid var(--rule); }
+    .cc-btn-secondary:hover { border-color: var(--ink); }
+
+    /* ── What I do — disciplines ── */
+    .disc {
+      max-width: 1400px; margin: 0 auto;
+      padding: clamp(64px, 8vw, 110px) clamp(24px, 6vw, 72px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .disc-head { margin-bottom: clamp(34px, 5vw, 54px); }
+    .disc-eyebrow {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--stone); margin-bottom: 14px;
+    }
+    .disc-title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(1.8rem, 3.6vw, 2.8rem); line-height: 1.12;
+      letter-spacing: -0.01em; color: var(--ink); max-width: 720px;
+    }
+    .disc-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      background: var(--rule); border: 1px solid var(--rule);
+    }
+    .disc-card {
+      background: var(--bg);
+      display: flex; flex-direction: row; align-items: flex-start;
+      gap: clamp(16px, 2vw, 24px); padding: clamp(24px, 2.8vw, 36px);
+      transition: background 0.2s; overflow: hidden;
+    }
+    .disc-card:hover { background: var(--bg2); }
+    .disc-card-icon { flex: 0 0 auto; width: clamp(40px, 4vw, 52px); height: clamp(40px, 4vw, 52px); color: var(--stone); transition: color 0.2s; }
+    .disc-card-icon svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+    .disc-card:hover .disc-card-icon { color: var(--ink); }
+    .disc-card-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .disc-card-num { font-size: 11px; letter-spacing: 0.16em; color: var(--stone); }
+    .disc-card-title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(1.4rem, 2.4vw, 1.9rem); line-height: 1.1; color: var(--ink);
+    }
+    .disc-card-desc { font-size: 14px; line-height: 1.7; color: var(--stone); flex-grow: 1; }
+    .disc-card-cta {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--stone); transition: color 0.2s;
+    }
+    .disc-card:hover .disc-card-cta { color: var(--ink); }
+    @media (max-width: 760px) { .disc-grid { grid-template-columns: 1fr; } }
+    .disc-also {
+      margin-top: clamp(28px, 3vw, 40px);
+      font-family: var(--serif); font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+      font-style: italic; line-height: 1.6; color: var(--stone); max-width: 760px;
+    }
+    .disc-also a { color: var(--ink); border-bottom: 1px solid var(--rule); transition: border-color 0.2s; }
+    .disc-also a:hover { border-color: var(--ink); }
     /* Fine-art intro band reuses the photography-hero styling (static cover, no parallax) */
     #art-intro { border-top: 1px solid var(--rule); }
     #art-intro .pf-hero-img img { height: 100%; top: 0; }
@@ -815,7 +926,7 @@
     }
 
     /* ── About ───────────────────────────────────── */
-    #about, #photo-about {
+    #about, #photo-about, #essays {
       padding: 100px 48px;
       border-top: 1px solid var(--rule);
       display: grid;
@@ -876,6 +987,13 @@
     .about-bio-btn:hover { background: transparent; color: var(--ink); border-color: var(--ink); }
     [data-theme="light"] .about-bio-btn { color: #FAF9F7; background: #0C0C0B; border-color: #0C0C0B; }
     [data-theme="light"] .about-bio-btn:hover { background: transparent; color: #0C0C0B; border-color: #0C0C0B; }
+    .essays-list { list-style:none; margin:24px 0 0; padding:0; }
+    .essays-list li { border-top:1px solid var(--rule); }
+    .essays-list li:last-child { border-bottom:1px solid var(--rule); }
+    .essays-list a { display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:16px 0; color:var(--ink); transition:opacity 0.2s; }
+    .essays-list a:hover { opacity:0.66; }
+    .essays-list-title { font-family:var(--serif); font-size:1.15rem; line-height:1.2; }
+    .essays-list-date { font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--stone); white-space:nowrap; }
 
     /* ── Enquiry sections ────────────────────────── */
     .enquiry-grid {
@@ -1322,17 +1440,36 @@
 
     /* ── Instagram feed ─────────────────────────── */
     /* ── Digital Experiments ── */
-    .digital { border-top: 1px solid var(--rule); padding: 64px 48px 72px; }
-    .digital-label { font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--stone);margin-bottom:24px; }
-    .digital-intro { font-family:var(--serif);font-size:clamp(1.3rem,2.6vw,1.9rem);font-style:italic;line-height:1.4;color:var(--ink);max-width:820px;margin-bottom:40px; }
+    .digital { border-top: 1px solid var(--rule); }
+    #design-digital .pf-hero-img img { height:100%; top:0; }
+    .digital-body { padding: 56px 48px 72px; }
     .digital-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule); }
     .digital-card { background:var(--bg);padding:32px;display:flex;flex-direction:column;gap:14px;transition:background 0.2s; }
     .digital-card:hover { background:var(--bg2); }
+    .digital-card-icon { width:clamp(36px,3.4vw,44px);height:clamp(36px,3.4vw,44px);color:var(--stone);transition:color 0.2s;margin-bottom:2px; }
+    .digital-card-icon svg { width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round; }
+    .digital-card:hover .digital-card-icon { color:var(--ink); }
+    .digital-card-num { font-size:11px;letter-spacing:0.16em;color:var(--stone); }
     .digital-title { font-family:var(--serif);font-size:clamp(1.4rem,2.2vw,1.75rem);font-weight:400;line-height:1.1; }
     .digital-desc { font-family:var(--serif);font-size:clamp(1rem,1.4vw,1.1rem);line-height:1.7;color:var(--stone);flex-grow:1; }
     .digital-cta { font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);transition:color 0.2s; }
     .digital-card:hover .digital-cta { color:var(--ink); }
-    @media (max-width:900px) { .digital { padding:48px 24px 56px; } .digital-grid { grid-template-columns:1fr; } }
+    @media (max-width:900px) { .digital-body { padding:40px 24px 56px; } .digital-grid { grid-template-columns:1fr; } }
+    /* Apps & Games sub-items (nested under Design & Digital) */
+    .digital-sub { margin-top: clamp(18px,2.2vw,28px); }
+    .digital-sub-label { font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);margin:0 0 14px 2px; }
+    .digital-sub-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule); }
+    .digital-sub-card { background:var(--bg2);padding:22px 28px;display:flex;flex-direction:column;gap:8px;transition:background 0.2s; }
+    .digital-sub-card:hover { background:var(--bg); }
+    .digital-sub-icon { width:26px;height:26px;color:var(--stone);transition:color 0.2s;margin-bottom:2px; }
+    .digital-sub-icon svg { width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round; }
+    .digital-sub-card:hover .digital-sub-icon { color:var(--ink); }
+    .digital-sub-title { font-family:var(--serif);font-size:clamp(1.1rem,1.6vw,1.3rem);font-weight:400;line-height:1.15; }
+    .digital-sub-desc { font-size:13px;line-height:1.6;color:var(--stone);flex-grow:1; }
+    .digital-sub-cta { font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);transition:color 0.2s; }
+    .digital-sub-card:hover .digital-sub-cta { color:var(--ink); }
+    @media (max-width:760px) { .digital-sub-grid { grid-template-columns:1fr; } }
+
 
     #instagram {
       border-top: 1px solid var(--rule);
@@ -1489,7 +1626,7 @@
       .hero-actions .btn-primary,
       .hero-actions .btn-secondary { flex: 1 1 auto; text-align: center; }
 
-      #works, #about, #photo-about { padding: 64px 24px; }
+      #works, #about, #photo-about, #essays { padding: 64px 24px; }
       .explore-albums { grid-template-columns: repeat(2, 1fr); }
       #hero { display: none; } /* hide the featured-work carousel on mobile */
       .instagram-grid { grid-template-columns: repeat(2, 1fr); } /* two across on mobile */
@@ -1508,7 +1645,7 @@
         object-fit: initial;
       }
 
-      #about, #photo-about {
+      #about, #photo-about, #essays {
         grid-template-columns: 1fr;
         gap: 40px;
       }
@@ -1654,7 +1791,7 @@
     [data-theme="light"] .gx-submit { background: #0C0C0B; color: #FAF9F7; }
     /* Static Protocol floating button (turquoise glowing triangle, opens the game) */
     .game-fab {
-      position: fixed; left: 21px; bottom: 170px; z-index: 150; width: 56px; height: 56px;
+      position: fixed; left: 92px; bottom: 20px; z-index: 150; width: 56px; height: 56px;
       display: flex; align-items: center; justify-content: center; border-radius: 50%;
       background: rgba(6, 20, 18, 0.55); border: 1px solid rgba(34, 230, 212, 0.35);
       box-shadow: 0 0 16px rgba(34,230,212,0.45), 0 0 32px rgba(34,230,212,0.25), 0 5px 10px rgba(0,0,0,0.35);
@@ -1666,7 +1803,7 @@
     /* Desktop keeps the game icon fixed above the dog badge (both clear the notice); only the mobile side-by-side layout lifts with the notice. */
     @media (max-width: 900px) { body.privacy-visible .game-fab { bottom: max(95px, calc(var(--privacy-h, 48px) + 33px)); } }
     /* Scritch Scratch floating button (dog badge, hover reaction) */
-    .scritch-fab { position: fixed; left: 16px; bottom: 90px; z-index: 150; width: 66px; height: 66px; display: block; transition: transform 0.18s ease, bottom 0.2s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.35)); }
+    .scritch-fab { position: fixed; left: 16px; bottom: 16px; z-index: 150; width: 66px; height: 66px; display: block; transition: transform 0.18s ease, bottom 0.2s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.35)); }
     .scritch-fab img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
     .scritch-fab .ss-over { opacity: 0; }
     .scritch-fab:hover { transform: translateY(-3px) scale(1.07); }
@@ -1696,17 +1833,14 @@
       <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
         <img src="logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
-      <div class="lang-toggle lang-switch" id="lang-toggle">
-        <div class="lang-group active" data-lang="en">English</div>
-        <button type="button" class="lang-track" aria-label="Toggle language"><span class="lang-knob"></span></button>
-        <div class="lang-group" data-lang="af">Afrikaans</div>
-      </div>
     </div>
     <ul class="nav-links">
-      <li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography &amp; Video</a></li>
-      <li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-works">Fine Art &amp; Illustration</a></li>
-      <li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>
-      <li class="nav-link-hide"><a href="#enquire" class="nav-cta" data-i18n="nav-enquire">Enquire</a></li>
+      <li class="nav-link-hide"><a href="/photography/">Photography &amp; Video</a></li>
+      <li class="nav-link-hide"><a href="/gallery/">Fine Art &amp; Illustration</a></li>
+      <li class="nav-link-hide"><a href="/graphic-design-portfolio/">Design &amp; Digital</a></li>
+      <li class="nav-link-hide"><a href="/apps/">Apps &amp; Games</a></li>
+      <li class="nav-link-hide"><a href="/blog/">Essays &amp; Articles</a></li>
+      <li class="nav-link-hide"><a href="#enquire" class="nav-cta gx-open">Enquire</a></li>
       <li>
         <div class="social-icons">
           <a href="https://instagram.com/waltviviers" target="_blank" aria-label="Instagram">
@@ -1742,10 +1876,12 @@
   <!-- Mobile menu overlay -->
   <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Navigation menu">
     <div class="mobile-menu-links">
-      <a href="/photography/" class="mobile-menu-link" data-i18n="nav-photography">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>
-      <a href="/gallery/" class="mobile-menu-link" data-i18n="nav-works">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>
-      <a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio &amp; Statement <span class="mobile-menu-arrow">↗</span></a>
-      <a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/photography/" class="mobile-menu-link">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/gallery/" class="mobile-menu-link">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/graphic-design-portfolio/" class="mobile-menu-link">Design &amp; Digital <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/apps/" class="mobile-menu-link">Apps &amp; Games <span class="mobile-menu-arrow">↗</span></a>
+      <a href="/blog/" class="mobile-menu-link">Essays &amp; Articles <span class="mobile-menu-arrow">↗</span></a>
+      <a href="#enquire" class="mobile-menu-link mobile-menu-link-cta gx-open">Enquire <span class="mobile-menu-arrow">↗</span></a>
     </div>
     <div class="mobile-menu-foot">
       <a href="/admin-index/" class="mobile-admin-btn">Admin</a>
@@ -1762,6 +1898,82 @@
   </div>
 
   <main id="main" role="main">
+
+  <!-- Content Creator hero -->
+  <section class="cc-hero" aria-label="Walt Viviers — Content Creator">
+    <div class="cc-hero-bg" style="background-image:url('/brushstrokes-bg.webp')"></div>
+    <div class="cc-hero-inner">
+      <p class="cc-eyebrow" data-i18n="cc-eyebrow">Walt Viviers · Content Creator</p>
+      <h1 class="cc-title" data-i18n-html="cc-title-html">Tinkerer, maker,<br/><em>chronic curiosity chaser.</em></h1>
+      <p class="cc-lead" data-i18n="cc-lead">A creative polymath from Pretoria. I paint and illustrate, shoot photography and video, design brands, build small apps and write — and lately I've been chasing video and social, in front of the camera as much as behind it. Artist, designer, photographer, writer, the occasional musician and editor: at the core, it's still people and art.</p>
+      <div class="cc-actions">
+        <button type="button" class="cc-btn cc-btn-primary gx-open" data-i18n="cc-cta-work">Get in touch</button>
+        <a href="#what-i-do" class="cc-btn cc-btn-secondary" data-i18n="cc-cta-see">See the work ↓</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instagram feed -->
+  <section id="instagram">
+    <div class="instagram-head">
+      <div class="instagram-handle">
+        <div class="ig-lead-row">
+          <span class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</span>
+          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+        </div>
+        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="instagram-handle-row">
+          <h2 class="section-title">@waltviviers</h2>
+        </a>
+      </div>
+    </div>
+    <div class="instagram-grid" id="instagram-grid"></div>
+  </section>
+
+  <!-- What I do — the disciplines -->
+  <section id="what-i-do" class="disc" aria-label="The work">
+    <div class="disc-head">
+      <p class="disc-eyebrow" data-i18n="disc-eyebrow">The work</p>
+      <h2 class="disc-title" data-i18n="disc-title">One creator, many crafts — pick a thread and follow it.</h2>
+    </div>
+    <div class="disc-grid">
+      <a class="disc-card" href="/photography/">
+        <div class="disc-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <div class="disc-card-body">
+          <span class="disc-card-num">01</span>
+          <h3 class="disc-card-title" data-i18n="disc-photo-title">Photography &amp; Video</h3>
+          <p class="disc-card-desc" data-i18n="disc-photo-desc">Portraits, events and wellness retreats — and, increasingly, social video: short-form storytelling in front of and behind the camera.</p>
+          <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        </div>
+      </a>
+      <a class="disc-card" href="/gallery/">
+        <div class="disc-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.06 11.9l8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/></svg></div>
+        <div class="disc-card-body">
+          <span class="disc-card-num">02</span>
+          <h3 class="disc-card-title" data-i18n="disc-art-title">Fine Art &amp; Illustration</h3>
+          <p class="disc-card-desc" data-i18n="disc-art-desc">Acrylic and mixed-media originals — from the iconic to the unexpected — held in private collections across South Africa and abroad.</p>
+          <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        </div>
+      </a>
+      <a class="disc-card" href="/graphic-design-portfolio/">
+        <div class="disc-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg></div>
+        <div class="disc-card-body">
+          <span class="disc-card-num">03</span>
+          <h3 class="disc-card-title" data-i18n="disc-design-title">Design &amp; Digital</h3>
+          <p class="disc-card-desc" data-i18n="disc-design-desc">A Creative Director's toolkit, hands-on again: brand identity, websites and e-commerce, illustration, motion and campaigns — plus small apps and browser games, built for the joy of it.</p>
+          <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        </div>
+      </a>
+      <a class="disc-card" href="/blog/">
+        <div class="disc-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+        <div class="disc-card-body">
+          <span class="disc-card-num">04</span>
+          <h3 class="disc-card-title" data-i18n="disc-essays-title">Essays &amp; Articles</h3>
+          <p class="disc-card-desc" data-i18n="disc-essays-desc">Longer-form writing — essays and articles on the craft, the tools, and the life around a creative practice.</p>
+          <span class="disc-card-cta" data-i18n="disc-view">Explore →</span>
+        </div>
+      </a>
+    </div>
+  </section>
 
   <!-- Photography & Video — feature -->
   <section id="photo-feature" aria-label="Photography & Video">
@@ -1800,10 +2012,6 @@
     </div>
   </section>
 
-  <!-- Brush divider -->
-  <div class="brush-divider" aria-hidden="true">
-    <img src="/brushstrokes-bg.webp" alt="Walt Viviers — South African fine artist, acrylic and mixed media" loading="lazy" width="2360" height="590" />
-  </div>
 
   <!-- Fine Art & Illustration — intro band -->
   <section id="art-intro" aria-label="Fine Art & Illustration">
@@ -1830,45 +2038,16 @@
   <section id="about">
     <div class="about-left">
       <h2 class="about-title" data-i18n-html="about-title-html">
-        Created in South Africa<br/><em>Available to the World</em>
+        People and Art<br/><em>at the Core</em>
       </h2>
       <a href="/artist-bio/" class="about-bio-btn" data-i18n="about-bio-btn">Bio &amp; Statement ↗</a>
     </div>
     <div class="about-body">
-      <p data-i18n="about-p1">I am a South African fine artist working in acrylic and mixed media. Professional creative practice — across design, art direction, and brand — has sharpened a painter's eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.</p>
-      <p data-i18n="about-p2">Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.</p>
-      <p data-i18n="about-p3">For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.</p>
-      <p data-i18n="about-p4">My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.</p>
+      <p data-i18n="about-p1">My path has always been creative and service-minded — early studies in directing and design, then apprenticeships and freelance work, always focused on making things and serving the people who need them.</p>
+      <p data-i18n="about-p2">I've worked bars and boardrooms, apprenticed as a tattoo artist and body piercer, and built a long career that led to Creative Director — running small businesses on the side and painting, illustrating and photographing the whole way through.</p>
+      <p data-i18n="about-p3">After a lifetime in design and marketing, I made a deliberate choice to step back from managing others and return to making things myself. I'm a creative polymath at heart, and with the rise of AI I think every creative will end up working across disciplines rather than just directing them.</p>
+      <p data-i18n="about-p4">That shift started in lockdown, when remote work let me bring hands-on making back into the mix — painting, photography, writing, video. Now I'm doing it full-time: exploring what AI-assisted tools can add, and following whatever curiosity pulls me next.</p>
       <button type="button" class="read-more-btn" data-i18n="read-more">Read more ↓</button>
-    </div>
-  </section>
-
-  <!-- Hero: Featured Work -->
-    <section class="hero" id="hero">
-    <div class="hero-image-wrap" id="hero-image">
-      <img src="images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
-           srcset="images/800/t-rex-acrylic-canvas-walt-viviers-2020.webp 800w, images/t-rex-acrylic-canvas-walt-viviers-2020.webp 1600w"
-           sizes="100vw"
-           alt="Walt Viviers, T-Rex, 2020, Acrylic on Canvas"
-           loading="lazy"
-           width="1600" height="1067" />
-    </div>
-    <div class="hero-detail">
-      <div class="hero-work-info">
-        <p class="hero-work-number" id="hero-number">Featured work</p>
-        <h1 class="hero-work-title" id="hero-title">Walt Viviers</h1>
-        <p class="hero-work-year"  id="hero-year"></p>
-        <div class="work-meta-table" id="hero-meta"></div>
-        <div class="hero-actions">
-          <button class="btn-primary" id="inquire-btn" data-i18n="hero-inquire">Enquire about this work</button>
-          <a href="#gallery-rep" class="btn-secondary" data-i18n="hero-gallery-rep">Gallery representation</a>
-        </div>
-        <div class="gallery-nav">
-          <button class="gn-btn" id="gn-prev" aria-label="Previous work">&#8592;</button>
-          <div class="gn-dots" id="gn-dots"></div>
-          <button class="gn-btn" id="gn-next" aria-label="Next work">&#8594;</button>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -1898,37 +2077,128 @@
     <a href="/gallery/" class="view-gallery-btn" data-i18n="view-gallery">View Gallery ↗</a>
   </section>
 
-  <!-- Instagram feed -->
-  <section id="instagram">
-    <div class="instagram-head">
-      <div class="instagram-handle">
-        <div class="ig-lead-row">
-          <span class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</span>
-          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
+  <!-- PILLAR 3 — Design & Digital -->
+  <section class="digital" id="design-digital" aria-label="Design & Digital">
+    <div class="pf-hero">
+      <div class="pf-hero-img">
+        <img src="/apps/scritch-scratch/ScritchScratch_Walt_desktop.jpg"
+             sizes="100vw"
+             alt="Walt Viviers — Scritch Scratch, an interactive pet app" loading="lazy" width="1600" height="1000" />
+      </div>
+      <div class="pf-hero-inner">
+        <p class="pf-eyebrow">Design &amp; Digital</p>
+        <h2 class="pf-title">Brands, websites, apps &amp; games</h2>
+        <p class="pf-desc">A Creative Director's full toolkit — brand identity, websites and online stores, illustration, motion and marketing for brands big and small. Plus small browser games and genuinely useful apps I build for the fun of it.</p>
+        <div class="pf-actions">
+          <a href="/graphic-design-portfolio/" class="pf-btn pf-btn-primary">View the portfolio ↗</a>
+          <button type="button" class="pf-btn pf-btn-secondary gx-open">Enquire</button>
         </div>
-        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="instagram-handle-row">
-          <h2 class="section-title">@waltviviers</h2>
+      </div>
+    </div>
+    <div class="digital-body">
+    <div class="digital-grid">
+      <a class="digital-card" href="/graphic-design-portfolio/">
+        <span class="digital-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></span>
+        <span class="digital-card-num">01</span>
+        <h2 class="digital-title">Brand, Web &amp; Campaigns</h2>
+        <p class="digital-desc">Identity systems, websites and online stores, illustration, motion and marketing — a full-service portfolio for brands big and small.</p>
+        <span class="digital-cta">View the portfolio &#8594;</span>
+      </a>
+      <a class="digital-card" href="/apps/">
+        <span class="digital-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+        <span class="digital-card-num">02</span>
+        <h2 class="digital-title">Apps &amp; Games</h2>
+        <p class="digital-desc">Small, independent browser games and offline-friendly apps — built for the joy of making. No ads, no tracking.</p>
+        <span class="digital-cta">Explore &#8594;</span>
+      </a>
+    </div>
+    <div class="digital-sub">
+      <p class="digital-sub-label">From the Apps &amp; Games shelf — play in your browser</p>
+      <div class="digital-sub-grid">
+        <a class="digital-sub-card" href="/apps/static-protocol/play/">
+          <span class="digital-sub-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></span>
+          <span class="digital-sub-title">Static Protocol</span>
+          <span class="digital-sub-desc">A cyberpunk data-heist story built for mobile — five decisions, five live hacking sequences, ten possible endings.</span>
+          <span class="digital-sub-cta">Play &#8594;</span>
+        </a>
+        <a class="digital-sub-card" href="/apps/scritch-scratch/play/">
+          <span class="digital-sub-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
+          <span class="digital-sub-title">Scritch Scratch</span>
+          <span class="digital-sub-desc">An interactive pet app with three relaxed modes and nothing to win. Tap around, make a mess, enjoy the calm.</span>
+          <span class="digital-sub-cta">Play &#8594;</span>
         </a>
       </div>
     </div>
-    <div class="instagram-grid" id="instagram-grid"></div>
+    </div>
   </section>
 
-  <!-- Digital Experiments -->
-  <section class="digital" aria-label="Digital Experiments">
-    <p class="digital-label" data-i18n="digital-label">Digital Experiments</p>
-    <p class="digital-intro" data-i18n="digital-intro">Alongside the paintings, I build small interactive pieces, mostly with AI-assisted tools, as another way of chasing the same instinct: make something, then see who it moves.</p>
-    <div class="digital-grid">
-      <a class="digital-card" href="/apps/static-protocol/play/">
-        <h2 class="digital-title">Static Protocol</h2>
-        <p class="digital-desc" data-i18n="digital-sp-desc">A cyberpunk data-heist story built for mobile. Five decisions, five live hacking sequences, ten possible endings. However you handle the jobs is however it goes.</p>
-        <span class="digital-cta" data-i18n="digital-play">Play &#8594;</span>
-      </a>
-      <a class="digital-card" href="/apps/scritch-scratch/play/">
-        <h2 class="digital-title">Scritch Scratch</h2>
-        <p class="digital-desc" data-i18n="digital-ss-desc">The opposite kind of experiment: an interactive pet app with three relaxed modes (dogs, rats, cats) and nothing to win. Tap around, make a mess, enjoy the calm.</p>
-        <span class="digital-cta" data-i18n="digital-play">Play &#8594;</span>
-      </a>
+  <!-- PILLAR 4 — Essays & Articles -->
+  <section id="essays" aria-label="Essays & Articles">
+    <div class="about-left">
+      <h2 class="about-title">Essays<br/><em>&amp; Articles</em></h2>
+      <a href="/blog/" class="about-bio-btn">Read the essays ↗</a>
+    </div>
+    <div class="about-body">
+      <p>Longer-form writing — essays and articles on the craft, the tools, and the life around a creative practice. New pieces go up as they're written; subscribe via <a href="/feed.xml" style="text-decoration:underline;text-underline-offset:3px">RSS</a> to follow along.</p>
+      <ul class="essays-list" id="essays-list">
+        <li><a href="/blog/on-beginning-to-write/"><span class="essays-list-title">On Beginning to Write</span><span class="essays-list-date">3 Sep 2026</span></a></li>
+      </ul>
+    </div>
+  </section>
+  <script>
+  (function(){var ul=document.getElementById('essays-list');if(!ul)return;
+    fetch('/data/essays.json').then(function(r){return r.json();}).then(function(list){
+      if(!Array.isArray(list)||!list.length)return;
+      ul.innerHTML=list.slice(0,6).map(function(p){
+        return '<li><a href="'+p.url+'"><span class="essays-list-title">'+p.title+'</span><span class="essays-list-date">'+p.date+'</span></a></li>';
+      }).join('');
+    }).catch(function(){});
+  })();
+  </script>
+
+  <!-- Work with me — closing CTA -->
+  <style>
+    .workwith { position: relative; overflow: hidden; background: var(--bg); border-top: 1px solid var(--rule); }
+    .workwith-bg {
+      position: absolute; inset: 0; opacity: 0.20;
+      background-position: center; background-size: cover; background-repeat: no-repeat;
+    }
+    [data-theme="light"] .workwith-bg { opacity: 0.12; filter: invert(1); }
+    .workwith::after {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: linear-gradient(to bottom, var(--bg) 0%, rgba(0,0,0,0) 26%, rgba(0,0,0,0) 74%, var(--bg) 100%);
+    }
+    .workwith-inner {
+      position: relative; z-index: 2; max-width: 860px; margin: 0 auto; text-align: center;
+      padding: clamp(64px, 9vw, 120px) clamp(24px, 6vw, 72px);
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    .workwith-eyebrow {
+      font-size: 12px; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--stone);
+    }
+    .workwith-title {
+      font-family: var(--serif); font-weight: 400;
+      font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.08;
+      letter-spacing: -0.015em; color: var(--ink); text-wrap: balance;
+    }
+    .workwith-title em { font-style: italic; color: var(--stone); }
+    .workwith-lead {
+      font-size: clamp(15px, 1.5vw, 18px); line-height: 1.75;
+      color: var(--ink); max-width: 660px;
+    }
+    .workwith-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 10px; }
+  </style>
+  <section class="workwith" id="work-with-me" aria-label="Work with me">
+    <div class="workwith-bg" style="background-image:url('/brushstrokes-bg.webp')"></div>
+    <div class="workwith-inner">
+      <p class="workwith-eyebrow">Work with me</p>
+      <h2 class="workwith-title">Let's make something —<br/><em>on camera, on brand, on screen.</em></h2>
+      <p class="workwith-lead">Available for photography &amp; video, short-form social content, brand &amp; web design, and creative collaborations — for individuals and businesses in Pretoria, across South Africa, and happily beyond. In front of the camera as much as behind it.</p>
+      <div class="workwith-actions">
+        <button type="button" class="cc-btn cc-btn-primary gx-open">Get in touch</button>
+        <a href="/photography/" class="cc-btn cc-btn-secondary">Photography &amp; video ↗</a>
+      </div>
     </div>
   </section>
 
@@ -2003,6 +2273,12 @@
         <a href="https://instagram.com/waltviviers" target="_blank" aria-label="Instagram">
           <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
         </a>
+        <a href="https://www.tiktok.com/@waltviviers" target="_blank" rel="noopener" aria-label="TikTok">
+          <svg viewBox="0 0 24 24"><path d="M14 3v11a4 4 0 1 1-3-3.87"/><path d="M14 3c0 2.8 2.2 5 5 5"/></svg>
+        </a>
+        <a href="https://www.facebook.com/waltviviers/" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
         <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
           <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
         </a>
@@ -2014,9 +2290,6 @@
         </a>
         <a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub">
           <svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        </a>
-        <a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">
-          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
         </a>
       </div>
       <div class="footer-legal" style="margin-top:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);line-height:1.7;text-align:center;"><span class="footer-copy" data-i18n="footer-copy">© 2026 Walt Viviers. All rights reserved.</span> <a href="/privacy/" class="footer-privacy" style="color:inherit;">Privacy Policy.</a> <a href="/privacy/" class="footer-cookie" style="color:inherit;" onclick="if(window.wvConsent){event.preventDefault();wvConsent.reopen();}">Cookie settings.</a> <span class="footer-credit">Made with <span style="color:#e0607e">&#9829;</span> by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Cat&#39;s Creations</a></span></div>
@@ -2075,23 +2348,33 @@
     var T = {
       en: {
         'nav-works': 'Fine Art & Illustration', 'nav-photography': 'Photography & Video', 'nav-apps': 'Apps & Games', 'nav-about': 'About', 'nav-bio': 'Bio & Statement', 'nav-design': 'Graphic Design', 'nav-journal': 'Journal', 'nav-enquire': 'Enquire',
+        'cc-eyebrow': 'Walt Viviers · Content Creator',
+        'cc-title-html': 'Tinkerer, maker,<br/><em>chronic curiosity chaser.</em>',
+        'cc-lead': "A creative polymath from Pretoria. I paint and illustrate, shoot photography and video, design brands, build small apps and write — and lately I've been chasing video and social, in front of the camera as much as behind it. Artist, designer, photographer, writer, the occasional musician and editor: at the core, it's still people and art.",
+        'cc-cta-work': 'Get in touch', 'cc-cta-see': 'See the work ↓',
+        'disc-eyebrow': 'The work', 'disc-title': 'One creator, many crafts — pick a thread and follow it.', 'disc-view': 'Explore →',
+        'disc-photo-title': 'Photography & Video', 'disc-photo-desc': 'Portraits, events and wellness retreats — and, increasingly, social video: short-form storytelling in front of and behind the camera.',
+        'disc-art-title': 'Fine Art & Illustration', 'disc-art-desc': 'Acrylic and mixed-media originals — from the iconic to the unexpected — held in private collections across South Africa and abroad.',
+        'disc-design-title': 'Design & Digital', 'disc-design-desc': "A Creative Director's toolkit, hands-on again: brand identity, websites and e-commerce, illustration, motion and campaigns — plus small apps and browser games, built for the joy of it.",
+        'disc-essays-title': 'Essays & Articles', 'disc-essays-desc': 'Longer-form writing — essays and articles on the craft, the tools, and the life around a creative practice.',
+        'disc-also-html': 'And along the way: music, the odd side project, and whatever curiosity pulls me next — a content creator wears every hat.',
         'hero-inquire': 'Enquire about this work', 'hero-gallery-rep': 'Gallery representation',
         'section-works': 'Selected Artworks', 'available-on': 'Available on', 'view-gallery': 'View Gallery ↗',
         'art-intro-eyebrow': 'Fine Art & Illustration', 'art-intro-headline': 'Bold originals — from the iconic to the unexpected', 'art-intro-desc': 'Acrylic and mixed-media paintings that read with clarity from across the room and reveal expressive, unmistakable brushwork up close — held in private collections across South Africa and abroad.',
         'explore-photo-title': 'Photography & Video', 'explore-photo-desc': 'Portrait sessions, events, and wellness retreats — captured in photo and video with a fine artist\'s eye. Each album opens in Google Photos.', 'explore-photo-cta': 'View albums →', 'pf-headline': 'Portraits, events & retreats — through a fine artist\'s eye', 'pf-book': 'Book a session',
         'explore-apps-title': 'Apps & Games', 'explore-apps-desc': 'A growing collection of browser games and small, private, offline-friendly apps — from a three-pet toy to a handy tip calculator. No ads, no tracking.', 'explore-apps-cta': 'Explore →',
         'digital-label': 'Digital Experiments', 'digital-intro': 'Alongside the paintings, I build small interactive pieces, mostly with AI-assisted tools, as another way of chasing the same instinct: make something, then see who it moves.', 'digital-sp-desc': 'A cyberpunk data-heist story built for mobile. Five decisions, five live hacking sequences, ten possible endings. However you handle the jobs is however it goes.', 'digital-ss-desc': 'The opposite kind of experiment: an interactive pet app with three relaxed modes (dogs, rats, cats) and nothing to win. Tap around, make a mess, enjoy the calm.', 'digital-play': 'Play →',
-        'about-title-html': 'Created in South Africa<br/><em>Available to the World</em>',
+        'about-title-html': 'People and Art<br/><em>at the Core</em>',
         'photo-about-title-html': 'A Painter\'s Eye<br/><em>Behind the Lens</em>',
         'photo-about-p1': 'Photography and video are an extension of the same practice — the same instinct for light, composition, and the quiet moment that says everything. I bring a fine artist\'s eye to every frame.',
         'photo-about-p2': 'I work with people first: portrait sessions, events, and wellness retreats where the aim is to capture something true rather than posed — unhurried, comfortable, and attentive to the story unfolding in front of the camera.',
         'photo-about-p3': 'Based in Pretoria and available across South Africa and beyond, I shoot in both photo and video, and every session is delivered as a private online album.',
         'photo-about-p4': 'Whether it\'s a single portrait or a multi-day retreat, tell me what you have in mind and I\'ll shape the session around it.',
         'read-more': 'Read more ↓',
-        'about-p1': 'I am a South African fine artist working in acrylic and mixed media. Professional creative practice — across design, art direction, and brand — has sharpened a painter\'s eye that finds the tension between the poetry and music of an image: reading with clarity and confidence from a distance, yet revealing bold, expressive brushstrokes and my unmistakable touch up close.',
-        'about-p2': 'Drawing on subjects that range from the iconic to the unexpected, I bridge the worlds of fine art and popular culture, rendered with energy, intention, and a distinctly South African perspective.',
-        'about-p3': 'For me, making art is therapy: a way of expressing yourself to find yourself. Faith, family, and creativity sit at the core of everything I make.',
-        'about-p4': 'My work is represented on Saatchi Art and held in private collections across South Africa and abroad. Commissions and gallery enquiries are welcome.',
+        'about-p1': 'My path has always been creative and service-minded — early studies in directing and design, then apprenticeships and freelance work, always focused on making things and serving the people who need them.',
+        'about-p2': "I've worked bars and boardrooms, apprenticed as a tattoo artist and body piercer, and built a long career that led to Creative Director — running small businesses on the side and painting, illustrating and photographing the whole way through.",
+        'about-p3': "After a lifetime in design and marketing, I made a deliberate choice to step back from managing others and return to making things myself. I'm a creative polymath at heart, and with the rise of AI I think every creative will end up working across disciplines rather than just directing them.",
+        'about-p4': "That shift started in lockdown, when remote work let me bring hands-on making back into the mix — painting, photography, writing, video. Now I'm doing it full-time: exploring what AI-assisted tools can add, and following whatever curiosity pulls me next.",
         'about-bio-btn': 'Bio & Statement ↗',
         'ig-follow': 'Follow on Instagram ↗', 'ig-follow-me': 'Follow me on Instagram',
         'commission-tag': 'For collectors', 'commission-title-html': 'Commission<br/>a new work',
@@ -2120,23 +2403,33 @@
       },
       af: {
         'nav-works': 'Skone Kunste & Illustrasie', 'nav-photography': 'Fotografie & Video', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-journal': 'Joernaal', 'nav-enquire': 'Navraag',
+        'cc-eyebrow': 'Walt Viviers · Inhoudskepper',
+        'cc-title-html': 'Knutselaar, maker,<br/><em>chroniese nuuskierigheidsjagter.</em>',
+        'cc-lead': "'n Kreatiewe alleskunstenaar van Pretoria. Ek skilder en illustreer, neem foto's en video, ontwerp handelsmerke, bou klein programme en skryf — en die laaste tyd jaag ek video en sosiale media, voor die kamera net soveel as daaragter. Kunstenaar, ontwerper, fotograaf, skrywer, die af-en-toe musikant en redigeerder: in die kern bly dit mense en kuns.",
+        'cc-cta-work': 'Kom gesels', 'cc-cta-see': 'Sien die werk ↓',
+        'disc-eyebrow': 'Die werk', 'disc-title': "Een skepper, baie ambagte — kies 'n draad en volg dit.", 'disc-view': 'Verken →',
+        'disc-photo-title': 'Fotografie & Video', 'disc-photo-desc': 'Portrette, geleenthede en welstand-toevlugte — en al hoe meer sosiale video: kortvorm-storievertelling voor en agter die kamera.',
+        'disc-art-title': 'Skone Kunste & Illustrasie', 'disc-art-desc': 'Akriel- en gemengde-media oorspronklikes — van die ikoniese tot die onverwagse — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
+        'disc-design-title': 'Ontwerp & Digitaal', 'disc-design-desc': "'n Kreatiewe Direkteur se gereedskap, weer hands-on: handelsmerk-identiteit, webwerwe en e-handel, illustrasie, beweging en veldtogte — plus klein programme en blaaierspeletjies, gebou vir die vreugde daarvan.",
+        'disc-essays-title': 'Essays & Artikels', 'disc-essays-desc': 'Langer skryfwerk — essays en artikels oor die ambag, die gereedskap, en die lewe rondom \'n kreatiewe praktyk.',
+        'disc-also-html': 'En langs die pad: musiek, die af-en-toe kantprojek, en waarheen nuuskierigheid ook al lei — ’n inhoudskepper dra elke hoed.',
         'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
         'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
         'art-intro-eyebrow': 'Skone Kunste & Illustrasie', 'art-intro-headline': 'Gedurfde oorspronklikes — van die ikoniese tot die onverwagte', 'art-intro-desc': 'Akriel- en gemengde-media skilderye wat met helderheid van oorkant die kamer lees en van naby uitdrukkingsvolle, onmiskenbare kwaswerk openbaar — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
         'explore-photo-title': 'Fotografie & Video', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — vasgevang in foto en video met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →', 'pf-headline': 'Portrette, geleenthede & toevlugte — deur \'n kunstenaar se oog', 'pf-book': 'Bespreek \'n sessie',
         'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': '\'n Groeiende versameling blaaierspeletjies en klein, private programme wat vanlyn werk — van \'n drie-troeteldier-speelding tot \'n handige fooi-sakrekenaar. Geen advertensies, geen opsporing.', 'explore-apps-cta': 'Verken →',
         'digital-label': 'Digitale Eksperimente', 'digital-intro': 'Naas die skilderye bou ek klein interaktiewe stukke, meestal met KI-ondersteunde gereedskap, as nog \'n manier om dieselfde instink na te jaag: maak iets, en kyk dan wie dit roer.', 'digital-sp-desc': '\'n Kuberpunk-data-roof-storie gebou vir mobiel. Vyf besluite, vyf lewendige inbraak-reekse, tien moontlike eindes. Hoe jy die werk hanteer, is hoe dit uitdraai.', 'digital-ss-desc': 'Die teenoorgestelde soort eksperiment: \'n interaktiewe troeteldier-toepassing met drie ontspanne modusse (honde, rotte, katte) en niks om te wen nie. Tik rond, maak \'n gemors, geniet die kalmte.', 'digital-play': 'Speel →',
-        'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
+        'about-title-html': 'Mense en Kuns<br/><em>in die Kern</em>',
         'photo-about-title-html': '\'n Skildersoog<br/><em>Agter die Lens</em>',
         'photo-about-p1': 'Fotografie en video is \'n verlengstuk van dieselfde praktyk — dieselfde instink vir lig, komposisie en die stil oomblik wat alles sê. Ek bring \'n kunstenaar se oog na elke raam.',
         'photo-about-p2': 'Ek werk eers met mense: portret-sessies, geleenthede en welstand-toevlugte waar die doel is om iets waar vas te vang eerder as poserend — ontspanne, gemaklik en aandagtig vir die storie wat voor die kamera ontvou.',
         'photo-about-p3': 'Gebaseer in Pretoria en beskikbaar regoor Suid-Afrika en verder, skiet ek in beide foto en video, en elke sessie word as \'n privaat aanlyn album gelewer.',
         'photo-about-p4': 'Of dit \'n enkele portret of \'n multi-dag toevlug is, laat weet my wat jy in gedagte het en ek sal die sessie daarom vorm.',
         'read-more': 'Lees meer ↓',
-        'about-p1': 'Ek is ‘n Suid-Afrikaanse kunstenaar wat in akriel en gemengde media werk. Professionele kreatiewe praktyk — deur ontwerp, kunsdireksie en handelsmerk — het ‘n skilder se oog geslyp wat die spanning tussen die poësie en musiek van ‘n beeld vind: van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.',
-        'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
-        'about-p3': 'Vir my is kunsmaak terapie: ‘n manier om jouself uit te druk om jouself te vind. Geloof, familie en kreatiwiteit lê aan die hart van alles wat ek maak.',
-        'about-p4': 'My werk word op Saatchi Art verteenwoordig en in privaat versamelings regoor Suid-Afrika en oorsee gehou. Opdragte en galery-navrae is welkom.',
+        'about-p1': 'My pad was nog altyd kreatief en diensgerig — vroeë studies in regie en ontwerp, toe vakleerlingskappe en vryskutwerk, altyd gefokus op dinge maak en die mense bedien wat dit nodig het.',
+        'about-p2': "Ek het kroeë en direksiekamers gewerk, as tatoeëerkunstenaar en lyfdeurboorder vakleerling gestaan, en 'n lang loopbaan gebou wat tot Kreatiewe Direkteur gelei het — kleinsake-ondernemings aan die kant bestuur en die hele pad deur geskilder, geïllustreer en gefotografeer.",
+        'about-p3': "Ná 'n leeftyd in ontwerp en bemarking het ek 'n doelbewuste keuse gemaak om terug te tree van ander bestuur en terug te keer na self dinge maak. Ek is 'n kreatiewe alleskunstenaar in murg en been, en met die opkoms van KI dink ek elke kreatiewe mens sal uiteindelik oor dissiplines heen werk eerder as om net te rig.",
+        'about-p4': "Daardie verskuiwing het in grendeltyd begin, toe afgeleë werk my toegelaat het om hands-on maak terug in die mengsel te bring — skilder, fotografie, skryf, video. Nou doen ek dit voltyds: ek verken wat KI-ondersteunde gereedskap kan byvoeg, en volg watter nuuskierigheid ook al my volgende trek.",
         'about-bio-btn': 'Bio & Verklaring ↗',
         'ig-follow': 'Volg op Instagram ↗', 'ig-follow-me': 'Volg my op Instagram',
         'commission-tag': 'Vir versamelaars', 'commission-title-html': 'Bestel<br/>‘n nuwe werk',
@@ -2165,7 +2458,7 @@
       }
     };
 
-    var lang = localStorage.getItem('wv-lang') || 'en';
+    var lang = 'en'; /* language toggle retired — site is English-only */
 
     window._t = function (key) { return (T[lang] || T.en)[key] || key; };
 
@@ -2190,15 +2483,6 @@
     }
 
     apply();
-
-    document.getElementById('lang-toggle').addEventListener('click', function (e) {
-      var group = e.target.closest('.lang-group[data-lang]');
-      if (group) { lang = group.dataset.lang; }
-      else if (e.target.closest('.lang-track')) { lang = (lang === 'en' ? 'af' : 'en'); }
-      else { return; }
-      localStorage.setItem('wv-lang', lang);
-      apply();
-    });
   })();
   </script>
 
@@ -2223,6 +2507,7 @@
 
       /* ── Render hero panel ── */
       function renderHero(index) {
+        if (!document.getElementById('hero-image')) return;
         const w = works[index];
         if (!w) return;
 
@@ -2274,6 +2559,7 @@
         const half    = Math.floor(visible / 2);
         const start   = Math.max(0, Math.min(index - half, total - visible));
         const container = document.getElementById('gn-dots');
+        if (!container) return;
         container.innerHTML = '';
         for (var i = start; i < start + visible; i++) {
           const d   = document.createElement('div');
@@ -2325,10 +2611,12 @@
 
         grid.querySelectorAll('.work-thumb').forEach(card => {
           card.addEventListener('click', e => {
+            var _h = document.getElementById('hero');
+            if (!_h) return; // no carousel on this page — let the link navigate
             e.preventDefault();
             current = +card.dataset.index;
             renderHero(current);
-            document.getElementById('hero').scrollIntoView({ behavior: 'smooth' });
+            _h.scrollIntoView({ behavior: 'smooth' });
             pauseAutoplay();
           });
         });
@@ -2373,8 +2661,9 @@
 
       /* ── Show loading / error state ── */
       function setHeroState(msg) {
-        document.getElementById('hero-image').innerHTML =
-          `<div class="placeholder">${msg}</div>`;
+        var _hi = document.getElementById('hero-image');
+        if (!_hi) return;
+        _hi.innerHTML = `<div class="placeholder">${msg}</div>`;
         document.getElementById('hero-title').textContent = '';
         document.getElementById('hero-number').textContent = '';
       }
@@ -2386,6 +2675,10 @@
       var RESUME_MS     = 6000;
 
       function startAutoplay() {
+        var h = document.getElementById('hero');
+        // Skip when the carousel is hidden (mobile): cycling would keep fetching
+        // off-screen images for no benefit and adds main-thread work.
+        if (!h || h.offsetParent === null) return;
         stopAutoplay();
         autoplayTimer = setInterval(function () {
           current = (current + 1) % works.length;
@@ -2405,12 +2698,14 @@
       }
 
       var heroEl = document.getElementById('hero');
+      if (heroEl) {
       heroEl.addEventListener('mouseenter', stopAutoplay);
       heroEl.addEventListener('mouseleave', function () {
         clearTimeout(resumeTimer);
         startAutoplay();
       });
       heroEl.addEventListener('touchstart', pauseAutoplay, { passive: true });
+      }
 
       /* ── Prev / Next ── */
       function goPrev() {
@@ -2425,12 +2720,13 @@
         renderHero(current);
         pauseAutoplay();
       }
-      document.getElementById('gn-prev').addEventListener('click', goPrev);
-      document.getElementById('gn-next').addEventListener('click', goNext);
+      var _gp = document.getElementById('gn-prev'); if (_gp) _gp.addEventListener('click', goPrev);
+      var _gnx = document.getElementById('gn-next'); if (_gnx) _gnx.addEventListener('click', goNext);
 
       /* ── Swipe left / right on the hero image ── */
       (function () {
         var wrap = document.getElementById('hero-image');
+        if (!wrap) return;
         var sx = 0, sy = 0, st = 0, tracking = false;
         wrap.addEventListener('touchstart', function (e) {
           var t = e.changedTouches[0];
@@ -2491,6 +2787,18 @@
           renderHero(current);
           injectArtworkSchema();
           startAutoplay();
+
+          // Randomise the Fine Art intro band background (like the photography band)
+          (function () {
+            var artImg = document.querySelector('#art-intro .pf-hero-img img');
+            if (!artImg || !works.length) return;
+            var a = works[Math.floor(Math.random() * works.length)];
+            var img800 = a.image.indexOf('images/') === 0 ? a.image.replace('images/', '/images/800/') : a.image;
+            artImg.src = '/' + a.image;
+            artImg.srcset = img800 + ' 800w, /' + a.image + ' 1600w';
+            artImg.sizes = '100vw';
+            artImg.alt = 'Walt Viviers, ' + a.title + ', ' + a.year + (a.medium ? ', ' + a.medium : '');
+          })();
 
           window._gallery = {
             refresh: function() {
@@ -2600,7 +2908,8 @@
 
       // ── Artwork enquiry modal ──
       const workName = document.getElementById('modal-work-name');
-      document.getElementById('inquire-btn').addEventListener('click', function () {
+      var _ib = document.getElementById('inquire-btn');
+      if (_ib) _ib.addEventListener('click', function () {
         var title = document.getElementById('hero-title').textContent;
         workName.textContent = title;
         document.querySelector('#enquiry-form [name="artwork"]').value = title;
@@ -2731,20 +3040,42 @@
       ];
       for (var i = ALBUMS.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = ALBUMS[i]; ALBUMS[i] = ALBUMS[j]; ALBUMS[j] = tmp; }
       // Rotate the header image through a random album on each visit…
+      // …EXCEPT on phones: swapping the pre-loaded fetchpriority=high header image
+      // hands Lighthouse a second, late "largest paint" and wrecks mobile LCP. On
+      // phones we keep the HTML default (/images/1600/garden.webp) as the single,
+      // stable LCP candidate; desktop still gets a random header.
       var heroImg = document.querySelector('#photo-feature .pf-hero-img img');
-      if (heroImg) {
-        heroImg.src = ALBUMS[0].hero || ALBUMS[0].img;
+      var isPhone = window.matchMedia('(max-width: 767px)').matches;
+      var HEADER_DEFAULT = '/images/1600/garden.webp';
+      var headerHero = HEADER_DEFAULT;
+      if (heroImg && !isPhone) {
+        headerHero = ALBUMS[0].hero || ALBUMS[0].img;
+        heroImg.src = headerHero;
         heroImg.alt = ALBUMS[0].title;
         heroImg.style.objectPosition = 'center ' + (ALBUMS[0].pos || '30%');
       }
-      // …and show the remaining four albums below (never the one in the header).
-      grid.innerHTML = ALBUMS.slice(1, 5).map(function (a) {
+      // …and show four albums below — never the one currently in the header.
+      grid.innerHTML = ALBUMS.filter(function (a) {
+        return (a.hero || a.img) !== headerHero;
+      }).slice(0, 4).map(function (a) {
         return '<a class="explore-album" href="' + esc(a.url) + '" target="_blank" rel="noopener" aria-label="' + esc(a.title) + ' — open album">' +
           '<span class="explore-album-img"><img src="' + a.img + '" alt="' + esc(a.title) + '" loading="lazy" width="1200" height="800" /></span>' +
           '<span class="explore-album-cap">' + esc(a.cap) + '</span></a>';
       }).join('');
     })();
   </script>
+  <!-- Floating game buttons -->
+  <a href="/apps/static-protocol/play/" class="game-fab" aria-label="Play Static Protocol">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6l6 6-6 6" stroke="#22e6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="18" x2="20" y2="18" stroke="#22e6d4" stroke-width="2" stroke-linecap="round"/></svg>
+  </a>
+  <a href="/apps/scritch-scratch/play/" class="scritch-fab" aria-label="Play Scritch Scratch">
+    <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Scritch Scratch" width="64" height="64" loading="lazy" />
+    <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" loading="lazy" />
+  </a>
+  <script>
+  (function(){var s=[['ss-up.webp','ss-over.webp'],['ss-cat-up.webp','ss-cat-over.webp'],['ss-rat-up.webp','ss-rat-over.webp']];var p=s[Math.floor(Math.random()*s.length)];var f=document.querySelector('.scritch-fab');if(!f)return;f.querySelector('.ss-up').src='/apps/scritch-scratch/'+p[0];f.querySelector('.ss-over').src='/apps/scritch-scratch/'+p[1];})();
+  </script>
+
   <!-- Global: floating Enquire button + Enquire modal -->
   <button type="button" class="gx-fab gx-open" aria-label="Enquire now">Enquire Now</button>
   <div class="gx-modal" id="gx-enquire" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Enquire">
@@ -2802,17 +3133,6 @@
         });
       });
     })();
-  </script>
-  <!-- Scritch Scratch floating icon -->
-  <a href="/apps/static-protocol/play/" class="game-fab" aria-label="Play Static Protocol">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6l6 6-6 6" stroke="#22e6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="18" x2="20" y2="18" stroke="#22e6d4" stroke-width="2" stroke-linecap="round"/></svg>
-  </a>
-  <a href="https://waltviviers.com/apps/scritch-scratch/play/" class="scritch-fab" aria-label="Play Scritch Scratch">
-    <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Scritch Scratch" width="64" height="64" loading="lazy" />
-    <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" loading="lazy" />
-  </a>
-  <script>
-  (function(){var s=[['ss-up.webp','ss-over.webp'],['ss-cat-up.png','ss-cat-over.png'],['ss-rat-up.png','ss-rat-over.png']];var p=s[Math.floor(Math.random()*s.length)];var f=document.querySelector('.scritch-fab');f.querySelector('.ss-up').src='/apps/scritch-scratch/'+p[0];f.querySelector('.ss-over').src='/apps/scritch-scratch/'+p[1];})();
   </script>
   <div id="privacy-notice" class="privacy-notice" role="region" aria-label="Privacy notice" hidden>
     <p>This site uses privacy-friendly analytics to see what resonates. <a href="/privacy/">How your data is handled</a>.</p>

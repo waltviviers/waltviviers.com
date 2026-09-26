@@ -2,7 +2,7 @@
 title: Creativity
 date: 2019-03-25
 description: Creativity is defined as the use of imagination or original ideas to create something. That definition seems pretty straight forward. Unfortunately though, I t…
-draft: true
+draft: false
 ---
 ### Creativity is defined as the use of imagination or original ideas to create something.
 
