@@ -27,30 +27,80 @@
      Meta Pixel / analytics is injected on any page under /apps/. ────────── */
   var WV_NO_TRACK = /^\/apps(\/|$)/.test(location.pathname);
 
-  /* ── Meta Pixel (loads on every non-/apps/ page that uses this chrome) ── */
-  if (!WV_NO_TRACK && !window.fbq) {
-    !function (f, b, e, v, n, t, s) {
-      if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) };
-      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-      n.queue = []; t = b.createElement(e); t.async = !0;
-      t.src = v; s = b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t, s)
-    }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1046039254921742');
-    fbq('track', 'PageView');
-  }
+  /* ── Cookie consent (opt-in). GTM + Meta Pixel load ONLY after the visitor
+        clicks Accept; the choice is remembered. Shared globally so the home
+        page (which has no chrome.js) can reuse the same gate. ───────────── */
+  window.wvConsent = window.wvConsent || (function () {
+    var KEY = 'wv-cookie-consent', q = [], state = null, banner = null;
+    try { state = localStorage.getItem(KEY); } catch (e) {}
+    function drain() { while (q.length) { try { q.shift()(); } catch (e) {} } }
+    function css() {
+      if (document.getElementById('wv-cc-style')) return;
+      var st = document.createElement('style'); st.id = 'wv-cc-style';
+      st.textContent =
+        '.wv-cc{position:fixed;left:0;right:0;bottom:0;z-index:9999;background:var(--bg,#0C0C0B);border-top:1px solid var(--rule,#2A2826);box-shadow:0 -6px 24px rgba(0,0,0,0.25);}' +
+        '.wv-cc-in{max-width:1100px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:space-between;}' +
+        '.wv-cc-txt{font-family:var(--sans,Inter,system-ui,sans-serif);font-size:13px;line-height:1.6;color:var(--stone,#9A9890);margin:0;max-width:720px;}' +
+        '.wv-cc-txt a{color:var(--ink,#FAF9F7);text-decoration:underline;text-underline-offset:2px;}' +
+        '.wv-cc-act{display:flex;gap:10px;flex-shrink:0;}' +
+        '.wv-cc-btn{font-family:var(--sans,Inter,system-ui,sans-serif);font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;padding:11px 22px;cursor:pointer;border:1px solid var(--rule,#2A2826);background:transparent;color:var(--ink,#FAF9F7);transition:background .2s,color .2s,border-color .2s;}' +
+        '.wv-cc-btn.rej:hover{border-color:var(--ink,#FAF9F7);}' +
+        '.wv-cc-btn.acc{background:var(--ink,#FAF9F7);color:var(--bg,#0C0C0B);border-color:var(--ink,#FAF9F7);}' +
+        '.wv-cc-btn.acc:hover{background:transparent;color:var(--ink,#FAF9F7);}' +
+        '@media(max-width:600px){.wv-cc-act{width:100%;}.wv-cc-btn{flex:1;}}';
+      (document.head || document.documentElement).appendChild(st);
+    }
+    function show() {
+      if (banner || state) return;
+      if (/^\/apps(\/|$)/.test(location.pathname)) return;   /* /apps/ never tracks */
+      css();
+      banner = document.createElement('div');
+      banner.className = 'wv-cc'; banner.setAttribute('role', 'dialog'); banner.setAttribute('aria-label', 'Cookie consent');
+      banner.innerHTML =
+        '<div class="wv-cc-in">' +
+          '<p class="wv-cc-txt">This site uses analytics &amp; marketing cookies (Google &amp; Meta) to understand what resonates and reach the right people. They load only if you accept. More in the <a href="/privacy/">Privacy Policy</a>.</p>' +
+          '<div class="wv-cc-act">' +
+            '<button type="button" class="wv-cc-btn rej">Reject</button>' +
+            '<button type="button" class="wv-cc-btn acc">Accept</button>' +
+          '</div>' +
+        '</div>';
+      (document.body || document.documentElement).appendChild(banner);
+      banner.querySelector('.acc').addEventListener('click', function () { set('granted'); });
+      banner.querySelector('.rej').addEventListener('click', function () { set('denied'); });
+    }
+    function hide() { if (banner && banner.parentNode) banner.parentNode.removeChild(banner); banner = null; }
+    function set(v) { state = v; try { localStorage.setItem(KEY, v); } catch (e) {} hide(); if (v === 'granted') drain(); }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', show); else show();
+    return {
+      onGrant: function (fn) { if (state === 'granted') { try { fn(); } catch (e) {} } else { q.push(fn); } },
+      granted: function () { return state === 'granted'; },
+      reopen: function () { try { localStorage.removeItem(KEY); } catch (e) {} state = null; show(); }
+    };
+  })();
 
-  /* ── Google Tag Manager (GTM-P8DPSSC9) — same opt-out as above. The home page
-        loads GTM inline, so skip if it is already present. ────────────── */
-  if (!WV_NO_TRACK && !(window.google_tag_manager && window.google_tag_manager['GTM-P8DPSSC9']) &&
-      !document.querySelector('script[src*="googletagmanager.com/gtm.js"]')) {
-    (function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-      var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
-      j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-P8DPSSC9');
-  }
+  /* Load GTM + Meta Pixel only after consent (and never under /apps/). */
+  if (!WV_NO_TRACK) window.wvConsent.onGrant(function () {
+    if (!window.fbq) {
+      !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) };
+        if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+        n.queue = []; t = b.createElement(e); t.async = !0;
+        t.src = v; s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s)
+      }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1046039254921742');
+      fbq('track', 'PageView');
+    }
+    if (!(window.google_tag_manager && window.google_tag_manager['GTM-P8DPSSC9']) &&
+        !document.querySelector('script[src*="googletagmanager.com/gtm.js"]')) {
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', 'GTM-P8DPSSC9');
+    }
+  });
 
   /* ── Chrome-only translations (nav + footer strings) ──────────────────── */
   var I18N = {
@@ -244,7 +294,7 @@
         '<a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub">' + GH + '</a>' +
         '<a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">' + EM + '</a>' +
       '</div>' +
-      '<div class="footer-legal" style="margin-top:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);line-height:1.7;text-align:center;"><span class="footer-copy" data-i18n="footer-copy">© 2026 Walt Viviers. All rights reserved.</span> <a href="/privacy/" class="footer-privacy" style="color:inherit;">Privacy Policy.</a> <span class="footer-credit">Made with <span style="color:#e0607e">♥</span> by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Cat&#39;s Creations</a></span></div>' +
+      '<div class="footer-legal" style="margin-top:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);line-height:1.7;text-align:center;"><span class="footer-copy" data-i18n="footer-copy">© 2026 Walt Viviers. All rights reserved.</span> <a href="/privacy/" class="footer-privacy" style="color:inherit;">Privacy Policy.</a> <a href="/privacy/" class="footer-cookie" style="color:inherit;" onclick="if(window.wvConsent){event.preventDefault();wvConsent.reopen();}">Cookie settings.</a> <span class="footer-credit">Made with <span style="color:#e0607e">♥</span> by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Cat&#39;s Creations</a></span></div>' +
     '</div>' +
     '<div class="footer-mark"><img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" /></div>';
 
