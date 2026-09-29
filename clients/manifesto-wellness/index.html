@@ -231,7 +231,8 @@ p { margin: 0; }
     border: 1px solid var(--hero-glass-border); box-shadow: var(--glass-shadow); color: var(--hero-fg);
   }
   .hero-inner .declaration .eyebrow { margin-bottom: 10px; }
-  .hero-inner .declaration ol { gap: 16px 28px; }
+  .hero-inner .declaration { max-width: 40rem; }  /* same width as the headline panel */
+  .hero-inner .declaration ol { grid-template-columns: 1fr 1fr; gap: 14px 28px; }
   .hero-inner .declaration li::before { color: var(--hero-soft); }
   .hero-inner .declaration p { color: var(--hero-soft); font-size: .9rem; }
   .hero .lede { margin-top: 18px; font-size: 1.05rem; color: var(--hero-soft); }
