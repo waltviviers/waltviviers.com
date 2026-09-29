@@ -221,7 +221,7 @@ p { margin: 0; }
 @keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } }
 @media (prefers-reduced-motion: reduce) { .nav.menu-open ul { animation: none; } .menu-toggle span::before, .menu-toggle span::after { transition: none; } }
 
-/* Hero: full-bleed photo with the headline over a dark fade (desktop); photo stacked above text (phone) */
+/* Hero: full-bleed photo with the headline, subtext and manifesto in one glass panel over it, on every screen size */
 .hero { position: relative; overflow: hidden; }
 .hero-media { position: relative; margin: 0; }
 .hero-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.2s ease; }
@@ -253,10 +253,7 @@ p { margin: 0; }
 .hero .lede { margin-top: 28px; max-width: 34em; font-size: 1.15rem; color: var(--ink-soft); }
 .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 .hero .eyebrow { margin-bottom: 24px; }
-@media (max-width: 899px) {
-  .hero-media { aspect-ratio: 16 / 10; max-height: 56vh; width: 100%; }
-}
-@media (min-width: 900px) {
+/* Glass panel over the photo (all widths) */
   .hero { min-height: clamp(420px, 34vw, 580px); display: flex; align-items: center; background: var(--hero-bg); }
   .hero-media { position: absolute; inset: 0; }
   .hero-dots { left: auto; right: var(--gutter); transform: none; bottom: auto; top: 24px; }
@@ -278,9 +275,22 @@ p { margin: 0; }
   .hero-copy .declaration p { color: var(--hero-soft); font-size: .9rem; }
   .hero .lede { margin-top: 18px; font-size: 1.05rem; color: var(--hero-soft); }
   .hero .ctas { margin-top: 24px; }
-  .hero h1 { color: var(--hero-fg); font-size: clamp(1.9rem, 2.5vw, 2.25rem); }
-  .br-d { display: inline; }
+  .hero h1 { color: var(--hero-fg); }
   .hero h1 em { color: var(--hero-accent); background: var(--hero-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
+@media (min-width: 900px) {
+  .hero h1 { font-size: clamp(1.9rem, 2.5vw, 2.25rem); }
+  .br-d { display: inline; }
+}
+/* Phones: the photo still fills the whole banner; the panel sits over it with tighter spacing */
+@media (max-width: 899px) {
+  .hero-inner { padding-block: max(240px, 36vh) 20px; }  /* let the photo show above the panel */
+  .hero-copy { padding: 22px 20px; border-radius: 20px; }
+  .hero-dots { top: 16px; right: 16px; }
+  .hero .lede { font-size: 1rem; }
+  .hero .ctas .btn { flex: 1 1 auto; justify-content: center; text-align: center; }
+}
+@media (max-width: 560px) {
+  .hero-copy .declaration ol { grid-template-columns: 1fr; gap: 12px; }
 }
 
 /* Manifesto strip under the hero */
