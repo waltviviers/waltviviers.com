@@ -313,6 +313,9 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 .contact h2 { font-size: var(--s-2); line-height: 1.05; font-weight: 800; margin: 14px 0 18px; }
 .contact .intro { min-width: 0; }
 .details dd { overflow-wrap: anywhere; }
+.map-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font-weight: 600; color: var(--gold-deep); user-select: auto; }
+.map-link::before { content: ""; width: 10px; height: 10px; border-radius: 50% 50% 50% 0; background: currentColor; transform: rotate(-45deg); }
+.map-link:hover { text-decoration: none; }
 .contact .intro p { color: var(--ink-soft); max-width: 30em; }
 .details { margin-top: 32px; display: grid; gap: 14px; }
 .details div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
@@ -621,7 +624,7 @@ footer a:hover { color: var(--on-footer); }
         <p>Tell us a little about your workplace and we'll send a tailored proposal within two working days.</p>
         <dl class="details">
           <div><dt>Email</dt><dd>admin@manifestowellness.co.za</dd></div>
-          <div><dt>Based in</dt><dd>Johannesburg, Gauteng</dd></div>
+          <div><dt>Based in</dt><dd>Johannesburg, Gauteng<br><a class="map-link" href="https://maps.app.goo.gl/vcNZfJQsDJMDHAHeA" target="_blank" rel="noopener">View on Google Maps</a></dd></div>
           <div><dt>Team</dt><dd>Anja Theron · Chantal Maskell</dd></div>
           <div><dt>Social</dt><dd><a href="https://www.facebook.com/manifestowellness" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/manifesto.wellness/" target="_blank" rel="noopener">Instagram</a> · <a href="https://linkedin.com/company/manifesto-wellness-africa" target="_blank" rel="noopener">LinkedIn</a></dd></div>
         </dl>
