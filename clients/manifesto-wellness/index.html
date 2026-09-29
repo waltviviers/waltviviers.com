@@ -237,6 +237,18 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 
 /* Why band */
 .why { background: var(--band-bg); color: var(--band-fg); border-block: 1px solid var(--band-line); }
+.why {
+  background:
+    linear-gradient(90deg, rgba(224, 163, 131, .93) 0%, rgba(224, 163, 131, .86) 45%, rgba(224, 163, 131, .8) 100%),
+    url("images/why-bowls-2000.webp") center / cover no-repeat,
+    var(--band-bg);
+}
+@media (max-width: 800px) {
+  .why { background:
+    linear-gradient(rgba(224, 163, 131, .88), rgba(224, 163, 131, .88)),
+    url("images/why-bowls-1000.webp") center / cover no-repeat,
+    var(--band-bg); }
+}
 .why blockquote, .why .eyebrow { color: var(--band-accent); }
 .why .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
 .why blockquote { margin: 0; font: 600 clamp(1.7rem, 3.4vw, 2.6rem)/1.15 var(--f-display); letter-spacing: -0.02em; text-wrap: balance; }
