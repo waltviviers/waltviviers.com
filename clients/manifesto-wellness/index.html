@@ -28,6 +28,8 @@
   --gold: #C98468;        /* rose gold shadow: headlines, numerals, icons on light */
   --gold-deep: #9E5F45;   /* deeper rose gold for small text on light */
   --gold-bright: #F7B68C; /* main rose gold: on black and over photos */
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 19c3 3 3 6 0 9c-3-3-3-6 0-9zM28 37c3-3 3-6 0-9c-3 3-3 6 0 9zM19 28c3-3 6-3 9 0c-3 3-6 3-9 0zM37 28c-3-3-6-3-9 0c3 3 6 3 9 0z' fill='none' stroke='%23C98468' stroke-opacity='.2' stroke-width='.9'/%3E%3Cg fill='%23C98468' fill-opacity='.2'%3E%3Ccircle cx='0' cy='0' r='1.2'/%3E%3Ccircle cx='56' cy='0' r='1.2'/%3E%3Ccircle cx='0' cy='56' r='1.2'/%3E%3Ccircle cx='56' cy='56' r='1.2'/%3E%3C/g%3E%3C/svg%3E");  /* faint lotus-petal lattice so the ground isn't flat */
+  --photo-tint: linear-gradient(135deg, rgba(251, 198, 166, .38), rgba(201, 132, 104, .32));  /* rose wash on hover */
   --gold-pale: #FBC6A6;   /* highlight */
   --brand-sheen: linear-gradient(115deg, #E39C78 0%, #F7B68C 30%, #FBC6A6 50%, #F7B68C 70%, #E39C78 100%); /* metallic rose gold, as in the logo */
   --panel: #FFFFFF;       /* feature cards: white in light mode, charcoal in dark */
@@ -82,6 +84,8 @@
   --panel-accent: #F7B68C; --panel-muted: rgba(251, 198, 166, .7);
   --footer-bg: #181818; --on-footer: #FFFFFF; --on-footer-soft: #B5B5B5;
   --lotus-opacity: .26;
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 19c3 3 3 6 0 9c-3-3-3-6 0-9zM28 37c3-3 3-6 0-9c-3 3-3 6 0 9zM19 28c3-3 6-3 9 0c-3 3-6 3-9 0zM37 28c-3-3-6-3-9 0c3 3 6 3 9 0z' fill='none' stroke='%23F7B68C' stroke-opacity='.1' stroke-width='.9'/%3E%3Cg fill='%23F7B68C' fill-opacity='.1'%3E%3Ccircle cx='0' cy='0' r='1.2'/%3E%3Ccircle cx='56' cy='0' r='1.2'/%3E%3Ccircle cx='0' cy='56' r='1.2'/%3E%3Ccircle cx='56' cy='56' r='1.2'/%3E%3C/g%3E%3C/svg%3E");
+  --photo-tint: linear-gradient(135deg, rgba(247, 182, 140, .32), rgba(158, 95, 69, .34));
   --logo-light: none; --logo-dark: block;
   --glass-bg: rgba(18, 18, 18, .5); --glass-strong: rgba(18, 18, 18, .66);
   --glass-border: rgba(255, 255, 255, .12); --glass-shadow: 0 8px 32px rgba(0, 0, 0, .4);
@@ -99,6 +103,8 @@
   --panel-accent: #F7B68C; --panel-muted: rgba(251, 198, 166, .7);
   --footer-bg: #181818; --on-footer: #FFFFFF; --on-footer-soft: #B5B5B5;
   --lotus-opacity: .26;
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 19c3 3 3 6 0 9c-3-3-3-6 0-9zM28 37c3-3 3-6 0-9c-3 3-3 6 0 9zM19 28c3-3 6-3 9 0c-3 3-6 3-9 0zM37 28c-3-3-6-3-9 0c3 3 6 3 9 0z' fill='none' stroke='%23F7B68C' stroke-opacity='.1' stroke-width='.9'/%3E%3Cg fill='%23F7B68C' fill-opacity='.1'%3E%3Ccircle cx='0' cy='0' r='1.2'/%3E%3Ccircle cx='56' cy='0' r='1.2'/%3E%3Ccircle cx='0' cy='56' r='1.2'/%3E%3Ccircle cx='56' cy='56' r='1.2'/%3E%3C/g%3E%3C/svg%3E");
+  --photo-tint: linear-gradient(135deg, rgba(247, 182, 140, .32), rgba(158, 95, 69, .34));
   --logo-light: none; --logo-dark: block;
   --glass-bg: rgba(18, 18, 18, .5); --glass-strong: rgba(18, 18, 18, .66);
   --glass-border: rgba(255, 255, 255, .12); --glass-shadow: 0 8px 32px rgba(0, 0, 0, .4);
@@ -111,7 +117,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  margin: 0; background: var(--ground); color: var(--ink);
+  margin: 0; background: var(--pattern) 0 0 / 56px 56px, var(--ground); color: var(--ink);
   font: 400 var(--s-body)/1.6 var(--f-body);
   -webkit-font-smoothing: antialiased;
 }
@@ -237,11 +243,26 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 @media (max-width: 760px) { .section-head { grid-template-columns: 1fr; } }
 
 /* Services */
-.services { display: grid; grid-template-columns: repeat(2, 1fr); border-top: 1px solid var(--ink); }
+.services { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .service {
   position: relative; cursor: pointer;
-  padding: 32px 28px 36px 0; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; min-width: 0;
+  padding: 14px 14px 24px; display: flex; flex-direction: column; gap: 12px; min-width: 0;
 }
+/* Frosted glass cards (services and team) */
+.service, .member {
+  border-radius: 22px; background: var(--glass-bg); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.service:hover, .member:hover { transform: translateY(-3px); }
+.service > :not(.service-media) { margin-inline: 10px; }
+/* Rose wash over photos that zoom on hover */
+.service-media, .post-image, .member-media { position: relative; }
+.service-media::after, .post-image::after, .member-media::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--photo-tint);
+  opacity: 0; transition: opacity .4s ease;
+}
+.service:hover .service-media::after, .post:hover .post-image::after, .member:hover .member-media::after { opacity: 1; }
 /* Whole card is clickable (the button's hit area covers the card), image zooms on hover like the blog cards */
 .service-cta::after { content: ""; position: absolute; inset: 0; }
 .service-cta:hover { transform: none; }  /* a transform would shrink the card-wide hit area back to the button */
@@ -251,9 +272,8 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 .service:hover h3 { color: var(--gold-deep); }
 .service:hover .service-cta { background: var(--gold-deep); border-color: var(--gold-deep); color: #FFFFFF; }
 .service:focus-within .service-cta { outline: 3px solid var(--gold-deep); outline-offset: 3px; }
-@media (prefers-reduced-motion: reduce) { .service-media .service-photo { transition: none; } .service:hover .service-photo { transform: none; } }
-.service:nth-child(2n) { padding-left: 28px; padding-right: 0; border-left: 1px solid var(--line); }
-.service-cta { align-self: flex-start; margin-top: auto; padding: .7em 1.2em; font-size: .92rem; }
+@media (prefers-reduced-motion: reduce) { .service-media .service-photo, .member-media img, .service, .member { transition: none; } .service:hover .service-photo, .member:hover .member-media img, .service:hover, .member:hover { transform: none; } }
+.service-cta { align-self: flex-start; margin-top: auto; margin-left: 10px; padding: .7em 1.2em; font-size: .92rem; }
 .service-cta:hover { background: var(--gold-deep); border-color: var(--gold-deep); color: #FFFFFF; }
 .service .tag { font: 500 .72rem/1 var(--f-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); }
 .service h3 { font-size: var(--s-3); font-weight: 600; }
@@ -262,7 +282,6 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 .service-photo { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 14px; margin-bottom: 8px; }
 @media (max-width: 560px) {
   .services { grid-template-columns: 1fr; }
-  .service, .service:nth-child(2n) { padding-left: 0; padding-right: 0; border-left: 0; }
 }
 
 /* Why band */
@@ -372,9 +391,14 @@ form .btn { justify-self: start; cursor: pointer; }
 
 /* Team */
 .team { display: grid; grid-template-columns: repeat(2, minmax(0, 360px)); gap: 28px; }
-.member { margin: 0; display: flex; flex-direction: column; gap: 14px; }
-.member img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 18px; }
-.member figcaption { display: flex; flex-direction: column; gap: 6px; }
+.member { margin: 0; position: relative; cursor: pointer; display: flex; flex-direction: column; gap: 14px; padding: 14px 14px 22px; }
+.member-media { border-radius: 14px; overflow: hidden; }
+.member img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; transition: transform .4s ease; }
+.member:hover .member-media img { transform: scale(1.04); }
+.member figcaption { display: flex; flex-direction: column; gap: 6px; padding-inline: 10px; flex: 1; }
+.member-link { margin-top: auto; padding-top: 6px; font-weight: 600; font-size: .92rem; color: var(--gold-deep); text-decoration: none; }
+.member-link::after { content: ""; position: absolute; inset: 0; border-radius: 22px; }  /* whole card links to the profile */
+.member:hover b { color: var(--gold-deep); }
 .member figcaption b { font-family: var(--f-display); font-weight: 600; font-size: 1.25rem; }
 .member .role { font: 500 .72rem/1.5 var(--f-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--gold-deep); }
 .member figcaption p { color: var(--ink-soft); font-size: .96rem; }
@@ -649,19 +673,21 @@ footer a:hover { color: var(--on-footer); }
       </div>
       <div class="team">
         <figure class="member">
-          <img src="images/team-anja-400.webp" srcset="images/team-anja-400.webp 400w, images/team-anja-800.webp 800w" sizes="(max-width: 560px) 92vw, 360px" width="800" height="1000" loading="lazy" decoding="async" alt="Anja Theron">
+          <div class="member-media"><img src="images/team-anja-400.webp" srcset="images/team-anja-400.webp 400w, images/team-anja-800.webp 800w" sizes="(max-width: 560px) 92vw, 360px" width="800" height="1000" loading="lazy" decoding="async" alt="Anja Theron"></div>
           <figcaption>
             <b>Anja Theron</b>
             <span class="role">Co-founder · Conscious Coach, Therapist, Somatologist &amp; Trainer</span>
             <p>A wellness strategist with over 20 years of experience across the wellness, spa, retail and corporate wellbeing industries.</p>
+            <a class="member-link" href="#team" data-mock="In the finished site, this opens Anja&#x27;s full profile.">Full profile<span class="visually-hidden">: Anja Theron</span> &rarr;</a>
           </figcaption>
         </figure>
         <figure class="member">
-          <img src="images/team-chantal-400.webp" srcset="images/team-chantal-400.webp 400w, images/team-chantal-800.webp 800w" sizes="(max-width: 560px) 92vw, 360px" width="800" height="1000" loading="lazy" decoding="async" alt="Chantal Maskell">
+          <div class="member-media"><img src="images/team-chantal-400.webp" srcset="images/team-chantal-400.webp 400w, images/team-chantal-800.webp 800w" sizes="(max-width: 560px) 92vw, 360px" width="800" height="1000" loading="lazy" decoding="async" alt="Chantal Maskell"></div>
           <figcaption>
             <b>Chantal Maskell</b>
             <span class="role">Therapist &amp; Energy Wellness Specialist</span>
             <p>Over 25 years in health and wellness, helping individuals and organisations find greater balance, resilience and self-awareness.</p>
+            <a class="member-link" href="#team" data-mock="In the finished site, this opens Chantal&#x27;s full profile.">Full profile<span class="visually-hidden">: Chantal Maskell</span> &rarr;</a>
           </figcaption>
         </figure>
       </div>
