@@ -650,11 +650,6 @@
       <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
         <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
-      <div class="lang-toggle lang-switch" id="lang-toggle">
-        <div class="lang-group active" id="lang-en">English</div>
-        <button type="button" class="lang-track" aria-label="Toggle language"><span class="lang-knob"></span></button>
-        <div class="lang-group" id="lang-af">Afrikaans</div>
-      </div>
     </div>
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography &amp; Video</a></li>
@@ -929,38 +924,9 @@
           'check-5': 'Works on mobile and desktop',
           'check-6': 'Pixel hand cursor on desktop',
           'cta-heading': 'Go play'
-        },
-        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Skone Kunste & Illustrasie','nav-photography':'Fotografie & Video','nav-apps':'Programme en Speletjies','back-apps':'← Terug na Programme en Speletjies','nav-enquire':'Navraag','email-href': 'mailto:kunstenaar@waltviviers.com',
-          'app-eyebrow': '\'n Pixel-kuns troeteldier-speeltjie vir jou blaaier',
-          'hero-tagline': 'Wie is \'n goeie troeteldier?',
-          'hero-desc': 'Drie pixel-troeteldiere deel een blaaier. Speel apportering met \'n hond, teel \'n kolonie rotte, of terg \'n kat met \'n laserpen. Verwissel modusse enige tyd.',
-          'play-sub': 'Speel in jou blaaier',
-          'play-name': 'Speel nou',
-          'how-heading': 'Drie troeteldiere, een blaaier',
-          'how-desc': 'Kies \'n modus en \'n ander wêreldjie gaan oop. \'n Hond wat haal en grawe. \'n Kolonie rotte wat teel en rondskarrel. \'n Paar katte wat slaap tot \'n laserkol verskyn. Elke troeteldier dwaal, foetel en reageer op sy eie — en besoekdiere kom nou en dan kuier.',
-          'how-survive': 'Begin krap. Kyk wat gebeur.',
-          'diff-heading': 'Drie modusse',
-          'diff-1': 'Doggo',
-          'diff-1-desc': 'Stap, krap en grawe. Gooi \'n bal of stok en kyk hoe jou hond dit haal.',
-          'diff-2': 'Ratty',
-          'diff-2-desc': 'Krap jou rotte en voer hulle meelwurms. Hulle teel vrylik — kyk uit vir dumbo\'s, kaal rotte en die af-en-toe roofkat.',
-          'diff-3': 'Cat Lady',
-          'diff-3-desc': 'Hou in om te spin en die katte wakker te maak. Tik die vloer vir \'n laserkol om hulle te laat jaag.',
-          'privacy-tag': 'Gebou vir plesier',
-          'priv-h1': 'Geen installasie.',
-          'priv-h2': 'Geen rekening.',
-          'priv-h3': 'Geen nonsens.',
-          'privacy-desc': 'Dit loop heeltemal in jou blaaier. Niks om af te laai nie, niks om aan te meld nie, niks om te betaal nie.',
-          'check-1': 'Loop heeltemal in jou blaaier',
-          'check-2': 'Geen data ingesamel',
-          'check-3': 'Geen rekening benodig',
-          'check-4': 'Gratis vir altyd',
-          'check-5': 'Werk op mobiel en lessenaar',
-          'check-6': 'Pixel handwyser op lessenaar',
-          'cta-heading': 'Gaan speel'
         }
       };
-      var lang = localStorage.getItem('wv-lang') || 'en';
+      var lang = 'en';
       function applyLang(l) {
         lang = l; localStorage.setItem('wv-lang', l);
         document.querySelectorAll('[data-i18n]').forEach(function(el) {
@@ -971,12 +937,7 @@
           var k = el.dataset.i18nHref;
           if (LANG[l] && LANG[l][k] !== undefined) el.href = LANG[l][k];
         });
-        document.getElementById('lang-en').classList.toggle('active', l === 'en');
-        document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }
-      document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
-      document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
-      var _lt = document.querySelector('.lang-track'); if (_lt) _lt.addEventListener('click', function () { applyLang(document.getElementById('lang-af').classList.contains('active') ? 'en' : 'af'); });
       applyLang(lang);
     })();
   </script>

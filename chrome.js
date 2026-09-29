@@ -11,10 +11,7 @@
        theme / language / burger / admin scripts, then add:
          <script defer src="/chrome.js"></script>
      • Keep the early inline theme-init in <head> (prevents a flash).
-     • Pages with their own translatable body content expose a global
-         window.wvApplyLang = function (lang) { ...translate page content... }
-       which this file calls on load and on every language change.
-     • Pages using [data-af] attributes are handled here automatically.
+     • The site is English-only; the language toggle has been removed.
      • If a global Enquire modal (#gx-enquire) is present, the nav "Enquire"
        button opens it; otherwise it links to /gallery/#commission.
    ========================================================================== */
@@ -111,14 +108,6 @@
       'nav-enquire': 'Enquire',
       'footer-copy': '© 2026 Walt Viviers. All rights reserved.',
       'email-href': 'mailto:artist@waltviviers.com'
-    },
-    af: {
-      'nav-photography': 'Fotografie & Video',
-      'nav-works': 'Skone Kunste & Illustrasie',
-      'nav-bio': 'Bio & Verklaring',
-      'nav-enquire': 'Navraag',
-      'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.',
-      'email-href': 'mailto:kunstenaar@waltviviers.com'
     }
   };
 
@@ -128,14 +117,6 @@
     'nav{position:fixed;inset:0 0 auto 0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:100px;background:rgba(0,0,0,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--rule);transition:height 0.4s cubic-bezier(0.4,0,0.2,1);}',
     'nav.scrolled{height:50px;}',
     '.nav-left{display:flex;align-items:center;gap:14px;}',
-    '.lang-toggle,.lang-switch{display:flex;align-items:center;gap:10px;}',
-    '.lang-group{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--stone);font-family:var(--sans);line-height:1;cursor:pointer;user-select:none;white-space:nowrap;transition:color 0.2s;}',
-    '.lang-group.active{color:var(--ink);}',
-    '.lang-group:not(.active):hover{color:var(--ink);}',
-    '.lang-track{position:relative;width:40px;height:20px;border-radius:12px;border:1.5px solid #4A4844;background:transparent;cursor:pointer;padding:0;flex-shrink:0;}',
-    '.lang-knob{position:absolute;top:50%;left:3px;width:12px;height:12px;border-radius:50%;background:var(--ink);transform:translateY(-50%);transition:left 0.28s cubic-bezier(0.4,0,0.2,1);}',
-    '.lang-switch:has(.lang-group:last-child.active) .lang-knob{left:22px;}',
-    '[data-theme="light"] .lang-track{border-color:#D5D1CB;}',
     '.nav-logo img{height:36px;width:auto;transition:height 0.4s cubic-bezier(0.4,0,0.2,1);}',
     'nav.scrolled .nav-logo img{height:28px;}',
     '.nav-links{display:flex;align-items:center;gap:24px;list-style:none;margin:0;padding:0;}',
@@ -217,10 +198,6 @@
       '.nav-logo img{height:28px;}' +
       '.nav-links{gap:20px;}' +
       '.nav-link-hide{display:none;}' +
-      '.lang-switch{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);gap:7px;}' +
-      '.lang-group{font-size:10px;letter-spacing:0.04em;}' +
-      '.lang-track{width:34px;height:18px;}' +
-      '.lang-switch:has(.lang-group:last-child.active) .lang-knob{left:18px;}' +
       '.theme-toggle{width:auto;height:auto;border:none;padding:4px;}' +
       '.toggle-thumb{position:static;width:auto;height:auto;background:none;border-radius:0;transform:none !important;}' +
       '.toggle-thumb svg.icon-moon,.toggle-thumb svg.icon-sun{width:18px;height:18px;stroke:var(--stone);}' +
@@ -374,7 +351,7 @@
 
     wire();
     applyTheme();
-    applyLang(readLang(), true);
+    applyLang();
   }
 
   /* ── Theme ────────────────────────────────────────────────────────────── */
@@ -390,15 +367,10 @@
     document.documentElement.dataset.theme = readTheme();
   }
 
-  /* ── Language ─────────────────────────────────────────────────────────── */
-  function readLang() {
-    return 'en'; /* language toggle retired — site is English-only */
-  }
-
-  function applyLang(lang, initial) {
-    var dict = I18N[lang] || I18N.en;
-    document.documentElement.lang = lang;
-    try { localStorage.setItem('wv-lang', lang); } catch (e) {}
+  /* ── Chrome strings (English-only; the language toggle was removed) ────── */
+  function applyLang() {
+    var dict = I18N.en;
+    document.documentElement.lang = 'en';
 
     /* Chrome strings only (scoped to the injected nav / menu / footer) */
     [nav, menu, footer].forEach(function (root) {
@@ -413,22 +385,9 @@
       });
     });
 
-    /* Language-switch knob state */
-    if (nav) {
-      nav.querySelectorAll('.lang-group[data-lang]').forEach(function (g) {
-        g.classList.toggle('active', g.dataset.lang === lang);
-      });
-    }
-
-    /* Page content marked with [data-af] (stores original HTML once) */
-    document.querySelectorAll('[data-af]').forEach(function (el) {
-      if (el.__wvEn == null) el.__wvEn = el.innerHTML;
-      el.innerHTML = (lang === 'af') ? el.getAttribute('data-af') : el.__wvEn;
-    });
-
-    /* Page-supplied content translator */
+    /* Page-supplied content translator (legacy hook, English-only) */
     if (typeof window.wvApplyLang === 'function') {
-      try { window.wvApplyLang(lang); } catch (e) {}
+      try { window.wvApplyLang('en'); } catch (e) {}
     }
   }
 
@@ -454,17 +413,6 @@
       var next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
       document.documentElement.dataset.theme = next;
       try { localStorage.setItem('wv-theme', next); } catch (e) {}
-    });
-
-    /* Language toggle */
-    var lt = nav.querySelector('#wv-lang-toggle');
-    if (lt) lt.addEventListener('click', function (e) {
-      var group = e.target.closest('.lang-group[data-lang]');
-      var lang;
-      if (group) lang = group.dataset.lang;
-      else if (e.target.closest('.lang-track')) lang = (readLang() === 'en' ? 'af' : 'en');
-      else return;
-      applyLang(lang, false);
     });
 
     /* Burger / mobile menu */

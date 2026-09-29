@@ -428,14 +428,6 @@
       <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
         <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
-      <div class="lang-toggle">
-        <div class="lang-group active" id="lang-en">
-          <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
-        </div>
-        <div class="lang-group" id="lang-af">
-          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
-        </div>
-      </div>
     </div>
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
@@ -496,7 +488,7 @@
     </div>
     
     <div class="artwork-desc">
-      <p id="artwork-description" data-en="Apocalypse Meow! is a 26 × 21 cm ink and pencils on paper work from 2017, presented framed. One of Viviers' most recognisable earlier pieces, the work depicts a cat in an apocalyptic encounter — carrying the dark humour and raw energy that would come to define his reputation. Ink and pencil on paper allows for a level of immediacy distinct from his acrylic practice: gestural, spontaneous, and full of expressive line quality. Featured in a Pixelsmith Studios interview alongside Venom Cat, Apocalypse Meow! is among the works that first brought Walt Viviers wider attention as a Pretoria-based South African artist navigating the space between fine art and popular culture. Enquire for acquisition details." data-af="Apocalypse Meow! is 'n 26 × 21 cm ink en potlode op papier werk uit 2017, in 'n raam aangebied. Een van Viviers se mees herkenbare vroeër stukke, beeld die werk 'n kat in 'n apokaliptiese ontmoeting uit — draend die donker humor en rou energie wat sou kom om sy reputasie te definieer. Ink en potlood op papier laat 'n vlak van onmiddellikheid toe wat uniek is tot sy akrielpraktyk: gestureel, spontaan en vol ekspressiewe lynkwaliteit. Navraag oor aankoopbesonderhede.">Apocalypse Meow! is a 26 × 21 cm ink and pencils on paper work from 2017, presented framed. One of Viviers' most recognisable earlier pieces, the work depicts a cat in an apocalyptic encounter — carrying the dark humour and raw energy that would come to define his reputation. Ink and pencil on paper allows for a level of immediacy distinct from his acrylic practice: gestural, spontaneous, and full of expressive line quality. Featured in a Pixelsmith Studios interview alongside Venom Cat, Apocalypse Meow! is among the works that first brought Walt Viviers wider attention as a Pretoria-based South African artist navigating the space between fine art and popular culture. Enquire for acquisition details.</p>
+      <p id="artwork-description" data-en="Apocalypse Meow! is a 26 × 21 cm ink and pencils on paper work from 2017, presented framed. One of Viviers' most recognisable earlier pieces, the work depicts a cat in an apocalyptic encounter — carrying the dark humour and raw energy that would come to define his reputation. Ink and pencil on paper allows for a level of immediacy distinct from his acrylic practice: gestural, spontaneous, and full of expressive line quality. Featured in a Pixelsmith Studios interview alongside Venom Cat, Apocalypse Meow! is among the works that first brought Walt Viviers wider attention as a Pretoria-based South African artist navigating the space between fine art and popular culture. Enquire for acquisition details.">Apocalypse Meow! is a 26 × 21 cm ink and pencils on paper work from 2017, presented framed. One of Viviers' most recognisable earlier pieces, the work depicts a cat in an apocalyptic encounter — carrying the dark humour and raw energy that would come to define his reputation. Ink and pencil on paper allows for a level of immediacy distinct from his acrylic practice: gestural, spontaneous, and full of expressive line quality. Featured in a Pixelsmith Studios interview alongside Venom Cat, Apocalypse Meow! is among the works that first brought Walt Viviers wider attention as a Pretoria-based South African artist navigating the space between fine art and popular culture. Enquire for acquisition details.</p>
     </div>
     
   <div class="enquiry-section" id="enquiry-section" hidden>
@@ -591,10 +583,9 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' }
       };
-      var lang = localStorage.getItem('wv-lang') || 'en';
+      var lang = 'en';
       function applyLang(l) {
         lang = l; localStorage.setItem('wv-lang', l);
         document.querySelectorAll('[data-i18n]').forEach(function(el) {
@@ -607,11 +598,7 @@
         });
         var descEl = document.getElementById('artwork-description');
         if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
-        document.getElementById('lang-en').classList.toggle('active', l === 'en');
-        document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }
-      document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
-      document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
       applyLang(lang);
     })();
   </script>

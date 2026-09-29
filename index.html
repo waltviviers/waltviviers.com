@@ -283,51 +283,6 @@
       gap: 14px;
     }
 
-    /* Language switch: English [ slider ] Afrikaans */
-    .lang-toggle, .lang-switch {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .lang-group {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--stone);
-      font-family: var(--sans);
-      line-height: 1;
-      cursor: pointer;
-      user-select: none;
-      white-space: nowrap;
-      transition: color 0.2s;
-    }
-
-    .lang-group.active { color: var(--ink); }
-    .lang-group:not(.active):hover { color: var(--ink); }
-
-    .lang-track {
-      position: relative;
-      width: 40px; height: 20px;
-      border-radius: 12px;
-      border: 1.5px solid #4A4844;
-      background: transparent;
-      cursor: pointer;
-      padding: 0;
-      flex-shrink: 0;
-    }
-    .lang-knob {
-      position: absolute; top: 50%; left: 3px;
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      background: var(--ink);
-      transform: translateY(-50%);
-      transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    /* Knob slides right when Afrikaans (the last word) is active */
-    .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 22px; }
-    [data-theme="light"] .lang-track { border-color: #D5D1CB; }
 
     .nav-logo img {
       height: 36px;
@@ -1603,10 +1558,6 @@
 
       .nav-links { gap: 20px; }
       .nav-link-hide { display: none; }
-      .lang-switch { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); gap: 7px; }
-      .lang-group { font-size: 10px; letter-spacing: 0.04em; }
-      .lang-track { width: 34px; height: 18px; }
-      .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 18px; }
 
       .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
@@ -2400,61 +2351,6 @@
         'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire', 'avail-on-show': 'On Show',
         'work-label': 'Work', 'works-suffix': 'artworks', 'view-artwork-page': 'View artwork page ↗',
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.'
-      },
-      af: {
-        'nav-works': 'Skone Kunste & Illustrasie', 'nav-photography': 'Fotografie & Video', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-journal': 'Joernaal', 'nav-enquire': 'Navraag',
-        'cc-eyebrow': 'Walt Viviers · Multimediakunstenaar',
-        'cc-title-html': 'Knutselaar, maker,<br/><em>chroniese nuuskierigheidsjagter.</em>',
-        'cc-lead': "'n Multimediakunstenaar van Pretoria, wat oor kuns, ontwerp, video en digitaal werk. Ek skilder en illustreer, neem foto's en video, ontwerp handelsmerke, bou klein programme en skryf — en die laaste tyd jaag ek video en sosiale media, voor die kamera net soveel as daaragter. Kunstenaar, ontwerper, fotograaf, skrywer, die af-en-toe musikant en redigeerder: in die kern bly dit mense en kuns.",
-        'cc-cta-work': 'Kom gesels', 'cc-cta-see': 'Sien die werk ↓',
-        'disc-eyebrow': 'Die werk', 'disc-title': "Een skepper, baie ambagte — kies 'n draad en volg dit.", 'disc-view': 'Verken →',
-        'disc-photo-title': 'Fotografie & Video', 'disc-photo-desc': 'Portrette, geleenthede en welstand-toevlugte — en al hoe meer sosiale video: kortvorm-storievertelling voor en agter die kamera.',
-        'disc-art-title': 'Skone Kunste & Illustrasie', 'disc-art-desc': 'Akriel- en gemengde-media oorspronklikes — van die ikoniese tot die onverwagse — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
-        'disc-design-title': 'Ontwerp & Digitaal', 'disc-design-desc': "'n Kreatiewe Direkteur se gereedskap, weer hands-on: handelsmerk-identiteit, webwerwe en e-handel, illustrasie, beweging en veldtogte — plus klein programme en blaaierspeletjies, gebou vir die vreugde daarvan.",
-        'disc-essays-title': 'Essays & Artikels', 'disc-essays-desc': 'Langer skryfwerk — essays en artikels oor die ambag, die gereedskap, en die lewe rondom \'n kreatiewe praktyk.',
-        'disc-also-html': 'En langs die pad: musiek, die af-en-toe kantprojek, en waarheen nuuskierigheid ook al lei — ’n multimediakunstenaar dra elke hoed.',
-        'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
-        'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
-        'art-intro-eyebrow': 'Skone Kunste & Illustrasie', 'art-intro-headline': 'Gedurfde oorspronklikes — van die ikoniese tot die onverwagte', 'art-intro-desc': 'Akriel- en gemengde-media skilderye wat met helderheid van oorkant die kamer lees en van naby uitdrukkingsvolle, onmiskenbare kwaswerk openbaar — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
-        'explore-photo-title': 'Fotografie & Video', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — vasgevang in foto en video met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →', 'pf-headline': 'Portrette, geleenthede & toevlugte — deur \'n kunstenaar se oog', 'pf-book': 'Bespreek \'n sessie',
-        'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': '\'n Groeiende versameling blaaierspeletjies en klein, private programme wat vanlyn werk — van \'n drie-troeteldier-speelding tot \'n handige fooi-sakrekenaar. Geen advertensies, geen opsporing.', 'explore-apps-cta': 'Verken →',
-        'digital-label': 'Digitale Eksperimente', 'digital-intro': 'Naas die skilderye bou ek klein interaktiewe stukke, meestal met KI-ondersteunde gereedskap, as nog \'n manier om dieselfde instink na te jaag: maak iets, en kyk dan wie dit roer.', 'digital-sp-desc': '\'n Kuberpunk-data-roof-storie gebou vir mobiel. Vyf besluite, vyf lewendige inbraak-reekse, tien moontlike eindes. Hoe jy die werk hanteer, is hoe dit uitdraai.', 'digital-ss-desc': 'Die teenoorgestelde soort eksperiment: \'n interaktiewe troeteldier-toepassing met drie ontspanne modusse (honde, rotte, katte) en niks om te wen nie. Tik rond, maak \'n gemors, geniet die kalmte.', 'digital-play': 'Speel →',
-        'about-title-html': 'Mense en Kuns<br/><em>in die Kern</em>',
-        'photo-about-title-html': '\'n Skildersoog<br/><em>Agter die Lens</em>',
-        'photo-about-p1': 'Fotografie en video is \'n verlengstuk van dieselfde praktyk — dieselfde instink vir lig, komposisie en die stil oomblik wat alles sê. Ek bring \'n kunstenaar se oog na elke raam.',
-        'photo-about-p2': 'Ek werk eers met mense: portret-sessies, geleenthede en welstand-toevlugte waar die doel is om iets waar vas te vang eerder as poserend — ontspanne, gemaklik en aandagtig vir die storie wat voor die kamera ontvou.',
-        'photo-about-p3': 'Gebaseer in Pretoria en beskikbaar regoor Suid-Afrika en verder, skiet ek in beide foto en video, en elke sessie word as \'n privaat aanlyn album gelewer.',
-        'photo-about-p4': 'Of dit \'n enkele portret of \'n multi-dag toevlug is, laat weet my wat jy in gedagte het en ek sal die sessie daarom vorm.',
-        'read-more': 'Lees meer ↓',
-        'about-p1': 'My pad was nog altyd kreatief en diensgerig — vroeë studies in regie en ontwerp, toe vakleerlingskappe en vryskutwerk, altyd gefokus op dinge maak en die mense bedien wat dit nodig het.',
-        'about-p2': "Ek het kroeë en direksiekamers gewerk, as tatoeëerkunstenaar en lyfdeurboorder vakleerling gestaan, en 'n lang loopbaan gebou wat tot Kreatiewe Direkteur gelei het — kleinsake-ondernemings aan die kant bestuur en die hele pad deur geskilder, geïllustreer en gefotografeer.",
-        'about-p3': "Ná 'n leeftyd in ontwerp en bemarking het ek 'n doelbewuste keuse gemaak om terug te tree van ander bestuur en terug te keer na self dinge maak. Ek werk oor kuns, ontwerp, video en digitaal, en met die opkoms van KI dink ek elke kreatiewe mens sal uiteindelik oor dissiplines heen werk eerder as om net te rig.",
-        'about-p4': "Daardie verskuiwing het in grendeltyd begin, toe afgeleë werk my toegelaat het om hands-on maak terug in die mengsel te bring — skilder, fotografie, skryf, video. Nou doen ek dit voltyds: ek verken wat KI-ondersteunde gereedskap kan byvoeg, en volg watter nuuskierigheid ook al my volgende trek.",
-        'about-bio-btn': 'Bio & Verklaring ↗',
-        'ig-follow': 'Volg op Instagram ↗', 'ig-follow-me': 'Volg my op Instagram',
-        'commission-tag': 'Vir versamelaars', 'commission-title-html': 'Bestel<br/>‘n nuwe werk',
-        'commission-desc': 'Elke opdrag begin met ‘n gesprek. Besprekings dek skaal, onderwerp, palet en konteks. Lewertyd is gewoonlik 8–16 weke.',
-        'commission-btn': 'Begin ‘n gesprek', 'commission-or': 'of',
-        'gallery-tag': 'Vir galerye', 'gallery-title-html': 'Galery-<br/>verteenwoordiging',
-        'gallery-desc': 'Stel jy belang om my te verteenwoordig of ‘n uitstalling voor te stel? Kontak my met ‘n kort inleiding en jou program.',
-        'gallery-btn': 'Kontak my',
-        'modal-enquiry-tag': 'Navraag', 'modal-enquiry-prefix': 'Doen navraag oor',
-        'modal-contact-tag': 'Kontak my', 'modal-contact-title-html': 'Stuur ‘n<br/><em>boodskap</em>', 'modal-contact-send': 'Stuur boodskap',
-        'modal-commission-tag': 'Vir versamelaars', 'modal-commission-title-html': 'Bestel<br/><em>‘n nuwe werk</em>',
-        'modal-commission-label': 'Vertel my van die werk wat jy in gedagte het', 'modal-commission-placeholder': 'Skaal, onderwerp, palet, waar dit gaan hang…',
-        'modal-gallery-tag': 'Vir galerye', 'modal-gallery-title-html': 'Galery-<br/><em>verteenwoordiging</em>',
-        'modal-gallery-label-name': 'Naam & galery', 'modal-gallery-label-msg': 'Inleiding & program',
-        'modal-gallery-placeholder-name': 'Jou naam en galery se naam', 'modal-gallery-placeholder-msg': 'Vertel my van jou galery en wat jy in gedagte het…',
-        'form-name': 'Naam', 'form-email': 'E-pos', 'form-message': 'Boodskap',
-        'form-send-enquiry': 'Stuur navraag',
-        'form-placeholder-name': 'Jou naam', 'form-placeholder-email': 'jou@epos.com',
-        "form-placeholder-enquiry": "Ek stel belang in hierdie werk…", "form-placeholder-contact": "Wat's op jou hart…",
-        'form-success-msg': 'Dankie — jou boodskap is gestuur. Walt sal gou kontak maak.',
-        'form-success-close': 'Sluit',
-        'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-price': 'Prys', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗', 'meta-on-show': 'Op Vertoon', 'meta-view-show': 'Sien vertoning ↗',
-        'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag', 'avail-on-show': 'Op Vertoon',
-        'work-label': 'Werk', 'works-suffix': 'kunswerke', 'view-artwork-page': 'Sien kunswerkblad ↗',
-        'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.'
       }
     };
 
@@ -2475,9 +2371,6 @@
       });
       document.querySelectorAll('[data-i18n-href]').forEach(function (el) {
         el.href = window._t(el.dataset.i18nHref);
-      });
-      document.querySelectorAll('.lang-group[data-lang]').forEach(function (group) {
-        group.classList.toggle('active', group.dataset.lang === lang);
       });
       if (window._gallery && window._gallery.refresh) window._gallery.refresh();
     }
