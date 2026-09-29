@@ -18,16 +18,18 @@
 <style>
 /* Layout: a declaration. Palette: the client's rose gold with black and white. Full-bleed rotating photo banner, manifesto strip, then services grid, a real 4-step process, events, and a quote form. Light and dark themes via tokens; nav toggle sets data-theme. */
 :root {
-  --ground: #FBF0E9;      /* light rose, from the brand highlight #F3C6A8 */
+  --ground: #FBF0E9;      /* light rose, from the brand highlight #FBC6A6 */
   --paper: #FFFFFF;
   --ink: #111111;         /* black */
   --ink-soft: #555555;
   --line: #EBD3C5;
-  /* Brand rose gold: highlight #F3C6A8, main #E0A383, shadow #C98468 */
+  /* Brand rose gold (measured from their logo): highlight #FBC6A6, main #F7B68C, shadow #EDA984.
+     #C98468 and #9E5F45 are deeper tones of the same hue for readable text on light grounds. */
   --gold: #C98468;        /* rose gold shadow: headlines, numerals, icons on light */
   --gold-deep: #9E5F45;   /* deeper rose gold for small text on light */
-  --gold-bright: #E0A383; /* main rose gold: on black and over photos */
-  --gold-pale: #F3C6A8;   /* highlight */
+  --gold-bright: #F7B68C; /* main rose gold: on black and over photos */
+  --gold-pale: #FBC6A6;   /* highlight */
+  --brand-sheen: linear-gradient(115deg, #E39C78 0%, #F7B68C 30%, #FBC6A6 50%, #F7B68C 70%, #E39C78 100%); /* metallic rose gold, as in the logo */
   --panel: #FFFFFF;       /* feature cards: white in light mode, charcoal in dark */
   --panel-line: #EBD3C5;
   --on-panel: #111111;
@@ -39,7 +41,7 @@
   --on-footer-soft: #BDBDBD;
   --band-bg: #9E5F45;     /* "why" band: deep rose under the photo wash, both themes */
   --band-fg: #FFFFFF;
-  --band-accent: #F3C6A8;  /* brand highlight: label and bullets */
+  --band-accent: #FBC6A6;  /* brand highlight: label and bullets */
   --band-line: transparent;
   --lotus-opacity: .3;
   --hero-bg: #FBF0E9;
@@ -47,6 +49,8 @@
   --hero-fg: #111111;
   --hero-soft: #3D3D3D;
   --hero-accent: #C98468;
+  --rose-sheen: linear-gradient(115deg, #9E5F45 0%, #C98468 45%, #D9957A 55%, #B0704F 100%);   /* large text on light grounds */
+  --hero-sheen: linear-gradient(115deg, #9E5F45 0%, #C98468 45%, #D9957A 55%, #B0704F 100%);
   --hero-eyebrow: #9E5F45;
   --logo-light: block;    /* shadow-tone logo on light grounds */
   --logo-dark: none;
@@ -68,29 +72,31 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
   --ground: #000000; --paper: #121212; --ink: #F5F5F5; --ink-soft: #A8A8A8; --line: #2A2A2A;
-  --gold: #E0A383; --gold-deep: #E0A383; --gold-bright: #E0A383; --gold-pale: #F3C6A8;
+  --gold: #F7B68C; --gold-deep: #F7B68C; --gold-bright: #F7B68C; --gold-pale: #FBC6A6;
   --panel: #181818; --panel-line: #2A2A2A; --on-panel: #FFFFFF; --on-panel-soft: #B5B5B5;
-  --panel-accent: #E0A383; --panel-muted: rgba(243, 198, 168, .7);
+  --panel-accent: #F7B68C; --panel-muted: rgba(251, 198, 166, .7);
   --footer-bg: #181818; --on-footer: #FFFFFF; --on-footer-soft: #B5B5B5;
   --lotus-opacity: .26;
   --logo-light: none; --logo-dark: block;
   --hero-bg: #000000;
   --hero-fade: linear-gradient(90deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.62) 30%, rgba(0,0,0,.2) 50%, rgba(0,0,0,0) 62%);
-  --hero-fg: #FFFFFF; --hero-soft: rgba(255, 255, 255, .84); --hero-accent: #E0A383; --hero-eyebrow: #E0A383;
+  --hero-fg: #FFFFFF; --hero-soft: rgba(255, 255, 255, .84); --hero-accent: #F7B68C; --hero-eyebrow: #F7B68C;
+  --rose-sheen: linear-gradient(115deg, #E39C78 0%, #F7B68C 30%, #FBC6A6 50%, #F7B68C 70%, #E39C78 100%); --hero-sheen: linear-gradient(115deg, #E39C78 0%, #F7B68C 30%, #FBC6A6 50%, #F7B68C 70%, #E39C78 100%);
   color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --ground: #000000; --paper: #121212; --ink: #F5F5F5; --ink-soft: #A8A8A8; --line: #2A2A2A;
-  --gold: #E0A383; --gold-deep: #E0A383; --gold-bright: #E0A383; --gold-pale: #F3C6A8;
+  --gold: #F7B68C; --gold-deep: #F7B68C; --gold-bright: #F7B68C; --gold-pale: #FBC6A6;
   --panel: #181818; --panel-line: #2A2A2A; --on-panel: #FFFFFF; --on-panel-soft: #B5B5B5;
-  --panel-accent: #E0A383; --panel-muted: rgba(243, 198, 168, .7);
+  --panel-accent: #F7B68C; --panel-muted: rgba(251, 198, 166, .7);
   --footer-bg: #181818; --on-footer: #FFFFFF; --on-footer-soft: #B5B5B5;
   --lotus-opacity: .26;
   --logo-light: none; --logo-dark: block;
   --hero-bg: #000000;
   --hero-fade: linear-gradient(90deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.62) 30%, rgba(0,0,0,.2) 50%, rgba(0,0,0,0) 62%);
-  --hero-fg: #FFFFFF; --hero-soft: rgba(255, 255, 255, .84); --hero-accent: #E0A383; --hero-eyebrow: #E0A383;
+  --hero-fg: #FFFFFF; --hero-soft: rgba(255, 255, 255, .84); --hero-accent: #F7B68C; --hero-eyebrow: #F7B68C;
+  --rose-sheen: linear-gradient(115deg, #E39C78 0%, #F7B68C 30%, #FBC6A6 50%, #F7B68C 70%, #E39C78 100%); --hero-sheen: linear-gradient(115deg, #E39C78 0%, #F7B68C 30%, #FBC6A6 50%, #F7B68C 70%, #E39C78 100%);
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -137,8 +143,8 @@ p { margin: 0; }
 .nav ul a { text-decoration: none; }
 .nav ul a:hover { color: var(--gold-deep); }
 .nav .btn { padding: .55em 1em; font-size: .88rem; white-space: nowrap; }
-.nav .btn-solid { background: #E0A383; border-color: #E0A383; color: #111111; }  /* brand rose gold, both themes */
-.nav .btn-solid:hover { background: #C98468; border-color: #C98468; color: #111111; }
+.nav .btn-solid { background: var(--brand-sheen); border-color: #F7B68C; color: #111111; }  /* brand rose gold, both themes */
+.nav .btn-solid:hover { background: #EDA984; border-color: #EDA984; color: #111111; }
 .logo { white-space: nowrap; }
 .nav-actions { display: flex; align-items: center; gap: 10px; }
 .theme-toggle {
@@ -177,7 +183,7 @@ p { margin: 0; }
 .hero-inner { position: relative; z-index: 2; pointer-events: none; padding-block: clamp(40px, 7vw, 96px); }
 .hero-copy { pointer-events: auto; max-width: 36rem; min-width: 0; display: flex; flex-direction: column; }
 .hero h1 { font-size: var(--s-1); line-height: .95; font-weight: 800; }
-.hero h1 em { font-style: normal; color: var(--gold); }
+.hero h1 em { font-style: normal; color: var(--gold); background: var(--rose-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero .lede { margin-top: 28px; max-width: 34em; font-size: 1.15rem; color: var(--ink-soft); }
 .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 .hero .eyebrow { margin-bottom: 24px; }
@@ -195,7 +201,7 @@ p { margin: 0; }
   .hero .lede { margin-top: 18px; font-size: 1.05rem; color: var(--hero-soft); }
   .hero .ctas { margin-top: 24px; }
   .hero h1 { color: var(--hero-fg); font-size: clamp(2.3rem, 4vw, 3.8rem); }
-  .hero h1 em { color: var(--hero-accent); }
+  .hero h1 em { color: var(--hero-accent); background: var(--hero-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
 }
 
 /* Manifesto strip under the hero */
@@ -269,7 +275,7 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 /* Process */
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; list-style: none; margin: 0; padding: 0; counter-reset: step; }
 .steps li { counter-increment: step; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 28px 24px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.steps li::before { content: counter(step, decimal-leading-zero); font: 800 2.4rem/1 var(--f-display); color: var(--gold); }
+.steps li::before { content: counter(step, decimal-leading-zero); font: 800 2.4rem/1 var(--f-display); color: var(--gold); background: var(--rose-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .steps h3 { font-size: 1.2rem; font-weight: 600; }
 .steps p { color: var(--ink-soft); font-size: .96rem; }
 @media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
@@ -282,7 +288,7 @@ section { padding-block: clamp(64px, 9vw, 112px); }
   border: 1px solid var(--line); border-radius: 20px; padding: clamp(22px, 3vw, 36px); min-width: 0;
 }
 .date { text-align: center; border-right: 1px solid var(--line); padding-right: 28px; }
-.date .d { font: 800 3.6rem/1 var(--f-display); color: var(--gold); }
+.date .d { font: 800 3.6rem/1 var(--f-display); color: var(--gold); background: var(--rose-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .date .m { font: 500 .8rem/1.4 var(--f-mono); text-transform: uppercase; letter-spacing: .12em; }
 .event h3 { font-size: 1.6rem; font-weight: 600; margin: 8px 0 10px; }
 .event p { color: var(--ink-soft); }
@@ -341,7 +347,7 @@ form .btn { justify-self: start; cursor: pointer; }
 .quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .quote { margin: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: clamp(24px, 3vw, 36px); display: flex; flex-direction: column; justify-content: space-between; gap: 24px; min-width: 0; }
 .quote blockquote { margin: 0; font: 400 1.2rem/1.5 var(--f-body); }
-.quote blockquote::before { content: "\201C"; display: block; font: 800 3rem/.8 var(--f-display); color: var(--gold); margin-bottom: 8px; }
+.quote blockquote::before { content: "\201C"; display: block; font: 800 3rem/.8 var(--f-display); color: var(--gold); margin-bottom: 8px; background: var(--rose-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; width: fit-content; }
 .quote figcaption { display: flex; flex-direction: column; gap: 2px; border-top: 1px solid var(--line); padding-top: 16px; }
 .quote figcaption span { font: 500 .75rem/1.6 var(--f-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); }
 @media (max-width: 760px) { .quotes { grid-template-columns: 1fr; } }
