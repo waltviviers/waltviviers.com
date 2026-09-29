@@ -16,7 +16,7 @@
 })();
 </script>
 <style>
-/* Layout: a declaration. Palette: gold, black and white only. Big manifesto hero with drifting gold flecks, then services grid, a real 4-step process, events, and a quote form. Light and dark themes via tokens; nav toggle sets data-theme. */
+/* Layout: a declaration. Palette: gold, black and white only. Full-bleed photo hero, manifesto strip, then services grid, a real 4-step process, events, and a quote form. Light and dark themes via tokens; nav toggle sets data-theme. */
 :root {
   --ground: #F7F6F3;      /* warm white */
   --paper: #FFFFFF;
@@ -122,31 +122,50 @@ p { margin: 0; }
 @media (max-width: 480px) { .nav .wrap { gap: 12px; } .nav .logo span { display: none; } .nav .long { display: none; } .nav .short { display: inline; } .nav .btn { padding: .65em .95em; font-size: .85rem; } }
 @media (max-width: 860px) { .nav ul { display: none; } }
 
-/* Hero */
-.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
-#petals { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
-.hero .wrap {
-  position: relative; display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(32px, 5vw, 72px);
-  padding-block: clamp(56px, 9vw, 120px); align-items: end;
-}
+/* Hero: full-bleed photo with the headline over a dark fade (desktop); photo stacked above text (phone) */
+.hero { position: relative; overflow: hidden; }
+.hero-media { position: relative; margin: 0; }
+.hero-media img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 72% 30%; }
+.hero-media::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+.hero-inner { position: relative; z-index: 2; padding-block: clamp(40px, 7vw, 96px); }
+.hero-copy { max-width: 36rem; min-width: 0; display: flex; flex-direction: column; }
 .hero h1 { font-size: var(--s-1); line-height: .95; font-weight: 800; }
 .hero h1 em { font-style: normal; color: var(--gold); }
 .hero .lede { margin-top: 28px; max-width: 34em; font-size: 1.15rem; color: var(--ink-soft); }
 .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
-.hero > .wrap > div { min-width: 0; display: flex; flex-direction: column; gap: 0; }
 .hero .eyebrow { margin-bottom: 24px; }
+@media (max-width: 899px) {
+  .hero-media { aspect-ratio: 4 / 3; max-height: 70vh; width: 100%; }
+}
+@media (min-width: 900px) {
+  .hero { min-height: clamp(560px, 46vw, 760px); display: flex; align-items: center; background: #000; }
+  .hero-media { position: absolute; inset: 0; }
+  .hero-media::after { background: linear-gradient(90deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.78) 34%, rgba(0,0,0,.35) 56%, rgba(0,0,0,0) 70%); }
+  .hero-inner { width: 100%; }
+  .hero-copy { max-width: 31rem; }
+  .hero h1 { color: #FFFFFF; font-size: clamp(2.8rem, 5.2vw, 4.8rem); }
+  .hero h1 em { color: var(--gold); }
+  .hero .eyebrow { color: var(--gold); }
+  .hero .lede { color: rgba(255, 255, 255, .84); }
+  .hero .btn-solid { background: #FFFFFF; color: #111111; border-color: #FFFFFF; }
+  .hero .btn-solid:hover { background: var(--gold); border-color: var(--gold); color: #FFFFFF; }
+  .hero .btn-ghost { color: #FFFFFF; border-color: rgba(255, 255, 255, .8); }
+  .hero .btn-ghost:hover { background: #FFFFFF; color: #111111; }
+}
 
+/* Manifesto strip under the hero */
+.manifesto { padding-block: clamp(28px, 4vw, 48px); border-bottom: 1px solid var(--line); }
 .declaration {
   background: var(--panel); color: var(--on-panel); border-radius: 20px; padding: clamp(24px, 3vw, 36px);
-  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .35);
 }
-.declaration .eyebrow { color: var(--gold-bright); margin-bottom: 20px; }
-.declaration ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; counter-reset: art; }
-.declaration li { counter-increment: art; display: grid; grid-template-columns: 2.6em 1fr; gap: 8px; font-size: 1.02rem; line-height: 1.45; }
+.declaration .eyebrow { color: var(--gold-bright); margin-bottom: 20px; display: block; }
+.declaration ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px 32px; counter-reset: art; }
+.declaration li { counter-increment: art; display: flex; flex-direction: column; gap: 6px; font-size: 1.02rem; line-height: 1.45; min-width: 0; }
 .declaration li::before { content: "Art. " counter(art); font: 500 .72rem/1.9 var(--f-mono); color: var(--gold-pale); opacity: .7; }
 .declaration strong { font-family: var(--f-display); font-weight: 600; font-size: 1.1rem; display: block; }
 .declaration p { color: var(--on-panel-soft); font-size: .95rem; }
-@media (max-width: 900px) { .hero .wrap { grid-template-columns: 1fr; } }
+@media (max-width: 1000px) { .declaration ol { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .declaration ol { grid-template-columns: 1fr; } }
 
 /* Section scaffolding */
 section { padding-block: clamp(64px, 9vw, 112px); }
@@ -287,9 +306,14 @@ footer a:hover { color: var(--on-panel); }
 
 <main id="top">
   <section class="hero" style="padding-block:0">
-    <canvas id="petals" aria-hidden="true"></canvas>
-    <div class="wrap">
-      <div>
+    <figure class="hero-media">
+      <img src="images/hero-sound-bath-1200.webp"
+           srcset="images/hero-sound-bath-800.webp 800w, images/hero-sound-bath-1200.webp 1200w, images/hero-sound-bath-2000.webp 2000w"
+           sizes="100vw" width="2000" height="1125" fetchpriority="high"
+           alt="A practitioner plays crystal singing bowls beside a gong and handpan at a Manifesto Wellness event">
+    </figure>
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
         <span class="eyebrow">Wellness that works · Johannesburg</span>
         <h1>Healthier people build <em>stronger businesses.</em></h1>
         <p class="lede">Tailored corporate wellness programmes designed for your team’s unique needs. We help companies invest in what matters most: their people.</p>
@@ -298,6 +322,11 @@ footer a:hover { color: var(--on-panel); }
           <a class="btn btn-ghost" href="#programmes">See our services</a>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="manifesto">
+    <div class="wrap">
       <aside class="declaration" aria-label="Our manifesto">
         <span class="eyebrow">Our manifesto</span>
         <ol>
@@ -494,40 +523,6 @@ document.getElementById('enquiry').addEventListener('submit', function (e) {
   document.getElementById('sent').hidden = false;
 });
 
-// Jacaranda petals drifting across the hero
-(function () {
-  const c = document.getElementById('petals');
-  const ctx = c.getContext('2d');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const colours = ['#A97A1F', '#C99A33', '#D9AC45', '#E8C877'];
-  let w, h, petals = [];
-  function size() {
-    const r = c.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
-    w = r.width; h = r.height; c.width = w * dpr; c.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  function make(y) {
-    return { x: Math.random() * w, y: y ?? Math.random() * h, s: 5 + Math.random() * 7,
-      vy: .25 + Math.random() * .45, vx: -.2 + Math.random() * .5, r: Math.random() * 6.28,
-      vr: -.02 + Math.random() * .04, a: .18 + Math.random() * .3, col: colours[Math.floor(Math.random() * colours.length)] };
-  }
-  function draw(p) {
-    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.globalAlpha = p.a; ctx.fillStyle = p.col;
-    ctx.beginPath(); ctx.ellipse(0, 0, p.s, p.s * .55, 0, 0, 6.28); ctx.fill(); ctx.restore();
-  }
-  function frame() {
-    ctx.clearRect(0, 0, w, h);
-    for (const p of petals) {
-      p.y += p.vy; p.x += p.vx + Math.sin(p.y / 40) * .3; p.r += p.vr;
-      if (p.y > h + 20) Object.assign(p, make(-20));
-      draw(p);
-    }
-    requestAnimationFrame(frame);
-  }
-  size();
-  petals = Array.from({ length: Math.round(Math.min(46, w / 26)) }, () => make());
-  addEventListener('resize', size);
-  if (reduce) petals.forEach(draw); else frame();
-})();
 </script>
 </body>
 </html>
