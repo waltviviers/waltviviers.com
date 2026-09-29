@@ -203,6 +203,7 @@ p { margin: 0; }
 .hero-dots button:hover::before { background: rgba(255, 255, 255, .6); }
 @media (prefers-reduced-motion: reduce) { .hero-slide { transition: none; } }
 .hero-inner { position: relative; z-index: 2; pointer-events: none; padding-block: clamp(40px, 7vw, 96px); }
+.hero-inner .declaration { pointer-events: auto; margin-top: 20px; }
 .hero-copy { pointer-events: auto; max-width: 36rem; min-width: 0; display: flex; flex-direction: column; }
 .hero h1 { font-size: var(--s-1); line-height: .95; font-weight: 800; }
 .hero h1 em { font-style: normal; color: var(--gold); background: var(--rose-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -215,23 +216,31 @@ p { margin: 0; }
 @media (min-width: 900px) {
   .hero { min-height: clamp(420px, 34vw, 580px); display: flex; align-items: center; background: var(--hero-bg); }
   .hero-media { position: absolute; inset: 0; }
-  .hero-dots { left: auto; right: var(--gutter); transform: none; bottom: 24px; }
+  .hero-dots { left: auto; right: var(--gutter); transform: none; bottom: auto; top: 24px; }
   .hero-media::after { background: var(--hero-fade); }
-  .hero-inner { width: 100%; padding-block: clamp(32px, 4vw, 56px); }
+  .hero-inner { width: 100%; padding-block: clamp(24px, 3vw, 40px); }
   .hero-copy {
-    max-width: 36rem; padding: clamp(24px, 3vw, 40px); border-radius: 24px;
+    max-width: 40rem; padding: clamp(22px, 2.4vw, 34px); border-radius: 24px;
     background: var(--hero-glass); -webkit-backdrop-filter: blur(12px) saturate(1.3); backdrop-filter: blur(12px) saturate(1.3);
     border: 1px solid var(--hero-glass-border); box-shadow: var(--glass-shadow);
   }
   .hero .eyebrow { margin-bottom: 16px; color: var(--hero-eyebrow); }
+  /* Manifesto strip sits on the banner as a second glass panel */
+  .hero-inner .declaration {
+    padding: 20px 28px; background: var(--hero-glass); -webkit-backdrop-filter: blur(12px) saturate(1.3); backdrop-filter: blur(12px) saturate(1.3);
+    border: 1px solid var(--hero-glass-border); box-shadow: var(--glass-shadow); color: var(--hero-fg);
+  }
+  .hero-inner .declaration .eyebrow { margin-bottom: 10px; }
+  .hero-inner .declaration ol { gap: 16px 28px; }
+  .hero-inner .declaration li::before { color: var(--hero-soft); }
+  .hero-inner .declaration p { color: var(--hero-soft); font-size: .9rem; }
   .hero .lede { margin-top: 18px; font-size: 1.05rem; color: var(--hero-soft); }
   .hero .ctas { margin-top: 24px; }
-  .hero h1 { color: var(--hero-fg); font-size: clamp(2.3rem, 4vw, 3.8rem); }
+  .hero h1 { color: var(--hero-fg); font-size: clamp(2.2rem, 3.3vw, 3.2rem); }
   .hero h1 em { color: var(--hero-accent); background: var(--hero-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
 }
 
 /* Manifesto strip under the hero */
-.manifesto { padding-block: clamp(28px, 4vw, 48px); border-bottom: 1px solid var(--line); }
 .declaration {
   background: var(--panel); color: var(--on-panel); border: 1px solid var(--panel-line); border-radius: 20px; padding: clamp(24px, 3vw, 36px);
 }
@@ -547,11 +556,6 @@ footer a:hover { color: var(--on-footer); }
           <a class="btn btn-ghost" href="#programmes">See our services</a>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="manifesto">
-    <div class="wrap">
       <aside class="declaration" aria-label="Our manifesto">
         <span class="eyebrow">Our manifesto</span>
         <ol>
