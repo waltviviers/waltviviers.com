@@ -255,15 +255,15 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 .services { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
 .service {
   position: relative; cursor: pointer;
-  padding: 14px 14px 24px; display: flex; flex-direction: column; gap: 12px; min-width: 0;
+  padding: 14px 14px 20px; display: flex; flex-direction: column; gap: 8px; min-width: 0;
 }
-/* Frosted glass cards (services and team) */
-.service, .member {
+/* Frosted glass cards (services, team and blog) */
+.service, .member, .post {
   border-radius: 22px; background: var(--glass-bg); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
   -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
   transition: transform .3s ease, box-shadow .3s ease;
 }
-.service:hover, .member:hover { transform: translateY(-3px); }
+.service:hover, .member:hover, .post:hover { transform: translateY(-3px); }
 .service > :not(.service-media) { margin-inline: 10px; }
 /* Rose wash over photos that zoom on hover */
 .service-media, .post-image, .member-media { position: relative; }
@@ -275,7 +275,7 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 /* Whole card is clickable (the button's hit area covers the card), image zooms on hover like the blog cards */
 .service-cta::after { content: ""; position: absolute; inset: 0; }
 .service-cta:hover { transform: none; }  /* a transform would shrink the card-wide hit area back to the button */
-.service-media { border-radius: 14px; overflow: hidden; margin-bottom: 8px; }
+.service-media { border-radius: 14px; overflow: hidden; margin-bottom: 4px; }
 .service-media .service-photo { margin-bottom: 0; border-radius: 0; transition: transform .4s ease; }
 .service:hover .service-photo { transform: scale(1.04); }
 .service:hover h3 { color: var(--gold-deep); }
@@ -287,8 +287,8 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 .service .tag { font: 500 .72rem/1 var(--f-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); }
 .service h3 { font-size: var(--s-3); font-weight: 600; }
 .service p { color: var(--ink-soft); font-size: .98rem; }
-.service svg { width: 36px; height: 36px; color: var(--gold); }
-.service-photo { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 14px; margin-bottom: 8px; }
+.service svg { width: 30px; height: 30px; color: var(--gold); }
+.service-photo { display: block; width: 100%; height: auto; aspect-ratio: 16 / 7; object-fit: cover; border-radius: 14px; margin-bottom: 8px; }
 @media (max-width: 560px) {
   .services { grid-template-columns: 1fr; }
 }
@@ -417,8 +417,11 @@ form .btn { justify-self: start; cursor: pointer; }
 @media (max-width: 480px) { .member { grid-template-columns: 1fr; } .member figcaption { padding: 0 8px 8px; } }
 
 /* Latest posts */
-.posts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-.post { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.posts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.post { position: relative; cursor: pointer; display: flex; flex-direction: column; gap: 10px; min-width: 0; padding: 14px 14px 20px; }
+.post > :not(.post-image) { margin-inline: 10px; }
+.post-more::after { content: ""; position: absolute; inset: 0; border-radius: 22px; }  /* whole card opens the article */
+.post:hover h3 a { color: var(--gold-deep); }
 .post-image { display: block; border-radius: 14px; overflow: hidden; margin-bottom: 6px; }
 .post-image img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; transition: transform .4s ease; }
 .post:hover .post-image img { transform: scale(1.03); }
@@ -428,11 +431,11 @@ form .btn { justify-self: start; cursor: pointer; }
 .post h3 a { text-decoration: none; }
 .post h3 a:hover { color: var(--gold-deep); }
 .post p { color: var(--ink-soft); font-size: .95rem; }
-.post-more { margin-top: auto; padding-top: 4px; font-weight: 600; font-size: .92rem; color: var(--gold-deep); }
+.post-more { margin-top: auto; padding-top: 4px; font-weight: 600; font-size: .92rem; color: var(--gold-deep); text-decoration: none; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (max-width: 900px) { .posts { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 600px) { .posts { grid-template-columns: 1fr; } }
-@media (prefers-reduced-motion: reduce) { .post-image img { transition: none; } .post:hover .post-image img { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .post, .post-image img { transition: none; } .post:hover, .post:hover .post-image img { transform: none; } }
 
 .mock-overlay {
   position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 24px 16px;
@@ -744,7 +747,7 @@ footer a:hover { color: var(--on-footer); }
           <div class="post-meta"><time datetime="2026-09-09">9 September 2026</time><span>Corporate Culture &amp; Leadership</span></div>
           <h3><a href="#blog" data-mock="In the finished site, this opens the full article.">Creating More Happiness in Your Life: Celebrating Women&#x27;s Day with Novo Nordisk</a></h3>
           <p>Manifesto Wellness Africa had the wonderful opportunity to join Novo Nordisk for their Women&#x27;s Day celebration and share an uplifting conversation around happiness and how we can intentionally create more of it in our everyday lives.</p>
-          <a class="post-more" href="#blog" data-mock="In the finished site, this opens the full article.">Read the article<span class="visually-hidden">: Creating More Happiness in Your Life: Celebrating Women&#x27;s Day with Novo Nordisk</span></a>
+          <a class="post-more" href="#blog" data-mock="In the finished site, this opens the full article.">Read the article<span class="visually-hidden">: Creating More Happiness in Your Life: Celebrating Women&#x27;s Day with Novo Nordisk</span> &rarr;</a>
         </article>
         <article class="post">
           <a class="post-image" href="#blog" data-mock="In the finished site, this opens the full article." tabindex="-1" aria-hidden="true">
@@ -753,7 +756,7 @@ footer a:hover { color: var(--on-footer); }
           <div class="post-meta"><time datetime="2026-06-24">24 June 2026</time><span>Events &amp; Experiences</span></div>
           <h3><a href="#blog" data-mock="In the finished site, this opens the full article.">Why Workplace Wellness Matters: Bringing Mental Health Support to Corporate Challenge Lesotho 2026</a></h3>
           <p>The modern workplace is changing. Across industries, organisations are recognising that employee wellbeing is no longer a nice-to-have initiative. It is a business necessity.</p>
-          <a class="post-more" href="#blog" data-mock="In the finished site, this opens the full article.">Read the article<span class="visually-hidden">: Why Workplace Wellness Matters: Bringing Mental Health Support to Corporate Challenge Lesotho 2026</span></a>
+          <a class="post-more" href="#blog" data-mock="In the finished site, this opens the full article.">Read the article<span class="visually-hidden">: Why Workplace Wellness Matters: Bringing Mental Health Support to Corporate Challenge Lesotho 2026</span> &rarr;</a>
         </article>
         <article class="post">
           <a class="post-image" href="#blog" data-mock="In the finished site, this opens the full article." tabindex="-1" aria-hidden="true">
@@ -762,7 +765,7 @@ footer a:hover { color: var(--on-footer); }
           <div class="post-meta"><time datetime="2026-05-24">24 May 2026</time><span>Workplace Wellbeing</span></div>
           <h3><a href="#blog" data-mock="In the finished site, this opens the full article.">How Corporate Wellness and Conscious Living Help People Thrive</a></h3>
           <p>As conversations around mental health, stress, and employee wellbeing continue to grow, organisations are recognising the importance of creating healthier, more supportive environments.</p>
-          <a class="post-more" href="#blog" data-mock="In the finished site, this opens the full article.">Read the article<span class="visually-hidden">: How Corporate Wellness and Conscious Living Help People Thrive</span></a>
+          <a class="post-more" href="#blog" data-mock="In the finished site, this opens the full article.">Read the article<span class="visually-hidden">: How Corporate Wellness and Conscious Living Help People Thrive</span> &rarr;</a>
         </article>
       </div>
     </div>
