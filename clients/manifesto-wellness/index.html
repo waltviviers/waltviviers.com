@@ -168,16 +168,19 @@ p { margin: 0; }
 .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 .hero .eyebrow { margin-bottom: 24px; }
 @media (max-width: 899px) {
-  .hero-media { aspect-ratio: 4 / 3; max-height: 70vh; width: 100%; }
+  .hero-media { aspect-ratio: 16 / 10; max-height: 56vh; width: 100%; }
 }
 @media (min-width: 900px) {
-  .hero { min-height: clamp(560px, 46vw, 760px); display: flex; align-items: center; background: #000; }
+  .hero { min-height: clamp(420px, 34vw, 580px); display: flex; align-items: center; background: #000; }
   .hero-media { position: absolute; inset: 0; }
   .hero-dots { left: auto; right: var(--gutter); transform: none; bottom: 24px; }
   .hero-media::after { background: linear-gradient(90deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.78) 34%, rgba(0,0,0,.35) 56%, rgba(0,0,0,0) 70%); }
-  .hero-inner { width: 100%; }
-  .hero-copy { max-width: 31rem; }
-  .hero h1 { color: #FFFFFF; font-size: clamp(2.8rem, 5.2vw, 4.8rem); }
+  .hero-inner { width: 100%; padding-block: clamp(32px, 4vw, 56px); }
+  .hero-copy { max-width: 34rem; }
+  .hero .eyebrow { margin-bottom: 16px; }
+  .hero .lede { margin-top: 18px; font-size: 1.05rem; }
+  .hero .ctas { margin-top: 24px; }
+  .hero h1 { color: #FFFFFF; font-size: clamp(2.3rem, 4vw, 3.8rem); }
   .hero h1 em { color: var(--gold-bright); }
   .hero .eyebrow { color: var(--gold-bright); }
   .hero .lede { color: rgba(255, 255, 255, .84); }
