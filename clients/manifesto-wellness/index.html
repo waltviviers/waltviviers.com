@@ -40,7 +40,6 @@
   --band-fg: #111111;
   --band-accent: #111111;
   --band-line: transparent;
-  --logo-filter: brightness(0); /* white logo file shown black on light grounds */
 
   --f-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
   --f-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -63,7 +62,6 @@
   --panel: #181818; --panel-line: #2A2A2A; --on-panel: #FFFFFF; --on-panel-soft: #B5B5B5;
   --panel-accent: #A97A1F; --panel-muted: rgba(243, 230, 196, .7);
   --footer-bg: #181818; --on-footer: #FFFFFF; --on-footer-soft: #B5B5B5;
-  --logo-filter: none;
   color-scheme: dark;
   }
 }
@@ -73,7 +71,6 @@
   --panel: #181818; --panel-line: #2A2A2A; --on-panel: #FFFFFF; --on-panel-soft: #B5B5B5;
   --panel-accent: #A97A1F; --panel-muted: rgba(243, 230, 196, .7);
   --footer-bg: #181818; --on-footer: #FFFFFF; --on-footer-soft: #B5B5B5;
-  --logo-filter: none;
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -112,7 +109,7 @@ p { margin: 0; }
 }
 .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 14px; }
 .logo { display: flex; align-items: baseline; gap: .35em; text-decoration: none; font-family: var(--f-display); }
-.logo img { display: block; height: 44px; width: auto; filter: var(--logo-filter); }
+.logo img { display: block; height: 44px; width: auto; }
 .nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; font-weight: 500; font-size: .95rem; }
 .nav ul a { text-decoration: none; }
 .nav ul a:hover { color: var(--gold-deep); }
@@ -282,7 +279,7 @@ form .btn { justify-self: start; cursor: pointer; }
 
 footer { background: var(--footer-bg); color: var(--on-footer-soft); font-size: .9rem; }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding-block: 32px; }
-footer .logo img { filter: none; height: 44px; }
+footer .logo img { height: 44px; }
 footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
 footer a { text-decoration: none; }
 footer a:hover { color: var(--on-footer); }
@@ -294,7 +291,7 @@ footer a:hover { color: var(--on-footer); }
 
 <header class="nav">
   <div class="wrap">
-    <a class="logo" href="#top" aria-label="Manifesto Wellness home"><img src="images/logo-white.png" width="290" height="68" alt="Manifesto: Motivate, Inspire, Succeed"></a>
+    <a class="logo" href="#top" aria-label="Manifesto Wellness home"><img src="images/logo-gold.png" width="290" height="68" alt="Manifesto: Motivate, Inspire, Succeed"></a>
     <nav aria-label="Main">
       <ul>
         <li><a href="#programmes">Services</a></li>
@@ -507,7 +504,7 @@ footer a:hover { color: var(--on-footer); }
 
 <footer>
   <div class="wrap">
-    <a class="logo" href="#top" aria-label="Back to top"><img src="images/logo-white.png" width="290" height="68" alt="Manifesto: Motivate, Inspire, Succeed"></a>
+    <a class="logo" href="#top" aria-label="Back to top"><img src="images/logo-gold.png" width="290" height="68" alt="Manifesto: Motivate, Inspire, Succeed"></a>
     <nav aria-label="Footer">
       <a href="#programmes">Services</a><a href="#approach">Approach</a><a href="#events">Events</a><a href="#contact">Contact</a>
     </nav>
