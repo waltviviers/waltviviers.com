@@ -66,6 +66,11 @@ function page(gate, message, status) {
   input { font: inherit; width: 100%; padding: .75em .85em; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--fg); }
   button { font: inherit; font-weight: 600; padding: .8em; border: 0; border-radius: 8px; background: var(--fg); color: var(--bg); cursor: pointer; }
   input:focus-visible, button:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+  .pw { position: relative; }
+  .pw input { padding-right: 3em; }
+  .peek { position: absolute; top: 50%; right: 6px; transform: translateY(-50%); width: 36px; height: 36px; padding: 0; display: grid; place-items: center; background: transparent; color: var(--muted); border-radius: 6px; touch-action: none; user-select: none; -webkit-user-select: none; }
+  .peek:hover, .peek[aria-pressed="true"] { color: var(--fg); }
+  .peek svg { width: 20px; height: 20px; pointer-events: none; }
   .err { color: var(--err); font-weight: 500; }
 </style>
 </head>
@@ -75,9 +80,27 @@ function page(gate, message, status) {
   <p>${gate.intro}</p>
   ${message ? `<p class="err" role="alert">${message}</p>` : ''}
   <label for="password">Password</label>
-  <input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
+  <div class="pw">
+    <input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
+    <button class="peek" type="button" aria-label="Hold to show password" aria-pressed="false" aria-controls="password">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+  </div>
   <button type="submit">${gate.button}</button>
 </form>
+<script>
+  // Hold the eye to reveal the password; it hides again as soon as you let go.
+  (function () {
+    var input = document.getElementById('password');
+    var peek = document.querySelector('.peek');
+    function show(on) { input.type = on ? 'text' : 'password'; peek.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+    peek.addEventListener('pointerdown', function (e) { e.preventDefault(); show(true); });
+    ['pointerup', 'pointerleave', 'pointercancel', 'blur'].forEach(function (t) { peek.addEventListener(t, function () { show(false); }); });
+    peek.addEventListener('keydown', function (e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); show(true); } });
+    peek.addEventListener('keyup', function () { show(false); });
+    peek.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  })();
+</script>
 </body>
 </html>`;
   return new Response(html, {
