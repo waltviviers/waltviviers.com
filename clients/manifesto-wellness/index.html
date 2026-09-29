@@ -27,10 +27,13 @@
   --gold-deep: #85600F;   /* small gold text, readable on the light ground */
   --gold-bright: #D9AC45; /* gold band and accents on dark */
   --gold-pale: #F3E6C4;
-  --on-gold: #15261F;     /* text on the gold band, both themes */
   --panel: #15261F;       /* dark feature panels and footer */
   --on-panel: #FAFBF8;
   --on-panel-soft: #C7D0CA;
+  --band-bg: #D9AC45;     /* "why" band */
+  --band-fg: #15261F;
+  --band-accent: #15261F;
+  --band-line: transparent;
 
   --f-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
   --f-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -51,6 +54,7 @@
   --ground: #0F1A15; --paper: #16241D; --ink: #E8EDE8; --ink-soft: #A9B7AF; --line: #2A3B33;
   --gold: #D4A845; --gold-deep: #DDB860; --gold-bright: #D9AC45; --gold-pale: #F3E6C4;
   --panel: #1E3229; --on-panel: #F1F4F0; --on-panel-soft: #B7C4BC;
+  --band-bg: #17281F; --band-fg: #E8EDE8; --band-accent: #D9AC45; --band-line: rgba(217, 172, 69, .35);
   color-scheme: dark;
   }
 }
@@ -58,6 +62,7 @@
   --ground: #0F1A15; --paper: #16241D; --ink: #E8EDE8; --ink-soft: #A9B7AF; --line: #2A3B33;
   --gold: #D4A845; --gold-deep: #DDB860; --gold-bright: #D9AC45; --gold-pale: #F3E6C4;
   --panel: #1E3229; --on-panel: #F1F4F0; --on-panel-soft: #B7C4BC;
+  --band-bg: #17281F; --band-fg: #E8EDE8; --band-accent: #D9AC45; --band-line: rgba(217, 172, 69, .35);
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -168,13 +173,14 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 }
 
 /* Why band */
-.why { background: var(--gold-bright); color: var(--on-gold); }
+.why { background: var(--band-bg); color: var(--band-fg); border-block: 1px solid var(--band-line); }
+.why blockquote, .why .eyebrow { color: var(--band-accent); }
 .why .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
 .why blockquote { margin: 0; font: 600 clamp(1.7rem, 3.4vw, 2.6rem)/1.15 var(--f-display); letter-spacing: -0.02em; text-wrap: balance; }
-.why .eyebrow { color: var(--on-gold); margin-bottom: 20px; display: block; }
+.why .eyebrow { margin-bottom: 20px; display: block; }
 .why ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
-.why li { display: grid; grid-template-columns: 24px 1fr; gap: 14px; color: var(--on-gold); }
-.why li::before { content: ""; width: 10px; height: 10px; margin-top: .55em; border-radius: 50% 50% 50% 0; background: var(--on-gold); transform: rotate(-45deg); }
+.why li { display: grid; grid-template-columns: 24px 1fr; gap: 14px; color: var(--band-fg); }
+.why li::before { content: ""; width: 10px; height: 10px; margin-top: .55em; border-radius: 50% 50% 50% 0; background: var(--band-accent); transform: rotate(-45deg); }
 @media (max-width: 800px) { .why .wrap { grid-template-columns: 1fr; } }
 
 /* Process */
