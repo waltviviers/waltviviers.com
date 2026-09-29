@@ -37,9 +37,9 @@
   --footer-bg: #111111;
   --on-footer: #FFFFFF;
   --on-footer-soft: #BDBDBD;
-  --band-bg: #E0A383;     /* "why" band: main rose gold, both themes */
-  --band-fg: #111111;
-  --band-accent: #111111;
+  --band-bg: #9E5F45;     /* "why" band: deep rose under the photo wash, both themes */
+  --band-fg: #FFFFFF;
+  --band-accent: #F3C6A8;  /* brand highlight: label and bullets */
   --band-line: transparent;
   --lotus-opacity: .3;
   --hero-bg: #FBF0E9;
@@ -239,17 +239,18 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 .why { background: var(--band-bg); color: var(--band-fg); border-block: 1px solid var(--band-line); }
 .why {
   background:
-    linear-gradient(90deg, rgba(224, 163, 131, .93) 0%, rgba(224, 163, 131, .86) 45%, rgba(224, 163, 131, .8) 100%),
+    linear-gradient(90deg, rgba(150, 88, 63, .93) 0%, rgba(158, 95, 69, .88) 45%, rgba(170, 104, 78, .84) 100%),
     url("images/why-bowls-2000.webp") center / cover no-repeat,
     var(--band-bg);
 }
 @media (max-width: 800px) {
   .why { background:
-    linear-gradient(rgba(224, 163, 131, .88), rgba(224, 163, 131, .88)),
+    linear-gradient(rgba(152, 90, 65, .9), rgba(152, 90, 65, .9)),
     url("images/why-bowls-1000.webp") center / cover no-repeat,
     var(--band-bg); }
 }
-.why blockquote, .why .eyebrow { color: var(--band-accent); }
+.why blockquote { color: var(--band-fg); }
+.why .eyebrow { color: var(--band-accent); }
 .why .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
 .why blockquote { margin: 0; font: 600 clamp(1.7rem, 3.4vw, 2.6rem)/1.15 var(--f-display); letter-spacing: -0.02em; text-wrap: balance; }
 .why .eyebrow { margin-bottom: 20px; display: block; }
