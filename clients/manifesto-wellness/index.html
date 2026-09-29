@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Manifesto Wellness Redesign</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Figtree:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a declaration. Big manifesto hero with drifting gold flecks, then services grid, a real 4-step process, events, and a quote form. Single deliberate light look. */
+:root {
+  --ground: #EEF1EC;      /* cool sage-white */
+  --paper: #FAFBF8;
+  --ink: #15261F;         /* deep eucalyptus */
+  --ink-soft: #4A5A52;
+  --line: #CFD6CD;
+  --gold: #A97A1F;        /* display gold: headlines, numerals, icons */
+  --gold-deep: #85600F;   /* small gold text, readable on the light ground */
+  --gold-bright: #D9AC45; /* gold band and accents on dark */
+  --gold-pale: #F3E6C4;
+
+  --f-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  --s-1: clamp(2.6rem, 7vw, 5.8rem);
+  --s-2: clamp(1.9rem, 4vw, 3rem);
+  --s-3: 1.35rem;
+  --s-body: 1.0625rem;
+  --s-small: 0.8125rem;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1200px;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font: 400 var(--s-body)/1.6 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--gold-deep); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.02em; }
+p { margin: 0; }
+.wrap { max-width: var(--max); margin: 0 auto; padding-inline: var(--gutter); }
+.eyebrow {
+  font: 500 var(--s-small)/1 var(--f-mono); text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--gold-deep);
+}
+.btn {
+  display: inline-flex; align-items: center; gap: .5em; padding: .9em 1.4em; border-radius: 999px;
+  font: 600 1rem/1 var(--f-body); text-decoration: none; border: 1.5px solid var(--ink);
+  transition: transform .2s ease, background .2s ease, color .2s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-solid { background: var(--ink); color: var(--paper); }
+.btn-solid:hover { background: var(--gold-deep); border-color: var(--gold-deep); }
+.btn-ghost { background: transparent; color: var(--ink); }
+.btn-ghost:hover { background: var(--ink); color: var(--paper); }
+
+/* Nav */
+.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
+}
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 14px; }
+.logo { display: flex; align-items: baseline; gap: .35em; text-decoration: none; font-family: var(--f-display); }
+.logo b { font-weight: 800; font-size: 1.35rem; letter-spacing: -0.03em; }
+.logo span { font-size: .95rem; color: var(--ink-soft); }
+.logo i { width: .55em; height: .55em; border-radius: 50% 50% 50% 0; background: var(--gold); display: inline-block; transform: rotate(-45deg) translateY(-.1em); }
+.nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; font-weight: 500; font-size: .95rem; }
+.nav ul a { text-decoration: none; }
+.nav ul a:hover { color: var(--gold-deep); }
+.nav .btn { padding: .7em 1.1em; font-size: .9rem; white-space: nowrap; }
+.logo { white-space: nowrap; }
+.nav .short { display: none; }
+@media (max-width: 480px) { .nav .long { display: none; } .nav .short { display: inline; } .nav .btn { padding: .65em .95em; font-size: .85rem; } }
+@media (max-width: 860px) { .nav ul { display: none; } }
+
+/* Hero */
+.hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+#petals { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.hero .wrap {
+  position: relative; display: grid; grid-template-columns: 1.35fr 1fr; gap: clamp(32px, 5vw, 72px);
+  padding-block: clamp(56px, 9vw, 120px); align-items: end;
+}
+.hero h1 { font-size: var(--s-1); line-height: .95; font-weight: 800; }
+.hero h1 em { font-style: normal; color: var(--gold); }
+.hero .lede { margin-top: 28px; max-width: 34em; font-size: 1.15rem; color: var(--ink-soft); }
+.hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+.hero > .wrap > div { min-width: 0; display: flex; flex-direction: column; gap: 0; }
+.hero .eyebrow { margin-bottom: 24px; }
+
+.declaration {
+  background: var(--ink); color: var(--paper); border-radius: 20px; padding: clamp(24px, 3vw, 36px);
+  box-shadow: 0 30px 60px -30px rgba(21, 38, 31, .5);
+}
+.declaration .eyebrow { color: var(--gold-bright); margin-bottom: 20px; }
+.declaration ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; counter-reset: art; }
+.declaration li { counter-increment: art; display: grid; grid-template-columns: 2.6em 1fr; gap: 8px; font-size: 1.02rem; line-height: 1.45; }
+.declaration li::before { content: "Art. " counter(art); font: 500 .72rem/1.9 var(--f-mono); color: var(--gold-pale); opacity: .7; }
+.declaration strong { font-family: var(--f-display); font-weight: 600; font-size: 1.1rem; display: block; }
+.declaration p { color: #C7D0CA; font-size: .95rem; }
+@media (max-width: 900px) { .hero .wrap { grid-template-columns: 1fr; } }
+
+/* Section scaffolding */
+section { padding-block: clamp(64px, 9vw, 112px); }
+.section-head { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 64px; align-items: end; margin-bottom: 48px; }
+.section-head h2 { font-size: var(--s-2); line-height: 1.05; font-weight: 800; margin-top: 14px; }
+.section-head p { color: var(--ink-soft); max-width: 32em; }
+@media (max-width: 760px) { .section-head { grid-template-columns: 1fr; } }
+
+/* Services */
+.services { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--ink); }
+.service {
+  padding: 32px 28px 36px 0; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; min-width: 0;
+}
+.service:not(:nth-child(3n+1)) { padding-left: 28px; border-left: 1px solid var(--line); }
+.service .tag { font: 500 .72rem/1 var(--f-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); }
+.service h3 { font-size: var(--s-3); font-weight: 600; }
+.service p { color: var(--ink-soft); font-size: .98rem; }
+.service svg { width: 40px; height: 40px; color: var(--gold); }
+@media (max-width: 900px) {
+  .services { grid-template-columns: 1fr 1fr; }
+  .service:not(:nth-child(3n+1)) { padding-left: 0; border-left: 0; }
+  .service:nth-child(2n) { padding-left: 24px; border-left: 1px solid var(--line); }
+}
+@media (max-width: 560px) {
+  .services { grid-template-columns: 1fr; }
+  .service:nth-child(2n) { padding-left: 0; border-left: 0; }
+}
+
+/* Why band */
+.why { background: var(--gold-bright); color: var(--ink); }
+.why .wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.why blockquote { margin: 0; font: 600 clamp(1.7rem, 3.4vw, 2.6rem)/1.15 var(--f-display); letter-spacing: -0.02em; text-wrap: balance; }
+.why .eyebrow { color: var(--ink); margin-bottom: 20px; display: block; }
+.why ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
+.why li { display: grid; grid-template-columns: 24px 1fr; gap: 14px; color: var(--ink); }
+.why li::before { content: ""; width: 10px; height: 10px; margin-top: .55em; border-radius: 50% 50% 50% 0; background: var(--ink); transform: rotate(-45deg); }
+@media (max-width: 800px) { .why .wrap { grid-template-columns: 1fr; } }
+
+/* Process */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; list-style: none; margin: 0; padding: 0; counter-reset: step; }
+.steps li { counter-increment: step; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 28px 24px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.steps li::before { content: counter(step, decimal-leading-zero); font: 800 2.4rem/1 var(--f-display); color: var(--gold); }
+.steps h3 { font-size: 1.2rem; font-weight: 600; }
+.steps p { color: var(--ink-soft); font-size: .96rem; }
+@media (max-width: 900px) { .steps { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+
+/* Events */
+.events-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; }
+.event {
+  display: grid; grid-template-columns: auto 1fr; gap: 28px; background: var(--paper);
+  border: 1px solid var(--line); border-radius: 20px; padding: clamp(22px, 3vw, 36px); min-width: 0;
+}
+.date { text-align: center; border-right: 1px solid var(--line); padding-right: 28px; }
+.date .d { font: 800 3.6rem/1 var(--f-display); color: var(--gold); }
+.date .m { font: 500 .8rem/1.4 var(--f-mono); text-transform: uppercase; letter-spacing: .12em; }
+.event h3 { font-size: 1.6rem; font-weight: 600; margin: 8px 0 10px; }
+.event p { color: var(--ink-soft); }
+.meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 18px; font-size: .92rem; }
+.meta span { display: inline-flex; gap: 6px; align-items: center; }
+.meta b { font-variant-numeric: tabular-nums; }
+.event .btn { margin-top: 22px; }
+.event-aside {
+  background: var(--ink); color: var(--paper); border-radius: 20px; padding: clamp(22px, 3vw, 36px);
+  display: flex; flex-direction: column; justify-content: space-between; gap: 24px;
+}
+.event-aside h3 { font-size: 1.5rem; font-weight: 600; }
+.event-aside p { color: #C7D0CA; margin-top: 10px; }
+.event-aside .btn { border-color: var(--paper); color: var(--paper); align-self: flex-start; }
+.event-aside .btn:hover { background: var(--paper); color: var(--ink); }
+@media (max-width: 900px) { .events-grid { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .event { grid-template-columns: 1fr; } .date { border-right: 0; padding-right: 0; text-align: left; display: flex; gap: 12px; align-items: baseline; } }
+
+/* Contact */
+.contact { background: var(--paper); border-top: 1px solid var(--line); }
+.contact .wrap { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(32px, 6vw, 80px); }
+.contact h2 { font-size: var(--s-2); line-height: 1.05; font-weight: 800; margin: 14px 0 18px; }
+.contact .intro { min-width: 0; }
+.details dd { overflow-wrap: anywhere; }
+.contact .intro p { color: var(--ink-soft); max-width: 30em; }
+.details { margin-top: 32px; display: grid; gap: 14px; }
+.details div { display: grid; grid-template-columns: 90px 1fr; gap: 12px; border-top: 1px solid var(--line); padding-top: 14px; }
+.details dt { font: 500 .75rem/1.8 var(--f-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--ink-soft); }
+.details dd { margin: 0; font-weight: 500; user-select: all; }
+form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-content: start; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+label { font-size: .85rem; font-weight: 600; }
+input, select, textarea {
+  font: inherit; font-size: 1rem; color: var(--ink); background: var(--ground); border: 1px solid var(--line);
+  border-radius: 10px; padding: .8em .9em; width: 100%;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--gold-deep); outline-offset: 1px; border-color: transparent; }
+textarea { min-height: 110px; resize: vertical; }
+form .btn { justify-self: start; cursor: pointer; }
+.sent { grid-column: 1 / -1; color: var(--gold-deep); font-weight: 600; }
+@media (max-width: 800px) { .contact .wrap, form { grid-template-columns: 1fr; } }
+
+footer { background: var(--ink); color: #C7D0CA; font-size: .9rem; }
+footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding-block: 32px; }
+footer .logo b { color: var(--paper); }
+footer .logo span { color: #9AA8A0; }
+footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
+footer a { text-decoration: none; }
+footer a:hover { color: var(--paper); }
+
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } .btn:hover { transform: none; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Manifesto Wellness home"><i></i><b>Manifesto</b><span>Wellness</span></a>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#programmes">Programmes</a></li>
+        <li><a href="#approach">Approach</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-solid" href="#contact"><span class="long">Plan a wellness day</span><span class="short">Contact us</span></a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" style="padding-block:0">
+    <canvas id="petals" aria-hidden="true"></canvas>
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Corporate wellbeing · Johannesburg</span>
+        <h1>Healthier people build <em>stronger businesses.</em></h1>
+        <p class="lede">We design and run wellness programmes for South African workplaces: on-site wellness days, mental health workshops and retreats that your team will actually show up for.</p>
+        <div class="ctas">
+          <a class="btn btn-solid" href="#contact">Get a proposal</a>
+          <a class="btn btn-ghost" href="#programmes">See our programmes</a>
+        </div>
+      </div>
+      <aside class="declaration" aria-label="Our manifesto">
+        <span class="eyebrow">Our manifesto</span>
+        <ol>
+          <li><div><strong>Wellbeing is a business decision.</strong><p>Rested, supported people make better calls and stay longer.</p></div></li>
+          <li><div><strong>Show up where people work.</strong><p>We come to your office, site or boardroom. No extra admin for your team.</p></div></li>
+          <li><div><strong>Mind and body, together.</strong><p>Screenings, movement, nutrition and mental health in one programme.</p></div></li>
+          <li><div><strong>Measure what matters.</strong><p>Every programme ends with a report you can take to leadership.</p></div></li>
+        </ol>
+      </aside>
+    </div>
+  </section>
+
+  <section id="programmes">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Programmes</span>
+          <h2>Everything your people need, under one roof.</h2>
+        </div>
+        <p>Book a single session or build a year-long calendar. Each programme is tailored to your team size, industry and budget.</p>
+      </div>
+      <div class="services">
+        <article class="service">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="9" width="30" height="26" rx="3"/><path d="M5 16h30M13 5v8M27 5v8"/><circle cx="20" cy="26" r="4" fill="currentColor"/></svg>
+          <span class="tag">On-site</span>
+          <h3>Corporate wellness days</h3>
+          <p>A full day of health stations, talks and treatments at your workplace, run end to end by our team.</p>
+        </article>
+        <article class="service">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 21h6l3-8 5 16 4-11 2 3h8"/></svg>
+          <span class="tag">Screening</span>
+          <h3>Health risk assessments</h3>
+          <p>Blood pressure, glucose, cholesterol and BMI checks, with confidential results and follow-up guidance.</p>
+        </article>
+        <article class="service">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><circle cx="20" cy="17" r="10"/><path d="M14 34c1-4 3-6 6-6s5 2 6 6"/><path d="M16 17c2 2 6 2 8 0"/></svg>
+          <span class="tag">Mental health</span>
+          <h3>Stress &amp; burnout workshops</h3>
+          <p>Practical sessions on resilience, sleep and boundaries, led by qualified practitioners.</p>
+        </article>
+        <article class="service">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><circle cx="22" cy="8" r="3"/><path d="M12 36l6-11 5 4 3 7M18 25l2-10 6 5 6-2M14 18l6-3"/></svg>
+          <span class="tag">Movement</span>
+          <h3>Yoga, breathwork &amp; desk mobility</h3>
+          <p>Weekly or once-off classes that fit into a lunch break. No mats or gym kit needed.</p>
+        </article>
+        <article class="service">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 35c-8 0-13-6-13-13 0-6 4-10 9-10 2 0 3 1 4 1s2-1 4-1c5 0 9 4 9 10 0 7-5 13-13 13z"/><path d="M20 13c0-4 2-7 6-8"/></svg>
+          <span class="tag">Nutrition</span>
+          <h3>Eat well at work</h3>
+          <p>Talks and cooking demos from a dietitian, built around real South African lunchboxes and canteens.</p>
+        </article>
+        <article class="service">
+          <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 34c4-12 8-20 12-26 4 6 8 14 12 26"/><path d="M12 26h16"/><circle cx="20" cy="8" r="2" fill="currentColor"/></svg>
+          <span class="tag">Retreats</span>
+          <h3>Team &amp; leadership retreats</h3>
+          <p>Half-day and weekend retreats near Johannesburg to reset, reconnect and plan with a clear head.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="why">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Why it matters</span>
+        <blockquote>When your people feel well, it shows in the work, the culture and the numbers.</blockquote>
+      </div>
+      <ul>
+        <li><span>Fewer sick days and less presenteeism, when people are at work but running on empty.</span></li>
+        <li><span>A visible employee benefit that helps you attract and keep good people.</span></li>
+        <li><span>Support that works alongside your medical aid and EAP, not instead of it.</span></li>
+        <li><span>One trusted partner instead of five separate suppliers to manage.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="approach">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">How we work</span>
+          <h2>From first call to final report.</h2>
+        </div>
+        <p>A clear process means HR spends less time coordinating and more time seeing results.</p>
+      </div>
+      <ol class="steps">
+        <li><h3>Discover</h3><p>A short call and survey to understand your people, pressures and goals.</p></li>
+        <li><h3>Design</h3><p>We propose a programme, calendar and budget that fits your workplace.</p></li>
+        <li><h3>Deliver</h3><p>Our practitioners run every session on-site or online. You just book the room.</p></li>
+        <li><h3>Measure</h3><p>Participation, feedback and health trends in a report for leadership.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="events" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Events</span>
+          <h2>Open to everyone.</h2>
+        </div>
+        <p>Alongside our corporate work, we host public retreats and workshops in and around Johannesburg.</p>
+      </div>
+      <div class="events-grid">
+        <article class="event">
+          <div class="date"><div class="d">01</div><div class="m">Aug · Sat</div></div>
+          <div>
+            <span class="eyebrow">Women's retreat</span>
+            <h3>Return to your feminine essence</h3>
+            <p>A nurturing morning retreat designed to restore balance, awaken inner wisdom and reconnect you with your authentic feminine essence.</p>
+            <div class="meta">
+              <span><b>08:00 – 13:00</b></span>
+              <span>The Garden Venue, North Riding</span>
+              <span><b>R1 690</b></span>
+            </div>
+            <a class="btn btn-solid" href="#contact">Reserve your place</a>
+          </div>
+        </article>
+        <aside class="event-aside">
+          <div>
+            <h3>Host a private event</h3>
+            <p>Any of our public retreats can be booked exclusively for your team, with a venue, catering and programme arranged for you.</p>
+          </div>
+          <a class="btn" href="#contact">Enquire about dates</a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="wrap">
+      <div class="intro">
+        <span class="eyebrow">Contact</span>
+        <h2>Let's plan something your team will remember.</h2>
+        <p>Tell us a little about your workplace and we'll send a tailored proposal within two working days.</p>
+        <dl class="details">
+          <div><dt>Email</dt><dd>admin@manifestowellness.co.za</dd></div>
+          <div><dt>Based in</dt><dd>Johannesburg, Gauteng</dd></div>
+          <div><dt>Social</dt><dd>Facebook · Instagram · LinkedIn</dd></div>
+        </dl>
+      </div>
+      <form id="enquiry" novalidate>
+        <div class="field"><label for="f-name">Your name</label><input id="f-name" name="name" autocomplete="name" value="Thandi Mokoena"></div>
+        <div class="field"><label for="f-company">Company</label><input id="f-company" name="company" autocomplete="organization" value="Example Holdings (Pty) Ltd"></div>
+        <div class="field"><label for="f-email">Work email</label><input id="f-email" name="email" type="email" autocomplete="email" value="thandi@example.co.za"></div>
+        <div class="field"><label for="f-size">Team size</label>
+          <select id="f-size" name="size"><option>1 – 25</option><option selected>26 – 100</option><option>101 – 500</option><option>500+</option></select></div>
+        <div class="field full"><label for="f-interest">I'm interested in</label>
+          <select id="f-interest" name="interest"><option selected>Corporate wellness day</option><option>Health risk assessments</option><option>Mental health workshops</option><option>Team or leadership retreat</option><option>A year-long programme</option></select></div>
+        <div class="field full"><label for="f-msg">Anything else?</label><textarea id="f-msg" name="message">We'd like a wellness day for Mental Health Awareness Month in October.</textarea></div>
+        <button class="btn btn-solid" type="submit">Request a proposal</button>
+        <p class="sent" id="sent" hidden>Thank you. This is a mockup, so nothing was sent.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top"><b>Manifesto</b><span>Wellness</span></a>
+    <nav aria-label="Footer">
+      <a href="#programmes">Programmes</a><a href="#approach">Approach</a><a href="#events">Events</a><a href="#contact">Contact</a>
+    </nav>
+    <span>© 2026 Manifesto Wellness · Johannesburg</span>
+  </div>
+</footer>
+
+<script>
+document.getElementById('enquiry').addEventListener('submit', function (e) {
+  e.preventDefault();
+  document.getElementById('sent').hidden = false;
+});
+
+// Jacaranda petals drifting across the hero
+(function () {
+  const c = document.getElementById('petals');
+  const ctx = c.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const colours = ['#A97A1F', '#C99A33', '#D9AC45', '#E8C877'];
+  let w, h, petals = [];
+  function size() {
+    const r = c.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    w = r.width; h = r.height; c.width = w * dpr; c.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function make(y) {
+    return { x: Math.random() * w, y: y ?? Math.random() * h, s: 5 + Math.random() * 7,
+      vy: .25 + Math.random() * .45, vx: -.2 + Math.random() * .5, r: Math.random() * 6.28,
+      vr: -.02 + Math.random() * .04, a: .18 + Math.random() * .3, col: colours[Math.floor(Math.random() * colours.length)] };
+  }
+  function draw(p) {
+    ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r); ctx.globalAlpha = p.a; ctx.fillStyle = p.col;
+    ctx.beginPath(); ctx.ellipse(0, 0, p.s, p.s * .55, 0, 0, 6.28); ctx.fill(); ctx.restore();
+  }
+  function frame() {
+    ctx.clearRect(0, 0, w, h);
+    for (const p of petals) {
+      p.y += p.vy; p.x += p.vx + Math.sin(p.y / 40) * .3; p.r += p.vr;
+      if (p.y > h + 20) Object.assign(p, make(-20));
+      draw(p);
+    }
+    requestAnimationFrame(frame);
+  }
+  size();
+  petals = Array.from({ length: Math.round(Math.min(46, w / 26)) }, () => make());
+  addEventListener('resize', size);
+  if (reduce) petals.forEach(draw); else frame();
+})();
+</script>
+</body>
+</html>
