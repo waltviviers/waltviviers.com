@@ -34,6 +34,7 @@
   --band-fg: #111111;
   --band-accent: #111111;
   --band-line: transparent;
+  --logo-filter: brightness(0); /* white logo file shown black on light grounds */
 
   --f-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
   --f-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -54,6 +55,7 @@
   --ground: #0A0A0A; --paper: #151515; --ink: #F5F5F5; --ink-soft: #A8A8A8; --line: #2A2A2A;
   --gold: #A97A1F; --gold-deep: #A97A1F; --gold-bright: #D9AC45; --gold-pale: #F3E6C4;
   --panel: #181818; --on-panel: #FFFFFF; --on-panel-soft: #B5B5B5;
+  --logo-filter: none;
   color-scheme: dark;
   }
 }
@@ -61,6 +63,7 @@
   --ground: #0A0A0A; --paper: #151515; --ink: #F5F5F5; --ink-soft: #A8A8A8; --line: #2A2A2A;
   --gold: #A97A1F; --gold-deep: #A97A1F; --gold-bright: #D9AC45; --gold-pale: #F3E6C4;
   --panel: #181818; --on-panel: #FFFFFF; --on-panel-soft: #B5B5B5;
+  --logo-filter: none;
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -99,9 +102,7 @@ p { margin: 0; }
 }
 .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 14px; }
 .logo { display: flex; align-items: baseline; gap: .35em; text-decoration: none; font-family: var(--f-display); }
-.logo b { font-weight: 800; font-size: 1.35rem; letter-spacing: -0.03em; }
-.logo span { font-size: .95rem; color: var(--ink-soft); }
-.logo i { width: .55em; height: .55em; border-radius: 50% 50% 50% 0; background: var(--gold); display: inline-block; transform: rotate(-45deg) translateY(-.1em); }
+.logo img { display: block; height: 44px; width: auto; filter: var(--logo-filter); }
 .nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; font-weight: 500; font-size: .95rem; }
 .nav ul a { text-decoration: none; }
 .nav ul a:hover { color: var(--gold-deep); }
@@ -119,7 +120,7 @@ p { margin: 0; }
 :root[data-theme="dark"] .theme-toggle .sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .moon { display: block; }
 .nav .short { display: none; }
-@media (max-width: 480px) { .nav .wrap { gap: 12px; } .nav .logo span { display: none; } .nav .long { display: none; } .nav .short { display: inline; } .nav .btn { padding: .65em .95em; font-size: .85rem; } }
+@media (max-width: 480px) { .nav .wrap { gap: 12px; } .nav .logo img { height: 32px; } .nav .long { display: none; } .nav .short { display: inline; } .nav .btn { padding: .65em .95em; font-size: .85rem; } }
 @media (max-width: 860px) { .nav ul { display: none; } }
 
 /* Hero: full-bleed photo with the headline over a dark fade (desktop); photo stacked above text (phone) */
@@ -271,8 +272,7 @@ form .btn { justify-self: start; cursor: pointer; }
 
 footer { background: var(--panel); color: var(--on-panel-soft); font-size: .9rem; }
 footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding-block: 32px; }
-footer .logo b { color: var(--on-panel); }
-footer .logo span { color: var(--on-panel-soft); }
+footer .logo img { filter: none; height: 44px; }
 footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
 footer a { text-decoration: none; }
 footer a:hover { color: var(--on-panel); }
@@ -284,7 +284,7 @@ footer a:hover { color: var(--on-panel); }
 
 <header class="nav">
   <div class="wrap">
-    <a class="logo" href="#top" aria-label="Manifesto Wellness home"><i></i><b>Manifesto</b><span>Wellness</span></a>
+    <a class="logo" href="#top" aria-label="Manifesto Wellness home"><img src="images/logo-white.png" width="290" height="68" alt="Manifesto: Motivate, Inspire, Succeed"></a>
     <nav aria-label="Main">
       <ul>
         <li><a href="#programmes">Services</a></li>
@@ -497,7 +497,7 @@ footer a:hover { color: var(--on-panel); }
 
 <footer>
   <div class="wrap">
-    <a class="logo" href="#top"><b>Manifesto</b><span>Wellness</span></a>
+    <a class="logo" href="#top" aria-label="Back to top"><img src="images/logo-white.png" width="290" height="68" alt="Manifesto: Motivate, Inspire, Succeed"></a>
     <nav aria-label="Footer">
       <a href="#programmes">Services</a><a href="#approach">Approach</a><a href="#events">Events</a><a href="#contact">Contact</a>
     </nav>
