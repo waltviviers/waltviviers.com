@@ -343,6 +343,13 @@ form .btn { justify-self: start; cursor: pointer; }
   .lotus-right { width: 56vw; right: -24vw; bottom: -40px; }
 }
 
+/* Team */
+.team { display: grid; grid-template-columns: repeat(2, minmax(0, 360px)); gap: 28px; }
+.member { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.member img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 18px; }
+.member figcaption { font-family: var(--f-display); font-weight: 600; font-size: 1.25rem; }
+@media (max-width: 560px) { .team { grid-template-columns: 1fr; } }
+
 /* Testimonials */
 .quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .quote { margin: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: clamp(24px, 3vw, 36px); display: flex; flex-direction: column; justify-content: space-between; gap: 24px; min-width: 0; }
@@ -546,6 +553,28 @@ footer a:hover { color: var(--on-footer); }
           </div>
           <a class="btn" href="#contact">Enquire about dates</a>
         </aside>
+      </div>
+    </div>
+  </section>
+
+  <section id="team" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Our team</span>
+          <h2>The people behind Manifesto.</h2>
+        </div>
+        <p>Meet the practitioners who design and run every wellness day, workshop and retreat.</p>
+      </div>
+      <div class="team">
+        <figure class="member">
+          <img src="images/team-anja-400.webp" srcset="images/team-anja-400.webp 400w, images/team-anja-800.webp 800w" sizes="(max-width: 560px) 92vw, 360px" width="800" height="1000" loading="lazy" decoding="async" alt="Anja Theron">
+          <figcaption>Anja Theron</figcaption>
+        </figure>
+        <figure class="member">
+          <img src="images/team-chantal-400.webp" srcset="images/team-chantal-400.webp 400w, images/team-chantal-800.webp 800w" sizes="(max-width: 560px) 92vw, 360px" width="800" height="1000" loading="lazy" decoding="async" alt="Chantal Maskell">
+          <figcaption>Chantal Maskell</figcaption>
+        </figure>
       </div>
     </div>
   </section>
