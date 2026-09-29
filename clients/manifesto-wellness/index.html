@@ -160,7 +160,6 @@ p { margin: 0; }
 .hero-media { position: relative; margin: 0; }
 .hero-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.2s ease; }
 .hero-slide.is-active { opacity: 1; }
-.hero-slide.is-flipped img { transform: scaleX(-1); }
 .hero-slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 70% 40%); }
 .hero-media::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1; }
 .hero-dots { position: absolute; z-index: 3; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 10px; }
@@ -363,19 +362,19 @@ footer a:hover { color: var(--on-footer); }
 <main id="top">
   <section class="hero" style="padding-block:0">
     <div class="hero-media" aria-roledescription="carousel" aria-label="Manifesto Wellness in action">
-      <figure class="hero-slide is-active is-flipped" style="--focus: 72% 100%">
+      <figure class="hero-slide is-active" style="--focus: 72% 30%">
         <img src="images/banner-singing-bowl-1200.webp"
              srcset="images/banner-singing-bowl-800.webp 800w, images/banner-singing-bowl-1200.webp 1200w, images/banner-singing-bowl-2000.webp 2000w"
              sizes="100vw" width="2000" height="1125" fetchpriority="high"
              alt="A practitioner plays a brass singing bowl in front of rose gold lotus line art">
       </figure>
-      <figure class="hero-slide is-flipped" style="--focus: 78% 100%" aria-hidden="true">
+      <figure class="hero-slide" style="--focus: 78% 30%" aria-hidden="true">
         <img src="images/banner-crystal-bowls-1200.webp"
              srcset="images/banner-crystal-bowls-800.webp 800w, images/banner-crystal-bowls-1200.webp 1200w, images/banner-crystal-bowls-2000.webp 2000w"
              sizes="100vw" width="2000" height="1125" loading="lazy" decoding="async"
              alt="A practitioner plays crystal singing bowls beside rose gold lotus line art">
       </figure>
-      <figure class="hero-slide is-flipped" style="--focus: 60% 100%" aria-hidden="true">
+      <figure class="hero-slide" style="--focus: 60% 50%" aria-hidden="true">
         <img src="images/banner-bowls-flatlay-1200.webp"
              srcset="images/banner-bowls-flatlay-800.webp 800w, images/banner-bowls-flatlay-1200.webp 1200w, images/banner-bowls-flatlay-2000.webp 2000w"
              sizes="100vw" width="2000" height="1125" loading="lazy" decoding="async"
