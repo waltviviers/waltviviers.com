@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Manifesto Wellness Redesign</title>
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/favicon-192.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -204,7 +207,7 @@ p { margin: 0; }
 .hero-dots button:hover::before { background: rgba(255, 255, 255, .6); }
 @media (prefers-reduced-motion: reduce) { .hero-slide { transition: none; } }
 .hero-inner { position: relative; z-index: 2; pointer-events: none; padding-block: clamp(40px, 7vw, 96px); }
-.hero-inner .declaration { pointer-events: auto; margin-top: 20px; }
+.hero-copy .declaration { margin-top: 28px; }
 .hero-copy { pointer-events: auto; max-width: 36rem; min-width: 0; display: flex; flex-direction: column; }
 .hero h1 { font-size: var(--s-1); line-height: .95; font-weight: 800; }
 .hero h1 em { font-style: normal; color: var(--gold); background: var(--rose-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -226,16 +229,14 @@ p { margin: 0; }
     border: 1px solid var(--hero-glass-border); box-shadow: var(--glass-shadow);
   }
   .hero .eyebrow { margin-bottom: 16px; color: var(--hero-eyebrow); }
-  /* Manifesto strip sits on the banner as a second glass panel */
-  .hero-inner .declaration {
-    padding: 20px 28px; background: var(--hero-glass); -webkit-backdrop-filter: blur(12px) saturate(1.3); backdrop-filter: blur(12px) saturate(1.3);
-    border: 1px solid var(--hero-glass-border); box-shadow: var(--glass-shadow); color: var(--hero-fg);
+  /* Manifesto sits inside the headline glass panel, under a hairline */
+  .hero-copy .declaration {
+    margin-top: 26px; padding: 22px 0 0; background: none; border: 0; border-top: 1px solid var(--hero-glass-border); border-radius: 0; color: var(--hero-fg);
   }
-  .hero-inner .declaration .eyebrow { margin-bottom: 10px; }
-  .hero-inner .declaration { max-width: 40rem; }  /* same width as the headline panel */
-  .hero-inner .declaration ol { grid-template-columns: 1fr 1fr; gap: 14px 28px; }
-  .hero-inner .declaration li::before { color: var(--hero-soft); }
-  .hero-inner .declaration p { color: var(--hero-soft); font-size: .9rem; }
+  .hero-copy .declaration .eyebrow { margin-bottom: 10px; }
+  .hero-copy .declaration ol { grid-template-columns: 1fr 1fr; gap: 14px 28px; }
+  .hero-copy .declaration li::before { color: var(--hero-soft); }
+  .hero-copy .declaration p { color: var(--hero-soft); font-size: .9rem; }
   .hero .lede { margin-top: 18px; font-size: 1.05rem; color: var(--hero-soft); }
   .hero .ctas { margin-top: 24px; }
   .hero h1 { color: var(--hero-fg); font-size: clamp(2.2rem, 3.3vw, 3.2rem); }
@@ -557,16 +558,16 @@ footer a:hover { color: var(--on-footer); }
           <a class="btn btn-solid" href="#contact">Get a proposal</a>
           <a class="btn btn-ghost" href="#programmes">See our services</a>
         </div>
+        <aside class="declaration" aria-label="Our manifesto">
+          <span class="eyebrow">Our manifesto</span>
+          <ol>
+            <li><div><strong>Wellness that works.</strong><p>Tailored programmes designed for your team’s unique needs.</p></div></li>
+            <li><div><strong>Invest in what matters most.</strong><p>Your people, and the culture they build together.</p></div></li>
+            <li><div><strong>Bring balance back to work.</strong><p>Programmes that energise, inspire and transform your workplace.</p></div></li>
+            <li><div><strong>Care, creativity and results.</strong><p>Every service is designed with intention.</p></div></li>
+          </ol>
+        </aside>
       </div>
-      <aside class="declaration" aria-label="Our manifesto">
-        <span class="eyebrow">Our manifesto</span>
-        <ol>
-          <li><div><strong>Wellness that works.</strong><p>Tailored programmes designed for your team’s unique needs.</p></div></li>
-          <li><div><strong>Invest in what matters most.</strong><p>Your people, and the culture they build together.</p></div></li>
-          <li><div><strong>Bring balance back to work.</strong><p>Programmes that energise, inspire and transform your workplace.</p></div></li>
-          <li><div><strong>Care, creativity and results.</strong><p>Every service is designed with intention.</p></div></li>
-        </ol>
-      </aside>
     </div>
   </section>
 
