@@ -115,7 +115,8 @@ p { margin: 0; }
   background: color-mix(in srgb, var(--ground) 88%, transparent);
   backdrop-filter: blur(10px); border-bottom: 1px solid var(--line);
 }
-.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 14px; }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 8px; }
+.nav .logo img { height: 36px; }
 .logo { display: flex; align-items: baseline; gap: .35em; text-decoration: none; font-family: var(--f-display); }
 .logo img { display: block; height: 44px; width: auto; }
 .nav .logo .logo-light { display: var(--logo-light); }
@@ -123,11 +124,11 @@ p { margin: 0; }
 .nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; font-weight: 500; font-size: .95rem; }
 .nav ul a { text-decoration: none; }
 .nav ul a:hover { color: var(--gold-deep); }
-.nav .btn { padding: .7em 1.1em; font-size: .9rem; white-space: nowrap; }
+.nav .btn { padding: .55em 1em; font-size: .88rem; white-space: nowrap; }
 .logo { white-space: nowrap; }
 .nav-actions { display: flex; align-items: center; gap: 10px; }
 .theme-toggle {
-  width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 50%;
+  width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 50%;
   border: 1.5px solid var(--line); background: transparent; color: var(--ink); cursor: pointer;
   transition: border-color .2s ease, color .2s ease;
 }
@@ -137,7 +138,7 @@ p { margin: 0; }
 :root[data-theme="dark"] .theme-toggle .sun { display: none; }
 :root[data-theme="dark"] .theme-toggle .moon { display: block; }
 .nav .short { display: none; }
-@media (max-width: 480px) { .nav .wrap { gap: 12px; } .nav .logo img { height: 32px; } .nav .long { display: none; } .nav .short { display: inline; } .nav .btn { padding: .65em .95em; font-size: .85rem; } }
+@media (max-width: 480px) { .nav .wrap { gap: 12px; } .nav .logo img { height: 30px; } .nav .long { display: none; } .nav .short { display: inline; } .nav .btn { padding: .65em .95em; font-size: .85rem; } }
 @media (max-width: 860px) { .nav ul { display: none; } }
 
 /* Hero: full-bleed photo with the headline over a dark fade (desktop); photo stacked above text (phone) */
