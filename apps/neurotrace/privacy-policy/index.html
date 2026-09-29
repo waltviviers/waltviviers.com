@@ -315,11 +315,6 @@
       <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
         <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
-      <div class="lang-toggle lang-switch" id="lang-toggle">
-        <div class="lang-group active" id="lang-en">English</div>
-        <button type="button" class="lang-track" aria-label="Toggle language"><span class="lang-knob"></span></button>
-        <div class="lang-group" id="lang-af">Afrikaans</div>
-      </div>
     </div>
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/photography/">Photography</a></li>
@@ -462,22 +457,16 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'email-href': 'mailto:artist@waltviviers.com' },
-        af: { 'email-href': 'mailto:kunstenaar@waltviviers.com' }
+        en: { 'email-href': 'mailto:artist@waltviviers.com' }
       };
-      var lang = localStorage.getItem('wv-lang') || 'en';
+      var lang = 'en';
       function applyLang(l) {
         lang = l; localStorage.setItem('wv-lang', l);
         document.querySelectorAll('[data-i18n-href]').forEach(function(el) {
           var k = el.dataset.i18nHref;
           if (LANG[l] && LANG[l][k] !== undefined) el.href = LANG[l][k];
         });
-        document.getElementById('lang-en').classList.toggle('active', l === 'en');
-        document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }
-      document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
-      document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
-      var _lt = document.querySelector('.lang-track'); if (_lt) _lt.addEventListener('click', function () { applyLang(document.getElementById('lang-af').classList.contains('active') ? 'en' : 'af'); });
       applyLang(lang);
     })();
   </script>
