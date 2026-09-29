@@ -284,13 +284,25 @@ p { margin: 0; }
 /* Phones: the photo still fills the whole banner; the panel sits over it with tighter spacing */
 @media (max-width: 899px) {
   .hero-inner { padding-block: max(240px, 36vh) 20px; }  /* let the photo show above the panel */
-  .hero-copy { padding: 22px 20px; border-radius: 20px; }
   .hero-dots { top: 16px; right: 16px; }
   .hero .lede { font-size: 1rem; }
   .hero .ctas .btn { flex: 1 1 auto; justify-content: center; text-align: center; }
 }
 @media (max-width: 560px) {
   .hero-copy .declaration ol { grid-template-columns: 1fr; gap: 12px; }
+}
+/* Phones: headline and manifesto become separate glass panels, each manifesto article its own tile */
+@media (max-width: 899px) {
+  .hero-copy { padding: 0; background: none; border: 0; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .hero-main, .hero-copy .declaration li {
+    background: var(--hero-glass); -webkit-backdrop-filter: blur(12px) saturate(1.3); backdrop-filter: blur(12px) saturate(1.3);
+    border: 1px solid var(--hero-glass-border); box-shadow: var(--glass-shadow);
+  }
+  .hero-main { padding: 22px 20px; border-radius: 20px; }
+  .hero-copy .declaration { margin-top: 16px; padding: 0; border-top: 0; }
+  .hero-copy .declaration .eyebrow { margin: 6px 4px 10px; text-shadow: 0 1px 8px rgba(0, 0, 0, .45); }
+  .hero-copy .declaration ol { grid-template-columns: 1fr; gap: 10px; }
+  .hero-copy .declaration li { padding: 14px 18px; border-radius: 16px; }
 }
 
 /* Manifesto strip under the hero */
@@ -643,25 +655,27 @@ footer .copyright strong { color: var(--on-footer); font-weight: 600; }
     </div>
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <!-- Eyebrow and headline change with each banner image -->
-        <span class="eyebrow hero-rot">
-          <span class="is-active">Bring balance back to work</span>
-          <span aria-hidden="true">Healthy teams. Thriving businesses.</span>
-          <span aria-hidden="true">Wellness that works</span>
-        </span>
-        <h1 class="hero-rot">
-          <span class="is-active">Create a culture of wellness <br class="br-d">that energises, inspires and <br class="br-d"><em>transforms your workplace.</em></span>
-          <span aria-hidden="true">We help companies invest <br class="br-d">in what matters most: <br class="br-d"><em>their people.</em></span>
-          <span aria-hidden="true">Wellness programmes <br class="br-d">tailored to your team’s <br class="br-d"><em>unique needs.</em></span>
-        </h1>
-        <p class="lede hero-rot">
-          <span class="is-active">Wellness days, workshops and talks that give your people the energy and focus to do their best work.</span>
-          <span aria-hidden="true">When people feel supported, businesses thrive: more engagement, less burnout and a culture people want to be part of.</span>
-          <span aria-hidden="true">Every programme starts with your people, pressures and goals, and runs on-site or online.</span>
-        </p>
-        <div class="ctas">
-          <a class="btn btn-solid" href="#contact">Get a proposal</a>
-          <a class="btn btn-ghost" href="#programmes">See our services</a>
+        <div class="hero-main">
+          <!-- Eyebrow and headline change with each banner image -->
+          <span class="eyebrow hero-rot">
+            <span class="is-active">Bring balance back to work</span>
+            <span aria-hidden="true">Healthy teams. Thriving businesses.</span>
+            <span aria-hidden="true">Wellness that works</span>
+          </span>
+          <h1 class="hero-rot">
+            <span class="is-active">Create a culture of wellness <br class="br-d">that energises, inspires and <br class="br-d"><em>transforms your workplace.</em></span>
+            <span aria-hidden="true">We help companies invest <br class="br-d">in what matters most: <br class="br-d"><em>their people.</em></span>
+            <span aria-hidden="true">Wellness programmes <br class="br-d">tailored to your team’s <br class="br-d"><em>unique needs.</em></span>
+          </h1>
+          <p class="lede hero-rot">
+            <span class="is-active">Wellness days, workshops and talks that give your people the energy and focus to do their best work.</span>
+            <span aria-hidden="true">When people feel supported, businesses thrive: more engagement, less burnout and a culture people want to be part of.</span>
+            <span aria-hidden="true">Every programme starts with your people, pressures and goals, and runs on-site or online.</span>
+          </p>
+          <div class="ctas">
+            <a class="btn btn-solid" href="#contact">Get a proposal</a>
+            <a class="btn btn-ghost" href="#programmes">See our services</a>
+          </div>
         </div>
         <aside class="declaration" aria-label="Our manifesto">
           <span class="eyebrow">Our manifesto</span>
