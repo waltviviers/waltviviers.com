@@ -54,6 +54,7 @@
   --glass-border: rgba(255, 255, 255, .7);
   --glass-shadow: 0 8px 32px rgba(120, 70, 45, .14);
   --glass-blur: blur(18px) saturate(1.4);
+  --menu-bg: rgba(255, 250, 247, .94);
   --glass-rose: linear-gradient(135deg, rgba(251, 198, 166, .45), rgba(255, 250, 247, .4));
   --hero-glass: rgba(255, 250, 247, .3); --hero-glass-border: rgba(255, 255, 255, .5);
   --hero-bg: #FBF0E9;
@@ -92,7 +93,7 @@
   --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='48'%3E%3Cpath d='M0 24C20 10 60 10 80 24S140 38 160 24' fill='none' stroke='%23F7B68C' stroke-opacity='.1' stroke-width='1'/%3E%3C/svg%3E");
   --photo-tint: linear-gradient(135deg, rgba(247, 182, 140, .32), rgba(158, 95, 69, .34));
   --logo-light: none; --logo-dark: block;
-  --glass-bg: rgba(27, 27, 27, .5); --glass-strong: rgba(27, 27, 27, .7);
+  --glass-bg: rgba(27, 27, 27, .5); --glass-strong: rgba(27, 27, 27, .7); --menu-bg: rgba(27, 27, 27, .94);
   --glass-border: rgba(255, 255, 255, .12); --glass-shadow: 0 8px 32px rgba(0, 0, 0, .4);
   --glass-rose: linear-gradient(135deg, rgba(247, 182, 140, .14), rgba(26, 26, 26, .5));
   --hero-glass: rgba(20, 20, 20, .28); --hero-glass-border: rgba(255, 255, 255, .16);
@@ -113,7 +114,7 @@
   --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='48'%3E%3Cpath d='M0 24C20 10 60 10 80 24S140 38 160 24' fill='none' stroke='%23F7B68C' stroke-opacity='.1' stroke-width='1'/%3E%3C/svg%3E");
   --photo-tint: linear-gradient(135deg, rgba(247, 182, 140, .32), rgba(158, 95, 69, .34));
   --logo-light: none; --logo-dark: block;
-  --glass-bg: rgba(27, 27, 27, .5); --glass-strong: rgba(27, 27, 27, .7);
+  --glass-bg: rgba(27, 27, 27, .5); --glass-strong: rgba(27, 27, 27, .7); --menu-bg: rgba(27, 27, 27, .94);
   --glass-border: rgba(255, 255, 255, .12); --glass-shadow: 0 8px 32px rgba(0, 0, 0, .4);
   --glass-rose: linear-gradient(135deg, rgba(247, 182, 140, .14), rgba(26, 26, 26, .5));
   --hero-glass: rgba(20, 20, 20, .28); --hero-glass-border: rgba(255, 255, 255, .16);
@@ -189,7 +190,33 @@ p { margin: 0; }
 :root[data-theme="dark"] .theme-toggle .moon { display: block; }
 .nav .short { display: none; }
 @media (max-width: 480px) { .nav .wrap { gap: 12px; } .nav .wrap { padding-block: 12px; } .nav .logo img { height: 36px; } .nav.is-scrolled .logo img { height: 30px; } .nav .long { display: none; } .nav .short { display: inline; } .nav .btn { padding: .65em .95em; font-size: .85rem; } }
-@media (max-width: 860px) { .nav ul { display: none; } }
+/* Burger menu (tablet and phone) */
+.menu-toggle {
+  display: none; width: 40px; height: 40px; flex: none; place-items: center; padding: 0; cursor: pointer;
+  border: 1.5px solid var(--line); border-radius: 50%; background: transparent; color: var(--ink);
+}
+.menu-toggle span { display: block; width: 18px; height: 2px; border-radius: 2px; background: currentColor; position: relative; transition: background .2s ease; }
+.menu-toggle span::before, .menu-toggle span::after { content: ""; position: absolute; left: 0; width: 18px; height: 2px; border-radius: 2px; background: currentColor; transition: transform .25s ease, top .25s ease; }
+.menu-toggle span::before { top: -6px; }
+.menu-toggle span::after { top: 6px; }
+.nav.menu-open .menu-toggle span { background: transparent; }
+.nav.menu-open .menu-toggle span::before { top: 0; transform: rotate(45deg); }
+.nav.menu-open .menu-toggle span::after { top: 0; transform: rotate(-45deg); }
+.menu-toggle:hover { border-color: var(--gold-deep); color: var(--gold-deep); }
+@media (max-width: 860px) {
+  .menu-toggle { display: grid; }
+  .nav ul {
+    display: none; position: absolute; left: 12px; right: 12px; top: calc(100% + 8px); flex-direction: column; gap: 0; padding: 8px;
+    border-radius: 20px; background: var(--menu-bg); border: 1px solid var(--glass-border); box-shadow: 0 18px 50px rgba(0, 0, 0, .25);
+    -webkit-backdrop-filter: blur(24px) saturate(1.4); backdrop-filter: blur(24px) saturate(1.4); font-size: 1.05rem;
+  }
+  .nav.menu-open ul { display: flex; animation: menu-in .2s ease; }
+  .nav ul a { display: block; padding: 14px 16px; border-radius: 12px; }
+  .nav ul a:hover, .nav ul a:focus-visible { background: var(--glass-bg); }
+  .nav ul li + li { border-top: 1px solid var(--glass-border); }
+}
+@keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .nav.menu-open ul { animation: none; } .menu-toggle span::before, .menu-toggle span::after { transition: none; } }
 
 /* Hero: full-bleed photo with the headline over a dark fade (desktop); photo stacked above text (phone) */
 .hero { position: relative; overflow: hidden; }
@@ -542,7 +569,7 @@ footer .copyright strong { color: var(--on-footer); font-weight: 600; }
   <div class="wrap">
     <a class="logo" href="#top" aria-label="Manifesto Wellness home"><img class="logo-light" src="images/logo-rose-deep.png" width="800" height="187" alt="Manifesto: Motivate, Inspire, Succeed"><img class="logo-dark" src="images/logo-rose.png" width="800" height="187" alt="Manifesto: Motivate, Inspire, Succeed"></a>
     <nav aria-label="Main">
-      <ul>
+      <ul id="main-menu">
         <li><a href="#programmes">Services</a></li>
         <li><a href="#approach">Approach</a></li>
         <li><a href="#events">Events</a></li>
@@ -557,6 +584,7 @@ footer .copyright strong { color: var(--on-footer); font-weight: 600; }
         <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
       </button>
       <a class="btn btn-solid" href="#contact"><span class="long">Plan a wellness day</span><span class="short">Contact us</span></a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="main-menu"><span></span></button>
     </div>
   </div>
 </header>
@@ -926,6 +954,22 @@ footer .copyright strong { color: var(--on-footer); font-weight: 600; }
     try { localStorage.setItem('mw-theme', next); } catch (e) {}
     label();
   });
+})();
+
+// Burger menu: opens a glass dropdown on smaller screens; closes on a link, Esc or a click outside.
+(function () {
+  var nav = document.querySelector('.nav');
+  var toggle = document.getElementById('menu-toggle');
+  function set(open) {
+    nav.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  toggle.addEventListener('click', function () { set(!nav.classList.contains('menu-open')); });
+  nav.querySelectorAll('#main-menu a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('menu-open')) { set(false); toggle.focus(); } });
+  document.addEventListener('click', function (e) { if (!nav.contains(e.target)) set(false); });
+  matchMedia('(min-width: 861px)').addEventListener('change', function (e) { if (e.matches) set(false); });
 })();
 
 // Header: starts roomier, slims down once the page scrolls.
