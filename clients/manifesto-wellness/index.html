@@ -221,7 +221,7 @@ p { margin: 0; }
 @keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } }
 @media (prefers-reduced-motion: reduce) { .nav.menu-open ul { animation: none; } .menu-toggle span::before, .menu-toggle span::after { transition: none; } }
 
-/* Hero: full-bleed photo with the headline, subtext and manifesto in one glass panel over it, on every screen size */
+/* Hero: full-bleed photo with the headline over a dark fade (desktop); photo stacked above text (phone) */
 .hero { position: relative; overflow: hidden; }
 .hero-media { position: relative; margin: 0; }
 .hero-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.2s ease; }
@@ -253,7 +253,10 @@ p { margin: 0; }
 .hero .lede { margin-top: 28px; max-width: 34em; font-size: 1.15rem; color: var(--ink-soft); }
 .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
 .hero .eyebrow { margin-bottom: 24px; }
-/* Glass panel over the photo (all widths) */
+@media (max-width: 899px) {
+  .hero-media { aspect-ratio: 16 / 10; max-height: 56vh; width: 100%; }
+}
+@media (min-width: 900px) {
   .hero { min-height: clamp(420px, 34vw, 580px); display: flex; align-items: center; background: var(--hero-bg); }
   .hero-media { position: absolute; inset: 0; }
   .hero-dots { left: auto; right: var(--gutter); transform: none; bottom: auto; top: 24px; }
@@ -275,28 +278,9 @@ p { margin: 0; }
   .hero-copy .declaration p { color: var(--hero-soft); font-size: .9rem; }
   .hero .lede { margin-top: 18px; font-size: 1.05rem; color: var(--hero-soft); }
   .hero .ctas { margin-top: 24px; }
-  .hero h1 { color: var(--hero-fg); }
-  .hero h1 em { color: var(--hero-accent); background: var(--hero-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
-@media (min-width: 900px) {
-  .hero h1 { font-size: clamp(1.9rem, 2.5vw, 2.25rem); }
+  .hero h1 { color: var(--hero-fg); font-size: clamp(1.9rem, 2.5vw, 2.25rem); }
   .br-d { display: inline; }
-}
-/* Phones: the photo still fills the whole banner; the panel sits over it with tighter spacing */
-@media (max-width: 899px) {
-  .hero-inner { padding-block: max(240px, 36vh) 20px; }  /* let the photo show above the panel */
-  .hero-dots { top: 16px; right: 16px; }
-  .hero .lede { font-size: 1rem; }
-  .hero .ctas .btn { flex: 1 1 auto; justify-content: center; text-align: center; }
-}
-@media (max-width: 560px) {
-  .hero-copy .declaration ol { grid-template-columns: 1fr; gap: 12px; }
-}
-/* Phones: the manifesto leaves the banner and gets its own section below it */
-.manifesto-m { display: none; }
-@media (max-width: 899px) {
-  .hero-copy .declaration-d { display: none; }
-  .manifesto-m { display: block; padding-block: 28px 8px; }
-  .hero-copy { padding: 22px 20px; border-radius: 20px; }
+  .hero h1 em { color: var(--hero-accent); background: var(--hero-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
 }
 
 /* Manifesto strip under the hero */
@@ -649,29 +633,27 @@ footer .copyright strong { color: var(--on-footer); font-weight: 600; }
     </div>
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <div class="hero-main">
-          <!-- Eyebrow and headline change with each banner image -->
-          <span class="eyebrow hero-rot">
-            <span class="is-active">Bring balance back to work</span>
-            <span aria-hidden="true">Healthy teams. Thriving businesses.</span>
-            <span aria-hidden="true">Wellness that works</span>
-          </span>
-          <h1 class="hero-rot">
-            <span class="is-active">Create a culture of wellness <br class="br-d">that energises, inspires and <br class="br-d"><em>transforms your workplace.</em></span>
-            <span aria-hidden="true">We help companies invest <br class="br-d">in what matters most: <br class="br-d"><em>their people.</em></span>
-            <span aria-hidden="true">Wellness programmes <br class="br-d">tailored to your team’s <br class="br-d"><em>unique needs.</em></span>
-          </h1>
-          <p class="lede hero-rot">
-            <span class="is-active">Wellness days, workshops and talks that give your people the energy and focus to do their best work.</span>
-            <span aria-hidden="true">When people feel supported, businesses thrive: more engagement, less burnout and a culture people want to be part of.</span>
-            <span aria-hidden="true">Every programme starts with your people, pressures and goals, and runs on-site or online.</span>
-          </p>
-          <div class="ctas">
-            <a class="btn btn-solid" href="#contact">Get a proposal</a>
-            <a class="btn btn-ghost" href="#programmes">See our services</a>
-          </div>
+        <!-- Eyebrow and headline change with each banner image -->
+        <span class="eyebrow hero-rot">
+          <span class="is-active">Bring balance back to work</span>
+          <span aria-hidden="true">Healthy teams. Thriving businesses.</span>
+          <span aria-hidden="true">Wellness that works</span>
+        </span>
+        <h1 class="hero-rot">
+          <span class="is-active">Create a culture of wellness <br class="br-d">that energises, inspires and <br class="br-d"><em>transforms your workplace.</em></span>
+          <span aria-hidden="true">We help companies invest <br class="br-d">in what matters most: <br class="br-d"><em>their people.</em></span>
+          <span aria-hidden="true">Wellness programmes <br class="br-d">tailored to your team’s <br class="br-d"><em>unique needs.</em></span>
+        </h1>
+        <p class="lede hero-rot">
+          <span class="is-active">Wellness days, workshops and talks that give your people the energy and focus to do their best work.</span>
+          <span aria-hidden="true">When people feel supported, businesses thrive: more engagement, less burnout and a culture people want to be part of.</span>
+          <span aria-hidden="true">Every programme starts with your people, pressures and goals, and runs on-site or online.</span>
+        </p>
+        <div class="ctas">
+          <a class="btn btn-solid" href="#contact">Get a proposal</a>
+          <a class="btn btn-ghost" href="#programmes">See our services</a>
         </div>
-        <aside class="declaration declaration-d" aria-label="Our manifesto">
+        <aside class="declaration" aria-label="Our manifesto">
           <span class="eyebrow">Our manifesto</span>
           <ol>
             <li><div><strong>Wellness that works.</strong><p>Tailored programmes designed for your team’s unique needs.</p></div></li>
@@ -681,21 +663,6 @@ footer .copyright strong { color: var(--on-footer); font-weight: 600; }
           </ol>
         </aside>
       </div>
-    </div>
-  </section>
-
-  <!-- Phones: the manifesto sits below the banner (the desktop copy lives inside the banner panel) -->
-  <section class="manifesto-m">
-    <div class="wrap">
-      <aside class="declaration" aria-label="Our manifesto">
-        <span class="eyebrow">Our manifesto</span>
-        <ol>
-          <li><div><strong>Wellness that works.</strong><p>Tailored programmes designed for your team’s unique needs.</p></div></li>
-          <li><div><strong>Invest in what matters most.</strong><p>Your people, and the culture they build together.</p></div></li>
-          <li><div><strong>Bring balance back to work.</strong><p>Programmes that energise, inspire and transform your workplace.</p></div></li>
-          <li><div><strong>Care, creativity and results.</strong><p>Every service is designed with intention.</p></div></li>
-        </ol>
-      </aside>
     </div>
   </section>
 
