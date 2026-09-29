@@ -1,5 +1,5 @@
 /* Walt Viviers — minimal service worker for PWA installability + basic offline */
-const CACHE = 'wv-cache-v2';
+const CACHE = 'wv-cache-v3';
 const PRECACHE = ['/', '/offline.html', '/logo.svg', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', (event) => {
@@ -23,6 +23,7 @@ self.addEventListener('fetch', (event) => {
   let url;
   try { url = new URL(req.url); } catch (e) { return; }
   if (url.origin !== self.location.origin) return; // let the browser handle cross-origin
+  if (/^\/(admin|clients)/.test(url.pathname)) return; // never cache private pages
 
   // Network-first, fall back to cache (so the app still opens offline after a visit).
   event.respondWith(

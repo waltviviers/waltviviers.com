@@ -1,11 +1,30 @@
-// Password gate for client previews under /clients/.
-// Set CLIENT_PREVIEW_PASSWORD in the Vercel project's environment variables.
-// Without it the pages stay locked.
+// Server-side password gates. Each gate reads its password from a Vercel
+// environment variable; without it the pages stay locked.
+//   /clients/     -> CLIENT_PREVIEW_PASSWORD (client mockups)
+//   /admin-index/ -> ADMIN_PASSWORD
 
-export const config = { matcher: ['/clients', '/clients/:path*'] };
+export const config = { matcher: ['/clients', '/clients/:path*', '/admin-index', '/admin-index/:path*'] };
 
-const COOKIE = 'client_preview';
-const MAX_AGE = 60 * 60 * 24 * 30; // 30 days
+const GATES = [
+  {
+    prefix: '/clients',
+    env: 'CLIENT_PREVIEW_PASSWORD',
+    cookie: 'client_preview',
+    maxAge: 60 * 60 * 24 * 30, // 30 days
+    title: 'Client preview',
+    intro: 'This page is private. Enter the password Walt sent you.',
+    button: 'View preview',
+  },
+  {
+    prefix: '/admin-index',
+    env: 'ADMIN_PASSWORD',
+    cookie: 'admin_session',
+    maxAge: 60 * 60 * 24 * 7, // 7 days
+    title: 'Admin access',
+    intro: 'Enter the admin password to continue.',
+    button: 'Enter',
+  },
+];
 
 async function sha256(text) {
   const bytes = new TextEncoder().encode(text);
@@ -19,14 +38,14 @@ function readCookie(request, name) {
   return match ? decodeURIComponent(match.slice(name.length + 1)) : '';
 }
 
-function page(message, status) {
+function page(gate, message, status) {
   const html = `<!doctype html>
 <html lang="en-ZA">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Client preview · Walt Viviers</title>
+<title>${gate.title} · Walt Viviers</title>
 <style>
   :root { --bg: #f4f4f2; --card: #fff; --fg: #1c1c1c; --muted: #6b6b6b; --line: #d9d9d4; --err: #b3261e; color-scheme: light; }
   @media (prefers-color-scheme: dark) { :root { --bg: #151515; --card: #1f1f1f; --fg: #f1f1ee; --muted: #a3a3a0; --line: #3a3a38; --err: #f2867e; color-scheme: dark; } }
@@ -44,12 +63,12 @@ function page(message, status) {
 </head>
 <body>
 <form method="post">
-  <h1>Client preview</h1>
-  <p>This page is private. Enter the password Walt sent you.</p>
+  <h1>${gate.title}</h1>
+  <p>${gate.intro}</p>
   ${message ? `<p class="err" role="alert">${message}</p>` : ''}
   <label for="password">Password</label>
   <input id="password" name="password" type="password" autocomplete="current-password" required autofocus>
-  <button type="submit">View preview</button>
+  <button type="submit">${gate.button}</button>
 </form>
 </body>
 </html>`;
@@ -64,27 +83,31 @@ function page(message, status) {
 }
 
 export default async function middleware(request) {
-  const secret = process.env.CLIENT_PREVIEW_PASSWORD;
-  if (!secret) return page('Previews are not available right now.', 503);
+  const { pathname } = new URL(request.url);
+  const gate = GATES.find((g) => pathname === g.prefix || pathname.startsWith(g.prefix + '/'));
+  if (!gate) return;
 
-  const token = await sha256('client-preview:' + secret);
-  if (readCookie(request, COOKIE) === token) return; // let the static page through
+  const secret = process.env[gate.env];
+  if (!secret) return page(gate, 'This page is not available right now.', 503);
+
+  const token = await sha256(gate.cookie + ':' + secret);
+  if (readCookie(request, gate.cookie) === token) return; // let the static page through
 
   if (request.method === 'POST') {
     const form = await request.formData().catch(() => null);
     const attempt = String(form?.get('password') || '');
-    if ((await sha256('client-preview:' + attempt)) === token) {
+    if ((await sha256(gate.cookie + ':' + attempt)) === token) {
       return new Response(null, {
         status: 303,
         headers: {
           location: request.url,
           'cache-control': 'no-store',
-          'set-cookie': `${COOKIE}=${token}; Path=/clients; Max-Age=${MAX_AGE}; HttpOnly; Secure; SameSite=Lax`,
+          'set-cookie': `${gate.cookie}=${token}; Path=${gate.prefix}; Max-Age=${gate.maxAge}; HttpOnly; Secure; SameSite=Lax`,
         },
       });
     }
-    return page('That password is incorrect. Try again.', 401);
+    return page(gate, 'That password is incorrect. Try again.', 401);
   }
 
-  return page('', 401);
+  return page(gate, '', 401);
 }
