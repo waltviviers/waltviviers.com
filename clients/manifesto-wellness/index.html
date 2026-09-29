@@ -243,7 +243,14 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 .why ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; }
 .why li { display: grid; grid-template-columns: 24px 1fr; gap: 14px; color: var(--band-fg); }
 .why li::before { content: ""; width: 10px; height: 10px; margin-top: .55em; border-radius: 50% 50% 50% 0; background: var(--band-accent); transform: rotate(-45deg); }
-@media (max-width: 800px) { .why .wrap { grid-template-columns: 1fr; } }
+.why { padding-block: clamp(36px, 5vw, 72px); }
+@media (max-width: 800px) {
+  .why .wrap { grid-template-columns: 1fr; gap: 20px; }
+  .why .eyebrow { margin-bottom: 10px; }
+  .why blockquote { font-size: 1.45rem; }
+  .why ul { gap: 10px; }
+  .why li { font-size: .95rem; line-height: 1.5; }
+}
 
 /* Process */
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; list-style: none; margin: 0; padding: 0; counter-reset: step; }
