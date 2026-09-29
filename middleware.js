@@ -1,30 +1,38 @@
-// Server-side password gates. Each gate reads its password from a Vercel
-// environment variable; without it the pages stay locked.
-//   /clients/     -> CLIENT_PREVIEW_PASSWORD (client mockups)
-//   /admin-index/ -> ADMIN_PASSWORD
+// Server-side password gates. Passwords live in Vercel environment
+// variables; a page with no password set stays locked.
+//   /clients/<slug>/ -> CLIENT_PASSWORD_<SLUG> (one per client, e.g.
+//                       /clients/manifesto-wellness/ -> CLIENT_PASSWORD_MANIFESTO_WELLNESS)
+//   /admin-index/    -> ADMIN_PASSWORD
 
 export const config = { matcher: ['/clients', '/clients/:path*', '/admin-index', '/admin-index/:path*'] };
 
-const GATES = [
-  {
-    prefix: '/clients',
-    env: 'CLIENT_PREVIEW_PASSWORD',
-    cookie: 'client_preview',
+const ADMIN_GATE = {
+  prefix: '/admin-index',
+  env: 'ADMIN_PASSWORD',
+  cookie: 'admin_session',
+  maxAge: 60 * 60 * 24 * 7, // 7 days
+  title: 'Admin access',
+  intro: 'Enter the admin password to continue.',
+  button: 'Enter',
+};
+
+function clientGate(slug) {
+  return {
+    prefix: '/clients/' + slug,
+    env: 'CLIENT_PASSWORD_' + slug.toUpperCase().replace(/-/g, '_'),
+    cookie: 'client_' + slug.replace(/-/g, '_'),
     maxAge: 60 * 60 * 24 * 30, // 30 days
     title: 'Client preview',
     intro: 'This page is private. Enter the password Walt sent you.',
     button: 'View preview',
-  },
-  {
-    prefix: '/admin-index',
-    env: 'ADMIN_PASSWORD',
-    cookie: 'admin_session',
-    maxAge: 60 * 60 * 24 * 7, // 7 days
-    title: 'Admin access',
-    intro: 'Enter the admin password to continue.',
-    button: 'Enter',
-  },
-];
+  };
+}
+
+function findGate(pathname) {
+  if (pathname === ADMIN_GATE.prefix || pathname.startsWith(ADMIN_GATE.prefix + '/')) return ADMIN_GATE;
+  const match = pathname.match(/^\/clients\/([a-z0-9-]+)(\/|$)/);
+  return match ? clientGate(match[1]) : null;
+}
 
 async function sha256(text) {
   const bytes = new TextEncoder().encode(text);
@@ -84,8 +92,9 @@ function page(gate, message, status) {
 
 export default async function middleware(request) {
   const { pathname } = new URL(request.url);
-  const gate = GATES.find((g) => pathname === g.prefix || pathname.startsWith(g.prefix + '/'));
-  if (!gate) return;
+  const gate = findGate(pathname);
+  // /clients/ itself, or anything that isn't a valid client folder, is not public.
+  if (!gate) return new Response('Not found', { status: 404, headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex' } });
 
   const secret = process.env[gate.env];
   if (!secret) return page(gate, 'This page is not available right now.', 503);
