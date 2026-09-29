@@ -43,7 +43,7 @@
   --band-line: transparent;
   --lotus-opacity: .3;
   --hero-bg: #FBF0E9;
-  --hero-fade: linear-gradient(90deg, rgba(251,240,233,.96) 0%, rgba(251,240,233,.88) 34%, rgba(251,240,233,.4) 56%, rgba(251,240,233,0) 70%);
+  --hero-fade: linear-gradient(90deg, rgba(251,240,233,.86) 0%, rgba(251,240,233,.72) 30%, rgba(251,240,233,.25) 50%, rgba(251,240,233,0) 62%);
   --hero-fg: #111111;
   --hero-soft: #3D3D3D;
   --hero-accent: #C98468;
@@ -75,7 +75,7 @@
   --lotus-opacity: .26;
   --logo-light: none; --logo-dark: block;
   --hero-bg: #000000;
-  --hero-fade: linear-gradient(90deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.78) 34%, rgba(0,0,0,.35) 56%, rgba(0,0,0,0) 70%);
+  --hero-fade: linear-gradient(90deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.62) 30%, rgba(0,0,0,.2) 50%, rgba(0,0,0,0) 62%);
   --hero-fg: #FFFFFF; --hero-soft: rgba(255, 255, 255, .84); --hero-accent: #E0A383; --hero-eyebrow: #E0A383;
   color-scheme: dark;
   }
@@ -89,7 +89,7 @@
   --lotus-opacity: .26;
   --logo-light: none; --logo-dark: block;
   --hero-bg: #000000;
-  --hero-fade: linear-gradient(90deg, rgba(0,0,0,.88) 0%, rgba(0,0,0,.78) 34%, rgba(0,0,0,.35) 56%, rgba(0,0,0,0) 70%);
+  --hero-fade: linear-gradient(90deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,.62) 30%, rgba(0,0,0,.2) 50%, rgba(0,0,0,0) 62%);
   --hero-fg: #FFFFFF; --hero-soft: rgba(255, 255, 255, .84); --hero-accent: #E0A383; --hero-eyebrow: #E0A383;
   color-scheme: dark;
 }
@@ -160,9 +160,10 @@ p { margin: 0; }
 .hero-media { position: relative; margin: 0; }
 .hero-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.2s ease; }
 .hero-slide.is-active { opacity: 1; }
+.hero-slide.is-flipped img { transform: scaleX(-1); }
 .hero-slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 70% 40%); }
 .hero-media::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1; }
-.hero-dots { position: absolute; z-index: 2; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 10px; }
+.hero-dots { position: absolute; z-index: 3; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 10px; }
 .hero-dots button {
   width: 28px; height: 28px; padding: 0; border: 0; background: transparent; cursor: pointer;
   display: grid; place-items: center;
@@ -174,8 +175,8 @@ p { margin: 0; }
 .hero-dots button[aria-current="true"]::before { background: #FFFFFF; transform: scale(1.15); }
 .hero-dots button:hover::before { background: rgba(255, 255, 255, .6); }
 @media (prefers-reduced-motion: reduce) { .hero-slide { transition: none; } }
-.hero-inner { position: relative; z-index: 2; padding-block: clamp(40px, 7vw, 96px); }
-.hero-copy { max-width: 36rem; min-width: 0; display: flex; flex-direction: column; }
+.hero-inner { position: relative; z-index: 2; pointer-events: none; padding-block: clamp(40px, 7vw, 96px); }
+.hero-copy { pointer-events: auto; max-width: 36rem; min-width: 0; display: flex; flex-direction: column; }
 .hero h1 { font-size: var(--s-1); line-height: .95; font-weight: 800; }
 .hero h1 em { font-style: normal; color: var(--gold); }
 .hero .lede { margin-top: 28px; max-width: 34em; font-size: 1.15rem; color: var(--ink-soft); }
@@ -362,19 +363,19 @@ footer a:hover { color: var(--on-footer); }
 <main id="top">
   <section class="hero" style="padding-block:0">
     <div class="hero-media" aria-roledescription="carousel" aria-label="Manifesto Wellness in action">
-      <figure class="hero-slide is-active" style="--focus: 72% 35%">
+      <figure class="hero-slide is-active is-flipped" style="--focus: 72% 100%">
         <img src="images/banner-singing-bowl-1200.webp"
              srcset="images/banner-singing-bowl-800.webp 800w, images/banner-singing-bowl-1200.webp 1200w, images/banner-singing-bowl-2000.webp 2000w"
              sizes="100vw" width="2000" height="1125" fetchpriority="high"
              alt="A practitioner plays a brass singing bowl in front of rose gold lotus line art">
       </figure>
-      <figure class="hero-slide" style="--focus: 78% 35%" aria-hidden="true">
+      <figure class="hero-slide" style="--focus: 78% 100%" aria-hidden="true">
         <img src="images/banner-crystal-bowls-1200.webp"
              srcset="images/banner-crystal-bowls-800.webp 800w, images/banner-crystal-bowls-1200.webp 1200w, images/banner-crystal-bowls-2000.webp 2000w"
              sizes="100vw" width="2000" height="1125" loading="lazy" decoding="async"
              alt="A practitioner plays crystal singing bowls beside rose gold lotus line art">
       </figure>
-      <figure class="hero-slide" style="--focus: 60% 50%" aria-hidden="true">
+      <figure class="hero-slide" style="--focus: 60% 100%" aria-hidden="true">
         <img src="images/banner-bowls-flatlay-1200.webp"
              srcset="images/banner-bowls-flatlay-800.webp 800w, images/banner-bowls-flatlay-1200.webp 1200w, images/banner-bowls-flatlay-2000.webp 2000w"
              sizes="100vw" width="2000" height="1125" loading="lazy" decoding="async"
