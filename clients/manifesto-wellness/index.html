@@ -16,31 +16,34 @@
 })();
 </script>
 <style>
-/* Layout: a declaration. Palette: gold, black and white only. Full-bleed rotating photo banner, manifesto strip, then services grid, a real 4-step process, events, and a quote form. Light and dark themes via tokens; nav toggle sets data-theme. */
+/* Layout: a declaration. Palette: the client's rose gold with black and white. Full-bleed rotating photo banner, manifesto strip, then services grid, a real 4-step process, events, and a quote form. Light and dark themes via tokens; nav toggle sets data-theme. */
 :root {
   --ground: #F7F6F3;      /* warm white */
   --paper: #FFFFFF;
   --ink: #111111;         /* black */
   --ink-soft: #555555;
   --line: #DEDCD6;
-  --gold: #A97A1F;        /* display gold: headlines, numerals, icons */
-  --gold-deep: #85600F;   /* small gold text, readable on the light ground */
-  --gold-bright: #D9AC45; /* gold band and accents on dark */
-  --gold-pale: #F3E6C4;
+  /* Brand rose gold: highlight #F3C6A8, main #E0A383, shadow #C98468 */
+  --gold: #C98468;        /* rose gold shadow: headlines, numerals, icons on light */
+  --gold-deep: #9E5F45;   /* deeper rose gold for small text on light */
+  --gold-bright: #E0A383; /* main rose gold: on black and over photos */
+  --gold-pale: #F3C6A8;   /* highlight */
   --panel: #FFFFFF;       /* feature cards: white in light mode, charcoal in dark */
   --panel-line: #DEDCD6;
   --on-panel: #111111;
   --on-panel-soft: #555555;
-  --panel-accent: #A97A1F;
+  --panel-accent: #9E5F45;
   --panel-muted: #8C8C8C;
   --footer-bg: #111111;
   --on-footer: #FFFFFF;
   --on-footer-soft: #BDBDBD;
-  --band-bg: #A97A1F;     /* "why" band: same gold as the step numbers, both themes */
+  --band-bg: #E0A383;     /* "why" band: main rose gold, both themes */
   --band-fg: #111111;
   --band-accent: #111111;
   --band-line: transparent;
-  --lotus-opacity: .16;
+  --lotus-opacity: .3;
+  --logo-light: block;    /* shadow-tone logo on light grounds */
+  --logo-dark: none;
 
   --f-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
   --f-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -58,22 +61,24 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-  --ground: #0A0A0A; --paper: #151515; --ink: #F5F5F5; --ink-soft: #A8A8A8; --line: #2A2A2A;
-  --gold: #A97A1F; --gold-deep: #A97A1F; --gold-bright: #D9AC45; --gold-pale: #F3E6C4;
+  --ground: #000000; --paper: #121212; --ink: #F5F5F5; --ink-soft: #A8A8A8; --line: #2A2A2A;
+  --gold: #E0A383; --gold-deep: #E0A383; --gold-bright: #E0A383; --gold-pale: #F3C6A8;
   --panel: #181818; --panel-line: #2A2A2A; --on-panel: #FFFFFF; --on-panel-soft: #B5B5B5;
-  --panel-accent: #A97A1F; --panel-muted: rgba(243, 230, 196, .7);
+  --panel-accent: #E0A383; --panel-muted: rgba(243, 198, 168, .7);
   --footer-bg: #181818; --on-footer: #FFFFFF; --on-footer-soft: #B5B5B5;
   --lotus-opacity: .26;
+  --logo-light: none; --logo-dark: block;
   color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --ground: #0A0A0A; --paper: #151515; --ink: #F5F5F5; --ink-soft: #A8A8A8; --line: #2A2A2A;
-  --gold: #A97A1F; --gold-deep: #A97A1F; --gold-bright: #D9AC45; --gold-pale: #F3E6C4;
+  --ground: #000000; --paper: #121212; --ink: #F5F5F5; --ink-soft: #A8A8A8; --line: #2A2A2A;
+  --gold: #E0A383; --gold-deep: #E0A383; --gold-bright: #E0A383; --gold-pale: #F3C6A8;
   --panel: #181818; --panel-line: #2A2A2A; --on-panel: #FFFFFF; --on-panel-soft: #B5B5B5;
-  --panel-accent: #A97A1F; --panel-muted: rgba(243, 230, 196, .7);
+  --panel-accent: #E0A383; --panel-muted: rgba(243, 198, 168, .7);
   --footer-bg: #181818; --on-footer: #FFFFFF; --on-footer-soft: #B5B5B5;
   --lotus-opacity: .26;
+  --logo-light: none; --logo-dark: block;
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -113,6 +118,8 @@ p { margin: 0; }
 .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 14px; }
 .logo { display: flex; align-items: baseline; gap: .35em; text-decoration: none; font-family: var(--f-display); }
 .logo img { display: block; height: 44px; width: auto; }
+.nav .logo .logo-light { display: var(--logo-light); }
+.nav .logo .logo-dark { display: var(--logo-dark); }
 .nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; font-weight: 500; font-size: .95rem; }
 .nav ul a { text-decoration: none; }
 .nav ul a:hover { color: var(--gold-deep); }
@@ -170,11 +177,11 @@ p { margin: 0; }
   .hero-inner { width: 100%; }
   .hero-copy { max-width: 31rem; }
   .hero h1 { color: #FFFFFF; font-size: clamp(2.8rem, 5.2vw, 4.8rem); }
-  .hero h1 em { color: var(--gold); }
-  .hero .eyebrow { color: var(--gold); }
+  .hero h1 em { color: var(--gold-bright); }
+  .hero .eyebrow { color: var(--gold-bright); }
   .hero .lede { color: rgba(255, 255, 255, .84); }
   .hero .btn-solid { background: #FFFFFF; color: #111111; border-color: #FFFFFF; }
-  .hero .btn-solid:hover { background: var(--gold); border-color: var(--gold); color: #FFFFFF; }
+  .hero .btn-solid:hover { background: var(--gold-bright); border-color: var(--gold-bright); color: #111111; }
   .hero .btn-ghost { color: #FFFFFF; border-color: rgba(255, 255, 255, .8); }
   .hero .btn-ghost:hover { background: #FFFFFF; color: #111111; }
 }
@@ -320,7 +327,7 @@ footer a:hover { color: var(--on-footer); }
 
 <header class="nav">
   <div class="wrap">
-    <a class="logo" href="#top" aria-label="Manifesto Wellness home"><img src="images/logo-gold.png" width="800" height="187" alt="Manifesto: Motivate, Inspire, Succeed"></a>
+    <a class="logo" href="#top" aria-label="Manifesto Wellness home"><img class="logo-light" src="images/logo-rose-deep.png" width="800" height="187" alt="Manifesto: Motivate, Inspire, Succeed"><img class="logo-dark" src="images/logo-rose.png" width="800" height="187" alt="Manifesto: Motivate, Inspire, Succeed"></a>
     <nav aria-label="Main">
       <ul>
         <li><a href="#programmes">Services</a></li>
@@ -554,7 +561,7 @@ footer a:hover { color: var(--on-footer); }
 
 <footer>
   <div class="wrap">
-    <a class="logo" href="#top" aria-label="Back to top"><img src="images/logo-gold.png" width="800" height="187" alt="Manifesto: Motivate, Inspire, Succeed"></a>
+    <a class="logo" href="#top" aria-label="Back to top"><img src="images/logo-rose.png" width="800" height="187" alt="Manifesto: Motivate, Inspire, Succeed"></a>
     <nav aria-label="Footer">
       <a href="#programmes">Services</a><a href="#approach">Approach</a><a href="#events">Events</a><a href="#contact">Contact</a>
     </nav>
