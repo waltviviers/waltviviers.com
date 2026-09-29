@@ -16,23 +16,23 @@
 })();
 </script>
 <style>
-/* Layout: a declaration. Big manifesto hero with drifting gold flecks, then services grid, a real 4-step process, events, and a quote form. Light and dark themes via tokens; nav toggle sets data-theme. */
+/* Layout: a declaration. Palette: gold, black and white only. Big manifesto hero with drifting gold flecks, then services grid, a real 4-step process, events, and a quote form. Light and dark themes via tokens; nav toggle sets data-theme. */
 :root {
-  --ground: #EEF1EC;      /* cool sage-white */
-  --paper: #FAFBF8;
-  --ink: #15261F;         /* deep eucalyptus */
-  --ink-soft: #4A5A52;
-  --line: #CFD6CD;
+  --ground: #F7F6F3;      /* warm white */
+  --paper: #FFFFFF;
+  --ink: #111111;         /* black */
+  --ink-soft: #555555;
+  --line: #DEDCD6;
   --gold: #A97A1F;        /* display gold: headlines, numerals, icons */
   --gold-deep: #85600F;   /* small gold text, readable on the light ground */
   --gold-bright: #D9AC45; /* gold band and accents on dark */
   --gold-pale: #F3E6C4;
-  --panel: #15261F;       /* dark feature panels and footer */
-  --on-panel: #FAFBF8;
-  --on-panel-soft: #C7D0CA;
+  --panel: #111111;       /* black feature panels and footer */
+  --on-panel: #FFFFFF;
+  --on-panel-soft: #BDBDBD;
   --band-bg: #A97A1F;     /* "why" band: same gold as the step numbers, both themes */
-  --band-fg: #15261F;
-  --band-accent: #15261F;
+  --band-fg: #111111;
+  --band-accent: #111111;
   --band-line: transparent;
 
   --f-display: "Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
@@ -51,16 +51,16 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-  --ground: #0F1A15; --paper: #16241D; --ink: #E8EDE8; --ink-soft: #A9B7AF; --line: #2A3B33;
+  --ground: #0A0A0A; --paper: #151515; --ink: #F5F5F5; --ink-soft: #A8A8A8; --line: #2A2A2A;
   --gold: #A97A1F; --gold-deep: #A97A1F; --gold-bright: #D9AC45; --gold-pale: #F3E6C4;
-  --panel: #1E3229; --on-panel: #F1F4F0; --on-panel-soft: #B7C4BC;
+  --panel: #181818; --on-panel: #FFFFFF; --on-panel-soft: #B5B5B5;
   color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --ground: #0F1A15; --paper: #16241D; --ink: #E8EDE8; --ink-soft: #A9B7AF; --line: #2A3B33;
+  --ground: #0A0A0A; --paper: #151515; --ink: #F5F5F5; --ink-soft: #A8A8A8; --line: #2A2A2A;
   --gold: #A97A1F; --gold-deep: #A97A1F; --gold-bright: #D9AC45; --gold-pale: #F3E6C4;
-  --panel: #1E3229; --on-panel: #F1F4F0; --on-panel-soft: #B7C4BC;
+  --panel: #181818; --on-panel: #FFFFFF; --on-panel-soft: #B5B5B5;
   color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
@@ -138,7 +138,7 @@ p { margin: 0; }
 
 .declaration {
   background: var(--panel); color: var(--on-panel); border-radius: 20px; padding: clamp(24px, 3vw, 36px);
-  box-shadow: 0 30px 60px -30px rgba(21, 38, 31, .5);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, .35);
 }
 .declaration .eyebrow { color: var(--gold-bright); margin-bottom: 20px; }
 .declaration ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 18px; counter-reset: art; }
