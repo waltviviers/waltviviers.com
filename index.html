@@ -279,51 +279,6 @@
       gap: 14px;
     }
 
-    /* Language switch: English [ slider ] Afrikaans */
-    .lang-toggle, .lang-switch {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .lang-group {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--stone);
-      font-family: var(--sans);
-      line-height: 1;
-      cursor: pointer;
-      user-select: none;
-      white-space: nowrap;
-      transition: color 0.2s;
-    }
-
-    .lang-group.active { color: var(--ink); }
-    .lang-group:not(.active):hover { color: var(--ink); }
-
-    .lang-track {
-      position: relative;
-      width: 40px; height: 20px;
-      border-radius: 12px;
-      border: 1.5px solid #4A4844;
-      background: transparent;
-      cursor: pointer;
-      padding: 0;
-      flex-shrink: 0;
-    }
-    .lang-knob {
-      position: absolute; top: 50%; left: 3px;
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      background: var(--ink);
-      transform: translateY(-50%);
-      transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    /* Knob slides right when Afrikaans (the last word) is active */
-    .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 22px; }
-    [data-theme="light"] .lang-track { border-color: #D5D1CB; }
 
     .nav-logo img {
       height: 36px;
@@ -1466,10 +1421,6 @@
 
       .nav-links { gap: 20px; }
       .nav-link-hide { display: none; }
-      .lang-switch { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); gap: 7px; }
-      .lang-group { font-size: 10px; letter-spacing: 0.04em; }
-      .lang-track { width: 34px; height: 18px; }
-      .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 18px; }
 
       .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
@@ -1696,11 +1647,6 @@
       <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
         <img src="logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
-      <div class="lang-toggle lang-switch" id="lang-toggle">
-        <div class="lang-group active" data-lang="en">English</div>
-        <button type="button" class="lang-track" aria-label="Toggle language"><span class="lang-knob"></span></button>
-        <div class="lang-group" data-lang="af">Afrikaans</div>
-      </div>
     </div>
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography &amp; Video</a></li>
@@ -2117,55 +2063,10 @@
         'avail-available': 'Available', 'avail-sold': 'Sold', 'avail-enquire': 'Enquire', 'avail-on-show': 'On Show',
         'work-label': 'Work', 'works-suffix': 'artworks', 'view-artwork-page': 'View artwork page ↗',
         'footer-copy': '© 2026 Walt Viviers. All rights reserved.','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.'
-      },
-      af: {
-        'nav-works': 'Skone Kunste & Illustrasie', 'nav-photography': 'Fotografie & Video', 'nav-apps': 'Programme en Speletjies', 'nav-about': 'Omheen', 'nav-bio': 'Bio & Verklaring', 'nav-design': 'Grafiese Ontwerp', 'nav-journal': 'Joernaal', 'nav-enquire': 'Navraag',
-        'hero-inquire': 'Doen navraag oor hierdie werk', 'hero-gallery-rep': 'Galery-verteenwoordiging',
-        'section-works': 'Geselekteerde Kunswerke', 'available-on': 'Beskikbaar op', 'view-gallery': 'Sien Galery ↗',
-        'art-intro-eyebrow': 'Skone Kunste & Illustrasie', 'art-intro-headline': 'Gedurfde oorspronklikes — van die ikoniese tot die onverwagte', 'art-intro-desc': 'Akriel- en gemengde-media skilderye wat met helderheid van oorkant die kamer lees en van naby uitdrukkingsvolle, onmiskenbare kwaswerk openbaar — in privaat versamelings regoor Suid-Afrika en in die buiteland.',
-        'explore-photo-title': 'Fotografie & Video', 'explore-photo-desc': 'Portret-sessies, geleenthede en welstand-toevlugte — vasgevang in foto en video met \'n kunstenaar se oog. Elke album maak in Google Foto\'s oop.', 'explore-photo-cta': 'Sien albums →', 'pf-headline': 'Portrette, geleenthede & toevlugte — deur \'n kunstenaar se oog', 'pf-book': 'Bespreek \'n sessie',
-        'explore-apps-title': 'Programme & Speletjies', 'explore-apps-desc': '\'n Groeiende versameling blaaierspeletjies en klein, private programme wat vanlyn werk — van \'n drie-troeteldier-speelding tot \'n handige fooi-sakrekenaar. Geen advertensies, geen opsporing.', 'explore-apps-cta': 'Verken →',
-        'digital-label': 'Digitale Eksperimente', 'digital-intro': 'Naas die skilderye bou ek klein interaktiewe stukke, meestal met KI-ondersteunde gereedskap, as nog \'n manier om dieselfde instink na te jaag: maak iets, en kyk dan wie dit roer.', 'digital-sp-desc': '\'n Kuberpunk-data-roof-storie gebou vir mobiel. Vyf besluite, vyf lewendige inbraak-reekse, tien moontlike eindes. Hoe jy die werk hanteer, is hoe dit uitdraai.', 'digital-ss-desc': 'Die teenoorgestelde soort eksperiment: \'n interaktiewe troeteldier-toepassing met drie ontspanne modusse (honde, rotte, katte) en niks om te wen nie. Tik rond, maak \'n gemors, geniet die kalmte.', 'digital-play': 'Speel →',
-        'about-title-html': 'Geskep in Suid-Afrika<br/><em>Beskikbaar vir die Wêreld</em>',
-        'photo-about-title-html': '\'n Skildersoog<br/><em>Agter die Lens</em>',
-        'photo-about-p1': 'Fotografie en video is \'n verlengstuk van dieselfde praktyk — dieselfde instink vir lig, komposisie en die stil oomblik wat alles sê. Ek bring \'n kunstenaar se oog na elke raam.',
-        'photo-about-p2': 'Ek werk eers met mense: portret-sessies, geleenthede en welstand-toevlugte waar die doel is om iets waar vas te vang eerder as poserend — ontspanne, gemaklik en aandagtig vir die storie wat voor die kamera ontvou.',
-        'photo-about-p3': 'Gebaseer in Pretoria en beskikbaar regoor Suid-Afrika en verder, skiet ek in beide foto en video, en elke sessie word as \'n privaat aanlyn album gelewer.',
-        'photo-about-p4': 'Of dit \'n enkele portret of \'n multi-dag toevlug is, laat weet my wat jy in gedagte het en ek sal die sessie daarom vorm.',
-        'read-more': 'Lees meer ↓',
-        'about-p1': 'Ek is ‘n Suid-Afrikaanse kunstenaar wat in akriel en gemengde media werk. Professionele kreatiewe praktyk — deur ontwerp, kunsdireksie en handelsmerk — het ‘n skilder se oog geslyp wat die spanning tussen die poësie en musiek van ‘n beeld vind: van ‘n afstand met helderheid en selfvertroue lees, maar van naby gewaagde, ekspressiewe kwashale en my onmiskenbare aanslag onthul.',
-        'about-p2': 'Met onderwerpe wat strek van die ikoniese tot die onverwagse, oorbrug ek die wêrelde van skone kuns en populêre kultuur, uitgebeeld met energie, doelgerigtheid en ‘n eg Suid-Afrikaanse perspektief.',
-        'about-p3': 'Vir my is kunsmaak terapie: ‘n manier om jouself uit te druk om jouself te vind. Geloof, familie en kreatiwiteit lê aan die hart van alles wat ek maak.',
-        'about-p4': 'My werk word op Saatchi Art verteenwoordig en in privaat versamelings regoor Suid-Afrika en oorsee gehou. Opdragte en galery-navrae is welkom.',
-        'about-bio-btn': 'Bio & Verklaring ↗',
-        'ig-follow': 'Volg op Instagram ↗', 'ig-follow-me': 'Volg my op Instagram',
-        'commission-tag': 'Vir versamelaars', 'commission-title-html': 'Bestel<br/>‘n nuwe werk',
-        'commission-desc': 'Elke opdrag begin met ‘n gesprek. Besprekings dek skaal, onderwerp, palet en konteks. Lewertyd is gewoonlik 8–16 weke.',
-        'commission-btn': 'Begin ‘n gesprek', 'commission-or': 'of',
-        'gallery-tag': 'Vir galerye', 'gallery-title-html': 'Galery-<br/>verteenwoordiging',
-        'gallery-desc': 'Stel jy belang om my te verteenwoordig of ‘n uitstalling voor te stel? Kontak my met ‘n kort inleiding en jou program.',
-        'gallery-btn': 'Kontak my',
-        'modal-enquiry-tag': 'Navraag', 'modal-enquiry-prefix': 'Doen navraag oor',
-        'modal-contact-tag': 'Kontak my', 'modal-contact-title-html': 'Stuur ‘n<br/><em>boodskap</em>', 'modal-contact-send': 'Stuur boodskap',
-        'modal-commission-tag': 'Vir versamelaars', 'modal-commission-title-html': 'Bestel<br/><em>‘n nuwe werk</em>',
-        'modal-commission-label': 'Vertel my van die werk wat jy in gedagte het', 'modal-commission-placeholder': 'Skaal, onderwerp, palet, waar dit gaan hang…',
-        'modal-gallery-tag': 'Vir galerye', 'modal-gallery-title-html': 'Galery-<br/><em>verteenwoordiging</em>',
-        'modal-gallery-label-name': 'Naam & galery', 'modal-gallery-label-msg': 'Inleiding & program',
-        'modal-gallery-placeholder-name': 'Jou naam en galery se naam', 'modal-gallery-placeholder-msg': 'Vertel my van jou galery en wat jy in gedagte het…',
-        'form-name': 'Naam', 'form-email': 'E-pos', 'form-message': 'Boodskap',
-        'form-send-enquiry': 'Stuur navraag',
-        'form-placeholder-name': 'Jou naam', 'form-placeholder-email': 'jou@epos.com',
-        "form-placeholder-enquiry": "Ek stel belang in hierdie werk…", "form-placeholder-contact": "Wat's op jou hart…",
-        'form-success-msg': 'Dankie — jou boodskap is gestuur. Walt sal gou kontak maak.',
-        'form-success-close': 'Sluit',
-        'meta-medium': 'Medium', 'meta-dimensions': 'Afmetings', 'meta-price': 'Prys', 'meta-status': 'Status', 'meta-instagram': 'Instagram', 'meta-view-post': 'Sien plasing ↗', 'meta-article': 'Artikel', 'meta-read-article': 'Lees artikel ↗', 'meta-on-show': 'Op Vertoon', 'meta-view-show': 'Sien vertoning ↗',
-        'avail-available': 'Beskikbaar', 'avail-sold': 'Verkoop', 'avail-enquire': 'Navraag', 'avail-on-show': 'Op Vertoon',
-        'work-label': 'Werk', 'works-suffix': 'kunswerke', 'view-artwork-page': 'Sien kunswerkblad ↗',
-        'footer-copy': '© 2026 Walt Viviers. Alle regte voorbehou.','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.'
       }
     };
 
-    var lang = localStorage.getItem('wv-lang') || 'en';
+    var lang = 'en'; /* language toggle removed — site is English-only */
 
     window._t = function (key) { return (T[lang] || T.en)[key] || key; };
 
@@ -2183,22 +2084,10 @@
       document.querySelectorAll('[data-i18n-href]').forEach(function (el) {
         el.href = window._t(el.dataset.i18nHref);
       });
-      document.querySelectorAll('.lang-group[data-lang]').forEach(function (group) {
-        group.classList.toggle('active', group.dataset.lang === lang);
-      });
       if (window._gallery && window._gallery.refresh) window._gallery.refresh();
     }
 
     apply();
-
-    document.getElementById('lang-toggle').addEventListener('click', function (e) {
-      var group = e.target.closest('.lang-group[data-lang]');
-      if (group) { lang = group.dataset.lang; }
-      else if (e.target.closest('.lang-track')) { lang = (lang === 'en' ? 'af' : 'en'); }
-      else { return; }
-      localStorage.setItem('wv-lang', lang);
-      apply();
-    });
   })();
   </script>
 
