@@ -191,7 +191,6 @@ p { margin: 0; }
 .hero-media { position: relative; margin: 0; }
 .hero-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.2s ease; }
 .hero-slide.is-active { opacity: 1; }
-.hero-flip img { transform: scaleX(-1); }  /* mirrored so the subject sits away from the text */
 .hero-slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 70% 40%); }
 .hero-media::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1; }
 .hero-dots { position: absolute; z-index: 3; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 4px; padding: 2px 8px; border-radius: 999px; background: rgba(0, 0, 0, .18); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, .3); }
@@ -495,10 +494,11 @@ form .btn { justify-self: start; cursor: pointer; }
 @media (max-width: 760px) { .quotes { grid-template-columns: 1fr; } }
 
 footer { background: var(--footer-bg); color: var(--on-footer-soft); font-size: .9rem; border-top: 1px solid var(--line); }
-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding-block: 32px; }
-footer nav { display: flex; gap: 20px; flex-wrap: wrap; }
-footer a { text-decoration: none; }
-footer a:hover { color: var(--on-footer); }
+footer .wrap { display: flex; flex-direction: column; gap: 8px; padding-block: 28px; text-align: center; }
+footer p { max-width: 62em; margin-inline: auto; font-size: .82rem; line-height: 1.6; }
+footer .copyright { font-size: .9rem; }
+footer .copyright strong { color: var(--on-footer); font-weight: 600; }
+@media (max-width: 700px) { footer .wrap { padding-bottom: 96px; } }  /* clear the floating WhatsApp button */
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } .btn:hover { transform: none; } }
 </style>
@@ -531,19 +531,19 @@ footer a:hover { color: var(--on-footer); }
 <main id="top">
   <section class="hero" style="padding-block:0">
     <div class="hero-media" aria-roledescription="carousel" aria-label="Manifesto Wellness in action">
-      <figure class="hero-slide is-active" style="--focus: 60% 50%">
+      <figure class="hero-slide is-active" style="--focus: 60% 100%">
         <img src="images/banner-bowls-flatlay-v3-1200.webp"
              srcset="images/banner-bowls-flatlay-v3-800.webp 800w, images/banner-bowls-flatlay-v3-1200.webp 1200w, images/banner-bowls-flatlay-v3-2000.webp 2000w"
              sizes="100vw" width="2000" height="1125" fetchpriority="high"
              alt="Singing bowls and a seed-pod rattle on a fur rug, overlaid with rose gold lotus line art">
       </figure>
-      <figure class="hero-slide hero-flip" style="--focus: 72% 30%" aria-hidden="true">
+      <figure class="hero-slide" style="--focus: 72% 100%" aria-hidden="true">
         <img src="images/banner-singing-bowl-v3-1200.webp"
              srcset="images/banner-singing-bowl-v3-800.webp 800w, images/banner-singing-bowl-v3-1200.webp 1200w, images/banner-singing-bowl-v3-2000.webp 2000w"
              sizes="100vw" width="2000" height="1125" loading="lazy" decoding="async"
              alt="A practitioner plays a brass singing bowl in front of rose gold lotus line art">
       </figure>
-      <figure class="hero-slide" style="--focus: 78% 30%" aria-hidden="true">
+      <figure class="hero-slide" style="--focus: 78% 100%" aria-hidden="true">
         <img src="images/banner-crystal-bowls-v3-1200.webp"
              srcset="images/banner-crystal-bowls-v3-800.webp 800w, images/banner-crystal-bowls-v3-1200.webp 1200w, images/banner-crystal-bowls-v3-2000.webp 2000w"
              sizes="100vw" width="2000" height="1125" loading="lazy" decoding="async"
@@ -564,9 +564,9 @@ footer a:hover { color: var(--on-footer); }
           <span aria-hidden="true">Wellness that works</span>
         </span>
         <h1 class="hero-rot">
-          <span class="is-active">Create a culture of wellness <br class="br-d">with programmes that <br class="br-d"><em>energise, inspire and <br class="br-d">transform</em> your workplace.</span>
-          <span aria-hidden="true">We help companies <br class="br-d">invest in what <br class="br-d">matters most: <br class="br-d"><em>their people.</em></span>
-          <span aria-hidden="true">Tailored corporate <br class="br-d">wellness programmes <br class="br-d">designed for <em>your <br class="br-d">team’s unique needs.</em></span>
+          <span class="is-active">Create a culture of wellness <br class="br-d">that energises, inspires and <br class="br-d"><em>transforms your workplace.</em></span>
+          <span aria-hidden="true">We help companies invest <br class="br-d">in what matters most: <br class="br-d"><em>their people.</em></span>
+          <span aria-hidden="true">Wellness programmes <br class="br-d">tailored to your team’s <br class="br-d"><em>unique needs.</em></span>
         </h1>
         <p class="lede hero-rot">
           <span class="is-active">Wellness days, workshops and talks that give your people the energy and focus to do their best work.</span>
@@ -841,10 +841,8 @@ footer a:hover { color: var(--on-footer); }
 
 <footer>
   <div class="wrap">
-    <nav aria-label="Footer">
-      <a href="#programmes">Services</a><a href="#approach">Approach</a><a href="#events">Events</a><a href="#contact">Contact</a>
-    </nav>
-    <span>© 2026 Manifesto Wellness Africa · Johannesburg</span>
+    <p class="copyright"><strong>© <span id="year">2026</span> Manifesto Wellness Africa. All rights reserved.</strong></p>
+    <p>All content on this website, including text, photographs, graphics and the Manifesto name and logo, is the property of Manifesto Wellness Africa and is protected by South African and international copyright and trademark law. No part of it may be copied, reproduced, distributed or used without prior written permission.</p>
   </div>
 </footer>
 
@@ -905,6 +903,8 @@ footer a:hover { color: var(--on-footer); }
   document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
   start();
 })();
+
+document.getElementById('year').textContent = new Date().getFullYear();
 
 document.getElementById('enquiry').addEventListener('submit', function (e) {
   e.preventDefault();
