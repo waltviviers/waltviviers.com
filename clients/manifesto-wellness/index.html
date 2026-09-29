@@ -374,6 +374,12 @@ form .btn { justify-self: start; cursor: pointer; }
 @media (max-width: 600px) { .posts { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .post-image img { transition: none; } .post:hover .post-image img { transform: none; } }
 
+.mock-toast {
+  position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 50;
+  max-width: calc(100% - 32px); padding: 12px 18px; border-radius: 999px; font-size: .92rem; font-weight: 500;
+  background: var(--ink); color: var(--ground); box-shadow: 0 10px 30px rgba(0, 0, 0, .2);
+}
+
 /* Testimonials */
 .quotes { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .quote { margin: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 20px; padding: clamp(24px, 3vw, 36px); display: flex; flex-direction: column; justify-content: space-between; gap: 24px; min-width: 0; }
@@ -645,31 +651,31 @@ footer a:hover { color: var(--on-footer); }
       </div>
       <div class="posts">
         <article class="post">
-          <a class="post-image" href="https://manifestowellness.co.za/creating-more-happiness-in-your-lifecelebrating-womens-day-with-novo-nordisk/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+          <a class="post-image" href="#blog" data-mock="In the finished site, this opens the full article." tabindex="-1" aria-hidden="true">
             <img src="images/post-novo-nordisk-v1.webp" width="840" height="473" loading="lazy" decoding="async" alt="Guests gathered around a catering table at the Novo Nordisk Women&#x27;s Day celebration">
           </a>
           <div class="post-meta"><time datetime="2026-09-09">9 September 2026</time><span>Corporate Culture &amp; Leadership</span></div>
-          <h3><a href="https://manifestowellness.co.za/creating-more-happiness-in-your-lifecelebrating-womens-day-with-novo-nordisk/" target="_blank" rel="noopener">Creating More Happiness in Your Life: Celebrating Women&#x27;s Day with Novo Nordisk</a></h3>
+          <h3><a href="#blog" data-mock="In the finished site, this opens the full article.">Creating More Happiness in Your Life: Celebrating Women&#x27;s Day with Novo Nordisk</a></h3>
           <p>Manifesto Wellness Africa had the wonderful opportunity to join Novo Nordisk for their Women&#x27;s Day celebration and share an uplifting conversation around happiness and how we can intentionally create more of it in our everyday lives.</p>
-          <a class="post-more" href="https://manifestowellness.co.za/creating-more-happiness-in-your-lifecelebrating-womens-day-with-novo-nordisk/" target="_blank" rel="noopener">Read the article<span class="visually-hidden">: Creating More Happiness in Your Life: Celebrating Women&#x27;s Day with Novo Nordisk</span></a>
+          <a class="post-more" href="#blog" data-mock="In the finished site, this opens the full article.">Read the article<span class="visually-hidden">: Creating More Happiness in Your Life: Celebrating Women&#x27;s Day with Novo Nordisk</span></a>
         </article>
         <article class="post">
-          <a class="post-image" href="https://manifestowellness.co.za/why-workplace-wellness-matters-bringing-mental-health-support-to-corporate-challenge-lesotho-2026/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+          <a class="post-image" href="#blog" data-mock="In the finished site, this opens the full article." tabindex="-1" aria-hidden="true">
             <img src="images/post-corporate-challenge-v1.webp" width="840" height="473" loading="lazy" decoding="async" alt="Muddy participants climbing through a tyre obstacle at Corporate Challenge Lesotho">
           </a>
           <div class="post-meta"><time datetime="2026-06-24">24 June 2026</time><span>Events &amp; Experiences</span></div>
-          <h3><a href="https://manifestowellness.co.za/why-workplace-wellness-matters-bringing-mental-health-support-to-corporate-challenge-lesotho-2026/" target="_blank" rel="noopener">Why Workplace Wellness Matters: Bringing Mental Health Support to Corporate Challenge Lesotho 2026</a></h3>
+          <h3><a href="#blog" data-mock="In the finished site, this opens the full article.">Why Workplace Wellness Matters: Bringing Mental Health Support to Corporate Challenge Lesotho 2026</a></h3>
           <p>The modern workplace is changing. Across industries, organisations are recognising that employee wellbeing is no longer a nice-to-have initiative. It is a business necessity.</p>
-          <a class="post-more" href="https://manifestowellness.co.za/why-workplace-wellness-matters-bringing-mental-health-support-to-corporate-challenge-lesotho-2026/" target="_blank" rel="noopener">Read the article<span class="visually-hidden">: Why Workplace Wellness Matters: Bringing Mental Health Support to Corporate Challenge Lesotho 2026</span></a>
+          <a class="post-more" href="#blog" data-mock="In the finished site, this opens the full article.">Read the article<span class="visually-hidden">: Why Workplace Wellness Matters: Bringing Mental Health Support to Corporate Challenge Lesotho 2026</span></a>
         </article>
         <article class="post">
-          <a class="post-image" href="https://manifestowellness.co.za/how-corporate-wellness-and-conscious-living-help-people-thrive/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+          <a class="post-image" href="#blog" data-mock="In the finished site, this opens the full article." tabindex="-1" aria-hidden="true">
             <img src="images/post-conscious-living-v1.webp" width="840" height="473" loading="lazy" decoding="async" alt="Facilitator guiding a seated group on yoga mats in a sunlit studio">
           </a>
           <div class="post-meta"><time datetime="2026-05-24">24 May 2026</time><span>Workplace Wellbeing</span></div>
-          <h3><a href="https://manifestowellness.co.za/how-corporate-wellness-and-conscious-living-help-people-thrive/" target="_blank" rel="noopener">How Corporate Wellness and Conscious Living Help People Thrive</a></h3>
+          <h3><a href="#blog" data-mock="In the finished site, this opens the full article.">How Corporate Wellness and Conscious Living Help People Thrive</a></h3>
           <p>As conversations around mental health, stress, and employee wellbeing continue to grow, organisations are recognising the importance of creating healthier, more supportive environments.</p>
-          <a class="post-more" href="https://manifestowellness.co.za/how-corporate-wellness-and-conscious-living-help-people-thrive/" target="_blank" rel="noopener">Read the article<span class="visually-hidden">: How Corporate Wellness and Conscious Living Help People Thrive</span></a>
+          <a class="post-more" href="#blog" data-mock="In the finished site, this opens the full article.">Read the article<span class="visually-hidden">: How Corporate Wellness and Conscious Living Help People Thrive</span></a>
         </article>
       </div>
     </div>
@@ -684,9 +690,9 @@ footer a:hover { color: var(--on-footer); }
         <p>Tell us a little about your workplace and we'll send a tailored proposal within two working days.</p>
         <dl class="details">
           <div><dt>Email</dt><dd>admin@manifestowellness.co.za</dd></div>
-          <div><dt>Based in</dt><dd>Johannesburg, Gauteng<br><a class="map-link" href="https://maps.app.goo.gl/vcNZfJQsDJMDHAHeA" target="_blank" rel="noopener">View on Google Maps</a></dd></div>
+          <div><dt>Based in</dt><dd>Johannesburg, Gauteng<br><a class="map-link" href="#contact" data-mock="In the finished site, this opens their location in Google Maps.">View on Google Maps</a></dd></div>
           <div><dt>Team</dt><dd>Anja Theron · Chantal Maskell</dd></div>
-          <div><dt>Social</dt><dd><a href="https://www.facebook.com/manifestowellness" target="_blank" rel="noopener">Facebook</a> · <a href="https://www.instagram.com/manifesto.wellness/" target="_blank" rel="noopener">Instagram</a> · <a href="https://linkedin.com/company/manifesto-wellness-africa" target="_blank" rel="noopener">LinkedIn</a></dd></div>
+          <div><dt>Social</dt><dd><a href="#contact" data-mock="In the finished site, this opens their Facebook page.">Facebook</a> · <a href="#contact" data-mock="In the finished site, this opens their Instagram profile.">Instagram</a> · <a href="#contact" data-mock="In the finished site, this opens their LinkedIn page.">LinkedIn</a></dd></div>
         </dl>
       </div>
       <form id="enquiry" novalidate>
@@ -759,6 +765,22 @@ document.getElementById('enquiry').addEventListener('submit', function (e) {
   document.getElementById('sent').hidden = false;
 });
 
+</script>
+<div class="mock-toast" id="mock-toast" role="status" aria-live="polite" hidden></div>
+<script>
+// Mockup only: links that would leave the site show a note instead.
+(function () {
+  var toast = document.getElementById('mock-toast'), timer;
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[data-mock]');
+    if (!link) return;
+    e.preventDefault();
+    toast.textContent = link.getAttribute('data-mock');
+    toast.hidden = false;
+    clearTimeout(timer);
+    timer = setTimeout(function () { toast.hidden = true; }, 3200);
+  });
+})();
 </script>
 </body>
 </html>
