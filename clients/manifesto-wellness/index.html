@@ -191,7 +191,7 @@ p { margin: 0; }
 .hero-media { position: relative; margin: 0; }
 .hero-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.2s ease; }
 .hero-slide.is-active { opacity: 1; }
-.hero-flip img { transform: scaleX(-1); }  /* mirrored so the bowls sit on the right, away from the text */
+.hero-flip img { transform: scaleX(-1); }  /* mirrored so the subject sits away from the text */
 .hero-slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 70% 40%); }
 .hero-media::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1; }
 .hero-dots { position: absolute; z-index: 3; left: 50%; bottom: 16px; transform: translateX(-50%); display: flex; gap: 4px; padding: 2px 8px; border-radius: 999px; background: rgba(0, 0, 0, .18); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, .3); }
@@ -209,7 +209,11 @@ p { margin: 0; }
 .hero-inner { position: relative; z-index: 2; pointer-events: none; padding-block: clamp(40px, 7vw, 96px); }
 .hero-copy .declaration { margin-top: 28px; }
 .hero-copy { pointer-events: auto; max-width: 36rem; min-width: 0; display: flex; flex-direction: column; }
-.hero h1 { font-size: var(--s-1); line-height: .95; font-weight: 800; }
+.hero h1 { font-size: clamp(1.9rem, 6.4vw, 2.6rem); line-height: 1.05; font-weight: 800; }
+.hero-rot { display: grid; }
+.hero-rot > span { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity .8s ease, visibility .8s; }
+.hero-rot > span.is-active { opacity: 1; visibility: visible; }
+@media (prefers-reduced-motion: reduce) { .hero-rot > span { transition: none; } }
 .hero h1 em { font-style: normal; color: var(--gold); background: var(--rose-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .hero .lede { margin-top: 28px; max-width: 34em; font-size: 1.15rem; color: var(--ink-soft); }
 .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
@@ -239,7 +243,7 @@ p { margin: 0; }
   .hero-copy .declaration p { color: var(--hero-soft); font-size: .9rem; }
   .hero .lede { margin-top: 18px; font-size: 1.05rem; color: var(--hero-soft); }
   .hero .ctas { margin-top: 24px; }
-  .hero h1 { color: var(--hero-fg); font-size: clamp(2.2rem, 3.3vw, 3.2rem); }
+  .hero h1 { color: var(--hero-fg); font-size: clamp(2rem, 2.8vw, 2.7rem); }
   .hero h1 em { color: var(--hero-accent); background: var(--hero-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
 }
 
@@ -525,13 +529,13 @@ footer a:hover { color: var(--on-footer); }
 <main id="top">
   <section class="hero" style="padding-block:0">
     <div class="hero-media" aria-roledescription="carousel" aria-label="Manifesto Wellness in action">
-      <figure class="hero-slide is-active hero-flip" style="--focus: 60% 50%">
+      <figure class="hero-slide is-active" style="--focus: 60% 50%">
         <img src="images/banner-bowls-flatlay-v3-1200.webp"
              srcset="images/banner-bowls-flatlay-v3-800.webp 800w, images/banner-bowls-flatlay-v3-1200.webp 1200w, images/banner-bowls-flatlay-v3-2000.webp 2000w"
              sizes="100vw" width="2000" height="1125" fetchpriority="high"
              alt="Singing bowls and a seed-pod rattle on a fur rug, overlaid with rose gold lotus line art">
       </figure>
-      <figure class="hero-slide" style="--focus: 72% 30%" aria-hidden="true">
+      <figure class="hero-slide hero-flip" style="--focus: 72% 30%" aria-hidden="true">
         <img src="images/banner-singing-bowl-v3-1200.webp"
              srcset="images/banner-singing-bowl-v3-800.webp 800w, images/banner-singing-bowl-v3-1200.webp 1200w, images/banner-singing-bowl-v3-2000.webp 2000w"
              sizes="100vw" width="2000" height="1125" loading="lazy" decoding="async"
@@ -551,9 +555,17 @@ footer a:hover { color: var(--on-footer); }
     </div>
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <span class="eyebrow">Wellness that works · Johannesburg</span>
-        <h1>Healthier people build <em>stronger businesses.</em></h1>
-        <p class="lede">Tailored corporate wellness programmes designed for your team’s unique needs. We help companies invest in what matters most: their people.</p>
+        <!-- Eyebrow and headline change with each banner image -->
+        <span class="eyebrow hero-rot">
+          <span class="is-active">Bring balance back to work</span>
+          <span aria-hidden="true">Healthy teams. Thriving businesses.</span>
+          <span aria-hidden="true">Wellness that works</span>
+        </span>
+        <h1 class="hero-rot">
+          <span class="is-active">Create a culture of wellness with programmes that <em>energise, inspire and transform</em> your workplace.</span>
+          <span aria-hidden="true">We help companies invest in what matters most: <em>their people.</em></span>
+          <span aria-hidden="true">Tailored corporate wellness programmes designed for <em>your team’s unique needs.</em></span>
+        </h1>
         <div class="ctas">
           <a class="btn btn-solid" href="#contact">Get a proposal</a>
           <a class="btn btn-ghost" href="#programmes">See our services</a>
@@ -869,6 +881,12 @@ footer a:hover { color: var(--on-footer); }
       if (i === current) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden', 'true');
     });
     dots.forEach(function (d, i) { d.setAttribute('aria-current', i === current ? 'true' : 'false'); });
+    [].forEach.call(hero.querySelectorAll('.hero-rot'), function (group) {
+      [].forEach.call(group.children, function (el, i) {
+        el.classList.toggle('is-active', i === current);
+        if (i === current) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden', 'true');
+      });
+    });
   }
   function start() { if (!still && !timer) timer = setInterval(function () { show(current + 1); }, 6000); }
   function stop() { clearInterval(timer); timer = null; }
