@@ -126,9 +126,14 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  margin: 0; background: var(--pattern) 0 0 / 160px 48px, var(--ground); color: var(--ink);
+  margin: 0; background: var(--ground); color: var(--ink);
   font: 400 var(--s-body)/1.6 var(--f-body);
   -webkit-font-smoothing: antialiased;
+}
+/* Wave pattern on the page ground, laid at an angle. Oversized so the rotated tile still covers every corner. */
+body::before {
+  content: ""; position: fixed; z-index: -1; inset: -50%; pointer-events: none;
+  background: var(--pattern) 0 0 / 160px 48px; transform: rotate(-18deg);
 }
 img { max-width: 100%; }
 a { color: inherit; }
@@ -351,32 +356,47 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
 
 /* Events */
-.events-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; }
+.events-grid { display: grid; grid-template-columns: 1fr 1fr 0.8fr; gap: 24px; align-items: stretch; }
 .event {
-  display: grid; grid-template-columns: auto 1fr; gap: 28px; background: var(--glass-bg);
-  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); box-shadow: var(--glass-shadow);
-  border: 1px solid var(--glass-border); border-radius: 20px; padding: clamp(22px, 3vw, 36px); min-width: 0;
+  position: relative; cursor: pointer; display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 14px 14px 20px;
+  background: var(--glass-bg); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); box-shadow: var(--glass-shadow);
+  border: 1px solid var(--glass-border); border-radius: 22px; transition: transform .3s ease;
 }
-.date { text-align: center; border-right: 1px solid var(--line); padding-right: 28px; }
-.date .d { font: 800 3.6rem/1 var(--f-display); color: var(--gold); background: var(--rose-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.date .m { font: 500 .8rem/1.4 var(--f-mono); text-transform: uppercase; letter-spacing: .12em; }
-.event h3 { font-size: 1.6rem; font-weight: 600; margin: 8px 0 10px; }
-.event p { color: var(--ink-soft); }
-.meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 18px; font-size: .92rem; }
-.meta span { display: inline-flex; gap: 6px; align-items: center; }
-.meta b { font-variant-numeric: tabular-nums; }
-.event .btn { margin-top: 22px; }
+.event:hover { transform: translateY(-3px); }
+.event > :not(.event-media) { margin-inline: 10px; }
+.event-media { position: relative; border-radius: 14px; overflow: hidden; margin-bottom: 6px; }
+.event-media img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; transition: transform .4s ease; }
+.event:hover .event-media img { transform: scale(1.04); }
+.event-media::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: var(--photo-tint); opacity: 0; transition: opacity .4s ease; }
+.event:hover .event-media::after { opacity: 1; }
+.date {
+  position: absolute; z-index: 1; left: 12px; top: 12px; min-width: 64px; padding: 8px 10px; text-align: center; border-radius: 14px;
+  background: var(--glass-strong); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border);
+}
+.date .d { font: 800 1.9rem/1 var(--f-display); color: var(--gold); background: var(--rose-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.date .m { font: 500 .66rem/1.4 var(--f-mono); text-transform: uppercase; letter-spacing: .1em; color: var(--ink); }
+.event-tags { display: flex; flex-wrap: wrap; gap: 6px 12px; font: 500 .72rem/1.5 var(--f-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--gold-deep); }
+.event-tags .past { color: var(--ink-soft); }
+.event h3 { font-size: 1.3rem; font-weight: 600; line-height: 1.25; }
+.event .subtitle { color: var(--ink); font-weight: 500; font-size: .95rem; }
+.event p { color: var(--ink-soft); font-size: .95rem; }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 4px; font-size: .86rem; color: var(--ink-soft); }
+.meta b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.event-more { margin-top: auto; padding-top: 6px; font-weight: 600; font-size: .92rem; color: var(--gold-deep); text-decoration: none; }
+.event-more::after { content: ""; position: absolute; inset: 0; border-radius: 22px; }  /* whole card opens the event */
+.event:hover h3 { color: var(--gold-deep); }
 .event-aside {
   background: var(--glass-rose); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); box-shadow: var(--glass-shadow);
-  color: var(--on-panel); border: 1px solid var(--glass-border); border-radius: 20px; padding: clamp(22px, 3vw, 36px);
+  color: var(--on-panel); border: 1px solid var(--glass-border); border-radius: 22px; padding: clamp(22px, 3vw, 32px);
   display: flex; flex-direction: column; justify-content: space-between; gap: 24px;
 }
-.event-aside h3 { font-size: 1.5rem; font-weight: 600; }
+.event-aside h3 { font-size: 1.4rem; font-weight: 600; }
 .event-aside p { color: var(--on-panel-soft); margin-top: 10px; }
 .event-aside .btn { border-color: var(--on-panel); color: var(--on-panel); align-self: flex-start; }
 .event-aside .btn:hover { background: var(--on-panel); color: var(--panel); }
-@media (max-width: 900px) { .events-grid { grid-template-columns: 1fr; } }
-@media (max-width: 520px) { .event { grid-template-columns: 1fr; } .date { border-right: 0; padding-right: 0; text-align: left; display: flex; gap: 12px; align-items: baseline; } }
+@media (max-width: 1000px) { .events-grid { grid-template-columns: 1fr 1fr; } .event-aside { grid-column: 1 / -1; } }
+@media (max-width: 640px) { .events-grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .event, .event-media img { transition: none; } .event:hover, .event:hover .event-media img { transform: none; } }
 
 /* Contact */
 .contact { background: var(--paper); border-top: 1px solid var(--line); }
@@ -686,22 +706,32 @@ footer .copyright strong { color: var(--on-footer); font-weight: 600; }
           <span class="eyebrow">Events</span>
           <h2>Open to everyone.</h2>
         </div>
-        <p>Alongside our corporate work, we host public retreats and workshops in and around Johannesburg.</p>
+        <p>Alongside our corporate work, we host public wellness days and retreats in and around Johannesburg. New dates are announced here first.</p>
       </div>
       <div class="events-grid">
         <article class="event">
-          <div class="date"><div class="d">01</div><div class="m">Aug · Sat</div></div>
-          <div>
-            <span class="eyebrow">Women's retreat</span>
-            <h3>Return to your feminine essence</h3>
-            <p>A nurturing morning retreat designed to restore balance, awaken inner wisdom and reconnect you with your authentic feminine essence.</p>
-            <div class="meta">
-              <span><b>08:00 – 13:00</b></span>
-              <span>The Garden Venue, North Riding</span>
-              <span><b>R1 690</b></span>
-            </div>
-            <a class="btn btn-solid" href="#contact">Reserve your place</a>
+          <div class="event-media">
+            <img src="images/event-burnout-balance-v1.webp" width="840" height="473" loading="lazy" decoding="async" alt="Two people meditating cross-legged outdoors in a leafy garden">
+            <div class="date"><div class="d">04</div><div class="m">Jul · Sat</div></div>
           </div>
+          <div class="event-tags"><span>Wellness day</span><span class="past">Past event</span></div>
+          <h3>From Burnout to Balance</h3>
+          <p class="subtitle">Mid-year reset: a journey to inner peace and personal renewal</p>
+          <p>A restorative retreat to reconnect and realign through movement, meditation, sound therapy, creative visioning and practical stress-management tools.</p>
+          <div class="meta"><span><b>08:00 – 13:00</b></span><span>The Garden Venue, Randburg</span><span><b>R1 395</b></span></div>
+          <a class="event-more" href="#events" data-mock="In the finished site, this opens the full event page.">View event<span class="visually-hidden">: From Burnout to Balance</span> &rarr;</a>
+        </article>
+        <article class="event">
+          <div class="event-media">
+            <img src="images/event-goddess-v1.webp" width="840" height="473" loading="lazy" decoding="async" alt="Facilitator in a yellow shawl leading a women&#x27;s circle beside a large garden window">
+            <div class="date"><div class="d">01</div><div class="m">Aug · Sat</div></div>
+          </div>
+          <div class="event-tags"><span>Wellness day</span><span class="past">Past event</span></div>
+          <h3>Awaken the Goddess Within</h3>
+          <p class="subtitle">Restore your nervous system. Reignite your intuition. Reclaim your radiance.</p>
+          <p>A nurturing retreat to restore balance, awaken inner wisdom and reconnect you with your authentic feminine essence.</p>
+          <div class="meta"><span><b>08:00 – 13:00</b></span><span>The Garden Venue, Randburg</span><span><b>R1 690</b></span></div>
+          <a class="event-more" href="#events" data-mock="In the finished site, this opens the full event page.">View event<span class="visually-hidden">: Awaken the Goddess Within</span> &rarr;</a>
         </article>
         <aside class="event-aside">
           <div>
