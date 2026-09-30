@@ -573,6 +573,17 @@ form .btn { justify-self: start; cursor: pointer; }
 .quotes-marquee:hover .quotes, .quotes-marquee:focus-within .quotes { animation-play-state: paused; }
 @keyframes quotes-loop { to { transform: translateX(calc(-50% - 10px)); } }
 .quotes .quote { width: min(420px, 80vw); flex: none; }
+/* Phones: no auto-scroll; swipe through the quotes by hand, snapping to each card */
+@media (max-width: 760px) {
+  .quotes-marquee { overflow: visible; -webkit-mask-image: none; mask-image: none; margin-inline: 0; padding: 0; }
+  .quotes {
+    animation: none; width: auto; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    margin-inline: calc(var(--gutter) * -1); padding: 8px var(--gutter) 24px; scroll-padding-inline: var(--gutter); scrollbar-width: none;
+  }
+  .quotes::-webkit-scrollbar { display: none; }
+  .quotes .quote { width: 84vw; scroll-snap-align: start; }
+  .quotes .quote[aria-hidden="true"] { display: none; }
+}
 @media (prefers-reduced-motion: reduce) {
   .quotes { animation: none; width: auto; overflow-x: auto; scroll-snap-type: x mandatory; }
   .quotes .quote { scroll-snap-align: start; }
