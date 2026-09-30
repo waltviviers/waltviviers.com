@@ -422,6 +422,12 @@ section { padding-block: clamp(64px, 9vw, 112px); }
   color: var(--on-panel); border: 1px solid var(--glass-border); border-radius: 22px; padding: clamp(22px, 3vw, 32px);
   display: flex; flex-direction: column; justify-content: space-between; gap: 24px;
 }
+.event-aside { position: relative; overflow: hidden; isolation: isolate; }
+/* Lotus line art tucked into the lower corner of the private-event card */
+.event-aside::before {
+  content: ""; position: absolute; z-index: -1; pointer-events: none; right: -18%; bottom: -12%; width: 85%; aspect-ratio: 2477 / 2999;
+  background: url("images/lotus.svg") center / contain no-repeat; opacity: var(--lotus-opacity);
+}
 .event-aside h3 { font-size: 1.4rem; font-weight: 600; }
 .event-aside p { color: var(--on-panel-soft); margin-top: 10px; }
 .event-aside .btn { border-color: var(--on-panel); color: var(--on-panel); align-self: flex-start; }
