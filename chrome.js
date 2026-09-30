@@ -75,7 +75,7 @@
     };
   })();
 
-  /* Load GTM + Meta Pixel only after consent (and never under /apps/). */
+  /* Load GTM + Meta Pixel + LinkedIn Insight Tag only after consent (and never under /apps/). */
   if (!WV_NO_TRACK) window.wvConsent.onGrant(function () {
     if (!window.fbq) {
       !function (f, b, e, v, n, t, s) {
@@ -96,6 +96,18 @@
         j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
         f.parentNode.insertBefore(j, f);
       })(window, document, 'script', 'dataLayer', 'GTM-P8DPSSC9');
+    }
+    /* LinkedIn Insight Tag */
+    if (!window._linkedin_data_partner_ids) {
+      window._linkedin_partner_id = '10965449';
+      window._linkedin_data_partner_ids = [window._linkedin_partner_id];
+      (function (l) {
+        if (!l) { window.lintrk = function (a, b) { window.lintrk.q.push([a, b]) }; window.lintrk.q = [] }
+        var s = document.getElementsByTagName('script')[0], b = document.createElement('script');
+        b.type = 'text/javascript'; b.async = true;
+        b.src = 'https://snap.licdn.com/li.lms-analytics/insight.min.js';
+        s.parentNode.insertBefore(b, s);
+      })(window.lintrk);
     }
   });
 
