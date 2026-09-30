@@ -3,6 +3,12 @@ node_modules/
 .DS_Store
 Thumbs.db
 *.log
+.vercel/
+
+# Secrets / environment files
+.env
+.env.*
+!.env.example
 
 # Unreferenced source originals & stray uploads (kept in history, not shipped)
 images/1ad6bd14761993.56288b067354b.jpg
