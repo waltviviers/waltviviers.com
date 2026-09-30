@@ -875,7 +875,7 @@
       fetch('/data/artworks.json')
         .then(function (r) { return r.json(); })
         .then(function (data) {
-          allWorks = data.artworks;
+          allWorks = (data.artworks || []).filter(function (w) { return !w.hidden; });
           renderGrid(allWorks);
 
           document.querySelectorAll('.sort-btn').forEach(function (btn) {
