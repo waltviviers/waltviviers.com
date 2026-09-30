@@ -432,6 +432,17 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 .event-aside p { color: var(--on-panel-soft); margin-top: 10px; }
 .event-aside .btn { border-color: var(--on-panel); color: var(--on-panel); align-self: flex-start; }
 .event-aside .btn:hover { background: var(--on-panel); color: var(--panel); }
+/* Whole card reacts and is clickable, like the other cards */
+.event-aside { cursor: pointer; transition: transform .3s ease, box-shadow .3s ease; }
+.event-aside:hover { transform: translateY(-3px); box-shadow: 0 16px 44px rgba(120, 70, 45, .22); }
+.event-aside::before { transition: transform .6s ease, opacity .4s ease; }
+.event-aside:hover::before { transform: scale(1.06) rotate(-2deg); opacity: calc(var(--lotus-opacity) + .12); }
+.event-aside:hover h3 { color: var(--gold-deep); }
+.event-aside:hover .aside-cta { background: var(--on-panel); color: var(--panel); }
+.aside-cta:hover { transform: none; }  /* keep the card-wide hit area */
+.aside-cta::after { content: ""; position: absolute; inset: 0; border-radius: 22px; }
+.event-aside:focus-within .aside-cta { outline: 3px solid var(--gold-deep); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .event-aside, .event-aside::before { transition: none; } .event-aside:hover, .event-aside:hover::before { transform: none; } }
 @media (max-width: 1000px) { .events-grid { grid-template-columns: 1fr 1fr; } .event-aside { grid-column: 1 / -1; } }
 @media (max-width: 640px) { .events-grid { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { .event, .event-media img { transition: none; } .event:hover, .event:hover .event-media img { transform: none; } }
@@ -805,7 +816,7 @@ footer .copyright strong { color: var(--on-footer); font-weight: 600; }
             <h3>Host a private event</h3>
             <p>Any of our public retreats can be booked exclusively for your team, with a venue, catering and programme arranged for you.</p>
           </div>
-          <a class="btn" href="#contact">Enquire about dates</a>
+          <a class="btn aside-cta" href="#contact">Enquire about dates</a>
         </aside>
       </div>
     </div>
