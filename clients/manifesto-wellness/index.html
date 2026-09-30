@@ -340,7 +340,7 @@ section { padding-block: clamp(64px, 9vw, 112px); }
 .service h3 { font-size: var(--s-3); font-weight: 600; }
 .service p { color: var(--ink-soft); font-size: .98rem; }
 .service svg { width: 30px; height: 30px; color: var(--gold); }
-.service-photo { display: block; width: 100%; height: auto; aspect-ratio: 16 / 7; object-fit: cover; border-radius: 14px; margin-bottom: 8px; }
+.service-photo { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; border-radius: 14px; margin-bottom: 8px; }
 @media (max-width: 560px) {
   .services { grid-template-columns: 1fr; }
 }
@@ -577,7 +577,7 @@ footer .copyright strong { color: var(--on-footer); font-weight: 600; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } .btn:hover { transform: none; } }
 /* Phones: every card photo (services, events, team, blog) shares one height */
 @media (max-width: 640px) {
-  .service-photo, .event-media img, .member img, .post-image img { aspect-ratio: auto; height: 220px; }
+  .service-photo, .event-media img, .member img, .post-image img { aspect-ratio: auto; height: 240px; }
   .member img { object-position: 50% 25%; }  /* keep faces in frame */
 }
 </style>
