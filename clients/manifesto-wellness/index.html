@@ -616,6 +616,11 @@ footer { background: var(--footer-bg); color: var(--on-footer-soft); font-size: 
 footer .wrap { display: flex; flex-direction: column; gap: 8px; padding-block: 28px; text-align: center; }
 footer p { max-width: 62em; margin-inline: auto; font-size: .82rem; line-height: 1.6; }
 footer .copyright { font-size: .9rem; }
+/* Small single-colour logo at the top of the footer (the SVG is used as a mask so it takes the footer text colour) */
+.footer-logo {
+  display: block; width: 150px; aspect-ratio: 689.67 / 160.89; margin: 0 auto 10px; background: var(--on-footer-soft); opacity: .8;
+  -webkit-mask: url("images/logo-mono.svg") center / contain no-repeat; mask: url("images/logo-mono.svg") center / contain no-repeat;
+}
 footer .copyright strong { color: var(--on-footer); font-weight: 600; }
 @media (max-width: 700px) { footer .wrap { padding-bottom: 96px; } }  /* clear the floating WhatsApp button */
 
@@ -1015,6 +1020,7 @@ footer .copyright strong { color: var(--on-footer); font-weight: 600; }
 
 <footer>
   <div class="wrap">
+    <span class="footer-logo" role="img" aria-label="Manifesto: Motivate, Inspire, Succeed"></span>
     <p class="copyright"><strong>© <span id="year">2026</span> Manifesto Wellness Africa. All rights reserved.</strong></p>
     <p>All content on this website, including text, photographs, graphics and the Manifesto name and logo, is the property of Manifesto Wellness Africa and is protected by South African and international copyright and trademark law. No part of it may be copied, reproduced, distributed or used without prior written permission.</p>
   </div>
