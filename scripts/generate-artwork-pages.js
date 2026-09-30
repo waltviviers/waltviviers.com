@@ -717,6 +717,7 @@ fs.mkdirSync(worksDir, { recursive: true });
 
 let generated = 0;
 for (const w of data.artworks) {
+  if (w.hidden) continue; // hidden artworks get no page
   const slug    = slugify(w.title, w.year);
   const pageDir = path.join(worksDir, slug);
   fs.mkdirSync(pageDir, { recursive: true });

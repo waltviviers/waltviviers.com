@@ -2642,7 +2642,7 @@
       fetch('data/artworks.json')
         .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(data => {
-          works = (data.artworks || []).map(w => ({
+          works = (data.artworks || []).filter(w => !w.hidden).map(w => ({
             id:         w.title + w.year,
             image:      w.image,
             title:      w.title      || '—',
