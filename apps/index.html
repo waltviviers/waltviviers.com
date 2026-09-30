@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Apps &amp; Games — Walt Viviers</title>
-  <meta name="description" content="Apps &amp; games by Walt Viviers — South African fine artist and developer, based in Pretoria." />
+  <meta name="description" content="Apps &amp; games by Walt Viviers — South African multimedia artist and developer, based in Pretoria." />
   <link rel="canonical" href="https://waltviviers.com/apps/" />
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
   <link rel="manifest" href="/manifest.json" />
@@ -27,9 +27,9 @@
   <meta property="og:type"         content="website" />
   <meta property="og:url"          content="https://waltviviers.com/apps/" />
   <meta property="og:title"        content="Apps &amp; Games — Walt Viviers" />
-  <meta property="og:description"  content="Apps &amp; games by Walt Viviers — South African fine artist and developer." />
+  <meta property="og:description"  content="Apps &amp; games by Walt Viviers — South African multimedia artist and developer." />
   <meta property="og:image"        content="https://waltviviers.com/brushstrokes-bg.webp" />
-  <meta property="og:image:alt"    content="Walt Viviers — fine artist and developer" />
+  <meta property="og:image:alt"    content="Walt Viviers — multimedia artist and developer" />
   <meta property="og:image:type"   content="image/webp" />
   <meta property="og:image:width"  content="2360" />
   <meta property="og:image:height" content="590" />
@@ -39,9 +39,9 @@
   <!-- Twitter / X -->
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="Apps &amp; Games — Walt Viviers" />
-  <meta name="twitter:description" content="Apps &amp; games by Walt Viviers — South African fine artist and developer." />
+  <meta name="twitter:description" content="Apps &amp; games by Walt Viviers — South African multimedia artist and developer." />
   <meta name="twitter:image"       content="https://waltviviers.com/brushstrokes-bg.webp" />
-  <meta name="twitter:image:alt"   content="Walt Viviers — fine artist and developer" />
+  <meta name="twitter:image:alt"   content="Walt Viviers — multimedia artist and developer" />
 
   <!-- Structured data -->
   <script type="application/ld+json">
@@ -51,7 +51,7 @@
       {
         "@type": "CollectionPage",
         "name": "Apps & Games — Walt Viviers",
-        "description": "Apps & games by Walt Viviers — South African fine artist and developer, based in Pretoria.",
+        "description": "Apps & games by Walt Viviers — South African multimedia artist and developer, based in Pretoria.",
         "url": "https://waltviviers.com/apps/",
         "author": {
           "@type": "Person",
@@ -123,26 +123,6 @@
     }
     nav.scrolled { height: 50px; }
     .nav-left { display: flex; align-items: center; gap: 14px; }
-.lang-slash { display: none; }
-    .lang-toggle { display: flex; align-items: center; gap: 14px; }
-    .lang-group { display: flex; align-items: center; cursor: pointer; user-select: none; }
-    .lang-label, .lang-code {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--stone); font-family: var(--sans);
-      transition: color 0.2s; line-height: 1;
-    }
-    .lang-label {
-      max-width: 200px; overflow: hidden; white-space: nowrap;
-      transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
-    }
-    .lang-pipe {
-      font-size: 11px; color: var(--rule); padding: 0 4px; pointer-events: none;
-      max-width: 20px; overflow: hidden; white-space: nowrap;
-      transition: max-width 0.3s ease, opacity 0.2s ease;
-    }
-    .lang-group.active .lang-label,
-    .lang-group.active .lang-code  { color: var(--ink); }
-    .lang-group.active .lang-pipe  { color: var(--stone); }
     .nav-logo img { height: 36px; width: auto; transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
     nav.scrolled .nav-logo img { height: 28px; }
     .nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
@@ -194,8 +174,6 @@
     }
     .toggle-thumb .icon-moon { display: block; }
     .toggle-thumb .icon-sun  { display: none; }
-    nav.scrolled .lang-label,
-    nav.scrolled .lang-pipe { max-width: 0; opacity: 0; padding: 0; }
     nav.scrolled .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
     nav.scrolled .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
     nav.scrolled .toggle-thumb .icon-moon,
@@ -382,8 +360,6 @@
       .nav-logo img { height: 28px; }
       .nav-links { gap: 20px; }
       .nav-link-hide { display: none; }
-      .lang-label, .lang-pipe { display: none; }
-      .lang-slash { display: inline; color: var(--stone); font-size: 11px; letter-spacing: 0.06em; }
       .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
       .toggle-thumb .icon-moon,
@@ -429,20 +405,7 @@
     [data-theme="light"] .gx-box { background: #F5F3EF; }
     [data-theme="light"] .gx-field input, [data-theme="light"] .gx-field textarea, [data-theme="light"] .gx-field select { background: #FAF9F7; border-color: #D5D1CB; color: #0C0C0B; }
     [data-theme="light"] .gx-submit { background: #0C0C0B; color: #FAF9F7; }
-    /* Language switch: English [ slider ] Afrikaans */
-    .lang-toggle, .lang-switch { display: flex; align-items: center; gap: 10px; }
-    .lang-group { display: block; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); font-family: var(--sans); line-height: 1; cursor: pointer; user-select: none; white-space: nowrap; transition: color 0.2s; }
-    .lang-group.active { color: var(--ink); }
-    .lang-group:not(.active):hover { color: var(--ink); }
-    .lang-track { position: relative; width: 40px; height: 20px; border-radius: 12px; border: 1.5px solid #4A4844; background: transparent; cursor: pointer; padding: 0; flex-shrink: 0; }
-    .lang-knob { position: absolute; top: 50%; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--ink); transform: translateY(-50%); transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1); }
-    .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 22px; }
-    [data-theme="light"] .lang-track { border-color: #D5D1CB; }
     @media (max-width: 900px) {
-      .lang-switch { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); gap: 7px; }
-      .lang-group { font-size: 10px; letter-spacing: 0.04em; }
-      .lang-track { width: 34px; height: 18px; }
-      .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 18px; }
     }
     /* ── Burger button + mobile menu (standard header) ── */
     .burger-btn { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; cursor: pointer; background: none; border: none; padding: 4px; flex-shrink: 0; font-size: 20px; line-height: 1; transition: opacity 0.2s; }

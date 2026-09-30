@@ -101,32 +101,6 @@
 
     .nav-left { display: flex; align-items: center; gap: 14px; }
 
-    .lang-toggle { display: flex; align-items: center; gap: 14px; }
-
-    .lang-group { display: flex; align-items: center; cursor: pointer; user-select: none; }
-
-    .lang-label,
-    .lang-code {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--stone); font-family: var(--sans);
-      transition: color 0.2s; line-height: 1;
-    }
-
-    .lang-label {
-      max-width: 200px; overflow: hidden; white-space: nowrap;
-      transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
-    }
-
-    .lang-pipe {
-      font-size: 11px; color: var(--rule); padding: 0 4px; pointer-events: none;
-      max-width: 20px; overflow: hidden; white-space: nowrap;
-      transition: max-width 0.3s ease, opacity 0.2s ease;
-    }
-
-    .lang-group.active .lang-label,
-    .lang-group.active .lang-code  { color: var(--ink); }
-    .lang-group.active .lang-pipe  { color: var(--stone); }
-
     .nav-logo img {
       height: 36px; width: auto;
       transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -197,9 +171,6 @@
     .toggle-thumb .icon-moon { display: block; }
     .toggle-thumb .icon-sun  { display: none; }
 
-    nav.scrolled .lang-label,
-    nav.scrolled .lang-pipe { max-width: 0; opacity: 0; padding: 0; }
-
     nav.scrolled .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
     nav.scrolled .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
     nav.scrolled .toggle-thumb .icon-moon,
@@ -256,7 +227,6 @@
       .nav-logo img { height: 28px; }
       .nav-links { gap: 20px; }
       .nav-link-hide { display: none; }
-      .lang-label, .lang-pipe { display: none; }
       .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
       .toggle-thumb .icon-moon,

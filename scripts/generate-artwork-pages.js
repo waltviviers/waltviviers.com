@@ -87,32 +87,6 @@ function sharedCSS() {
 
     .nav-left { display: flex; align-items: center; gap: 14px; }
 
-    .lang-toggle { display: flex; align-items: center; gap: 14px; }
-
-    .lang-group { display: flex; align-items: center; cursor: pointer; user-select: none; }
-
-    .lang-label,
-    .lang-code {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--stone); font-family: var(--sans);
-      transition: color 0.2s; line-height: 1;
-    }
-
-    .lang-label {
-      max-width: 200px; overflow: hidden; white-space: nowrap;
-      transition: max-width 0.3s ease, opacity 0.2s ease, color 0.2s;
-    }
-
-    .lang-pipe {
-      font-size: 11px; color: var(--rule); padding: 0 4px; pointer-events: none;
-      max-width: 20px; overflow: hidden; white-space: nowrap;
-      transition: max-width 0.3s ease, opacity 0.2s ease;
-    }
-
-    .lang-group.active .lang-label,
-    .lang-group.active .lang-code  { color: var(--ink); }
-    .lang-group.active .lang-pipe  { color: var(--stone); }
-
     .nav-logo img {
       height: 36px; width: auto;
       transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -183,8 +157,6 @@ function sharedCSS() {
     .toggle-thumb .icon-moon { display: block; }
     .toggle-thumb .icon-sun  { display: none; }
 
-    nav.scrolled .lang-label,
-    nav.scrolled .lang-pipe { max-width: 0; opacity: 0; padding: 0; }
 
     nav.scrolled .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
     nav.scrolled .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
@@ -242,7 +214,6 @@ function sharedCSS() {
       .nav-logo img { height: 28px; }
       .nav-links { gap: 20px; }
       .nav-link-hide { display: none; }
-      .lang-label, .lang-pipe { display: none; }
       .theme-toggle { width: auto; height: auto; border: none; padding: 4px; }
       .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
       .toggle-thumb .icon-moon,
@@ -268,14 +239,6 @@ function sharedNavHTML() {
       <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
         <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
-      <div class="lang-toggle">
-        <div class="lang-group active" id="lang-en">
-          <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
-        </div>
-        <div class="lang-group" id="lang-af">
-          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
-        </div>
-      </div>
     </div>
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#works" data-i18n="nav-artworks">Artworks</a></li>
@@ -374,12 +337,11 @@ function sharedScripts() {
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-artworks':'Kunswerke','nav-about':'Oor my','nav-apps':'Programme','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-artworks':'Artworks','nav-about':'About','nav-apps':'Apps','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' }
       };
-      var lang = localStorage.getItem('wv-lang') || 'en';
+      var lang = 'en';
       function applyLang(l) {
-        lang = l; localStorage.setItem('wv-lang', l);
+        lang = l;
         document.querySelectorAll('[data-i18n]').forEach(function(el) {
           var k = el.dataset.i18n;
           if (LANG[l] && LANG[l][k] !== undefined) el.textContent = LANG[l][k];
@@ -388,13 +350,7 @@ function sharedScripts() {
           var k = el.dataset.i18nHref;
           if (LANG[l] && LANG[l][k] !== undefined) el.href = LANG[l][k];
         });
-        var descEl = document.getElementById('artwork-description');
-        if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
-        document.getElementById('lang-en').classList.toggle('active', l === 'en');
-        document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }
-      document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
-      document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
       applyLang(lang);
     })();
   </script>`;
@@ -743,7 +699,7 @@ ${sharedNavHTML()}
       ${enquireBtn}
       <a href="/gallery/" class="btn btn-secondary" data-i18n="btn-all-works">View all works</a>
     </div>
-    ${w.description ? `\n    <div class="artwork-desc">\n      <p id="artwork-description" data-en="${escapeHtml(w.description)}" data-af="${escapeHtml(w.description_af || w.description)}">${escapeHtml(w.description)}</p>\n    </div>` : ''}
+    ${w.description ? `\n    <div class="artwork-desc">\n      <p id="artwork-description">${escapeHtml(w.description)}</p>\n    </div>` : ''}
     ${enquiryForm}${instagramLink}
   </main>
 
