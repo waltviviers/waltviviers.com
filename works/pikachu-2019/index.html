@@ -428,14 +428,6 @@
       <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
         <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
       </a>
-      <div class="lang-toggle">
-        <div class="lang-group active" id="lang-en">
-          <span class="lang-label">Artist</span><span class="lang-pipe"> | </span><span class="lang-code">EN</span>
-        </div>
-        <div class="lang-group" id="lang-af">
-          <span class="lang-label">Kunstenaar</span><span class="lang-pipe"> | </span><span class="lang-code">AF</span>
-        </div>
-      </div>
     </div>
     <ul class="nav-links">
       <li class="nav-link-hide"><a href="/#about" data-i18n="nav-about">About</a></li>
@@ -495,7 +487,7 @@
     </div>
     
     <div class="artwork-desc">
-      <p id="artwork-description" data-en="Pikachu is a 2019 acrylic on canvas capturing the world's most famous Pokémon mid-laugh — eyes squeezed shut, mouth open in pure delight. Viviers frames the character inside a painted polaroid-style border against a deep blue field, with ears and tail breaking playfully out of the frame, a compositional wink that gives the piece its energy. Painted the same year as Venom Cat, it belongs to a body of work in which Viviers brings genuine painterly care to pop-culture icons: soft gradients through the yellows, warm blush on the cheeks, and the texture of the canvas left visible beneath. The result is joyful without being throwaway — a comfort character given the still-life treatment. This original has been sold." data-af="Pikachu is 'n 2019 akriel op doek wat die wêreld se bekendste Pokémon midde-in 'n lag vasvang — oë styf toegeknyp, mond oop van pure vreugde. Viviers raam die karakter binne 'n geverfde polaroid-styl rand teen 'n diep blou veld, met ore en stert wat speels uit die raam breek — 'n komposisionele knipoog wat die stuk sy energie gee. Geskilder in dieselfde jaar as Venom Cat, behoort dit tot 'n groep werke waarin Viviers opregte skildersorg aan popkultuur-ikone bestee: sagte gradiënte deur die geel tone, warm blos op die wange, en die tekstuur van die doek wat sigbaar bly daaronder. Die resultaat is vreugdevol sonder om weggooibaar te wees — 'n troos-karakter wat die stillewe-behandeling kry. Hierdie oorspronklike is verkoop.">Pikachu is a 2019 acrylic on canvas capturing the world's most famous Pokémon mid-laugh — eyes squeezed shut, mouth open in pure delight. Viviers frames the character inside a painted polaroid-style border against a deep blue field, with ears and tail breaking playfully out of the frame, a compositional wink that gives the piece its energy. Painted the same year as Venom Cat, it belongs to a body of work in which Viviers brings genuine painterly care to pop-culture icons: soft gradients through the yellows, warm blush on the cheeks, and the texture of the canvas left visible beneath. The result is joyful without being throwaway — a comfort character given the still-life treatment. This original has been sold.</p>
+      <p id="artwork-description" data-en="Pikachu is a 2019 acrylic on canvas capturing the world's most famous Pokémon mid-laugh — eyes squeezed shut, mouth open in pure delight. Viviers frames the character inside a painted polaroid-style border against a deep blue field, with ears and tail breaking playfully out of the frame, a compositional wink that gives the piece its energy. Painted the same year as Venom Cat, it belongs to a body of work in which Viviers brings genuine painterly care to pop-culture icons: soft gradients through the yellows, warm blush on the cheeks, and the texture of the canvas left visible beneath. The result is joyful without being throwaway — a comfort character given the still-life treatment. This original has been sold.">Pikachu is a 2019 acrylic on canvas capturing the world's most famous Pokémon mid-laugh — eyes squeezed shut, mouth open in pure delight. Viviers frames the character inside a painted polaroid-style border against a deep blue field, with ears and tail breaking playfully out of the frame, a compositional wink that gives the piece its energy. Painted the same year as Venom Cat, it belongs to a body of work in which Viviers brings genuine painterly care to pop-culture icons: soft gradients through the yellows, warm blush on the cheeks, and the texture of the canvas left visible beneath. The result is joyful without being throwaway — a comfort character given the still-life treatment. This original has been sold.</p>
     </div>
     
   <div style="margin-top:24px;text-align:center"><a href="https://www.instagram.com/p/BvPTIzcBDqt/" target="_blank" rel="noopener" style="font-size:0.8rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.5" data-i18n="btn-instagram">View on Instagram ↗</a></div>
@@ -566,10 +558,9 @@
   <script>
     (function() {
       var LANG = {
-        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' },
-        af: { 'nav-about':'Oor my','nav-bio':'Bio & Verklaring','nav-artworks':'Kunswerke','nav-photography':'Fotografie','nav-apps':'Programme en Speletjies','nav-enquire':'Navraag','email-href':'mailto:kunstenaar@waltviviers.com','email-fallback':'Kon nie stuur nie. E-pos kunstenaar@waltviviers.com direk.','btn-enquire':'Navraag oor hierdie werk','btn-all-works':'Alle werke','btn-instagram':'Sien op Instagram ↗','status-available':'Beskikbaar','status-sold':'Verkoop','status-enquire':'Navraag','meta-medium':'Medium','meta-dimensions':'Afmetings','meta-price':'Prys','meta-status':'Status' }
+        en: { 'nav-about':'About','nav-bio':'Bio & Statement','nav-artworks':'Artworks','nav-photography':'Photography','nav-apps':'Apps and Games','nav-enquire':'Enquire','email-href':'mailto:artist@waltviviers.com','email-fallback':'Could not send. Email artist@waltviviers.com directly.','btn-enquire':'Enquire about this work','btn-all-works':'View all works','btn-instagram':'View on Instagram ↗','status-available':'Available','status-sold':'Sold','status-enquire':'Enquire','meta-medium':'Medium','meta-dimensions':'Dimensions','meta-price':'Price','meta-status':'Status' }
       };
-      var lang = localStorage.getItem('wv-lang') || 'en';
+      var lang = 'en';
       function applyLang(l) {
         lang = l; localStorage.setItem('wv-lang', l);
         document.querySelectorAll('[data-i18n]').forEach(function(el) {
@@ -582,11 +573,7 @@
         });
         var descEl = document.getElementById('artwork-description');
         if (descEl) descEl.textContent = descEl.dataset[l] || descEl.dataset.en || '';
-        document.getElementById('lang-en').classList.toggle('active', l === 'en');
-        document.getElementById('lang-af').classList.toggle('active', l === 'af');
       }
-      document.getElementById('lang-en').addEventListener('click', function() { applyLang('en'); });
-      document.getElementById('lang-af').addEventListener('click', function() { applyLang('af'); });
       applyLang(lang);
     })();
   </script>
