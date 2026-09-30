@@ -575,6 +575,11 @@ footer .copyright strong { color: var(--on-footer); font-weight: 600; }
 @media (max-width: 700px) { footer .wrap { padding-bottom: 96px; } }  /* clear the floating WhatsApp button */
 
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } .btn:hover { transform: none; } }
+/* Phones: every card photo (services, events, team, blog) shares one height */
+@media (max-width: 640px) {
+  .service-photo, .event-media img, .member img, .post-image img { aspect-ratio: auto; height: 220px; }
+  .member img { object-position: 50% 25%; }  /* keep faces in frame */
+}
 </style>
 </head>
 <body>
