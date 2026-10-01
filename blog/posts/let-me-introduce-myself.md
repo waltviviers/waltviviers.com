@@ -1,7 +1,7 @@
 ---
 title: Let me introduce myself.
 date: 2018-08-12
-description: Hi, nice to meet you. My name is Walt Viviers, I was born in South Africa in 1985. Nine years before apartheid was over. It’s been 32 years since I was born. I…
+description: Who I am, what I care about, and why I started writing.
 draft: false
 slug: ''
 ---
@@ -30,7 +30,7 @@ I enjoy Star Trek and very much embody the ethos of that show. My wife and daugh
 
 I want to share my knowledge and ideas with people like (and unlike) me. In about three to six months I’m hoping to find my groove and work out all the niggles. I want to connect with people who feel they can talk to me. I aim to be an open, honest, and passionate blogger. I’m not here to sell you bullshit. I’m here to connect with like-minded individuals.
 
-Now, tell me about _yourself_. I encourage comments and would love to feature some guest posts. You can email me here if you have questions, suggestions or complaints. You are more than welcome to reach out to me if you need to. I also encourage disagreements and am open to changing my mind as well as doing follow-up posts. I appreciate and encourage any and all feedback.
+Now, tell me about _yourself_. I encourage comments and would love to feature some guest posts. You can [email me here](mailto:artist@waltviviers.com) if you have questions, suggestions or complaints. You are more than welcome to reach out to me if you need to. I also encourage disagreements and am open to changing my mind as well as doing follow-up posts. I appreciate and encourage any and all feedback.
 
 Thanks for getting to know me, I'd like to get to know you too.
 
