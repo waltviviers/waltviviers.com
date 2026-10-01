@@ -2,7 +2,7 @@
 title: Looking back, looking forward.
 date: 2019-05-06
 description: Concentrate every minute on doing what’s in front of you with precise and genuine seriousness, tenderly, willingly, with justice; and on freeing yourself from…
-draft: true
+draft: false
 ---
 > Concentrate every minute on doing what’s in front of you with precise and genuine seriousness, tenderly, willingly, with justice; and on freeing yourself from all other distractions. Do everything as if it were the last thing you were doing in your life, and stop being aimless, stop letting your emotions override what your mind tells you. Stop being hypocritical, self-centred, and irritable. You see how few things you have to do to live a satisfying and reverent life?
 > Marcus Aurelius, Meditations

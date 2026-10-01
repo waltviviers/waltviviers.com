@@ -2,7 +2,7 @@
 title: Sisyphus Syndrome
 date: 2019-01-27
 description: The habit of feeling compelled to endlessly repeat a self defeating practice for no good reason. According to ancient Greek mythology, Sisyphus was a man who u…
-draft: true
+draft: false
 ---
 ### The habit of feeling compelled to endlessly repeat a self-defeating practice for no good reason.
 

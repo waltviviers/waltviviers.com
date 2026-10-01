@@ -2,7 +2,7 @@
 title: Reflection
 date: 2018-11-22
 description: "Sometimes a life can ache Like sore feet that still have far to go Or a bruised heart When the ego is black and blue I ask the mirror: Who are you? I don't kno…"
-draft: true
+draft: false
 ---
 Sometimes a life can ache Like sore feet that still have far to go Or a bruised heart When the ego is black and blue I ask the mirror: Who are you?
 

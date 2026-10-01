@@ -2,7 +2,7 @@
 title: The “meaning” of life.
 date: 2018-12-02
 description: We look for meaning in everything, and through meaning, anything can become important. Once we perceive something to be important, we become a slave to it. So…
-draft: true
+draft: false
 ---
 ### We look for meaning in everything, and through meaning, *anything* can become important. Once we perceive something to be important, we become a slave to it.
 

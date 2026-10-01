@@ -2,7 +2,7 @@
 title: A letter to my daughter.
 date: 2018-09-18
 description: Dear Daughter, I know you are only five months old, but I already love you with every fibre of my being. I can hear you moaning in the room as I write this. Yo…
-draft: true
+draft: false
 ---
 Dear Daughter,
 

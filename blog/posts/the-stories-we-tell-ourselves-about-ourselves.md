@@ -2,7 +2,7 @@
 title: The stories we tell ourselves, about ourselves.
 date: 2018-11-20
 description: I’ve gone through many different versions of myself in my lifetime. A lot of times, many versions at the same time. My parents divorced when I was very young,…
-draft: true
+draft: false
 ---
 ### I’ve gone through many different versions of myself in my lifetime. A lot of times, many versions at the same time.
 
