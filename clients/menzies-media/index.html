@@ -1,0 +1,768 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Menzies Media · Digital agency in Johannesburg</title>
+<meta name="description" content="A coalition of technical and creative minds. Menzies Media builds business intelligence, CRM and app solutions, and runs digital marketing for B2B and B2C brands across South Africa and the UK.">
+<meta name="theme-color" content="#F4F5F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1015" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/favicon-192.png">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<script>
+(function () {
+  var t; try { t = localStorage.getItem('mm-theme'); } catch (e) {}
+  if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+/* Menzies Media refresh. Hand-built HTML and CSS, no framework. Rebuilt from the 2018 to 2024 WordPress site (recovered from the Wayback Machine): same logo, copy and gold-fire imagery, modern layout. Palette: the logo's charcoal #343841 with the gold measured from the site's banners; light and dark themes via tokens. */
+:root {
+  --ground: #F4F5F7;
+  --paper: #FFFFFF;
+  --ink: #1E222B;          /* deepened logo charcoal */
+  --ink-soft: #50545E;
+  --line: #DFE1E6;
+  --logo-ink: #343841;     /* the logo's own charcoal */
+  /* Gold measured from the banners: ember #C3741E, main #D49E24, flare #F2CB5C. #8F5F12 is a deeper tone for readable text on light grounds. */
+  --gold: #8F5F12;
+  --gold-bright: #D49E24;
+  --gold-sheen: linear-gradient(115deg, #C3741E 0%, #D49E24 35%, #F2CB5C 50%, #D49E24 65%, #C3741E 100%);
+  --text-sheen: linear-gradient(115deg, #7A4E0C 0%, #9A6820 45%, #B07A1C 55%, #8F5F12 100%);
+  --card: #FFFFFF;
+  --card-line: #E3E5EA;
+  --card-shadow: 0 1px 2px rgba(30, 34, 43, .04), 0 10px 30px rgba(30, 34, 43, .06);
+  --glass-bg: rgba(244, 245, 247, .72);
+  --glass-border: rgba(255, 255, 255, .8);
+  --glass-shadow: 0 8px 32px rgba(30, 34, 43, .1);
+  --glass-blur: blur(18px) saturate(1.4);
+  --menu-solid: #FFFFFF;
+  --grid-line: rgba(52, 56, 65, .06);  /* faint blueprint grid on the ground, a nod to the line art in the imagery */
+  --footer-bg: #1E222B; --on-footer: #F2F3F5; --on-footer-soft: #A3A7B0;
+
+  --f-display: "Poppins", system-ui, sans-serif;
+  --f-body: "Source Sans 3", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  --s-2: clamp(1.9rem, 4vw, 2.9rem);
+  --s-body: 1.0625rem;
+  --s-small: 0.8125rem;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --max: 1200px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+  --ground: #0E1015; --paper: #161920; --ink: #F2F3F5; --ink-soft: #A3A7B0; --line: #262A33; --logo-ink: #F2F3F5;
+  --gold: #E8B03A; --text-sheen: linear-gradient(115deg, #D49E24 0%, #F2CB5C 45%, #F7DC8A 55%, #E8B03A 100%);
+  --card: #161920; --card-line: #262A33; --card-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+  --glass-bg: rgba(14, 16, 21, .7); --glass-border: rgba(255, 255, 255, .1); --glass-shadow: 0 8px 32px rgba(0, 0, 0, .45); --menu-solid: #161920;
+  --grid-line: rgba(255, 255, 255, .035);
+  --footer-bg: #08090C;
+  color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0E1015; --paper: #161920; --ink: #F2F3F5; --ink-soft: #A3A7B0; --line: #262A33; --logo-ink: #F2F3F5;
+  --gold: #E8B03A; --text-sheen: linear-gradient(115deg, #D49E24 0%, #F2CB5C 45%, #F7DC8A 55%, #E8B03A 100%);
+  --card: #161920; --card-line: #262A33; --card-shadow: 0 10px 30px rgba(0, 0, 0, .3);
+  --glass-bg: rgba(14, 16, 21, .7); --glass-border: rgba(255, 255, 255, .1); --glass-shadow: 0 8px 32px rgba(0, 0, 0, .45); --menu-solid: #161920;
+  --grid-line: rgba(255, 255, 255, .035);
+  --footer-bg: #08090C;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font: 400 var(--s-body)/1.6 var(--f-body);
+  -webkit-font-smoothing: antialiased;
+  background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+img { max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--gold-bright); outline-offset: 3px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; letter-spacing: -0.02em; }
+p { margin: 0; }
+.wrap { max-width: var(--max); margin: 0 auto; padding-inline: var(--gutter); }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: .6em;
+  font: 500 var(--s-small)/1 var(--f-mono); text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold);
+}
+.eyebrow::before { content: ""; width: 18px; height: 1.5px; background: currentColor; }
+em.gold { font-style: normal; background: var(--text-sheen); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.btn {
+  display: inline-flex; align-items: center; gap: .5em; padding: .9em 1.4em; border-radius: 999px;
+  font: 600 1rem/1 var(--f-display); text-decoration: none; border: 1.5px solid var(--ink); cursor: pointer;
+  transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-solid { background: var(--gold-sheen); border-color: #D49E24; color: #14161C; }  /* brand gold, both themes */
+.btn-solid:hover { background: #F2CB5C; border-color: #F2CB5C; }
+.btn-ghost { background: transparent; color: var(--ink); }
+.btn-ghost:hover { background: var(--ink); color: var(--paper); }
+.btn-light { background: transparent; color: #FFFFFF; border-color: rgba(255, 255, 255, .6); }
+.btn-light:hover { background: #FFFFFF; color: #14161C; border-color: #FFFFFF; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } .btn:hover { transform: none; } }
+
+/* Logo: the original SVG used as a mask, so one file takes the charcoal on light grounds and white on dark */
+.brand { display: block; width: 168px; aspect-ratio: 244.87 / 52.7; background: var(--logo-ink); -webkit-mask: url("images/logo.svg") center / contain no-repeat; mask: url("images/logo.svg") center / contain no-repeat; transition: width .3s ease; }
+
+/* Nav */
+.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+  background: var(--glass-bg); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
+}
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 20px; transition: padding .3s ease; }
+.nav.is-scrolled .wrap { padding-block: 10px; }
+.nav.is-scrolled .brand { width: 136px; }
+.nav .logo { display: block; text-decoration: none; }
+.nav ul { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; font: 500 .95rem/1 var(--f-display); }
+.nav ul a { text-decoration: none; }
+.nav ul a:hover { color: var(--gold); }
+.nav .btn { padding: .6em 1.05em; font-size: .88rem; white-space: nowrap; }
+.nav-actions { display: flex; align-items: center; gap: 10px; }
+.theme-toggle, .menu-toggle {
+  width: 38px; height: 38px; flex: none; display: grid; place-items: center; padding: 0; border-radius: 50%;
+  border: 1.5px solid var(--line); background: transparent; color: var(--ink); cursor: pointer;
+  transition: border-color .2s ease, color .2s ease;
+}
+.theme-toggle:hover, .menu-toggle:hover { border-color: var(--gold); color: var(--gold); }
+.theme-toggle svg { width: 18px; height: 18px; }
+.theme-toggle .moon { display: none; }
+:root[data-theme="dark"] .theme-toggle .sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .moon { display: block; }
+.menu-toggle { display: none; }
+.menu-toggle span { display: block; width: 18px; height: 2px; border-radius: 2px; background: currentColor; position: relative; transition: background .2s ease; }
+.menu-toggle span::before, .menu-toggle span::after { content: ""; position: absolute; left: 0; width: 18px; height: 2px; border-radius: 2px; background: currentColor; transition: transform .25s ease, top .25s ease; }
+.menu-toggle span::before { top: -6px; }
+.menu-toggle span::after { top: 6px; }
+.nav.menu-open .menu-toggle span { background: transparent; }
+.nav.menu-open .menu-toggle span::before { top: 0; transform: rotate(45deg); }
+.nav.menu-open .menu-toggle span::after { top: 0; transform: rotate(-45deg); }
+@media (prefers-reduced-motion: reduce) { .nav .wrap, .brand { transition: none; } .menu-toggle span::before, .menu-toggle span::after { transition: none; } }
+@media (max-width: 860px) {
+  .menu-toggle { display: grid; }
+  .nav ul {
+    display: none; position: absolute; left: 12px; right: 12px; top: calc(100% + 10px); flex-direction: column; gap: 2px; padding: 12px;
+    border-radius: 20px; border: 1px solid var(--line); box-shadow: 0 24px 60px rgba(0, 0, 0, .25); background: var(--menu-solid);
+  }
+  .nav.menu-open ul { display: flex; animation: menu-in .25s ease; }
+  .nav ul a {
+    display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 12px;
+    font: 600 1.25rem/1.2 var(--f-display); transition: background .2s ease, color .2s ease;
+  }
+  .nav ul a::after { content: "\2192"; font-size: 1rem; color: var(--gold); }
+  .nav ul a:hover, .nav ul a:focus-visible { background: var(--ground); color: var(--gold); }
+}
+@keyframes menu-in { from { opacity: 0; transform: translateY(-6px); } }
+@media (prefers-reduced-motion: reduce) { .nav.menu-open ul { animation: none; } }
+@media (max-width: 480px) {
+  .nav .wrap { gap: 10px; padding-block: 14px; }
+  .brand { width: 128px; } .nav.is-scrolled .brand { width: 112px; }
+  .nav .btn { display: none; }
+}
+
+/* Hero: the original banners crossfade full-bleed behind a dark fade; always dark, like the imagery */
+.hero { position: relative; overflow: hidden; background: #0B0D11; color: #FFFFFF; min-height: clamp(520px, 72vh, 720px); display: flex; align-items: center; }
+.hero-media { position: absolute; inset: 0; margin: 0; }
+.hero-slide { position: absolute; inset: 0; margin: 0; opacity: 0; transition: opacity 1.2s ease; }
+.hero-slide.is-active { opacity: 1; }
+.hero-slide img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--focus, 70% 50%); }
+.hero-media::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(11, 13, 17, .92) 0%, rgba(11, 13, 17, .7) 42%, rgba(11, 13, 17, .1) 75%);
+}
+.hero-inner { position: relative; z-index: 2; width: 100%; padding-block: clamp(56px, 8vw, 104px); }
+.hero-copy { max-width: 38rem; }
+.hero .eyebrow { color: #F2CB5C; margin-bottom: 22px; }
+.hero h1 { font-size: clamp(2.3rem, 5.6vw, 4rem); line-height: 1.04; font-weight: 700; }
+.hero h1 em { font-style: normal; background: linear-gradient(115deg, #D49E24 0%, #F2CB5C 45%, #F7DC8A 55%, #E8B03A 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero .lede { margin-top: 24px; max-width: 34em; font-size: 1.15rem; color: rgba(255, 255, 255, .82); }
+.hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.hero-dots { position: absolute; z-index: 3; right: var(--gutter); bottom: 20px; display: flex; gap: 4px; padding: 2px 8px; border-radius: 999px; background: rgba(0, 0, 0, .3); border: 1px solid rgba(255, 255, 255, .25); }
+.hero-dots button { width: 28px; height: 28px; padding: 0; border: 0; background: transparent; cursor: pointer; display: grid; place-items: center; }
+.hero-dots button::before { content: ""; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid #FFFFFF; transition: background .2s ease, transform .2s ease; }
+.hero-dots button[aria-current="true"]::before { background: #F2CB5C; border-color: #F2CB5C; transform: scale(1.15); }
+.hero-dots button:hover::before { background: rgba(255, 255, 255, .6); }
+@media (prefers-reduced-motion: reduce) { .hero-slide { transition: none; } }
+@media (max-width: 760px) {
+  .hero { min-height: 0; align-items: flex-end; }
+  .hero-media::after { background: linear-gradient(180deg, rgba(11, 13, 17, .35) 0%, rgba(11, 13, 17, .75) 45%, rgba(11, 13, 17, .95) 100%); }
+  .hero-inner { padding-top: 38vh; padding-bottom: 72px; }
+  .hero-dots { right: auto; left: 50%; transform: translateX(-50%); }
+}
+
+/* Fact strip */
+.facts { margin-top: -1px; background: #14161C; color: #FFFFFF; border-top: 1px solid rgba(242, 203, 92, .35); }
+.facts ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); }
+.facts li { padding: 26px 24px 26px 0; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.facts li + li { padding-left: 24px; border-left: 1px solid rgba(255, 255, 255, .1); }
+.facts strong { font: 600 1.35rem/1.2 var(--f-display); color: #F2CB5C; }
+.facts span { color: rgba(255, 255, 255, .7); font-size: .95rem; }
+@media (max-width: 860px) {
+  .facts ul { grid-template-columns: 1fr 1fr; }
+  .facts li, .facts li + li { padding: 20px 16px; border-left: 0; }
+  .facts li:nth-child(even) { border-left: 1px solid rgba(255, 255, 255, .1); }
+  .facts li:nth-child(n+3) { border-top: 1px solid rgba(255, 255, 255, .1); }
+}
+
+/* Section scaffolding */
+section { padding-block: clamp(64px, 9vw, 112px); }
+.section-head { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 64px; align-items: end; margin-bottom: 44px; }
+.section-head h2 { font-size: var(--s-2); line-height: 1.08; font-weight: 700; margin-top: 16px; }
+.section-head p { color: var(--ink-soft); max-width: 32em; }
+@media (max-width: 760px) { .section-head { grid-template-columns: 1fr; } }
+
+/* Two pillars */
+.pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.pillar {
+  position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 14px; min-height: 340px; justify-content: flex-end;
+  padding: clamp(24px, 3vw, 40px); border-radius: 24px; color: #FFFFFF; text-decoration: none; background: #14161C; isolation: isolate;
+  transition: transform .3s ease;
+}
+.pillar img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.pillar::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(11, 13, 17, .1) 0%, rgba(11, 13, 17, .55) 45%, rgba(11, 13, 17, .94) 100%); }
+.pillar:hover { transform: translateY(-4px); }
+.pillar:hover img { transform: scale(1.05); }
+.pillar .eyebrow { color: #F2CB5C; }
+.pillar h3 { font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.1; font-weight: 700; }
+.pillar p { color: rgba(255, 255, 255, .82); max-width: 32em; }
+.pillar .more { font: 600 .95rem/1 var(--f-display); color: #F2CB5C; margin-top: 6px; }
+.pillar .more::after { content: " \2192"; }
+@media (max-width: 760px) { .pillars { grid-template-columns: 1fr; } .pillar { min-height: 300px; } }
+@media (prefers-reduced-motion: reduce) { .pillar, .pillar img { transition: none; } .pillar:hover, .pillar:hover img { transform: none; } }
+
+/* Service lists (Tech and Media): compact cards with a square crop of the original artwork */
+.services { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.service {
+  display: grid; grid-template-columns: 112px 1fr; gap: 20px; align-items: start; padding: 16px; border-radius: 18px;
+  background: var(--card); border: 1px solid var(--card-line); box-shadow: var(--card-shadow); transition: border-color .2s ease, transform .2s ease;
+}
+.service:hover { border-color: var(--gold-bright); transform: translateY(-2px); }
+.service img { display: block; width: 112px; height: 112px; object-fit: cover; border-radius: 12px; background: #14161C; }
+.service h3 { font-size: 1.12rem; line-height: 1.25; font-weight: 600; margin-top: 4px; }
+.service p { color: var(--ink-soft); font-size: .98rem; margin-top: 8px; }
+.service .num { font: 500 .72rem/1 var(--f-mono); color: var(--gold); letter-spacing: .08em; }
+@media (max-width: 900px) { .services { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .service { grid-template-columns: 80px 1fr; gap: 14px; padding: 14px; } .service img { width: 80px; height: 80px; } }
+@media (prefers-reduced-motion: reduce) { .service { transition: none; } .service:hover { transform: none; } }
+
+/* Place and people band */
+.band { position: relative; overflow: hidden; color: #FFFFFF; background: #0B0D11; isolation: isolate; }
+.band > img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 80% 50%; }
+.band::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(11, 13, 17, .95) 0%, rgba(11, 13, 17, .85) 55%, rgba(11, 13, 17, .55) 100%); }
+.band .eyebrow { color: #F2CB5C; }
+.band h2 { font-size: var(--s-2); line-height: 1.08; font-weight: 700; margin-top: 16px; max-width: 16em; }
+.band-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 44px; }
+.band-col {
+  padding: clamp(22px, 2.6vw, 32px); border-radius: 20px; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .14);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.band-col h3 { font-size: 1.3rem; font-weight: 600; }
+.band-col p { color: rgba(255, 255, 255, .8); margin-top: 10px; }
+.band .ctas { margin-top: 36px; }
+@media (max-width: 760px) { .band-cols { grid-template-columns: 1fr; } .band::before { background: rgba(11, 13, 17, .86); } }
+
+/* Clients */
+.featured {
+  display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center; padding: clamp(22px, 3vw, 36px); margin-bottom: 20px;
+  border-radius: 24px; background: var(--card); border: 1px solid var(--card-line); box-shadow: var(--card-shadow);
+}
+.featured img { width: 120px; height: 120px; display: block; }
+.featured h3 { font-size: 1.4rem; font-weight: 600; margin-top: 10px; }
+.featured p { color: var(--ink-soft); margin-top: 8px; max-width: 46em; }
+@media (max-width: 560px) { .featured { grid-template-columns: 1fr; } .featured img { width: 96px; height: 96px; } }
+.clients { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.clients li {
+  display: grid; place-items: center; min-height: 92px; padding: 14px; border-radius: 16px; text-align: center;
+  background: var(--card); border: 1px solid var(--card-line); font: 600 1.02rem/1.2 var(--f-display); letter-spacing: -.01em; color: var(--ink-soft);
+  transition: color .2s ease, border-color .2s ease;
+}
+.clients li:hover { color: var(--ink); border-color: var(--gold-bright); }
+@media (max-width: 960px) { .clients { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 700px) { .clients { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 460px) { .clients { grid-template-columns: 1fr 1fr; } .clients li { min-height: 76px; font-size: .95rem; } }
+
+/* Insights */
+.posts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.post {
+  display: flex; flex-direction: column; border-radius: 20px; overflow: hidden; text-decoration: none;
+  background: var(--card); border: 1px solid var(--card-line); box-shadow: var(--card-shadow); transition: transform .25s ease, border-color .2s ease;
+}
+.post:hover { transform: translateY(-4px); border-color: var(--gold-bright); }
+.post-image { aspect-ratio: 8 / 5; overflow: hidden; background: #14161C; }
+.post-image img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+.post:hover .post-image img { transform: scale(1.05); }
+.post-body { padding: 22px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.post time { font: 500 .75rem/1 var(--f-mono); color: var(--gold); letter-spacing: .08em; text-transform: uppercase; }
+.post h3 { font-size: 1.18rem; line-height: 1.3; font-weight: 600; }
+.post p { color: var(--ink-soft); font-size: .98rem; }
+.post .more { margin-top: auto; padding-top: 6px; font: 600 .92rem/1 var(--f-display); color: var(--gold); }
+.post .more::after { content: " \2192"; }
+@media (max-width: 900px) { .posts { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 600px) { .posts { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .post, .post-image img { transition: none; } .post:hover, .post:hover .post-image img { transform: none; } }
+
+/* Contact */
+.contact .wrap { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
+.contact h2 { font-size: var(--s-2); line-height: 1.08; font-weight: 700; margin-top: 16px; }
+.contact .intro { color: var(--ink-soft); margin-top: 18px; max-width: 30em; }
+.contact-list { list-style: none; margin: 28px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.contact-list a { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; font-weight: 600; }
+.contact-list a:hover { color: var(--gold); }
+.contact-list svg { width: 20px; height: 20px; flex: none; color: var(--gold); }
+.socials { display: flex; gap: 10px; margin-top: 28px; }
+.socials a { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; border: 1.5px solid var(--line); color: var(--ink); transition: border-color .2s ease, color .2s ease; }
+.socials a:hover { border-color: var(--gold); color: var(--gold); }
+.socials svg { width: 18px; height: 18px; }
+form {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: clamp(22px, 3vw, 36px); border-radius: 24px;
+  background: var(--card); border: 1px solid var(--card-line); box-shadow: var(--card-shadow);
+}
+form .full { grid-column: 1 / -1; }
+label { display: flex; flex-direction: column; gap: 8px; font: 600 .9rem/1.2 var(--f-display); }
+label small { font: 400 .8rem/1 var(--f-body); color: var(--ink-soft); }
+input, textarea {
+  font: 400 1rem/1.4 var(--f-body); color: var(--ink); background: var(--ground); border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 14px; width: 100%;
+}
+input:focus, textarea:focus { outline: none; border-color: var(--gold-bright); box-shadow: 0 0 0 3px rgba(212, 158, 36, .25); }
+textarea { min-height: 140px; resize: vertical; }
+form .btn { justify-self: start; }
+@media (max-width: 800px) { .contact .wrap, form { grid-template-columns: 1fr; } }
+
+/* Footer */
+footer { background: var(--footer-bg); color: var(--on-footer); padding-block: 48px; }
+footer .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px 32px; }
+footer .brand { --logo-ink: #F2F3F5; background: #F2F3F5; width: 150px; }
+footer p { color: var(--on-footer-soft); font-size: .92rem; }
+footer nav { display: flex; gap: 20px; font-size: .92rem; }
+footer nav a { color: var(--on-footer-soft); text-decoration: none; }
+footer nav a:hover { color: #F2CB5C; }
+
+/* Mockup note: outbound links and the form open this instead of leaving the page */
+.mock-overlay {
+  position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 24px 16px;
+  background: rgba(0, 0, 0, .6); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); animation: mock-fade .2s ease;
+}
+.mock-overlay[hidden] { display: none; }
+.mock-card {
+  width: 100%; max-width: 420px; padding: 32px 28px; border-radius: 20px; text-align: center;
+  background: var(--paper); color: var(--ink); border: 1px solid var(--line);
+  display: flex; flex-direction: column; align-items: center; gap: 12px; box-shadow: 0 30px 80px rgba(0, 0, 0, .35);
+}
+.mock-card h3 { font-size: 1.3rem; font-weight: 600; }
+.mock-card p { color: var(--ink-soft); }
+.mock-card .btn { margin-top: 8px; }
+@keyframes mock-fade { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .mock-overlay { animation: none; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="Menzies Media, back to top"><span class="brand" role="img" aria-label="Menzies Media"></span></a>
+    <nav aria-label="Main">
+      <ul id="main-menu">
+        <li><a href="#tech">Tech</a></li>
+        <li><a href="#media">Media</a></li>
+        <li><a href="#clients">Clients</a></li>
+        <li><a href="#insights">Insights</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch theme">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+      <a class="btn btn-solid" href="#contact">Let's talk</a>
+      <button type="button" class="menu-toggle" id="menu-toggle" aria-controls="main-menu" aria-expanded="false" aria-label="Open menu"><span></span></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" style="padding-block:0" aria-label="Introduction">
+    <div class="hero-media">
+      <figure class="hero-slide is-active" style="--focus: 80% 50%">
+        <img src="images/hero-header-1200.webp" srcset="images/hero-header-800.webp 800w, images/hero-header-1200.webp 1200w, images/hero-header-1680.webp 1680w" sizes="100vw" alt="" fetchpriority="high">
+      </figure>
+      <figure class="hero-slide" style="--focus: 75% 60%" aria-hidden="true">
+        <img data-src="images/hero-bi-1200.webp" data-srcset="images/hero-bi-800.webp 800w, images/hero-bi-1200.webp 1200w, images/hero-bi-1680.webp 1680w" sizes="100vw" alt="">
+      </figure>
+      <figure class="hero-slide" style="--focus: 75% 50%" aria-hidden="true">
+        <img data-src="images/hero-analytics-1200.webp" data-srcset="images/hero-analytics-800.webp 800w, images/hero-analytics-1200.webp 1200w, images/hero-analytics-1680.webp 1680w" sizes="100vw" alt="">
+      </figure>
+    </div>
+    <div class="hero-inner">
+      <div class="wrap">
+        <div class="hero-copy">
+          <span class="eyebrow">Digital agency · Johannesburg &amp; UK</span>
+          <h1>A coalition of technical <em>and creative minds.</em></h1>
+          <p class="lede">A passionate team of experts working hand in hand to create proven success stories for our clients. With a wealth of industry experience, we help change the way your business grows and keeps succeeding.</p>
+          <div class="ctas">
+            <a class="btn btn-solid" href="#contact">Let's discuss success</a>
+            <a class="btn btn-light" href="#tech">See what we do</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-dots" role="group" aria-label="Banner slides">
+      <button type="button" aria-label="Slide 1" aria-current="true"></button>
+      <button type="button" aria-label="Slide 2" aria-current="false"></button>
+      <button type="button" aria-label="Slide 3" aria-current="false"></button>
+    </div>
+  </section>
+
+  <div class="facts">
+    <div class="wrap">
+      <ul>
+        <li><strong>Since 2010</strong><span>At the forefront of digital advertising</span></li>
+        <li><strong>SA &amp; UK</strong><span>Founded in South Africa, now in the United Kingdom</span></li>
+        <li><strong>B2B &amp; B2C</strong><span>Strategy for both kinds of business</span></li>
+        <li><strong>Tech + Media</strong><span>Systems and marketing under one roof</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <section id="what-we-do">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">What we do</span>
+          <h2>Two disciplines, <em class="gold">one team.</em></h2>
+        </div>
+        <p>Driven by people and passion, we don't find solutions, we make them. Our full-service studio combines strategy and technical know-how across all major platforms.</p>
+      </div>
+      <div class="pillars">
+        <a class="pillar" href="#tech">
+          <img src="images/hero-bi-800.webp" alt="" loading="lazy">
+          <span class="eyebrow">Tech</span>
+          <h3>Intelligent solutions.</h3>
+          <p>Tailor-made systems developed for the growth of your business. By modelling future scenarios, we show you the opportunities worth taking for long-term growth.</p>
+          <span class="more">Explore Tech</span>
+        </a>
+        <a class="pillar" href="#media">
+          <img src="images/band-digital-1000.webp" alt="" loading="lazy">
+          <span class="eyebrow">Media</span>
+          <h3>Connect the dots.</h3>
+          <p>We conceptualise, build and run digital marketing strategies based on your unique needs, so your brand shines through the competition online.</p>
+          <span class="more">Explore Media</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="tech" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Tech</span>
+          <h2>Intelligent solutions for <em class="gold">intelligent businesses.</em></h2>
+        </div>
+        <p>From assessment to implementation: consulting, custom systems, apps and business intelligence, all supported by live data.</p>
+      </div>
+      <ul class="services">
+        <li class="service"><img src="images/tech-consulting.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">01</span><h3>Consulting</h3><p>Complete business and technical consulting, from assessment to implementation, for companies that need an end-to-end digital business system supported by live data.</p></div></li>
+        <li class="service"><img src="images/tech-leads.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">02</span><h3>Lead Management</h3><p>Automated, technology-run ecosystems inside your business that capture, route and convert the leads fed into them.</p></div></li>
+        <li class="service"><img src="images/tech-crm.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">03</span><h3>CRM and ERP Systems</h3><p>Our own multilevel software, EngineCRM and LeadCRM, gives you more control and growth, and is agile enough to grow into a fully fledged ERP system.</p></div></li>
+        <li class="service"><img src="images/tech-systems.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">04</span><h3>System Development</h3><p>Bespoke systems that manage internal and external processes, monitor performance on live dashboards and integrate with your accounting, logistics, telecoms and POS software.</p></div></li>
+        <li class="service"><img src="images/tech-apps.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">05</span><h3>Application Development</h3><p>Commercial and internal business apps for Android and iOS on modern tech stacks. We design, code and deploy your app to the stores.</p></div></li>
+        <li class="service"><img src="images/tech-ai.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">06</span><h3>Artificial Intelligence</h3><p>AI and machine learning automate repetitive work, so your people can focus on the parts of the business that need them most.</p></div></li>
+        <li class="service"><img src="images/tech-warehousing.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">07</span><h3>Data Warehousing</h3><p>We bring your scattered data from different applications, processes and locations together, and extract usable knowledge that answers key business questions.</p></div></li>
+        <li class="service"><img src="images/tech-datavis.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">08</span><h3>Data Visualisation</h3><p>Structured and unstructured sources combined into interactive dashboards of reports, graphs and timelines that reveal new opportunities.</p></div></li>
+        <li class="service"><img src="images/tech-decision.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">09</span><h3>Decision Modelling</h3><p>Real-time decision models help whole teams act effectively, with future scenarios modelled to show the opportunities your business can take.</p></div></li>
+        <li class="service"><img src="images/tech-reporting.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">10</span><h3>Performance Reporting</h3><p>Forecast trends and patterns from your own data. Businesses outperform their peers when decisions are backed by live reporting and analysis.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="media" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Media</span>
+          <h2>Creative marketing for <em class="gold">B2B and B2C brands.</em></h2>
+        </div>
+        <p>Strategy, campaigns, websites and content, all measured with proper reporting and analysis.</p>
+      </div>
+      <ul class="services">
+        <li class="service"><img src="images/media-strategy.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">01</span><h3>Marketing Strategy</h3><p>A tailored plan setting out the best marketing techniques and tactics for your business, with reporting and data analysis built in.</p></div></li>
+        <li class="service"><img src="images/media-online.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">02</span><h3>Online Marketing</h3><p>Paid promotion that reaches consumers through emailers, search engines, social, display advertising and mobile.</p></div></li>
+        <li class="service"><img src="images/media-web.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">03</span><h3>Website Development</h3><p>Websites that attract clients: design, development, content, server-side scripting, e-commerce and content management systems.</p></div></li>
+        <li class="service"><img src="images/media-seo.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">04</span><h3>SEO and Conversion Optimisation</h3><p>Meet Google's guidelines, rank higher in search, and turn more visitors into buyers, sign-ups and subscribers.</p></div></li>
+        <li class="service"><img src="images/media-social.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">05</span><h3>Social Media Marketing</h3><p>Unique content that builds engagement and loyalty, generates leads and drives traffic through Facebook, Instagram, LinkedIn, YouTube and X.</p></div></li>
+        <li class="service"><img src="images/media-content.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">06</span><h3>Content Marketing</h3><p>Relevant, attractive content that wins customers, saves costs and increases sales through a modern, strategic approach.</p></div></li>
+        <li class="service"><img src="images/media-database.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">07</span><h3>Database Management and Targeting</h3><p>We build, maintain and analyse databases in line with POPIA and security best practice, and target opt-in data to drive sales.</p></div></li>
+        <li class="service"><img src="images/media-analytics.webp" alt="" loading="lazy" width="112" height="112"><div><span class="num">08</span><h3>Analytics and Reporting</h3><p>Expert analysis that turns raw data into strategy and gives you clear, actionable direction.</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="band" id="about">
+    <img src="images/band-digital-1680.webp" srcset="images/band-digital-1000.webp 1000w, images/band-digital-1680.webp 1680w" sizes="100vw" alt="" loading="lazy">
+    <div class="wrap">
+      <span class="eyebrow">About Menzies</span>
+      <h2>We don't find solutions. <em class="gold" style="--text-sheen: linear-gradient(115deg, #D49E24 0%, #F2CB5C 45%, #F7DC8A 55%, #E8B03A 100%)">We make them.</em></h2>
+      <div class="band-cols">
+        <div class="band-col">
+          <h3>The place</h3>
+          <p>Established in South Africa, Menzies has been at the forefront of digital technology in advertising since 2010. Now expanded into the United Kingdom, our full-service studio combines strategy and technical know-how across all major platforms, globally.</p>
+        </div>
+        <div class="band-col">
+          <h3>The people</h3>
+          <p>A passionate team of experts who work hand in hand to create proven success stories. With a wealth of industry experience, Menzies Media will help change the way your business grows and continues to succeed.</p>
+        </div>
+      </div>
+      <div class="ctas"><a class="btn btn-solid" href="#contact">Let's discuss success</a></div>
+    </div>
+  </section>
+
+  <section id="clients">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Clients</span>
+          <h2>Maintaining quality <em class="gold">client relationships.</em></h2>
+        </div>
+        <p>Brands across sport, retail, fashion, property and more trust us with their growth. Let's create your success together.</p>
+      </div>
+      <div class="featured">
+        <img src="images/client-kaizer-chiefs.webp" alt="Kaizer Chiefs crest" loading="lazy" width="120" height="120">
+        <div>
+          <span class="eyebrow">Featured client</span>
+          <h3>Kaizer Chiefs</h3>
+          <p>South Africa's number one football club. Founded in 1970 by the great Kaizer Motaung, former Atlanta Chiefs star, the club has built a family of followers who truly live and breathe the KC lifestyle.</p>
+        </div>
+      </div>
+      <ul class="clients" aria-label="Client list">
+        <li>Mochachos</li>
+        <li>Kaizer Chiefs</li>
+        <li>Eris</li>
+        <li>Broll</li>
+        <li>Sedgars</li>
+        <li>Superga</li>
+        <li>Kappa</li>
+        <li>Sebago</li>
+        <li>Alpha-I</li>
+        <li>1618 Adv</li>
+        <li>1618 STS</li>
+        <li>Covrd</li>
+        <li>BrokerBuddy</li>
+        <li>PSA</li>
+        <li>Phulukisa</li>
+        <li>WRC</li>
+        <li>RMC</li>
+        <li>SAB</li>
+        <li>Metcon</li>
+        <li>VCT</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="insights" style="padding-top:0">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Insights</span>
+          <h2>Thinking from <em class="gold">the studio.</em></h2>
+        </div>
+        <p>Notes on technology, media and the way consumers are changing, from the Menzies team.</p>
+      </div>
+      <div class="posts">
+        <a class="post" href="#" data-mock="In the finished site, this opens the full article: Adapt for Success in a Digital World.">
+          <div class="post-image"><img src="images/post-adapt.webp" alt="" loading="lazy"></div>
+          <div class="post-body">
+            <time datetime="2020-05-18">18 May 2020</time>
+            <h3>Adapt for success in a digital world</h3>
+            <p>Forget the roaring twenties: with over 3 billion smartphone users, the new age is fully digital, and businesses need to adapt to an era driven by consumers.</p>
+            <span class="more">Read article</span>
+          </div>
+        </a>
+        <a class="post" href="#" data-mock="In the finished site, this opens the full article: Netflix and Their Chilled Approach to Brand Awareness.">
+          <div class="post-image"><img src="images/post-netflix.webp" alt="" loading="lazy"></div>
+          <div class="post-body">
+            <time datetime="2020-02-11">11 February 2020</time>
+            <h3>Netflix and their chilled approach to brand awareness</h3>
+            <p>From a mail-order DVD service to the overlord of online streaming: what Netflix teaches us about building a brand.</p>
+            <span class="more">Read article</span>
+          </div>
+        </a>
+        <a class="post" href="#" data-mock="In the finished site, this opens the full article: Redefining Marketing via the Creation of New Realities.">
+          <div class="post-image"><img src="images/post-reality.webp" alt="" loading="lazy"></div>
+          <div class="post-body">
+            <time datetime="2018-04-17">17 April 2018</time>
+            <h3>Redefining marketing via the creation of new realities</h3>
+            <p>Augmented reality sounds like science fiction, yet it is already setting the pace for the future of advertising.</p>
+            <span class="more">Read article</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact" style="padding-top:0">
+    <div class="wrap">
+      <div>
+        <span class="eyebrow">Get in touch</span>
+        <h2>Let's grow <em class="gold">your business.</em></h2>
+        <p class="intro">Tell us what you're working on and we'll get back to you.</p>
+        <ul class="contact-list">
+          <li><a href="mailto:info@menziesmedia.co.za" data-mock="In the finished site, this opens an email to info@menziesmedia.co.za."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>info@menziesmedia.co.za</a></li>
+          <li><a href="#" data-mock="In the finished site, this opens the studio on Google Maps."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Johannesburg, South Africa</a></li>
+        </ul>
+        <div class="socials">
+          <a href="https://www.facebook.com/menziesmedia/" aria-label="Facebook" data-mock="In the finished site, this opens Menzies Media on Facebook."><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-7.5H16l.4-3h-2.9V8.6c0-.9.3-1.5 1.5-1.5h1.5V4.4c-.3 0-1.2-.1-2.2-.1-2.2 0-3.8 1.4-3.8 3.9v2.3H8v3h2.5V21h3z"/></svg></a>
+          <a href="https://www.instagram.com/menziesmedia/" aria-label="Instagram" data-mock="In the finished site, this opens Menzies Media on Instagram."><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://www.linkedin.com/company/menzies-media" aria-label="LinkedIn" data-mock="In the finished site, this opens Menzies Media on LinkedIn."><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.9 8.5H3.6V20h3.3V8.5zM5.3 3.5a1.9 1.9 0 1 0 0 3.8 1.9 1.9 0 0 0 0-3.8zM20.4 13.4c0-3.1-1.7-5.1-4.4-5.1-1.5 0-2.5.8-2.9 1.6V8.5H9.9V20h3.3v-6c0-1.5.6-2.6 2-2.6 1.3 0 1.9 1 1.9 2.6v6h3.3v-6.6z"/></svg></a>
+          <a href="https://twitter.com/menziesmedia" aria-label="X (Twitter)" data-mock="In the finished site, this opens Menzies Media on X."><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.4L5.3 21H2.2l7.3-8.3L1.9 3h6.4l4.4 5.8L17.8 3zm-1.1 16.2h1.7L7.3 4.7H5.5l11.2 14.5z"/></svg></a>
+        </div>
+      </div>
+      <form id="enquiry">
+        <label>Your name <input type="text" name="name" autocomplete="name" required></label>
+        <label>Your email <input type="email" name="email" autocomplete="email" required></label>
+        <label class="full">Subject <small>Optional</small><input type="text" name="subject"></label>
+        <label class="full">Your message <textarea name="message" required></textarea></label>
+        <button type="submit" class="btn btn-solid full">Send message</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="brand" role="img" aria-label="Menzies Media"></span>
+    <p>© <span id="year">2026</span> Menzies Media. All rights reserved.</p>
+    <nav aria-label="Legal">
+      <a href="#" data-mock="In the finished site, this opens the Menzies Media Privacy Policy (PDF).">Privacy Policy</a>
+      <a href="#" data-mock="In the finished site, this opens the Menzies Media Cookie Policy (PDF).">Cookie Policy</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement, btn = document.getElementById('theme-toggle');
+  function label() { btn.setAttribute('aria-label', root.getAttribute('data-theme') === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'); }
+  label();
+  btn.addEventListener('click', function () {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('mm-theme', next); } catch (e) {}
+    label();
+  });
+})();
+
+// Burger menu: opens a dropdown on smaller screens; closes on a link, Esc or a click outside.
+(function () {
+  var nav = document.querySelector('.nav');
+  var toggle = document.getElementById('menu-toggle');
+  function set(open) {
+    nav.classList.toggle('menu-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  }
+  toggle.addEventListener('click', function () { set(!nav.classList.contains('menu-open')); });
+  nav.querySelectorAll('#main-menu a').forEach(function (a) { a.addEventListener('click', function () { set(false); }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && nav.classList.contains('menu-open')) { set(false); toggle.focus(); } });
+  document.addEventListener('click', function (e) { if (!nav.contains(e.target)) set(false); });
+  matchMedia('(min-width: 861px)').addEventListener('change', function (e) { if (e.matches) set(false); });
+})();
+
+// Header: starts roomier, slims down once the page scrolls.
+(function () {
+  var nav = document.querySelector('.nav');
+  function update() { nav.classList.toggle('is-scrolled', window.scrollY > 24); }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+
+// Banner slides 2 and 3 load after the page has, so they don't compete with the first view.
+window.addEventListener('load', function () {
+  document.querySelectorAll('.hero-slide img[data-src]').forEach(function (img) {
+    img.srcset = img.getAttribute('data-srcset'); img.src = img.getAttribute('data-src');
+  });
+});
+
+// Hero banner: crossfades every 6s, pauses on hover or keyboard focus, and stays put for reduced motion.
+(function () {
+  var hero = document.querySelector('.hero');
+  var slides = [].slice.call(hero.querySelectorAll('.hero-slide'));
+  var dots = [].slice.call(hero.querySelectorAll('.hero-dots button'));
+  var current = 0, timer = null;
+  var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function show(n) {
+    current = (n + slides.length) % slides.length;
+    slides.forEach(function (el, i) {
+      el.classList.toggle('is-active', i === current);
+      if (i === current) el.removeAttribute('aria-hidden'); else el.setAttribute('aria-hidden', 'true');
+    });
+    dots.forEach(function (d, i) { d.setAttribute('aria-current', i === current ? 'true' : 'false'); });
+  }
+  function start() { if (!still && !timer) timer = setInterval(function () { show(current + 1); }, 6000); }
+  function stop() { clearInterval(timer); timer = null; }
+  dots.forEach(function (d, i) { d.addEventListener('click', function () { show(i); stop(); start(); }); });
+  hero.addEventListener('mouseenter', stop);
+  hero.addEventListener('mouseleave', start);
+  hero.addEventListener('focusin', stop);
+  hero.addEventListener('focusout', start);
+  document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); else start(); });
+  start();
+})();
+
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+<div class="mock-overlay" id="mock-overlay" hidden>
+  <div class="mock-card" role="dialog" aria-modal="true" aria-labelledby="mock-title" aria-describedby="mock-text">
+    <span class="eyebrow">Mockup preview</span>
+    <h3 id="mock-title">This link leaves the mockup</h3>
+    <p id="mock-text"></p>
+    <button type="button" class="btn btn-solid" id="mock-close">Back to the mockup</button>
+  </div>
+</div>
+<script>
+// Mockup only: every link that would leave this page (and the enquiry form) opens a note instead.
+(function () {
+  var overlay = document.getElementById('mock-overlay');
+  var text = document.getElementById('mock-text');
+  var close = document.getElementById('mock-close');
+  var lastLink = null;
+  function show(message, from) {
+    lastLink = from;
+    text.textContent = message;
+    overlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+    close.focus();
+  }
+  function hide() { overlay.hidden = true; document.body.style.overflow = ''; if (lastLink) lastLink.focus(); }
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[href]');
+    if (!link) return;
+    var href = link.getAttribute('href');
+    // In-page jumps (#tech etc.) behave normally; anything else is outbound in the mockup.
+    if (href.charAt(0) === '#' && !link.hasAttribute('data-mock')) return;
+    e.preventDefault();
+    show(link.getAttribute('data-mock') || 'In the finished site, this link opens its destination.', link);
+  });
+  document.getElementById('enquiry').addEventListener('submit', function (e) {
+    e.preventDefault();
+    show('In the finished site, this sends your message to Menzies Media and confirms it by email.', e.submitter || null);
+  });
+  close.addEventListener('click', hide);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) hide(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !overlay.hidden) hide(); });
+})();
+</script>
+</body>
+</html>
