@@ -161,8 +161,51 @@ img.wv-parallax {
   to   { left: 150%; }
 }
 
+/* ── Pointer interaction (desktop / fine pointer only) ─────────────────────
+   A soft light that follows the cursor across the whole page. enhance.js sets
+   --wv-mx / --wv-my (px) and toggles .on while the pointer is on the page. */
+.wv-spotlight {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(280px circle at var(--wv-mx, 50%) var(--wv-my, 50%),
+              rgba(140, 110, 255, 0.12), rgba(140, 110, 255, 0.05) 40%, transparent 62%);
+  mix-blend-mode: screen;
+}
+.wv-spotlight.on { opacity: 1; }
+[data-theme="light"] .wv-spotlight {
+  mix-blend-mode: multiply;
+  background: radial-gradient(280px circle at var(--wv-mx, 50%) var(--wv-my, 50%),
+              rgba(90, 70, 200, 0.10), rgba(90, 70, 200, 0.04) 40%, transparent 62%);
+}
+
+/* 3D tilt of cards toward the pointer. enhance.js sets --wv-rx / --wv-ry and
+   only adds .wv-tilt3d on fine pointers, so this needs no hover/pointer gate
+   (and overrides the earlier .wv-lift:hover, keeping the lift via translateY). */
+.wv-tilt3d {
+  transform-style: preserve-3d;
+  transition: transform 0.18s ease-out, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.wv-tilt3d:hover {
+  transform: perspective(900px)
+             rotateX(var(--wv-rx, 0deg)) rotateY(var(--wv-ry, 0deg))
+             translateY(-6px);
+}
+
+/* Magnetic pull on primary buttons. enhance.js sets --wv-dx / --wv-dy (px). */
+.wv-magnetic {
+  transition: transform 0.18s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transform: translate(var(--wv-dx, 0px), var(--wv-dy, 0px));
+}
+
 /* ── Respect user + medium ─────────────────────────────────────────────────*/
 @media (prefers-reduced-motion: reduce) {
+  .wv-spotlight { display: none !important; }
+  .wv-tilt3d:hover { transform: translateY(-4px) !important; }
+  .wv-magnetic { transform: none !important; }
   html.wv-anim [data-wv-reveal] {
     opacity: 1 !important;
     transform: none !important;
