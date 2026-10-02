@@ -1,19 +1,44 @@
 ---
 title: Reflection
 date: 2018-11-22
-description: "Sometimes a life can ache Like sore feet that still have far to go Or a bruised heart When the ego is black and blue I ask the mirror: Who are you? I don't kno…"
-draft: true
+description: 'A poem: a conversation with the stranger in the mirror.'
+draft: false
+slug: ''
 ---
-Sometimes a life can ache Like sore feet that still have far to go Or a bruised heart When the ego is black and blue I ask the mirror: Who are you?
 
-I don't know. Nobody. Somebody. A face in the crowd A blur on the bus A voice on the phone
+Sometimes a life can ache\
+Like sore feet that still have far to go\
+Or a bruised heart\
+When the ego is black and blue\
+I ask the mirror:\
+Who are you?
 
-I rarely answer myself directly A recluse inside my skin A ghost in a shell A moment in time
+I don't know\
+Nobody\
+Somebody\
+A face in the crowd\
+A blur on the bus\
+A voice on the phone
 
-Every conversation in the mirror is with someone new A constant form of Deja Vu
+I rarely answer myself directly\
+A recluse inside my skin\
+A ghost in a shell\
+A moment in time
 
-Who are you, old man? What happened to that kid who used to pull faces at me?
+Every conversation in the mirror is with someone new\
+A constant déjà vu
 
-What happened to that boy? What happened to that scholar? What happened to that punk? What happened to that fool?
+Who are you, old man?\
+What happened to that kid who used to pull faces at me?
 
-The man who looks back Looks hard Judgmental Damaged
+What happened to that boy?\
+What happened to that punk?\
+What happened to that scholar?\
+What happened to that fool?
+
+The man who looks back\
+Looks hard\
+Judgmental\
+Damaged\
+But not broken\
+Tempered
