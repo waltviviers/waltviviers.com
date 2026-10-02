@@ -1399,29 +1399,31 @@
     /* ── Digital Experiments ── */
     .digital { border-top: 1px solid var(--rule); }
     #design-digital .pf-hero-img img { height:100%; top:0; }
-    .digital-body { padding: 56px 48px 72px; }
+    .digital-body { max-width: 1400px; margin: 0 auto; padding: clamp(64px, 8vw, 110px) clamp(24px, 6vw, 72px); }
     .digital-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule); }
-    .digital-card { background:var(--bg);padding:32px;display:flex;flex-direction:column;gap:14px;transition:background 0.2s; }
+    .digital-card { background:var(--bg);display:flex;flex-direction:row;align-items:flex-start;gap:clamp(16px,2vw,24px);padding:clamp(24px,2.8vw,36px);transition:background 0.2s;overflow:hidden; }
     .digital-card:hover { background:var(--bg2); }
-    .digital-card-icon { width:clamp(36px,3.4vw,44px);height:clamp(36px,3.4vw,44px);color:var(--stone);transition:color 0.2s;margin-bottom:2px; }
+    .digital-card-icon { flex:0 0 auto;width:clamp(40px,4vw,52px);height:clamp(40px,4vw,52px);color:var(--stone);transition:color 0.2s; }
     .digital-card-icon svg { width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round; }
     .digital-card:hover .digital-card-icon { color:var(--ink); }
+    .digital-card-body { flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:10px; }
     .digital-card-num { font-size:11px;letter-spacing:0.16em;color:var(--stone); }
-    .digital-title { font-family:var(--serif);font-size:clamp(1.4rem,2.2vw,1.75rem);font-weight:400;line-height:1.1; }
-    .digital-desc { font-family:var(--serif);font-size:clamp(1rem,1.4vw,1.1rem);line-height:1.7;color:var(--stone);flex-grow:1; }
+    .digital-title { font-family:var(--serif);font-size:clamp(1.4rem,2.4vw,1.9rem);font-weight:400;line-height:1.1;color:var(--ink); }
+    .digital-desc { font-size:14px;line-height:1.7;color:var(--stone);flex-grow:1; }
     .digital-cta { font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);transition:color 0.2s; }
     .digital-card:hover .digital-cta { color:var(--ink); }
-    @media (max-width:900px) { .digital-body { padding:40px 24px 56px; } .digital-grid { grid-template-columns:1fr; } }
+    @media (max-width:900px) { .digital-body { padding: clamp(48px,9vw,72px) 24px; } .digital-grid { grid-template-columns:1fr; } }
     /* Apps & Games sub-items (nested under Design & Digital) */
-    .digital-sub { margin-top: clamp(18px,2.2vw,28px); }
-    .digital-sub-label { font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);margin:0 0 14px 2px; }
+    .digital-sub { margin-top: clamp(32px,4vw,52px); }
+    .digital-sub-label { font-size:11px;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:var(--stone);margin:0 0 18px 2px; }
     .digital-sub-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule); }
-    .digital-sub-card { background:var(--bg2);padding:22px 28px;display:flex;flex-direction:column;gap:8px;transition:background 0.2s; }
+    .digital-sub-card { background:var(--bg2);display:flex;flex-direction:row;align-items:flex-start;gap:clamp(14px,1.6vw,20px);padding:clamp(22px,2.4vw,30px);transition:background 0.2s; }
     .digital-sub-card:hover { background:var(--bg); }
-    .digital-sub-icon { width:26px;height:26px;color:var(--stone);transition:color 0.2s;margin-bottom:2px; }
+    .digital-sub-icon { flex:0 0 auto;width:30px;height:30px;color:var(--stone);transition:color 0.2s; }
     .digital-sub-icon svg { width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round; }
     .digital-sub-card:hover .digital-sub-icon { color:var(--ink); }
-    .digital-sub-title { font-family:var(--serif);font-size:clamp(1.1rem,1.6vw,1.3rem);font-weight:400;line-height:1.15; }
+    .digital-sub-body { flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:8px; }
+    .digital-sub-title { font-family:var(--serif);font-size:clamp(1.1rem,1.6vw,1.3rem);font-weight:400;line-height:1.15;color:var(--ink); }
     .digital-sub-desc { font-size:13px;line-height:1.6;color:var(--stone);flex-grow:1; }
     .digital-sub-cta { font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);transition:color 0.2s; }
     .digital-sub-card:hover .digital-sub-cta { color:var(--ink); }
@@ -2052,17 +2054,21 @@
     <div class="digital-grid">
       <a class="digital-card" href="/graphic-design-portfolio/">
         <span class="digital-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></span>
-        <span class="digital-card-num">01</span>
-        <h2 class="digital-title">Brand, Web &amp; Campaigns</h2>
-        <p class="digital-desc">Identity systems, websites and online stores, illustration, motion and marketing — a full-service portfolio for brands big and small.</p>
-        <span class="digital-cta">View the portfolio &#8594;</span>
+        <div class="digital-card-body">
+          <span class="digital-card-num">01</span>
+          <h2 class="digital-title">Brand, Web &amp; Campaigns</h2>
+          <p class="digital-desc">Identity systems, websites and online stores, illustration, motion and marketing — a full-service portfolio for brands big and small.</p>
+          <span class="digital-cta">View the portfolio &#8594;</span>
+        </div>
       </a>
       <a class="digital-card" href="/apps/">
         <span class="digital-card-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
-        <span class="digital-card-num">02</span>
-        <h2 class="digital-title">Apps &amp; Games</h2>
-        <p class="digital-desc">Small, independent browser games and offline-friendly apps — built for the joy of making. No ads, no tracking.</p>
-        <span class="digital-cta">Explore &#8594;</span>
+        <div class="digital-card-body">
+          <span class="digital-card-num">02</span>
+          <h2 class="digital-title">Apps &amp; Games</h2>
+          <p class="digital-desc">Small, independent browser games and offline-friendly apps — built for the joy of making. No ads, no tracking.</p>
+          <span class="digital-cta">Explore &#8594;</span>
+        </div>
       </a>
     </div>
     <div class="digital-sub">
@@ -2070,15 +2076,19 @@
       <div class="digital-sub-grid">
         <a class="digital-sub-card" href="/apps/static-protocol/play/">
           <span class="digital-sub-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></span>
-          <span class="digital-sub-title">Static Protocol</span>
-          <span class="digital-sub-desc">A cyberpunk data-heist story built for mobile — five decisions, five live hacking sequences, ten possible endings.</span>
-          <span class="digital-sub-cta">Play &#8594;</span>
+          <span class="digital-sub-body">
+            <span class="digital-sub-title">Static Protocol</span>
+            <span class="digital-sub-desc">A cyberpunk data-heist story built for mobile — five decisions, five live hacking sequences, ten possible endings.</span>
+            <span class="digital-sub-cta">Play &#8594;</span>
+          </span>
         </a>
         <a class="digital-sub-card" href="/apps/scritch-scratch/play/">
           <span class="digital-sub-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>
-          <span class="digital-sub-title">Scritch Scratch</span>
-          <span class="digital-sub-desc">An interactive pet app with three relaxed modes and nothing to win. Tap around, make a mess, enjoy the calm.</span>
-          <span class="digital-sub-cta">Play &#8594;</span>
+          <span class="digital-sub-body">
+            <span class="digital-sub-title">Scritch Scratch</span>
+            <span class="digital-sub-desc">An interactive pet app with three relaxed modes and nothing to win. Tap around, make a mess, enjoy the calm.</span>
+            <span class="digital-sub-cta">Play &#8594;</span>
+          </span>
         </a>
       </div>
     </div>
