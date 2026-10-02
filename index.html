@@ -1942,9 +1942,10 @@
   <section class="digital" id="design-digital" aria-label="Design & Digital">
     <div class="pf-hero">
       <div class="pf-hero-img">
-        <img src="/apps/scritch-scratch/ScritchScratch_Walt_desktop.jpg"
+        <img src="/images/design-digital-cyberpunk.webp"
              sizes="100vw"
-             alt="Walt Viviers — Scritch Scratch, an interactive pet app" loading="lazy" width="1600" height="1000" />
+             alt="Walt Viviers — design, digital and interactive work" loading="lazy" width="1600" height="900"
+             data-dd-bg="/images/design-digital-cyberpunk.webp|/images/design-digital-garden.webp" />
       </div>
       <div class="pf-hero-inner">
         <p class="pf-eyebrow">Design &amp; Digital</p>
@@ -2000,6 +2001,18 @@
     </div>
     </div>
   </section>
+
+  <!-- Alternate the Design & Digital hero band background on each load -->
+  <script>
+    (function () {
+      var img = document.querySelector('#design-digital .pf-hero-img img[data-dd-bg]');
+      if (!img) return;
+      var opts = (img.getAttribute('data-dd-bg') || '').split('|').filter(Boolean);
+      if (opts.length < 2) return;
+      var pick = opts[Math.floor(Math.random() * opts.length)];
+      if (pick && pick !== img.getAttribute('src')) img.src = pick;
+    })();
+  </script>
 
   <!-- PILLAR 4 — Essays & Articles -->
   <section id="essays" aria-label="Essays & Articles">
