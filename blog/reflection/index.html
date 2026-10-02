@@ -3,17 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Journal — Walt Viviers</title>
-  <meta name="description" content="Written essays by South African fine artist Walt Viviers — on making art, the studio, and the life around the work." />
+  <title>Reflection — Walt Viviers</title>
+  <meta name="description" content="A poem: a conversation with the stranger in the mirror." />
   <meta name="author" content="Walt Viviers" />
   <meta name="robots" content="noindex, follow" />
-  <link rel="canonical" href="https://waltviviers.com/blog/" />
+  <link rel="canonical" href="https://waltviviers.com/blog/reflection/" />
 
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://waltviviers.com/blog/" />
-  <meta property="og:title" content="Journal — Walt Viviers" />
-  <meta property="og:description" content="Written essays by South African fine artist Walt Viviers." />
+  <meta property="og:type" content="article" />
+  <meta property="og:url" content="https://waltviviers.com/blog/reflection/" />
+  <meta property="og:title" content="Reflection" />
+  <meta property="og:description" content="A poem: a conversation with the stranger in the mirror." />
   <meta property="og:site_name" content="Walt Viviers — Fine Art" />
+  <meta property="article:published_time" content="2018-11-22" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Reflection" />
+  <meta name="twitter:description" content="A poem: a conversation with the stranger in the mirror." />
 
   <link rel="icon" href="/logo.svg" type="image/svg+xml" />
   <link rel="manifest" href="/manifest.json" />
@@ -27,7 +31,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Blog","name":"Walt Viviers — Journal","url":"https://waltviviers.com/blog/","author":{"@type":"Person","name":"Walt Viviers","url":"https://waltviviers.com"},"blogPost":[{"@type":"BlogPosting","headline":"On Beginning to Write","datePublished":"2026-09-03","url":"https://waltviviers.com/blog/on-beginning-to-write/"},{"@type":"BlogPosting","headline":"Reflection","datePublished":"2018-11-22","url":"https://waltviviers.com/blog/reflection/"},{"@type":"BlogPosting","headline":"The stories we tell ourselves, about ourselves.","datePublished":"2018-11-20","url":"https://waltviviers.com/blog/the-stories-we-tell-ourselves-about-ourselves/"},{"@type":"BlogPosting","headline":"Star Trek, so what’s the big deal?","datePublished":"2018-10-16","url":"https://waltviviers.com/blog/star-trek-so-what-s-the-big-deal/"},{"@type":"BlogPosting","headline":"A letter to my daughter.","datePublished":"2018-09-18","url":"https://waltviviers.com/blog/a-letter-to-my-daughter/"},{"@type":"BlogPosting","headline":"Let me introduce myself.","datePublished":"2018-08-12","url":"https://waltviviers.com/blog/let-me-introduce-myself/"}]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Reflection","datePublished":"2018-11-22","url":"https://waltviviers.com/blog/reflection/","description":"A poem: a conversation with the stranger in the mirror.","author":{"@type":"Person","name":"Walt Viviers","url":"https://waltviviers.com"},"publisher":{"@type":"Person","name":"Walt Viviers","url":"https://waltviviers.com"},"mainEntityOfPage":"https://waltviviers.com/blog/reflection/"}</script>
 
   <style>
     
@@ -122,79 +126,64 @@
     }
   
 
-    .journal-wrap { max-width: 720px; margin: 0 auto; padding: calc(100px + 56px) 24px 96px; }
-    .journal-head { margin-bottom: 56px; }
-    .journal-title { font-family: var(--serif); font-weight: 400; font-size: clamp(2.4rem, 8vw, 4rem); line-height: 1.05; margin-bottom: 16px; }
-    .journal-sub { font-family: var(--serif); font-size: 1.25rem; font-style: italic; color: var(--stone); }
-    .journal-rss { display: inline-block; margin-top: 20px; font-family: var(--sans); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); border: 1px solid var(--rule); padding: 8px 16px; transition: border-color 0.2s, color 0.2s; }
-    .journal-rss:hover { border-color: var(--stone); color: var(--ink); }
+    .article-wrap { max-width: 680px; margin: 0 auto; padding: calc(100px + 48px) 24px 96px; }
+    .article-back {
+      display: inline-block; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--stone); margin-bottom: 40px; transition: color 0.2s;
+    }
+    .article-back:hover { color: var(--ink); }
+    .article-date { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone); margin-bottom: 14px; }
+    .article-title { font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 6vw, 3.1rem); line-height: 1.12; margin-bottom: 40px; }
 
-    .post-list { display: flex; flex-direction: column; }
-    .post-card { display: block; padding: 32px 0; border-top: 1px solid var(--rule); transition: opacity 0.2s; }
-    .post-card:last-child { border-bottom: 1px solid var(--rule); }
-    .post-card:hover { opacity: 0.72; }
-    .post-card-date { font-family: var(--sans); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); margin-bottom: 10px; }
-    .post-card-title { font-family: var(--serif); font-weight: 400; font-size: 1.85rem; line-height: 1.15; margin-bottom: 10px; }
-    .post-card-desc { font-family: var(--serif); font-size: 1.1rem; line-height: 1.6; color: var(--stone); margin-bottom: 14px; }
-    .post-card-more { font-family: var(--sans); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); }
+    .article-body { font-family: var(--serif); font-size: 1.24rem; line-height: 1.75; color: var(--ink); }
+    .article-body p { margin: 0 0 1.4em; }
+    .article-body h2 { font-family: var(--serif); font-weight: 500; font-size: 1.55rem; line-height: 1.25; margin: 2em 0 0.6em; }
+    .article-body h3 { font-family: var(--serif); font-weight: 500; font-size: 1.28rem; margin: 1.8em 0 0.5em; }
+    .article-body h4 { font-family: var(--sans); font-weight: 500; font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone); margin: 1.8em 0 0.5em; }
+    .article-body a { text-decoration: underline; text-decoration-color: var(--stone); text-underline-offset: 3px; transition: text-decoration-color 0.2s; }
+    .article-body a:hover { text-decoration-color: var(--ink); }
+    .article-body strong { font-weight: 600; }
+    .article-body em { font-style: italic; }
+    .article-body ul, .article-body ol { margin: 0 0 1.4em; padding-left: 1.3em; }
+    .article-body li { margin: 0 0 0.5em; }
+    .article-body blockquote {
+      margin: 1.8em 0; padding-left: 1.2em; border-left: 2px solid var(--rule);
+      color: var(--stone); font-style: italic;
+    }
+    .article-body blockquote p:last-child { margin-bottom: 0; }
+    .article-body hr { border: none; border-top: 1px solid var(--rule); margin: 2.6em auto; width: 80px; }
+    .article-body code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85em; background: var(--bg2); padding: 2px 6px; border-radius: 3px; }
+    .article-body pre { background: var(--bg2); border: 1px solid var(--rule); border-radius: 6px; padding: 16px 18px; overflow-x: auto; margin: 0 0 1.4em; }
+    .article-body pre code { background: none; padding: 0; font-size: 0.8em; }
+    .article-body figure { margin: 2em 0; }
+    .article-body figure img { border-radius: 4px; }
+    .article-body figcaption { font-family: var(--sans); font-size: 0.8rem; color: var(--stone); text-align: center; margin-top: 10px; }
+    [data-theme="light"] .article-body code, [data-theme="light"] .article-body pre { background: var(--bg2); }
 
-    .journal-empty { font-family: var(--serif); font-size: 1.2rem; font-style: italic; color: var(--stone); padding: 40px 0; border-top: 1px solid var(--rule); }
+    .article-foot { margin-top: 64px; padding-top: 32px; border-top: 1px solid var(--rule); font-size: 0.95rem; color: var(--stone); }
+    .article-foot a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
-    @media (max-width: 900px) { .journal-wrap { padding: calc(50px + 40px) 22px 72px; } .post-card-title { font-size: 1.55rem; } }
+    @media (max-width: 900px) { .article-wrap { padding: calc(50px + 40px) 22px 72px; } .article-body { font-size: 1.16rem; } }
   </style>
 </head>
 <body>
 
 
-  <main class="journal-wrap">
-    <header class="journal-head">
-      <h1 class="journal-title">Journal</h1>
-      <p class="journal-sub">Written essays from the studio and the life around the work.</p>
-      <a class="journal-rss" href="/feed.xml">Subscribe via RSS</a>
-    </header>
-    <div class="post-list">
-
-      <a class="post-card" href="/blog/on-beginning-to-write/">
-        <div class="post-card-date">3 September 2026</div>
-        <h2 class="post-card-title">On Beginning to Write</h2>
-        <p class="post-card-desc">A short note on why I'm starting to keep a written journal alongside the paintings.</p>
-        <span class="post-card-more">Read →</span>
-      </a>
-
-      <a class="post-card" href="/blog/reflection/">
-        <div class="post-card-date">22 November 2018</div>
-        <h2 class="post-card-title">Reflection</h2>
-        <p class="post-card-desc">A poem: a conversation with the stranger in the mirror.</p>
-        <span class="post-card-more">Read →</span>
-      </a>
-
-      <a class="post-card" href="/blog/the-stories-we-tell-ourselves-about-ourselves/">
-        <div class="post-card-date">20 November 2018</div>
-        <h2 class="post-card-title">The stories we tell ourselves, about ourselves.</h2>
-        <p class="post-card-desc">The many versions of myself I’ve lived through, the stories behind them, and the one I want to tell my daughter.</p>
-        <span class="post-card-more">Read →</span>
-      </a>
-
-      <a class="post-card" href="/blog/star-trek-so-what-s-the-big-deal/">
-        <div class="post-card-date">16 October 2018</div>
-        <h2 class="post-card-title">Star Trek, so what’s the big deal?</h2>
-        <p class="post-card-desc">How I became a Trekkie late in life, my take on every series, and why I watch it for the science fiction.</p>
-        <span class="post-card-more">Read →</span>
-      </a>
-
-      <a class="post-card" href="/blog/a-letter-to-my-daughter/">
-        <div class="post-card-date">18 September 2018</div>
-        <h2 class="post-card-title">A letter to my daughter.</h2>
-        <p class="post-card-desc">A letter to my five-month-old daughter, written mid-bath-time and mid-hiccups.</p>
-        <span class="post-card-more">Read →</span>
-      </a>
-
-      <a class="post-card" href="/blog/let-me-introduce-myself/">
-        <div class="post-card-date">12 August 2018</div>
-        <h2 class="post-card-title">Let me introduce myself.</h2>
-        <p class="post-card-desc">Who I am, what I care about, and why I started writing.</p>
-        <span class="post-card-more">Read →</span>
-      </a>
+  <main class="article-wrap">
+    <a href="/blog/" class="article-back">← Journal</a>
+    <div class="article-date">22 November 2018</div>
+    <h1 class="article-title">Reflection</h1>
+    <article class="article-body">
+<p>Sometimes a life can ache\ Like sore feet that still have far to go\ Or a bruised heart\ When the ego is black and blue\ I ask the mirror:\ Who are you?</p>
+<p>I don't know\ Nobody\ Somebody\ A face in the crowd\ A blur on the bus\ A voice on the phone</p>
+<p>I rarely answer myself directly\ A recluse inside my skin\ A ghost in a shell\ A moment in time</p>
+<p>Every conversation in the mirror is with someone new\ A constant déjà vu</p>
+<p>Who are you, old man?\ What happened to that kid who used to pull faces at me?</p>
+<p>What happened to that boy?\ What happened to that punk?\ What happened to that scholar?\ What happened to that fool?</p>
+<p>The man who looks back\ Looks hard\ Judgmental\ Damaged\ But not broken\ Tempered</p>
+    </article>
+    <div class="article-foot">
+      <p>Written by Walt Viviers. Follow new essays via <a href="/feed.xml">RSS</a>, or return to the <a href="/blog/">Journal</a>.</p>
     </div>
   </main>
 
