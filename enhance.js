@@ -92,6 +92,8 @@
 
     if (!('IntersectionObserver' in window)) { forceAll(); return true; }
 
+    // Reveal as soon as a sliver enters the lower viewport (fire early so a
+    // fast scroll never outruns it).
     var io = new IntersectionObserver(function (entries) {
       each(entries, function (en) {
         if (en.isIntersecting) {
@@ -99,21 +101,49 @@
           io.unobserve(en.target);
         }
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    }, { rootMargin: '0px 0px 14% 0px', threshold: 0 });
+
+    function revealInView() {
+      var vh = window.innerHeight || 0;
+      each(document.querySelectorAll('[data-wv-reveal]:not(.wv-in)'), function (el) {
+        if (el.getBoundingClientRect().top < vh * 1.02) {
+          el.classList.add('wv-in');
+          io.unobserve(el);
+        }
+      });
+    }
 
     each(targets, function (el) {
-      // Reveal anything already in view on load immediately (above the fold).
-      var r = el.getBoundingClientRect();
-      if (r.top < (window.innerHeight || 0) * 0.92) {
+      // Reveal anything already in/near view on load immediately.
+      if (el.getBoundingClientRect().top < (window.innerHeight || 0) * 0.98) {
         el.classList.add('wv-in');
       } else {
         io.observe(el);
       }
     });
 
+    // Scroll fallback: guarantees reveal even if the observer misses a fast
+    // programmatic jump. rAF-throttled, self-removing once all are shown.
+    var sTick = false;
+    function onScroll() {
+      if (sTick) return;
+      sTick = true;
+      requestAnimationFrame(function () {
+        sTick = false;
+        revealInView();
+        if (!document.querySelector('[data-wv-reveal]:not(.wv-in)')) {
+          window.removeEventListener('scroll', onScroll);
+        }
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // After images load the layout settles — reveal whatever is now in view.
+    window.addEventListener('load', revealInView);
+
     // Safety net: never leave content hidden.
-    setTimeout(forceAll, 4000);
-    window.addEventListener('load', function () { setTimeout(forceAll, 1200); });
+    setTimeout(forceAll, 3000);
+    window.addEventListener('load', function () { setTimeout(forceAll, 800); });
     return true;
   }
 
@@ -135,7 +165,7 @@
     if (reduce) return;
     // (a) Hero wrappers that contain an <img> (photo / art / design bands).
     each(document.querySelectorAll(
-      '.pf-hero-img, .hero-img, [data-wv-parallax]'
+      '.pf-hero-img, .hero-img, .hero-image-wrap, [data-wv-parallax]'
     ), function (wrap) {
       var img = wrap.tagName === 'IMG' ? wrap : wrap.querySelector('img');
       if (!img) return;
