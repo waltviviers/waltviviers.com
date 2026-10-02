@@ -247,6 +247,91 @@
     });
   }
 
+  /* ── 6. Cursor-following spotlight (whole page) ────────────────────────── */
+  function setupSpotlight() {
+    if (reduce || !fine) return;
+    var el = document.createElement('div');
+    el.className = 'wv-spotlight';
+    el.setAttribute('aria-hidden', 'true');
+    (document.body || document.documentElement).appendChild(el);
+    var raf = false, mx = 0, my = 0;
+    function apply() {
+      raf = false;
+      el.style.setProperty('--wv-mx', mx + 'px');
+      el.style.setProperty('--wv-my', my + 'px');
+    }
+    window.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      if (!el.classList.contains('on')) el.classList.add('on');
+      if (!raf) { raf = true; requestAnimationFrame(apply); }
+    }, { passive: true });
+    document.addEventListener('mouseleave', function () { el.classList.remove('on'); });
+    document.addEventListener('mouseenter', function () { el.classList.add('on'); });
+  }
+
+  /* ── 7. Card tilt toward the pointer ───────────────────────────────────── */
+  function setupTilt3d() {
+    if (reduce || !fine) return;
+    each(document.querySelectorAll(
+      '.disc-card, .digital-card, .digital-sub-card, .work-thumb, ' +
+      '.essay-card, .app-card, .blog-card, .post-card, [data-wv-tilt]'
+    ), function (card) {
+      card.classList.add('wv-tilt3d');
+      var raf = false, rx = 0, ry = 0;
+      function apply() {
+        raf = false;
+        card.style.setProperty('--wv-rx', rx.toFixed(2) + 'deg');
+        card.style.setProperty('--wv-ry', ry.toFixed(2) + 'deg');
+      }
+      card.addEventListener('mousemove', function (e) {
+        var r = card.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        var cx = (e.clientX - r.left) / r.width - 0.5;
+        var cy = (e.clientY - r.top) / r.height - 0.5;
+        ry = cx * 10;          // max ~5deg each way
+        rx = -cy * 10;
+        if (!raf) { raf = true; requestAnimationFrame(apply); }
+      });
+      card.addEventListener('mouseleave', function () {
+        rx = 0; ry = 0; if (!raf) { raf = true; requestAnimationFrame(apply); }
+      });
+    });
+  }
+
+  /* ── 8. Magnetic primary buttons ───────────────────────────────────────── */
+  function setupMagnetic() {
+    if (reduce || !fine) return;
+    var btns = [];
+    each(document.querySelectorAll(
+      '.cc-btn-primary, .pf-btn-primary, .btn-primary, [data-wv-magnetic]'
+    ), function (btn) { btn.classList.add('wv-magnetic'); btns.push(btn); });
+    if (!btns.length) return;
+    var R = 70;              // activation radius beyond the button edge
+    var raf = false, mx = 0, my = 0;
+    function apply() {
+      raf = false;
+      var vh = window.innerHeight || 0;
+      each(btns, function (btn) {
+        var r = btn.getBoundingClientRect();
+        if (r.bottom < -100 || r.top > vh + 100) return;   // offscreen: skip
+        var ox = mx - (r.left + r.width / 2);
+        var oy = my - (r.top + r.height / 2);
+        var reach = Math.max(r.width, r.height) / 2 + R;
+        var dx = 0, dy = 0;
+        if (Math.hypot(ox, oy) < reach) {
+          dx = Math.max(-10, Math.min(10, ox * 0.3));
+          dy = Math.max(-10, Math.min(10, oy * 0.3));
+        }
+        btn.style.setProperty('--wv-dx', dx.toFixed(1) + 'px');
+        btn.style.setProperty('--wv-dy', dy.toFixed(1) + 'px');
+      });
+    }
+    window.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      if (!raf) { raf = true; requestAnimationFrame(apply); }
+    }, { passive: true });
+  }
+
   /* ── Boot ──────────────────────────────────────────────────────────────── */
   ready(function () {
     try { applyGlass(); } catch (e) {}
@@ -257,5 +342,8 @@
     if (revealed && !reduce) root.classList.add('wv-anim');
     try { setupParallax(); } catch (e) {}
     try { setupPointerDrift(); } catch (e) {}
+    try { setupSpotlight(); } catch (e) {}
+    try { setupTilt3d(); } catch (e) {}
+    try { setupMagnetic(); } catch (e) {}
   });
 })();
