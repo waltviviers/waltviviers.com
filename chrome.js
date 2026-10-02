@@ -285,8 +285,29 @@
   /* ── Build & mount ────────────────────────────────────────────────────── */
   var nav, menu, footer;
 
+  /* Load the shared frosted-glass + motion layer (enhance.css / enhance.js)
+     so every interior page gets the same treatment as the home page. */
+  function injectEnhance() {
+    try {
+      if (!document.querySelector('link[href="/enhance.css"]')) {
+        var l = document.createElement('link');
+        l.rel = 'stylesheet';
+        l.href = '/enhance.css';
+        (document.head || document.documentElement).appendChild(l);
+      }
+      if (!window.__wvEnhanceLoaded && !document.querySelector('script[src="/enhance.js"]')) {
+        var s = document.createElement('script');
+        s.src = '/enhance.js';
+        s.defer = true;
+        (document.body || document.documentElement).appendChild(s);
+      }
+    } catch (e) {}
+  }
+
   function mount() {
     if (document.getElementById('wv-chrome-style')) return;
+
+    injectEnhance();
 
     var style = document.createElement('style');
     style.id = 'wv-chrome-style';

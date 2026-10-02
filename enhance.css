@@ -1,0 +1,181 @@
+/* ============================================================================
+   enhance.css — frosted glass + motion layer for waltviviers.com
+   ----------------------------------------------------------------------------
+   Progressive, structure-agnostic enhancement loaded site-wide (homepage
+   directly + interior pages via chrome.js). Everything here is additive and
+   opt-in through classes/attributes that enhance.js applies at runtime, so a
+   page with JS disabled, a JS error, or reduced-motion preference degrades to
+   the plain static layout with zero hidden content.
+
+   Motion uses only transform/opacity (GPU-friendly). All of it is disabled
+   under prefers-reduced-motion and when printing.
+   ========================================================================== */
+
+/* ── Frosted glass ─────────────────────────────────────────────────────────
+   Applied by enhance.js to the nav, mobile menu, modals and the cookie banner
+   when backdrop-filter is supported (html.wv-glass). Falls back to the page's
+   own solid backgrounds otherwise. */
+html.wv-glass nav {
+  background: rgba(10, 10, 10, 0.55) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(1.4);
+  backdrop-filter: blur(22px) saturate(1.4);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+html.wv-glass[data-theme="light"] nav,
+html.wv-glass [data-theme="light"] nav {
+  background: rgba(245, 243, 239, 0.6) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+html.wv-glass .mobile-menu {
+  background: rgba(10, 10, 10, 0.72) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(1.3);
+  backdrop-filter: blur(26px) saturate(1.3);
+}
+html.wv-glass[data-theme="light"] .mobile-menu,
+html.wv-glass [data-theme="light"] .mobile-menu {
+  background: rgba(245, 243, 239, 0.78) !important;
+}
+/* Generic glass utility enhance.js adds to modal panels / cookie banner. */
+html.wv-glass .wv-glassify {
+  -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  backdrop-filter: blur(20px) saturate(1.3);
+}
+
+/* ── Scroll reveal ─────────────────────────────────────────────────────────
+   enhance.js tags targets with [data-wv-reveal] and flips them to .wv-in when
+   they enter the viewport. Initial hidden state only applies once html.wv-anim
+   is present (added by JS after setup succeeds), so failed JS = visible. */
+html.wv-anim [data-wv-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: var(--wv-delay, 0s);
+  will-change: opacity, transform;
+}
+html.wv-anim [data-wv-reveal].wv-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Hover lift + sheen on cards/links ─────────────────────────────────────
+   Added as .wv-lift to card-like blocks. */
+.wv-lift {
+  transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1),
+              box-shadow 0.35s ease, border-color 0.35s ease;
+  will-change: transform;
+}
+@media (hover: hover) and (pointer: fine) {
+  .wv-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* ── Hero parallax / drift ─────────────────────────────────────────────────
+   enhance.js sets --wv-par (px) on hero image wrappers; the image translates
+   by it on scroll. Scale keeps edges covered as it drifts. */
+.wv-parallax {
+  will-change: transform;
+}
+.wv-parallax img,
+img.wv-parallax {
+  transform: translate3d(0, var(--wv-par, 0px), 0) scale(1.08);
+  transition: transform 0.05s linear;
+}
+
+/* Background-image hero bands: combined scroll drift (--wv-par, y) + desktop
+   pointer drift (--wv-px / --wv-py). Scaled up so edges stay covered. */
+.wv-parallax-bg {
+  transform: translate3d(var(--wv-px, 0px),
+                         calc(var(--wv-par, 0px) + var(--wv-py, 0px)), 0)
+             scale(1.12);
+  transition: transform 0.12s ease-out;
+  will-change: transform;
+}
+
+/* ── Ambient animated glow ─────────────────────────────────────────────────
+   A couple of slow-drifting radial blobs enhance.js injects behind hero bands
+   for subtle living movement. Pure transform animation, pointer-events none. */
+.wv-glow-field {
+  position: absolute;
+  inset: -20% -10%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.wv-glow {
+  position: absolute;
+  width: 48vw;
+  height: 48vw;
+  max-width: 640px;
+  max-height: 640px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.5;
+  mix-blend-mode: screen;
+}
+.wv-glow.a {
+  left: -8%;
+  top: -12%;
+  background: radial-gradient(circle at 50% 50%, rgba(120, 90, 255, 0.55), transparent 65%);
+  animation: wv-drift-a 22s ease-in-out infinite;
+}
+.wv-glow.b {
+  right: -6%;
+  bottom: -14%;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 90, 170, 0.45), transparent 65%);
+  animation: wv-drift-b 28s ease-in-out infinite;
+}
+[data-theme="light"] .wv-glow { opacity: 0.32; mix-blend-mode: multiply; }
+@keyframes wv-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(8%, 10%, 0) scale(1.15); }
+}
+@keyframes wv-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.1); }
+  50%      { transform: translate3d(-10%, -8%, 0) scale(1); }
+}
+
+/* Gradient-animated primary buttons for a touch of life on CTAs. */
+.wv-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.wv-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  transform: skewX(-18deg);
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .wv-shimmer:hover::after { animation: wv-sheen 0.9s ease; }
+}
+@keyframes wv-sheen {
+  from { left: -150%; }
+  to   { left: 150%; }
+}
+
+/* ── Respect user + medium ─────────────────────────────────────────────────*/
+@media (prefers-reduced-motion: reduce) {
+  html.wv-anim [data-wv-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .wv-lift, .wv-parallax img, img.wv-parallax, .wv-parallax-bg { transition: none !important; }
+  .wv-lift:hover { transform: none !important; }
+  .wv-parallax img, img.wv-parallax { transform: scale(1.02) !important; }
+  .wv-parallax-bg { transform: scale(1.04) !important; }
+  .wv-glow { animation: none !important; }
+  .wv-shimmer:hover::after { animation: none !important; }
+}
+@media print {
+  html.wv-anim [data-wv-reveal] { opacity: 1 !important; transform: none !important; }
+  .wv-glow-field { display: none !important; }
+}
