@@ -518,7 +518,7 @@
 
     /* ── Works Index ─────────────────────────────── */
     #works {
-      padding: 80px 48px;
+      padding: 80px max(48px, (100% - 1500px) / 2);
       border-top: 1px solid var(--rule);
     }
 
@@ -555,6 +555,7 @@
       position: relative; z-index: 2;
       padding: clamp(32px, 5vw, 68px) clamp(32px, 5vw, 68px) clamp(32px, 5vw, 68px) clamp(96px, 9vw, 108px);
       max-width: 808px;
+      margin-left: max(0px, (100% - 1500px) / 2);
       display: flex; flex-direction: column; gap: 16px;
     }
     .pf-eyebrow {
@@ -605,6 +606,7 @@
     }
     .cc-hero-inner {
       position: relative; z-index: 2; width: 100%; max-width: 1320px;
+      margin-left: max(0px, (100% - 1500px) / 2);
       padding: clamp(96px, 11vw, 140px) clamp(24px, 6vw, 72px) clamp(56px, 7vw, 90px);
       display: flex; flex-direction: column; gap: 22px;
     }
@@ -883,7 +885,7 @@
 
     /* ── About ───────────────────────────────────── */
     #about, #photo-about, #essays {
-      padding: 100px 48px;
+      padding: 100px max(48px, (100% - 1500px) / 2);
       border-top: 1px solid var(--rule);
       display: grid;
       grid-template-columns: 1fr 1fr;
