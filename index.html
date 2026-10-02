@@ -1398,6 +1398,16 @@
     /* ── Digital Experiments ── */
     .digital { border-top: 1px solid var(--rule); }
     #design-digital .pf-hero-img img { height:100%; top:0; }
+    /* Align the hero copy's left edge with the cards below (same centred 1400 container). */
+    #design-digital .pf-hero-inner {
+      max-width: 1400px; width: 100%; margin: 0 auto;
+      padding-left: clamp(24px, 6vw, 72px); padding-right: clamp(24px, 6vw, 72px);
+      align-items: flex-start;
+    }
+    #design-digital .pf-eyebrow,
+    #design-digital .pf-title,
+    #design-digital .pf-desc,
+    #design-digital .pf-actions { max-width: 680px; }
     .digital-body { max-width: 1400px; margin: 0 auto; padding: clamp(64px, 8vw, 110px) clamp(24px, 6vw, 72px); }
     .digital-grid { display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule); }
     .digital-card { background:var(--bg);display:flex;flex-direction:row;align-items:flex-start;gap:clamp(16px,2vw,24px);padding:clamp(24px,2.8vw,36px);transition:background 0.2s;overflow:hidden; }
