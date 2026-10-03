@@ -210,9 +210,9 @@
       each(parallaxItems, function (it) {
         var r = it.wrap.getBoundingClientRect();
         if (r.bottom < -200 || r.top > vh + 200) return;
-        // -1..1 across the viewport → up to ~40px of drift.
+        // -1..1 across the viewport → up to ~70px of drift.
         var progress = (r.top + r.height / 2 - vh / 2) / vh;
-        var shift = Math.max(-40, Math.min(40, -progress * 60));
+        var shift = Math.max(-70, Math.min(70, -progress * 110));
         it.wrap.style.setProperty('--wv-par', shift.toFixed(1) + 'px');
       });
     }
@@ -238,8 +238,8 @@
     }
     band.addEventListener('mousemove', function (e) {
       var r = band.getBoundingClientRect();
-      px = ((e.clientX - r.left) / r.width - 0.5) * -24;   // ±12px
-      py = ((e.clientY - r.top) / r.height - 0.5) * -24;
+      px = ((e.clientX - r.left) / r.width - 0.5) * -44;   // ±22px
+      py = ((e.clientY - r.top) / r.height - 0.5) * -44;
       if (!raf) { raf = true; requestAnimationFrame(apply); }
     });
     band.addEventListener('mouseleave', function () {
@@ -288,8 +288,8 @@
         if (!r.width || !r.height) return;
         var cx = (e.clientX - r.left) / r.width - 0.5;
         var cy = (e.clientY - r.top) / r.height - 0.5;
-        ry = cx * 10;          // max ~5deg each way
-        rx = -cy * 10;
+        ry = cx * 18;          // max ~9deg each way
+        rx = -cy * 18;
         if (!raf) { raf = true; requestAnimationFrame(apply); }
       });
       card.addEventListener('mouseleave', function () {
@@ -306,7 +306,7 @@
       '.cc-btn-primary, .pf-btn-primary, .btn-primary, [data-wv-magnetic]'
     ), function (btn) { btn.classList.add('wv-magnetic'); btns.push(btn); });
     if (!btns.length) return;
-    var R = 70;              // activation radius beyond the button edge
+    var R = 95;              // activation radius beyond the button edge
     var raf = false, mx = 0, my = 0;
     function apply() {
       raf = false;
@@ -319,8 +319,8 @@
         var reach = Math.max(r.width, r.height) / 2 + R;
         var dx = 0, dy = 0;
         if (Math.hypot(ox, oy) < reach) {
-          dx = Math.max(-10, Math.min(10, ox * 0.3));
-          dy = Math.max(-10, Math.min(10, oy * 0.3));
+          dx = Math.max(-16, Math.min(16, ox * 0.45));
+          dy = Math.max(-16, Math.min(16, oy * 0.45));
         }
         btn.style.setProperty('--wv-dx', dx.toFixed(1) + 'px');
         btn.style.setProperty('--wv-dy', dy.toFixed(1) + 'px');
