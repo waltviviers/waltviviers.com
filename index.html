@@ -124,7 +124,6 @@
   <!-- Performance hints -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="dns-prefetch" href="https://feeds.behold.so" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preload" href="/data/artworks.json" as="fetch" crossorigin />
   <link rel="preload" as="image" href="/images/800/DSC_0610.webp" fetchpriority="high" />
@@ -1278,7 +1277,6 @@
       .brush-divider { display: none; }
     }
 
-    /* ── Instagram feed ─────────────────────────── */
     /* ── Digital Experiments ── */
     .digital { border-top: 1px solid var(--rule); padding: 64px max(48px, (100% - 1500px) / 2) 72px; }
     .digital-label { font-size:12px;font-weight:500;letter-spacing:0.16em;text-transform:uppercase;color:var(--stone);margin-bottom:24px; }
@@ -1291,90 +1289,6 @@
     .digital-cta { font-size:11px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--stone);transition:color 0.2s; }
     .digital-card:hover .digital-cta { color:var(--ink); }
     @media (max-width:900px) { .digital { padding:48px 24px 56px; } .digital-grid { grid-template-columns:1fr; } }
-
-    #instagram {
-      border-top: 1px solid var(--rule);
-    }
-
-    .instagram-head {
-      padding: 64px 48px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .instagram-handle {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
-    }
-    .ig-lead-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .instagram-handle-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: inherit;
-    }
-
-    .ig-follow-lead {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--stone); transition: color 0.2s;
-      white-space: nowrap; line-height: 1;
-    }
-    .ig-follow-lead:hover { color: var(--ink); }
-    .instagram-handle .section-title { line-height: 1; }
-
-    .instagram-handle svg {
-      width: 20px;
-      height: 20px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      color: var(--stone);
-    }
-
-    .instagram-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-      background: var(--rule);
-    }
-    .instagram-grid > *:nth-child(n+7) { display: none; } /* 3 × 2 = 6 on desktop */
-
-    .ig-thumb {
-      aspect-ratio: 1;
-      overflow: hidden;
-      background: var(--bg2);
-      display: block;
-      position: relative;
-    }
-
-    .ig-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s;
-      display: block;
-    }
-
-    .ig-thumb:hover img { transform: scale(1.05); }
-
-    .ig-thumb::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: transparent;
-      transition: background 0.3s;
-    }
-
-    .ig-thumb:hover::after { background: rgba(0,0,0,0.2); }
 
     /* ── Back to top ────────────────────────────── */
     .back-to-top {
@@ -1446,9 +1360,6 @@
       #works, #about, #photo-about { padding: 64px 24px; }
       .explore-albums { grid-template-columns: repeat(2, 1fr); }
       #hero { display: none; } /* hide the featured-work carousel on mobile */
-      .instagram-grid { grid-template-columns: repeat(2, 1fr); } /* two across on mobile */
-      .instagram-head { padding: 48px 24px 32px; }
-      .instagram-head .section-count { display: none; } /* hide right-side follow link on mobile */
 
       .works-grid { grid-template-columns: 1fr; }
       .works-grid .work-thumb:nth-child(n+5) { display: none; }
@@ -1850,21 +1761,6 @@
     <a href="/gallery/" class="view-gallery-btn" data-i18n="view-gallery">View Gallery ↗</a>
   </section>
 
-  <!-- Instagram feed -->
-  <section id="instagram">
-    <div class="instagram-head">
-      <div class="instagram-handle">
-        <div class="ig-lead-row">
-          <span class="ig-follow-lead" data-i18n="ig-follow-me">Follow me on Instagram</span>
-          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
-        </div>
-        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" class="instagram-handle-row">
-          <h2 class="section-title">@waltviviers</h2>
-        </a>
-      </div>
-    </div>
-    <div class="instagram-grid" id="instagram-grid"></div>
-  </section>
 
   <!-- Digital Experiments -->
   <section class="digital" aria-label="Digital Experiments">
@@ -2552,26 +2448,6 @@
     })();
   </script>
 
-
-  <!-- Instagram feed (Behold) -->
-  <script>
-    (function () {
-      const grid = document.getElementById('instagram-grid');
-      if (!grid) return;
-      fetch('https://feeds.behold.so/XF2qeG8FeoVkeUAOOjI1')
-        .then(function (r) { return r.json(); })
-        .then(function (data) {
-          var posts = (Array.isArray(data) ? data : (data.posts || [])).slice(0, 6);
-          grid.innerHTML = posts.map(function (p) {
-            var img = p.mediaType === 'VIDEO' ? p.thumbnailUrl : p.mediaUrl;
-            return '<a class="ig-thumb" href="' + p.permalink + '" target="_blank" rel="noopener noreferrer">'
-              + '<img src="' + img + '" alt="' + (p.caption ? p.caption.substring(0, 80).replace(/"/g, '&quot;') : 'Walt Viviers on Instagram') + '" loading="lazy" width="1080" height="1080" decoding="async" />'
-              + '</a>';
-          }).join('');
-        })
-        .catch(function () {});
-    })();
-  </script>
 
   <!-- Admin + burger menu -->
   <script>
