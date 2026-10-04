@@ -89,6 +89,8 @@ body {
   background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 48px 48px;
 }
+/* Nothing may widen the page sideways (off-screen animation start points, parallax layers) */
+html, body { overflow-x: hidden; overflow-x: clip; }
 img { max-width: 100%; }
 a { color: inherit; }
 :focus-visible { outline: 3px solid var(--gold-bright); outline-offset: 3px; border-radius: 4px; }
@@ -360,6 +362,7 @@ footer nav a:hover { color: #F2CB5C; }
 .motion .reveal.from-right { transform: translate3d(40px, 0, 0); }
 .motion .reveal.pop { transform: translate3d(0, 18px, 0) scale(.92); }
 .motion .reveal.is-in { opacity: 1; transform: none; }
+@media (max-width: 760px) { .motion .reveal.from-left, .motion .reveal.from-right { transform: translate3d(0, 36px, 0); } }  /* phones: rise only, never start off the side */
 .motion .eyebrow::before { width: 0; transition: width .7s ease .2s; }
 .motion .is-in .eyebrow::before, .motion .eyebrow.is-in::before, .motion .hero .eyebrow::before, .motion .mock-card .eyebrow::before { width: 18px; }
 /* Gold headline words sweep in left to right */
