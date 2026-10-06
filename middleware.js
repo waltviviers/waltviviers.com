@@ -3,8 +3,13 @@
 //   /clients/<slug>/ -> CLIENT_PASSWORD_<SLUG> (one per client, e.g.
 //                       /clients/manifesto-wellness/ -> CLIENT_PASSWORD_MANIFESTO_WELLNESS)
 //   /admin-index/    -> ADMIN_PASSWORD
+//
+// Public client subdomains (no password): the root of menzies.waltviviers.com serves /menzies/,
+// rewritten in place so the address stays put. The page loads its images from /menzies/images/.
 
-export const config = { matcher: ['/clients', '/clients/:path*', '/admin-index', '/admin-index/:path*'] };
+export const config = { matcher: ['/', '/clients', '/clients/:path*', '/admin-index', '/admin-index/:path*'] };
+
+const SUBDOMAIN_PAGES = { 'menzies.waltviviers.com': '/menzies/' };
 
 const ADMIN_GATE = {
   prefix: '/admin-index',
@@ -114,7 +119,13 @@ function page(gate, message, status) {
 }
 
 export default async function middleware(request) {
-  const { pathname } = new URL(request.url);
+  const url = new URL(request.url);
+  const { pathname } = url;
+  if (pathname === '/') {
+    const target = SUBDOMAIN_PAGES[url.hostname];
+    if (!target) return; // the main site's homepage
+    return new Response(null, { headers: { 'x-middleware-rewrite': new URL(target, url).toString() } });
+  }
   const gate = findGate(pathname);
   // /clients/ itself, or anything that isn't a valid client folder, is not public.
   if (!gate) return new Response('Not found', { status: 404, headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex' } });
