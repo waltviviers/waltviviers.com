@@ -7,10 +7,14 @@
 // Public client sites skip the gate and live on their own subdomain:
 //   manifesto.waltviviers.com/* serves /clients/manifesto-wellness/*, and the
 //   old waltviviers.com/clients/manifesto-wellness/ address redirects there.
+//   menzies.waltviviers.com/* serves /clients/menzies-media/* the same way.
 
 export const config = { matcher: ['/:path*'] };
 
-const PUBLIC_SITES = { 'manifesto.waltviviers.com': 'manifesto-wellness' };
+const PUBLIC_SITES = {
+  'manifesto.waltviviers.com': 'manifesto-wellness',
+  'menzies.waltviviers.com': 'menzies-media',
+};
 const MAIN_HOSTS = ['waltviviers.com', 'www.waltviviers.com'];
 
 const ADMIN_GATE = {
