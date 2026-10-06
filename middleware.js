@@ -3,8 +3,15 @@
 //   /clients/<slug>/ -> CLIENT_PASSWORD_<SLUG> (one per client, e.g.
 //                       /clients/manifesto-wellness/ -> CLIENT_PASSWORD_MANIFESTO_WELLNESS)
 //   /admin-index/    -> ADMIN_PASSWORD
+//
+// Public client sites skip the gate and live on their own subdomain:
+//   manifesto.waltviviers.com/* serves /clients/manifesto-wellness/*, and the
+//   old waltviviers.com/clients/manifesto-wellness/ address redirects there.
 
-export const config = { matcher: ['/clients', '/clients/:path*', '/admin-index', '/admin-index/:path*'] };
+export const config = { matcher: ['/:path*'] };
+
+const PUBLIC_SITES = { 'manifesto.waltviviers.com': 'manifesto-wellness' };
+const MAIN_HOSTS = ['waltviviers.com', 'www.waltviviers.com'];
 
 const ADMIN_GATE = {
   prefix: '/admin-index',
@@ -113,8 +120,35 @@ function page(gate, message, status) {
   });
 }
 
+function publicSiteRoute(url) {
+  const slug = PUBLIC_SITES[url.hostname];
+  if (slug) {
+    const prefix = '/clients/' + slug;
+    // Old full paths on the subdomain fold back to the short form.
+    if (url.pathname === prefix || url.pathname.startsWith(prefix + '/')) {
+      return Response.redirect(new URL((url.pathname.slice(prefix.length) || '/') + url.search, url), 308);
+    }
+    return new Response(null, { headers: { 'x-middleware-rewrite': new URL(prefix + url.pathname + url.search, url).toString() } });
+  }
+  for (const [host, site] of Object.entries(PUBLIC_SITES)) {
+    const prefix = '/clients/' + site;
+    if (url.pathname !== prefix && !url.pathname.startsWith(prefix + '/')) continue;
+    // On the main domain, send visitors to the subdomain; preview deployments serve it in place.
+    if (MAIN_HOSTS.includes(url.hostname)) {
+      return Response.redirect('https://' + host + (url.pathname.slice(prefix.length) || '/') + url.search, 308);
+    }
+    return 'serve';
+  }
+  return null;
+}
+
 export default async function middleware(request) {
-  const { pathname } = new URL(request.url);
+  const url = new URL(request.url);
+  const { pathname } = url;
+  const site = publicSiteRoute(url);
+  if (site === 'serve') return;
+  if (site) return site;
+  if (!/^\/(clients|admin-index)(\/|$)/.test(pathname)) return; // the rest of the site is public
   const gate = findGate(pathname);
   // /clients/ itself, or anything that isn't a valid client folder, is not public.
   if (!gate) return new Response('Not found', { status: 404, headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex' } });
