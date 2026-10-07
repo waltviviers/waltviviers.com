@@ -93,7 +93,7 @@
       '/apps/scritch-scratch/' + pet[0], '/apps/scritch-scratch/' + pet[1]);
     if (pet[2]) dog.querySelectorAll('img').forEach(function (img) { img.style.top = pet[2] + 'px'; });
     var beet = badge('beat-fab', 'https://chopped-beats.waltviviers.com/', "Open Chopped Beats",
-      '/apps/chopped-beats/fab-over.webp', '/apps/chopped-beats/fab-up.webp');
+      '/apps/chopped-beats/fab-up.webp', '/apps/chopped-beats/fab-over.webp');
 
     var frag = document.createDocumentFragment();
     frag.appendChild(game);
