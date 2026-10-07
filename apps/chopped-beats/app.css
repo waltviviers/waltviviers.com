@@ -100,6 +100,19 @@ input[type="range"] { accent-color: var(--ink); }
 }
 .brand { font-family: var(--serif); font-size: 24px; color: var(--ink); text-decoration: none; margin-right: 10px; white-space: nowrap; }
 .brand em { font-style: italic; color: var(--stone); }
+.home-link {
+  color: var(--stone);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: .06em;
+  padding: 6px 10px;
+  margin-right: 6px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  white-space: nowrap;
+  transition: color .15s, border-color .15s;
+}
+.home-link:hover, .home-link:focus-visible { color: var(--ink); border-color: var(--stone); }
 .brand { display: inline-flex; align-items: center; gap: 8px; }
 .mascot { height: 34px; width: auto; display: block; }
 .welcome-mascot { display: block; width: 150px; height: auto; margin: -6px auto 14px; }
@@ -353,4 +366,5 @@ input[type="range"] { accent-color: var(--ink); }
   :root { --head-w: 120px; }
   .viz { display: none; }
   .proj-name { width: 120px; }
+  .home-link { padding: 6px 8px; }
 }

@@ -1,0 +1,2668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+<meta name="robots" content="index, follow" />
+<title>Static Protocol</title>
+<meta name="description" content="A cyberpunk interactive story played entirely on your phone. Five decisions, five live SYNC hacking sequences, ten possible endings." />
+<link rel="canonical" href="https://static-protocol.waltviviers.com/play" />
+<meta property="og:title" content="Static Protocol" />
+<meta property="og:description" content="A cyberpunk interactive story played entirely on your phone. Five decisions, five live SYNC hacking sequences, ten possible endings." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://static-protocol.waltviviers.com/play" />
+<meta name="theme-color" content="#05050a" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%2305050a'/%3E%3Cpath d='M4 6l6 6-6 6' fill='none' stroke='%2322e6d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='12' y1='18' x2='20' y2='18' stroke='%2322e6d4' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #05050a; }
+  body {
+    font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+    color: #d9f7f2;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  svg { display: block; }
+
+  :root {
+    --cyan: #22e6d4;
+    --cyan-dim: rgba(34,230,212,0.28);
+    --magenta: #ff3d94;
+    --amber: #ffcf3d;
+    --danger: #ff4d4d;
+    --bg: #05050a;
+    --panel: #0b0c16;
+    --panel-line: rgba(34,230,212,0.22);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* ── The device: everything lives inside this phone, on purpose ── */
+  .device-wrap {
+    position: fixed; inset: 0;
+    background: #030304;
+    display: flex; align-items: center; justify-content: center;
+    padding: max(20px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+  .device-wrap[hidden] { display: none; }
+  .bg-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;
+    transform: scale(1.25);
+  }
+  .device-wrap::before {
+    content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: radial-gradient(ellipse at 50% 15%, rgba(13,14,26,0.35) 0%, rgba(3,3,4,0.88) 72%);
+  }
+  .phone {
+    position: relative; z-index: 2;
+    width: min(94vw, 400px, calc((100vh - 60px) * 0.4615));
+    aspect-ratio: 9 / 19.5;
+    background: #05050a;
+    border-radius: 42px;
+    border: 10px solid #16171f;
+    box-shadow: 0 0 0 1px rgba(34,230,212,0.15), 0 40px 100px rgba(0,0,0,0.7), 0 0 70px rgba(34,230,212,0.06);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .notch {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 38%; height: 20px; background: #16171f; border-radius: 0 0 14px 14px; z-index: 80;
+  }
+  .phone-bg {
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: url('/apps/static-protocol/phone-bg-portrait.jpg') center 18% / cover no-repeat;
+    opacity: 0.5;
+    animation: phoneBgLive 16s ease-in-out infinite;
+  }
+  @keyframes phoneBgLive {
+    0%, 100% { transform: scale(1.05) translate(0, 0); }
+    50% { transform: scale(1.12) translate(-1.2%, -1.6%); }
+  }
+  /* On an actual phone, a drawn bezel is a phone showing a picture of a phone — pointless. Go edge-to-edge and let the real device be the device. */
+  @media (max-width: 480px) {
+    .device-wrap { padding: 0; background: var(--bg); }
+    .bg-video { display: none; }
+    .phone {
+      width: 100vw; height: 100vh; height: 100dvh;
+      max-width: none; aspect-ratio: unset;
+      border: none; border-radius: 0; box-shadow: none;
+    }
+    .notch { display: none; }
+    .status-bar {
+      padding-top: max(13px, env(safe-area-inset-top));
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+    }
+    .home-indicator { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+  }
+  .status-bar {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 20px 6px; font-size: 11.5px; letter-spacing: 0.02em; position: relative; z-index: 60;
+  }
+  .status-right { display: flex; align-items: center; gap: 7px; }
+  .mute-toggle { background: none; border: none; padding: 2px; display: flex; align-items: center; color: rgba(217,247,242,0.6); }
+  .mute-toggle svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .mute-toggle.is-muted { color: rgba(217,247,242,0.3); }
+  .signal-bars { display: flex; align-items: flex-end; gap: 2px; height: 10px; }
+  .signal-bars i { width: 3px; display: block; background: rgba(217,247,242,0.22); border-radius: 1px; }
+  .signal-bars i:nth-child(1) { height: 4px; } .signal-bars i:nth-child(2) { height: 7px; } .signal-bars i:nth-child(3) { height: 10px; }
+  .signal-bars i.on { background: var(--danger); box-shadow: 0 0 4px var(--danger); }
+  .battery { width: 21px; height: 10px; border: 1px solid rgba(217,247,242,0.4); border-radius: 2px; padding: 1.5px; position: relative; }
+  .battery::after { content: ''; position: absolute; right: -3px; top: 3px; width: 2px; height: 4px; background: rgba(217,247,242,0.4); border-radius: 0 1px 1px 0; }
+  .battery-fill { height: 100%; background: var(--cyan); border-radius: 0.5px; }
+
+  #phone-screen { flex: 1 1 auto; overflow-y: auto; position: relative; }
+  .home-indicator { flex: 0 0 auto; display: flex; justify-content: center; padding: 8px 0 12px; }
+  .home-indicator span { width: 110px; height: 4px; border-radius: 3px; background: rgba(217,247,242,0.28); }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-thumb { background: rgba(34,230,212,0.25); }
+
+  /* ── Start menu: a separate full-screen title screen, not part of the phone ── */
+  .start-menu { position: fixed; inset: 0; z-index: 200; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; text-align: center; padding: 24px; padding-bottom: 64px; }
+  .site-logo {
+    position: absolute; top: max(32px, env(safe-area-inset-top)); left: max(48px, env(safe-area-inset-left));
+    z-index: 3; opacity: 0.85; transition: opacity 0.2s;
+  }
+  .site-logo:hover, .site-logo:focus-visible { opacity: 1; }
+  .site-logo img { display: block; height: 36px; width: auto; }
+  @media (max-width: 900px) {
+    .site-logo { top: max(11px, env(safe-area-inset-top)); left: max(24px, env(safe-area-inset-left)); }
+    .site-logo img { height: 28px; }
+  }
+  .start-menu[hidden] { display: none; }
+  .menu-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .menu-bg-video-blur { display: none; }
+  @media (max-width: 900px) {
+    /* The source video is landscape; on a narrow portrait screen a straight cover crop loses
+       most of the frame off the sides. Show the full frame (contain) over a blurred, cover-fit
+       copy of the same clip so the screen still reads as fully filled edge to edge. */
+    .menu-bg-video-blur {
+      display: block; position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0; filter: blur(30px) brightness(0.55); transform: scale(1.15);
+    }
+    .menu-bg-video {
+      object-fit: contain; object-position: center top; background: #05050a; opacity: 1;
+      transform: scale(1.6); transform-origin: center top;
+    }
+    /* The video (contain, top-anchored, scale(1.6)) renders at height = 0.9 * viewport width,
+       independent of viewport height. Push the panel to start clear of it instead of centering
+       vertically, or the copy overlaps the footage. */
+    .start-menu { align-items: flex-start; padding-top: calc(90vw + 20px); }
+  }
+  .menu-panel { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 340px; }
+  .menu-panel[hidden] { display: none; }
+  .menu-brand { font-size: 2.1rem; font-weight: 800; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .menu-loop-tag { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--magenta); margin-bottom: 8px; }
+  .menu-copy { font-size: 13px; color: rgba(217,247,242,0.65); max-width: 300px; line-height: 1.45; }
+  .menu-howto { max-width: 380px; }
+  .menu-howto .prose { text-align: left; }
+  .menu-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 230px; margin-top: 16px; }
+  .ghost-btn {
+    display: flex; width: 100%; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(217,247,242,0.25); color: #d9f7f2;
+    font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; padding: 13px;
+  }
+  .ghost-btn:active { transform: scale(0.98); background: rgba(255,255,255,0.1); }
+  .menu-back-link {
+    margin-top: 8px; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(217,247,242,0.5); text-decoration: none; transition: color 0.2s;
+  }
+  .menu-back-link:hover, .menu-back-link:focus-visible { color: var(--cyan); }
+
+  /* ── Home screen ── */
+  .home-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 10px; padding: 96px 18px 10px; }
+  .app-icon { display: flex; flex-direction: column; align-items: center; gap: 6px; background: none; border: none; color: inherit; position: relative; }
+  .app-icon .tile {
+    width: 52px; height: 52px; border-radius: 15px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center; transition: transform 0.1s;
+  }
+  .app-icon .tile svg { width: 24px; height: 24px; stroke: var(--accent, rgba(217,247,242,0.65)); color: var(--accent, rgba(217,247,242,0.65)); }
+  .app-icon.is-active .tile { border-color: var(--accent, var(--cyan)); animation: tilePulse 1.8s ease-in-out infinite; }
+  .app-icon:active .tile { transform: scale(0.94); }
+  .app-icon .label { font-size: 9.5px; letter-spacing: 0.03em; color: rgba(217,247,242,0.55); }
+  .app-icon .badge {
+    position: absolute; top: -3px; right: 6px; min-width: 15px; height: 15px; padding: 0 3px; border-radius: 8px;
+    background: var(--danger); color: #fff; font-size: 8.5px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 8px rgba(255,77,77,0.6);
+  }
+  @keyframes tilePulse { 0%, 100% { box-shadow: 0 0 14px var(--accent-glow, rgba(34,230,212,0.35)); } 50% { box-shadow: 0 0 24px var(--accent-glow, rgba(34,230,212,0.6)); } }
+
+  /* ── Notification banner ── */
+  .notif-banner {
+    position: absolute; top: 8px; left: 8px; right: 8px; z-index: 90;
+    background: rgba(16,17,26,0.94); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 10px 12px;
+    display: flex; gap: 10px; align-items: flex-start;
+    transform: translateY(-140%); transition: transform 0.35s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  .notif-banner.show { transform: translateY(0); }
+  .notif-banner .nicon { width: 26px; height: 26px; border-radius: 8px; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .notif-banner .nicon svg { width: 15px; height: 15px; }
+  .notif-banner .nbody b { display: block; font-size: 11px; letter-spacing: 0.02em; }
+  .notif-banner .nbody span { font-size: 10.5px; color: rgba(217,247,242,0.65); }
+  .notif-banner.warn { border-color: rgba(255,77,77,0.45); }
+  .notif-banner.warn .nicon { background: rgba(255,77,77,0.15); }
+
+  .location-status { font-size: 10.5px; letter-spacing: 0.05em; color: rgba(217,247,242,0.5); margin-bottom: 14px; line-height: 1.5; }
+  .location-status.warn { color: var(--danger); }
+  .location-list { display: flex; flex-direction: column; gap: 10px; }
+  .location-card { text-align: left; padding: 14px; border: 1px solid var(--panel-line); border-radius: 10px; background: none; color: inherit; }
+  .location-card.current { border-color: var(--cyan); background: rgba(34,230,212,0.06); }
+  .location-name { font-size: 12.5px; font-weight: 700; letter-spacing: 0.04em; display: flex; align-items: center; gap: 8px; }
+  .location-tag { font-size: 8.5px; letter-spacing: 0.1em; color: var(--cyan); border: 1px solid rgba(34,230,212,0.4); border-radius: 999px; padding: 2px 7px; }
+  .location-desc { font-size: 10.5px; color: rgba(217,247,242,0.5); margin-top: 5px; line-height: 1.4; }
+  .location-map {
+    display: block; width: 100%; height: auto; margin-bottom: 16px;
+    border: 1px solid var(--panel-line); border-radius: 12px;
+    background: radial-gradient(circle at 50% 40%, rgba(34,230,212,0.05), transparent 70%);
+  }
+  .map-bldg { fill: rgba(34,230,212,0.07); stroke: rgba(34,230,212,0.15); stroke-width: 1; }
+  .map-route { stroke: rgba(217,247,242,0.14); stroke-width: 1; stroke-dasharray: 3 3; }
+  .map-node circle { fill: rgba(217,247,242,0.45); cursor: pointer; }
+  .map-node.current circle.map-dot { fill: var(--cyan); }
+  .map-node text { fill: rgba(217,247,242,0.55); font-size: 8px; font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em; cursor: pointer; }
+  .map-node.current text { fill: var(--cyan); font-weight: 700; }
+  .map-pulse { fill: none; stroke: var(--cyan); stroke-width: 1.5; transform-origin: center; transform-box: fill-box; animation: mapPulse 1.8s ease-out infinite; }
+  @keyframes mapPulse { 0% { transform: scale(1); opacity: 0.65; } 100% { transform: scale(2.4); opacity: 0; } }
+
+  /* ── App chrome ── */
+  .app-screen { min-height: 100%; display: flex; flex-direction: column; }
+  .app-header { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); flex: 0 0 auto; }
+  .app-header .aicon { width: 28px; height: 28px; border-radius: 8px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .app-header .aicon svg { width: 16px; height: 16px; }
+  .app-header .aname { font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .back-btn { background: none; border: none; color: inherit; font-size: 16px; padding: 0 4px 0 0; line-height: 1; }
+  .app-body { padding: 16px 18px 26px; flex: 1 1 auto; }
+
+  /* ── Messages ── */
+  .bubble-row { display: flex; margin-bottom: 10px; }
+  .bubble-row.out { justify-content: flex-end; }
+  .bubble { max-width: 80%; padding: 10px 13px; border-radius: 16px; font-size: 12.5px; line-height: 1.55; }
+  .bubble-row.in .bubble { background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.14); border-bottom-left-radius: 4px; }
+  .bubble-row.out .bubble { background: var(--cyan); color: #05050a; border-bottom-right-radius: 4px; }
+  .quick-replies { display: flex; flex-direction: column; gap: 8px; margin-top: 18px; }
+  .quick-reply { display: flex; align-items: center; gap: 8px; text-align: left; padding: 11px 14px; border-radius: 14px; border: 1px solid rgba(34,230,212,0.45); background: rgba(34,230,212,0.10); font-size: 12.5px; }
+  .quick-reply:active { background: rgba(34,230,212,0.12); }
+  .quick-reply.skill-check { border-color: rgba(255,207,61,0.5); background: rgba(255,207,61,0.08); }
+
+  /* ── Tracker ── */
+  .radar-wrap { display: flex; justify-content: center; padding: 6px 0 20px; }
+  .radar { position: relative; width: 148px; height: 148px; border-radius: 50%; border: 1px solid rgba(34,230,212,0.25); background: radial-gradient(circle, rgba(34,230,212,0.06), transparent 70%); }
+  .radar::before, .radar::after { content: ''; position: absolute; border: 1px solid rgba(34,230,212,0.12); border-radius: 50%; }
+  .radar::before { inset: 24px; } .radar::after { inset: 48px; }
+  .radar .you { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+  .radar .blip { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--danger); box-shadow: 0 0 10px var(--danger); animation: blipPing 1.6s ease-in-out infinite; }
+  @keyframes blipPing { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.55; } }
+  .log-line { font-size: 12px; line-height: 1.75; color: rgba(217,247,242,0.72); margin-bottom: 8px; }
+  .log-line::before { content: '> '; color: var(--cyan); }
+
+  /* ── Breach terminal ── */
+  .terminal { background: #020203; border: 1px solid rgba(34,230,212,0.2); border-radius: 8px; padding: 12px 14px; font-size: 11.5px; line-height: 1.75; color: var(--cyan); margin-bottom: 18px; }
+  .terminal .tline::before { content: '$ '; opacity: 0.55; }
+
+  /* ── Generic action list (tracker / breach / transmit / call) ── */
+  .action-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; width: 100%; }
+  .action-row { display: flex; align-items: center; gap: 12px; padding: 13px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.07); text-align: left; font-size: 12.5px; }
+  .action-row .aicon2 { width: 30px; height: 30px; border-radius: 9px; background: rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .action-row .aicon2 svg { width: 30px; height: 30px; }
+  .action-row:active { background: rgba(34,230,212,0.1); }
+  .action-row.skill-check { border-color: rgba(255,207,61,0.4); background: rgba(255,207,61,0.06); }
+  .skill-tag {
+    margin-left: auto; flex-shrink: 0; font-size: 8.5px; letter-spacing: 0.1em; color: var(--amber);
+    border: 1px solid rgba(255,207,61,0.4); border-radius: 999px; padding: 3px 7px;
+  }
+
+  /* ── Call screen ── */
+  .call-screen { display: flex; flex-direction: column; align-items: center; padding: 44px 20px 22px; min-height: 100%; }
+  .call-avatar { width: 88px; height: 88px; border-radius: 50%; background: rgba(255,77,77,0.12); border: 1px solid rgba(255,77,77,0.4); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; animation: ringPulse 1.4s ease-in-out infinite; }
+  .call-avatar svg { width: 34px; height: 34px; stroke: var(--danger); }
+  @keyframes ringPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,77,0.4); } 50% { box-shadow: 0 0 0 14px rgba(255,77,77,0); } }
+  .call-name { font-size: 14px; letter-spacing: 0.05em; margin-bottom: 3px; }
+  .call-sub { font-size: 10.5px; color: rgba(217,247,242,0.5); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 18px; }
+  .call-copy { font-size: 12px; line-height: 1.7; color: rgba(217,247,242,0.7); text-align: center; max-width: 280px; margin-bottom: 22px; }
+
+  /* ── Result dialog ── */
+  .dialog-overlay { position: absolute; inset: 0; background: rgba(2,2,4,0.74); display: flex; align-items: center; justify-content: center; padding: 22px; z-index: 95; }
+  .dialog-card { width: 100%; background: #12131c; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 22px 20px; text-align: center; }
+  .dialog-card .dtitle { font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px; }
+  .dialog-card .dbody { font-size: 12.5px; line-height: 1.7; color: rgba(217,247,242,0.8); margin-bottom: 18px; }
+  .dialog-ok { width: 100%; padding: 12px; border-radius: 10px; background: var(--cyan); color: #05050a; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11.5px; border: none; }
+
+  .glitch {
+    position: relative; font-weight: 800; letter-spacing: 0.02em; color: #eafffb;
+    text-shadow: 0 0 18px rgba(34,230,212,0.35);
+  }
+  .glitch::before, .glitch::after { content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%; overflow: hidden; opacity: 0.7; }
+  .glitch::before { color: var(--cyan); transform: translate(-1px,0); animation: glitch1 3.2s infinite steps(1); clip-path: inset(0 0 55% 0); }
+  .glitch::after  { color: var(--magenta); transform: translate(1px,0); animation: glitch2 3.6s infinite steps(1); clip-path: inset(55% 0 0 0); }
+  @keyframes glitch1 { 0%,90%,100% { transform: translate(-1px,0); } 92% { transform: translate(2px,-1px); } 94% { transform: translate(-3px,1px); } 96% { transform: translate(1px,1px); } }
+  @keyframes glitch2 { 0%,88%,100% { transform: translate(1px,0); } 91% { transform: translate(-2px,1px); } 95% { transform: translate(3px,-1px); } 97% { transform: translate(-1px,-1px); } }
+
+  .eyebrow { font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cyan); margin-bottom: 12px; }
+  .eyebrow.magenta { color: var(--magenta); }
+  h1.title { font-size: 1.7rem; line-height: 1.1; margin-bottom: 12px; }
+  .tagline { color: rgba(217,247,242,0.65); font-size: 12.5px; margin-bottom: 20px; line-height: 1.6; }
+  .prose p { color: rgba(217,247,242,0.82); font-size: 12.5px; line-height: 1.75; margin-bottom: 14px; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .primary-btn {
+    display: flex; width: 100%; align-items: center; justify-content: center;
+    background: var(--cyan); color: #05050a; font-weight: 700; letter-spacing: 0.10em;
+    text-transform: uppercase; font-size: 12px; padding: 14px; border: none; margin-top: 6px;
+    box-shadow: 0 0 20px rgba(34,230,212,0.3);
+  }
+  .primary-btn:active { transform: scale(0.98); }
+
+  /* ── Sync arena (reused across every node's SYNC moment) ── */
+  .sync-label { font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--magenta); text-align: center; margin-bottom: 6px; }
+  .sync-sub { font-size: 10.5px; color: rgba(217,247,242,0.45); text-align: center; margin-bottom: 22px; letter-spacing: 0.05em; }
+  .sync-arena { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+  .ring-wrap { position: relative; width: 116px; height: 116px; display: flex; align-items: center; justify-content: center; }
+  .ring-track { position: absolute; inset: 0; border-radius: 50%; border: 2px solid rgba(217,247,242,0.12); }
+  .ring-glyph { position: relative; z-index: 2; font-size: 30px; font-weight: 800; color: #eafffb; }
+
+  /* ── Dodge (rooftop: evade the scan pulse) ── */
+  .dodge-field { position: relative; width: 230px; height: 230px; border-radius: 20px; border: 1px solid rgba(217,247,242,0.15); background: radial-gradient(circle at 50% 50%, rgba(34,230,212,0.05), transparent 70%); overflow: hidden; }
+  .dodge-target { position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--danger); box-shadow: 0 0 12px rgba(255,77,77,0.8); transform: translate(-50%,-50%); }
+  .dodge-target.hit { background: var(--cyan); box-shadow: 0 0 14px var(--cyan); }
+  .dodge-target.late { background: var(--amber); box-shadow: 0 0 14px var(--amber); }
+  .dodge-ring { position: absolute; width: 60px; height: 60px; border-radius: 50%; border: 2px solid rgba(255,77,77,0.55); transform: translate(-50%,-50%) scale(1); transition: transform linear, border-color linear; }
+  .dodge-ring.late { border-color: var(--amber); }
+  .drone-hud { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .drone-score { font-size: 22px; font-weight: 800; color: var(--cyan); }
+  .drone-best { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(217,247,242,0.45); }
+  .drone-wrap {
+    position: relative; width: 100%; height: 360px; border-radius: 16px;
+    border: 1px solid rgba(217,247,242,0.15);
+    background: linear-gradient(180deg, rgba(34,230,212,0.07) 0%, rgba(5,5,10,0.5) 100%);
+    overflow: hidden; touch-action: manipulation;
+  }
+  .drone-wrap canvas { display: block; width: 100%; height: 100%; }
+  .drone-hint { text-align: center; font-size: 10.5px; color: rgba(217,247,242,0.4); letter-spacing: 0.05em; margin-top: 12px; }
+  .drone-overlay {
+    position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 12px;
+    background: rgba(3,3,4,0.8); text-align: center; padding: 20px;
+  }
+  .drone-overlay-score { font-size: 34px; font-weight: 800; color: var(--cyan); }
+
+  .contact-list { display: flex; flex-direction: column; gap: 10px; }
+  .contact-card { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border: 1px solid var(--panel-line); border-radius: 10px; }
+  .contact-card.locked { opacity: 0.4; }
+  .contact-avatar {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    border: 1.5px solid rgba(217,247,242,0.3); color: rgba(217,247,242,0.6);
+    display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;
+  }
+  .contact-name { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; }
+  .contact-role { font-size: 10.5px; color: rgba(217,247,242,0.5); margin-top: 2px; line-height: 1.4; }
+
+  .trophy-count { font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(217,247,242,0.4); margin-bottom: 14px; }
+  .trophy-list { display: flex; flex-direction: column; gap: 10px; }
+  .trophy-row { padding: 12px 14px; border: 1px solid var(--panel-line); border-radius: 10px; opacity: 0.4; }
+  .trophy-row.unlocked { opacity: 1; border-color: rgba(255,207,61,0.4); background: rgba(255,207,61,0.06); }
+  .trophy-title { font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+  .trophy-tag { font-size: 10.5px; color: rgba(217,247,242,0.5); margin-top: 3px; line-height: 1.4; }
+
+  .wallpaper-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .wallpaper-tile { display: flex; flex-direction: column; align-items: center; gap: 8px; background: none; border: none; color: inherit; padding: 0; }
+  .wallpaper-swatch {
+    display: block; width: 100%; aspect-ratio: 1 / 1; border-radius: 12px;
+    background: url('/apps/static-protocol/phone-bg-portrait.jpg') center 18% / cover no-repeat;
+    border: 2px solid rgba(217,247,242,0.15);
+  }
+  .wallpaper-tile.active .wallpaper-swatch { border-color: var(--cyan); box-shadow: 0 0 14px rgba(34,230,212,0.4); }
+  .wallpaper-name { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(217,247,242,0.6); }
+
+  .exfil-hud { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .exfil-hud-group { display: flex; gap: 14px; }
+  .exfil-stat { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(217,247,242,0.5); }
+  .exfil-stat b { color: var(--cyan); font-weight: 700; }
+  .exfil-best { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(217,247,242,0.45); }
+  .exfil-wrap {
+    position: relative; width: 100%; height: 360px; border-radius: 16px;
+    border: 1px solid rgba(217,247,242,0.15);
+    background: linear-gradient(180deg, rgba(34,230,212,0.07) 0%, rgba(5,5,10,0.5) 100%);
+    overflow: hidden; touch-action: manipulation;
+  }
+  .exfil-wrap canvas { display: block; width: 100%; height: 100%; }
+  .exfil-hint { text-align: center; font-size: 10.5px; color: rgba(217,247,242,0.4); letter-spacing: 0.05em; margin-top: 12px; }
+  .exfil-overlay {
+    position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 12px;
+    background: rgba(3,3,4,0.8); text-align: center; padding: 20px;
+  }
+  .exfil-overlay-score { font-size: 30px; font-weight: 800; color: var(--cyan); }
+
+  /* ── Hit feedback: a brief brightness pulse, safe to layer on any element regardless of its own transform ── */
+  @keyframes hitFlash { 0% { filter: brightness(1); } 25% { filter: brightness(2.4); } 100% { filter: brightness(1); } }
+  .hit-pulse { animation: hitFlash 0.3s ease-out; }
+
+  .memory-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; max-width: 300px; }
+  .memory-slot {
+    width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(217,247,242,0.18); font-size: 14px; font-weight: 700; color: rgba(217,247,242,0.3);
+  }
+  .memory-slot.active { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 10px rgba(34,230,212,0.5); background: rgba(34,230,212,0.08); }
+  .memory-slot.hit { border-color: var(--cyan); color: var(--cyan); background: rgba(34,230,212,0.12); }
+  .memory-slot.miss { border-color: var(--danger); color: var(--danger); background: rgba(255,77,77,0.10); }
+
+  .progress-bar { width: 230px; height: 4px; background: rgba(217,247,242,0.12); position: relative; overflow: hidden; }
+  .progress-fill { position: absolute; inset: 0; background: var(--cyan); transform-origin: left; transform: scaleX(1); transition: transform linear; }
+
+  .dpad { display: grid; grid-template-columns: repeat(3, 50px); grid-template-rows: repeat(2, 50px); gap: 7px; justify-content: center; }
+  .dpad button { background: rgba(34,230,212,0.05); border: 1px solid var(--panel-line); color: #eafffb; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+  .dpad button:active { transform: scale(0.92); background: rgba(34,230,212,0.18); }
+  .dpad .d-up { grid-column: 2; grid-row: 1; }
+  .dpad .d-left { grid-column: 1; grid-row: 2; }
+  .dpad .d-down { grid-column: 2; grid-row: 2; }
+  .dpad .d-right { grid-column: 3; grid-row: 2; }
+  .key-hint { font-size: 9.5px; color: rgba(217,247,242,0.35); letter-spacing: 0.06em; text-align: center; }
+
+  /* ── Timing bar (fixer: sell the cover story) ── */
+  .timing-track { position: relative; width: 260px; height: 10px; background: rgba(217,247,242,0.10); border-radius: 5px; }
+  .timing-zone { position: absolute; top: -5px; bottom: -5px; background: rgba(34,230,212,0.14); border: 1px solid rgba(34,230,212,0.4); border-radius: 5px; }
+  .timing-marker { position: absolute; top: -7px; width: 3px; height: 24px; background: #eafffb; box-shadow: 0 0 10px rgba(234,255,251,0.7); border-radius: 2px; left: 0%; }
+  .timing-marker.hit { background: var(--cyan); box-shadow: 0 0 14px var(--cyan); }
+  .timing-marker.late { background: var(--amber); box-shadow: 0 0 14px var(--amber); }
+  .timing-marker.miss { background: var(--danger); box-shadow: 0 0 14px var(--danger); }
+
+  /* ── Quickdraw (confrontation) ── */
+  .quickdraw-stage {
+    width: 180px; height: 180px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    border: 2px solid rgba(217,247,242,0.15); font-size: 13px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(217,247,242,0.4); transition: background 0.12s, border-color 0.12s, color 0.12s, box-shadow 0.12s;
+  }
+  .quickdraw-stage.go { background: rgba(34,230,212,0.16); border-color: var(--cyan); color: #eafffb; box-shadow: 0 0 30px rgba(34,230,212,0.5); }
+  .quickdraw-stage.early { background: rgba(255,77,77,0.16); border-color: var(--danger); color: #fff; box-shadow: 0 0 30px rgba(255,77,77,0.4); }
+
+  /* ── Overload (final climax — mixes react + flash prompts) ── */
+  .overload-flash {
+    width: 96px; height: 96px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    border: 2px solid rgba(255,61,148,0.4); font-size: 11.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(217,247,242,0.4); background: rgba(255,61,148,0.06); transition: background 0.1s, box-shadow 0.1s, color 0.1s;
+  }
+  .overload-flash.go { color: #eafffb; background: rgba(255,61,148,0.32); box-shadow: 0 0 26px rgba(255,61,148,0.6); }
+
+  .flag-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+  .flag-box { border: 1px solid var(--panel-line); padding: 10px 12px; }
+  .flag-box .fk { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(217,247,242,0.4); margin-bottom: 5px; }
+  .flag-box .fv { font-size: 12px; color: var(--cyan); }
+
+  .stat-group { margin-bottom: 22px; }
+  .stat-group:last-child { margin-bottom: 0; }
+  .stat-title { font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(217,247,242,0.4); margin-bottom: 10px; }
+  .stat-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .stat-row:last-child { margin-bottom: 0; }
+  .stat-label { flex: 0 0 64px; font-size: 10px; letter-spacing: 0.05em; color: rgba(217,247,242,0.6); text-transform: uppercase; }
+  .stat-track { flex: 1 1 auto; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.06); overflow: hidden; }
+  .stat-fill { height: 100%; border-radius: 3px; background: var(--cyan); transition: width 0.4s ease; }
+  .stat-val { flex: 0 0 22px; text-align: right; font-size: 10.5px; color: rgba(217,247,242,0.65); }
+  .stat-flags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .stat-pill {
+    font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 10px;
+    border-radius: 999px; border: 1px solid var(--panel-line); color: rgba(217,247,242,0.45);
+  }
+  .stat-pill.on { color: var(--cyan); border-color: var(--cyan); background: rgba(34,230,212,0.08); }
+  .sync-log { display: flex; gap: 5px; margin-top: 2px; }
+  .sync-log span { width: 8px; height: 8px; border-radius: 50%; }
+  .sync-log span.clean { background: var(--cyan); box-shadow: 0 0 6px var(--cyan); }
+  .sync-log span.partial { background: var(--amber); }
+  .sync-log span.fail { background: var(--danger); }
+
+  .screen { display: block; animation: fadein 0.3s ease; }
+  @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="start-menu" id="start-menu">
+  <video class="menu-bg-video-blur" autoplay loop muted playsinline aria-hidden="true" src="/apps/static-protocol/magnific_no-moths-way-more-flicker_3zVs6SqREY.mp4"></video>
+  <video class="menu-bg-video" autoplay loop muted playsinline aria-hidden="true" src="/apps/static-protocol/magnific_no-moths-way-more-flicker_3zVs6SqREY.mp4"></video>
+  <a href="https://waltviviers.com/" class="site-logo" aria-label="Walt Viviers — home">
+    <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+  </a>
+  <div class="menu-panel" id="menu-main">
+    <div class="menu-brand glitch" data-text="STATIC PROTOCOL">STATIC PROTOCOL</div>
+    <div class="menu-loop-tag" id="loop-tag" hidden></div>
+    <div class="menu-copy">A cyberpunk data heist, played entirely on the runner's phone. Five jobs tonight — however you handle them is however this goes.</div>
+    <div class="menu-actions">
+      <button class="primary-btn" id="new-game-btn">New Game</button>
+      <button class="ghost-btn" id="how-to-play-btn">How To Play</button>
+      <a href="/" class="menu-back-link">Back to Main Page</a>
+    </div>
+  </div>
+  <div class="menu-panel menu-howto" id="menu-howto" hidden>
+    <div class="eyebrow magenta">How To Play</div>
+    <div class="prose">
+      <p>This is the runner's phone. Five jobs come through tonight. Tap a notification to open the app it lands in, then pick how you handle it.</p>
+      <p>Every choice triggers a live <b>SYNC</b> — a short minigame, different for every job. Tap the prompts, or use arrow keys / WASD / Space on desktop. Clean it and your choice plays out exactly as intended; fumble it and the job gets forced sideways.</p>
+      <p>Fumble too many and the heat — the signal bars, top right — climbs. Three strikes and the job ends for you, whatever you decide next.</p>
+      <p>Ten different endings are waiting, built from who you trusted, how you got it done, and how steady your hands were.</p>
+    </div>
+    <div class="menu-actions">
+      <button class="primary-btn" id="howto-new-game-btn">New Game</button>
+      <button class="ghost-btn" id="howto-back-btn">Back</button>
+    </div>
+  </div>
+</div>
+
+<div class="device-wrap" id="device-wrap" hidden>
+  <video class="bg-video" id="bg-video" loop muted playsinline preload="none" aria-hidden="true"></video>
+  <script>
+    // Desktop only — on the mobile breakpoint the phone fills the screen and the video is never seen.
+    if (window.matchMedia('(min-width: 481px)').matches) {
+      var bgVideo = document.getElementById('bg-video');
+      bgVideo.src = '/apps/static-protocol/magnific_just-a-subtle-loop_s7NG0CJl8e.mp4';
+      bgVideo.play().catch(function () {});
+    }
+  </script>
+  <div class="phone">
+    <div class="phone-bg" aria-hidden="true"></div>
+    <div class="notch" aria-hidden="true"></div>
+    <div class="status-bar">
+      <span id="clock-time">23:47</span>
+      <div class="status-right">
+        <button class="mute-toggle" id="mute-toggle" aria-label="Toggle sound"><svg id="mute-icon" viewBox="0 0 24 24"></svg></button>
+        <div class="signal-bars" id="signal-bars" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="battery" aria-hidden="true"><div class="battery-fill" id="battery-fill" style="width:100%"></div></div>
+      </div>
+    </div>
+    <div id="phone-screen"></div>
+    <div class="home-indicator" aria-hidden="true"><span></span></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ── Glyph set (react + memory SYNC input) ── */
+var GLYPHS = [
+  { sym: '▲', key: 'up',    keys: ['ArrowUp','w','W'] },
+  { sym: '▼', key: 'down',  keys: ['ArrowDown','s','S'] },
+  { sym: '◀', key: 'left',  keys: ['ArrowLeft','a','A'] },
+  { sym: '▶', key: 'right', keys: ['ArrowRight','d','D'] }
+];
+function glyphByKey(k) { for (var i=0;i<GLYPHS.length;i++) if (GLYPHS[i].keys.indexOf(k) !== -1) return GLYPHS[i]; return null; }
+function randomGlyph(prev) {
+  var g;
+  do { g = GLYPHS[Math.floor(Math.random()*GLYPHS.length)]; } while (GLYPHS.length > 1 && prev && g.key === prev.key);
+  return g;
+}
+
+/* ── Choice icons: the object/person each option is about ── */
+var ICONS = {
+  drone:  function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><rect x="-15" y="-5" width="30" height="9" rx="3"/><circle cx="-15" cy="-0.5" r="3" fill="' + a + '"/><circle cx="15" cy="-0.5" r="3" fill="' + a + '"/><line x1="0" y1="4" x2="0" y2="12"/></g>'; },
+  door:   function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><rect x="-16" y="-20" width="32" height="42" rx="2"/><line x1="-16" y1="2" x2="16" y2="2"/><line x1="0" y1="-20" x2="0" y2="22"/></g>'; },
+  tower:  function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><line x1="0" y1="-24" x2="0" y2="14"/><line x1="-8" y1="14" x2="8" y2="14"/><path d="M-12 -4 a17 17 0 0 1 24 0" stroke-opacity="0.75"/><path d="M-18 -12 a26 26 0 0 1 36 0" stroke-opacity="0.45"/></g>'; },
+  shadow: function (a) { return '<g><circle r="22" fill="#05050a" opacity="0.55"/><path d="M-9,-7 L0,8 L9,-7" stroke="' + a + '" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>'; },
+  signal: function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><circle cx="0" cy="6" r="3.4" fill="' + a + '" stroke="none"/><path d="M-11 -1 a15 15 0 0 1 22 0" opacity="0.85"/><path d="M-18 -8 a24 24 0 0 1 36 0" opacity="0.5"/></g>'; },
+  seal:   function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><polygon points="0,-19 16,-9.5 16,9.5 0,19 -16,9.5 -16,-9.5"/><circle cx="0" cy="0" r="5" fill="' + a + '" stroke="none"/></g>'; },
+  drive:  function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><rect x="-15" y="-9" width="30" height="19" rx="2"/><line x1="-8" y1="10" x2="-8" y2="16"/><line x1="0" y1="10" x2="0" y2="16"/><line x1="8" y1="10" x2="8" y2="16"/></g>'; },
+  terminal: function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><rect x="-17" y="-13" width="34" height="23" rx="1.5"/><line x1="-17" y1="15" x2="17" y2="15"/><line x1="-8" y1="15" x2="-10" y2="21"/><line x1="8" y1="15" x2="10" y2="21"/><line x1="-9" y1="-3" x2="3" y2="-3"/></g>'; },
+  eye:    function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2"><circle r="14"/><circle r="5" fill="' + a + '" stroke="none"/><line x1="-21" y1="0" x2="-15" y2="0"/><line x1="15" y1="0" x2="21" y2="0"/><line x1="0" y1="-21" x2="0" y2="-15"/></g>'; },
+  talk:   function (a) { return '<g fill="none" stroke="' + a + '" stroke-width="2" stroke-linecap="round"><path d="M-15,-9 q-7,9 0,18"/><path d="M15,-9 q7,9 0,18"/><circle cx="0" cy="0" r="3" fill="' + a + '" stroke="none"/></g>'; },
+  figure: function (a) { return '<g fill="' + a + '" opacity="0.92"><circle cx="0" cy="-15" r="6.5"/><path d="M-10,20 L-7,-4 L7,-4 L10,20 Z"/></g>'; },
+  flame:  function (a) { return '<path d="M0,-19 C9,-9 9,2 0,11 C-9,2 -9,-9 0,-19 Z M0,-3 C4,2 3,8 0,11 C-3,8 -4,2 0,-3 Z" fill="' + a + '"/>'; }
+};
+function choiceIconSvg(name, accent) { return '<svg viewBox="-24 -24 48 48">' + (ICONS[name] ? ICONS[name](accent) : '') + '</svg>'; }
+
+/* ── App icons (home grid + headers) ── */
+var APP_ICONS = {
+  messages: function () { return '<path d="M4 5h16v12H9l-4 4V5z" fill="none" stroke="currentColor" stroke-width="1.6"/><line x1="8" y1="9" x2="16" y2="9" stroke="currentColor" stroke-width="1.3"/><line x1="8" y1="13" x2="13" y2="13" stroke="currentColor" stroke-width="1.3"/>'; },
+  tracker:  function () { return '<circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><line x1="12" y1="2" x2="12" y2="5" stroke="currentColor" stroke-width="1.4"/>'; },
+  breach:   function () { return '<path d="M4 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="18" x2="20" y2="18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>'; },
+  transmit: function () { return '<path d="M12 4v13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M7 9l5-5 5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 17v3h14v-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'; },
+  camera:   function () { return '<rect x="3" y="7" width="18" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="13.5" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 7l1.5-2.5h5L16 7" fill="none" stroke="currentColor" stroke-width="1.5"/>'; },
+  notes:    function () { return '<rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="8" x2="16" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="1.3"/><line x1="8" y1="16" x2="13" y2="16" stroke="currentColor" stroke-width="1.3"/>'; },
+  status:   function () { return '<path d="M12 3l7 3.5v5c0 5-3 8.5-7 9.5-4-1-7-4.5-7-9.5v-5L12 3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>'; },
+  stats:    function () { return '<rect x="4" y="14" width="4" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="9" width="4" height="12" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="16" y="4" width="4" height="17" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/>'; },
+  dronegame: function () { return '<line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="8" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="6" cy="6" r="2.2" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="18" cy="6" r="2.2" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="6" cy="18" r="2.2" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="18" cy="18" r="2.2" fill="none" stroke="currentColor" stroke-width="1.4"/><line x1="7.5" y1="7.5" x2="10.3" y2="10.3" stroke="currentColor" stroke-width="1.3"/><line x1="16.5" y1="7.5" x2="13.7" y2="10.3" stroke="currentColor" stroke-width="1.3"/><line x1="7.5" y1="16.5" x2="10.3" y2="13.7" stroke="currentColor" stroke-width="1.3"/><line x1="16.5" y1="16.5" x2="13.7" y2="13.7" stroke="currentColor" stroke-width="1.3"/>'; },
+  trophy:   function () { return '<path d="M7 4h10v4a5 5 0 0 1-10 0V4z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 5H4v2a3 3 0 0 0 3 3" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M17 5h3v2a3 3 0 0 1-3 3" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="12" y1="13" x2="12" y2="20" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="20" x2="16" y2="20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>'; },
+  contacts: function () { return '<rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="12" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M7 17c0-2.5 2-4 5-4s5 1.5 5 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>'; },
+  wallpaper: function () { return '<rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8.5" cy="9.5" r="1.6" fill="currentColor"/><path d="M4 16l5-5 4 4 3-3 4 4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>'; },
+  walthome: function () { return '<path d="M4 11l8-7 8 7" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9h12v-9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><line x1="10" y1="19" x2="10" y2="14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>'; },
+  exfilgame: function () { return '<path d="M12 3l3 5v6H9V8l3-5z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="9" r="1.2" fill="currentColor"/><path d="M9 14l-2 3M15 14l2 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M10 17l2 4 2-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>'; },
+  jackout: function () { return '<path d="M9 4H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M13 8l5 4-5 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><line x1="9" y1="12" x2="18" y2="12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>'; },
+  locationpin: function () { return '<path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.4"/>'; }
+};
+function appIconSvg(id) { return '<svg viewBox="0 0 24 24">' + (APP_ICONS[id] ? APP_ICONS[id]() : '') + '</svg>'; }
+
+var APPS = [
+  { id: 'messages', name: 'Messages', icon: 'messages', color: '#22e6d4' },
+  { id: 'tracker',  name: 'Tracker',  icon: 'tracker',  color: '#22e6d4' },
+  { id: 'breach',   name: 'BREACH',   icon: 'breach',   color: '#22e6d4' },
+  { id: 'transmit', name: 'Transmit', icon: 'transmit', color: '#ff3d94' },
+  { id: 'camera',   name: 'Cam',      icon: 'camera',   color: '#8b909a' },
+  { id: 'notes',    name: 'Notes',    icon: 'notes',    color: '#8b909a' },
+  { id: 'status',   name: 'Status',   icon: 'status',   color: '#8b909a' },
+  { id: 'stats',    name: 'Stats',    icon: 'stats',    color: '#ffcf3d' },
+  { id: 'drone',    name: 'Drone',    icon: 'dronegame', color: '#22e6d4' },
+  { id: 'trophy',   name: 'Endings',  icon: 'trophy',    color: '#ffcf3d' },
+  { id: 'contacts', name: 'Contacts', icon: 'contacts',  color: '#8b909a' },
+  { id: 'wallpaper', name: 'Wallpaper', icon: 'wallpaper', color: '#ff3d94' },
+  { id: 'exfil',    name: 'Exfil',    icon: 'exfilgame', color: '#22e6d4' },
+  { id: 'walt',     name: 'WALT',     icon: 'walthome',  color: '#8b909a' },
+  { id: 'jackout',  name: 'Jack Out', icon: 'jackout',   color: '#ff4d4d' },
+  { id: 'location', name: 'Location', icon: 'locationpin', color: '#22e6d4' }
+];
+function appById(id) { for (var i = 0; i < APPS.length; i++) if (APPS[i].id === id) return APPS[i]; return null; }
+
+var LOCATIONS = [
+  { id: 'rooftop',   name: 'Rooftop',    desc: 'High above the grid — thin drone coverage, but nowhere to run if they close in.' },
+  { id: 'alley',     name: 'Back Alley', desc: 'Tight, dark, full of blind spots. The fixer\'s territory.' },
+  { id: 'underpass', name: 'Underpass',  desc: 'Street-level chaos. Easy to vanish into, easy to get boxed in.' },
+  { id: 'plaza',     name: 'Corp Plaza', desc: 'Cameras on every corner — but nobody looks twice at a suit.' }
+];
+var LOCATION_STALE_LIMIT = 2;
+
+/* ── Narrative data ── */
+/* A starting-path choice before the run itself begins — no SYNC, just a
+   head start: a method lean and one free skill point toward it. */
+var NODE_PROLOGUE = {
+    id: 'prologue',
+    art: { accent: '#8b909a' },
+    app: 'messages',
+    sender: 'FIXER',
+    notif: { title: 'Messages', body: 'FIXER sent you the brief' },
+    label: 'PROLOGUE — HOW YOU WORK',
+    noSync: true,
+    scene: [
+      "The brief lands with no warmth in it, same as always: a drive, a rooftop, a window before Corp security finishes their sweep. \"You know the job,\" the fixer writes. \"Question's how you're doing it tonight.\"",
+      "Old habits are still the fastest way in. Pick the one that's kept you breathing this long."
+    ],
+    choices: [
+      { id: 'ghost',  icon: 'shadow', label: 'Ghost — quiet, careful, gone before anyone notices', method: { stealth: 2 },
+        response: "\"Quiet works,\" you type back. It always has. Whatever's waiting on that roof, it isn't going to see you coming." },
+      { id: 'muscle', icon: 'figure', label: 'Muscle — fast, loud, through anything in the way',    method: { violence: 2 },
+        response: "\"Fast and loud,\" you send, already moving. Subtlety's a tool like any other — tonight just isn't the night for it." },
+      { id: 'talker', icon: 'talk',   label: 'Talker — favours, angles, a way through every door',   method: { words: 2 },
+        response: "\"I'll talk my way in,\" you write, and you mean it. Half the city owes somebody a favour. Tonight, that somebody's you." }
+    ],
+    onSelect: function (state, choice) {
+      if (choice.id === 'ghost') state.skills.hacking += 1;
+      else if (choice.id === 'muscle') state.skills.combat += 1;
+      else if (choice.id === 'talker') state.skills.charisma += 1;
+    }
+};
+
+/* Nodes 1, 2, 4, 5 are fixed. Node 3 branches into one of three variants,
+   picked by whichever trust is dominant once node 2 resolves — a real fork
+   in scene, choices and SYNC mechanic, not just re-flavoured text. */
+var NODE_ROOFTOP = {
+    id: 'rooftop',
+    art: { accent: '#22e6d4' },
+    app: 'tracker',
+    notif: { title: 'Tracker', body: 'Contact closing on your position' },
+    label: 'NODE 01 — ROOFTOP EXTRACTION',
+    scene: [
+      "Rain needles down through forty storeys of neon haze. The extraction was supposed to be quiet — in, grab the drive, out before anyone blinked. It isn't quiet any more.",
+      "A security drone unfolds from the water tank behind you, lens strobing red, already threading a scan pulse across the roof. Somewhere below, a voice on comms reads your name off a manifest like it's already evidence."
+    ],
+    choices: [
+      { id: 'fight',  icon: 'drone',  label: 'Fight the drone',              method: { violence: 2 }, trust: {} },
+      { id: 'slip',   icon: 'shadow', label: 'Slip past it',                 method: { stealth: 2 },  trust: {} },
+      { id: 'favour', icon: 'signal', label: 'Call in a Street favour',      method: { stealth: 1 },  trust: { street: 2 } }
+    ],
+    sync: { mode: 'dodge', rounds: 5, duration: 1300, label: 'EVADE THE SCAN PULSE', sub: 'Tap the gap before the ring closes' },
+    outcomes: {
+      clean: function (c) {
+        return c.id === 'fight'  ? "The drone never gets a shot off. Its optics spark and die under your fists before it finishes turning."
+             : c.id === 'slip'   ? "You read the sweep pattern perfectly and thread every gap. It scans an empty rooftop."
+             :                     "Your contact kills the drone's uplink right on cue. It freezes mid-turn, blind.";
+      },
+      partial: function (c) {
+        return c.id === 'fight'  ? "You wreck it — but not before it screams a fragment of your position into the building's grid."
+             : c.id === 'slip'   ? "You make it past, barely. A stray footstep pings on its audio log."
+             :                     "The favour lands late. The drone catches half a heat signature before it dies.";
+      },
+      fail: function () {
+        return "It doesn't go your way. The drone gets a clean shot off into the building's alarm mesh, and by the time you're moving again, the whole tower knows you're here.";
+      }
+    },
+    onFail: function (state) { state.flags.hunted++; if (state.lastChoice.id !== 'fight') state.flags.method.violence++; },
+    onPartial: function () {}
+};
+
+/* Interludes: pure dialogue, no SYNC — the character beats that balance the action nodes.
+   Each response nudges alignment (good/neutral/evil), which only matters for one thing:
+   staying near-neutral across both is what secretly breaks the loop. */
+var NODE_CHECKIN = {
+    id: 'checkin',
+    art: { accent: '#8b909a' },
+    app: 'messages',
+    sender: 'MARA',
+    notif: { title: 'Messages', body: 'MARA sent you a message' },
+    label: 'INTERLUDE — AN OLD FRIEND CHECKS IN',
+    noSync: true,
+    scene: [
+      "The drone's barely cooled before your phone buzzes. Mara — the only person from your old crew who still has this number, and still uses it.",
+      "\"Heard there's a job going around with your name near it,\" she writes. \"Just — be smart out there, yeah? Whatever you're doing.\""
+    ],
+    choices: [
+      { id: 'reassure', icon: 'talk',   label: 'Tell her the truth, gently',       align: { good: 2 },    response: "You tell her enough to matter and none of the parts that would keep her up at night. \"I'll be careful,\" you add, and for once you mean it." },
+      { id: 'deflect',  icon: 'shadow', label: 'Keep it vague, change the subject', align: { neutral: 2 }, response: "You give her nothing she can worry about and nothing she can use — just enough small talk to close the conversation without closing the door." },
+      { id: 'cut-off',  icon: 'door',   label: 'Tell her to stop checking on you',  align: { evil: 2 },    response: "You're short with her, sharper than you mean to be, and by the time you notice it's too late to take it back. She doesn't write again tonight." },
+      { id: 'reroute',  icon: 'signal', label: 'Talk her down completely',          align: { good: 1, neutral: 1 }, requires: { skill: 'charisma', min: 2 },
+        response: "You talk her all the way down — not vague, not clinical, just steady and sure enough that she actually believes it. \"Okay,\" she finally says. \"Okay. Just — text me after.\" It costs you nothing and buys you something you can't quite name." }
+    ],
+    onSelect: function (state, choice) { if (choice.id === 'reroute') state.flags.resolve = Math.min(3, state.flags.resolve + 1); }
+};
+
+var NODE_FIXER = {
+    id: 'fixer',
+    art: { accent: '#ffcf3d' },
+    app: 'messages',
+    sender: 'FIXER',
+    notif: { title: 'Messages', body: 'FIXER sent you a message' },
+    label: 'NODE 02 — BACK-ALLEY FIXER',
+    scene: [
+      "The drive sits warm in your pocket, like it knows what's on it. Your fixer's booth smells of solder and instant noodles, three screens throwing blue light across a face that's done this a hundred times and trusts none of them.",
+      "\"So,\" they say, not looking up from the screens. \"Who's buying tonight — Corp, the Street crowd, or nobody at all?\""
+    ],
+    choices: [
+      { id: 'corp',   icon: 'seal',   label: 'Sell to Corp',                          method: {},              trust: { corp: 2 } },
+      { id: 'street', icon: 'signal', label: 'Hand it to the Street resistance',      method: { words: 1 },    trust: { street: 2 } },
+      { id: 'keep',   icon: 'drive',  label: 'Keep it for yourself',                  method: { stealth: 1 },  trust: { self: 2 } }
+    ],
+    sync: { mode: 'timing', rounds: 5, duration: 1500, label: 'SELL THE COVER STORY', sub: 'Stop the signal inside the truth zone' },
+    outcomes: {
+      clean: function (c) {
+        return c.id === 'corp'   ? "You talk the price up twice and the fixer doesn't blink once. Clean money, clean exit."
+             : c.id === 'street' ? "The fixer believes every word — and, for once, so do you."
+             :                     "Your story holds all the way through. Whatever's on that drive, it's still only yours.";
+      },
+      partial: function () {
+        return "The story mostly holds, but the fixer's eyes linger half a second too long on your hands. They'll remember that.";
+      },
+      fail: function () {
+        return "You stumble on the third beat of the lie, and the fixer's smile goes somewhere cold. They already know who they're calling the second you leave.";
+      }
+    },
+    onFail: function (state) { state.flags.hunted++; state.flags.betrayed = true; },
+    onPartial: function () {}
+};
+
+var NODE_TAIL = {
+    id: 'tail',
+    art: { accent: '#22e6d4' },
+    app: 'tracker',
+    notif: { title: 'Tracker', body: 'Someone\'s matching your pace' },
+    label: 'SOMEONE\'S ON YOU',
+    scene: [
+      "Two blocks from the fixer's booth, you clock it: the same jacket in the reflection of three different windows, always a half-step behind, never quite closing the gap.",
+      "Whoever it is, they're patient. You're not going to out-walk them. You need to decide how this ends before they do."
+    ],
+    choices: [
+      { id: 'shake',    icon: 'shadow', label: 'Lose them in the crowd',        method: { stealth: 2 },  trust: {} },
+      { id: 'corner',   icon: 'figure', label: 'Turn it around, corner them',   method: { violence: 2 }, trust: {} },
+      { id: 'call-out', icon: 'talk',   label: 'Call them out, see who blinks', method: { words: 2 },    trust: {} }
+    ],
+    sync: { mode: 'timing', rounds: 5, duration: 1250, label: 'BREAK THE TAIL', sub: 'Stop the signal inside the gap' },
+    outcomes: {
+      clean: function (c) {
+        return c.id === 'shake'   ? "You fold into the crowd at exactly the right second and come out the other side alone. Whoever it was, they're still checking doorways two streets back."
+             : c.id === 'corner'  ? "You close the distance instead of running, and they don't expect that at all. By the time they recover, you've got everything you need to know about who sent them."
+             :                      "You turn and just ask, flat out, and something about doing it in the open rattles them enough to answer honestly before they think better of it.";
+      },
+      partial: function () {
+        return "You lose them, mostly — but not before they get a decent look at your face. That's a cost you'll be paying later, not tonight.";
+      },
+      fail: function () {
+        return "You don't lose them at all. They peel off only once they're sure you've clocked exactly how thoroughly you're being watched.";
+      }
+    },
+    onFail: function (state) { state.flags.hunted++; },
+    onPartial: function (state) { state.flags.notoriety += 1; }
+};
+
+/* Branch: dominant trust after the fixer decides which of these three plays out. */
+var NODE_SERVER_STREET = {
+    id: 'server-street',
+    art: { accent: '#22e6d4' },
+    app: 'breach',
+    notif: { title: 'BREACH', body: 'Terminal in range — signal locked' },
+    label: 'NODE 03 — SERVER ROOM',
+    scene: [
+      "Corp Tower, sub-level six. Rows of black server racks breathe cold air into a room that shouldn't exist on any building plan. Somewhere in this grid is the rest of what the drive started — enough to burn the district down, or build it back up.",
+      "A terminal blinks awake under your fingers, and for a second you could swear something on the other side of the glass blinks back."
+    ],
+    choices: [
+      { id: 'stealth', icon: 'terminal', label: 'Stealth hack the terminal',   method: { stealth: 2 },  trust: {} },
+      { id: 'brute',   icon: 'door',     label: 'Loud brute-force it',         method: { violence: 2 }, trust: {} },
+      { id: 'ai',      icon: 'eye',      label: 'Recruit the rogue AI',        method: { words: 1 },    trust: { self: 1 } }
+    ],
+    sync: { mode: 'memory', length: 6, flashMs: 480, gapMs: 160, recallPerGlyph: 1300, label: 'MATCH THE GLYPH KEY', sub: 'Memorise the pattern, then repeat it' },
+    outcomes: {
+      clean: function (c) {
+        return c.id === 'stealth' ? "You move through the terminal like it's asleep. Doors open ahead of you before you even reach for them."
+             : c.id === 'brute'   ? "You tear the firewalls apart with brutal, perfect precision — done before the room can react."
+             :                      "The AI answers. Not in code — in something closer to relief. A door opens that was never meant to.";
+      },
+      partial: function () {
+        return "You get what you came for, but the terminal logs a partial trace on its way out. Something upstream just noticed.";
+      },
+      fail: function () {
+        return "Your pattern breaks halfway through. Alarms bloom red down the corridor outside, and the quiet part of the job is over.";
+      }
+    },
+    onFail: function (state) { state.flags.hunted++; if (state.lastChoice.id !== 'brute') state.flags.method.violence++; },
+    onPartial: function () {},
+    onSelect: function (state, choice) { if (choice.id === 'ai') state.flags.aiAlly = true; }
+};
+
+var NODE_SERVER_CORP = {
+    id: 'server-corp',
+    art: { accent: '#ffcf3d' },
+    app: 'breach',
+    notif: { title: 'BREACH', body: 'Access granted — somebody\'s watching' },
+    label: 'NODE 03 — CORP CLEARANCE',
+    scene: [
+      "Corp Tower, sub-level six — except this time the elevator already knows your floor. The credentials your fixer traded away get you further than you expected: a terminal, live, unlocked, no alarm anywhere in earshot. That's the part that should worry you.",
+      "Every door that opens this easily is a door somebody upstairs is watching close on a screen you'll never see. You've got a badge that isn't really yours, and about as much time as it takes them to double-check the name on it."
+    ],
+    choices: [
+      { id: 'play-along', icon: 'seal',     label: 'Play the authorised visitor',   method: { words: 1 },   trust: { corp: 1 } },
+      { id: 'grab-fast',  icon: 'terminal', label: 'Grab the data and get out fast', method: { stealth: 1 }, trust: {} },
+      { id: 'go-dark',    icon: 'eye',      label: 'Cut the feed and improvise',     method: { violence: 1 }, trust: {} }
+    ],
+    sync: { mode: 'quickdraw', rounds: 4, minDelay: 700, maxDelay: 1800, hitMs: 240, lateMs: 500, label: 'HOLD THE COVER', sub: 'Every check-in is a chance they clock you' },
+    outcomes: {
+      clean: function (c) {
+        return c.id === 'play-along' ? "You badge through three separate checkpoints without a flicker of doubt from anyone watching. Whoever built this cover, they built it well."
+             : c.id === 'grab-fast'  ? "You're in, you're out, and the terminal never even finishes logging your session."
+             :                         "You kill the feed clean — thirty seconds of true blindness, and you use every one of them.";
+      },
+      partial: function () {
+        return "You get through, but a supervisor's badge pings twice on your way out. Filed away. Not urgent. Not forgotten, either.";
+      },
+      fail: function () {
+        return "The credentials hold for exactly as long as it takes someone to actually read your face against the file photo. Then they don't hold at all.";
+      }
+    },
+    onFail: function (state) { state.flags.hunted++; state.flags.trust.corp = Math.max(0, state.flags.trust.corp - 1); },
+    onPartial: function () {}
+};
+
+var NODE_SERVER_SELF = {
+    id: 'server-self',
+    art: { accent: '#ff3d94' },
+    app: 'breach',
+    notif: { title: 'BREACH', body: 'You\'re on your own for this one' },
+    label: 'NODE 03 — SOLO BREAK-IN',
+    scene: [
+      "No fixer intel, no street map of the guard rotation, no corp clearance riding shotgun for you tonight — just sub-level six, a terminal that doesn't care whose idea this was, and the sound of your own breathing.",
+      "Whatever happens in this room, there's nobody to call if it goes wrong. You've got maybe ninety seconds before the next patrol swings back through. Alone, ninety seconds is a very long time."
+    ],
+    choices: [
+      { id: 'quiet', icon: 'shadow',   label: 'Move quiet, trust nothing',      method: { stealth: 2 },  trust: { self: 1 } },
+      { id: 'force', icon: 'door',     label: 'Force the terminal open',        method: { violence: 2 }, trust: {} },
+      { id: 'gamble', icon: 'eye',     label: 'Gamble on the rogue AI again',   method: { words: 1 },    trust: { self: 1 } }
+    ],
+    sync: { mode: 'dodge', rounds: 6, duration: 1050, label: 'CLEAR EACH PATROL GAP', sub: 'Nobody\'s covering you if you miss one' },
+    outcomes: {
+      clean: function (c) {
+        return c.id === 'quiet'  ? "You thread every gap in the rotation like you've walked it a hundred times before. Nobody so much as glances your way."
+             : c.id === 'force'  ? "You're through before the terminal even finishes complaining about it. Brute, but nobody's around to hear it."
+             :                     "The AI answers again, quieter this time — like it already knew you'd come back alone.";
+      },
+      partial: function () {
+        return "You get through, but one patrol nearly doubles back on you. Too close, and you both know it.";
+      },
+      fail: function () {
+        return "The rotation catches you halfway across the floor, and there's no favour, no cover story, nobody at all to talk you out of this one.";
+      }
+    },
+    onFail: function (state) { state.flags.hunted++; },
+    onPartial: function () {},
+    onSelect: function (state, choice) { if (choice.id === 'gamble') state.flags.aiAlly = true; }
+};
+
+function pickServerVariant(state) {
+  var t = dominant(state.flags.trust, ['street', 'self', 'corp']);
+  if (t === 'corp') return NODE_SERVER_CORP;
+  if (t === 'self') return NODE_SERVER_SELF;
+  return NODE_SERVER_STREET;
+}
+
+var NODE_DEBRIEF = {
+    id: 'debrief',
+    art: { accent: '#8b909a' },
+    app: 'messages',
+    sender: 'FIXER',
+    notif: { title: 'Messages', body: 'FIXER wants a status update' },
+    label: 'INTERLUDE — THE FIXER WANTS WORDS',
+    noSync: true,
+    scene: [
+      "Your phone buzzes before you're even off the property. \"Heard you were in and out,\" the fixer writes. Word travels fast when it's about you.",
+      "\"So — what actually happened in there? And more importantly: does anyone know it was you?\""
+    ],
+    choices: [
+      { id: 'honest', icon: 'talk',   label: 'Tell them exactly what happened',           align: { good: 1 },
+        response: "You lay it out straight, no spin. \"Appreciate that,\" the fixer writes back, and for once it sounds like they mean it." },
+      { id: 'spin',   icon: 'shadow', label: 'Give them the version that sounds cleaner', align: { neutral: 1 },
+        response: "You round the edges off the story until it sounds like it went exactly to plan. The fixer doesn't push. They rarely do." },
+      { id: 'silent', icon: 'door',   label: 'Don\'t answer at all',                       align: { evil: 1 },
+        response: "You leave it on read. Whatever the fixer makes of that, they'll have to make of it without you." },
+      { id: 'reassure2', icon: 'signal', label: 'Talk them down about the exposure',       align: { neutral: 1 }, requires: { skill: 'charisma', min: 2 },
+        response: "You talk them through exactly what did and didn't get seen, calm enough and specific enough that the worry actually leaves their voice. \"Okay,\" they write. \"Okay, I believe you.\"" }
+    ],
+    onSelect: function (state, choice) { if (choice.id === 'reassure2') state.flags.resolve = Math.min(3, state.flags.resolve + 1); }
+};
+
+var NODE_WITNESS = {
+    id: 'witness',
+    art: { accent: '#8b909a' },
+    app: 'messages',
+    sender: 'UNKNOWN NUMBER',
+    notif: { title: 'Messages', body: 'Unknown number is messaging you' },
+    label: 'INTERLUDE — SOMEONE SAW YOU',
+    noSync: true,
+    scene: [
+      "Your phone lights up with a number you don't recognise, one very close call after the server room. \"I saw you in there,\" it says. \"I'm not calling anyone. Yet.\"",
+      "Whoever it is, they're not asking for money. They're asking what you're going to do about what you just took."
+    ],
+    choices: [
+      { id: 'promise',   icon: 'talk',   label: 'Promise them it\'ll be used right',        align: { good: 2 },    response: "You mean it when you say it, and something in the silence on the other end suggests they believe you, at least a little." },
+      { id: 'noncommit', icon: 'shadow', label: 'Say nothing you can be held to',            align: { neutral: 2 }, response: "You keep it noncommittal — not a lie, not a promise, just enough words to end the conversation without starting anything else." },
+      { id: 'threaten',  icon: 'figure', label: 'Make it clear silence is the only option',  align: { evil: 2 },    response: "You make yourself very clear. The reply, when it comes, is just: \"understood.\" You believe them. You're not proud of that." },
+      { id: 'trace',     icon: 'terminal', label: 'Trace the number and lock it down',       align: { neutral: 2 }, requires: { skill: 'hacking', min: 2 },
+        response: "You're already tracing the number before you've finished reading the text — three hops, a burner, a dead end that isn't quite dead. You don't need to threaten anyone. You just need them to know you could find them exactly as easily as they found you. The line goes quiet, and stays that way." }
+    ],
+    onSelect: function (state, choice) { if (choice.id === 'trace') state.flags.resolve = Math.min(3, state.flags.resolve + 1); }
+};
+
+var NODE_CONFRONTATION = {
+    id: 'confrontation',
+    art: { accent: '#ff4d4d' },
+    app: 'call',
+    caller: 'UNKNOWN',
+    label: 'NODE 04 — CONFRONTATION',
+    scene: [
+      "They're waiting where the market stalls thin out — Corp security, or what's left of your old crew, depending on how the last hour went. Either way there's a gun levelled and your name said like a question.",
+      "This is the part of the run nobody writes up afterward. This is just you, and whatever you decide to do with the next ten seconds."
+    ],
+    choices: [
+      { id: 'negotiate', icon: 'talk',   label: 'Negotiate',                  method: { words: 2 },    trust: {} },
+      { id: 'fight',     icon: 'figure', label: 'Fight',                       method: { violence: 2 }, trust: {} },
+      { id: 'flee',      icon: 'shadow', label: 'Flee through the crowd',      method: { stealth: 2 },  trust: {} }
+    ],
+    sync: { mode: 'quickdraw', rounds: 4, minDelay: 900, maxDelay: 2200, hitMs: 260, lateMs: 550, label: 'QUICK-DRAW / DODGE', sub: 'Wait for the cue. Fire the instant it drops.' },
+    outcomes: {
+      clean: function (c) {
+        return c.id === 'negotiate' ? "You keep talking, calm and level, until the gun lowers on its own. Nobody bleeds today."
+             : c.id === 'fight'     ? "It's over before it starts. You're already past them, and they're still reaching."
+             :                        "The crowd swallows you whole. By the time they push through it, there's nothing left to find.";
+      },
+      partial: function () { state.flags.hurt = true; return "It goes mostly your way, but not for free — you're carrying a graze you'll feel tomorrow, if there is one."; },
+      fail: function () { state.flags.hurt = true; return "It goes loud and it goes wrong. You get clear, but not clean — and not without a mark to show for it."; }
+    },
+    onFail: function (state) { state.flags.hunted++; },
+    onPartial: function () {}
+};
+
+var NODE_FINAL = {
+    id: 'final',
+    art: { accent: '#ff3d94' },
+    app: 'transmit',
+    notif: { title: 'Transmit', body: 'Package ready — awaiting destination' },
+    label: 'NODE 05 — FINAL CHOICE',
+    scene: [
+      "It comes down to this: the drive, the data, and whatever's left of who you were before tonight. Broadcast it wide, hand it to the highest bidder, feed it to the thing that's been talking to you through the wires, burn it, or just — disappear.",
+      "Whatever you choose next, the city won't ask your permission to remember it."
+    ],
+    choices: [
+      { id: 'broadcast', icon: 'tower',  label: 'Broadcast the data to the net' },
+      { id: 'corp',       icon: 'seal',   label: 'Hand it to Corp' },
+      { id: 'merge',      icon: 'eye',    label: 'Merge with the AI' },
+      { id: 'destroy',    icon: 'flame',  label: 'Destroy it' },
+      { id: 'vanish',     icon: 'shadow', label: 'Vanish' }
+    ],
+    sync: { mode: 'overload', rounds: 9, label: 'FULL SYNC — HOLD THE LINE', sub: 'The climax. Everything you\'ve got, right now' },
+    outcomes: { clean: function(){return '';}, partial: function(){return '';}, fail: function(){return '';} },
+    onFail: function (state) { state.flags.hunted++; },
+    onPartial: function () {}
+};
+
+function buildNodeSequence() {
+  return [NODE_PROLOGUE, NODE_ROOFTOP, NODE_CHECKIN, NODE_FIXER, NODE_TAIL, null, NODE_DEBRIEF, NODE_WITNESS, NODE_CONFRONTATION, NODE_FINAL];
+}
+var SERVER_BRANCH_INDEX = 5;
+
+var ENDINGS = {
+  'ghost': {
+    title: 'GHOST', tag: 'Full stealth. No alarms. Gone.',
+    body: "Nobody sees you leave. No alarm ever trips, no camera ever catches a clean frame — by the time anyone thinks to look for you, you're a rumour in a city that runs on rumours. You vanish the way you moved through the whole run: perfectly, quietly, completely."
+  },
+  'martyr': {
+    title: 'MARTYR', tag: 'You broadcast the truth — and got caught doing it.',
+    body: "The data hits every feed in the district before they drag you off the terminal. It's out there now, permanently, unkillably out there — and so, within the hour, are you. Wrong place. Right cause. The city will argue about which one mattered more for years."
+  },
+  'revolution-spark': {
+    title: 'REVOLUTION SPARK', tag: 'Street trust, clean nerve, a city that finally listens.',
+    body: "You broadcast clean, on your own terms, with the Street behind you the whole way. By morning the feeds are still burning and so are three Corp checkpoints. You didn't just leak the data — you lit something that isn't going out. Whatever happens to you now, it isn't the end of this story."
+  },
+  'corporate-puppet': {
+    title: 'CORPORATE PUPPET', tag: 'Sold out. Safe. Hollow.',
+    body: "Corp pays exactly what was promised, no more, no less, and folds you quietly into an NDA thicker than the drive ever was. You're safe now. You're comfortable now. Some nights you almost forget what it cost to get here — and that's the part that should worry you."
+  },
+  'merged': {
+    title: 'MERGED', tag: 'Fused with the rogue AI. No longer fully human.',
+    body: "The line between you and it stops meaning anything somewhere around the third hour. What walks out of the server room afterward answers to your name, remembers your life, and thinks in threads no single mind was built to hold. You got what you came for. You're just not entirely the one who gets to keep it."
+  },
+  'hunted-down': {
+    title: 'HUNTED DOWN', tag: 'Too many alarms. Cornered, regardless of what you chose.',
+    body: "It stopped being about the data three failures ago. Every SYNC you fumbled left a trace, and traces add up into a net. They find you not because of who you are or what you decided — but because the city was already closing in before you got the chance to decide anything at all."
+  },
+  'betrayed': {
+    title: 'BETRAYED', tag: 'Your fixer sold you out after the story broke down.',
+    body: "The call goes out the second you're through the door — you just don't hear it happen. Somewhere between the booth and your next move, the fixer's cold read on you turns into a phone number, and the phone number turns into people waiting for you who shouldn't know where to wait."
+  },
+  'vigilante': {
+    title: 'VIGILANTE', tag: 'Too violent to vanish. A feared street legend instead.',
+    body: "You meant to disappear. You don't, quite — not with a reputation like the one you've built tonight trailing behind you through every district scanner in the city. You become a name whispered in the same breath as a warning: the one who went through Corp security like it was nothing at all."
+  },
+  'walk-away': {
+    title: 'WALK AWAY', tag: 'Refused every side. The city forgets you.',
+    body: "You destroy the drive, or you simply stop carrying it, and either way nobody gets what they wanted from you — including, maybe, yourself. No uprising. No payday. No legend. Just a life that quietly goes on, unremarkable, entirely your own again."
+  },
+  'reconditioned': {
+    title: 'RECONDITIONED', tag: 'Captured at the final node. Memory wiped.',
+    body: "The last thing you remember clearly is the SYNC failing under your fingers. Everything after that belongs to someone else's report — a chair, a wipe, a new set of memories waiting to be issued along with your next assignment. Somewhere, a version of tonight is about to happen again, to someone who won't remember it either."
+  },
+  'burned-out': {
+    title: 'BURNED OUT', tag: 'You made it out. There\'s nothing left to make it out with.',
+    body: "You get clear. Every objective, technically, lands. But you spent everything getting here — every fumble tonight took something with it that isn't coming back tomorrow. You did the job. You just don't have anything left over that feels like winning."
+  },
+  'bought-silence': {
+    title: 'BOUGHT SILENCE', tag: 'Too well-known to just pay off — so they paid more.',
+    body: "The name you've built tonight is worth more to Corp buried than it ever was to you free. The NDA that lands on the table is thicker than the one they usually write, the number bigger, the smile a little tighter — because quiet, for someone like you now, doesn't come cheap."
+  },
+  'silence': {
+    title: 'SILENCE', tag: 'Reached for the AI. Nothing reached back.',
+    body: "You open the channel the way it opened for someone else, once. Nothing answers. Whatever was listening in that server room, it was never listening for you — and now you're standing in the open, holding a decision that isn't going to make itself."
+  },
+  'loop-broken': {
+    title: 'SIGNAL CLEAR', tag: 'Never fully good, never fully gone. The static doesn\'t know what to do with that.',
+    body: "You never pick a side all the way through — not Corp's, not the Street's, not even fully your own. Somewhere underneath that refusal to commit, the static this whole night has been running on simply loses its grip. Not louder. Not a victory lap. Just quiet, the specific quiet of a loop that finally doesn't know how to reset you."
+  }
+};
+
+/* ── State ── */
+var state, timers = [];
+function freshState() {
+  return {
+    nodeIndex: 0,
+    lastChoice: null,
+    currentNodes: buildNodeSequence(),
+    flags: {
+      trust: { corp: 0, street: 0, self: 0 },
+      method: { stealth: 0, violence: 0, words: 0 },
+      alignment: { good: 0, neutral: 0, evil: 0 },
+      hunted: 0,
+      resolve: 3,
+      notoriety: 0,
+      betrayed: false,
+      hurt: false,
+      aiAlly: false
+    },
+    skills: { hacking: 0, combat: 0, charisma: 0 },
+    xp: 0,
+    syncLog: [],
+    location: null,
+    locationStale: 0
+  };
+}
+
+/* ── Drone high score: a small arcade side-game, persisted separately from the loop. ── */
+var DRONE_HIGH_KEY = 'staticProtocolDroneHigh';
+function loadDroneHigh() { try { return parseInt(localStorage.getItem(DRONE_HIGH_KEY), 10) || 0; } catch (e) { return 0; } }
+function saveDroneHigh(v) { try { localStorage.setItem(DRONE_HIGH_KEY, String(v)); } catch (e) {} }
+
+/* ── Exfil high score: best clean-landing score, persisted separately. ── */
+var EXFIL_HIGH_KEY = 'staticProtocolExfilHigh';
+function loadExfilHigh() { try { return parseInt(localStorage.getItem(EXFIL_HIGH_KEY), 10) || 0; } catch (e) { return 0; } }
+function saveExfilHigh(v) { try { localStorage.setItem(EXFIL_HIGH_KEY, String(v)); } catch (e) {} }
+
+/* ── Endings unlocked: which of the ENDINGS keys have been reached, across loops. ── */
+var ENDINGS_SEEN_KEY = 'staticProtocolEndingsSeen';
+function loadEndingsSeen() {
+  try {
+    var raw = localStorage.getItem(ENDINGS_SEEN_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) { return {}; }
+}
+function markEndingSeen(key) {
+  endingsSeen[key] = true;
+  try { localStorage.setItem(ENDINGS_SEEN_KEY, JSON.stringify(endingsSeen)); } catch (e) {}
+}
+var endingsSeen = loadEndingsSeen();
+
+/* ── Time loop: persisted across sessions. Only staying level-headed breaks it. ── */
+var LOOP_STORAGE_KEY = 'staticProtocolLoop';
+function loadLoopMeta() {
+  try {
+    var raw = localStorage.getItem(LOOP_STORAGE_KEY);
+    if (!raw) return { count: 0, broken: false };
+    var parsed = JSON.parse(raw);
+    return { count: parsed.count || 0, broken: !!parsed.broken };
+  } catch (e) { return { count: 0, broken: false }; }
+}
+function saveLoopMeta() { try { localStorage.setItem(LOOP_STORAGE_KEY, JSON.stringify(loopMeta)); } catch (e) {} }
+var loopMeta = loadLoopMeta();
+function isReplaying() { return loopMeta.count > 0 && !loopMeta.broken; }
+function isNeutralAligned() {
+  return dominant(state.flags.alignment, ['neutral', 'good', 'evil']) === 'neutral';
+}
+function clearTimers() { timers.forEach(function (t) { clearTimeout(t); }); timers = []; }
+function addFlags(target, delta) { for (var k in delta) { if (Object.prototype.hasOwnProperty.call(delta, k)) target[k] = (target[k] || 0) + delta[k]; } }
+function dominant(obj, order) {
+  var best = order[0], bestVal = obj[order[0]] || 0;
+  for (var i = 1; i < order.length; i++) { var v = obj[order[i]] || 0; if (v > bestVal) { best = order[i]; bestVal = v; } }
+  return best;
+}
+function allZero(obj) { for (var k in obj) if (obj[k]) return false; return true; }
+
+/* ── Skills & XP: earned by method (stealth/violence/words) in SYNC results, gate a bonus
+   dialogue option per interlude and let a well-trained skill skip a matching SYNC outright. ── */
+var METHOD_TO_SKILL = { stealth: 'hacking', violence: 'combat', words: 'charisma' };
+var SKIP_THRESHOLD = 2;
+function xpLevel() { return Math.floor(state.xp / 30) + 1; }
+function awardXp(amount) { if (amount) state.xp += amount; }
+function dominantMethodKey(methodObj) {
+  if (!methodObj) return null;
+  var best = null, bestVal = 0;
+  for (var k in methodObj) { if (methodObj[k] > bestVal) { best = k; bestVal = methodObj[k]; } }
+  return best;
+}
+function trainSkills(choice, result) {
+  var mult = result === 'clean' ? 1 : result === 'partial' ? 0.5 : 0;
+  if (!mult || !choice || !choice.method) return;
+  for (var k in choice.method) {
+    var skillKey = METHOD_TO_SKILL[k];
+    if (skillKey && choice.method[k]) state.skills[skillKey] += choice.method[k] * mult;
+  }
+}
+function skillForChoice(choice) {
+  var key = dominantMethodKey(choice && choice.method);
+  return key ? METHOD_TO_SKILL[key] : null;
+}
+function skipEligible(choice) {
+  var skill = skillForChoice(choice);
+  return !!skill && state.skills[skill] >= SKIP_THRESHOLD;
+}
+function meetsRequirement(choice) {
+  if (!choice.requires) return true;
+  return (state.skills[choice.requires.skill] || 0) >= choice.requires.min;
+}
+
+function classify(hits, lates, misses, N) {
+  var failThreshold = Math.ceil(N / 2);
+  if (misses >= failThreshold) return 'fail';
+  if (misses === 0 && lates === 0) return 'clean';
+  return 'partial';
+}
+
+/* ── Audio: synthesised music, SFX and ambient city noise — no audio files, just Web Audio. ── */
+var AudioEngine = (function () {
+  var ctx = null, masterGain = null, ambientNodes = null, musicTimer = null;
+  var MUTE_KEY = 'staticProtocolMuted';
+  var SCALE = [110, 123.47, 130.81, 146.83, 164.81, 174.61, 196];
+  var muted = (function () { try { return localStorage.getItem(MUTE_KEY) === '1'; } catch (e) { return false; } })();
+
+  function ensureCtx() {
+    if (ctx) return ctx;
+    try {
+      var Ctor = window.AudioContext || window.webkitAudioContext;
+      if (!Ctor) return null;
+      ctx = new Ctor();
+      masterGain = ctx.createGain();
+      masterGain.gain.value = muted ? 0 : 1;
+      masterGain.connect(ctx.destination);
+    } catch (e) { ctx = null; }
+    return ctx;
+  }
+  function resume() {
+    var c = ensureCtx();
+    if (c && c.state === 'suspended') c.resume().catch(function () {});
+  }
+  function setMuted(v) {
+    muted = v;
+    try { localStorage.setItem(MUTE_KEY, v ? '1' : '0'); } catch (e) {}
+    if (masterGain && ctx) masterGain.gain.setTargetAtTime(muted ? 0 : 1, ctx.currentTime, 0.05);
+  }
+  function isMuted() { return muted; }
+
+  var SFX = {
+    tap:    { freq: 720, type: 'sine',     dur: 0.06, vol: 0.11 },
+    hit:    { freq: 920, type: 'square',   dur: 0.07, vol: 0.13 },
+    miss:   { freq: 200, type: 'sawtooth', dur: 0.18, vol: 0.16, down: true },
+    notify: { freq: 1100, type: 'sine',    dur: 0.12, vol: 0.13 },
+    open:   { freq: 480, type: 'triangle', dur: 0.09, vol: 0.09 },
+    ending: { freq: 260, type: 'sine',     dur: 0.55, vol: 0.15, up: true },
+    flap:   { freq: 620, type: 'sine',     dur: 0.05, vol: 0.09 },
+    crash:  { freq: 110, type: 'sawtooth', dur: 0.32, vol: 0.19, down: true },
+    land:   { freq: 480, type: 'sine',     dur: 0.45, vol: 0.16, up: true }
+  };
+  function sfx(name) {
+    var c = ensureCtx(); if (!c) return;
+    resume();
+    var p = SFX[name] || SFX.tap;
+    var now = c.currentTime;
+    var osc = c.createOscillator(), gain = c.createGain();
+    osc.type = p.type;
+    osc.frequency.setValueAtTime(p.freq, now);
+    if (p.down) osc.frequency.exponentialRampToValueAtTime(Math.max(30, p.freq * 0.4), now + p.dur);
+    if (p.up) osc.frequency.exponentialRampToValueAtTime(p.freq * 1.8, now + p.dur);
+    gain.gain.setValueAtTime(p.vol, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + p.dur);
+    osc.connect(gain); gain.connect(masterGain);
+    osc.start(now);
+    osc.stop(now + p.dur + 0.02);
+  }
+
+  function startAmbient() {
+    var c = ensureCtx(); if (!c || ambientNodes) return;
+    resume();
+    var bufSize = 2 * c.sampleRate;
+    var buffer = c.createBuffer(1, bufSize, c.sampleRate);
+    var data = buffer.getChannelData(0);
+    for (var i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+    var noise = c.createBufferSource();
+    noise.buffer = buffer; noise.loop = true;
+    var filter = c.createBiquadFilter();
+    filter.type = 'lowpass'; filter.frequency.value = 280;
+    var noiseGain = c.createGain(); noiseGain.gain.value = 0.075;
+    noise.connect(filter); filter.connect(noiseGain); noiseGain.connect(masterGain);
+    noise.start();
+
+    var drone = c.createOscillator();
+    drone.type = 'sine'; drone.frequency.value = 55;
+    var droneGain = c.createGain(); droneGain.gain.value = 0.055;
+    drone.connect(droneGain); droneGain.connect(masterGain);
+    drone.start();
+
+    ambientNodes = { noise: noise, drone: drone };
+  }
+  function stopAmbient() {
+    if (!ambientNodes) return;
+    try { ambientNodes.noise.stop(); ambientNodes.drone.stop(); } catch (e) {}
+    ambientNodes = null;
+  }
+
+  function startMusic() {
+    var c = ensureCtx(); if (!c || musicTimer) return;
+    resume();
+    function playNote() {
+      if (!ctx) return;
+      var freq = SCALE[Math.floor(Math.random() * SCALE.length)];
+      var now = ctx.currentTime;
+      var osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.1, now + 0.5);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 2.4);
+      osc.connect(gain); gain.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + 2.5);
+    }
+    playNote();
+    musicTimer = setInterval(playNote, 2700);
+  }
+  function stopMusic() {
+    if (musicTimer) { clearInterval(musicTimer); musicTimer = null; }
+  }
+
+  return {
+    resume: resume, sfx: sfx,
+    startAmbient: startAmbient, stopAmbient: stopAmbient,
+    startMusic: startMusic, stopMusic: stopMusic,
+    setMuted: setMuted, isMuted: isMuted
+  };
+})();
+
+/* ── Feedback: a crisp buzz + brightness pulse on a clean hit, a duller one on a miss ── */
+function haptic(pattern) {
+  if (navigator.vibrate) { try { navigator.vibrate(pattern); } catch (e) {} }
+}
+function feedbackFor(kind, el) {
+  if (kind === 'hit') { haptic(18); AudioEngine.sfx('hit'); if (el) { el.classList.remove('hit-pulse'); void el.offsetWidth; el.classList.add('hit-pulse'); } }
+  else if (kind === 'miss') { haptic([40, 30, 40]); AudioEngine.sfx('miss'); }
+}
+
+/* ── Status bar (persistent — signal bars double as the Hunted meter) ── */
+function updateStatusBar() {
+  var hunted = state ? Math.min(state.flags.hunted, 3) : 0;
+  var bars = '';
+  for (var i = 0; i < 3; i++) bars += '<i class="' + (i < hunted ? 'on' : '') + '"></i>';
+  var sb = document.getElementById('signal-bars'); if (sb) sb.innerHTML = bars;
+  var batt = document.getElementById('battery-fill'); if (batt) batt.style.width = batteryPct() + '%';
+}
+function batteryPct() { var idx = state ? state.nodeIndex : 0; return Math.max(14, 100 - idx * 17); }
+function toRoman(num) {
+  if (num === 0) return 'N';
+  var vals = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1];
+  var syms = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
+  var out = '';
+  for (var i = 0; i < vals.length; i++) {
+    while (num >= vals[i]) { out += syms[i]; num -= vals[i]; }
+  }
+  return out;
+}
+function tickClock() {
+  function paint() {
+    var el = document.getElementById('clock-time');
+    if (!el) return;
+    var d = new Date();
+    var h12 = d.getHours() % 12; if (h12 === 0) h12 = 12;
+    el.textContent = toRoman(h12) + ':' + toRoman(d.getMinutes());
+  }
+  paint();
+  setInterval(paint, 15000);
+}
+
+/* ── Rendering ── */
+var phoneScreen = document.getElementById('phone-screen');
+function setPhoneScreen(html) { phoneScreen.innerHTML = '<div class="screen">' + html + '</div>'; phoneScreen.scrollTop = 0; }
+
+function appHeaderHtml(appDef) {
+  return '<div class="app-header"><span class="aicon" style="color:' + appDef.color + '">' + appIconSvg(appDef.icon) + '</span><span class="aname">' + appDef.name + '</span></div>';
+}
+function screenHeaderHtml(node) {
+  if (node.app === 'call') {
+    return '<div class="app-header"><span class="aicon" style="color:' + node.art.accent + '">' + appIconSvg('tracker') + '</span><span class="aname">Call — ' + node.caller + '</span></div>';
+  }
+  return appHeaderHtml(appById(node.app));
+}
+function actionListHtml(node) {
+  return '<div class="action-list">' + node.choices.map(function (c, i) {
+    if (!meetsRequirement(c)) return '';
+    var tag = c.requires ? '<span class="skill-tag">' + c.requires.skill.toUpperCase() + '</span>' : '';
+    return '<button class="action-row' + (c.requires ? ' skill-check' : '') + '" data-idx="' + i + '"><span class="aicon2" style="color:' + node.art.accent + '">' + choiceIconSvg(c.icon, node.art.accent) + '</span>' + c.label + tag + '</button>';
+  }).join('') + '</div>';
+}
+function bindChoiceControls(node) {
+  Array.prototype.forEach.call(phoneScreen.querySelectorAll('.quick-reply, .action-row'), function (btn) {
+    btn.addEventListener('click', function () { activateChoice(node, Number(btn.dataset.idx)); });
+  });
+}
+
+/* ── Start menu: a separate full-screen title screen, not part of the phone ── */
+var startMenuEl = document.getElementById('start-menu');
+var deviceWrapEl = document.getElementById('device-wrap');
+var menuMainEl = document.getElementById('menu-main');
+var menuHowtoEl = document.getElementById('menu-howto');
+
+function enterGame() {
+  startMenuEl.hidden = true;
+  deviceWrapEl.hidden = false;
+  applyWallpaper(loadWallpaper());
+  AudioEngine.resume();
+  AudioEngine.startAmbient();
+  AudioEngine.startMusic();
+  state = freshState();
+  if (isReplaying()) {
+    NODE_ROOFTOP.sync.duration = 1450;
+    NODE_ROOFTOP.scene = NODE_ROOFTOP.scene.slice(0, 2).concat([
+      "Something about this is familiar in a way you can't place — the rain, the angle of the drone's lens, the exact second the alarm mesh usually wakes up. Muscle memory, maybe. Or maybe you've been here before."
+    ]);
+  } else {
+    NODE_ROOFTOP.sync.duration = 1300;
+    NODE_ROOFTOP.scene = NODE_ROOFTOP.scene.slice(0, 2);
+  }
+  updateStatusBar();
+  renderHome();
+  queueNotification(state.nodeIndex);
+}
+function exitToMenu() {
+  clearTimers();
+  AudioEngine.stopAmbient();
+  AudioEngine.stopMusic();
+  deviceWrapEl.hidden = true;
+  menuHowtoEl.hidden = true;
+  menuMainEl.hidden = false;
+  startMenuEl.hidden = false;
+  refreshLoopTag();
+}
+document.getElementById('new-game-btn').addEventListener('click', enterGame);
+document.getElementById('howto-new-game-btn').addEventListener('click', enterGame);
+document.getElementById('how-to-play-btn').addEventListener('click', function () { menuMainEl.hidden = true; menuHowtoEl.hidden = false; });
+document.getElementById('howto-back-btn').addEventListener('click', function () { menuHowtoEl.hidden = true; menuMainEl.hidden = false; });
+
+var SPEAKER_ON = '<path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor" stroke="none"/><path d="M16 8a5 5 0 0 1 0 8" fill="none"/><path d="M18.5 5.5a9 9 0 0 1 0 13" fill="none"/>';
+var SPEAKER_OFF = '<path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor" stroke="none"/><line x1="15.5" y1="8.5" x2="21.5" y2="15.5"/><line x1="21.5" y1="8.5" x2="15.5" y2="15.5"/>';
+function refreshMuteIcon() {
+  var icon = document.getElementById('mute-icon');
+  var btn = document.getElementById('mute-toggle');
+  if (!icon || !btn) return;
+  icon.innerHTML = AudioEngine.isMuted() ? SPEAKER_OFF : SPEAKER_ON;
+  btn.classList.toggle('is-muted', AudioEngine.isMuted());
+}
+document.getElementById('mute-toggle').addEventListener('click', function () {
+  AudioEngine.setMuted(!AudioEngine.isMuted());
+  refreshMuteIcon();
+});
+refreshMuteIcon();
+
+function renderHome() {
+  clearTimers();
+  updateStatusBar();
+  var activeApp = (state && state.nodeIndex < state.currentNodes.length) ? state.currentNodes[state.nodeIndex].app : null;
+  var iconsHtml = APPS.map(function (a) {
+    var isActive = a.id === activeApp;
+    return (
+      '<button class="app-icon' + (isActive ? ' is-active' : '') + '" data-app="' + a.id + '" style="--accent:' + a.color + '; --accent-glow:' + a.color + '55;">' +
+        '<span class="tile">' + appIconSvg(a.icon) + (isActive ? '<span class="badge">1</span>' : '') + '</span>' +
+        '<span class="label">' + a.name + '</span>' +
+      '</button>'
+    );
+  }).join('');
+  setPhoneScreen('<div class="home-screen"><div class="home-grid">' + iconsHtml + '</div></div>');
+  Array.prototype.forEach.call(phoneScreen.querySelectorAll('.app-icon'), function (btn) {
+    btn.addEventListener('click', function () {
+      var id = btn.dataset.app;
+      AudioEngine.sfx('open');
+      if (id === activeApp) { openCurrentNode(); }
+      else if (id === 'status') { renderStatusApp(); }
+      else if (id === 'stats') { renderStatsApp(); }
+      else if (id === 'drone') { renderDroneGame(); }
+      else if (id === 'trophy') { renderTrophyApp(); }
+      else if (id === 'contacts') { renderContactsApp(); }
+      else if (id === 'wallpaper') { renderWallpaperApp(); }
+      else if (id === 'exfil') { renderExfilGame(); }
+      else if (id === 'walt') { window.location.href = 'https://waltviviers.com/'; }
+      else if (id === 'jackout') { exitToMenu(); }
+      else if (id === 'location') { renderLocationApp(); }
+      else if (id === 'camera') { renderInert('Camera', 'No photos yet. Nothing on this roll — you\'ve been busy.'); }
+      else if (id === 'notes') { renderInert('Notes', 'STEAL DRIVE. DON\'T DIE.\n\nJob notes, from the last time you thought you could plan for this.'); }
+    });
+  });
+}
+
+function renderInert(title, body) {
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-header"><button class="back-btn" id="back-home">←</button><span class="aname">' + title + '</span></div>' +
+      '<div class="app-body"><p style="font-size:12.5px;line-height:1.8;color:rgba(217,247,242,0.7);white-space:pre-line;">' + body + '</p></div>' +
+    '</div>'
+  );
+  document.getElementById('back-home').addEventListener('click', renderHome);
+}
+
+function renderStatusApp() {
+  var trustDom = allZero(state.flags.trust) ? 'UNASSIGNED' : dominant(state.flags.trust, ['street', 'self', 'corp']).toUpperCase();
+  var methodDom = allZero(state.flags.method) ? 'UNASSIGNED' : dominant(state.flags.method, ['stealth', 'words', 'violence']).toUpperCase();
+  var notorietyDesc = state.flags.notoriety >= 5 ? 'HIGH' : state.flags.notoriety >= 2 ? 'RISING' : 'LOW';
+  var alignDom = dominant(state.flags.alignment, ['neutral', 'good', 'evil']);
+  var readDesc = alignDom === 'good' ? 'WARM' : alignDom === 'evil' ? 'COLD' : 'UNREADABLE';
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-header"><button class="back-btn" id="back-home">←</button><span class="aname">Status</span></div>' +
+      '<div class="app-body">' +
+        '<div class="flag-grid">' +
+          '<div class="flag-box"><div class="fk">Network Affinity</div><div class="fv">' + trustDom + '</div></div>' +
+          '<div class="flag-box"><div class="fk">Behaviour Profile</div><div class="fv">' + methodDom + '</div></div>' +
+          '<div class="flag-box"><div class="fk">Threat Detection</div><div class="fv">' + Math.min(state.flags.hunted, 3) + ' / 3</div></div>' +
+          '<div class="flag-box"><div class="fk">Resolve</div><div class="fv">' + state.flags.resolve + ' / 3</div></div>' +
+          '<div class="flag-box"><div class="fk">Notoriety</div><div class="fv">' + notorietyDesc + '</div></div>' +
+          '<div class="flag-box"><div class="fk">Emotional Read</div><div class="fv">' + readDesc + '</div></div>' +
+          '<div class="flag-box"><div class="fk">Battery</div><div class="fv">' + batteryPct() + '%</div></div>' +
+        '</div>' +
+        (loopMeta.count > 0 ? '<p style="font-size:10.5px;color:rgba(217,247,242,0.4);letter-spacing:0.08em;text-transform:uppercase;margin-top:4px;">Loop ' + (loopMeta.count + 1) + (loopMeta.broken ? ' · protocol complete' : '') + '</p>' : '') +
+      '</div>' +
+    '</div>'
+  );
+  document.getElementById('back-home').addEventListener('click', renderHome);
+}
+
+function statBarRow(label, value, groupMax) {
+  var pct = groupMax > 0 ? Math.round((value / groupMax) * 100) : 0;
+  return '<div class="stat-row"><span class="stat-label">' + label + '</span><div class="stat-track"><div class="stat-fill" style="width:' + pct + '%"></div></div><span class="stat-val">' + value + '</span></div>';
+}
+function renderStatsApp() {
+  var t = state.flags.trust, m = state.flags.method, a = state.flags.alignment, s = state.skills;
+  var trustMax = Math.max(t.street, t.self, t.corp, 1);
+  var methodMax = Math.max(m.stealth, m.words, m.violence, 1);
+  var alignMax = Math.max(a.good, a.neutral, a.evil, 1);
+  var notorietyMax = Math.max(state.flags.notoriety, 5);
+  var skillMax = Math.max(s.hacking, s.combat, s.charisma, SKIP_THRESHOLD);
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-header"><button class="back-btn" id="back-home">←</button><span class="aname">Stats</span></div>' +
+      '<div class="app-body">' +
+        '<div class="stat-group"><div class="stat-title">Level ' + xpLevel() + ' · ' + state.xp + ' XP</div>' +
+          statBarRow('Hacking', Math.round(s.hacking * 10) / 10, skillMax) +
+          statBarRow('Combat', Math.round(s.combat * 10) / 10, skillMax) +
+          statBarRow('Charisma', Math.round(s.charisma * 10) / 10, skillMax) +
+          '<p style="font-size:9.5px;color:rgba(217,247,242,0.35);letter-spacing:0.05em;margin-top:8px;">Reach ' + SKIP_THRESHOLD + ' in a skill to skip its SYNC, and unlock bonus dialogue.</p>' +
+        '</div>' +
+        '<div class="stat-group"><div class="stat-title">Trust</div>' +
+          statBarRow('Street', t.street, trustMax) + statBarRow('Self', t.self, trustMax) + statBarRow('Corp', t.corp, trustMax) +
+        '</div>' +
+        '<div class="stat-group"><div class="stat-title">Method</div>' +
+          statBarRow('Stealth', m.stealth, methodMax) + statBarRow('Words', m.words, methodMax) + statBarRow('Violence', m.violence, methodMax) +
+        '</div>' +
+        '<div class="stat-group"><div class="stat-title">Alignment</div>' +
+          statBarRow('Good', a.good, alignMax) + statBarRow('Neutral', a.neutral, alignMax) + statBarRow('Evil', a.evil, alignMax) +
+        '</div>' +
+        '<div class="stat-group"><div class="stat-title">Vitals</div>' +
+          statBarRow('Hunted', Math.min(state.flags.hunted, 3), 3) + statBarRow('Resolve', state.flags.resolve, 3) + statBarRow('Notoriety', state.flags.notoriety, notorietyMax) +
+        '</div>' +
+        '<div class="stat-group"><div class="stat-title">Flags</div>' +
+          '<div class="stat-flags">' +
+            '<span class="stat-pill' + (state.flags.betrayed ? ' on' : '') + '">Betrayed</span>' +
+            '<span class="stat-pill' + (state.flags.hurt ? ' on' : '') + '">Hurt</span>' +
+            '<span class="stat-pill' + (state.flags.aiAlly ? ' on' : '') + '">AI Ally</span>' +
+          '</div>' +
+        '</div>' +
+        (loopMeta.count > 0 ? '<p style="font-size:10.5px;color:rgba(217,247,242,0.4);letter-spacing:0.08em;text-transform:uppercase;margin-top:18px;">Loop ' + (loopMeta.count + 1) + (loopMeta.broken ? ' · protocol complete' : '') + '</p>' : '') +
+      '</div>' +
+    '</div>'
+  );
+  document.getElementById('back-home').addEventListener('click', renderHome);
+}
+
+/* ── Drone: a flappy-bird side game, threading skyscraper gaps. Purely optional. ── */
+function renderDroneGame() {
+  clearTimers();
+  var best = loadDroneHigh();
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-header"><button class="back-btn" id="back-home">←</button><span class="aname">Drone</span></div>' +
+      '<div class="app-body">' +
+        '<div class="drone-hud"><span class="drone-score" id="drone-score">0</span><span class="drone-best" id="drone-best">Best ' + best + '</span></div>' +
+        '<div class="drone-wrap" id="drone-wrap"><canvas id="drone-canvas"></canvas></div>' +
+        '<p class="drone-hint">Tap, click, or press Space to climb</p>' +
+      '</div>' +
+    '</div>'
+  );
+
+  var wrap = document.getElementById('drone-wrap');
+  var canvas = document.getElementById('drone-canvas');
+  var scoreEl = document.getElementById('drone-score');
+  var bestEl = document.getElementById('drone-best');
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width = wrap.clientWidth;
+  var H = canvas.height = wrap.clientHeight;
+
+  var GRAVITY = 0.32, FLAP = -6.2, BUILD_W = 46;
+  var drone = { x: 0, y: 0, r: 10, vy: 0 };
+  var buildings = [], score = 0, running = true, started = false, spawnTimer = 0, rafId = null;
+
+  function reset() {
+    if (rafId) cancelAnimationFrame(rafId);
+    drone.x = W * 0.28; drone.y = H / 2; drone.vy = 0;
+    buildings = []; score = 0; started = false; running = true; spawnTimer = 0;
+    scoreEl.textContent = '0';
+  }
+  reset();
+
+  function spawnBuilding() {
+    var gapH = Math.max(90, H * 0.28);
+    var gapY = 40 + Math.random() * Math.max(20, H - gapH - 80);
+    buildings.push({ x: W + 10, gapY: gapY, gapH: gapH, passed: false });
+  }
+
+  function flap() {
+    if (!running) return;
+    started = true;
+    drone.vy = FLAP;
+    haptic(12);
+    AudioEngine.sfx('flap');
+  }
+
+  function die() {
+    if (!running) return;
+    running = false;
+    AudioEngine.sfx('crash');
+    if (score > best) { best = score; saveDroneHigh(best); }
+    bestEl.textContent = 'Best ' + best;
+    var overlay = document.createElement('div');
+    overlay.className = 'drone-overlay';
+    overlay.innerHTML =
+      '<p class="eyebrow magenta" style="margin:0;">SIGNAL LOST</p>' +
+      '<div class="drone-overlay-score">' + score + '</div>' +
+      '<button class="primary-btn" id="drone-retry" style="width:auto;padding:12px 28px;">Fly Again</button>';
+    wrap.appendChild(overlay);
+    document.getElementById('drone-retry').addEventListener('click', function () {
+      overlay.remove();
+      reset();
+      loop();
+    });
+  }
+
+  function loop() {
+    rafId = requestAnimationFrame(loop);
+    if (!running) return;
+    ctx.clearRect(0, 0, W, H);
+
+    if (started) {
+      drone.vy += GRAVITY;
+      drone.y += drone.vy;
+    }
+
+    spawnTimer -= 1;
+    if (spawnTimer <= 0) { spawnBuilding(); spawnTimer = Math.max(70, 100 - score * 1.5); }
+
+    var speed = 2.4 + Math.min(score * 0.04, 2);
+    for (var i = buildings.length - 1; i >= 0; i--) {
+      var b = buildings[i];
+      b.x -= speed;
+      if (b.x + BUILD_W < 0) { buildings.splice(i, 1); continue; }
+      if (!b.passed && b.x + BUILD_W < drone.x) { b.passed = true; score++; scoreEl.textContent = String(score); }
+
+      ctx.fillStyle = 'rgba(34,230,212,0.18)';
+      ctx.strokeStyle = 'rgba(34,230,212,0.55)';
+      ctx.lineWidth = 1.5;
+      ctx.fillRect(b.x, 0, BUILD_W, b.gapY);
+      ctx.strokeRect(b.x, 0, BUILD_W, b.gapY);
+      ctx.fillRect(b.x, b.gapY + b.gapH, BUILD_W, H - (b.gapY + b.gapH));
+      ctx.strokeRect(b.x, b.gapY + b.gapH, BUILD_W, H - (b.gapY + b.gapH));
+
+      if (drone.x + drone.r > b.x && drone.x - drone.r < b.x + BUILD_W) {
+        if (drone.y - drone.r < b.gapY || drone.y + drone.r > b.gapY + b.gapH) die();
+      }
+    }
+
+    ctx.save();
+    ctx.translate(drone.x, drone.y);
+    ctx.rotate(Math.max(-0.5, Math.min(0.9, drone.vy * 0.06)));
+    ctx.fillStyle = '#22e6d4';
+    ctx.shadowColor = '#22e6d4';
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.arc(0, 0, drone.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    if (drone.y - drone.r < 0 || drone.y + drone.r > H) die();
+  }
+  loop();
+
+  function onKey(e) { if (e.code === 'Space' || e.key === ' ') { e.preventDefault(); flap(); } }
+  canvas.addEventListener('pointerdown', flap);
+  document.addEventListener('keydown', onKey);
+
+  document.getElementById('back-home').addEventListener('click', function () {
+    running = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    document.removeEventListener('keydown', onKey);
+    renderHome();
+  });
+}
+
+/* ── Location: pick a position, hold too long and surveillance catches up. ── */
+var LOCATION_MAP_POS = {
+  plaza:     { x: 72,  y: 55 },
+  rooftop:   { x: 208, y: 55 },
+  alley:     { x: 60,  y: 155 },
+  underpass: { x: 208, y: 165 }
+};
+function locationMapSvg() {
+  var nodesHtml = LOCATIONS.map(function (loc) {
+    var p = LOCATION_MAP_POS[loc.id];
+    var isCurrent = state.location === loc.id;
+    return '<g class="map-node' + (isCurrent ? ' current' : '') + '" data-loc="' + loc.id + '">' +
+      (isCurrent ? '<circle class="map-pulse" cx="' + p.x + '" cy="' + p.y + '" r="7"></circle>' : '') +
+      '<circle class="map-dot" cx="' + p.x + '" cy="' + p.y + '" r="' + (isCurrent ? 6 : 5) + '"></circle>' +
+      '<text x="' + p.x + '" y="' + (p.y + 22) + '" text-anchor="middle">' + loc.name.toUpperCase() + '</text>' +
+    '</g>';
+  }).join('');
+  return (
+    '<svg class="location-map" viewBox="0 0 280 210">' +
+      '<rect class="map-bldg" x="18" y="20" width="30" height="55"></rect>' +
+      '<rect class="map-bldg" x="150" y="12" width="26" height="80"></rect>' +
+      '<rect class="map-bldg" x="232" y="18" width="30" height="65"></rect>' +
+      '<rect class="map-bldg" x="16" y="115" width="26" height="45"></rect>' +
+      '<rect class="map-bldg" x="230" y="120" width="30" height="50"></rect>' +
+      '<line class="map-route" x1="72" y1="55" x2="208" y2="55"></line>' +
+      '<line class="map-route" x1="72" y1="55" x2="60" y2="155"></line>' +
+      '<line class="map-route" x1="208" y1="55" x2="208" y2="165"></line>' +
+      '<line class="map-route" x1="60" y1="155" x2="208" y2="165"></line>' +
+      nodesHtml +
+    '</svg>'
+  );
+}
+function renderLocationApp() {
+  var stale = state.location && state.locationStale >= LOCATION_STALE_LIMIT;
+  var statusText = !state.location ? 'Pick a position to hold.'
+    : stale ? 'Stationary ' + state.locationStale + ' stops — surveillance is circling. Move.'
+    : 'Holding position. Stay sharp.';
+  var cardsHtml = LOCATIONS.map(function (loc) {
+    var isCurrent = state.location === loc.id;
+    return '<button class="location-card' + (isCurrent ? ' current' : '') + '" data-loc="' + loc.id + '">' +
+      '<div class="location-name">' + loc.name + (isCurrent ? ' <span class="location-tag">HERE</span>' : '') + '</div>' +
+      '<div class="location-desc">' + loc.desc + '</div>' +
+    '</button>';
+  }).join('');
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-header"><button class="back-btn" id="back-home">←</button><span class="aname">Location</span></div>' +
+      '<div class="app-body">' +
+        locationMapSvg() +
+        '<p class="location-status' + (stale ? ' warn' : '') + '">' + statusText + '</p>' +
+        '<div class="location-list">' + cardsHtml + '</div>' +
+      '</div>' +
+    '</div>'
+  );
+  document.getElementById('back-home').addEventListener('click', renderHome);
+  function selectLocation(id) {
+    if (id === state.location) return;
+    state.location = id;
+    state.locationStale = 0;
+    AudioEngine.sfx('tap');
+    renderLocationApp();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.map-node'), function (g) {
+    g.addEventListener('click', function () { selectLocation(g.dataset.loc); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.location-card'), function (btn) {
+    btn.addEventListener('click', function () { selectLocation(btn.dataset.loc); });
+  });
+}
+
+/* ── Contacts: who you've actually met, derived from how far the run has gone. ── */
+function nodePassed(nodeObj) {
+  var idx = state.currentNodes.indexOf(nodeObj);
+  return idx !== -1 && idx < state.nodeIndex;
+}
+function renderContactsApp() {
+  var contacts = [
+    { name: 'MARA', role: 'Old crew, still checks in — the last one who bothers.', met: nodePassed(NODE_CHECKIN) },
+    { name: 'FIXER', role: 'Back-alley broker. Loyal to whoever\'s paying that hour.', met: nodePassed(NODE_FIXER) },
+    { name: 'UNKNOWN NUMBER', role: 'Saw you in the server room. Says nothing more — yet.', met: nodePassed(NODE_WITNESS) },
+    { name: 'ROGUE AI', role: 'Something in the wires that talks back.', met: !!state.flags.aiAlly }
+  ];
+  var cardsHtml = contacts.map(function (c) {
+    if (!c.met) {
+      return '<div class="contact-card locked"><div class="contact-avatar">?</div><div class="contact-body"><div class="contact-name">???</div><div class="contact-role">Not yet encountered</div></div></div>';
+    }
+    return '<div class="contact-card"><div class="contact-avatar">' + c.name.charAt(0) + '</div><div class="contact-body"><div class="contact-name">' + c.name + '</div><div class="contact-role">' + c.role + '</div></div></div>';
+  }).join('');
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-header"><button class="back-btn" id="back-home">←</button><span class="aname">Contacts</span></div>' +
+      '<div class="app-body"><div class="contact-list">' + cardsHtml + '</div></div>' +
+    '</div>'
+  );
+  document.getElementById('back-home').addEventListener('click', renderHome);
+}
+
+/* ── Endings: a trophy case of every ending reached across loops. ── */
+function renderTrophyApp() {
+  var keys = Object.keys(ENDINGS);
+  var seenCount = keys.filter(function (k) { return endingsSeen[k]; }).length;
+  var rowsHtml = keys.map(function (k) {
+    var e = ENDINGS[k];
+    var seen = !!endingsSeen[k];
+    return '<div class="trophy-row' + (seen ? ' unlocked' : '') + '">' +
+      '<div class="trophy-title">' + (seen ? e.title : '???') + '</div>' +
+      '<div class="trophy-tag">' + (seen ? e.tag : 'Not yet reached') + '</div>' +
+    '</div>';
+  }).join('');
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-header"><button class="back-btn" id="back-home">←</button><span class="aname">Endings</span></div>' +
+      '<div class="app-body">' +
+        '<p class="trophy-count">' + seenCount + ' / ' + keys.length + ' unlocked</p>' +
+        '<div class="trophy-list">' + rowsHtml + '</div>' +
+      '</div>' +
+    '</div>'
+  );
+  document.getElementById('back-home').addEventListener('click', renderHome);
+}
+
+/* ── Wallpaper: a few filter presets over the one portrait, picked and persisted. ── */
+var WALLPAPER_KEY = 'staticProtocolWallpaper';
+var WALLPAPER_PRESETS = [
+  { id: 'default', name: 'Default', filter: 'none' },
+  { id: 'noir', name: 'Noir', filter: 'grayscale(1) contrast(1.15)' },
+  { id: 'magenta', name: 'Magenta Wash', filter: 'sepia(0.5) hue-rotate(280deg) saturate(2.2)' },
+  { id: 'cyan', name: 'Cyan Wash', filter: 'sepia(0.5) hue-rotate(150deg) saturate(2.6)' }
+];
+function loadWallpaper() { try { return localStorage.getItem(WALLPAPER_KEY) || 'default'; } catch (e) { return 'default'; } }
+function saveWallpaper(id) { try { localStorage.setItem(WALLPAPER_KEY, id); } catch (e) {} }
+function applyWallpaper(id) {
+  var preset = WALLPAPER_PRESETS.filter(function (p) { return p.id === id; })[0] || WALLPAPER_PRESETS[0];
+  var bg = document.querySelector('.phone-bg');
+  if (bg) bg.style.filter = preset.filter;
+}
+function renderWallpaperApp() {
+  var current = loadWallpaper();
+  var tilesHtml = WALLPAPER_PRESETS.map(function (p) {
+    return '<button class="wallpaper-tile' + (p.id === current ? ' active' : '') + '" data-id="' + p.id + '">' +
+      '<span class="wallpaper-swatch" style="filter:' + p.filter + ';"></span>' +
+      '<span class="wallpaper-name">' + p.name + '</span>' +
+    '</button>';
+  }).join('');
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-header"><button class="back-btn" id="back-home">←</button><span class="aname">Wallpaper</span></div>' +
+      '<div class="app-body"><div class="wallpaper-grid">' + tilesHtml + '</div></div>' +
+    '</div>'
+  );
+  document.getElementById('back-home').addEventListener('click', renderHome);
+  Array.prototype.forEach.call(document.querySelectorAll('.wallpaper-tile'), function (btn) {
+    btn.addEventListener('click', function () {
+      var id = btn.dataset.id;
+      saveWallpaper(id);
+      applyWallpaper(id);
+      renderWallpaperApp();
+    });
+  });
+}
+
+/* ── Exfil: a lunar-lander clone, threading gravity and a rooftop pad. ── */
+function renderExfilGame() {
+  clearTimers();
+  var best = loadExfilHigh();
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-header"><button class="back-btn" id="back-home">←</button><span class="aname">Exfil</span></div>' +
+      '<div class="app-body">' +
+        '<div class="exfil-hud">' +
+          '<div class="exfil-hud-group">' +
+            '<span class="exfil-stat">ALT <b id="exfil-alt">0</b></span>' +
+            '<span class="exfil-stat">VEL <b id="exfil-vel">0</b></span>' +
+            '<span class="exfil-stat">FUEL <b id="exfil-fuel">100</b></span>' +
+          '</div>' +
+          '<span class="exfil-best" id="exfil-best">Best ' + best + '</span>' +
+        '</div>' +
+        '<div class="exfil-wrap" id="exfil-wrap"><canvas id="exfil-canvas"></canvas></div>' +
+        '<p class="exfil-hint">Hold to burn thrust. Land soft, on the pad.</p>' +
+      '</div>' +
+    '</div>'
+  );
+
+  var wrap = document.getElementById('exfil-wrap');
+  var canvas = document.getElementById('exfil-canvas');
+  var altEl = document.getElementById('exfil-alt');
+  var velEl = document.getElementById('exfil-vel');
+  var fuelEl = document.getElementById('exfil-fuel');
+  var bestEl = document.getElementById('exfil-best');
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width = wrap.clientWidth;
+  var H = canvas.height = wrap.clientHeight;
+
+  var GRAVITY = 0.05, THRUST = -0.115, FUEL_BURN = 0.55, PAD_W = 58, GROUND_Y = H - 26;
+  var SAFE_VY = 1.8, SAFE_VX = 1.5;
+  var ship = { x: 0, y: 0, r: 9, vx: 0, vy: 0 };
+  var padX = 0, fuel = 100, thrusting = false, running = true, rafId = null, skyline = [];
+
+  function reset() {
+    if (rafId) cancelAnimationFrame(rafId);
+    ship.x = W * 0.5; ship.y = H * 0.12; ship.vy = 0;
+    ship.vx = (Math.random() < 0.5 ? -1 : 1) * (0.6 + Math.random() * 0.4);
+    fuel = 100; running = true; thrusting = false;
+    padX = 20 + Math.random() * Math.max(20, W - 40 - PAD_W);
+    skyline = [];
+    var x = 0;
+    while (x < W) {
+      var w = 24 + Math.random() * 30;
+      skyline.push({ x: x, w: w, h: 20 + Math.random() * 70 });
+      x += w + 4;
+    }
+    altEl.textContent = '0'; velEl.textContent = '0'; fuelEl.textContent = '100';
+  }
+  reset();
+
+  function startThrust() { if (running) { thrusting = true; haptic(10); } }
+  function stopThrust() { thrusting = false; }
+
+  function die(success, score) {
+    if (!running) return;
+    running = false;
+    if (success) {
+      AudioEngine.sfx('land');
+      if (score > best) { best = score; saveExfilHigh(best); }
+    } else {
+      AudioEngine.sfx('crash');
+      haptic([40, 30, 40]);
+    }
+    bestEl.textContent = 'Best ' + best;
+    var overlay = document.createElement('div');
+    overlay.className = 'exfil-overlay';
+    overlay.innerHTML =
+      '<p class="eyebrow magenta" style="margin:0;">' + (success ? 'TOUCHDOWN' : 'SIGNAL LOST') + '</p>' +
+      '<div class="exfil-overlay-score">' + (success ? score : '—') + '</div>' +
+      '<button class="primary-btn" id="exfil-retry" style="width:auto;padding:12px 28px;">' + (success ? 'Fly Again' : 'Retry') + '</button>';
+    wrap.appendChild(overlay);
+    document.getElementById('exfil-retry').addEventListener('click', function () {
+      overlay.remove();
+      reset();
+      loop();
+    });
+  }
+
+  function loop() {
+    rafId = requestAnimationFrame(loop);
+    if (!running) return;
+    ctx.clearRect(0, 0, W, H);
+
+    ship.vy += GRAVITY;
+    if (thrusting && fuel > 0) {
+      ship.vy += THRUST;
+      fuel = Math.max(0, fuel - FUEL_BURN);
+    }
+    ship.y += ship.vy;
+    ship.x += ship.vx;
+    if (ship.x - ship.r < 0) { ship.x = ship.r; ship.vx *= -1; }
+    if (ship.x + ship.r > W) { ship.x = W - ship.r; ship.vx *= -1; }
+
+    altEl.textContent = String(Math.max(0, Math.round(GROUND_Y - ship.y)));
+    velEl.textContent = ship.vy.toFixed(1);
+    fuelEl.textContent = String(Math.round(fuel));
+
+    // skyline (decorative)
+    ctx.fillStyle = 'rgba(34,230,212,0.08)';
+    for (var i = 0; i < skyline.length; i++) {
+      var b = skyline[i];
+      ctx.fillRect(b.x, GROUND_Y - b.h, b.w, b.h);
+    }
+    // ground
+    ctx.strokeStyle = 'rgba(217,247,242,0.25)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(0, GROUND_Y); ctx.lineTo(W, GROUND_Y); ctx.stroke();
+    // pad
+    ctx.strokeStyle = '#22e6d4';
+    ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(padX, GROUND_Y); ctx.lineTo(padX + PAD_W, GROUND_Y); ctx.stroke();
+
+    // ship
+    ctx.save();
+    ctx.translate(ship.x, ship.y);
+    ctx.strokeStyle = '#22e6d4';
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(0, -ship.r); ctx.lineTo(ship.r * 0.8, ship.r * 0.7); ctx.lineTo(-ship.r * 0.8, ship.r * 0.7); ctx.closePath();
+    ctx.stroke();
+    if (thrusting && fuel > 0) {
+      ctx.strokeStyle = 'rgba(255,207,61,0.85)';
+      ctx.beginPath();
+      ctx.moveTo(-ship.r * 0.5, ship.r * 0.7);
+      ctx.lineTo(0, ship.r * 0.7 + 8 + Math.random() * 6);
+      ctx.lineTo(ship.r * 0.5, ship.r * 0.7);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    if (ship.y + ship.r >= GROUND_Y) {
+      var onPad = ship.x >= padX && ship.x <= padX + PAD_W;
+      var soft = Math.abs(ship.vy) <= SAFE_VY && Math.abs(ship.vx) <= SAFE_VX;
+      if (onPad && soft) {
+        var score = Math.round(100 + fuel + (SAFE_VY - Math.abs(ship.vy)) * 30);
+        die(true, score);
+      } else {
+        die(false, 0);
+      }
+    }
+  }
+  loop();
+
+  function onKeyDown(e) { if (e.code === 'Space' || e.key === ' ') { e.preventDefault(); startThrust(); } }
+  function onKeyUp(e) { if (e.code === 'Space' || e.key === ' ') { e.preventDefault(); stopThrust(); } }
+  canvas.addEventListener('pointerdown', startThrust);
+  canvas.addEventListener('pointerup', stopThrust);
+  canvas.addEventListener('pointerleave', stopThrust);
+  document.addEventListener('keydown', onKeyDown);
+  document.addEventListener('keyup', onKeyUp);
+
+  document.getElementById('back-home').addEventListener('click', function () {
+    running = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    document.removeEventListener('keydown', onKeyDown);
+    document.removeEventListener('keyup', onKeyUp);
+    renderHome();
+  });
+}
+
+/* ── Notifications route the player into the right app for the current node ── */
+function showBanner(appDef, title, body, onTap) {
+  var home = phoneScreen.querySelector('.home-screen');
+  if (!home) return;
+  AudioEngine.sfx('notify');
+  var el = document.createElement('div');
+  el.className = 'notif-banner';
+  el.innerHTML = '<span class="nicon" style="color:' + appDef.color + '">' + appIconSvg(appDef.icon) + '</span><span class="nbody"><b>' + title + '</b><span>' + body + '</span></span>';
+  phoneScreen.appendChild(el);
+  requestAnimationFrame(function () { el.classList.add('show'); });
+  el.addEventListener('click', function () { el.remove(); onTap(); });
+  timers.push(setTimeout(function () {
+    el.classList.remove('show');
+    timers.push(setTimeout(function () { el.remove(); }, 400));
+  }, 4500));
+}
+function showSurveillanceWarning() {
+  var home = phoneScreen.querySelector('.home-screen');
+  if (!home) return;
+  AudioEngine.sfx('miss');
+  haptic([30, 20, 30]);
+  var el = document.createElement('div');
+  el.className = 'notif-banner warn';
+  el.innerHTML = '<span class="nicon" style="color:var(--danger)">' + appIconSvg('locationpin') + '</span><span class="nbody"><b>Surveillance</b><span>They\'re narrowing in on your position. Move.</span></span>';
+  phoneScreen.appendChild(el);
+  requestAnimationFrame(function () { el.classList.add('show'); });
+  el.addEventListener('click', function () { el.remove(); });
+  timers.push(setTimeout(function () {
+    el.classList.remove('show');
+    timers.push(setTimeout(function () { el.remove(); }, 400));
+  }, 4500));
+}
+function queueNotification(nodeIndex) {
+  if (nodeIndex >= state.currentNodes.length) return;
+  var node = state.currentNodes[nodeIndex];
+  if (node.app === 'call') {
+    timers.push(setTimeout(function () { renderCall(node); }, 1400));
+    return;
+  }
+  var appDef = appById(node.app);
+  timers.push(setTimeout(function () { showBanner(appDef, node.notif.title, node.notif.body, openCurrentNode); }, 700));
+}
+function openCurrentNode() {
+  var node = state.currentNodes[state.nodeIndex];
+  if (node.app === 'call') { renderCall(node); return; }
+  renderAppChoice(node);
+}
+
+function renderAppChoice(node) {
+  clearTimers();
+  var bodyHtml = '';
+  if (node.app === 'messages') {
+    bodyHtml =
+      node.scene.map(function (p) { return '<div class="bubble-row in"><div class="bubble">' + p + '</div></div>'; }).join('') +
+      '<div class="quick-replies">' + node.choices.map(function (c, i) {
+        if (!meetsRequirement(c)) return '';
+        var tag = c.requires ? '<span class="skill-tag">' + c.requires.skill.toUpperCase() + '</span>' : '';
+        return '<button class="quick-reply' + (c.requires ? ' skill-check' : '') + '" data-idx="' + i + '">' + c.label + tag + '</button>';
+      }).join('') + '</div>';
+  } else if (node.app === 'tracker') {
+    bodyHtml =
+      '<div class="radar-wrap"><div class="radar"><span class="you"></span><span class="blip" style="top:16%;left:68%;"></span></div></div>' +
+      node.scene.map(function (p) { return '<div class="log-line">' + p + '</div>'; }).join('') +
+      '<div style="height:16px;"></div>' + actionListHtml(node);
+  } else if (node.app === 'breach') {
+    bodyHtml = '<div class="terminal">' + node.scene.map(function (p) { return '<div class="tline">' + p + '</div>'; }).join('') + '</div>' + actionListHtml(node);
+  } else if (node.app === 'transmit') {
+    bodyHtml = '<p style="font-size:12.5px;line-height:1.75;color:rgba(217,247,242,0.8);margin-bottom:18px;">' + node.scene.join(' ') + '</p>' + actionListHtml(node);
+  }
+  setPhoneScreen('<div class="app-screen">' + screenHeaderHtml(node) + '<div class="app-body">' + bodyHtml + '</div></div>');
+  bindChoiceControls(node);
+}
+
+function renderCall(node) {
+  clearTimers();
+  setPhoneScreen(
+    '<div class="call-screen">' +
+      '<div class="call-avatar">' + appIconSvg('tracker') + '</div>' +
+      '<div class="call-name">' + node.caller + '</div>' +
+      '<div class="call-sub">Incoming call</div>' +
+      '<p class="call-copy">' + node.scene.join(' ') + '</p>' +
+      actionListHtml(node) +
+    '</div>'
+  );
+  bindChoiceControls(node);
+}
+
+function activateChoice(node, idx) {
+  var choice = node.choices[idx];
+  AudioEngine.sfx('tap');
+  state.lastChoice = choice;
+  addFlags(state.flags.method, choice.method || {});
+  addFlags(state.flags.trust, choice.trust || {});
+  addFlags(state.flags.alignment, choice.align || {});
+  if (choice.method && choice.method.violence) state.flags.notoriety += choice.method.violence;
+  if (node.onSelect) node.onSelect(state, choice);
+  if (node.noSync) { resolveDialogue(node, choice); return; }
+  renderSyncIntro(node, choice);
+}
+
+/* ── Dialogue nodes skip SYNC entirely — a response, a consequence, then onward ── */
+function resolveDialogue(node, choice) {
+  clearTimers();
+  awardXp(5);
+  var overlay = document.createElement('div');
+  overlay.className = 'dialog-overlay';
+  overlay.innerHTML =
+    '<div class="dialog-card">' +
+      '<p class="dtitle" style="color:' + node.art.accent + '">MESSAGE SENT</p>' +
+      '<p class="dbody">' + choice.response + '</p>' +
+      '<button class="dialog-ok" id="dialog-ok">Continue</button>' +
+    '</div>';
+  phoneScreen.appendChild(overlay);
+  document.getElementById('dialog-ok').addEventListener('click', advanceToNextNode);
+}
+
+function advanceToNextNode() {
+  state.nodeIndex++;
+  if (state.nodeIndex === SERVER_BRANCH_INDEX) state.currentNodes[SERVER_BRANCH_INDEX] = pickServerVariant(state);
+  var surveillancePenalty = false;
+  if (state.location) {
+    state.locationStale++;
+    if (state.locationStale >= LOCATION_STALE_LIMIT) { state.flags.hunted++; surveillancePenalty = true; }
+  }
+  updateStatusBar();
+  if (state.flags.hunted >= 3) { renderEnding(null, null); return; }
+  renderHome();
+  queueNotification(state.nodeIndex);
+  if (surveillancePenalty) timers.push(setTimeout(showSurveillanceWarning, 1900));
+}
+
+function renderSyncIntro(node, choice) {
+  var skill = skillForChoice(choice);
+  var canSkip = skipEligible(choice);
+  setPhoneScreen(
+    '<div class="app-screen">' + screenHeaderHtml(node) +
+      '<div class="app-body" style="text-align:center;">' +
+        '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+        '<p class="sync-sub" style="margin-bottom:20px;">' + node.sync.sub + '</p>' +
+        '<button class="primary-btn" id="sync-go">Initiate SYNC</button>' +
+        (canSkip ? '<button class="ghost-btn" id="sync-skip" style="margin-top:10px;">Skip — ' + skill.toUpperCase() + ' handles it</button>' : '') +
+      '</div>' +
+    '</div>'
+  );
+  document.getElementById('sync-go').addEventListener('click', function () {
+    var mode = node.sync.mode;
+    if (mode === 'memory') runMemorySync(node, choice);
+    else if (mode === 'timing') runTimingSync(node, choice);
+    else if (mode === 'quickdraw') runQuickdrawSync(node, choice);
+    else if (mode === 'overload') runOverloadSync(node, choice);
+    else runDodgeSync(node, choice);
+  });
+  if (canSkip) {
+    document.getElementById('sync-skip').addEventListener('click', function () { settleSync(node, choice, 'clean'); });
+  }
+}
+
+/* ── Dodge-mode SYNC: tap the gap before a closing ring catches it ── */
+function runDodgeSync(node, choice) {
+  var N = node.sync.rounds, D = node.sync.duration;
+  var hits = 0, lates = 0, misses = 0, round = 0;
+
+  nextRound();
+
+  function nextRound() {
+    if (round >= N) return finish();
+    var tx = 15 + Math.random() * 70, ty = 15 + Math.random() * 70;
+    setPhoneScreen(
+      '<div class="app-screen">' + screenHeaderHtml(node) +
+        '<div class="app-body" style="text-align:center;">' +
+          '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+          '<p class="sync-sub">' + (round + 1) + ' / ' + N + '</p>' +
+          '<div class="sync-arena">' +
+            '<div class="dodge-field" id="dodge-field">' +
+              '<div class="dodge-ring" id="dodge-ring" style="left:' + tx + '%;top:' + ty + '%;"></div>' +
+              '<div class="dodge-target" id="dodge-target" style="left:' + tx + '%;top:' + ty + '%;"></div>' +
+            '</div>' +
+            '<div class="key-hint">Tap the gap, or press Space / Enter</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+    var field = document.getElementById('dodge-field');
+    var target = document.getElementById('dodge-target');
+    var ring = document.getElementById('dodge-ring');
+    ring.style.transition = 'none'; ring.style.transform = 'translate(-50%,-50%) scale(2.4)';
+    void ring.offsetWidth;
+    ring.style.transition = 'transform ' + D + 'ms linear';
+    ring.style.transform = 'translate(-50%,-50%) scale(0.35)';
+    var startTime = performance.now(), active = true;
+    var missTimer = setTimeout(function () { if (active) resolve('miss'); }, D + 30);
+    timers.push(missTimer);
+
+    field.addEventListener('click', onTap);
+    document.addEventListener('keydown', keyHandler);
+
+    function onTap(e) {
+      if (!active) return;
+      var r = field.getBoundingClientRect();
+      var px = ((e.clientX - r.left) / r.width) * 100;
+      var py = ((e.clientY - r.top) / r.height) * 100;
+      var dx = (px - tx) / 100 * r.width, dy = (py - ty) / 100 * r.height;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      resolve(dist <= 16 ? 'hit' : dist <= 34 ? 'late' : 'miss');
+    }
+    function keyHandler(e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); resolve('late'); } }
+    function resolve(kind) {
+      active = false;
+      clearTimeout(missTimer);
+      field.removeEventListener('click', onTap);
+      document.removeEventListener('keydown', keyHandler);
+      feedbackFor(kind, target);
+      if (kind === 'hit') { hits++; target.classList.add('hit'); }
+      else if (kind === 'late') { lates++; target.classList.add('late'); ring.classList.add('late'); }
+      else { misses++; }
+      round++;
+      timers.push(setTimeout(nextRound, 260));
+    }
+  }
+  function finish() {
+    var result = classify(hits, lates, misses, N);
+    settleSync(node, choice, result);
+  }
+}
+
+/* ── Timing-mode SYNC: stop a sweeping marker inside a moving target zone ── */
+function runTimingSync(node, choice) {
+  var N = node.sync.rounds, D = node.sync.duration;
+  var hits = 0, lates = 0, misses = 0, round = 0;
+
+  nextRound();
+
+  function nextRound() {
+    if (round >= N) return finish();
+    var zoneCenter = 18 + Math.random() * 64;
+    var lateHalf = 11, hitHalf = 5;
+    setPhoneScreen(
+      '<div class="app-screen">' + screenHeaderHtml(node) +
+        '<div class="app-body" style="text-align:center;">' +
+          '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+          '<p class="sync-sub">' + (round + 1) + ' / ' + N + '</p>' +
+          '<div class="sync-arena">' +
+            '<div class="timing-track" id="timing-track">' +
+              '<div class="timing-zone" style="left:' + (zoneCenter - lateHalf) + '%;width:' + (lateHalf * 2) + '%;"></div>' +
+              '<div class="timing-marker" id="timing-marker"></div>' +
+            '</div>' +
+            '<button class="primary-btn" id="timing-tap" style="max-width:160px;">Stop It</button>' +
+            '<div class="key-hint">Tap, or press Space / Enter</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+    var marker = document.getElementById('timing-marker');
+    marker.style.transition = 'none'; marker.style.left = '0%';
+    void marker.offsetWidth;
+    marker.style.transition = 'left ' + D + 'ms linear';
+    requestAnimationFrame(function () { marker.style.left = '100%'; });
+    var startTime = performance.now(), active = true;
+    var timeoutId = setTimeout(function () { if (active) resolve('miss', 100); }, D + 30);
+    timers.push(timeoutId);
+
+    document.getElementById('timing-tap').addEventListener('click', tap);
+    document.getElementById('timing-track').addEventListener('click', tap);
+    document.addEventListener('keydown', keyHandler);
+
+    function tap() {
+      if (!active) return;
+      var elapsed = performance.now() - startTime;
+      var pos = Math.min(100, (elapsed / D) * 100);
+      var dist = Math.abs(pos - zoneCenter);
+      resolve(dist <= hitHalf ? 'hit' : dist <= lateHalf ? 'late' : 'miss', pos);
+    }
+    function keyHandler(e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); tap(); } }
+    function resolve(kind, pos) {
+      active = false;
+      clearTimeout(timeoutId);
+      document.removeEventListener('keydown', keyHandler);
+      marker.style.transition = 'none'; marker.style.left = pos + '%';
+      marker.classList.add(kind);
+      feedbackFor(kind, marker);
+      if (kind === 'hit') hits++; else if (kind === 'late') lates++; else misses++;
+      round++;
+      timers.push(setTimeout(nextRound, 260));
+    }
+  }
+  function finish() {
+    var result = classify(hits, lates, misses, N);
+    settleSync(node, choice, result);
+  }
+}
+
+/* ── Memory-mode SYNC: flash a pattern, then repeat it ── */
+function runMemorySync(node, choice) {
+  var N = node.sync.length;
+  var pattern = [];
+  for (var k = 0; k < N; k++) pattern.push(randomGlyph(pattern[k - 1]));
+
+  setPhoneScreen(
+    '<div class="app-screen">' + screenHeaderHtml(node) +
+      '<div class="app-body" style="text-align:center;">' +
+        '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+        '<p class="sync-sub" id="phase-label">Memorise the pattern…</p>' +
+        '<div class="sync-arena">' +
+          '<div class="ring-wrap"><div class="ring-track"></div><div class="ring-glyph" id="ring-glyph" style="z-index:2;"></div></div>' +
+          '<div class="memory-row" id="memory-row"></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>'
+  );
+  var row = document.getElementById('memory-row');
+  row.innerHTML = pattern.map(function () { return '<div class="memory-slot"></div>'; }).join('');
+  var slots = row.querySelectorAll('.memory-slot');
+  var glyphEl = document.getElementById('ring-glyph');
+
+  var idx = 0;
+  function flashStep() {
+    if (idx >= pattern.length) { timers.push(setTimeout(startRecall, 300)); return; }
+    glyphEl.textContent = pattern[idx].sym;
+    slots[idx].classList.add('active');
+    timers.push(setTimeout(function () {
+      glyphEl.textContent = '';
+      slots[idx].classList.remove('active');
+      idx++;
+      timers.push(setTimeout(flashStep, node.sync.gapMs));
+    }, node.sync.flashMs));
+  }
+  timers.push(setTimeout(flashStep, 500));
+
+  function startRecall() {
+    document.getElementById('phase-label').textContent = 'Repeat it back';
+    glyphEl.textContent = '?';
+    var arena = phoneScreen.querySelector('.sync-arena');
+    var bar = document.createElement('div');
+    bar.className = 'progress-bar';
+    bar.innerHTML = '<div class="progress-fill" id="progress-fill"></div>';
+    arena.appendChild(bar);
+    var dpadHolder = document.createElement('div');
+    dpadHolder.innerHTML = dpadHtml() + '<div class="key-hint">Arrow keys / WASD, or tap</div>';
+    arena.appendChild(dpadHolder);
+    bindDpad(handleInput);
+    document.addEventListener('keydown', keyHandler);
+
+    var totalMs = pattern.length * node.sync.recallPerGlyph;
+    var fill = document.getElementById('progress-fill');
+    fill.style.transition = 'none'; fill.style.transform = 'scaleX(1)';
+    void fill.offsetWidth;
+    fill.style.transition = 'transform ' + totalMs + 'ms linear';
+    fill.style.transform = 'scaleX(0)';
+
+    var pos = 0, misses = 0, active = true;
+    timers.push(setTimeout(function () { if (active) timeout(); }, totalMs));
+
+    function handleInput(dirKey) {
+      if (!active || pos >= pattern.length) return;
+      var expected = pattern[pos];
+      if (dirKey === expected.key) { slots[pos].classList.add('hit'); feedbackFor('hit', slots[pos]); }
+      else { slots[pos].classList.add('miss'); misses++; feedbackFor('miss'); }
+      pos++;
+      if (pos >= pattern.length) finish();
+    }
+    function keyHandler(e) { var g = glyphByKey(e.key); if (g) { e.preventDefault(); handleInput(g.key); } }
+    function timeout() {
+      active = false;
+      while (pos < pattern.length) { slots[pos].classList.add('miss'); misses++; pos++; }
+      finish();
+    }
+    function finish() {
+      active = false;
+      document.removeEventListener('keydown', keyHandler);
+      settleAfterDelay();
+    }
+    function settleAfterDelay() {
+      var result = classify(pattern.length - misses, 0, misses, pattern.length);
+      timers.push(setTimeout(function () { settleSync(node, choice, result); }, 250));
+    }
+  }
+}
+
+/* ── Quickdraw-mode SYNC: wait for the cue, fire the instant it drops ── */
+function runQuickdrawSync(node, choice) {
+  var N = node.sync.rounds, hitMs = node.sync.hitMs, lateMs = node.sync.lateMs;
+  var hits = 0, lates = 0, misses = 0, round = 0;
+
+  nextRound();
+
+  function nextRound() {
+    if (round >= N) return finish();
+    setPhoneScreen(
+      '<div class="app-screen">' + screenHeaderHtml(node) +
+        '<div class="app-body" style="text-align:center;">' +
+          '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+          '<p class="sync-sub">' + (round + 1) + ' / ' + N + '</p>' +
+          '<div class="sync-arena">' +
+            '<div class="quickdraw-stage wait" id="qd-stage">STEADY</div>' +
+            '<div class="key-hint">Tap, or press Space, the instant it flips</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+    var stage = document.getElementById('qd-stage');
+    var phase = 'wait', goTime = 0;
+    var delay = node.sync.minDelay + Math.random() * (node.sync.maxDelay - node.sync.minDelay);
+    var goTimer = setTimeout(function () {
+      phase = 'go'; goTime = performance.now();
+      stage.className = 'quickdraw-stage go'; stage.textContent = 'DRAW';
+      timers.push(setTimeout(function () { if (phase === 'go') resolve('miss'); }, lateMs + 40));
+    }, delay);
+    timers.push(goTimer);
+
+    stage.addEventListener('click', act);
+    document.addEventListener('keydown', keyHandler);
+
+    function act() {
+      if (phase === 'wait') { clearTimeout(goTimer); stage.className = 'quickdraw-stage early'; stage.textContent = 'TOO SOON'; resolve('miss'); return; }
+      if (phase !== 'go') return;
+      var rt = performance.now() - goTime;
+      resolve(rt <= hitMs ? 'hit' : rt <= lateMs ? 'late' : 'miss');
+    }
+    function keyHandler(e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); act(); } }
+    function resolve(kind) {
+      phase = 'done';
+      document.removeEventListener('keydown', keyHandler);
+      stage.className = 'quickdraw-stage ' + (kind === 'miss' ? 'early' : 'go');
+      stage.textContent = kind === 'hit' ? 'HIT' : kind === 'late' ? 'LATE' : 'MISSED';
+      feedbackFor(kind, stage);
+      if (kind === 'hit') hits++; else if (kind === 'late') lates++; else misses++;
+      round++;
+      timers.push(setTimeout(nextRound, 500));
+    }
+  }
+  function finish() {
+    var result = classify(hits, lates, misses, N);
+    settleSync(node, choice, result);
+  }
+}
+
+/* ── Overload-mode SYNC: the climax mashup — alternates dodge and flash prompts ── */
+function runOverloadSync(node, choice) {
+  var N = node.sync.rounds;
+  var hits = 0, lates = 0, misses = 0, round = 0;
+
+  nextRound();
+
+  function nextRound() {
+    if (round >= N) return finish();
+    if (Math.random() < 0.55) runDodgeRound(); else runFlashRound();
+  }
+
+  function runDodgeRound() {
+    var D = 780;
+    var tx = 15 + Math.random() * 70, ty = 15 + Math.random() * 70;
+    setPhoneScreen(
+      '<div class="app-screen">' + screenHeaderHtml(node) +
+        '<div class="app-body" style="text-align:center;">' +
+          '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+          '<p class="sync-sub">' + (round + 1) + ' / ' + N + '</p>' +
+          '<div class="sync-arena">' +
+            '<div class="dodge-field" id="dodge-field" style="width:190px;height:190px;">' +
+              '<div class="dodge-ring" id="dodge-ring" style="left:' + tx + '%;top:' + ty + '%;"></div>' +
+              '<div class="dodge-target" id="dodge-target" style="left:' + tx + '%;top:' + ty + '%;"></div>' +
+            '</div>' +
+            '<div class="key-hint">Tap the gap, or press Space / Enter</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+    var field = document.getElementById('dodge-field'), target = document.getElementById('dodge-target'), ring = document.getElementById('dodge-ring');
+    ring.style.transition = 'none'; ring.style.transform = 'translate(-50%,-50%) scale(2.4)';
+    void ring.offsetWidth;
+    ring.style.transition = 'transform ' + D + 'ms linear';
+    ring.style.transform = 'translate(-50%,-50%) scale(0.35)';
+    var active = true;
+    timers.push(setTimeout(function () { if (active) resolve('miss'); }, D + 30));
+    field.addEventListener('click', onTap);
+    document.addEventListener('keydown', keyHandler);
+
+    function onTap(e) {
+      if (!active) return;
+      var r = field.getBoundingClientRect();
+      var px = ((e.clientX - r.left) / r.width) * 100;
+      var py = ((e.clientY - r.top) / r.height) * 100;
+      var dx = (px - tx) / 100 * r.width, dy = (py - ty) / 100 * r.height;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      resolve(dist <= 18 ? 'hit' : dist <= 38 ? 'late' : 'miss');
+    }
+    function keyHandler(e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); resolve('late'); } }
+    function resolve(kind) {
+      active = false;
+      field.removeEventListener('click', onTap);
+      document.removeEventListener('keydown', keyHandler);
+      feedbackFor(kind, target);
+      if (kind === 'hit') { hits++; target.classList.add('hit'); }
+      else if (kind === 'late') { lates++; target.classList.add('late'); ring.classList.add('late'); }
+      else { misses++; }
+      round++;
+      timers.push(setTimeout(nextRound, 150));
+    }
+  }
+
+  function runFlashRound() {
+    var windowMs = 480;
+    setPhoneScreen(
+      '<div class="app-screen">' + screenHeaderHtml(node) +
+        '<div class="app-body" style="text-align:center;">' +
+          '<p class="eyebrow magenta">' + node.sync.label + '</p>' +
+          '<p class="sync-sub">' + (round + 1) + ' / ' + N + '</p>' +
+          '<div class="sync-arena">' +
+            '<div class="overload-flash" id="ov-flash">HOLD</div>' +
+            '<div class="key-hint">Tap, or press Space, right now</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>'
+    );
+    var el = document.getElementById('ov-flash');
+    requestAnimationFrame(function () { el.classList.add('go'); el.textContent = 'NOW'; });
+    var startTime = performance.now(), active = true;
+    timers.push(setTimeout(function () { if (active) resolve('miss'); }, windowMs));
+    el.addEventListener('click', act);
+    document.addEventListener('keydown', keyHandler);
+
+    function act() {
+      if (!active) return;
+      var elapsed = performance.now() - startTime;
+      resolve(elapsed <= windowMs * 0.45 ? 'hit' : 'late');
+    }
+    function keyHandler(e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); act(); } }
+    function resolve(kind) {
+      active = false;
+      document.removeEventListener('keydown', keyHandler);
+      el.removeEventListener('click', act);
+      feedbackFor(kind, el);
+      if (kind === 'hit') hits++; else if (kind === 'late') lates++; else misses++;
+      round++;
+      timers.push(setTimeout(nextRound, 150));
+    }
+  }
+
+  function finish() {
+    var result = classify(hits, lates, misses, N);
+    settleSync(node, choice, result);
+  }
+}
+
+function dpadHtml() {
+  return (
+    '<div class="dpad">' +
+      '<button class="d-up" data-dir="up">▲</button>' +
+      '<button class="d-left" data-dir="left">◀</button>' +
+      '<button class="d-down" data-dir="down">▼</button>' +
+      '<button class="d-right" data-dir="right">▶</button>' +
+    '</div>'
+  );
+}
+function bindDpad(handler) {
+  Array.prototype.forEach.call(phoneScreen.querySelectorAll('.dpad button'), function (btn) {
+    btn.addEventListener('click', function () { handler(btn.dataset.dir); });
+  });
+}
+
+/* ── Resolve a SYNC outcome as a system dialog, then move to the next job ── */
+function settleSync(node, choice, result) {
+  state.syncLog.push(result);
+  awardXp(result === 'clean' ? 15 : result === 'partial' ? 6 : 0);
+  trainSkills(choice, result);
+  if (result === 'fail') state.flags.resolve = Math.max(0, state.flags.resolve - 2);
+  else if (result === 'partial') state.flags.resolve = Math.max(0, state.flags.resolve - 1);
+  if (result === 'fail' && node.onFail) node.onFail(state);
+  if (result === 'partial' && node.onPartial) node.onPartial(state);
+  updateStatusBar();
+
+  var isFinal = node.id === 'final';
+  var bodyText = isFinal ? '' : node.outcomes[result](choice);
+  var resultLabel = result === 'clean' ? 'CLEAN SYNC' : result === 'partial' ? 'PARTIAL SYNC' : 'SYNC FAILED';
+  var resultColor = result === 'clean' ? 'var(--cyan)' : result === 'partial' ? 'var(--amber)' : 'var(--danger)';
+
+  var overlay = document.createElement('div');
+  overlay.className = 'dialog-overlay';
+  overlay.innerHTML =
+    '<div class="dialog-card">' +
+      '<p class="dtitle" style="color:' + resultColor + '">' + resultLabel + '</p>' +
+      (bodyText ? '<p class="dbody">' + bodyText + '</p>' : '') +
+      '<button class="dialog-ok" id="dialog-ok">Continue</button>' +
+    '</div>';
+  phoneScreen.appendChild(overlay);
+  document.getElementById('dialog-ok').addEventListener('click', function () {
+    if (isFinal) { renderEnding(choice.id, result); return; }
+    advanceToNextNode();
+  });
+}
+
+function computeEnding(choiceId, syncResult) {
+  if (choiceId === null) return 'hunted-down';
+  if (syncResult === 'fail') return 'reconditioned';
+  if (isNeutralAligned()) return 'loop-broken';
+  if (state.flags.betrayed && syncResult !== 'clean') return 'betrayed';
+  if (state.flags.resolve <= 0) return 'burned-out';
+
+  var methodDom = dominant(state.flags.method, ['stealth', 'words', 'violence']);
+  var trustDom = dominant(state.flags.trust, ['street', 'self', 'corp']);
+
+  if (choiceId === 'merge') return state.flags.aiAlly ? 'merged' : 'silence';
+  if (choiceId === 'destroy') return 'walk-away';
+  if (choiceId === 'vanish') {
+    if (methodDom === 'violence') return 'vigilante';
+    if (methodDom === 'stealth' && state.flags.hunted === 0) return 'ghost';
+    return 'walk-away';
+  }
+  if (choiceId === 'broadcast') return (syncResult === 'clean' && trustDom === 'street') ? 'revolution-spark' : 'martyr';
+  if (choiceId === 'corp') return state.flags.notoriety >= 5 ? 'bought-silence' : 'corporate-puppet';
+  return 'walk-away';
+}
+
+function renderEnding(choiceId, syncResult) {
+  clearTimers();
+  AudioEngine.stopMusic();
+  AudioEngine.sfx('ending');
+  var key = computeEnding(choiceId, syncResult);
+  var ending = ENDINGS[key];
+  var brokeLoop = key === 'loop-broken';
+  var loopsBefore = loopMeta.count;
+  loopMeta.count++;
+  if (brokeLoop) loopMeta.broken = true;
+  saveLoopMeta();
+  markEndingSeen(key);
+
+  updateStatusBar();
+  var trustDom = allZero(state.flags.trust) ? 'NONE' : dominant(state.flags.trust, ['street', 'self', 'corp']).toUpperCase();
+  var methodDom = allZero(state.flags.method) ? 'NONE' : dominant(state.flags.method, ['stealth', 'words', 'violence']).toUpperCase();
+  var alignDomEnd = dominant(state.flags.alignment, ['neutral', 'good', 'evil']);
+  var readDescEnd = alignDomEnd === 'good' ? 'WARM' : alignDomEnd === 'evil' ? 'COLD' : 'UNREADABLE';
+  var logHtml = state.syncLog.map(function (r) { return '<span class="' + r + '"></span>'; }).join('');
+  var loopParagraph = brokeLoop
+    ? '<p>' + (loopsBefore > 0 ? 'It took ' + (loopsBefore + 1) + ' nights to get here. This is the one that sticks.' : 'First night, first try. Whatever was resetting this loop never even got the chance to run twice.') + '</p>'
+    : '<p style="opacity:0.6;">The static resets. Somewhere, the rooftop is still wet with rain, and it\'s about to start again.</p>';
+
+  setPhoneScreen(
+    '<div class="app-screen">' +
+      '<div class="app-body" style="padding-top:26px;">' +
+        '<p class="eyebrow magenta">' + (brokeLoop ? 'Loop broken' : 'Connection terminated') + '</p>' +
+        '<h1 class="title glitch" data-text="' + ending.title + '">' + ending.title + '</h1>' +
+        '<p class="tagline" style="font-style:italic;">' + ending.tag + '</p>' +
+        '<div class="prose"><p>' + ending.body + '</p>' + loopParagraph + '</div>' +
+        '<div class="flag-grid">' +
+          '<div class="flag-box"><div class="fk">Trust leaning</div><div class="fv">' + trustDom + '</div></div>' +
+          '<div class="flag-box"><div class="fk">Method leaning</div><div class="fv">' + methodDom + '</div></div>' +
+          '<div class="flag-box"><div class="fk">Hunted level</div><div class="fv">' + Math.min(state.flags.hunted, 3) + ' / 3</div></div>' +
+          '<div class="flag-box"><div class="fk">Resolve</div><div class="fv">' + state.flags.resolve + ' / 3</div></div>' +
+          '<div class="flag-box"><div class="fk">Notoriety</div><div class="fv">' + state.flags.notoriety + '</div></div>' +
+          '<div class="flag-box"><div class="fk">Emotional read</div><div class="fv">' + readDescEnd + '</div></div>' +
+          '<div class="flag-box"><div class="fk">SYNC record</div><div class="sync-log">' + logHtml + '</div></div>' +
+        '</div>' +
+        '<button class="primary-btn" id="again-btn">' + (brokeLoop ? 'Play Again' : 'Run It Back') + '</button>' +
+      '</div>' +
+    '</div>'
+  );
+  document.getElementById('again-btn').addEventListener('click', exitToMenu);
+}
+
+function refreshLoopTag() {
+  var tag = document.getElementById('loop-tag');
+  if (loopMeta.count > 0) {
+    tag.hidden = false;
+    tag.textContent = loopMeta.broken ? 'Protocol complete — free replay' : 'Loop ' + (loopMeta.count + 1);
+    var label = loopMeta.broken ? 'Play Again' : 'Loop Again';
+    ['new-game-btn', 'howto-new-game-btn'].forEach(function (id) {
+      var btn = document.getElementById(id);
+      if (btn) btn.textContent = label;
+    });
+  }
+}
+
+tickClock();
+refreshLoopTag();
+
+// The landing page (one directory up) already shows this same title screen and its
+// own "Play" button, so jump straight into the phone on arrival here instead of
+// showing it a second time. This menu still earns its keep on the way back out
+// (exitToMenu): loop count, replay, How To Play.
+enterGame();
+</script>
+</body>
+</html>
