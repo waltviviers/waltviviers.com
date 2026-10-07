@@ -1882,6 +1882,11 @@ function startTour() {
   });
 }
 
+// Leaving with work that only exists in memory would lose it, so ask first.
+window.addEventListener('beforeunload', (e) => {
+  if (!S.connected() && project.clips.length) { e.preventDefault(); e.returnValue = ''; }
+});
+
 // ── Start-up ──
 
 async function init() {
