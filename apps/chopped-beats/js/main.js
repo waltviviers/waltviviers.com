@@ -110,6 +110,8 @@ function toast(msg, err) {
 }
 
 function modal(title, html, onReady) {
+  // A welcome image sits above the title; clear it so other dialogs don't inherit it.
+  $('.modal-card').querySelectorAll(':scope > .welcome-mascot').forEach((el) => el.remove());
   $('#modalTitle').textContent = title;
   $('#modalBody').innerHTML = html;
   $('#modal').hidden = false;
@@ -1862,7 +1864,7 @@ window.addEventListener('keydown', (e) => {
 
 let tourPending = false;
 const TOUR = [
-  { title: 'Welcome to Walt\'s Chopped Beats', text: 'A quick tour of the basics. It takes under a minute. Use Next, or the arrow keys.' },
+  { title: 'Welcome to Chopped Beats', text: 'A quick tour of the basics. It takes under a minute. Use Next, or the arrow keys.' },
   { target: '#btnFolder', title: 'Your folder', text: 'Pick a folder on your PC once. Your sounds, projects and exports save there automatically. Nothing is uploaded.' },
   { target: '.library', title: 'Sounds', text: 'Import audio or TikTok videos here, or drop files anywhere on the page. Videos keep only the sound. Drag any sound onto a track.' },
   { target: '#player', title: 'The player', text: 'Play, go back to the start, and record your voice with ●. Recording goes onto the highlighted track. Drag the ⠿ grip to move this anywhere; double-click it to put it back.' },
@@ -1915,7 +1917,7 @@ async function init() {
     return;
   }
   const reconnect = state === 'needs-permission';
-  modal('Walt\'s Chopped Beats', `
+  modal('Chopped Beats', `
     <img class="welcome-mascot" src="/apps/chopped-beats/mascot.png" alt="" onerror="this.remove()" />
     <p>Chop TikTok clips, your voice and any sound into songs. <strong>Nothing is uploaded.</strong> Your sounds, projects and exports live in a folder on your computer.</p>
     ${S.supported ? '' : '<p><strong>This browser can\'t save to a folder.</strong> Use Chrome or Edge on a computer to keep your work.</p>'}
@@ -1924,6 +1926,8 @@ async function init() {
       <button class="btn" id="wTry">Just try it</button>
     </div>
     <p class="hint" style="margin-top:14px">Tip: make a new folder called “Chopped Beats” in Music.</p>`, (body) => {
+    const pic = $('.welcome-mascot', body);
+    if (pic) $('#modalTitle').before(pic);
     const f = $('#wFolder', body);
     if (f) f.addEventListener('click', async () => { if (await connectFolder(reconnect)) { closeModal(); const last = pref.get('last', null); const names = await S.list('projects'); if (last && names.includes(S.safeName(last) + '.json')) loadProject(S.safeName(last) + '.json'); } });
     $('#wTry', body).addEventListener('click', closeModal);

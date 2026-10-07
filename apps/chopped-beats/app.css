@@ -115,7 +115,8 @@ input[type="range"] { accent-color: var(--ink); }
 .home-link:hover, .home-link:focus-visible { color: var(--ink); border-color: var(--stone); }
 .brand { display: inline-flex; align-items: center; gap: 8px; }
 .mascot { height: 34px; width: auto; display: block; }
-.welcome-mascot { display: block; width: 150px; height: auto; margin: -6px auto 14px; }
+.welcome-mascot { display: block; width: 150px; height: auto; margin: -4px auto 10px; }
+.modal-card > .welcome-mascot + h2 { text-align: center; }
 .proj-name { background: transparent !important; border-color: transparent !important; font-size: 14px !important; width: 220px; }
 .proj-name:hover, .proj-name:focus { border-color: var(--rule) !important; }
 .save-state { color: var(--stone); font-size: 11px; }
