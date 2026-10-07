@@ -188,7 +188,6 @@
     '.mobile-menu{position:fixed;inset:0;z-index:190;background:var(--bg);display:flex;flex-direction:column;padding:80px 32px 48px;opacity:0;pointer-events:none;transition:opacity 0.3s cubic-bezier(0.4,0,0.2,1);}',
     '.mobile-menu.is-open{opacity:1;pointer-events:auto;}',
     'body.menu-open{overflow:hidden;}',
-    'body.menu-open .gx-fab{display:none !important;}',
     '.mobile-menu-links{display:flex;flex-direction:column;border-top:1px solid var(--rule);flex:1 1 0;min-height:0;overflow-y:auto;}',
     '.mobile-menu-link{display:flex;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:1px solid var(--rule);font-family:var(--serif);font-size:clamp(2rem,9vw,3.2rem);font-weight:400;line-height:1;color:var(--stone);transition:color 0.2s;text-decoration:none;flex-shrink:0;}',
     '.mobile-menu-link:hover{color:var(--ink);}',
@@ -301,7 +300,14 @@
         s.defer = true;
         (document.body || document.documentElement).appendChild(s);
       }
-      /* Shared floating game buttons (fabs.js decides which pages show them). */
+      /* Shared Enquire form + mobile button, and the floating game buttons
+         (each file decides which pages show it). */
+      if (!window.__wvEnquire && !document.querySelector('script[src="/enquire.js"]')) {
+        var q = document.createElement('script');
+        q.src = '/enquire.js';
+        q.defer = true;
+        (document.body || document.documentElement).appendChild(q);
+      }
       if (!window.__wvFabs && !document.querySelector('script[src="/fabs.js"]')) {
         var b = document.createElement('script');
         b.src = '/fabs.js';
