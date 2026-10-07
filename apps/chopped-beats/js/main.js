@@ -2,6 +2,8 @@ import * as A from './audio.js';
 import { buildKit } from './drums.js';
 import { detectHits, detectWords, guessBpm } from './analysis.js';
 import * as S from './storage.js';
+import { initPlayer } from './player.js';
+import { runTour } from './tour.js';
 
 const { ctx, SR } = A;
 const $ = (s, el = document) => el.querySelector(s);
@@ -113,7 +115,10 @@ function modal(title, html, onReady) {
   $('#modal').hidden = false;
   if (onReady) onReady($('#modalBody'));
 }
-function closeModal() { $('#modal').hidden = true; }
+function closeModal() {
+  $('#modal').hidden = true;
+  if (tourPending) { tourPending = false; setTimeout(startTour, 250); }
+}
 $('#modal').addEventListener('pointerdown', (e) => { if (e.target.id === 'modal' && !$('#modal').dataset.locked) closeModal(); });
 
 // ── Undo / redo ──
@@ -1804,8 +1809,9 @@ function showHelp() {
     </div>
     <div class="field"><span>Microphone</span><div class="opts">
       <label><input type="checkbox" id="optClean" ${pref.get('cleanMic', true) ? 'checked' : ''}/> Reduce background noise</label></div></div>
-    <div class="row-btns"><button class="btn primary" id="helpOk">Got it</button></div>`, (body) => {
+    <div class="row-btns"><button class="btn primary" id="helpOk">Got it</button><button class="btn" id="helpTour">Show the tour</button></div>`, (body) => {
     $('#helpOk', body).addEventListener('click', closeModal);
+    $('#helpTour', body).addEventListener('click', () => { tourPending = true; closeModal(); });
     $('#optClean', body).addEventListener('change', (e) => {
       pref.set('cleanMic', e.target.checked);
       if (recorder.stream) { recorder.stream.getTracks().forEach((t) => t.stop()); recorder.stream = null; recorder.srcNode = null; recorder.node = null; }
@@ -1852,6 +1858,30 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
+// ── First-run tour ──
+
+let tourPending = false;
+const TOUR = [
+  { title: 'Welcome to Chopped Beats', text: 'A quick tour of the basics. It takes under a minute. Use Next, or the arrow keys.' },
+  { target: '#btnFolder', title: 'Your folder', text: 'Pick a folder on your PC once. Your sounds, projects and exports save there automatically. Nothing is uploaded.' },
+  { target: '.library', title: 'Sounds', text: 'Import audio or TikTok videos here, or drop files anywhere on the page. Videos keep only the sound. Drag any sound onto a track.' },
+  { target: '#player', title: 'The player', text: 'Play, go back to the start, and record your voice with ●. Recording goes onto the highlighted track. Drag the ⠿ grip to move this anywhere; double-click it to put it back.' },
+  { target: '.timeline-wrap', title: 'The timeline', text: 'Drag clips to move them, between tracks too. Pull a clip\'s edges to trim. Shift-click a clip to cut it. Alt-drag copies. Drag on the ruler to mark a loop.' },
+  { target: '#inspector', title: 'Make it weird', text: 'Click a clip and its effects show here: presets like Deep, Robot or Slowed + reverb, plus pitch, speed, warp, echo and more. Auto-chop cuts a clip into words or beats.' },
+  { target: '.transport', title: 'Tempo and tools', text: 'Set the BPM (or Tap it), choose how clips snap to the grid, and turn on the Click and Loop. Chop switches to the cutting tool.' },
+  { target: '#pads', title: 'Pads and beat maker', text: 'Hit pads with keys 1–4, Q–R, A–F, Z–V. Click steps in the beat maker to build a pattern, then Add to timeline. Chops from your clips can go on pads too.' },
+  { target: '#btnExport', title: 'Export', text: 'When it sounds right, export an MP3 for TikTok or CapCut, or a full-quality WAV. It lands in your folder\'s exports.' },
+  { title: 'That\'s it', text: 'Drop in a clip and start chopping. You can see this tour again from the ? button.' },
+];
+
+function startTour() {
+  const padsWereOpen = !$('#pads').hidden;
+  runTour(TOUR, {
+    before: (step) => togglePads(step.target === '#pads' ? true : padsWereOpen),
+    onEnd: () => { togglePads(padsWereOpen); pref.set('toured', true); },
+  });
+}
+
 // ── Start-up ──
 
 async function init() {
@@ -1864,7 +1894,9 @@ async function init() {
   renderLibrary();
   changed();
   togglePads(pref.get('padsOpen', false));
+  initPlayer($('#player'), $('#playerGrip'));
   requestAnimationFrame(frame);
+  tourPending = !pref.get('toured', false);
 
   const state = await S.restore();
   updateFolderBtn();
@@ -1874,6 +1906,7 @@ async function init() {
     const names = await S.list('projects');
     if (last && names.includes(S.safeName(last) + '.json')) await loadProject(S.safeName(last) + '.json');
     else scheduleSave();
+    if (tourPending) { tourPending = false; startTour(); }
     return;
   }
   const reconnect = state === 'needs-permission';

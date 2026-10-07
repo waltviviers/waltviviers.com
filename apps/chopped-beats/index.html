@@ -29,13 +29,15 @@
   <button id="btnHelp" class="btn icon" title="Help and shortcuts" aria-label="Help">?</button>
 </header>
 
+<div id="player" class="player" role="toolbar" aria-label="Player">
+  <span id="playerGrip" class="grip" title="Drag to move. Double-click to put it back." aria-hidden="true">⠿</span>
+  <button id="btnStart" class="btn icon" title="Back to start (Home)" aria-label="Back to start">⏮</button>
+  <button id="btnPlay" class="btn icon play" title="Play / pause (Space)" aria-label="Play">▶</button>
+  <button id="btnRec" class="btn icon rec" title="Record voice (R)" aria-label="Record">●</button>
+  <output id="clock" class="clock">0:00.00<small>1.1</small></output>
+</div>
+
 <div class="transport">
-  <div class="group">
-    <button id="btnStart" class="btn icon" title="Back to start (Home)" aria-label="Back to start">⏮</button>
-    <button id="btnPlay" class="btn icon play" title="Play / pause (Space)" aria-label="Play">▶</button>
-    <button id="btnRec" class="btn icon rec" title="Record voice (R)" aria-label="Record">●</button>
-    <output id="clock" class="clock">0:00.00<small>1.1</small></output>
-  </div>
   <div class="group">
     <label class="lbl">BPM <input id="bpm" type="number" min="40" max="240" value="100" /></label>
     <button id="btnTap" class="btn" title="Tap along to set the tempo">Tap</button>
@@ -125,6 +127,21 @@
 </div>
 
 <div id="toasts" class="toasts" aria-live="polite"></div>
+
+<div id="tour" class="tour" hidden>
+  <div id="tourSpot" class="tour-spot"></div>
+  <div id="tourCard" class="tour-card" role="dialog" aria-modal="true" aria-labelledby="tourTitle">
+    <p id="tourStep" class="tour-step"></p>
+    <h2 id="tourTitle"></h2>
+    <p id="tourText"></p>
+    <div class="row-btns">
+      <button id="tourBack" class="btn">Back</button>
+      <button id="tourNext" class="btn primary">Next</button>
+      <span class="spacer"></span>
+      <button id="tourSkip" class="btn small">Skip tour</button>
+    </div>
+  </div>
+</div>
 
 <script type="module" src="/apps/chopped-beats/js/main.js"></script>
 </body>
