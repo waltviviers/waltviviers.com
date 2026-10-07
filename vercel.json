@@ -1,6 +1,11 @@
 {
   "rewrites": [
     {
+      "has": [{"type": "host", "value": "lemonhands.waltviviers.com"}],
+      "source": "/",
+      "destination": "/lemonhands/"
+    },
+    {
       "has": [{"type": "host", "value": "scritch-scratch.waltviviers.com"}],
       "source": "/",
       "destination": "/apps/scritch-scratch/"
