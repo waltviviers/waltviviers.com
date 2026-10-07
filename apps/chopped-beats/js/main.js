@@ -455,6 +455,7 @@ const headW = () => parseFloat(getComputedStyle(document.documentElement).getPro
 function contentSec() { return Math.max(90, songEnd(true) + 30, (project.loop ? project.loop.b : 0) + 30); }
 
 function renderTimeline() {
+  liveIds = new Set(); // clips are rebuilt below; flair() re-marks the live ones
   const W = contentSec() * pps;
   tlInner.style.width = headW() + W + 'px';
   const bpx = beat() * pps;
@@ -1209,9 +1210,58 @@ function frame() {
     const view = tl.clientWidth - headW();
     if (!drag && (x < tl.scrollLeft || x > tl.scrollLeft + view - 40)) tl.scrollLeft = x - 40;
   }
-  drawViz();
+  flair(drawViz());
   seq.tick();
   requestAnimationFrame(frame);
+}
+
+// ── Flair: purely visual. Feeds the CSS a smoothed level (--lvl), a pulse
+// on each beat (body.beat), play/record state, and marks clips as "live"
+// while they sound. Nothing here changes what you hear or do. ──
+let lvl = 0;
+let lastBeat = -1;
+let liveIds = new Set();
+function flair(level) {
+  lvl = lvl * 0.75 + level * 0.25;
+  document.documentElement.style.setProperty('--lvl', lvl.toFixed(3));
+  const body = document.body;
+  body.classList.toggle('is-playing', transport.playing);
+  body.classList.toggle('is-recording', recorder.active);
+  let now = new Set();
+  if (transport.playing) {
+    const t = transport.pos();
+    const b = Math.floor(t / beat());
+    if (b !== lastBeat) {
+      lastBeat = b;
+      body.classList.remove('beat');
+      void body.offsetWidth; // restart the CSS animation
+      body.classList.add('beat');
+    }
+    for (const c of project.clips) if (t >= c.start && t < c.start + fullLen(c)) now.add(c.id);
+  } else lastBeat = -1;
+  const el = (id) => document.querySelector(`.clip[data-id="${id}"]`);
+  for (const id of liveIds) if (!now.has(id)) { const e = el(id); if (e) e.classList.remove('live'); }
+  for (const id of now) if (!liveIds.has(id)) { const e = el(id); if (e) e.classList.add('live'); }
+  liveIds = now;
+}
+
+// A little burst of beet-red sparks from an element (used after an export).
+function sparks(from) {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const r = from.getBoundingClientRect();
+  for (let i = 0; i < 16; i++) {
+    const s = document.createElement('span');
+    s.className = 'spark';
+    const a = Math.random() * Math.PI * 2;
+    const d = 40 + Math.random() * 60;
+    s.style.left = r.left + r.width / 2 + 'px';
+    s.style.top = r.top + r.height / 2 + 'px';
+    s.style.setProperty('--dx', Math.cos(a) * d + 'px');
+    s.style.setProperty('--dy', Math.sin(a) * d + 'px');
+    s.style.animationDelay = Math.random() * 60 + 'ms';
+    document.body.appendChild(s);
+    s.addEventListener('animationend', () => s.remove());
+  }
 }
 
 const vizData = new Uint8Array(analyser.frequencyBinCount);
@@ -1232,6 +1282,9 @@ function drawViz() {
     const bh = Math.max(1, (m / 255) * h);
     g.fillRect(i * bw + 1, h - bh, bw - 2, bh);
   }
+  let sum = 0;
+  for (let j = 0; j < vizData.length >> 1; j++) sum += vizData[j];
+  return Math.min(1, sum / (vizData.length >> 1) / 140);
 }
 
 $('#btnPlay').addEventListener('click', () => (transport.playing ? stopAll() : transport.play()));
@@ -1417,6 +1470,10 @@ async function playPad(i, when = 0) {
 
 function flashPad(i) {
   const b = padBtns[i];
+  const ring = document.createElement('span');
+  ring.className = 'ripple';
+  ring.addEventListener('animationend', () => ring.remove());
+  b.appendChild(ring);
   b.classList.add('hit');
   setTimeout(() => b.classList.remove('hit'), 110);
 }
@@ -1792,6 +1849,7 @@ async function exportMix(fmt, range, norm) {
   if (S.connected()) {
     const saved = await S.writeUnique('exports', name, blob);
     toast(`Exported to exports/${saved}`);
+    sparks($('#btnExport'));
   } else {
     const a2 = document.createElement('a');
     a2.href = URL.createObjectURL(blob);
@@ -1799,6 +1857,7 @@ async function exportMix(fmt, range, norm) {
     a2.click();
     setTimeout(() => URL.revokeObjectURL(a2.href), 10000);
     toast(`Downloaded ${name}`);
+    sparks($('#btnExport'));
   }
 }
 
