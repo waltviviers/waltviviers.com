@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+<meta name="robots" content="index, follow" />
+<title>Static Protocol</title>
+<meta name="description" content="A cyberpunk interactive story played entirely on your phone. Five decisions, five live SYNC hacking sequences, ten possible endings." />
+<link rel="canonical" href="https://static-protocol.waltviviers.com/" />
+<meta property="og:title" content="Static Protocol" />
+<meta property="og:description" content="A cyberpunk interactive story played entirely on your phone. Five decisions, five live SYNC hacking sequences, ten possible endings." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://static-protocol.waltviviers.com/" />
+<meta name="theme-color" content="#05050a" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%2305050a'/%3E%3Cpath d='M4 6l6 6-6 6' fill='none' stroke='%2322e6d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='12' y1='18' x2='20' y2='18' stroke='%2322e6d4' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #05050a; }
+  body {
+    font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+    color: #d9f7f2;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { font: inherit; color: inherit; cursor: pointer; background: none; border: none; }
+  a { color: inherit; }
+
+  :root {
+    --cyan: #22e6d4;
+    --magenta: #ff3d94;
+    --bg: #05050a;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  /* ── Start menu: same full-screen title treatment as the game's own title screen ── */
+  .start-menu { position: fixed; inset: 0; z-index: 200; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; text-align: center; padding: 24px; padding-bottom: 64px; }
+  .site-logo {
+    position: absolute; top: max(32px, env(safe-area-inset-top)); left: max(48px, env(safe-area-inset-left));
+    z-index: 3; opacity: 0.85; transition: opacity 0.2s;
+  }
+  .site-logo:hover, .site-logo:focus-visible { opacity: 1; }
+  .site-logo img { display: block; height: 36px; width: auto; }
+  @media (max-width: 900px) {
+    .site-logo { top: max(11px, env(safe-area-inset-top)); left: max(24px, env(safe-area-inset-left)); }
+    .site-logo img { height: 28px; }
+  }
+  .menu-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .menu-bg-video-blur { display: none; }
+  @media (max-width: 900px) {
+    /* The source video is landscape; on a narrow portrait screen a straight cover crop loses
+       most of the frame off the sides. Show the full frame (contain) over a blurred, cover-fit
+       copy of the same clip so the screen still reads as fully filled edge to edge. */
+    .menu-bg-video-blur {
+      display: block; position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0; filter: blur(30px) brightness(0.55); transform: scale(1.15);
+    }
+    .menu-bg-video {
+      object-fit: contain; object-position: center top; background: #05050a; opacity: 1;
+      transform: scale(1.6); transform-origin: center top;
+    }
+    /* The video (contain, top-anchored, scale(1.6)) renders at height = 0.9 * viewport width,
+       independent of viewport height. Push the panel to start clear of it instead of centering
+       vertically, or the copy overlaps the footage. */
+    .start-menu { align-items: flex-start; padding-top: calc(90vw + 20px); }
+  }
+  .menu-panel { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 340px; }
+  .menu-panel[hidden] { display: none; }
+  .menu-brand { font-size: 2.1rem; font-weight: 800; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .menu-copy { font-size: 13px; color: rgba(217,247,242,0.65); max-width: 300px; line-height: 1.45; }
+  .menu-howto { max-width: 380px; }
+  .menu-howto .prose { text-align: left; }
+  .menu-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 230px; margin-top: 16px; }
+
+  .glitch {
+    position: relative; font-weight: 800; letter-spacing: 0.02em; color: #eafffb;
+    text-shadow: 0 0 18px rgba(34,230,212,0.35);
+  }
+  .glitch::before, .glitch::after { content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%; overflow: hidden; opacity: 0.7; }
+  .glitch::before { color: var(--cyan); transform: translate(-1px,0); animation: glitch1 3.2s infinite steps(1); clip-path: inset(0 0 55% 0); }
+  .glitch::after  { color: var(--magenta); transform: translate(1px,0); animation: glitch2 3.6s infinite steps(1); clip-path: inset(55% 0 0 0); }
+  @keyframes glitch1 { 0%,90%,100% { transform: translate(-1px,0); } 92% { transform: translate(2px,-1px); } 94% { transform: translate(-3px,1px); } 96% { transform: translate(1px,1px); } }
+  @keyframes glitch2 { 0%,88%,100% { transform: translate(1px,0); } 91% { transform: translate(-2px,1px); } 95% { transform: translate(3px,-1px); } 97% { transform: translate(-1px,-1px); } }
+
+  .eyebrow { font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cyan); margin-bottom: 12px; }
+  .eyebrow.magenta { color: var(--magenta); }
+  .prose p { color: rgba(217,247,242,0.82); font-size: 12.5px; line-height: 1.75; margin-bottom: 14px; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .primary-btn {
+    display: flex; width: 100%; align-items: center; justify-content: center;
+    background: var(--cyan); color: #05050a; font-weight: 700; letter-spacing: 0.10em;
+    text-transform: uppercase; font-size: 12px; padding: 14px; border: none; margin-top: 6px;
+    box-shadow: 0 0 20px rgba(34,230,212,0.3); text-decoration: none;
+  }
+  .primary-btn:active { transform: scale(0.98); }
+  .ghost-btn {
+    display: flex; width: 100%; align-items: center; justify-content: center;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(217,247,242,0.25); color: #d9f7f2;
+    font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; padding: 13px;
+  }
+  .ghost-btn:active { transform: scale(0.98); background: rgba(255,255,255,0.1); }
+  .menu-back-link {
+    margin-top: 8px; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: rgba(217,247,242,0.5); text-decoration: none; transition: color 0.2s;
+  }
+  .menu-back-link:hover, .menu-back-link:focus-visible { color: var(--cyan); }
+</style>
+</head>
+<body>
+<div class="start-menu" id="start-menu">
+  <video class="menu-bg-video-blur" autoplay loop muted playsinline aria-hidden="true" src="/apps/static-protocol/magnific_no-moths-way-more-flicker_3zVs6SqREY.mp4"></video>
+  <video class="menu-bg-video" autoplay loop muted playsinline aria-hidden="true" src="/apps/static-protocol/magnific_no-moths-way-more-flicker_3zVs6SqREY.mp4"></video>
+  <a href="https://waltviviers.com/" class="site-logo" aria-label="Walt Viviers — home">
+    <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
+  </a>
+  <div class="menu-panel" id="menu-main">
+    <div class="menu-brand glitch" data-text="STATIC PROTOCOL">STATIC PROTOCOL</div>
+    <div class="menu-copy">A cyberpunk data heist, played entirely on the runner's phone. Five jobs tonight — however you handle them is however this goes.</div>
+    <div class="menu-actions">
+      <a href="/play/" class="primary-btn">Play</a>
+      <button class="ghost-btn" id="how-to-play-btn">How To Play</button>
+      <a href="https://waltviviers.com/" class="menu-back-link">Back to Main Page</a>
+    </div>
+  </div>
+  <div class="menu-panel menu-howto" id="menu-howto" hidden>
+    <div class="eyebrow magenta">How To Play</div>
+    <div class="prose">
+      <p>This is the runner's phone. Five jobs come through tonight. Tap a notification to open the app it lands in, then pick how you handle it.</p>
+      <p>Every choice triggers a live <b>SYNC</b> — a short minigame, different for every job. Tap the prompts, or use arrow keys / WASD / Space on desktop. Clean it and your choice plays out exactly as intended; fumble it and the job gets forced sideways.</p>
+      <p>Fumble too many and the heat — the signal bars, top right — climbs. Three strikes and the job ends for you, whatever you decide next.</p>
+      <p>Ten different endings are waiting, built from who you trusted, how you got it done, and how steady your hands were.</p>
+    </div>
+    <div class="menu-actions">
+      <a href="/play/" class="primary-btn">Play</a>
+      <button class="ghost-btn" id="howto-back-btn">Back</button>
+    </div>
+  </div>
+</div>
+<script>
+  var mainPanel = document.getElementById('menu-main');
+  var howtoPanel = document.getElementById('menu-howto');
+  document.getElementById('how-to-play-btn').addEventListener('click', function () {
+    mainPanel.hidden = true; howtoPanel.hidden = false;
+  });
+  document.getElementById('howto-back-btn').addEventListener('click', function () {
+    howtoPanel.hidden = true; mainPanel.hidden = false;
+  });
+</script>
+</body>
+</html>

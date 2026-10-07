@@ -3,7 +3,7 @@
    ----------------------------------------------------------------------------
    One place for the three game badges in the bottom-left corner:
      • Walt's Chopped Beats (beet DJ)   → chopped-beats.waltviviers.com
-     • Static Protocol (turquoise prompt) → the game on GitHub Pages
+     • Static Protocol (turquoise prompt) → static-protocol.waltviviers.com
      • Scritch Scratch (dog, cat or rat, picked at random) → scritch-scratch.waltviviers.com
    Desktop stacks them up the left edge; mobile puts the dog and Static
    Protocol side by side with the beet above the dog, clear of Enquire.
@@ -81,7 +81,7 @@
 
     var game = document.createElement('a');
     game.className = 'game-fab';
-    game.href = '/apps/static-protocol/play/';
+    game.href = 'https://static-protocol.waltviviers.com/';
     game.setAttribute('aria-label', 'Play Static Protocol');
     game.innerHTML = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6l6 6-6 6" stroke="#22e6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="18" x2="20" y2="18" stroke="#22e6d4" stroke-width="2" stroke-linecap="round"/></svg>';
 
