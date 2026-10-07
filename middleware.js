@@ -9,8 +9,6 @@
 //   old waltviviers.com/clients/manifesto-wellness/ address redirects there.
 //   menzies.waltviviers.com/* serves /clients/menzies-media/* the same way.
 //
-// static-protocol.waltviviers.com/* redirects to the game on GitHub Pages.
-//
 // App subdomains map only their entry pages; the apps load their own assets
 // by absolute /apps/... paths, which every host serves as-is. This lives here
 // rather than in vercel.json because Vercel serves the root index.html for "/"
@@ -30,11 +28,14 @@ const APP_SITES = {
     '/play': '/apps/scritch-scratch/play/',
     '/play/': '/apps/scritch-scratch/play/',
   },
+  'static-protocol.waltviviers.com': {
+    '/': '/apps/static-protocol/',
+    '/play': '/apps/static-protocol/play/',
+    '/play/': '/apps/static-protocol/play/',
+  },
 };
 // Subdomains for things hosted elsewhere: send the whole host there, keeping the path.
-const EXTERNAL_SITES = {
-  'static-protocol.waltviviers.com': 'https://waltviviers.github.io/Static-Protocol',
-};
+const EXTERNAL_SITES = {};
 
 const ADMIN_GATE = {
   prefix: '/admin-index',
