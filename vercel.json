@@ -1,4 +1,21 @@
 {
+  "rewrites": [
+    {
+      "has": [{"type": "host", "value": "scritch-scratch.waltviviers.com"}],
+      "source": "/",
+      "destination": "/apps/scritch-scratch/"
+    },
+    {
+      "has": [{"type": "host", "value": "scritch-scratch.waltviviers.com"}],
+      "source": "/play",
+      "destination": "/apps/scritch-scratch/play/"
+    },
+    {
+      "has": [{"type": "host", "value": "scritch-scratch.waltviviers.com"}],
+      "source": "/play/",
+      "destination": "/apps/scritch-scratch/play/"
+    }
+  ],
   "redirects": [
     { "source": "/works/zombie-vs-cat-2017", "destination": "/gallery/apocalypse-meow-2017/", "permanent": true },
     { "source": "/works/zombie-vs-cat-2017/", "destination": "/gallery/apocalypse-meow-2017/", "permanent": true },
