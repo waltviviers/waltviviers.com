@@ -1862,7 +1862,7 @@ window.addEventListener('keydown', (e) => {
 
 let tourPending = false;
 const TOUR = [
-  { title: 'Welcome to Chopped Beats', text: 'A quick tour of the basics. It takes under a minute. Use Next, or the arrow keys.' },
+  { title: 'Welcome to Walt\'s Chopped Beats', text: 'A quick tour of the basics. It takes under a minute. Use Next, or the arrow keys.' },
   { target: '#btnFolder', title: 'Your folder', text: 'Pick a folder on your PC once. Your sounds, projects and exports save there automatically. Nothing is uploaded.' },
   { target: '.library', title: 'Sounds', text: 'Import audio or TikTok videos here, or drop files anywhere on the page. Videos keep only the sound. Drag any sound onto a track.' },
   { target: '#player', title: 'The player', text: 'Play, go back to the start, and record your voice with ●. Recording goes onto the highlighted track. Drag the ⠿ grip to move this anywhere; double-click it to put it back.' },
@@ -1910,7 +1910,7 @@ async function init() {
     return;
   }
   const reconnect = state === 'needs-permission';
-  modal('Chopped Beats', `
+  modal('Walt\'s Chopped Beats', `
     <img class="welcome-mascot" src="/apps/chopped-beats/mascot.png" alt="" onerror="this.remove()" />
     <p>Chop TikTok clips, your voice and any sound into songs. <strong>Nothing is uploaded.</strong> Your sounds, projects and exports live in a folder on your computer.</p>
     ${S.supported ? '' : '<p><strong>This browser can\'t save to a folder.</strong> Use Chrome or Edge on a computer to keep your work.</p>'}
