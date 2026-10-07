@@ -51,15 +51,19 @@
     '.scritch-fab:hover,.beat-fab:hover{transform:translateY(-3px) scale(1.07);}',
     '.scritch-fab:hover .fab-up,.beat-fab:hover .fab-up{opacity:0;}',
     '.scritch-fab:hover .fab-over,.beat-fab:hover .fab-over{opacity:1;}',
-    /* Mobile: dog bottom-left, Static Protocol beside it, beet above the dog */
+    /* Mobile: all three badges in a single row along the bottom-left,
+       clear of the Enquire pill on the right. Slightly smaller so the row
+       fits beside Enquire even on narrow phones. */
     '@media (max-width:900px){',
-    '.game-fab{left:94px;bottom:21px;}',
-    '.scritch-fab{bottom:16px;}',
-    '.beat-fab{bottom:92px;}',
-    /* The home page's privacy notice lifts the mobile row clear of it */
-    'body.privacy-visible .game-fab{bottom:max(95px,calc(var(--privacy-h,48px) + 33px));}',
+    '.scritch-fab,.beat-fab{width:56px;height:56px;}',
+    '.game-fab{width:50px;height:50px;}',
+    '.scritch-fab{left:12px;bottom:16px;}',
+    '.game-fab{left:76px;bottom:19px;}',
+    '.beat-fab{left:134px;bottom:16px;}',
+    /* The home page's privacy notice lifts the whole row clear of it */
     'body.privacy-visible .scritch-fab{bottom:max(90px,calc(var(--privacy-h,48px) + 28px));}',
-    'body.privacy-visible .beat-fab{bottom:max(166px,calc(var(--privacy-h,48px) + 104px));}',
+    'body.privacy-visible .game-fab{bottom:max(93px,calc(var(--privacy-h,48px) + 31px));}',
+    'body.privacy-visible .beat-fab{bottom:max(90px,calc(var(--privacy-h,48px) + 28px));}',
     '}',
     'body.menu-open .game-fab,body.menu-open .scritch-fab,body.menu-open .beat-fab{display:none !important;}'
   ].join('');
