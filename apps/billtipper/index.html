@@ -940,6 +940,25 @@
     <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Scritch Scratch" width="64" height="64" loading="lazy" />
     <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" loading="lazy" />
   </a>
+  <!-- Walt's Chopped Beats floating icon -->
+  <a href="https://chopped-beats.waltviviers.com/" class="beat-fab" aria-label="Open Walt's Chopped Beats">
+    <img class="cb-up" src="/apps/chopped-beats/fab-up.webp" alt="Walt's Chopped Beats" width="66" height="66" loading="lazy" />
+    <img class="cb-over" src="/apps/chopped-beats/fab-over.webp" alt="" aria-hidden="true" width="66" height="66" loading="lazy" />
+  </a>
+  <style>
+    /* Desktop: stacked above the Static Protocol icon. Mobile: above the dog badge. */
+    .beat-fab { position: fixed; left: 16px; bottom: 236px; z-index: 150; width: 66px; height: 66px; display: block; transition: transform 0.18s ease, bottom 0.2s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.35)); }
+    .beat-fab img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
+    .beat-fab .cb-over { opacity: 0; }
+    .beat-fab:hover { transform: translateY(-3px) scale(1.07); }
+    .beat-fab:hover .cb-up { opacity: 0; }
+    .beat-fab:hover .cb-over { opacity: 1; }
+    @media (max-width: 900px) {
+      .beat-fab { bottom: 90px; }
+      body.privacy-visible .beat-fab { bottom: max(164px, calc(var(--privacy-h, 48px) + 102px)); }
+    }
+    body.menu-open .beat-fab { display: none !important; }
+  </style>
   <script>
   (function(){var s=[['ss-up.webp','ss-over.webp'],['ss-cat-up.png','ss-cat-over.png'],['ss-rat-up.png','ss-rat-over.png']];var p=s[Math.floor(Math.random()*s.length)];var f=document.querySelector('.scritch-fab');f.querySelector('.ss-up').src='/apps/scritch-scratch/'+p[0];f.querySelector('.ss-over').src='/apps/scritch-scratch/'+p[1];})();
   </script>
