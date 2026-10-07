@@ -456,7 +456,7 @@ function hitTestItem(placed, px, py) {
 }
 
 // ─── Particles ───────────────────────────────────────────────────────────────
-const hearts = [], dirts = [], labels = [], ripples = [];
+const hearts = [], dirts = [], labels = [], ripples = [], confettis = [], sparkles = [];
 
 class Heart {
   constructor(x, y) {
@@ -529,6 +529,44 @@ function tapFeedback(x, y) {
   try { if (navigator.vibrate) navigator.vibrate(12); } catch(e) {}
 }
 
+const CONFETTI_COLORS = ['#ff4488','#ffdd22','#44ee44','#4499ff','#ee44ee','#ff8844'];
+class Confetti {
+  constructor(x, y) {
+    this.x = x + (Math.random() - 0.5) * 20; this.y = y;
+    this.vx = (Math.random() - 0.5) * 4; this.vy = -(2 + Math.random() * 4); this.ay = 0.1;
+    this.color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    this.life = 1; this.sz = 3 + Math.floor(Math.random() * 3);
+  }
+  update() { this.x += this.vx; this.y += this.vy; this.vy += this.ay; this.life -= 0.022; }
+  draw() {
+    if (this.life <= 0) return;
+    ctx.save(); ctx.globalAlpha = Math.max(0, this.life);
+    ctx.fillStyle = this.color;
+    ctx.fillRect(Math.round(this.x), Math.round(this.y), this.sz, this.sz);
+    ctx.restore();
+  }
+  get dead() { return this.life <= 0; }
+}
+
+class Sparkle {
+  constructor(x, y) {
+    this.x = x + (Math.random() - 0.5) * 10; this.y = y + (Math.random() - 0.5) * 10;
+    this.vx = (Math.random() - 0.5) * 1.5; this.vy = (Math.random() - 0.5) * 1.5;
+    this.color = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+    this.life = 1; this.sz = 2;
+  }
+  update() { this.x += this.vx; this.y += this.vy; this.life -= 0.07; }
+  draw() {
+    if (this.life <= 0) return;
+    ctx.save(); ctx.globalAlpha = Math.max(0, this.life);
+    ctx.fillStyle = this.color;
+    ctx.fillRect(Math.round(this.x) - 1, Math.round(this.y) - 3, 2, 6);
+    ctx.fillRect(Math.round(this.x) - 3, Math.round(this.y) - 1, 6, 2);
+    ctx.restore();
+  }
+  get dead() { return this.life <= 0; }
+}
+
 // ─── Cat sprites (all facing RIGHT, head right, tail rear-left) ──────────────
 // ears: row 0 cols 7+9 (gap=pointy), face rows 1-2 cols 6-9, nose row2 col9
 // whiskers: row 2 cols 3+4, body rows 3-4, tail row 5-6, legs rows 6-7
@@ -586,6 +624,7 @@ const poolRings = [];   // expanding rings, like dragonflies touching the water
 // ─── Dog-yard extras: dragonfly, night lamp, BBQ lid ─────────────────────────
 let dragonfly = null;   // flits over the pool
 let dogBbqOpen = 0;     // BBQ lid-open (patties showing) timer
+let dogRainbowAlpha = 0, dogRainbowTimer = 60 * 30;
 // Fishpond in the yard — koi swim around, and scatter when a dog runs through
 let pondFish = [];
 const pondSplashes = [];
@@ -848,6 +887,21 @@ function drawDogBackground() {
   ctx.beginPath(); ctx.ellipse(pondCX - pondRX * 0.4, pondCY - 1, 5, 3, 0, 0, Math.PI * 2); ctx.fill();
   ctx.beginPath(); ctx.ellipse(pondCX + pondRX * 0.45, pondCY + 2, 4, 2.5, 0, 0, Math.PI * 2); ctx.fill();
   // (koi are drawn as live entities in the game loop)
+
+  // Rainbow over the pool (appears occasionally)
+  if (dogRainbowAlpha > 0) {
+    const rcx = Math.round(splitX * 0.5), rcy = poolFloor - poolEdge;
+    const rr = Math.round(splitX * 0.44);
+    const bands = ['#ff0000','#ff8800','#ffee00','#44cc00','#2299ff','#7744ff'];
+    ctx.save(); ctx.globalAlpha = dogRainbowAlpha * 0.6;
+    for (let i = 0; i < bands.length; i++) {
+      const r = rr - i * 5;
+      if (r <= 0) continue;
+      ctx.strokeStyle = bands[i]; ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.arc(rcx, rcy, r, Math.PI, 0); ctx.stroke();
+    }
+    ctx.restore();
+  }
 
 }
 
@@ -2038,6 +2092,7 @@ class Rat {
           else if (r < 0.94) { babyColor = '#e8e8e8'; babyPatch = '#c8922a'; }
           else { babyColor = '#dddddd'; }
           babies.push(new Baby(this.x + RAT_W / 2, this.y + RAT_H, babyColor, babyPatch));
+          for (let _c = 0; _c < 18; _c++) confettis.push(new Confetti(this.x + RAT_W / 2, this.y));
         }
       }
     }
@@ -3125,7 +3180,7 @@ function enterRatMode() {
   rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
   placedItems.length = 0;
-  hearts.length = 0; dirts.length = 0; labels.length = 0; ripples.length = 0;
+  hearts.length = 0; dirts.length = 0; labels.length = 0; ripples.length = 0; confettis.length = 0; sparkles.length = 0;
   thrownBall = null; marker = null; laserActive = false;
   scritchCat = null; interacted = false;
   cheeseCount = 0; raidCats.length = 0; seedRespawnTimer = 0; bigStrawberry = null;
@@ -3150,11 +3205,12 @@ function enterDogMode() {
   rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
   placedItems.length = 0;
-  hearts.length = 0; dirts.length = 0; labels.length = 0; ripples.length = 0;
+  hearts.length = 0; dirts.length = 0; labels.length = 0; ripples.length = 0; confettis.length = 0; sparkles.length = 0;
   thrownBall = null; marker = null; laserActive = false;
   scritchCat = null; interacted = false;
   itemIdx = 1;
   puppies.length = 0; puppyTimer = 0; puppiesSpawned = false;
+  dogRainbowAlpha = 0; dogRainbowTimer = 60 * 30;
   visitorCooldown = 60 * (30 + Math.floor(Math.random() * 90));
   placeDogFurniture();
   spawnBirds();
@@ -3176,7 +3232,7 @@ function enterCatMode() {
   happiness = 80;
   visitors.length = 0; rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
-  placedItems.length = 0; hearts.length = 0; dirts.length = 0; labels.length = 0;
+  placedItems.length = 0; hearts.length = 0; dirts.length = 0; labels.length = 0; ripples.length = 0; confettis.length = 0; sparkles.length = 0;
   thrownBall = null; marker = null; laserActive = false; interacted = false;
   scritchCat = null;
   catVisitorCooldown = 60 * 25;
@@ -4124,6 +4180,11 @@ function loop() {
   }
 
   if (gameMode === 'dog') {
+    if (--dogRainbowTimer <= 0) {
+      dogRainbowTimer = 60 * (40 + Math.floor(Math.random() * 40));
+      dogRainbowAlpha = 1;
+    }
+    if (dogRainbowAlpha > 0) dogRainbowAlpha -= 0.004;
     drawDogBackground();
     dog.update();
     dogPondInteract();
@@ -4238,6 +4299,7 @@ function loop() {
     tickParticles(hearts);
     tickParticles(labels);
     tickParticles(ripples);
+    tickParticles(confettis);
 
     if (!interacted) {
       ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
@@ -4290,7 +4352,10 @@ function loop() {
 
     if (laserActive) {
       if (--laserTimer <= 0) laserActive = false;
-      else drawLaser(laserX, laserY);
+      else {
+        drawLaser(laserX, laserY);
+        if (gameTick % 3 === 0) sparkles.push(new Sparkle(laserX, laserY));
+      }
     }
 
     trySpawnCatRat();
@@ -4319,6 +4384,7 @@ function loop() {
     tickParticles(hearts);
     tickParticles(labels);
     tickParticles(ripples);
+    tickParticles(sparkles);
 
     if (scritchCat) sndStartPurr(); else sndStopPurr();
     if (Math.random() < 0.0007) sndClockTick();
