@@ -2657,6 +2657,12 @@ function refreshLoopTag() {
 
 tickClock();
 refreshLoopTag();
+
+// The landing page (one directory up) already shows this same title screen and its
+// own "Play" button, so jump straight into the phone on arrival here instead of
+// showing it a second time. This menu still earns its keep on the way back out
+// (exitToMenu): loop count, replay, How To Play.
+enterGame();
 </script>
 </body>
 </html>
