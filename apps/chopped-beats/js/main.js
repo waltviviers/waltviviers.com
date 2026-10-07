@@ -110,6 +110,8 @@ function toast(msg, err) {
 }
 
 function modal(title, html, onReady) {
+  // A welcome image sits above the title; clear it so other dialogs don't inherit it.
+  $('.modal-card').querySelectorAll(':scope > .welcome-mascot').forEach((el) => el.remove());
   $('#modalTitle').textContent = title;
   $('#modalBody').innerHTML = html;
   $('#modal').hidden = false;
@@ -1924,6 +1926,8 @@ async function init() {
       <button class="btn" id="wTry">Just try it</button>
     </div>
     <p class="hint" style="margin-top:14px">Tip: make a new folder called “Chopped Beats” in Music.</p>`, (body) => {
+    const pic = $('.welcome-mascot', body);
+    if (pic) $('#modalTitle').before(pic);
     const f = $('#wFolder', body);
     if (f) f.addEventListener('click', async () => { if (await connectFolder(reconnect)) { closeModal(); const last = pref.get('last', null); const names = await S.list('projects'); if (last && names.includes(S.safeName(last) + '.json')) loadProject(S.safeName(last) + '.json'); } });
     $('#wTry', body).addEventListener('click', closeModal);

@@ -28,10 +28,12 @@
   var path = location.pathname;
   for (var i = 0; i < HIDE_ON.length; i++) if (path.indexOf(HIDE_ON[i]) === 0) return;
 
+  /* [normal, hover, nudge]: the cat and rat art sits 4px lower in its image
+     than the dog's, so it's lifted to keep the gaps between badges even. */
   var PETS = [
-    ['ss-up.webp', 'ss-over.webp'],
-    ['ss-cat-up.png', 'ss-cat-over.png'],
-    ['ss-rat-up.png', 'ss-rat-over.png']
+    ['ss-up.webp', 'ss-over.webp', 0],
+    ['ss-cat-up.png', 'ss-cat-over.png', -4],
+    ['ss-rat-up.png', 'ss-rat-over.png', -4]
   ];
 
   var CSS = [
@@ -42,7 +44,8 @@
     /* Image badges with a hover swap (Scritch Scratch, Chopped Beats) */
     '.scritch-fab,.beat-fab{position:fixed;left:16px;z-index:150;width:66px;height:66px;display:block;transition:transform .18s ease,bottom .2s ease;filter:drop-shadow(0 5px 10px rgba(0,0,0,.35));}',
     '.scritch-fab{bottom:90px;}',
-    '.beat-fab{bottom:236px;}',
+    /* Bottoms are set so the visible circles (not the image boxes) sit ~17px apart */
+    '.beat-fab{bottom:240px;}',
     '.scritch-fab img,.beat-fab img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .15s ease;}',
     '.scritch-fab .fab-over,.beat-fab .fab-over{opacity:0;}',
     '.scritch-fab:hover,.beat-fab:hover{transform:translateY(-3px) scale(1.07);}',
@@ -52,11 +55,11 @@
     '@media (max-width:900px){',
     '.game-fab{left:94px;bottom:21px;}',
     '.scritch-fab{bottom:16px;}',
-    '.beat-fab{bottom:90px;}',
+    '.beat-fab{bottom:92px;}',
     /* The home page's privacy notice lifts the mobile row clear of it */
     'body.privacy-visible .game-fab{bottom:max(95px,calc(var(--privacy-h,48px) + 33px));}',
     'body.privacy-visible .scritch-fab{bottom:max(90px,calc(var(--privacy-h,48px) + 28px));}',
-    'body.privacy-visible .beat-fab{bottom:max(164px,calc(var(--privacy-h,48px) + 102px));}',
+    'body.privacy-visible .beat-fab{bottom:max(166px,calc(var(--privacy-h,48px) + 104px));}',
     '}',
     'body.menu-open .game-fab,body.menu-open .scritch-fab,body.menu-open .beat-fab{display:none !important;}'
   ].join('');
@@ -88,6 +91,7 @@
     var pet = PETS[Math.floor(Math.random() * PETS.length)];
     var dog = badge('scritch-fab', 'https://scritch-scratch.waltviviers.com/play', 'Play Scritch Scratch',
       '/apps/scritch-scratch/' + pet[0], '/apps/scritch-scratch/' + pet[1]);
+    if (pet[2]) dog.querySelectorAll('img').forEach(function (img) { img.style.top = pet[2] + 'px'; });
     var beet = badge('beat-fab', 'https://chopped-beats.waltviviers.com/', "Open Chopped Beats",
       '/apps/chopped-beats/fab-over.webp', '/apps/chopped-beats/fab-up.webp');
 
