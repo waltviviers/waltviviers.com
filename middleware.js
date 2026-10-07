@@ -8,6 +8,11 @@
 //   manifesto.waltviviers.com/* serves /clients/manifesto-wellness/*, and the
 //   old waltviviers.com/clients/manifesto-wellness/ address redirects there.
 //   menzies.waltviviers.com/* serves /clients/menzies-media/* the same way.
+//
+// App subdomains map only their entry pages; the apps load their own assets
+// by absolute /apps/... paths, which every host serves as-is. This lives here
+// rather than in vercel.json because Vercel serves the root index.html for "/"
+// before vercel.json rewrites run.
 
 export const config = { matcher: ['/:path*'] };
 
@@ -16,6 +21,14 @@ const PUBLIC_SITES = {
   'menzies.waltviviers.com': 'menzies-media',
 };
 const MAIN_HOSTS = ['waltviviers.com', 'www.waltviviers.com'];
+const APP_SITES = {
+  'chopped-beats.waltviviers.com': { '/': '/apps/chopped-beats/' },
+  'scritch-scratch.waltviviers.com': {
+    '/': '/apps/scritch-scratch/',
+    '/play': '/apps/scritch-scratch/play/',
+    '/play/': '/apps/scritch-scratch/play/',
+  },
+};
 
 const ADMIN_GATE = {
   prefix: '/admin-index',
@@ -149,6 +162,8 @@ function publicSiteRoute(url) {
 export default async function middleware(request) {
   const url = new URL(request.url);
   const { pathname } = url;
+  const app = APP_SITES[url.hostname] && APP_SITES[url.hostname][pathname];
+  if (app) return new Response(null, { headers: { 'x-middleware-rewrite': new URL(app + url.search, url).toString() } });
   const site = publicSiteRoute(url);
   if (site === 'serve') return;
   if (site) return site;
