@@ -23,6 +23,7 @@ const PUBLIC_SITES = {
 const MAIN_HOSTS = ['waltviviers.com', 'www.waltviviers.com'];
 const APP_SITES = {
   'chopped-beats.waltviviers.com': { '/': '/apps/chopped-beats/' },
+  'lemonhands.waltviviers.com': { '/': '/lemonhands/' },
   'scritch-scratch.waltviviers.com': {
     '/': '/apps/scritch-scratch/',
     '/play': '/apps/scritch-scratch/play/',
