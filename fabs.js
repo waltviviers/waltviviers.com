@@ -2,7 +2,7 @@
    fabs.js — the floating game buttons, shared site-wide.
    ----------------------------------------------------------------------------
    One place for the three game badges in the bottom-left corner:
-     • Walt's Chopped Beats (beet DJ)   → chopped-beats.waltviviers.com
+     • Chopped Beats (beet DJ)   → chopped-beats.waltviviers.com
      • Static Protocol (turquoise prompt) → static-protocol.waltviviers.com
      • Scritch Scratch (dog, cat or rat, picked at random) → scritch-scratch.waltviviers.com
    Desktop stacks them up the left edge; mobile puts the dog and Static
@@ -88,7 +88,7 @@
     var pet = PETS[Math.floor(Math.random() * PETS.length)];
     var dog = badge('scritch-fab', 'https://scritch-scratch.waltviviers.com/play', 'Play Scritch Scratch',
       '/apps/scritch-scratch/' + pet[0], '/apps/scritch-scratch/' + pet[1]);
-    var beet = badge('beat-fab', 'https://chopped-beats.waltviviers.com/', "Open Walt's Chopped Beats",
+    var beet = badge('beat-fab', 'https://chopped-beats.waltviviers.com/', "Open Chopped Beats",
       '/apps/chopped-beats/fab-over.webp', '/apps/chopped-beats/fab-up.webp');
 
     var frag = document.createDocumentFragment();
