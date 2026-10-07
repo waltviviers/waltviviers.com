@@ -421,3 +421,16 @@ body.is-recording .timeline-wrap::after { content: ''; position: absolute; inset
   body.is-playing .top .mascot { transform: none; }
   .spark { display: none; }
 }
+
+/* Floating player glow: white normally, red (pulsing) while recording */
+:root { --player-glow: rgba(255, 255, 255, .38); }
+:root[data-theme="light"] { --player-glow: rgba(12, 12, 11, .22); }
+.player { box-shadow: 0 0 0 1px color-mix(in srgb, var(--player-glow) 60%, transparent), 0 0 22px 2px var(--player-glow), 0 8px 28px rgba(0,0,0,.35); transition: box-shadow .3s ease; }
+body.is-recording .player { animation: cb-rec-glow 1.4s ease-in-out infinite; }
+@keyframes cb-rec-glow {
+  0%, 100% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 70%, transparent), 0 0 18px 2px color-mix(in srgb, var(--accent) 55%, transparent), 0 8px 28px rgba(0,0,0,.35); }
+  50% { box-shadow: 0 0 0 1px var(--accent), 0 0 34px 6px color-mix(in srgb, var(--accent) 75%, transparent), 0 8px 28px rgba(0,0,0,.35); }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.is-recording .player { animation: none; box-shadow: 0 0 0 1px var(--accent), 0 0 26px 4px color-mix(in srgb, var(--accent) 65%, transparent), 0 8px 28px rgba(0,0,0,.35); }
+}
