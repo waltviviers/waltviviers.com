@@ -228,15 +228,34 @@ async function migrateMemSamples() {
   for (const p of project.pads) if (p && remap[p.sample]) p.sample = remap[p.sample];
 }
 
+// Returns the sounds that weren't in the library before this scan.
 async function scanFolder() {
-  if (!S.connected()) return;
+  if (!S.connected()) return [];
   const names = await S.list('samples');
+  const added = [];
   for (const n of names) {
-    if (!/\.(wav|mp3|ogg|flac|m4a|aac|opus|webm|mp4)$/i.test(n)) continue;
-    if (!samples.has(n)) samples.set(n, { id: n, name: prettyName(n), kind: 'user', buffer: null });
+    if (!/\.(wav|mp3|ogg|flac|m4a|aac|opus|webm|mp4|mov|3gp|amr|caf)$/i.test(n)) continue;
+    if (!samples.has(n)) { samples.set(n, { id: n, name: prettyName(n), kind: 'user', buffer: null }); added.push(n); }
   }
   renderLibrary();
+  return added;
 }
+
+// Sounds sent from the phone companion land in samples/ (via Google Drive,
+// OneDrive or by hand). Look for them when the window regains focus and every
+// 20 seconds while it's open, and say when something new arrives.
+let watching = false;
+async function checkForNewSounds() {
+  if (watching || !S.connected() || document.hidden) return;
+  watching = true;
+  try {
+    const added = await scanFolder();
+    if (added.length) toast(added.length === 1 ? `New sound: ${prettyName(added[0])}` : `${added.length} new sounds in your library`);
+  } catch { /* folder briefly unavailable; try again next time */ }
+  watching = false;
+}
+window.addEventListener('focus', checkForNewSounds);
+setInterval(checkForNewSounds, 20000);
 
 // ── Library ──
 
@@ -452,6 +471,7 @@ function renderTimeline() {
       for (let i = 1; i < c.loops; i++) marks.push(`<span class="loop-mark" style="left:${(i / c.loops) * 100}%"></span>`);
       return `<div class="${cls}" data-id="${c.id}" style="left:${c.start * pps}px;width:${fullLen(c) * pps}px">
         <span class="clip-name">${esc(c.name)}${c.fx.reverse ? ' ⇠' : ''}</span><canvas></canvas>${marks.join('')}
+        <button class="clip-dup" title="Duplicate: put a copy right after this clip (Ctrl+D)" aria-label="Duplicate clip">⧉</button>
         <div class="h h-l"></div><div class="h h-r"></div></div>`;
     }).join('');
     return `<div class="row ${t.id === selectedTrack ? 'selected' : ''}" data-track="${t.id}" style="--tc:${t.colour}">
@@ -652,6 +672,11 @@ $('#tracks').addEventListener('pointerdown', (e) => {
   const lane = e.target.closest('.lane');
   if (!lane) return;
   const clipEl = e.target.closest('.clip');
+  if (clipEl && e.target.closest('.clip-dup')) {
+    e.preventDefault();
+    duplicateClip(clipById(clipEl.dataset.id));
+    return;
+  }
   const t = timeAt(e.clientX);
   selectedTrack = lane.dataset.track;
 
@@ -1789,6 +1814,7 @@ $('#btnTheme').addEventListener('click', () => {
 function showHelp() {
   modal('How it works', `
     <p><strong>Everything stays on your computer.</strong> Choose a folder once; Chopped Beats keeps <em>samples</em>, <em>projects</em> and <em>exports</em> inside it and saves as you work.</p>
+    <p><strong>From your phone:</strong> open chopped-beats.waltviviers.com on your phone to record or collect sounds, then tap Send. Tip: keep your Chopped Beats folder inside Google Drive or OneDrive and save phone sounds into its <em>samples</em> folder; they appear here by themselves within a few seconds.</p>
     <p><strong>Get sounds in:</strong> drop audio or video files (TikTok downloads work; only the sound is kept), or press ● to record your voice onto the highlighted track. Use headphones so the mic doesn't pick up the music.</p>
     <p><strong>Make it weird:</strong> select a clip and use the presets or sliders: pitch, speed, warp, robot, echo, reverb and more.</p>
     <p><strong>Chop it:</strong> Auto-chop cuts a clip at pauses (words) or hits (beats). Or use the Chop tool, or Shift-click a clip, to cut by hand. Alt-drag copies a clip.</p>
