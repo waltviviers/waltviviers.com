@@ -3,8 +3,8 @@
    ----------------------------------------------------------------------------
    Injects the exact home-page navigation (with language switch, theme toggle
    and mobile burger menu) and footer onto every public page, so the chrome is
-   identical site-wide. The home page keeps its own inline chrome as the
-   canonical source; this file mirrors it 1:1.
+   identical site-wide, the home page included. It also loads the shared
+   Enquire form (enquire.js) and floating game buttons (fabs.js).
 
    Integration contract for host pages:
      • Remove the page's own <nav>, mobile-menu and <footer> markup and their
@@ -450,6 +450,17 @@
         m.removeAttribute('aria-hidden');
         document.body.style.overflow = 'hidden';
       }
+    });
+
+    /* Email icon — open the page's contact pop-up where there is one (the
+       home page), else it stays a plain mailto link */
+    nav.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        if (document.getElementById('contact-modal') && typeof window.openModal === 'function') {
+          e.preventDefault();
+          window.openModal('contact-modal');
+        }
+      });
     });
   }
 

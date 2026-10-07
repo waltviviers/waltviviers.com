@@ -23,7 +23,7 @@
     '/blog/', '/artist-bio/', '/privacy/',
     '/master-cv/', '/budtender-cv/', '/senior-graphic-design-cv/',
     '/consignment-note/', '/artist-gallery-agreement/',
-    '/admin', '/clients/', '/apps/chopped-beats/', '/apps/scritch-scratch/play/'
+    '/admin', '/clients/', '/apps/chopped-beats/', '/apps/scritch-scratch/'
   ];
   var path = location.pathname;
   for (var i = 0; i < HIDE_ON.length; i++) if (path.indexOf(HIDE_ON[i]) === 0) return;
