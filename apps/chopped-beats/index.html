@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walt's Chopped Beats</title>
+  <meta name="description" content="A small music maker for chopping clips, voice and video sound into songs. Everything stays on your computer." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="canonical" href="https://chopped-beats.waltviviers.com/" />
+  <link rel="icon" href="/apps/chopped-beats/mascot.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/apps/chopped-beats/mascot.png" />
+  <script>(function(){var s;try{s=localStorage.getItem('wv-theme')}catch(e){}document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/apps/chopped-beats/app.css" />
+</head>
+<body>
+
+<header class="top">
+  <a class="home-link" href="https://waltviviers.com/" title="Back to Walt Viviers' main site">← waltviviers.com</a>
+  <a class="brand" href="/" title="Walt's Chopped Beats"><img class="mascot" src="/apps/chopped-beats/mascot.png" alt="" onerror="this.remove()" />Walt's Chopped <em>Beats</em></a>
+  <input id="projName" class="proj-name" value="Untitled" aria-label="Project name" spellcheck="false" />
+  <span id="saveState" class="save-state"></span>
+  <span class="spacer"></span>
+  <button id="btnNew" class="btn">New</button>
+  <button id="btnOpen" class="btn">Open</button>
+  <button id="btnFolder" class="btn">Choose folder</button>
+  <button id="btnTheme" class="btn icon" title="Light / dark" aria-label="Toggle light or dark">◐</button>
+  <button id="btnHelp" class="btn icon" title="Help and shortcuts" aria-label="Help">?</button>
+</header>
+
+<div id="player" class="player" role="toolbar" aria-label="Player">
+  <span id="playerGrip" class="grip" title="Drag to move. Double-click to put it back." aria-hidden="true">⠿</span>
+  <button id="btnStart" class="btn icon" title="Back to start (Home)" aria-label="Back to start">⏮</button>
+  <button id="btnPlay" class="btn icon play" title="Play / pause (Space)" aria-label="Play">▶</button>
+  <button id="btnRec" class="btn icon rec" title="Record voice (R)" aria-label="Record">●</button>
+  <output id="clock" class="clock">0:00.00<small>1.1</small></output>
+</div>
+
+<div class="transport">
+  <div class="group">
+    <label class="lbl">BPM <input id="bpm" type="number" min="40" max="240" value="100" /></label>
+    <button id="btnTap" class="btn" title="Tap along to set the tempo">Tap</button>
+    <label class="lbl">Snap
+      <select id="snap">
+        <option value="0">Off</option>
+        <option value="4">Bar</option>
+        <option value="1">Beat</option>
+        <option value="0.5">1/8</option>
+        <option value="0.25">1/16</option>
+      </select>
+    </label>
+    <button id="btnMetro" class="btn toggle" aria-pressed="false" title="Metronome click (M)">Click</button>
+    <button id="btnLoop" class="btn toggle" aria-pressed="false" title="Loop the marked region (L). Drag on the ruler to mark it.">Loop</button>
+  </div>
+  <div class="group">
+    <button id="toolMove" class="btn toggle" aria-pressed="true" title="Move and trim clips (V)">Move</button>
+    <button id="toolChop" class="btn toggle" aria-pressed="false" title="Click a clip to cut it (C)">Chop</button>
+    <button id="btnUndo" class="btn icon" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
+    <button id="btnRedo" class="btn icon" title="Redo (Ctrl+Y)" aria-label="Redo">↷</button>
+    <label class="lbl zoom" title="Zoom (Ctrl + scroll)">Zoom <input id="zoom" type="range" min="15" max="400" value="80" /></label>
+  </div>
+  <canvas id="viz" class="viz" width="160" height="34" aria-hidden="true"></canvas>
+  <button id="btnPads" class="btn toggle" aria-pressed="false" title="Drum pads and beat maker (P)">Pads</button>
+  <button id="btnExport" class="btn primary">Export</button>
+</div>
+
+<main class="work">
+  <aside class="library">
+    <div class="pane-head">
+      <h2>Sounds</h2>
+      <button id="btnImport" class="btn small">Import</button>
+      <input id="fileInput" type="file" accept="audio/*,video/*,.mp4,.mov,.m4a,.wav,.mp3,.ogg,.flac,.webm" multiple hidden />
+    </div>
+    <input id="libSearch" class="search" type="search" placeholder="Search" aria-label="Search sounds" />
+    <p class="hint">Drop audio or video files anywhere. Video keeps only the sound.</p>
+    <h3 class="sub">My sounds</h3>
+    <ul id="libList" class="lib-list"></ul>
+    <h3 class="sub">Drum kit</h3>
+    <ul id="kitList" class="lib-list"></ul>
+  </aside>
+
+  <section class="timeline-wrap">
+    <div id="tl" class="tl">
+      <div id="tlInner" class="tl-inner">
+        <div class="ruler-row">
+          <div class="corner"><button id="btnAddTrack" class="btn small">+ Track</button></div>
+          <div class="ruler-view"><canvas id="ruler" height="28"></canvas></div>
+        </div>
+        <div id="tracks"></div>
+        <div id="loopBand" class="loop-band" hidden></div>
+        <div id="playhead" class="playhead"></div>
+      </div>
+    </div>
+  </section>
+
+  <aside id="inspector" class="inspector"></aside>
+</main>
+
+<section id="pads" class="pads" hidden>
+  <div class="pads-pad">
+    <div class="pane-head">
+      <h2>Pads</h2>
+      <label class="check"><input id="recPads" type="checkbox" /> Record hits while playing</label>
+    </div>
+    <div id="padGrid" class="pad-grid"></div>
+    <p class="hint">Keys 1–4, Q–R, A–F, Z–V. Drag any sound onto a pad.</p>
+  </div>
+  <div class="pads-seq">
+    <div class="pane-head">
+      <h2>Beat maker</h2>
+      <button id="btnSeqPlay" class="btn small toggle" aria-pressed="false">Preview</button>
+      <button id="btnSeqClear" class="btn small">Clear</button>
+      <span class="spacer"></span>
+      <label class="lbl">Bars <input id="seqBars" type="number" min="1" max="64" value="4" /></label>
+      <button id="btnSeqStamp" class="btn small primary" title="Write the pattern into the timeline at the playhead">Add to timeline</button>
+    </div>
+    <div id="seqGrid" class="seq-grid"></div>
+  </div>
+</section>
+
+<div id="modal" class="modal" hidden>
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle"></h2>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+
+<div id="tour" class="tour" hidden>
+  <div id="tourSpot" class="tour-spot"></div>
+  <div id="tourCard" class="tour-card" role="dialog" aria-modal="true" aria-labelledby="tourTitle">
+    <p id="tourStep" class="tour-step"></p>
+    <h2 id="tourTitle"></h2>
+    <p id="tourText"></p>
+    <div class="row-btns">
+      <button id="tourBack" class="btn">Back</button>
+      <button id="tourNext" class="btn primary">Next</button>
+      <span class="spacer"></span>
+      <button id="tourSkip" class="btn small">Skip tour</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/apps/chopped-beats/js/main.js"></script>
+</body>
+</html>
