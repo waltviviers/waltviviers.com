@@ -119,6 +119,26 @@ input[type="range"] { accent-color: var(--ink); }
   flex-wrap: wrap;
 }
 .transport .group { display: flex; align-items: center; gap: 6px; }
+/* Floating player: drag it by the grip; position is remembered. */
+.player {
+  position: fixed;
+  z-index: 40;
+  left: 50%;
+  bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px 6px 4px;
+  background: var(--bg2);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.35);
+  touch-action: none;
+}
+.player.dragging { box-shadow: 0 14px 40px rgba(0,0,0,.45); opacity: .95; }
+.grip { cursor: grab; color: var(--stone); font-size: 16px; padding: 4px 6px; line-height: 1; }
+.player.dragging .grip { cursor: grabbing; }
+.grip:hover { color: var(--ink); }
 .clock {
   font-variant-numeric: tabular-nums;
   font-size: 15px;
@@ -297,6 +317,34 @@ input[type="range"] { accent-color: var(--ink); }
 .toast { background: var(--ink); color: var(--bg); padding: 8px 14px; font-size: 12px; border-radius: 2px; animation: tin .2s ease; max-width: 80vw; }
 .toast.err { background: var(--accent); color: #fff; }
 @keyframes tin { from { opacity: 0; transform: translateY(6px); } }
+
+/* ── First-run tour ── */
+.tour { position: fixed; inset: 0; z-index: 70; }
+.tour-spot {
+  position: fixed;
+  border-radius: 4px;
+  box-shadow: 0 0 0 9999px rgba(0,0,0,.62);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  transition: all .25s ease;
+  pointer-events: none;
+}
+.tour-spot.none { outline: 0; width: 0 !important; height: 0 !important; left: 50% !important; top: 40% !important; }
+.tour-card {
+  position: fixed;
+  width: 330px;
+  max-width: calc(100vw - 32px);
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  padding: 18px 20px 16px;
+  box-shadow: 0 16px 48px rgba(0,0,0,.4);
+  transition: left .25s ease, top .25s ease;
+  user-select: text;
+}
+.tour-card h2 { font-size: 24px; margin-bottom: 8px; }
+.tour-card p { color: var(--stone); font-size: 13px; }
+.tour-card .tour-step { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 6px; color: var(--accent); }
+.tour-card .row-btns { display: flex; gap: 8px; align-items: center; margin-top: 16px; }
 
 @media (max-width: 900px) {
   .work { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; }
