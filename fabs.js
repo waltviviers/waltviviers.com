@@ -89,7 +89,7 @@
     var dog = badge('scritch-fab', 'https://scritch-scratch.waltviviers.com/play', 'Play Scritch Scratch',
       '/apps/scritch-scratch/' + pet[0], '/apps/scritch-scratch/' + pet[1]);
     var beet = badge('beat-fab', 'https://chopped-beats.waltviviers.com/', "Open Walt's Chopped Beats",
-      '/apps/chopped-beats/fab-up.webp', '/apps/chopped-beats/fab-over.webp');
+      '/apps/chopped-beats/fab-over.webp', '/apps/chopped-beats/fab-up.webp');
 
     var frag = document.createDocumentFragment();
     frag.appendChild(game);
