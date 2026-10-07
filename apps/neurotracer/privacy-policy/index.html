@@ -232,68 +232,6 @@
       footer { padding: 40px 24px 88px; flex-direction: column; gap: 28px; }
       .footer-mark { position: static; transform: none; }
     }
-    /* Language switch: English [ slider ] Afrikaans */
-    .lang-toggle, .lang-switch { display: flex; align-items: center; gap: 10px; }
-    .lang-group { display: block; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); font-family: var(--sans); line-height: 1; cursor: pointer; user-select: none; white-space: nowrap; transition: color 0.2s; }
-    .lang-group.active { color: var(--ink); }
-    .lang-group:not(.active):hover { color: var(--ink); }
-    .lang-track { position: relative; width: 40px; height: 20px; border-radius: 12px; border: 1.5px solid #4A4844; background: transparent; cursor: pointer; padding: 0; flex-shrink: 0; }
-    .lang-knob { position: absolute; top: 50%; left: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--ink); transform: translateY(-50%); transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1); }
-    .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 22px; }
-    [data-theme="light"] .lang-track { border-color: #D5D1CB; }
-    @media (max-width: 900px) {
-      .lang-switch { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); gap: 7px; }
-      .lang-group { font-size: 10px; letter-spacing: 0.04em; }
-      .lang-track { width: 34px; height: 18px; }
-      .lang-switch:has(.lang-group:last-child.active) .lang-knob { left: 18px; }
-    }
-    /* ── Burger button + mobile menu (standard header) ── */
-    .burger-btn { display: none; align-items: center; justify-content: center; width: 36px; height: 36px; cursor: pointer; background: none; border: none; padding: 4px; flex-shrink: 0; font-size: 20px; line-height: 1; transition: opacity 0.2s; }
-    .burger-btn:hover { opacity: 0.7; }
-    .burger-btn .burger-icon { display: block; }
-    .burger-btn .burger-close { display: none; font-style: normal; font-size: 20px; }
-    .burger-btn.is-open .burger-icon { display: none; }
-    .burger-btn.is-open .burger-close { display: block; }
-    .mobile-menu { position: fixed; inset: 0; z-index: 190; background: var(--bg); display: flex; flex-direction: column; padding: 80px 32px 48px; opacity: 0; pointer-events: none; transition: opacity 0.3s cubic-bezier(0.4,0,0.2,1); }
-    .mobile-menu.is-open { opacity: 1; pointer-events: auto; }
-    body.menu-open { overflow: hidden; }
-    .mobile-menu-links { display: flex; flex-direction: column; border-top: 1px solid var(--rule); flex: 1 1 0; min-height: 0; overflow-y: auto; }
-    .mobile-menu-link { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; border-bottom: 1px solid var(--rule); font-family: var(--serif); font-size: clamp(2rem, 9vw, 3.2rem); font-weight: 400; line-height: 1; color: var(--stone); transition: color 0.2s; text-decoration: none; flex-shrink: 0; }
-    .mobile-menu-link:hover { color: var(--ink); }
-    .mobile-menu-link-cta { color: var(--ink); margin-top: 4px; }
-    .mobile-menu-link-cta:hover { color: var(--stone); }
-    .mobile-menu-arrow { font-size: 1.4rem; opacity: 0.4; }
-    .mobile-menu-foot { padding-top: 32px; flex-shrink: 0; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
-    .mobile-menu-foot a { display: flex; align-items: center; color: var(--stone); transition: color 0.2s; }
-    .mobile-menu-foot a:hover { color: var(--ink); }
-    .mobile-menu-foot svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-    .mobile-admin-btn { font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; color: var(--stone); padding: 6px 14px; border: 1px solid var(--rule); transition: border-color 0.2s, color 0.2s; margin-right: auto; }
-    .mobile-admin-btn:hover { border-color: var(--stone); color: var(--ink); }
-    [data-theme="light"] .mobile-menu { background: #F5F3EF; }
-    @media (max-width: 900px) {
-      .burger-btn { display: flex; }
-      nav .social-icons { display: none; }
-    }
-    /* Static Protocol floating button (turquoise glowing triangle, opens the game) */
-    .game-fab {
-      position: fixed; left: 21px; bottom: 170px; z-index: 150; width: 56px; height: 56px;
-      display: flex; align-items: center; justify-content: center; border-radius: 50%;
-      background: rgba(6, 20, 18, 0.55); border: 1px solid rgba(34, 230, 212, 0.35);
-      box-shadow: 0 0 16px rgba(34,230,212,0.45), 0 0 32px rgba(34,230,212,0.25), 0 5px 10px rgba(0,0,0,0.35);
-      transition: transform 0.18s ease, bottom 0.2s ease, box-shadow 0.2s ease;
-    }
-    .game-fab svg { width: 22px; height: 22px; }
-    .game-fab:hover { transform: translateY(-3px) scale(1.07); }
-    @media (max-width: 900px) { .game-fab { left: 94px; bottom: 21px; } }
-    body.privacy-visible .game-fab { bottom: max(95px, calc(var(--privacy-h, 48px) + 33px)); }
-    /* Scritch Scratch floating button (dog badge, hover reaction) */
-    .scritch-fab { position: fixed; left: 16px; bottom: 90px; z-index: 150; width: 66px; height: 66px; display: block; transition: transform 0.18s ease; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.35)); }
-    .scritch-fab img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; transition: opacity 0.15s ease; }
-    .scritch-fab .ss-over { opacity: 0; }
-    .scritch-fab:hover { transform: translateY(-3px) scale(1.07); }
-    .scritch-fab:hover .ss-up { opacity: 0; }
-    .scritch-fab:hover .ss-over { opacity: 1; }
-    @media (max-width: 900px) { .scritch-fab { bottom: 16px; } } /* level with the Enquire FAB on mobile */
     /* Custom hand pointer, site-wide */
     html, body, body * { cursor: url('/images/pointer_up.png') 3 1, auto !important; }
     body *:active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
@@ -307,68 +245,11 @@
       ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
     }
 </style>
+  <script defer src="/chrome.js"></script>
 </head>
 <body>
 
-  <nav>
-    <div class="nav-left">
-      <a href="https://waltviviers.com/" class="nav-logo" aria-label="Home">
-        <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
-      </a>
-    </div>
-    <ul class="nav-links">
-      <li class="nav-link-hide"><a href="/photography/">Photography</a></li>
-      <li class="nav-link-hide"><a href="/gallery/">Fine Art &amp; Illustration</a></li>
-      <li class="nav-link-hide"><a href="/artist-bio/">Bio &amp; Statement</a></li>
-      <li class="nav-link-hide"><a href="/#commission" class="nav-cta">Enquire</a></li>
-      <li>
-        <div class="social-icons">
-          <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
-          </a>
-          <a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">
-            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
-          </a>
-        </div>
-      </li>
-      <li>
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle light/dark mode">
-          <span class="toggle-thumb">
-            <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            <svg class="icon-sun"  viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-          </span>
-        </button>
-      </li>
-      <li>
-        <button class="burger-btn" id="burger-btn" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
-          <span class="burger-icon">🍔</span>
-          <em class="burger-close">🌭</em>
-        </button>
-      </li>
-    </ul>
-  </nav>
 
-  <!-- Mobile menu overlay -->
-  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Navigation menu">
-    <div class="mobile-menu-links">
-      <a href="/photography/" class="mobile-menu-link" data-i18n="nav-photography">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>
-      <a href="/gallery/" class="mobile-menu-link" data-i18n="nav-artworks">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>
-      <a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio &amp; Statement <span class="mobile-menu-arrow">↗</span></a>
-      <a href="#enquire" class="mobile-menu-link mobile-menu-link-cta gx-open" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>
-    </div>
-    <div class="mobile-menu-foot">
-      <a href="/admin-index/" class="mobile-admin-btn">Admin</a>
-      <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
-        <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
-      </a>
-      <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
-        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-      </a>
-      <a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" aria-label="Dribbble">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/></svg>
-      </a>
-    </div>
-  </div>
 
   <main>
     <div class="policy-wrap">
@@ -413,86 +294,7 @@
     </div>
   </main>
 
-  <footer>
-    <div class="footer-social">
-      <div class="social-icons">
-        <a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2.5"/></svg>
-        </a>
-        <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-        </a>
-        <a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">
-          <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
-        </a>
-      </div>
-      <div class="footer-legal" style="margin-top:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);line-height:1.7;text-align:center;"><span class="footer-copy">© 2026 Walt Viviers. All rights reserved.</span> <a href="/privacy/" class="footer-privacy" style="color:inherit;">Privacy Policy.</a> <span class="footer-credit">Made with <span style="color:#e0607e">&#9829;</span> by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Cat&#39;s Creations</a></span></div>
-    </div>
-    <a href="/admin-index/" class="footer-mark" aria-label="Admin">
-      <img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" />
-    </a>
-  </footer>
 
-  <script>
-    (function () {
-      document.getElementById('theme-toggle').addEventListener('click', function () {
-        const html = document.documentElement;
-        const next = html.dataset.theme === 'light' ? 'dark' : 'light';
-        html.dataset.theme = next;
-        localStorage.setItem('wv-theme', next);
-      });
-      const nav = document.querySelector('nav');
-      let ticking = false;
-      window.addEventListener('scroll', function () {
-        if (!ticking) {
-          requestAnimationFrame(function () {
-            nav.classList.toggle('scrolled', window.scrollY > 40);
-            ticking = false;
-          });
-          ticking = true;
-        }
-      }, { passive: true });
-    })();
-  </script>
-  <script>
-    (function() {
-      var LANG = {
-        en: { 'email-href': 'mailto:artist@waltviviers.com' }
-      };
-      var lang = 'en';
-      function applyLang(l) {
-        lang = l; localStorage.setItem('wv-lang', l);
-        document.querySelectorAll('[data-i18n-href]').forEach(function(el) {
-          var k = el.dataset.i18nHref;
-          if (LANG[l] && LANG[l][k] !== undefined) el.href = LANG[l][k];
-        });
-      }
-      applyLang(lang);
-    })();
-  </script>
-  <script>
-    (function () {
-      var burger = document.getElementById('burger-btn');
-      var menu   = document.getElementById('mobile-menu');
-      if (!burger || !menu) return;
-      function openMenu() { burger.classList.add('is-open'); burger.setAttribute('aria-expanded', 'true'); menu.classList.add('is-open'); document.body.classList.add('menu-open'); }
-      function closeMenu() { burger.classList.remove('is-open'); burger.setAttribute('aria-expanded', 'false'); menu.classList.remove('is-open'); document.body.classList.remove('menu-open'); }
-      burger.addEventListener('click', function () { menu.classList.contains('is-open') ? closeMenu() : openMenu(); });
-      menu.querySelectorAll('a').forEach(function (link) { link.addEventListener('click', closeMenu); });
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
-    })();
-  </script>
-  <!-- Scritch Scratch floating icon -->
-  <a href="/apps/static-protocol/play/" class="game-fab" aria-label="Play Static Protocol">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6l6 6-6 6" stroke="#22e6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="18" x2="20" y2="18" stroke="#22e6d4" stroke-width="2" stroke-linecap="round"/></svg>
-  </a>
-  <a href="https://scritch-scratch.waltviviers.com/play" class="scritch-fab" aria-label="Play Scritch Scratch">
-    <img class="ss-up" src="/apps/scritch-scratch/ss-up.webp" alt="Scritch Scratch" width="64" height="64" loading="lazy" />
-    <img class="ss-over" src="/apps/scritch-scratch/ss-over.webp" alt="" aria-hidden="true" width="64" height="64" loading="lazy" />
-  </a>
-  <script>
-  (function(){var s=[['ss-up.webp','ss-over.webp'],['ss-cat-up.png','ss-cat-over.png'],['ss-rat-up.png','ss-rat-over.png']];var p=s[Math.floor(Math.random()*s.length)];var f=document.querySelector('.scritch-fab');f.querySelector('.ss-up').src='/apps/scritch-scratch/'+p[0];f.querySelector('.ss-over').src='/apps/scritch-scratch/'+p[1];})();
-  </script>
   <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>

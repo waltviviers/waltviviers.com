@@ -3,8 +3,8 @@
    ----------------------------------------------------------------------------
    Injects the exact home-page navigation (with language switch, theme toggle
    and mobile burger menu) and footer onto every public page, so the chrome is
-   identical site-wide. The home page keeps its own inline chrome as the
-   canonical source; this file mirrors it 1:1.
+   identical site-wide, the home page included. It also loads the shared
+   Enquire form (enquire.js) and floating game buttons (fabs.js).
 
    Integration contract for host pages:
      • Remove the page's own <nav>, mobile-menu and <footer> markup and their
@@ -188,7 +188,6 @@
     '.mobile-menu{position:fixed;inset:0;z-index:190;background:var(--bg);display:flex;flex-direction:column;padding:80px 32px 48px;opacity:0;pointer-events:none;transition:opacity 0.3s cubic-bezier(0.4,0,0.2,1);}',
     '.mobile-menu.is-open{opacity:1;pointer-events:auto;}',
     'body.menu-open{overflow:hidden;}',
-    'body.menu-open .gx-fab,body.menu-open .game-fab,body.menu-open .scritch-fab{display:none !important;}',
     '.mobile-menu-links{display:flex;flex-direction:column;border-top:1px solid var(--rule);flex:1 1 0;min-height:0;overflow-y:auto;}',
     '.mobile-menu-link{display:flex;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:1px solid var(--rule);font-family:var(--serif);font-size:clamp(2rem,9vw,3.2rem);font-weight:400;line-height:1;color:var(--stone);transition:color 0.2s;text-decoration:none;flex-shrink:0;}',
     '.mobile-menu-link:hover{color:var(--ink);}',
@@ -300,6 +299,20 @@
         s.src = '/enhance.js';
         s.defer = true;
         (document.body || document.documentElement).appendChild(s);
+      }
+      /* Shared Enquire form + mobile button, and the floating game buttons
+         (each file decides which pages show it). */
+      if (!window.__wvEnquire && !document.querySelector('script[src="/enquire.js"]')) {
+        var q = document.createElement('script');
+        q.src = '/enquire.js';
+        q.defer = true;
+        (document.body || document.documentElement).appendChild(q);
+      }
+      if (!window.__wvFabs && !document.querySelector('script[src="/fabs.js"]')) {
+        var b = document.createElement('script');
+        b.src = '/fabs.js';
+        b.defer = true;
+        (document.body || document.documentElement).appendChild(b);
       }
     } catch (e) {}
   }
@@ -437,6 +450,17 @@
         m.removeAttribute('aria-hidden');
         document.body.style.overflow = 'hidden';
       }
+    });
+
+    /* Email icon — open the page's contact pop-up where there is one (the
+       home page), else it stays a plain mailto link */
+    nav.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        if (document.getElementById('contact-modal') && typeof window.openModal === 'function') {
+          e.preventDefault();
+          window.openModal('contact-modal');
+        }
+      });
     });
   }
 

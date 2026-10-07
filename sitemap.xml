@@ -415,6 +415,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://static-protocol.waltviviers.com/</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://static-protocol.waltviviers.com/play</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://waltviviers.com/artist-bio/</loc>
     <lastmod>2026-08-04</lastmod>
     <changefreq>monthly</changefreq>

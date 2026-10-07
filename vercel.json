@@ -29,9 +29,7 @@
     { "source": "/apps/neurotrace/", "destination": "/apps/neurotracer/", "permanent": true },
     { "source": "/apps/neurotrace/privacy-policy/", "destination": "/apps/neurotracer/privacy-policy/", "permanent": true },
     { "source": "/apps/bill_tipper/", "destination": "/apps/billtipper/", "permanent": true },
-    { "source": "/apps/bill_tipper/privacy-policy/", "destination": "/apps/billtipper/privacy-policy/", "permanent": true },
-    { "source": "/apps/static-protocol/play", "destination": "https://waltviviers.github.io/Static-Protocol/", "permanent": false },
-    { "source": "/apps/static-protocol/play/", "destination": "https://waltviviers.github.io/Static-Protocol/", "permanent": false }
+    { "source": "/apps/bill_tipper/privacy-policy/", "destination": "/apps/billtipper/privacy-policy/", "permanent": true }
   ],
   "headers": [
     {
@@ -43,6 +41,20 @@
         { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" },
         { "key": "Content-Security-Policy", "value": "frame-ancestors 'self'" }
+      ]
+    },
+    {
+      "source": "/apps/chopped-beats/(.*)",
+      "headers": [
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(self), geolocation=()" }
+      ]
+    },
+    {
+      "has": [{"type": "host", "value": "chopped-beats.waltviviers.com"}],
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(self), geolocation=()" },
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow" }
       ]
     },
     {
