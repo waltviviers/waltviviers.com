@@ -1,0 +1,31 @@
+name: Generate artwork pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/artworks.json'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate static artwork pages
+        run: node scripts/generate-artwork-pages.js
+
+      - name: Commit generated pages
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add works/
+          git diff --cached --quiet || git commit -m "chore: regenerate artwork pages [skip ci]"
+          git push
