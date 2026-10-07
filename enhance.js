@@ -150,13 +150,20 @@
   /* ── 3. Hover lift on card-like blocks ─────────────────────────────────── */
   function applyLift() {
     each(document.querySelectorAll(
-      '.disc-card, .digital-card, .digital-sub-card, .work-thumb, .essay-card, ' +
-      '.app-card, .blog-card, .post-card, .card, [data-wv-lift]'
+      '.disc-card, .digital-card, .digital-sub-card, .work-thumb, .work-card, ' +
+      '.essay-card, .app-card, .blog-card, .post-card, .card, [data-wv-lift]'
     ), function (el) { el.classList.add('wv-lift'); });
     // Subtle sheen on primary buttons.
     each(document.querySelectorAll(
       '.cc-btn-primary, .pf-btn-primary, .btn-primary, [data-wv-shimmer]'
     ), function (el) { el.classList.add('wv-shimmer'); });
+    // A matching hover lift on buttons/CTAs (shadow + glow only, so it composes
+    // with the magnetic transform on the primary buttons).
+    each(document.querySelectorAll(
+      '.pf-btn, .cc-btn, .btn-primary, .btn-secondary, .disc-card-cta, ' +
+      '.digital-cta, .digital-sub-cta, .about-bio-btn, .gn-btn, .gx-fab, ' +
+      '.view-gallery-btn, [data-wv-btnlift]'
+    ), function (el) { el.classList.add('wv-btnlift'); });
   }
 
   /* ── 4. Hero parallax + ambient glow ───────────────────────────────────── */
@@ -273,7 +280,7 @@
   function setupTilt3d() {
     if (reduce || !fine) return;
     each(document.querySelectorAll(
-      '.disc-card, .digital-card, .digital-sub-card, .work-thumb, ' +
+      '.disc-card, .digital-card, .digital-sub-card, .work-thumb, .work-card, ' +
       '.essay-card, .app-card, .blog-card, .post-card, [data-wv-tilt]'
     ), function (card) {
       card.classList.add('wv-tilt3d');
