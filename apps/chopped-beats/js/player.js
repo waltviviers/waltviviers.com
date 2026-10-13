@@ -1,7 +1,8 @@
 // Floating, draggable player. Its position is kept per browser.
 const KEY = 'cb-player-pos';
 
-export function initPlayer(el, grip) {
+// `avoid` returns an element the default spot should sit above (the open pads), or null.
+export function initPlayer(el, grip, avoid = () => null) {
   const save = (pos) => { try { localStorage.setItem(KEY, JSON.stringify(pos)); } catch { /* optional */ } };
   const load = () => { try { return JSON.parse(localStorage.getItem(KEY)); } catch { return null; } };
 
@@ -15,13 +16,19 @@ export function initPlayer(el, grip) {
     return { x: nx, y: ny };
   }
 
+  function home() {
+    const r = el.getBoundingClientRect();
+    const block = avoid();
+    const floor = block ? block.getBoundingClientRect().top - 12 : window.innerHeight - 24;
+    place((window.innerWidth - r.width) / 2, floor - r.height);
+  }
+
   function reset() {
     el.style.left = '';
     el.style.top = '';
     el.style.bottom = '';
-    const r = el.getBoundingClientRect();
-    place((window.innerWidth - r.width) / 2, window.innerHeight - r.height - 24);
     try { localStorage.removeItem(KEY); } catch { /* optional */ }
+    home();
   }
 
   const saved = load();
@@ -52,7 +59,10 @@ export function initPlayer(el, grip) {
   // Pointer capture retargets the double-click to the panel, so listen there.
   el.addEventListener('dblclick', (e) => { if (!e.target.closest('button')) reset(); });
   window.addEventListener('resize', () => {
+    if (!load()) { home(); return; }
     const r = el.getBoundingClientRect();
     place(r.left, r.top);
   });
+  // Until it has been moved by hand, the player keeps to its default spot as the layout changes.
+  return { settle: () => { if (!load()) home(); } };
 }

@@ -85,7 +85,7 @@ input[type="number"], input[type="text"], input[type="search"], select {
 }
 input[type="number"] { width: 58px; }
 input[type="range"] { accent-color: var(--ink); }
-.lbl { display: inline-flex; align-items: center; gap: 6px; color: var(--stone); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.lbl { display: inline-flex; align-items: center; gap: 6px; color: var(--stone); font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; }
 .lbl input, .lbl select { color: var(--ink); text-transform: none; letter-spacing: 0; }
 .check { display: inline-flex; gap: 6px; align-items: center; color: var(--stone); font-size: 12px; cursor: pointer; }
 .hint { color: var(--stone); font-size: 11px; line-height: 1.4; }
@@ -133,6 +133,23 @@ input[type="range"] { accent-color: var(--ink); }
   flex-wrap: wrap;
 }
 .transport .group { display: flex; align-items: center; gap: 6px; }
+/* Compact view: icons stand in for words (the words stay for tooltips and screen readers). */
+.ic { display: none; width: 16px; height: 16px; flex: 0 0 auto; vertical-align: middle; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+#btnCompact .ic, body.compact .ic { display: inline-block; }
+#btnCompact { margin-left: 2px; }
+#btnCompact .ic { margin-top: -2px; }
+body.compact .tx { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+body.compact .btn:has(> .ic) { padding: 6px 8px; line-height: 0; }
+body.compact .btn.small:has(> .ic) { padding: 4px 7px; }
+body.compact .home-link { padding: 5px 7px; line-height: 0; }
+body.compact .lbl { gap: 4px; }
+body.compact h2 .ic { width: 20px; height: 20px; }
+body.compact .top { padding: 6px 12px; }
+body.compact .transport { padding: 5px 12px; gap: 12px; }
+body.compact .transport .group { gap: 4px; }
+body.compact #zoom { width: 90px; }
+body.compact .check { gap: 4px; }
+
 /* Floating player: drag it by the grip; position is remembered. */
 .player {
   position: fixed;
@@ -187,7 +204,7 @@ input[type="range"] { accent-color: var(--ink); }
 }
 .lib-list li:hover { background: var(--bg2); }
 .lib-list .nm { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.lib-list .dur { color: var(--stone); font-size: 10px; font-variant-numeric: tabular-nums; }
+.lib-list .dur { color: var(--stone); font-size: 11px; font-variant-numeric: tabular-nums; }
 .lib-list button { border: 0; background: none; cursor: pointer; color: var(--stone); width: 20px; font-size: 12px; }
 .lib-list button:hover { color: var(--ink); }
 .lib-list .empty { color: var(--stone); cursor: default; font-size: 11px; border: 0; }
@@ -219,6 +236,8 @@ input[type="range"] { accent-color: var(--ink); }
 .th-name:focus { border-color: var(--rule) !important; }
 .th-btn { border: 1px solid var(--rule); background: none; width: 20px; height: 20px; font-size: 10px; cursor: pointer; border-radius: 2px; color: var(--stone); }
 .th-btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+/* Delete sits apart from Mute and Solo, and stays quiet until you aim for it. */
+.th-btn.x { margin-left: 10px; border-color: transparent; }
 .th-btn.x:hover { color: var(--accent); border-color: var(--accent); }
 .th input[type="range"] { width: 100%; height: 14px; }
 .th .rec-target { font-size: 9px; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); visibility: hidden; }
@@ -267,7 +286,7 @@ input[type="range"] { accent-color: var(--ink); }
 .loop-band { position: absolute; top: 28px; bottom: 0; background: color-mix(in srgb, var(--ink) 5%, transparent); border-left: 1px solid var(--stone); border-right: 1px solid var(--stone); pointer-events: none; z-index: 1; }
 .loop-band.off { background: none; border-style: dashed; opacity: .5; }
 
-.empty-tl { position: absolute; left: calc(var(--head-w) + 32px); top: 120px; max-width: 420px; color: var(--stone); pointer-events: none; }
+.empty-tl { position: absolute; left: calc(var(--head-w) + 32px); top: 120px; max-width: min(420px, calc(100vw - 240px - 290px - var(--head-w) - 64px)); color: var(--stone); pointer-events: none; }
 .empty-tl h3 { font-family: var(--serif); font-weight: 400; font-size: 26px; color: var(--ink); margin-bottom: 8px; }
 .empty-tl p { font-size: 13px; margin-bottom: 6px; }
 
@@ -323,6 +342,20 @@ input[type="range"] { accent-color: var(--ink); }
 /* ── Modal & toasts ── */
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: grid; place-items: center; z-index: 50; padding: 16px; }
 .modal-card { background: var(--bg); border: 1px solid var(--rule); max-width: 520px; width: 100%; max-height: 86vh; overflow: auto; padding: 24px; user-select: text; }
+/* Find sounds (Freesound) */
+.fs-search { display: flex; gap: 8px; margin-bottom: 8px; }
+.fs-search input { flex: 1; min-width: 0; }
+.fs-credit { display: flex; margin-bottom: 10px; font-size: 12px; color: var(--stone); }
+.fs-list { list-style: none; max-height: 46vh; overflow: auto; margin-bottom: 10px; }
+.fs-list li { display: flex; align-items: center; gap: 8px; padding: 6px 2px; border-bottom: 1px solid var(--rule); }
+.fs-list li.empty { color: var(--stone); font-size: 13px; padding: 14px 2px; border: 0; }
+.fs-list .nm { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.fs-list .nm small { display: block; color: var(--stone); font-size: 11px; }
+.fs-list .dur { color: var(--stone); font-size: 11px; font-variant-numeric: tabular-nums; }
+.fs-lic { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; padding: 2px 6px; border: 1px solid var(--rule); border-radius: 2px; color: var(--stone); }
+.fs-lic.credit { color: var(--accent); border-color: var(--accent); }
+.fs-play.on { color: var(--accent); }
+.fs-add { min-width: 64px; }
 .modal-card h2 { font-size: 28px; margin-bottom: 12px; }
 .modal-card p { margin-bottom: 10px; font-size: 13px; color: var(--stone); }
 .modal-card p strong { color: var(--ink); font-weight: 500; }
@@ -376,6 +409,7 @@ input[type="range"] { accent-color: var(--ink); }
   .library, .inspector { max-height: 30vh; border: 0; border-bottom: 1px solid var(--rule); }
   .pads { grid-template-columns: 1fr; height: 45vh; }
   :root { --head-w: 120px; }
+  .empty-tl { max-width: calc(100vw - var(--head-w) - 64px); }
   .viz { display: none; }
   .proj-name { width: 120px; }
   .home-link { padding: 6px 8px; }
