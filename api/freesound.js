@@ -48,6 +48,7 @@ export default async function handler(req, res) {
       filter: `license:${allowed} duration:[0 TO 120]`,
       fields: FIELDS,
       page_size: '20',
+      group_by_pack: '1', // one sound per pack, so a single big pack can't fill the page
       page: String(Math.max(1, Math.min(50, parseInt(page, 10) || 1))),
     });
     let r = await call(`/search/text/?${params}`, key);
