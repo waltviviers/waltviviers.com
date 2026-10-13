@@ -148,6 +148,7 @@ body.compact .top { padding: 6px 12px; }
 body.compact .transport { padding: 5px 12px; gap: 12px; }
 body.compact .transport .group { gap: 4px; }
 body.compact #zoom { width: 90px; }
+body.compact .insp-empty { display: none; }
 body.compact .check { gap: 4px; }
 
 /* Floating player: drag it by the grip; position is remembered. */

@@ -901,13 +901,13 @@ function renderInspector() {
   const el = $('#inspector');
   const c = selectedClip && clipById(selectedClip);
   if (!c) {
-    el.innerHTML = `<h2>No clip selected</h2>
+    el.innerHTML = `<div class="insp-empty"><h2>No clip selected</h2>
       <p class="meta">Click a clip to change its sound.</p>
       <section><h3>Quick start</h3>
       <p class="hint">1. Choose a folder (top right) so your sounds, projects and exports save on your PC.</p>
       <p class="hint">2. Drop in a TikTok video or audio file, or press ● to record your voice onto the highlighted track.</p>
       <p class="hint">3. Select a clip, then use Auto-chop to cut it into words or hits.</p>
-      <p class="hint">4. Drag pieces around, add drums from Pads, then Export.</p></section>`;
+      <p class="hint">4. Drag pieces around, add drums from Pads, then Export.</p></section></div>`;
     return;
   }
   const fx = c.fx;
