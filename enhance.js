@@ -339,6 +339,69 @@
     }, { passive: true });
   }
 
+  /* ── 9. Background texture + nav picker ─────────────────────────────────── */
+  var TEX = [['none', 'None'], ['grain', 'Film grain'], ['dots', 'Dot grid'],
+             ['hairlines', 'Hairlines'], ['grid', 'Blueprint grid'],
+             ['crosshatch', 'Crosshatch'], ['aurora', 'Aurora wash']];
+  function texGet() { try { return localStorage.getItem('wv-texture'); } catch (e) { return null; } }
+  function texSet(v) { try { localStorage.setItem('wv-texture', v); } catch (e) {} }
+  function applyTexture(v) { root.setAttribute('data-texture', v); }
+
+  function mountTexturePicker(toggle) {
+    if (document.querySelector('.wv-tex')) return;
+    var cur = root.getAttribute('data-texture') || 'grain';
+    var inLi = toggle.closest ? toggle.closest('li') : null;
+    var host = document.createElement(inLi ? 'li' : 'span');
+    var tex = document.createElement('div');
+    tex.className = 'wv-tex';
+    var opts = TEX.map(function (t) {
+      return '<button type="button" class="wv-tex-opt" role="menuitemradio" data-tex="' + t[0] +
+        '" aria-checked="' + (t[0] === cur) + '"><span class="wv-tex-dot"></span>' + t[1] + '</button>';
+    }).join('');
+    tex.innerHTML =
+      '<button type="button" class="wv-tex-btn" aria-label="Background texture" aria-haspopup="true" aria-expanded="false">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">' +
+        '<path d="M4 15 15 4M9 20 20 9M4 9 9 4M14 20 20 14"/></svg></button>' +
+      '<div class="wv-tex-menu" role="menu">' + opts + '</div>';
+    host.appendChild(tex);
+    var ref = inLi || toggle;
+    ref.parentNode.insertBefore(host, ref);
+
+    var btn = tex.querySelector('.wv-tex-btn');
+    var menu = tex.querySelector('.wv-tex-menu');
+    function close() { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = menu.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    each(tex.querySelectorAll('.wv-tex-opt'), function (o) {
+      o.addEventListener('click', function () {
+        applyTexture(o.getAttribute('data-tex'));
+        texSet(o.getAttribute('data-tex'));
+        each(tex.querySelectorAll('.wv-tex-opt'), function (x) {
+          x.setAttribute('aria-checked', x === o ? 'true' : 'false');
+        });
+        close();
+      });
+    });
+    document.addEventListener('click', function (e) { if (!tex.contains(e.target)) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  }
+
+  function setupTexture() {
+    var tries = 0;
+    (function find() {
+      var t = document.querySelector('.theme-toggle');
+      if (t) { try { mountTexturePicker(t); } catch (e) {} return; }
+      if (tries++ > 25) return;
+      setTimeout(find, 120);
+    })();
+  }
+
+  // Apply the saved texture immediately (before paint) to avoid a flash.
+  try { applyTexture(texGet() || 'grain'); } catch (e) {}
+
   /* ── Boot ──────────────────────────────────────────────────────────────── */
   ready(function () {
     try { applyGlass(); } catch (e) {}
@@ -352,5 +415,6 @@
     try { setupSpotlight(); } catch (e) {}
     try { setupTilt3d(); } catch (e) {}
     try { setupMagnetic(); } catch (e) {}
+    try { setupTexture(); } catch (e) {}
   });
 })();

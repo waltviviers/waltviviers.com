@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bio &amp; Statement — Walt Viviers</title>
-  <meta name="description" content="Walt Viviers is a South African fine artist and multidisciplinary creative, based in Pretoria — working across art direction, graphic design, video, photography, illustration and web. His painting sits at the intersection of realism and Pop Art." />
+  <meta name="description" content="Walt Viviers is a Pretoria-based multimedia artist working across art, design, video &amp; digital — fine art &amp; illustration, photography &amp; video, graphic &amp; web design, and small apps &amp; games — bringing a fine artist's eye to both traditional and digital craft." />
   <meta name="author" content="Walt Viviers" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://waltviviers.com/artist-bio/" />
@@ -15,14 +15,14 @@
   <meta property="og:type"        content="profile" />
   <meta property="og:url"         content="https://waltviviers.com/artist-bio/" />
   <meta property="og:title"       content="Bio &amp; Statement — Walt Viviers" />
-  <meta property="og:description" content="South African fine artist and multidisciplinary creative. Painting at the intersection of realism and Pop Art; also art direction, design, video, photography and web. Represented on Saatchi Art." />
+  <meta property="og:description" content="Pretoria-based multimedia artist across art, design, video &amp; digital — fine art, photography &amp; video, design, and apps. Represented on Saatchi Art; open to commissions and collaborations." />
   <meta property="og:image"       content="https://waltviviers.com/brushstrokes-bg.webp" />
   <meta property="og:image:type"  content="image/webp" />
   <meta property="og:locale"      content="en_ZA" />
   <meta property="og:site_name"   content="Walt Viviers" />
   <meta name="twitter:card"        content="summary_large_image" />
   <meta name="twitter:title"       content="Bio &amp; Statement — Walt Viviers" />
-  <meta name="twitter:description" content="South African fine artist and multidisciplinary creative. Painting at the intersection of realism and Pop Art; also art direction, design, video, photography and web." />
+  <meta name="twitter:description" content="South African fine artist working in acrylic and mixed media. Practice at the intersection of realism and Pop Art." />
   <meta name="twitter:image"       content="https://waltviviers.com/brushstrokes-bg.webp" />
 
   <script type="application/ld+json">
@@ -32,7 +32,7 @@
     "name": "Walt Viviers",
     "url": "https://waltviviers.com",
     "image": "https://waltviviers.com/brushstrokes-bg.webp",
-    "description": "South African fine artist and multidisciplinary creative working across art direction, graphic design, video, photography, illustration and web, based in Pretoria. Returned to full-time freelance in 2026.",
+    "description": "South African multimedia artist and fine artist based in Pretoria, working across art, design, video and digital. After some fourteen years in agency and media environments, returned to full-time freelance in 2026.",
     "jobTitle": "Multidisciplinary Creative & Fine Artist",
     "address": { "@type": "PostalAddress", "addressLocality": "Pretoria", "addressRegion": "Gauteng", "addressCountry": "ZA" },
     "email": "artist@waltviviers.com",
@@ -54,6 +54,39 @@
     button { font: inherit; cursor: pointer; border: none; background: none; }
     :root { --black:#0C0C0B;--white:#FAF9F7;--ink:#FAF9F7;--stone:#9A9890;--rule:#2A2826;--bg:#000000;--bg2:#0D0D0D;--serif:'EB Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif; }
     body { font-family:var(--sans);background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh; }
+    /* ── Standard site nav ── */
+    nav { position:fixed;inset:0 0 auto 0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:100px;background:rgba(0,0,0,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--rule);transition:height 0.4s cubic-bezier(0.4,0,0.2,1); }
+    nav.scrolled { height:50px; }
+    .nav-logo img { height:36px;width:auto;transition:height 0.4s cubic-bezier(0.4,0,0.2,1); }
+    nav.scrolled .nav-logo img { height:28px; }
+    .nav-links { display:flex;align-items:center;gap:26px;list-style:none;margin:0;padding:0; }
+    .nav-links a { font-family:var(--sans);font-size:11px;font-weight:400;letter-spacing:0.10em;text-transform:uppercase;white-space:nowrap;color:var(--stone);transition:color 0.2s; }
+    .nav-links a:hover { color:var(--ink); }
+    .nav-cta { color:var(--ink);padding:7px 18px;border:1px solid #4A4844;transition:background 0.2s,color 0.2s,border-color 0.2s; }
+    .nav-cta:hover { background:var(--ink);color:var(--bg);border-color:var(--ink); }
+    .nav-social { display:flex;align-items:center;gap:16px; }
+    .nav-social a { display:flex;color:var(--stone);transition:color 0.2s; }
+    .nav-social a:hover { color:var(--ink); }
+    .nav-social svg { width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round; }
+    .theme-toggle { width:auto;height:auto;border:none;padding:4px;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center; }
+    .toggle-thumb { display:flex;align-items:center;justify-content:center; }
+    .toggle-thumb .icon-moon,.toggle-thumb .icon-sun { width:17px;height:17px;fill:none;stroke:var(--stone);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s; }
+    .toggle-thumb .icon-moon { display:block; }
+    .toggle-thumb .icon-sun  { display:none; }
+    .theme-toggle:hover .toggle-thumb .icon-moon,.theme-toggle:hover .toggle-thumb .icon-sun { stroke:var(--ink); }
+    .burger-btn { display:none;background:none;border:none;cursor:pointer;font-size:20px;line-height:1;padding:2px; }
+    .burger-btn .burger-close { display:none;font-style:normal; }
+    .burger-btn.is-open .burger-icon { display:none; }
+    .burger-btn.is-open .burger-close { display:inline; }
+    .nav-lang { display:flex;align-items:center;gap:6px; }
+    /* mobile menu overlay */
+    .mobile-menu { position:fixed;inset:0;z-index:190;background:var(--bg);display:flex;flex-direction:column;justify-content:center;padding:80px 32px 48px;opacity:0;pointer-events:none;transition:opacity 0.3s; }
+    .mobile-menu.is-open { opacity:1;pointer-events:auto; }
+    body.menu-open { overflow:hidden; }
+    .mobile-menu-link { display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--rule);font-family:var(--serif);font-size:clamp(1.8rem,8vw,3rem);font-weight:400;color:var(--stone);transition:color 0.2s; }
+    .mobile-menu-link:hover { color:var(--ink); }
+    .mobile-menu-link-cta { color:var(--ink); }
+    .mobile-menu-arrow { font-size:1.2rem;opacity:0.4; }
     /* relocated document download button */
     .doc-download { display:flex;justify-content:center;padding:56px 48px 8px; }
     .download-btn { font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--white);padding:13px 26px;border:1px solid #4A4844;transition:background 0.2s,color 0.2s,border-color 0.2s; }
@@ -106,6 +139,27 @@
     body *:active { cursor: url('/images/pointer_down.png') 3 1, auto !important; }
     input[type="text"], input[type="email"], input[type="search"], input[type="tel"], input[type="number"], input[type="url"], input[type="password"], textarea, [contenteditable="true"] { cursor: text !important; }
   
+    /* ── Standard site footer (ported for consistency) ─────────────── */
+    footer { padding: 40px 48px; border-top: 1px solid var(--rule,#2A2826); display: flex; justify-content: center; align-items: center; position: relative; }
+    .footer-admin { position: absolute; top: 50%; transform: translateY(-50%); left: 48px; font-size: 11px; font-weight: 500; letter-spacing: 0.10em; text-transform: uppercase; color: var(--stone,#9A9890); padding: 7px 16px; border: 1px solid var(--rule,#2A2826); transition: border-color 0.2s, color 0.2s; background: none; cursor: pointer; }
+    .footer-admin:hover { border-color: var(--stone,#9A9890); color: var(--ink,#FAF9F7); }
+    .footer-social { display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .footer-social .social-icons { display: flex; align-items: center; gap: 24px; }
+    .footer-social .social-icons a { color: var(--stone,#9A9890); }
+    .footer-social .social-icons a:hover { color: var(--white,#FAF9F7); }
+    .footer-social .social-icons svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .footer-copy { font-size: 11px; color: var(--stone,#9A9890); letter-spacing: 0.06em; text-align: center; margin: 0; }
+    .footer-mark { position: absolute; top: 50%; right: 0; transform: translateY(-50%); line-height: 0; }
+    .footer-mark img { display: block; }
+    [data-theme="light"] .footer-mark img { filter: invert(1); }
+    @media (max-width: 900px) {
+      footer { padding: 40px 24px 88px; flex-direction: column; gap: 28px; }
+      .footer-admin { position: static; transform: none; order: 1; }
+      .footer-social { order: 0; }
+      .footer-mark { position: static; transform: none; order: 2; }
+    }
+    @media (max-width: 560px) { .footer-admin { display: none; } }
+
     /* Smooth cross-page transitions (Chrome MPA view transitions; ignored elsewhere) */
     @view-transition { navigation: auto; }
     /* Respect the visitor's reduced-motion preference */
@@ -120,17 +174,17 @@
   <div class="page-wrap">
     <div class="page-head">
       <div class="page-head-top"><h1>Walt Viviers</h1><span class="page-head-sub">Pretoria, South Africa</span></div>
-      <p class="page-head-discipline">Fine Artist &nbsp;/&nbsp; Acrylic &amp; Mixed Media &nbsp;/&nbsp; Pretoria, South Africa</p>
+      <p class="page-head-discipline">Multimedia Artist &nbsp;/&nbsp; Art &middot; Design &middot; Video &middot; Digital &nbsp;/&nbsp; Pretoria, South Africa</p>
     </div>
     <div class="bio-grid">
       <div class="bio-col">
         <p class="col-label">Artist Bio</p>
         <div class="bio-text">
-          <p>Walt Viviers is a South African fine artist and multidisciplinary creative, based in Pretoria. He works across art direction, graphic design, video, photography, illustration and web, with acrylic and mixed-media painting at the heart of his practice. A soul shaped by art, design, and technology, his work sits at the intersection of realism and Pop Art, drawing inspiration from Chinese brushstroke traditions and the visual storytelling techniques of sequential art.</p>
-          <p>His work explores the tension between the poetry and the music of the artwork: images that read with clarity and confidence from a distance, yet reveal bold, expressive brushstrokes and his unmistakable touch up close. Drawing on subjects ranging from the iconic to the unexpected, Walt bridges the worlds of fine art and popular culture, rendering them with energy, intention, and a distinctly South African perspective.</p>
-          <p>Walt exhibited actively throughout his twenties before stepping back from the art world around 2011 to focus on his career. In 2020, during the COVID-19 pandemic, he returned to painting with renewed purpose and has been working consistently ever since. After some fourteen years in agency and media environments, he returned to full-time freelance in 2026 to focus on hands-on creative work and independent projects, with a growing interest in AI, emerging tools, and the future of multidisciplinary creative practice.</p>
-          <p>Art runs in the Viviers family across generations, and Walt is part of a creative lineage that continues to grow. His daughter has inherited that same impulse to create, carrying the tradition forward in her own right.</p>
-          <p>Walt's works are held in private collections. He is represented on Saatchi Art and welcomes commissions and gallery enquiries.</p>
+          <p>Walt Viviers is a Pretoria-based multimedia artist working across art, design, video and digital. He paints and illustrates, shoots photography and video, designs brands and websites, builds small apps and browser games, and writes &mdash; a practice that moves fluidly between traditional and digital craft, and lately more and more toward video and social, in front of the camera as much as behind it.</p>
+          <p>At the centre it is still people and art. His fine-art work &mdash; acrylic and mixed media &mdash; sits at the intersection of realism and Pop Art, drawing on Chinese brushstroke traditions, Rembrandt's handling of light, and the visual storytelling of sequential art: images that read with clarity from a distance yet reveal bold, expressive marks up close. He brings that same eye to a photograph, a brand, or a screen.</p>
+          <p>His path has always been creative and service-minded &mdash; early studies in directing and design, apprenticeships and freelance work, and a long career in advertising and design &mdash; some fourteen years of it in agency and media environments &mdash; that led to Creative Director, running small businesses on the side and painting, illustrating and photographing the whole way through.</p>
+          <p>After a lifetime spent largely directing others, he made a deliberate choice during the 2020 lockdown to step back into making things himself. In 2026 he returned to full-time freelance, working across disciplines and exploring what AI-assisted tools can add &mdash; convinced that, as those tools mature, every creative will end up working across crafts rather than only directing them.</p>
+          <p>Faith, family, and creativity sit at the core of everything he makes. Art runs through the Viviers family across generations &mdash; his daughter carries that same impulse forward. His paintings are held in private collections across South Africa and abroad; he is represented on Saatchi Art and welcomes commissions, collaborations, and enquiries.</p>
         </div>
       </div>
       <div class="bio-col">
@@ -140,7 +194,7 @@
           <p>I've always painted what catches my eye and won't let go. That image that sits somewhere between the real and the heightened, the everyday seen in a way that somehow feels like a sign.</p>
           <p>My work draws from the Realist and Pop traditions, but my influences reach further. Chinese brushwork taught me about economy and intention, how a single mark can carry weight and direction, as well as a fascination with Rembrandt's use of light. Sequential art taught me about pacing and visual narrative, how one image leads the eye into the next. I bring all of these sensibilities into paintings that are, on the surface, still and singular.</p>
           <p>I stepped away from showing work in galleries for about a decade, but coming back to painting during the pandemic reminded me why it matters. Some things you can put down for a while and pick up again and find they've been waiting for you, and never really left.</p>
-          <p>That gap wasn't empty. Through those years I was building a career in advertising and design — fourteen years of it in agency and media environments, before I returned to full-time freelance in 2026 under waltviviers.com — and somewhere along the way the same restlessness that puts me in front of a canvas started showing up in code, and more recently in AI-assisted tools. I don't experience these as separate lives. A painting has to hold up from across the room and reward you up close; a well-built interactive piece works the same way, there's a shape you take in at a glance, and detail that only shows itself once you start touching it. Faith, family, and creativity are still the core of everything I make, whether the tool is a brush or a build.</p>
+          <p>That gap wasn't empty. Through those years I was building a career in advertising and design, work I still do under waltviviers.com, and somewhere along the way the same restlessness that puts me in front of a canvas started showing up in code, and more recently in AI-assisted tools. I don't experience these as separate lives. A painting has to hold up from across the room and reward you up close; a well-built interactive piece works the same way, there's a shape you take in at a glance, and detail that only shows itself once you start touching it. Faith, family, and creativity are still the core of everything I make, whether the tool is a brush or a build.</p>
           <p>Making art is something my family has done for generations, and I see that same instinct in my daughter. It tells me this isn't just what I do; it's who we are.</p>
           <p>Being self-taught and guided by my family has shaped how I see things. I didn't just learn the rules first. I also learned their philosophies, which means I've had to figure out what actually matters to me: presence. Paintings that hold their own in a room, that reward the time you give them (for both the creator and the observer).</p>
         </div>

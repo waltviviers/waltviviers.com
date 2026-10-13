@@ -2,7 +2,7 @@
 title: Monkey See
 date: 2019-02-08
 description: Most creatures are, from a human frame of reference, extremely stupid. A lot of creatures have very rudimentary brains, yet they survive and thrive. Even the d…
-draft: true
+draft: false
 ---
 ### Most creatures are, from a human frame of reference, extremely stupid.
 

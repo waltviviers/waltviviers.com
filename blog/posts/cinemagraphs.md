@@ -2,7 +2,7 @@
 title: Cinemagraphs
 date: 2018-12-22
 description: This post is a summary of my short lived blog about my love of Cinemagraphs (and Animations), as well as my attempts at making them. It all started (as with mo…
-draft: true
+draft: false
 ---
 This post is a summary of my short-lived blog about my love of Cinemagraphs (and Animations), as well as my attempts at making them. It all started (as* with most good things in life) when* I was a kid. I loved animated things.
 
