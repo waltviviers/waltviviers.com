@@ -270,29 +270,87 @@
     wireDrift(dd, dd && dd.querySelector('.pf-hero-img'), 40, 'xform'); // ±20px
   }
 
-  /* ── 6. Cursor-following spotlight (whole page) ────────────────────────── */
-  function setupSpotlight() {
+  /* ── 6. Rubber-hose cursor arm ─────────────────────────────────────────────
+     A long, black 1930s-cartoon rubber-hose arm reaches in from the bottom-left
+     corner and its white-gloved hand follows the pointer. The arm is a single
+     smooth bezier that sags and whips as the hand moves, with a springy lag so
+     it feels rubbery. A warm rim keeps the black limb legible on the dark theme.
+     Replaces the old cursor glow. */
+  var NS = 'http://www.w3.org/2000/svg';
+  function svgEl(name, attrs) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) if (attrs.hasOwnProperty(k)) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function setupCursorArm() {
     if (reduce || !fine) return;
-    var el = document.createElement('div');
-    el.className = 'wv-spotlight';
-    el.setAttribute('aria-hidden', 'true');
-    (document.body || document.documentElement).appendChild(el);
-    var raf = false, mx = 0, my = 0;
-    function apply() {
-      raf = false;
-      el.style.setProperty('--wv-mx', mx + 'px');
-      el.style.setProperty('--wv-my', my + 'px');
+    var svg = svgEl('svg', { 'class': 'wv-arm', 'aria-hidden': 'true' });
+    var rim = svgEl('path', { 'class': 'wv-arm-rim' });
+    var limb = svgEl('path', { 'class': 'wv-arm-limb' });
+    var hand = svgEl('g', { 'class': 'wv-arm-hand' });
+    // A classic white rubber-hose glove, local coords with +x leading (away
+    // from the arm), the pointer at the origin. Back to front: cuff band on the
+    // arm side, the fist, a thumb, three knuckle bumps on the leading edge, and
+    // stitch lines fanning across the back.
+    hand.appendChild(svgEl('rect', { 'class': 'wv-arm-cuff', x: -27, y: -12, width: 13, height: 24, rx: 6 }));
+    hand.appendChild(svgEl('circle', { 'class': 'wv-arm-glove', cx: 0, cy: 0, r: 16 }));      // fist
+    hand.appendChild(svgEl('circle', { 'class': 'wv-arm-glove', cx: -5, cy: -15, r: 7 }));    // thumb
+    hand.appendChild(svgEl('circle', { 'class': 'wv-arm-glove', cx: 12, cy: -9, r: 5.5 }));   // knuckle 1
+    hand.appendChild(svgEl('circle', { 'class': 'wv-arm-glove', cx: 15, cy: 1,  r: 5.5 }));   // knuckle 2
+    hand.appendChild(svgEl('circle', { 'class': 'wv-arm-glove', cx: 12, cy: 10, r: 5.5 }));   // knuckle 3
+    hand.appendChild(svgEl('path', { 'class': 'wv-arm-stitch', d: 'M -10 -5 Q -2 -3 5 -6' }));
+    hand.appendChild(svgEl('path', { 'class': 'wv-arm-stitch', d: 'M -11 2 Q -2 3 6 1' }));
+    svg.appendChild(rim); svg.appendChild(limb); svg.appendChild(hand);
+    (document.body || document.documentElement).appendChild(svg);
+
+    var W = 0, H = 0;
+    function resize() {
+      W = window.innerWidth; H = window.innerHeight;
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
     }
-    var CLICKABLE = 'a[href], button, [role="button"], label, select, summary, input[type="submit"], input[type="button"]';
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    var ax = -34;                 // anchor: just off the bottom-left corner
+    var tx = W * 0.5, ty = H * 0.5;   // target (pointer)
+    var hx = tx, hy = ty, phx = hx, phy = hy;   // hand (eased) + previous
+    var running = false, seen = false;
+
+    function frame() {
+      var ay = H + 34;
+      hx += (tx - hx) * 0.18; hy += (ty - hy) * 0.18;
+      var vx = hx - phx, vy = hy - phy; phx = hx; phy = hy;
+      var dx = hx - ax, dy = hy - ay, len = Math.hypot(dx, dy) || 1;
+      var ux = dx / len, uy = dy / len;         // anchor→hand unit
+      var px = -uy, py = ux;                     // perpendicular
+      // Whip: perpendicular component of hand velocity bends the hose.
+      var whip = Math.max(-150, Math.min(150, (vx * px + vy * py) * 7));
+      var sag = 58;                              // base downward sag
+      var c1x = ax + dx * 0.33 + px * whip * 0.55, c1y = ay + dy * 0.33 + py * whip * 0.55 + sag;
+      var c2x = ax + dx * 0.70 + px * whip,        c2y = ay + dy * 0.70 + py * whip + sag * 0.5;
+      // End the limb a touch behind the hand so the cuff covers the join.
+      var ex = hx - ux * 18, ey = hy - uy * 18;
+      var d = 'M ' + ax.toFixed(1) + ' ' + ay.toFixed(1) +
+              ' C ' + c1x.toFixed(1) + ' ' + c1y.toFixed(1) +
+              ' ' + c2x.toFixed(1) + ' ' + c2y.toFixed(1) +
+              ' ' + ex.toFixed(1) + ' ' + ey.toFixed(1);
+      limb.setAttribute('d', d); rim.setAttribute('d', d);
+      var ang = Math.atan2(hy - c2y, hx - c2x) * 180 / Math.PI;
+      hand.setAttribute('transform', 'translate(' + hx.toFixed(1) + ' ' + hy.toFixed(1) + ') rotate(' + ang.toFixed(1) + ')');
+      // Keep animating while the hand hasn't settled on the target.
+      if (Math.abs(tx - hx) > 0.3 || Math.abs(ty - hy) > 0.3) {
+        requestAnimationFrame(frame);
+      } else { running = false; }
+    }
+    function kick() { if (!running) { running = true; requestAnimationFrame(frame); } }
+
     window.addEventListener('mousemove', function (e) {
-      mx = e.clientX; my = e.clientY;
-      if (!el.classList.contains('on')) el.classList.add('on');
-      var hot = e.target && e.target.closest && e.target.closest(CLICKABLE);
-      el.classList.toggle('throb', !!hot);
-      if (!raf) { raf = true; requestAnimationFrame(apply); }
+      tx = e.clientX; ty = e.clientY;
+      if (!seen) { seen = true; hx = tx; hy = ty; phx = hx; phy = hy; svg.classList.add('on'); }
+      kick();
     }, { passive: true });
-    document.addEventListener('mouseleave', function () { el.classList.remove('on'); el.classList.remove('throb'); });
-    document.addEventListener('mouseenter', function () { el.classList.add('on'); });
+    document.addEventListener('mouseleave', function () { svg.classList.remove('on'); });
+    document.addEventListener('mouseenter', function () { if (seen) svg.classList.add('on'); });
   }
 
   /* ── 7. Card tilt toward the pointer ───────────────────────────────────── */
@@ -464,7 +522,7 @@
     if (revealed && !reduce) root.classList.add('wv-anim');
     try { setupParallax(); } catch (e) {}
     try { setupPointerDrift(); } catch (e) {}
-    try { setupSpotlight(); } catch (e) {}
+    try { setupCursorArm(); } catch (e) {}
     try { setupTilt3d(); } catch (e) {}
     try { setupMagnetic(); } catch (e) {}
     try { setupTexture(); } catch (e) {}
