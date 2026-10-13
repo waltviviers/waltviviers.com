@@ -399,8 +399,40 @@
     })();
   }
 
-  // Apply the saved texture immediately (before paint) to avoid a flash.
-  try { applyTexture(texGet() || 'grain'); } catch (e) {}
+  /* ── 10. Card icons drift toward the pointer on hover ──────────────────── */
+  function setupIconFollow() {
+    if (reduce || !fine) return;
+    each(document.querySelectorAll('.disc-card, .digital-card, .digital-sub-card'), function (card) {
+      var icon = card.querySelector('.disc-card-icon, .digital-card-icon, .digital-sub-icon');
+      if (!icon) return;
+      icon.style.transition = 'transform 0.2s ease-out';
+      icon.style.willChange = 'transform';
+      var raf = false, tx = 0, ty = 0;
+      function apply() { raf = false; icon.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px)'; }
+      card.addEventListener('mousemove', function (e) {
+        var r = card.getBoundingClientRect();
+        if (!r.width) return;
+        tx = ((e.clientX - r.left) / r.width - 0.5) * 18;   // ±9px
+        ty = ((e.clientY - r.top) / r.height - 0.5) * 18;
+        if (!raf) { raf = true; requestAnimationFrame(apply); }
+      });
+      card.addEventListener('mouseleave', function () {
+        tx = 0; ty = 0; if (!raf) { raf = true; requestAnimationFrame(apply); }
+      });
+    });
+  }
+
+  // Apply the texture immediately (before paint). First-time visitors get a
+  // random texture (not "none"), remembered thereafter; the picker overrides it.
+  try {
+    var savedTex = texGet();
+    if (!savedTex) {
+      var pool = TEX.filter(function (t) { return t[0] !== 'none'; });
+      savedTex = pool[Math.floor(Math.random() * pool.length)][0];
+      texSet(savedTex);
+    }
+    applyTexture(savedTex);
+  } catch (e) {}
 
   /* ── Boot ──────────────────────────────────────────────────────────────── */
   ready(function () {
@@ -416,5 +448,6 @@
     try { setupTilt3d(); } catch (e) {}
     try { setupMagnetic(); } catch (e) {}
     try { setupTexture(); } catch (e) {}
+    try { setupIconFollow(); } catch (e) {}
   });
 })();
