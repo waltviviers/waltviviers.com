@@ -231,27 +231,43 @@
     update();
   }
 
-  /* ── 5. Desktop pointer drift on the main hero background ───────────────── */
-  function setupPointerDrift() {
-    if (reduce || !fine) return;
-    var band = document.querySelector('.cc-hero');
-    var bg = band && band.querySelector('.cc-hero-bg');
-    if (!band || !bg) return;
+  /* ── 5. Desktop pointer drift on hero bands ────────────────────────────────
+     The image under the pointer eases toward the cursor (same feel as the main
+     header). Wired to the multimedia-artist header and the Design & Digital
+     band. */
+  // mode 'var'  → set --wv-px/--wv-py (for .wv-parallax-bg, transform on el)
+  // mode 'xform' → set inline transform: translate() (for a wrapper with no
+  //               competing transform; its child keeps its own transform)
+  function wireDrift(band, target, amp, mode) {
+    if (!band || !target) return;
+    if (mode === 'xform') { target.classList.add('wv-drift'); target.style.transform = 'translate(0px,0px)'; }
     var raf = false, px = 0, py = 0;
     function apply() {
       raf = false;
-      bg.style.setProperty('--wv-px', px.toFixed(1) + 'px');
-      bg.style.setProperty('--wv-py', py.toFixed(1) + 'px');
+      if (mode === 'xform') {
+        target.style.transform = 'translate(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px)';
+      } else {
+        target.style.setProperty('--wv-px', px.toFixed(1) + 'px');
+        target.style.setProperty('--wv-py', py.toFixed(1) + 'px');
+      }
     }
     band.addEventListener('mousemove', function (e) {
       var r = band.getBoundingClientRect();
-      px = ((e.clientX - r.left) / r.width - 0.5) * -44;   // ±22px
-      py = ((e.clientY - r.top) / r.height - 0.5) * -44;
+      if (!r.width || !r.height) return;
+      px = ((e.clientX - r.left) / r.width - 0.5) * -amp;
+      py = ((e.clientY - r.top) / r.height - 0.5) * -amp;
       if (!raf) { raf = true; requestAnimationFrame(apply); }
     });
     band.addEventListener('mouseleave', function () {
       px = 0; py = 0; if (!raf) { raf = true; requestAnimationFrame(apply); }
     });
+  }
+  function setupPointerDrift() {
+    if (reduce || !fine) return;
+    var cc = document.querySelector('.cc-hero');
+    wireDrift(cc, cc && cc.querySelector('.cc-hero-bg'), 44, 'var');    // ±22px
+    var dd = document.querySelector('#design-digital .pf-hero');
+    wireDrift(dd, dd && dd.querySelector('.pf-hero-img'), 40, 'xform'); // ±20px
   }
 
   /* ── 6. Cursor-following spotlight (whole page) ────────────────────────── */
@@ -286,6 +302,7 @@
       '.disc-card, .digital-card, .digital-sub-card, .work-thumb, .work-card, ' +
       '.essay-card, .app-card, .blog-card, .post-card, [data-wv-tilt]'
     ), function (card) {
+      if (card.classList.contains('wv-tilt3d')) return;   // already wired
       card.classList.add('wv-tilt3d');
       var raf = false, rx = 0, ry = 0;
       function apply() {
@@ -453,4 +470,9 @@
     try { setupTexture(); } catch (e) {}
     try { setupIconFollow(); } catch (e) {}
   });
+
+  /* Pages that build card grids after load (e.g. the gallery) can re-wire the
+     tilt on freshly-injected cards. Idempotent — only new cards are bound. */
+  window.wvEnhance = window.wvEnhance || {};
+  window.wvEnhance.rescanTilt = function () { try { setupTilt3d(); } catch (e) {} };
 })();

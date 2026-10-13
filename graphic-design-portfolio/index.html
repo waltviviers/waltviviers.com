@@ -588,6 +588,30 @@
     </div>
   </main>
 
+    <!-- The portrait tilts gently toward the pointer (desktop, motion-friendly). -->
+    <script>
+    (function () {
+      var v = document.querySelector('.uc-video');
+      if (!v) return;
+      if (!window.matchMedia('(pointer: fine)').matches) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      v.style.transition = 'transform 0.25s ease-out';
+      v.style.willChange = 'transform';
+      var raf = false, rx = 0, ry = 0;
+      function apply() {
+        raf = false;
+        v.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+      }
+      window.addEventListener('mousemove', function (e) {
+        var cx = e.clientX / (window.innerWidth || 1) - 0.5;
+        var cy = e.clientY / (window.innerHeight || 1) - 0.5;
+        ry = cx * 22;    // ±11deg
+        rx = -cy * 22;
+        if (!raf) { raf = true; requestAnimationFrame(apply); }
+      }, { passive: true });
+    })();
+    </script>
+
     <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>

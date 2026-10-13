@@ -782,13 +782,13 @@
 
     .works-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 2px;
       background-color: #0D0D0D;
       position: relative;
     }
 
-    .works-grid .work-thumb:nth-child(n+9) { display: none; }
+    .works-grid .work-thumb:nth-child(n+7) { display: none; }
 
     .view-gallery-btn {
       display: flex;
@@ -2427,6 +2427,7 @@
             pauseAutoplay();
           });
         });
+        if (window.wvEnhance && window.wvEnhance.rescanTilt) window.wvEnhance.rescanTilt();
       }
 
       /* ── Inject VisualArtwork schema ── */
