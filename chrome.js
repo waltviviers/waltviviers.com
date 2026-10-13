@@ -167,8 +167,8 @@
     '.footer-social .social-icons a{color:var(--stone);}',
     '.footer-social .social-icons svg{width:22px;height:22px;}',
     '.footer-social .social-icons a:hover{color:var(--white);}',
-    '.footer-copy{font-size:11px;color:var(--stone);letter-spacing:0.06em;text-align:center;}',
-    '.footer-admin{position:absolute;top:50%;transform:translateY(-50%);left:48px;font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);padding:7px 16px;border:1px solid var(--rule);transition:border-color 0.2s,color 0.2s;background:none;cursor:pointer;}',
+    '.footer-copy{font-size:12.5px;color:var(--stone);letter-spacing:0.04em;text-align:center;}',
+    '.footer-admin{position:absolute;top:50%;transform:translateY(-50%);left:64px;font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);padding:7px 16px;border:1px solid var(--rule);transition:border-color 0.2s,color 0.2s;background:none;cursor:pointer;}',
     '.footer-admin:hover{border-color:var(--stone);color:var(--ink);}',
     '[data-theme="light"] .footer-admin:hover{color:#0C0C0B;border-color:#6B6560;}',
     /* Light-mode nav */
@@ -237,7 +237,9 @@
     '<ul class="nav-links">' +
       '<li class="nav-link-hide"><a href="/photography/" data-i18n="nav-photography">Photography &amp; Video</a></li>' +
       '<li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-works">Fine Art &amp; Illustration</a></li>' +
-      '<li class="nav-link-hide"><a href="/artist-bio/" data-i18n="nav-bio">Bio &amp; Statement</a></li>' +
+      '<li class="nav-link-hide"><a href="/graphic-design-portfolio/">Design &amp; Digital</a></li>' +
+      '<li class="nav-link-hide"><a href="/apps/">Apps &amp; Games</a></li>' +
+      '<li class="nav-link-hide"><a href="/blog/">Essays &amp; Articles</a></li>' +
       '<li class="nav-link-hide"><a href="/gallery/#commission" class="nav-cta" id="wv-enquire" data-i18n="nav-enquire">Enquire</a></li>' +
       '<li><div class="social-icons">' +
         '<a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">' + IG + '</a>' +
@@ -256,7 +258,9 @@
     '<div class="mobile-menu-links">' +
       '<a href="/photography/" class="mobile-menu-link" data-i18n="nav-photography">Photography &amp; Video <span class="mobile-menu-arrow">↗</span></a>' +
       '<a href="/gallery/" class="mobile-menu-link" data-i18n="nav-works">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>' +
-      '<a href="/artist-bio/" class="mobile-menu-link" data-i18n="nav-bio">Bio &amp; Statement <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/graphic-design-portfolio/" class="mobile-menu-link">Design &amp; Digital <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/apps/" class="mobile-menu-link">Apps &amp; Games <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/blog/" class="mobile-menu-link">Essays &amp; Articles <span class="mobile-menu-arrow">↗</span></a>' +
       '<a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>' +
     '</div>' +
     '<div class="mobile-menu-foot">' +
@@ -277,7 +281,7 @@
         '<a href="https://github.com/waltviviers" target="_blank" rel="noopener" aria-label="GitHub">' + GH + '</a>' +
         '<a href="mailto:artist@waltviviers.com" data-i18n-href="email-href" aria-label="Email">' + EM + '</a>' +
       '</div>' +
-      '<div class="footer-legal" style="margin-top:8px;font-size:11px;letter-spacing:0.06em;color:var(--stone,#9A9890);line-height:1.7;text-align:center;"><span class="footer-copy" data-i18n="footer-copy">© 2026 Walt Viviers. All rights reserved.</span> <a href="/privacy/" class="footer-privacy" style="color:inherit;">Privacy Policy.</a> <a href="/privacy/" class="footer-cookie" style="color:inherit;" onclick="if(window.wvConsent){event.preventDefault();wvConsent.reopen();}">Cookie settings.</a> <span class="footer-credit">Made with <span style="color:#e0607e">♥</span> by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Cat&#39;s Creations</a></span></div>' +
+      '<div class="footer-legal" style="margin-top:8px;font-size:12.5px;letter-spacing:0.04em;color:var(--stone,#9A9890);line-height:1.8;text-align:center;"><span class="footer-copy" data-i18n="footer-copy">© 2026 Walt Viviers. All rights reserved.</span> <a href="/privacy/" class="footer-privacy" style="color:inherit;">Privacy Policy.</a> <a href="/privacy/" class="footer-cookie" style="color:inherit;" onclick="if(window.wvConsent){event.preventDefault();wvConsent.reopen();}">Cookie settings.</a> <span class="footer-credit">Made with <span style="color:#e0607e">♥</span> by <a href="https://catscreations.co.za" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Cat&#39;s Creations</a></span></div>' +
     '</div>' +
     '<div class="footer-mark"><img src="/images/walt-viviers-mark.webp" alt="Walt Viviers" width="150" height="31" loading="lazy" /></div>';
 

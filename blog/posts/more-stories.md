@@ -2,7 +2,7 @@
 title: More Stories
 date: 2019-02-08
 description: There are these stories that we tell ourselves, the story of who we are, the story of what we do, the story of where we come from. You are not the colour of yo…
-draft: true
+draft: false
 ---
 There are these stories that we tell ourselves, the story of who we are, the story of what we do, the story of where we come from.
 

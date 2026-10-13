@@ -2,7 +2,7 @@
 title: Art for fun vs Art for money
 date: 2018-11-22
 description: In this post, I am going to chat about the psychology and motive behind making different kinds of art (as the title suggests) but I'll also touch on the gradie…
-draft: true
+draft: false
 ---
 In this post, I am going to chat about the psychology and motive behind making different kinds of art (as the title suggests) but I'll also touch on the gradients in between.
 

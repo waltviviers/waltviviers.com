@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Walt Viviers — Journal</title>
+    <title>Walt Viviers — Essays &amp; Articles</title>
     <link>https://waltviviers.com/blog/</link>
     <atom:link href="https://waltviviers.com/feed.xml" rel="self" type="application/rss+xml" />
-    <description>Written essays by South African fine artist Walt Viviers.</description>
+    <description>Essays and articles by Walt Viviers — on making, curiosity, and the work behind the work.</description>
     <language>en-ZA</language>
     <lastBuildDate>Fri, 02 Oct 2026 00:00:00 +0200</lastBuildDate>
     <item>
@@ -22,11 +22,74 @@
       <description>A short note on why I'm starting to keep a written journal alongside the paintings.</description>
     </item>
     <item>
+      <title>Parenting</title>
+      <link>https://waltviviers.com/blog/parenting/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/parenting/</guid>
+      <pubDate>Wed, 10 Jul 2019 00:00:00 +0200</pubDate>
+      <description>The best way to be a good parent is to lead by example. Noisy, obnoxious parents tend to have noisy obnoxious kids. Lie a lot? The kid will too. Fight a lot? K…</description>
+    </item>
+    <item>
+      <title>Looking back, looking forward.</title>
+      <link>https://waltviviers.com/blog/looking-back-looking-forward/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/looking-back-looking-forward/</guid>
+      <pubDate>Mon, 06 May 2019 00:00:00 +0200</pubDate>
+      <description>Concentrate every minute on doing what’s in front of you with precise and genuine seriousness, tenderly, willingly, with justice; and on freeing yourself from…</description>
+    </item>
+    <item>
+      <title>Creativity</title>
+      <link>https://waltviviers.com/blog/creativity/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/creativity/</guid>
+      <pubDate>Mon, 25 Mar 2019 00:00:00 +0200</pubDate>
+      <description>Creativity is defined as the use of imagination or original ideas to create something. That definition seems pretty straight forward. Unfortunately though, I t…</description>
+    </item>
+    <item>
+      <title>My Career</title>
+      <link>https://waltviviers.com/blog/my-career/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/my-career/</guid>
+      <pubDate>Tue, 26 Feb 2019 00:00:00 +0200</pubDate>
+      <description>Hobbies Drawing / Reading / Design / Animation First Job Tattoo Millennium: Piercing Apprenticeship Tattoo Apprenticeship Tattoo Flash Illustrator Graphic Desi…</description>
+    </item>
+    <item>
       <title>Real People</title>
       <link>https://waltviviers.com/blog/real-people/</link>
       <guid isPermaLink="true">https://waltviviers.com/blog/real-people/</guid>
       <pubDate>Fri, 15 Feb 2019 00:00:00 +0200</pubDate>
       <description>Behind the perfect feeds and the doom-and-gloom news: real people, quietly trying to make it.</description>
+    </item>
+    <item>
+      <title>The Thing</title>
+      <link>https://waltviviers.com/blog/the-thing/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/the-thing/</guid>
+      <pubDate>Fri, 08 Feb 2019 00:00:00 +0200</pubDate>
+      <description>Best sci fi concept ever conceived?</description>
+    </item>
+    <item>
+      <title>More Stories</title>
+      <link>https://waltviviers.com/blog/more-stories/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/more-stories/</guid>
+      <pubDate>Fri, 08 Feb 2019 00:00:00 +0200</pubDate>
+      <description>There are these stories that we tell ourselves, the story of who we are, the story of what we do, the story of where we come from. You are not the colour of yo…</description>
+    </item>
+    <item>
+      <title>Monkey See</title>
+      <link>https://waltviviers.com/blog/monkey-see/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/monkey-see/</guid>
+      <pubDate>Fri, 08 Feb 2019 00:00:00 +0200</pubDate>
+      <description>Most creatures are, from a human frame of reference, extremely stupid. A lot of creatures have very rudimentary brains, yet they survive and thrive. Even the d…</description>
+    </item>
+    <item>
+      <title>Apocalypse Meow</title>
+      <link>https://waltviviers.com/blog/apocalypse-meow/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/apocalypse-meow/</guid>
+      <pubDate>Fri, 08 Feb 2019 00:00:00 +0200</pubDate>
+      <description>The world was turning the way it always had, people going about their lives, animals going about their business. No one can remember anymore exactly when it ca…</description>
+    </item>
+    <item>
+      <title>A person's character.</title>
+      <link>https://waltviviers.com/blog/a-person-s-character/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/a-person-s-character/</guid>
+      <pubDate>Thu, 31 Jan 2019 00:00:00 +0200</pubDate>
+      <description>And the lack thereof.</description>
     </item>
     <item>
       <title>Sisyphus Syndrome</title>
@@ -36,6 +99,27 @@
       <description>Why I keep pushing the same boulder of questions uphill, and why I’ve made peace with it.</description>
     </item>
     <item>
+      <title>Strong and Fragile</title>
+      <link>https://waltviviers.com/blog/strong-and-fragile/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/strong-and-fragile/</guid>
+      <pubDate>Thu, 17 Jan 2019 00:00:00 +0200</pubDate>
+      <description>On what it is be human.</description>
+    </item>
+    <item>
+      <title>The language of animals.</title>
+      <link>https://waltviviers.com/blog/the-language-of-animals/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/the-language-of-animals/</guid>
+      <pubDate>Sat, 22 Dec 2018 00:00:00 +0200</pubDate>
+      <description>I enjoy the language of animals, it's not spoken with the tongue, but rather expressed with the whole body. It is honest and primal, no room for sales pitches,…</description>
+    </item>
+    <item>
+      <title>Cinemagraphs</title>
+      <link>https://waltviviers.com/blog/cinemagraphs/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/cinemagraphs/</guid>
+      <pubDate>Sat, 22 Dec 2018 00:00:00 +0200</pubDate>
+      <description>This post is a summary of my short lived blog about my love of Cinemagraphs (and Animations), as well as my attempts at making them. It all started (as with mo…</description>
+    </item>
+    <item>
       <title>The “meaning” of life.</title>
       <link>https://waltviviers.com/blog/the-meaning-of-life/</link>
       <guid isPermaLink="true">https://waltviviers.com/blog/the-meaning-of-life/</guid>
@@ -43,11 +127,46 @@
       <description>Why nothing is inherently meaningful, why that’s freeing, and the one kind of meaning I think is real.</description>
     </item>
     <item>
+      <title>Terraformed: a short story</title>
+      <link>https://waltviviers.com/blog/terraformed-a-short-story/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/terraformed-a-short-story/</guid>
+      <pubDate>Sun, 25 Nov 2018 00:00:00 +0200</pubDate>
+      <description>What if humans are biological weapons created by sentient machines, designed to terraform planets? The humans are &quot;programmed&quot; to remove trees, kill other orga…</description>
+    </item>
+    <item>
+      <title>Knowledge: a short story</title>
+      <link>https://waltviviers.com/blog/knowledge-a-short-story/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/knowledge-a-short-story/</guid>
+      <pubDate>Sun, 25 Nov 2018 00:00:00 +0200</pubDate>
+      <description>SciFi idea: in the future, all knowledge is downloaded to the brain (Matrix style) the catch? People are divided into social classes based on the bandwidth spe…</description>
+    </item>
+    <item>
       <title>Reflection</title>
       <link>https://waltviviers.com/blog/reflection/</link>
       <guid isPermaLink="true">https://waltviviers.com/blog/reflection/</guid>
       <pubDate>Thu, 22 Nov 2018 00:00:00 +0200</pubDate>
       <description>A poem: a conversation with the stranger in the mirror.</description>
+    </item>
+    <item>
+      <title>Practice</title>
+      <link>https://waltviviers.com/blog/practice/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/practice/</guid>
+      <pubDate>Thu, 22 Nov 2018 00:00:00 +0200</pubDate>
+      <description>&quot;Sucking at something is the first step towards being sorta good at something.&quot; Jake the Dog</description>
+    </item>
+    <item>
+      <title>Art</title>
+      <link>https://waltviviers.com/blog/art/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/art/</guid>
+      <pubDate>Thu, 22 Nov 2018 00:00:00 +0200</pubDate>
+      <description>I've always been interested in art, I'm particularly drawn to Chiaroscuro in painting and Comics Art in drawing. I've spent a lot of time with traditional mate…</description>
+    </item>
+    <item>
+      <title>Art for fun vs Art for money</title>
+      <link>https://waltviviers.com/blog/art-for-fun-vs-art-for-money/</link>
+      <guid isPermaLink="true">https://waltviviers.com/blog/art-for-fun-vs-art-for-money/</guid>
+      <pubDate>Thu, 22 Nov 2018 00:00:00 +0200</pubDate>
+      <description>In this post, I am going to chat about the psychology and motive behind making different kinds of art (as the title suggests) but I'll also touch on the gradie…</description>
     </item>
     <item>
       <title>The stories we tell ourselves, about ourselves.</title>

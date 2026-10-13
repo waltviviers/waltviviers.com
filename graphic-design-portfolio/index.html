@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Graphic Design Portfolio — Walt Viviers</title>
-  <meta name="description" content="Graphic design portfolio of Walt Viviers — Creative Director based in Pretoria, South Africa. Brand identity, web design, e-commerce, and digital marketing for major South African and international brands. MEA Business Award winner. 4,343% ROI for Kaizer Chiefs." />
+  <title>Design &amp; Digital — Coming Soon | Walt Viviers</title>
+  <meta name="description" content="The Design &amp; Digital portfolio section is being polished and will be here soon." />
   <meta name="author" content="Walt Viviers" />
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://waltviviers.com/graphic-design-portfolio/" />
@@ -565,391 +565,53 @@
 </head>
 <body>
 
+  <style>
+    .uc { min-height: calc(100vh - 100px); display: flex; align-items: center; justify-content: center; padding: clamp(96px, 14vh, 160px) 24px 80px; text-align: center; }
+    .uc-inner { max-width: 720px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: clamp(20px, 3vw, 30px); }
+    .uc-video { width: min(420px, 74vw); aspect-ratio: 1 / 1; object-fit: cover; border-radius: 50%; background: transparent; display: block; }
+    .uc-eyebrow { font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); }
+    .uc-title { font-family: var(--serif); font-weight: 400; font-size: clamp(1.5rem, 4.2vw, 2.6rem); line-height: 1.18; letter-spacing: -0.01em; color: var(--ink); max-width: 20ch; }
+    .uc-note { font-family: var(--serif); font-style: italic; font-size: clamp(1.05rem, 2.2vw, 1.35rem); color: var(--stone); }
+    .uc-back { margin-top: 6px; font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone); border-bottom: 1px solid var(--rule); padding-bottom: 4px; transition: color 0.2s, border-color 0.2s; }
+    .uc-back:hover { color: var(--ink); border-color: var(--ink); }
+  </style>
 
-  <div class="page-wrap">
-
-    <!-- Page header -->
-    <div class="page-head">
-      <div class="page-head-top">
-        <h1>Graphic Design<br/>&amp; Creative Direction</h1>
-        <a href="/" class="back-link">← Back to fine art</a>
-      </div>
-      <p class="page-intro">
-        Creative practice — from Junior Designer to Creative Director at a leading South African digital agency. Brand identity, web design, Shopify e-commerce, motion graphics, and performance digital marketing for major SA and international brands. MEA Business Award winner. Full project case studies on Behance; shots on Dribbble.
-      </p>
+  <main class="uc">
+    <div class="uc-inner">
+      <video class="uc-video" autoplay loop muted playsinline preload="auto">
+        <source src="/waltviviers_.mp4" type="video/mp4" />
+      </video>
+      <p class="uc-eyebrow">Design &amp; Digital</p>
+      <h1 class="uc-title">I&rsquo;m still busy polishing my portfolio section</h1>
+      <p class="uc-note">(you know how designers can be about that)</p>
+      <a href="/" class="uc-back">&larr; Back to the work</a>
     </div>
+  </main>
 
-    <!-- Client list -->
-    <div class="clients-section">
-      <p class="section-label">Selected clients — Menzies Media &amp; freelance</p>
-      <div class="clients-list">
-        <span class="client-chip">Kaizer Chiefs</span>
-        <span class="client-chip">Alpha Industries</span>
-        <span class="client-chip">Sebago</span>
-        <span class="client-chip">Superga</span>
-        <span class="client-chip">Kappa</span>
-        <span class="client-chip">Broll Property Group</span>
-        <span class="client-chip">Eris Property Group</span>
-        <span class="client-chip">SAB</span>
-        <span class="client-chip">Mochachos</span>
-        <span class="client-chip">PrintingSA</span>
-        <span class="client-chip">Oaksure</span>
-        <span class="client-chip">1.618 Group</span>
-        <span class="client-chip">Longhouse Brewery</span>
-        <span class="client-chip">Villas in Cape Town</span>
-        <span class="client-chip">Digital Tequila</span>
-        <span class="client-chip">Connect Me Now</span>
-      </div>
-    </div>
+    <!-- The portrait tilts gently toward the pointer (desktop, motion-friendly). -->
+    <script>
+    (function () {
+      var v = document.querySelector('.uc-video');
+      if (!v) return;
+      if (!window.matchMedia('(pointer: fine)').matches) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      v.style.transition = 'transform 0.25s ease-out';
+      v.style.willChange = 'transform';
+      var raf = false, rx = 0, ry = 0;
+      function apply() {
+        raf = false;
+        v.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+      }
+      window.addEventListener('mousemove', function (e) {
+        var cx = e.clientX / (window.innerWidth || 1) - 0.5;
+        var cy = e.clientY / (window.innerHeight || 1) - 0.5;
+        ry = cx * 22;    // ±11deg
+        rx = -cy * 22;
+        if (!raf) { raf = true; requestAnimationFrame(apply); }
+      }, { passive: true });
+    })();
+    </script>
 
-    <!-- Web & Digital -->
-    <div class="discipline-section">
-      <div class="discipline-header">
-        <h2 class="discipline-title">Web &amp; Digital</h2>
-        <span class="discipline-count">UX · UI · Shopify E-Commerce · SEO</span>
-      </div>
-      <div class="shot-grid">
-
-        <a href="https://dribbble.com/shots/21909323-Kaizer-Chiefs-Website-Update" target="_blank" rel="noopener" class="shot-card">
-          <div class="shot-preview">
-            <div class="shot-preview-bg" aria-hidden="true"></div>
-            <span class="shot-preview-title">Kaizer Chiefs — Website</span>
-            <span class="shot-preview-cta">View on Dribbble ↗</span>
-          </div>
-          <div class="shot-info">
-            <div class="shot-info-row">
-              <span class="shot-title">Kaizer Chiefs — Website</span>
-              <span class="shot-link">Dribbble ↗</span>
-            </div>
-            <span class="shot-meta">Full UX/UI overhaul · Shopify · 4,343% ROI · 2024</span>
-          </div>
-        </a>
-
-        <a href="https://dribbble.com/shots/1709878-Connect-Me-Now" target="_blank" rel="noopener" class="shot-card">
-          <div class="shot-preview">
-            <div class="shot-preview-bg" aria-hidden="true"></div>
-            <span class="shot-preview-title">Connect Me Now</span>
-            <span class="shot-preview-cta">View on Dribbble ↗</span>
-          </div>
-          <div class="shot-info">
-            <div class="shot-info-row">
-              <span class="shot-title">Connect Me Now</span>
-              <span class="shot-link">Dribbble ↗</span>
-            </div>
-            <span class="shot-meta">Web design · UI/UX · 2014</span>
-          </div>
-        </a>
-
-      </div>
-    </div>
-
-    <!-- Brand & Identity -->
-    <div class="discipline-section">
-      <div class="discipline-header">
-        <h2 class="discipline-title">Brand &amp; Identity</h2>
-        <span class="discipline-count">Logo · Visual Identity · Typography · Print</span>
-      </div>
-      <div class="shot-grid">
-
-        <a href="https://dribbble.com/shots/1772378-Longhouse-Brewery" target="_blank" rel="noopener" class="shot-card">
-          <div class="shot-preview">
-            <div class="shot-preview-bg" aria-hidden="true"></div>
-            <span class="shot-preview-title">Longhouse Brewery</span>
-            <span class="shot-preview-cta">View on Dribbble ↗</span>
-          </div>
-          <div class="shot-info">
-            <div class="shot-info-row">
-              <span class="shot-title">Longhouse Brewery</span>
-              <span class="shot-link">Dribbble ↗</span>
-            </div>
-            <span class="shot-meta">Brand identity · Logo · Packaging · 2015</span>
-          </div>
-        </a>
-
-        <a href="https://dribbble.com/shots/1626862-Digital-Tequila" target="_blank" rel="noopener" class="shot-card">
-          <div class="shot-preview">
-            <div class="shot-preview-bg" aria-hidden="true"></div>
-            <span class="shot-preview-title">Digital Tequila</span>
-            <span class="shot-preview-cta">View on Dribbble ↗</span>
-          </div>
-          <div class="shot-info">
-            <div class="shot-info-row">
-              <span class="shot-title">Digital Tequila</span>
-              <span class="shot-link">Dribbble ↗</span>
-            </div>
-            <span class="shot-meta">Brand identity · Logo design · 2015</span>
-          </div>
-        </a>
-
-        <a href="https://dribbble.com/shots/1644402-Alchemy-1b" target="_blank" rel="noopener" class="shot-card">
-          <div class="shot-preview">
-            <div class="shot-preview-bg" aria-hidden="true"></div>
-            <span class="shot-preview-title">Alchemy</span>
-            <span class="shot-preview-cta">View on Dribbble ↗</span>
-          </div>
-          <div class="shot-info">
-            <div class="shot-info-row">
-              <span class="shot-title">Alchemy</span>
-              <span class="shot-link">Dribbble ↗</span>
-            </div>
-            <span class="shot-meta">Brand identity · Logo design · 2015</span>
-          </div>
-        </a>
-
-      </div>
-    </div>
-
-    <!-- Illustration & Pixel Art -->
-    <div class="discipline-section">
-      <div class="discipline-header">
-        <h2 class="discipline-title">Illustration &amp; Pixel Art</h2>
-        <span class="discipline-count">Character Design · Pixel Art · Digital Illustration</span>
-      </div>
-      <div class="shot-grid">
-
-        <a href="https://dribbble.com/shots/6745248-Pixel-Art-MGS" target="_blank" rel="noopener" class="shot-card">
-          <div class="shot-preview">
-            <div class="shot-preview-bg" aria-hidden="true"></div>
-            <span class="shot-preview-title">Pixel Art — MGS</span>
-            <span class="shot-preview-cta">View on Dribbble ↗</span>
-          </div>
-          <div class="shot-info">
-            <div class="shot-info-row">
-              <span class="shot-title">Pixel Art — MGS</span>
-              <span class="shot-link">Dribbble ↗</span>
-            </div>
-            <span class="shot-meta">Pixel art · Character design · 2019</span>
-          </div>
-        </a>
-
-        <a href="https://dribbble.com/shots/3848165-Pixel-Walt-RPG" target="_blank" rel="noopener" class="shot-card">
-          <div class="shot-preview">
-            <div class="shot-preview-bg" aria-hidden="true"></div>
-            <span class="shot-preview-title">Pixel Walt — RPG</span>
-            <span class="shot-preview-cta">View on Dribbble ↗</span>
-          </div>
-          <div class="shot-info">
-            <div class="shot-info-row">
-              <span class="shot-title">Pixel Walt — RPG</span>
-              <span class="shot-link">Dribbble ↗</span>
-            </div>
-            <span class="shot-meta">Pixel art · Self-portrait · 2017</span>
-          </div>
-        </a>
-
-        <a href="https://dribbble.com/shots/3832151-Pixel-Walt-s-Shades" target="_blank" rel="noopener" class="shot-card">
-          <div class="shot-preview">
-            <div class="shot-preview-bg" aria-hidden="true"></div>
-            <span class="shot-preview-title">Pixel Walt — Shades</span>
-            <span class="shot-preview-cta">View on Dribbble ↗</span>
-          </div>
-          <div class="shot-info">
-            <div class="shot-info-row">
-              <span class="shot-title">Pixel Walt — Shades</span>
-              <span class="shot-link">Dribbble ↗</span>
-            </div>
-            <span class="shot-meta">Pixel art · Self-portrait · 2017</span>
-          </div>
-        </a>
-
-      </div>
-    </div>
-
-    <!-- Digital Marketing & E-Commerce case studies -->
-    <div class="discipline-section">
-      <div class="discipline-header">
-        <h2 class="discipline-title">Digital Marketing &amp; E-Commerce</h2>
-        <span class="discipline-count">Google Ads · Shopify · SEO/SEM · Analytics</span>
-      </div>
-      <div class="case-grid">
-
-        <a href="https://www.kaizerchiefs.com/" target="_blank" rel="noopener" class="case-card">
-          <p class="case-tag">Website · E-Commerce · Google Ads</p>
-          <h3 class="case-client"><img class="case-logo" src="https://www.google.com/s2/favicons?domain=kaizerchiefs.com&sz=64" alt="Kaizer Chiefs" width="28" height="28" loading="lazy">Kaizer Chiefs</h3>
-          <p class="case-roi">4,343%</p>
-          <p class="case-roi-label">Return on investment</p>
-          <p class="case-desc">Full UX/UI overhaul of the Kaizer Chiefs website. Shopify e-commerce build-out and Google Ads strategy driving record-breaking sales ROI for South Africa's biggest football club.</p>
-          <span class="case-link">Visit site ↗</span>
-        </a>
-
-        <a href="https://www.alphaindustries.com/" target="_blank" rel="noopener" class="case-card">
-          <p class="case-tag">E-Commerce · SEO · Google Ads</p>
-          <h3 class="case-client"><img class="case-logo" src="https://www.google.com/s2/favicons?domain=alphaindustries.com&sz=64" alt="Alpha Industries" width="28" height="28" loading="lazy">Alpha Industries</h3>
-          <p class="case-roi">944%</p>
-          <p class="case-roi-label">Return on investment</p>
-          <p class="case-desc">E-commerce UX/UI redesign, SEO optimisation, and Google Ads campaigns for the iconic American apparel brand's South African operation.</p>
-          <span class="case-link">Visit site ↗</span>
-        </a>
-
-        <a href="https://www.sebago.com/" target="_blank" rel="noopener" class="case-card">
-          <p class="case-tag">E-Commerce · SEO · Google Ads</p>
-          <h3 class="case-client"><img class="case-logo" src="https://www.google.com/s2/favicons?domain=sebago.com&sz=64" alt="Sebago" width="28" height="28" loading="lazy">Sebago</h3>
-          <p class="case-roi">822%</p>
-          <p class="case-roi-label">Return on investment</p>
-          <p class="case-desc">End-to-end e-commerce UX/UI, SEO strategy, and Google Ads sales campaigns for the American footwear brand's SA digital presence.</p>
-          <span class="case-link">Visit site ↗</span>
-        </a>
-
-        <a href="https://www.superga.com/" target="_blank" rel="noopener" class="case-card">
-          <p class="case-tag">E-Commerce · Google Ads</p>
-          <h3 class="case-client"><img class="case-logo" src="https://www.google.com/s2/favicons?domain=superga.com&sz=64" alt="Superga" width="28" height="28" loading="lazy">Superga</h3>
-          <p class="case-roi">552%</p>
-          <p class="case-roi-label">Return on investment</p>
-          <p class="case-desc">E-commerce strategy and Google Ads delivering 3,558 conversions and over 7.5 million campaign impressions for the Italian footwear brand.</p>
-          <span class="case-link">Visit site ↗</span>
-        </a>
-
-        <a href="https://www.kappa.com/" target="_blank" rel="noopener" class="case-card">
-          <p class="case-tag">E-Commerce · Google Ads</p>
-          <h3 class="case-client"><img class="case-logo" src="https://www.google.com/s2/favicons?domain=kappa.com&sz=64" alt="Kappa" width="28" height="28" loading="lazy">Kappa</h3>
-          <p class="case-roi">362%</p>
-          <p class="case-roi-label">Return on investment</p>
-          <p class="case-desc">E-commerce design and full Google Ads sales funnel strategy for the Italian sportswear brand's South African e-commerce operation.</p>
-          <span class="case-link">Visit site ↗</span>
-        </a>
-
-        <a href="https://www.1618.co.za/" target="_blank" rel="noopener" class="case-card">
-          <p class="case-tag">Brand Identity · Website · Digital</p>
-          <h3 class="case-client"><img class="case-logo" src="https://www.google.com/s2/favicons?domain=1618.co.za&sz=64" alt="1618 Group" width="28" height="28" loading="lazy">1618 Group</h3>
-          <p class="case-desc">Brand identity, website design, and digital strategy for the 1618 Group — a South African creative and digital agency.</p>
-          <span class="case-link">Visit site ↗</span>
-        </a>
-
-        <a href="https://www.1618sts.co.za/" target="_blank" rel="noopener" class="case-card">
-          <p class="case-tag">Brand Identity · Website · Hospitality</p>
-          <h3 class="case-client"><img class="case-logo" src="https://www.google.com/s2/favicons?domain=1618sts.co.za&sz=64" alt="1618 Short Term Solutions" width="28" height="28" loading="lazy">1618 Short Term Solutions</h3>
-          <p class="case-desc">Brand identity and website design for 1618 Short Term Solutions — a curated short-term accommodation platform.</p>
-          <span class="case-link">Visit site ↗</span>
-        </a>
-
-        <a href="https://www.villasincapetown.com/" target="_blank" rel="noopener" class="case-card">
-          <p class="case-tag">Website · UX/UI · Hospitality</p>
-          <h3 class="case-client"><img class="case-logo" src="https://www.google.com/s2/favicons?domain=villasincapetown.com&sz=64" alt="Villas in Cape Town" width="28" height="28" loading="lazy">Villas in Cape Town</h3>
-          <p class="case-desc">UX/UI design and web build for a premium villa rental platform showcasing Cape Town's finest private properties.</p>
-          <span class="case-link">Visit site ↗</span>
-        </a>
-
-        <a href="https://www.facebook.com/share/1Cto7cwN8L/" target="_blank" rel="noopener" class="case-card">
-          <p class="case-tag">Social Media · Content · Brand</p>
-          <h3 class="case-client"><img class="case-logo" src="https://www.google.com/s2/favicons?domain=mochachos.co.za&sz=64" alt="Mochachos" width="28" height="28" loading="lazy">Mochachos</h3>
-          <p class="case-desc">Social media content creation and brand management for Mochachos — one of South Africa's most recognisable casual dining franchises.</p>
-          <span class="case-link">View page ↗</span>
-        </a>
-
-      </div>
-    </div>
-
-    <!-- Apps & Side Projects -->
-    <div class="discipline-section">
-      <div class="discipline-header">
-        <h2 class="discipline-title">Apps &amp; Side Projects</h2>
-        <span class="discipline-count">UI Design · Android · Web Apps</span>
-      </div>
-      <div class="app-grid">
-
-        <a href="/apps/billtipper/" class="app-card">
-          <div class="app-icon">
-            <img src="/images/bill-tipper-icon.webp" alt="Bill Tipper icon" width="72" height="72" loading="lazy" />
-          </div>
-          <div class="app-body">
-            <p class="app-tag">Utility · Android &amp; Web</p>
-            <h3 class="app-name">Bill Tipper</h3>
-            <p class="app-tagline">Split bills and calculate tips instantly. No ads, no tracking, no account required — works entirely on device.</p>
-            <div class="app-links">
-              <span class="app-link">View app ↗</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="/apps/neurotrace/" class="app-card">
-          <div class="app-icon">
-            <img src="/images/neurotrace-icon.webp" alt="Neurotrace icon" width="72" height="72" loading="lazy" />
-          </div>
-          <div class="app-body">
-            <p class="app-tag">Game · Android · Google Play</p>
-            <h3 class="app-name">Neurotrace</h3>
-            <p class="app-tagline">A cyberpunk memory puzzle for Android. Tiles flash. You watch. Then you repeat — faster, longer, deeper into the grid.</p>
-            <div class="app-links">
-              <span class="app-link">View app ↗</span>
-            </div>
-          </div>
-        </a>
-
-        <a href="https://waltviviers.com/" class="app-card">
-          <div class="app-icon" style="background: #0C0C0B; display: flex; align-items: center; justify-content: center; padding: 14px;">
-            <img src="/logo.svg" alt="waltviviers.com" width="44" height="21" />
-          </div>
-          <div class="app-body">
-            <p class="app-tag">Fine Art · Portfolio · Website</p>
-            <h3 class="app-name">waltviviers.com</h3>
-            <p class="app-tagline">Personal fine art portfolio built from scratch in HTML/CSS. Dark mode, bilingual (EN/AF), Saatchi Art integration, and a custom artwork gallery.</p>
-            <div class="app-links">
-              <span class="app-link">Visit site ↗</span>
-            </div>
-          </div>
-        </a>
-
-      </div>
-    </div>
-
-    <!-- Awards -->
-    <div class="awards-section">
-      <p class="section-label">Awards &amp; recognition</p>
-      <div class="awards-grid">
-
-        <div class="award-item">
-          <span class="award-year">2021</span>
-          <p class="award-title">Leading Pioneers in Digital Marketing</p>
-          <p class="award-org">MEA Business Awards</p>
-        </div>
-
-        <div class="award-item">
-          <span class="award-year">2020</span>
-          <p class="award-title">Best Next-Gen Tech-Driven Marketing Company, Southern Africa</p>
-          <p class="award-org">MEA Business Awards</p>
-        </div>
-
-        <div class="award-item">
-          <span class="award-year">2004</span>
-          <p class="award-title">Best Art &amp; Design Student Floating Trophy</p>
-          <p class="award-org">Design School S.A.</p>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Profile CTAs -->
-    <div class="profile-ctas">
-      <a href="https://dribbble.com/waltviviers" target="_blank" rel="noopener" class="profile-cta">
-        <div class="profile-cta-body">
-          <p class="profile-cta-label">Shots &amp; process work</p>
-          <p class="profile-cta-name">Dribbble</p>
-          <p class="profile-cta-desc">Browse the full collection of design shots, logo explorations, and process work.</p>
-        </div>
-        <span class="profile-cta-arrow">↗</span>
-      </a>
-      <a href="https://www.behance.net/waltviviers" target="_blank" rel="noopener" class="profile-cta">
-        <div class="profile-cta-body">
-          <p class="profile-cta-label">Full case studies</p>
-          <p class="profile-cta-name">Behance</p>
-          <p class="profile-cta-desc">Detailed project breakdowns, campaign work, and brand identity case studies.</p>
-        </div>
-        <span class="profile-cta-arrow">↗</span>
-      </a>
-      <a href="https://www.linkedin.com/in/waltviviers" target="_blank" rel="noopener" class="profile-cta">
-        <div class="profile-cta-body">
-          <p class="profile-cta-label">Professional history</p>
-          <p class="profile-cta-name">LinkedIn</p>
-          <p class="profile-cta-desc">Client endorsements, career highlights, and the full timeline.</p>
-        </div>
-        <span class="profile-cta-arrow">↗</span>
-      </a>
-    </div>
-
-  </div>
-
-
-
-  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
+    <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>

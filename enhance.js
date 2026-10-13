@@ -151,7 +151,7 @@
   function applyLift() {
     each(document.querySelectorAll(
       '.disc-card, .digital-card, .digital-sub-card, .work-thumb, .work-card, ' +
-      '.essay-card, .app-card, .blog-card, .post-card, .card, [data-wv-lift]'
+      '.essay-card, .app-card, .blog-card, .post-card, .card, .essays-list a, [data-wv-lift]'
     ), function (el) { el.classList.add('wv-lift'); });
     // Subtle sheen on primary buttons.
     each(document.querySelectorAll(
@@ -231,27 +231,43 @@
     update();
   }
 
-  /* ── 5. Desktop pointer drift on the main hero background ───────────────── */
-  function setupPointerDrift() {
-    if (reduce || !fine) return;
-    var band = document.querySelector('.cc-hero');
-    var bg = band && band.querySelector('.cc-hero-bg');
-    if (!band || !bg) return;
+  /* ── 5. Desktop pointer drift on hero bands ────────────────────────────────
+     The image under the pointer eases toward the cursor (same feel as the main
+     header). Wired to the multimedia-artist header and the Design & Digital
+     band. */
+  // mode 'var'  → set --wv-px/--wv-py (for .wv-parallax-bg, transform on el)
+  // mode 'xform' → set inline transform: translate() (for a wrapper with no
+  //               competing transform; its child keeps its own transform)
+  function wireDrift(band, target, amp, mode) {
+    if (!band || !target) return;
+    if (mode === 'xform') { target.classList.add('wv-drift'); target.style.transform = 'translate(0px,0px)'; }
     var raf = false, px = 0, py = 0;
     function apply() {
       raf = false;
-      bg.style.setProperty('--wv-px', px.toFixed(1) + 'px');
-      bg.style.setProperty('--wv-py', py.toFixed(1) + 'px');
+      if (mode === 'xform') {
+        target.style.transform = 'translate(' + px.toFixed(1) + 'px,' + py.toFixed(1) + 'px)';
+      } else {
+        target.style.setProperty('--wv-px', px.toFixed(1) + 'px');
+        target.style.setProperty('--wv-py', py.toFixed(1) + 'px');
+      }
     }
     band.addEventListener('mousemove', function (e) {
       var r = band.getBoundingClientRect();
-      px = ((e.clientX - r.left) / r.width - 0.5) * -44;   // ±22px
-      py = ((e.clientY - r.top) / r.height - 0.5) * -44;
+      if (!r.width || !r.height) return;
+      px = ((e.clientX - r.left) / r.width - 0.5) * -amp;
+      py = ((e.clientY - r.top) / r.height - 0.5) * -amp;
       if (!raf) { raf = true; requestAnimationFrame(apply); }
     });
     band.addEventListener('mouseleave', function () {
       px = 0; py = 0; if (!raf) { raf = true; requestAnimationFrame(apply); }
     });
+  }
+  function setupPointerDrift() {
+    if (reduce || !fine) return;
+    var cc = document.querySelector('.cc-hero');
+    wireDrift(cc, cc && cc.querySelector('.cc-hero-bg'), 44, 'var');    // ±22px
+    var dd = document.querySelector('#design-digital .pf-hero');
+    wireDrift(dd, dd && dd.querySelector('.pf-hero-img'), 40, 'xform'); // ±20px
   }
 
   /* ── 6. Cursor-following spotlight (whole page) ────────────────────────── */
@@ -267,12 +283,15 @@
       el.style.setProperty('--wv-mx', mx + 'px');
       el.style.setProperty('--wv-my', my + 'px');
     }
+    var CLICKABLE = 'a[href], button, [role="button"], label, select, summary, input[type="submit"], input[type="button"]';
     window.addEventListener('mousemove', function (e) {
       mx = e.clientX; my = e.clientY;
       if (!el.classList.contains('on')) el.classList.add('on');
+      var hot = e.target && e.target.closest && e.target.closest(CLICKABLE);
+      el.classList.toggle('throb', !!hot);
       if (!raf) { raf = true; requestAnimationFrame(apply); }
     }, { passive: true });
-    document.addEventListener('mouseleave', function () { el.classList.remove('on'); });
+    document.addEventListener('mouseleave', function () { el.classList.remove('on'); el.classList.remove('throb'); });
     document.addEventListener('mouseenter', function () { el.classList.add('on'); });
   }
 
@@ -283,6 +302,7 @@
       '.disc-card, .digital-card, .digital-sub-card, .work-thumb, .work-card, ' +
       '.essay-card, .app-card, .blog-card, .post-card, [data-wv-tilt]'
     ), function (card) {
+      if (card.classList.contains('wv-tilt3d')) return;   // already wired
       card.classList.add('wv-tilt3d');
       var raf = false, rx = 0, ry = 0;
       function apply() {
@@ -339,6 +359,101 @@
     }, { passive: true });
   }
 
+  /* ── 9. Background texture + nav picker ─────────────────────────────────── */
+  var TEX = [['none', 'None'], ['grain', 'Film grain'], ['dots', 'Dot grid'],
+             ['hairlines', 'Hairlines'], ['grid', 'Blueprint grid'],
+             ['crosshatch', 'Crosshatch'], ['aurora', 'Aurora wash']];
+  function texGet() { try { return localStorage.getItem('wv-texture'); } catch (e) { return null; } }
+  function texSet(v) { try { localStorage.setItem('wv-texture', v); } catch (e) {} }
+  function applyTexture(v) { root.setAttribute('data-texture', v); }
+
+  function mountTexturePicker(toggle) {
+    if (document.querySelector('.wv-tex')) return;
+    var cur = root.getAttribute('data-texture') || 'grain';
+    var inLi = toggle.closest ? toggle.closest('li') : null;
+    var host = document.createElement(inLi ? 'li' : 'span');
+    var tex = document.createElement('div');
+    tex.className = 'wv-tex';
+    var opts = TEX.map(function (t) {
+      return '<button type="button" class="wv-tex-opt" role="menuitemradio" data-tex="' + t[0] +
+        '" aria-checked="' + (t[0] === cur) + '"><span class="wv-tex-dot"></span>' + t[1] + '</button>';
+    }).join('');
+    tex.innerHTML =
+      '<button type="button" class="wv-tex-btn" aria-label="Background texture" aria-haspopup="true" aria-expanded="false">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">' +
+        '<path d="M4 15 15 4M9 20 20 9M4 9 9 4M14 20 20 14"/></svg></button>' +
+      '<div class="wv-tex-menu" role="menu">' + opts + '</div>';
+    host.appendChild(tex);
+    var ref = inLi || toggle;
+    ref.parentNode.insertBefore(host, ref);
+
+    var btn = tex.querySelector('.wv-tex-btn');
+    var menu = tex.querySelector('.wv-tex-menu');
+    function close() { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = menu.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    each(tex.querySelectorAll('.wv-tex-opt'), function (o) {
+      o.addEventListener('click', function () {
+        applyTexture(o.getAttribute('data-tex'));
+        texSet(o.getAttribute('data-tex'));
+        each(tex.querySelectorAll('.wv-tex-opt'), function (x) {
+          x.setAttribute('aria-checked', x === o ? 'true' : 'false');
+        });
+        close();
+      });
+    });
+    document.addEventListener('click', function (e) { if (!tex.contains(e.target)) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+  }
+
+  function setupTexture() {
+    var tries = 0;
+    (function find() {
+      var t = document.querySelector('.theme-toggle');
+      if (t) { try { mountTexturePicker(t); } catch (e) {} return; }
+      if (tries++ > 25) return;
+      setTimeout(find, 120);
+    })();
+  }
+
+  /* ── 10. Card icons drift toward the pointer on hover ──────────────────── */
+  function setupIconFollow() {
+    if (reduce || !fine) return;
+    each(document.querySelectorAll('.disc-card, .digital-card, .digital-sub-card'), function (card) {
+      var icon = card.querySelector('.disc-card-icon, .digital-card-icon, .digital-sub-icon');
+      if (!icon) return;
+      icon.style.transition = 'transform 0.2s ease-out';
+      icon.style.willChange = 'transform';
+      var raf = false, tx = 0, ty = 0;
+      function apply() { raf = false; icon.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px)'; }
+      card.addEventListener('mousemove', function (e) {
+        var r = card.getBoundingClientRect();
+        if (!r.width) return;
+        tx = ((e.clientX - r.left) / r.width - 0.5) * 18;   // ±9px
+        ty = ((e.clientY - r.top) / r.height - 0.5) * 18;
+        if (!raf) { raf = true; requestAnimationFrame(apply); }
+      });
+      card.addEventListener('mouseleave', function () {
+        tx = 0; ty = 0; if (!raf) { raf = true; requestAnimationFrame(apply); }
+      });
+    });
+  }
+
+  // Apply the texture immediately (before paint). First-time visitors get a
+  // random texture (not "none"), remembered thereafter; the picker overrides it.
+  try {
+    var savedTex = texGet();
+    if (!savedTex) {
+      var pool = TEX.filter(function (t) { return t[0] !== 'none'; });
+      savedTex = pool[Math.floor(Math.random() * pool.length)][0];
+      texSet(savedTex);
+    }
+    applyTexture(savedTex);
+  } catch (e) {}
+
   /* ── Boot ──────────────────────────────────────────────────────────────── */
   ready(function () {
     try { applyGlass(); } catch (e) {}
@@ -352,5 +467,12 @@
     try { setupSpotlight(); } catch (e) {}
     try { setupTilt3d(); } catch (e) {}
     try { setupMagnetic(); } catch (e) {}
+    try { setupTexture(); } catch (e) {}
+    try { setupIconFollow(); } catch (e) {}
   });
+
+  /* Pages that build card grids after load (e.g. the gallery) can re-wire the
+     tilt on freshly-injected cards. Idempotent — only new cards are bound. */
+  window.wvEnhance = window.wvEnhance || {};
+  window.wvEnhance.rescanTilt = function () { try { setupTilt3d(); } catch (e) {} };
 })();

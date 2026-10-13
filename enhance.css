@@ -93,6 +93,9 @@ img.wv-parallax {
   transform: translate3d(0, var(--wv-par, 0px), 0) scale(1.14);
   transition: transform 0.05s linear;
 }
+/* Desktop pointer drift: the wrapper eases toward the cursor (the inner image
+   keeps its own scroll-parallax + scale, so the two compose cleanly). */
+.wv-drift { transition: transform 0.18s ease-out; will-change: transform; }
 
 /* Background-image hero bands: combined scroll drift (--wv-par, y) + desktop
    pointer drift (--wv-px / --wv-py). Scaled up so edges stay covered. */
@@ -187,15 +190,18 @@ img.wv-parallax {
   opacity: 0;
   transition: opacity 0.5s ease;
   background: radial-gradient(460px circle at var(--wv-mx, 50%) var(--wv-my, 50%),
-              rgba(150, 118, 255, 0.22), rgba(150, 118, 255, 0.10) 40%, transparent 64%);
+              rgba(255, 168, 92, 0.24), rgba(255, 150, 70, 0.11) 40%, transparent 64%);
   mix-blend-mode: screen;
 }
 .wv-spotlight.on { opacity: 1; }
 [data-theme="light"] .wv-spotlight {
   mix-blend-mode: multiply;
   background: radial-gradient(460px circle at var(--wv-mx, 50%) var(--wv-my, 50%),
-              rgba(90, 70, 200, 0.16), rgba(90, 70, 200, 0.07) 40%, transparent 64%);
+              rgba(214, 120, 40, 0.18), rgba(214, 120, 40, 0.08) 40%, transparent 64%);
 }
+/* Over a clickable element the glow throbs slowly instead of the cursor growing. */
+.wv-spotlight.throb { animation: wv-spot-throb 1.7s ease-in-out infinite; }
+@keyframes wv-spot-throb { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
 /* 3D tilt of cards toward the pointer. enhance.js sets --wv-rx / --wv-ry and
    only adds .wv-tilt3d on fine pointers, so this needs no hover/pointer gate
@@ -237,3 +243,135 @@ img.wv-parallax {
   html.wv-anim [data-wv-reveal] { opacity: 1 !important; transform: none !important; }
   .wv-glow-field { display: none !important; }
 }
+
+/* ── Background texture (user-selectable via the nav picker) ─────────────────
+   A faint full-page texture layered on the body background. Driven by
+   html[data-texture="…"]; colours flip for light mode. */
+:root { --tex-ink: rgba(255,255,255,0.09); --tex-ink-soft: rgba(255,255,255,0.06); }
+:root[data-theme="light"] { --tex-ink: rgba(0,0,0,0.09); --tex-ink-soft: rgba(0,0,0,0.06); }
+
+html[data-texture]:not([data-texture="none"]) body { background-attachment: fixed; }
+html[data-texture="grain"] body {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.14'/%3E%3C/svg%3E");
+}
+/* Light mode: the same grey noise over a light page reads as dark speckle,
+   but needs more opacity to be visible. */
+html[data-theme="light"][data-texture="grain"] body {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.26'/%3E%3C/svg%3E");
+}
+html[data-texture="dots"] body {
+  background-image: radial-gradient(circle, var(--tex-ink) 1px, transparent 1.4px);
+  background-size: 24px 24px;
+}
+html[data-texture="hairlines"] body {
+  background-image: repeating-linear-gradient(45deg, var(--tex-ink-soft) 0 1px, transparent 1px 9px);
+}
+html[data-texture="grid"] body {
+  background-image: linear-gradient(var(--tex-ink) 1px, transparent 1px),
+                    linear-gradient(90deg, var(--tex-ink) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+html[data-texture="crosshatch"] body {
+  background-image: repeating-linear-gradient(45deg, var(--tex-ink-soft) 0 1px, transparent 1px 10px),
+                    repeating-linear-gradient(-45deg, var(--tex-ink-soft) 0 1px, transparent 1px 10px);
+}
+html[data-texture="aurora"] body {
+  background-image: radial-gradient(1500px 720px at 15% -8%, rgba(128,96,255,0.30), transparent 62%),
+                    radial-gradient(1300px 720px at 105% 108%, rgba(255,92,170,0.24), transparent 62%);
+  background-attachment: fixed;
+}
+
+/* ── Texture picker (nav) ───────────────────────────────────────────────── */
+.wv-tex { position: relative; display: inline-flex; align-items: center; }
+.wv-tex-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--rule); background: transparent; color: var(--stone);
+  cursor: pointer; transition: color 0.2s, border-color 0.2s;
+}
+.wv-tex-btn:hover, .wv-tex-btn[aria-expanded="true"] { color: var(--ink); border-color: var(--ink); }
+.wv-tex-btn svg { width: 16px; height: 16px; display: block; }
+.wv-tex-menu {
+  position: absolute; top: calc(100% + 10px); right: 0; z-index: 400;
+  min-width: 176px; padding: 6px; border-radius: 10px;
+  background: rgba(12,12,11,0.92); border: 1px solid var(--rule);
+  -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px);
+  box-shadow: 0 18px 44px -18px rgba(0,0,0,0.7);
+  display: flex; flex-direction: column; gap: 2px;
+  opacity: 0; transform: translateY(-6px); pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+:root[data-theme="light"] .wv-tex-menu { background: rgba(245,243,239,0.95); }
+.wv-tex-menu.open { opacity: 1; transform: none; pointer-events: auto; }
+.wv-tex-opt {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 9px 12px; border: none; background: transparent; cursor: pointer;
+  font-family: var(--sans); font-size: 12px; letter-spacing: 0.04em;
+  color: var(--stone); text-align: left; border-radius: 6px; transition: background 0.15s, color 0.15s;
+}
+.wv-tex-opt:hover { background: rgba(255,255,255,0.06); color: var(--ink); }
+:root[data-theme="light"] .wv-tex-opt:hover { background: rgba(0,0,0,0.05); }
+.wv-tex-opt[aria-checked="true"] { color: var(--ink); }
+.wv-tex-opt .wv-tex-dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--stone); flex: 0 0 auto; }
+.wv-tex-opt[aria-checked="true"] .wv-tex-dot { background: var(--ink); border-color: var(--ink); }
+/* The texture picker stays available on mobile — it sits in the top bar next
+   to the theme toggle, and its menu is already right-aligned so it never
+   overflows the viewport. */
+@media (max-width: 900px) {
+  nav .wv-tex { display: inline-flex; margin-right: 2px; }
+  .wv-tex-btn { width: 32px; height: 32px; }
+}
+
+/* ── Consistent interior-page content column (match the home page) ──────────
+   Interior pages use .page-wrap with assorted max-widths; standardise the
+   left/right inset to the same centred 1500px column used site-wide. */
+.page-wrap {
+  max-width: none !important;
+  padding-left: max(48px, (100% - 1500px) / 2) !important;
+  padding-right: max(48px, (100% - 1500px) / 2) !important;
+}
+@media (max-width: 900px) {
+  .page-wrap { padding-left: 24px !important; padding-right: 24px !important; }
+  /* Full-bleed showcase pages (photography, fine-art gallery): on phones the
+     hero, sort bar and image grid run edge-to-edge; their inner elements keep
+     their own text padding. */
+  .page-wrap--bleed { padding-left: 0 !important; padding-right: 0 !important; }
+}
+
+/* ── Shared testimonial / pull-quote, uniform across every section page ──────
+   One card component so the quote blocks on Photography, Fine Art, Apps and
+   Essays all read the same. Self-contained: caps its own width and keeps a
+   side gutter even when its parent runs full-bleed. */
+.wv-quote {
+  width: min(100% - 48px, 820px);
+  margin: clamp(48px, 7vw, 80px) auto;
+  background: var(--bg2);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: clamp(32px, 5vw, 56px);
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(18px, 3vw, 32px);
+}
+[data-theme="light"] .wv-quote { background: #F5F3EF; }
+.wv-quote-mark {
+  font-family: var(--serif); font-size: 5rem; line-height: 0.7;
+  color: var(--stone); opacity: 0.4; flex-shrink: 0; margin-top: 6px;
+}
+.wv-quote-body { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.wv-quote-text {
+  font-family: var(--serif); font-size: clamp(1.2rem, 2vw, 1.6rem);
+  font-style: italic; font-weight: 400; line-height: 1.5; color: var(--ink);
+}
+.wv-quote-cite { font-size: 14px; line-height: 1.55; color: var(--stone); margin-top: 4px; }
+.wv-quote-cite strong { color: var(--ink); font-weight: 500; }
+.wv-quote-cite a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.wv-quote-cite em { font-style: italic; }
+@media (max-width: 560px) {
+  .wv-quote { flex-direction: column; gap: 10px; }
+  .wv-quote-mark { font-size: 3.5rem; }
+}
+
+/* ── Light mode: social icons wash out on the pale background — darken them ── */
+[data-theme="light"] .social-icons a { color: #5A544E !important; }
+[data-theme="light"] .social-icons a:hover { color: #0C0C0B !important; }
