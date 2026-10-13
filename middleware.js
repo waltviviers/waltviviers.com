@@ -21,6 +21,9 @@ export const config = { matcher: ['/:path*'] };
 const PUBLIC_SITES = {
   'manifesto.waltviviers.com': 'manifesto-wellness',
 };
+// Client sites listed here are hidden: their subdomain asks for the client
+// password again. Remove a slug to make its site public.
+const HIDDEN_SITES = ['manifesto-wellness'];
 const MAIN_HOSTS = ['waltviviers.com', 'www.waltviviers.com'];
 const APP_SITES = {
   'chopped-beats.waltviviers.com': { '/': '/apps/chopped-beats/' },
@@ -157,7 +160,9 @@ function publicSiteRoute(url) {
     if (url.pathname === prefix || url.pathname.startsWith(prefix + '/')) {
       return Response.redirect(new URL((url.pathname.slice(prefix.length) || '/') + url.search, url), 308);
     }
-    return new Response(null, { headers: { 'x-middleware-rewrite': new URL(prefix + url.pathname + url.search, url).toString() } });
+    const rewrite = new Response(null, { headers: { 'x-middleware-rewrite': new URL(prefix + url.pathname + url.search, url).toString() } });
+    // The subdomain serves from its root, so the gate cookie covers the whole host.
+    return HIDDEN_SITES.includes(slug) ? { gate: { ...clientGate(slug), prefix: '/' }, rewrite } : rewrite;
   }
   for (const [host, site] of Object.entries(PUBLIC_SITES)) {
     const prefix = '/clients/' + site;
@@ -166,7 +171,7 @@ function publicSiteRoute(url) {
     if (MAIN_HOSTS.includes(url.hostname)) {
       return Response.redirect('https://' + host + (url.pathname.slice(prefix.length) || '/') + url.search, 308);
     }
-    return 'serve';
+    return HIDDEN_SITES.includes(site) ? null : 'serve'; // hidden sites fall through to the normal gate
   }
   return null;
 }
@@ -180,17 +185,22 @@ export default async function middleware(request) {
   if (app) return new Response(null, { headers: { 'x-middleware-rewrite': new URL(app + url.search, url).toString() } });
   const site = publicSiteRoute(url);
   if (site === 'serve') return;
-  if (site) return site;
+  if (site instanceof Response) return site;
+  if (site) return (await checkGate(request, site.gate)) || site.rewrite;
   if (!/^\/(clients|admin-index)(\/|$)/.test(pathname)) return; // the rest of the site is public
   const gate = findGate(pathname);
   // /clients/ itself, or anything that isn't a valid client folder, is not public.
   if (!gate) return new Response('Not found', { status: 404, headers: { 'cache-control': 'no-store', 'x-robots-tag': 'noindex' } });
+  return (await checkGate(request, gate)) || undefined;
+}
 
+// Returns the password page (or the post-login redirect), or null once the visitor is signed in.
+async function checkGate(request, gate) {
   const secret = process.env[gate.env];
   if (!secret) return page(gate, 'This page is not available right now.', 503);
 
   const token = await sha256(gate.cookie + ':' + secret);
-  if (readCookie(request, gate.cookie) === token) return; // let the static page through
+  if (readCookie(request, gate.cookie) === token) return null; // let the static page through
 
   if (request.method === 'POST') {
     const form = await request.formData().catch(() => null);
