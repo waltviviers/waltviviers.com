@@ -56,6 +56,11 @@
     position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;
     transform: scale(1.25);
   }
+  .bg-location-img {
+    position: absolute; inset: 0; z-index: 0; background-size: cover; background-position: center;
+    transform: scale(1.25); opacity: 0; transition: opacity 0.6s ease;
+  }
+  .bg-location-img.active { opacity: 1; }
   .device-wrap::before {
     content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
     background: radial-gradient(ellipse at 50% 15%, rgba(13,14,26,0.35) 0%, rgba(3,3,4,0.88) 72%);
@@ -89,6 +94,7 @@
   @media (max-width: 480px) {
     .device-wrap { padding: 0; background: var(--bg); }
     .bg-video { display: none; }
+    .bg-location-img { display: none; }
     .phone {
       width: 100vw; height: 100vh; height: 100dvh;
       max-width: none; aspect-ratio: unset;
@@ -516,6 +522,7 @@
 
 <div class="device-wrap" id="device-wrap" hidden>
   <video class="bg-video" id="bg-video" loop muted playsinline preload="none" aria-hidden="true"></video>
+  <div class="bg-location-img" id="bg-location-img" aria-hidden="true"></div>
   <script>
     // Desktop only — on the mobile breakpoint the phone fills the screen and the video is never seen.
     if (window.matchMedia('(min-width: 481px)').matches) {
@@ -1677,9 +1684,19 @@ var LOCATION_BACKGROUNDS = {
 };
 function applyLocationBackground(id) {
   var bg = document.querySelector('.phone-bg');
-  if (!bg) return;
-  var url = (id && LOCATION_BACKGROUNDS[id]) || '/apps/static-protocol/phone-bg-portrait.jpg';
-  bg.style.backgroundImage = "url('" + url + "')";
+  var defaultUrl = '/apps/static-protocol/phone-bg-portrait.jpg';
+  if (bg) bg.style.backgroundImage = "url('" + ((id && LOCATION_BACKGROUNDS[id]) || defaultUrl) + "')";
+  // Desktop only: the big scene behind the phone itself swaps to the location photo,
+  // covering the ambient loop; with no location picked (or no art for one yet) the
+  // loop shows through again.
+  var scene = document.getElementById('bg-location-img');
+  if (!scene) return;
+  if (id && LOCATION_BACKGROUNDS[id]) {
+    scene.style.backgroundImage = "url('" + LOCATION_BACKGROUNDS[id] + "')";
+    scene.classList.add('active');
+  } else {
+    scene.classList.remove('active');
+  }
 }
 function locationMapSvg() {
   var nodesHtml = LOCATIONS.map(function (loc) {
