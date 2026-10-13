@@ -93,6 +93,9 @@ img.wv-parallax {
   transform: translate3d(0, var(--wv-par, 0px), 0) scale(1.14);
   transition: transform 0.05s linear;
 }
+/* Desktop pointer drift: the wrapper eases toward the cursor (the inner image
+   keeps its own scroll-parallax + scale, so the two compose cleanly). */
+.wv-drift { transition: transform 0.18s ease-out; will-change: transform; }
 
 /* Background-image hero bands: combined scroll drift (--wv-par, y) + desktop
    pointer drift (--wv-px / --wv-py). Scaled up so edges stay covered. */
@@ -311,7 +314,13 @@ html[data-texture="aurora"] body {
 .wv-tex-opt[aria-checked="true"] { color: var(--ink); }
 .wv-tex-opt .wv-tex-dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--stone); flex: 0 0 auto; }
 .wv-tex-opt[aria-checked="true"] .wv-tex-dot { background: var(--ink); border-color: var(--ink); }
-@media (max-width: 900px) { nav .wv-tex { display: none; } }
+/* The texture picker stays available on mobile — it sits in the top bar next
+   to the theme toggle, and its menu is already right-aligned so it never
+   overflows the viewport. */
+@media (max-width: 900px) {
+  nav .wv-tex { display: inline-flex; margin-right: 2px; }
+  .wv-tex-btn { width: 32px; height: 32px; }
+}
 
 /* ── Consistent interior-page content column (match the home page) ──────────
    Interior pages use .page-wrap with assorted max-widths; standardise the
