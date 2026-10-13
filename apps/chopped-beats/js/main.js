@@ -3,6 +3,7 @@ import { buildKit } from './drums.js';
 import { detectHits, detectWords, guessBpm } from './analysis.js';
 import * as S from './storage.js';
 import { initPlayer } from './player.js';
+import { initCompact } from './compact.js';
 import { runTour } from './tour.js';
 
 const { ctx, SR } = A;
@@ -1801,7 +1802,7 @@ async function connectFolder(reconnect) {
 }
 function updateFolderBtn() {
   const b = $('#btnFolder');
-  b.textContent = S.connected() ? `Folder: ${S.folderName()}` : 'Choose folder';
+  (b.querySelector('.tx') || b).textContent = S.connected() ? `Folder: ${S.folderName()}` : 'Choose folder';
   b.title = S.connected() ? 'Sounds, projects and exports save here. Click to change.' : 'Pick a folder on your PC to keep everything in';
 }
 $('#btnFolder').addEventListener('click', () => {
@@ -2133,6 +2134,7 @@ async function init() {
   renderLibrary();
   changed();
   togglePads(pref.get('padsOpen', false));
+  initCompact($('#btnCompact'), pref);
   player = initPlayer($('#player'), $('#playerGrip'), () => ($('#pads').hidden ? null : $('#pads')));
   requestAnimationFrame(frame);
   tourPending = !pref.get('toured', false);
