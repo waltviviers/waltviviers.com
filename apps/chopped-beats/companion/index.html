@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en-ZA">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Chopped Beats Companion</title>
+  <meta name="description" content="Record and collect sounds on your phone, then send them to Chopped Beats on your computer." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" href="/apps/chopped-beats/mascot.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/apps/chopped-beats/mascot.png" />
+  <script>(function(){var s;try{s=localStorage.getItem('wv-theme')}catch(e){}document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/apps/chopped-beats/companion/companion.css" />
+</head>
+<body>
+  <header class="top">
+    <a class="back" href="https://waltviviers.com/" aria-label="Back to waltviviers.com">←</a>
+    <img class="mascot" src="/apps/chopped-beats/mascot.png" alt="" />
+    <div>
+      <h1>Chopped Beats</h1>
+      <p class="sub">Phone companion</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <p><strong>Chopped Beats is made for a computer.</strong> Use your phone to record your voice or grab sounds from videos, then send them over and make the song on your PC.</p>
+    </section>
+
+    <section class="capture">
+      <button id="btnRec" class="rec" aria-label="Start recording">
+        <span class="dot"></span><span id="recLabel">Record</span>
+      </button>
+      <div id="meter" class="meter" aria-hidden="true"><span></span></div>
+      <output id="timer" class="timer">0:00</output>
+      <label class="add">
+        <input id="fileInput" type="file" accept="audio/*,video/*" multiple />
+        <span>Add from phone</span>
+      </label>
+      <p class="hint">Videos keep only their sound, so saved TikToks work too.</p>
+    </section>
+
+    <section>
+      <div class="list-head">
+        <h2>Your sounds</h2>
+        <button id="btnSendAll" class="btn" hidden>Send all</button>
+      </div>
+      <ul id="list" class="list"></ul>
+      <p id="empty" class="hint">Nothing yet. Record something or add a file. Sounds stay on this phone until you delete them.</p>
+    </section>
+
+    <details class="how" open>
+      <summary>Getting sounds onto your computer</summary>
+      <ol>
+        <li><strong>Easiest:</strong> keep your Chopped Beats folder inside Google Drive or OneDrive on your PC. Tap <em>Send</em>, choose Drive or OneDrive, and save into the folder's <em>samples</em> folder. The sound shows up in Chopped Beats by itself within a few seconds.</li>
+        <li><strong>Or:</strong> tap <em>Send</em> and send it to yourself (WhatsApp, email, Nearby Share, AirDrop). On your PC, drop the file onto Chopped Beats.</li>
+      </ol>
+      <p class="hint">Nothing is uploaded to this site. Sounds go only where you send them.</p>
+    </details>
+
+    <p class="full"><a href="/apps/chopped-beats/?desktop=1">Open the full app anyway</a></p>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="/apps/chopped-beats/companion/companion.js"></script>
+</body>
+</html>
