@@ -501,6 +501,7 @@ function renderTimeline() {
           <input class="th-name" value="${esc(t.name)}" title="${esc(t.name)}" aria-label="Track name" spellcheck="false" />
           <button class="th-btn" data-act="mute" aria-pressed="${t.mute}" title="Mute">M</button>
           <button class="th-btn" data-act="solo" aria-pressed="${t.solo}" title="Solo">S</button>
+          <button class="th-btn" data-act="dup" title="Duplicate track: copy it and all its clips underneath" aria-label="Duplicate track">⧉</button>
           <button class="th-btn x" data-act="del" title="Delete track" aria-label="Delete track">×</button>
         </div>
         <input type="range" min="0" max="1.2" step="0.01" value="${t.vol}" data-act="vol" aria-label="Track volume" title="Volume" />
@@ -651,6 +652,17 @@ $('#tracks').addEventListener('click', (e) => {
   if (act === 'mute' || act === 'solo') {
     checkpoint();
     t[act] = !t[act];
+    changed();
+    return;
+  }
+  if (act === 'dup') {
+    checkpoint();
+    const copy = { ...newTrack(`${t.name} copy`, project.tracks.length), vol: t.vol, mute: t.mute, solo: t.solo };
+    project.tracks.splice(project.tracks.indexOf(t) + 1, 0, copy);
+    for (const c of project.clips.filter((x) => x.track === t.id)) {
+      project.clips.push({ ...JSON.parse(JSON.stringify(c)), id: uid(), track: copy.id });
+    }
+    selectedTrack = copy.id;
     changed();
     return;
   }
