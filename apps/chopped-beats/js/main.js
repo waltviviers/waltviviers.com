@@ -498,7 +498,7 @@ function renderTimeline() {
     return `<div class="row ${t.id === selectedTrack ? 'selected' : ''}" data-track="${t.id}" style="--tc:${t.colour}">
       <div class="th">
         <div class="th-top">
-          <input class="th-name" value="${esc(t.name)}" aria-label="Track name" spellcheck="false" />
+          <input class="th-name" value="${esc(t.name)}" title="${esc(t.name)}" aria-label="Track name" spellcheck="false" />
           <button class="th-btn" data-act="mute" aria-pressed="${t.mute}" title="Mute">M</button>
           <button class="th-btn" data-act="solo" aria-pressed="${t.solo}" title="Solo">S</button>
           <button class="th-btn x" data-act="del" title="Delete track" aria-label="Delete track">×</button>
@@ -639,7 +639,7 @@ $('#tracks').addEventListener('input', (e) => {
   if (!row) return;
   const t = track(row.dataset.track);
   if (e.target.dataset.act === 'vol') { beginEdit(); t.vol = +e.target.value; updateTrackGains(); }
-  if (e.target.classList.contains('th-name')) { beginEdit(); t.name = e.target.value; }
+  if (e.target.classList.contains('th-name')) { beginEdit(); t.name = e.target.value; e.target.title = t.name; }
 });
 $('#tracks').addEventListener('change', (e) => { if (e.target.closest('.th')) { endEdit(); } });
 $('#tracks').addEventListener('click', (e) => {
