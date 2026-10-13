@@ -556,7 +556,7 @@
 
 
 
-  <div class="page-wrap">
+  <div class="page-wrap page-wrap--bleed">
     <section class="gh-hero" aria-label="Fine Art & Illustration">
       <div class="gh-hero-img">
         <img src="/images/t-rex-acrylic-canvas-walt-viviers-2020.webp"
@@ -575,10 +575,8 @@
       </div>
     </section>
     <div class="sort-bar" id="sort-bar">
-      <button class="sort-btn" data-sort="az"><span class="sort-emoji">✋ </span>A→Z</button>
-      <button class="sort-btn" data-sort="za"><span class="sort-emoji">🖖 </span>Z→A</button>
-      <button class="sort-btn" data-sort="oldest"><span class="sort-emoji">🥚 </span>Old</button>
-      <button class="sort-btn" data-sort="newest"><span class="sort-emoji">🐣 </span>New</button>
+      <button class="sort-btn" data-axis="alpha" data-dir="az" aria-label="Sort alphabetically"><span class="sort-emoji">✋ </span><span class="sort-label">A→Z</span></button>
+      <button class="sort-btn" data-axis="date" data-dir="newest" aria-label="Sort by year"><span class="sort-emoji">🐣 </span><span class="sort-label">New</span></button>
     </div>
 
     <main id="works-grid" class="works-grid" aria-label="Artworks gallery">
@@ -591,11 +589,13 @@
   </div>
 
   <!-- Testimonial -->
-  <section class="testimonial" aria-label="Testimonial" style="max-width:760px;margin:0 auto;padding:76px 24px 96px;text-align:center;border-top:1px solid var(--rule);">
-    <blockquote style="font-family:var(--serif);font-size:clamp(1.45rem,3.4vw,1.95rem);line-height:1.5;font-style:italic;color:var(--ink);margin:0 0 30px;">&ldquo;Walt is a highly professional and creative person. When he starts a project he will finish it magnificently! Highly recommend him.&rdquo;</blockquote>
-    <div style="font-family:var(--sans);font-size:0.95rem;font-weight:500;letter-spacing:0.04em;color:var(--ink);margin-bottom:8px;">Roslynn O&rsquo;Moore</div>
-    <div style="font-family:var(--sans);font-size:0.78rem;line-height:1.65;letter-spacing:0.03em;color:var(--stone);max-width:560px;margin:0 auto;">Lead Buyer for Pepkor Lifestyle Division of Pepkor &mdash; Hi-Fi Corp, Incredible Connection, Boardmans, Russells, Bradlows, Rochester, OK, House &amp; Home</div>
-  </section>
+  <div class="wv-quote" role="group" aria-label="Testimonial">
+    <span class="wv-quote-mark" aria-hidden="true">&ldquo;</span>
+    <div class="wv-quote-body">
+      <p class="wv-quote-text">Walt is a highly professional and creative person. When he starts a project he will finish it magnificently! Highly recommend him.</p>
+      <p class="wv-quote-cite"><strong>Roslynn O&rsquo;Moore</strong> &mdash; Lead Buyer for Pepkor Lifestyle Division of Pepkor (Hi-Fi Corp, Incredible Connection, Boardmans, Russells, Bradlows, Rochester, OK, House &amp; Home)</p>
+    </div>
+  </div>
 
 
   <script>
@@ -641,16 +641,43 @@
         }).join('');
       }
 
-      function applySort(mode) {
+      /* Two toggle buttons: one flips alphabetical A→Z / Z→A, the other flips
+         chronological New / Old. Clicking the already-active axis reverses its
+         direction; clicking the other axis switches to it in its current
+         direction. */
+      var LABELS = { az: 'A→Z', za: 'Z→A', newest: 'New', oldest: 'Old' };
+      var EMOJI  = { az: '✋ ', za: '🖖 ', newest: '🐣 ', oldest: '🥚 ' };
+      var activeAxis = null;
+
+      function applySort(axis, dir) {
         var sorted = allWorks.slice();
-        if (mode === 'az')     sorted.sort(function (a, b) { return a.title.localeCompare(b.title); });
-        if (mode === 'za')     sorted.sort(function (a, b) { return b.title.localeCompare(a.title); });
-        if (mode === 'oldest') sorted.sort(function (a, b) { return a.year - b.year; });
-        if (mode === 'newest') sorted.sort(function (a, b) { return b.year - a.year; });
+        if (axis === 'alpha') {
+          sorted.sort(function (a, b) {
+            return dir === 'az' ? a.title.localeCompare(b.title) : b.title.localeCompare(a.title);
+          });
+        } else {
+          sorted.sort(function (a, b) {
+            return dir === 'newest' ? b.year - a.year : a.year - b.year;
+          });
+        }
         renderGrid(sorted);
-        document.querySelectorAll('.sort-btn').forEach(function (btn) {
-          btn.classList.toggle('is-active', btn.dataset.sort === mode);
+      }
+
+      function handleSort(btn) {
+        var axis = btn.dataset.axis;
+        if (activeAxis === axis) {
+          btn.dataset.dir = axis === 'alpha'
+            ? (btn.dataset.dir === 'az' ? 'za' : 'az')
+            : (btn.dataset.dir === 'newest' ? 'oldest' : 'newest');
+        }
+        activeAxis = axis;
+        var dir = btn.dataset.dir;
+        btn.querySelector('.sort-label').textContent = LABELS[dir];
+        btn.querySelector('.sort-emoji').textContent = EMOJI[dir];
+        document.querySelectorAll('.sort-btn').forEach(function (b) {
+          b.classList.toggle('is-active', b === btn);
         });
+        applySort(axis, dir);
       }
 
       fetch('/data/artworks.json')
@@ -660,7 +687,7 @@
           renderGrid(allWorks);
 
           document.querySelectorAll('.sort-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () { applySort(btn.dataset.sort); });
+            btn.addEventListener('click', function () { handleSort(btn); });
           });
         })
         .catch(function () {

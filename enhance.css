@@ -323,6 +323,44 @@ html[data-texture="aurora"] body {
 }
 @media (max-width: 900px) {
   .page-wrap { padding-left: 24px !important; padding-right: 24px !important; }
+  /* Full-bleed showcase pages (photography, fine-art gallery): on phones the
+     hero, sort bar and image grid run edge-to-edge; their inner elements keep
+     their own text padding. */
+  .page-wrap--bleed { padding-left: 0 !important; padding-right: 0 !important; }
+}
+
+/* ── Shared testimonial / pull-quote, uniform across every section page ──────
+   One card component so the quote blocks on Photography, Fine Art, Apps and
+   Essays all read the same. Self-contained: caps its own width and keeps a
+   side gutter even when its parent runs full-bleed. */
+.wv-quote {
+  width: min(100% - 48px, 820px);
+  margin: clamp(48px, 7vw, 80px) auto;
+  background: var(--bg2);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: clamp(32px, 5vw, 56px);
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(18px, 3vw, 32px);
+}
+[data-theme="light"] .wv-quote { background: #F5F3EF; }
+.wv-quote-mark {
+  font-family: var(--serif); font-size: 5rem; line-height: 0.7;
+  color: var(--stone); opacity: 0.4; flex-shrink: 0; margin-top: 6px;
+}
+.wv-quote-body { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.wv-quote-text {
+  font-family: var(--serif); font-size: clamp(1.2rem, 2vw, 1.6rem);
+  font-style: italic; font-weight: 400; line-height: 1.5; color: var(--ink);
+}
+.wv-quote-cite { font-size: 14px; line-height: 1.55; color: var(--stone); margin-top: 4px; }
+.wv-quote-cite strong { color: var(--ink); font-weight: 500; }
+.wv-quote-cite a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.wv-quote-cite em { font-style: italic; }
+@media (max-width: 560px) {
+  .wv-quote { flex-direction: column; gap: 10px; }
+  .wv-quote-mark { font-size: 3.5rem; }
 }
 
 /* ── Light mode: social icons wash out on the pale background — darken them ── */
