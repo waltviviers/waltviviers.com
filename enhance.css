@@ -187,15 +187,18 @@ img.wv-parallax {
   opacity: 0;
   transition: opacity 0.5s ease;
   background: radial-gradient(460px circle at var(--wv-mx, 50%) var(--wv-my, 50%),
-              rgba(150, 118, 255, 0.22), rgba(150, 118, 255, 0.10) 40%, transparent 64%);
+              rgba(255, 168, 92, 0.24), rgba(255, 150, 70, 0.11) 40%, transparent 64%);
   mix-blend-mode: screen;
 }
 .wv-spotlight.on { opacity: 1; }
 [data-theme="light"] .wv-spotlight {
   mix-blend-mode: multiply;
   background: radial-gradient(460px circle at var(--wv-mx, 50%) var(--wv-my, 50%),
-              rgba(90, 70, 200, 0.16), rgba(90, 70, 200, 0.07) 40%, transparent 64%);
+              rgba(214, 120, 40, 0.18), rgba(214, 120, 40, 0.08) 40%, transparent 64%);
 }
+/* Over a clickable element the glow throbs slowly instead of the cursor growing. */
+.wv-spotlight.throb { animation: wv-spot-throb 1.7s ease-in-out infinite; }
+@keyframes wv-spot-throb { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
 /* 3D tilt of cards toward the pointer. enhance.js sets --wv-rx / --wv-ry and
    only adds .wv-tilt3d on fine pointers, so this needs no hover/pointer gate
@@ -246,7 +249,12 @@ img.wv-parallax {
 
 html[data-texture]:not([data-texture="none"]) body { background-attachment: fixed; }
 html[data-texture="grain"] body {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.14'/%3E%3C/svg%3E");
+}
+/* Light mode: the same grey noise over a light page reads as dark speckle,
+   but needs more opacity to be visible. */
+html[data-theme="light"][data-texture="grain"] body {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.26'/%3E%3C/svg%3E");
 }
 html[data-texture="dots"] body {
   background-image: radial-gradient(circle, var(--tex-ink) 1px, transparent 1.4px);
@@ -265,8 +273,9 @@ html[data-texture="crosshatch"] body {
                     repeating-linear-gradient(-45deg, var(--tex-ink-soft) 0 1px, transparent 1px 10px);
 }
 html[data-texture="aurora"] body {
-  background-image: radial-gradient(1200px 520px at 18% -5%, rgba(128,96,255,0.17), transparent 60%),
-                    radial-gradient(1000px 520px at 102% 105%, rgba(255,92,170,0.14), transparent 60%);
+  background-image: radial-gradient(1500px 720px at 15% -8%, rgba(128,96,255,0.30), transparent 62%),
+                    radial-gradient(1300px 720px at 105% 108%, rgba(255,92,170,0.24), transparent 62%);
+  background-attachment: fixed;
 }
 
 /* ── Texture picker (nav) ───────────────────────────────────────────────── */
@@ -304,20 +313,6 @@ html[data-texture="aurora"] body {
 .wv-tex-opt[aria-checked="true"] .wv-tex-dot { background: var(--ink); border-color: var(--ink); }
 @media (max-width: 900px) { nav .wv-tex { display: none; } }
 
-/* ── 15%-larger cursor over clickable elements ──────────────────────────────
-   Beats the base `body * { cursor … !important }` via the `body` prefix. */
-body a, body a *, body button, body button *,
-body [role="button"], body [role="button"] *,
-body label, body select, body summary,
-body input[type="submit"], body input[type="button"],
-body input[type="checkbox"], body input[type="radio"] {
-  cursor: url('/images/pointer_up_lg.png') 3 1, pointer !important;
-}
-body a:active, body a:active *, body button:active, body button:active *,
-body [role="button"]:active, body input[type="submit"]:active, body input[type="button"]:active {
-  cursor: url('/images/pointer_down_lg.png') 3 1, pointer !important;
-}
-
 /* ── Consistent interior-page content column (match the home page) ──────────
    Interior pages use .page-wrap with assorted max-widths; standardise the
    left/right inset to the same centred 1500px column used site-wide. */
@@ -329,3 +324,7 @@ body [role="button"]:active, body input[type="submit"]:active, body input[type="
 @media (max-width: 900px) {
   .page-wrap { padding-left: 24px !important; padding-right: 24px !important; }
 }
+
+/* ── Light mode: social icons wash out on the pale background — darken them ── */
+[data-theme="light"] .social-icons a { color: #5A544E !important; }
+[data-theme="light"] .social-icons a:hover { color: #0C0C0B !important; }
