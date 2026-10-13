@@ -241,12 +241,12 @@ img.wv-parallax {
 /* ── Background texture (user-selectable via the nav picker) ─────────────────
    A faint full-page texture layered on the body background. Driven by
    html[data-texture="…"]; colours flip for light mode. */
-:root { --tex-ink: rgba(255,255,255,0.05); --tex-ink-soft: rgba(255,255,255,0.032); }
-:root[data-theme="light"] { --tex-ink: rgba(0,0,0,0.055); --tex-ink-soft: rgba(0,0,0,0.04); }
+:root { --tex-ink: rgba(255,255,255,0.09); --tex-ink-soft: rgba(255,255,255,0.06); }
+:root[data-theme="light"] { --tex-ink: rgba(0,0,0,0.09); --tex-ink-soft: rgba(0,0,0,0.06); }
 
 html[data-texture]:not([data-texture="none"]) body { background-attachment: fixed; }
 html[data-texture="grain"] body {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
 }
 html[data-texture="dots"] body {
   background-image: radial-gradient(circle, var(--tex-ink) 1px, transparent 1.4px);
@@ -265,8 +265,8 @@ html[data-texture="crosshatch"] body {
                     repeating-linear-gradient(-45deg, var(--tex-ink-soft) 0 1px, transparent 1px 10px);
 }
 html[data-texture="aurora"] body {
-  background-image: radial-gradient(1200px 520px at 18% -5%, rgba(128,96,255,0.10), transparent 60%),
-                    radial-gradient(1000px 520px at 102% 105%, rgba(255,92,170,0.08), transparent 60%);
+  background-image: radial-gradient(1200px 520px at 18% -5%, rgba(128,96,255,0.17), transparent 60%),
+                    radial-gradient(1000px 520px at 102% 105%, rgba(255,92,170,0.14), transparent 60%);
 }
 
 /* ── Texture picker (nav) ───────────────────────────────────────────────── */
@@ -303,3 +303,29 @@ html[data-texture="aurora"] body {
 .wv-tex-opt .wv-tex-dot { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--stone); flex: 0 0 auto; }
 .wv-tex-opt[aria-checked="true"] .wv-tex-dot { background: var(--ink); border-color: var(--ink); }
 @media (max-width: 900px) { nav .wv-tex { display: none; } }
+
+/* ── 15%-larger cursor over clickable elements ──────────────────────────────
+   Beats the base `body * { cursor … !important }` via the `body` prefix. */
+body a, body a *, body button, body button *,
+body [role="button"], body [role="button"] *,
+body label, body select, body summary,
+body input[type="submit"], body input[type="button"],
+body input[type="checkbox"], body input[type="radio"] {
+  cursor: url('/images/pointer_up_lg.png') 3 1, pointer !important;
+}
+body a:active, body a:active *, body button:active, body button:active *,
+body [role="button"]:active, body input[type="submit"]:active, body input[type="button"]:active {
+  cursor: url('/images/pointer_down_lg.png') 3 1, pointer !important;
+}
+
+/* ── Consistent interior-page content column (match the home page) ──────────
+   Interior pages use .page-wrap with assorted max-widths; standardise the
+   left/right inset to the same centred 1500px column used site-wide. */
+.page-wrap {
+  max-width: none !important;
+  padding-left: max(48px, (100% - 1500px) / 2) !important;
+  padding-right: max(48px, (100% - 1500px) / 2) !important;
+}
+@media (max-width: 900px) {
+  .page-wrap { padding-left: 24px !important; padding-right: 24px !important; }
+}
