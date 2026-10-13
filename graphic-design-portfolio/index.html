@@ -569,9 +569,7 @@
     .uc { min-height: calc(100vh - 100px); display: flex; align-items: center; justify-content: center; padding: clamp(96px, 14vh, 160px) 24px 80px; text-align: center; }
     .uc-inner { max-width: 720px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: clamp(20px, 3vw, 30px); }
     .uc-video { width: min(560px, 86vw); height: auto; border-radius: 14px; box-shadow: 0 30px 70px -28px rgba(0,0,0,0.6); background: var(--bg2, #0D0D0D); display: block; }
-    /* Dark mode: flip the clip's white background to black (inverts lightness;
-       hue-rotate keeps colours roughly true). Light mode shows it untouched. */
-    [data-theme="dark"] .uc-video { background: #000; filter: invert(1) hue-rotate(180deg); }
+    [data-theme="dark"] .uc-video { background: #000; }
     .uc-eyebrow { font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--stone); }
     .uc-title { font-family: var(--serif); font-weight: 400; font-size: clamp(1.5rem, 4.2vw, 2.6rem); line-height: 1.18; letter-spacing: -0.01em; color: var(--ink); max-width: 20ch; }
     .uc-note { font-family: var(--serif); font-style: italic; font-size: clamp(1.05rem, 2.2vw, 1.35rem); color: var(--stone); }
