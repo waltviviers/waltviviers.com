@@ -7,7 +7,9 @@
 // Public client sites skip the gate and live on their own subdomain:
 //   manifesto.waltviviers.com/* serves /clients/manifesto-wellness/*, and the
 //   old waltviviers.com/clients/manifesto-wellness/ address redirects there.
-//   menzies.waltviviers.com/* serves /clients/menzies-media/* the same way.
+//   Menzies Media is hidden for now (see EXTERNAL_SITES): its subdomain sends visitors to
+//   the password-gated /clients/menzies-media/. To make it public again, move
+//   'menzies.waltviviers.com': 'menzies-media' back into PUBLIC_SITES.
 //
 // App subdomains map only their entry pages; the apps load their own assets
 // by absolute /apps/... paths, which every host serves as-is. This lives here
@@ -18,7 +20,6 @@ export const config = { matcher: ['/:path*'] };
 
 const PUBLIC_SITES = {
   'manifesto.waltviviers.com': 'manifesto-wellness',
-  'menzies.waltviviers.com': 'menzies-media',
 };
 const MAIN_HOSTS = ['waltviviers.com', 'www.waltviviers.com'];
 const APP_SITES = {
@@ -36,7 +37,10 @@ const APP_SITES = {
   },
 };
 // Subdomains for things hosted elsewhere: send the whole host there, keeping the path.
-const EXTERNAL_SITES = {};
+const EXTERNAL_SITES = {
+  // Hidden until recalled: back behind CLIENT_PASSWORD_MENZIES_MEDIA.
+  'menzies.waltviviers.com': 'https://waltviviers.com/clients/menzies-media',
+};
 
 const ADMIN_GATE = {
   prefix: '/admin-index',

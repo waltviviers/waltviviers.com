@@ -72,6 +72,16 @@ html.wv-anim [data-wv-reveal].wv-in {
   }
 }
 
+/* Matching hover lift for buttons/CTAs — shadow + glow only (no transform),
+   so it composes with the magnetic transform on primary buttons. */
+.wv-btnlift { transition: box-shadow 0.28s ease, filter 0.28s ease; }
+@media (hover: hover) and (pointer: fine) {
+  .wv-btnlift:hover {
+    box-shadow: 0 12px 28px -12px rgba(0, 0, 0, 0.6);
+    filter: brightness(1.05);
+  }
+}
+
 /* ── Hero parallax / drift ─────────────────────────────────────────────────
    enhance.js sets --wv-par (px) on hero image wrappers; the image translates
    by it on scroll. Scale keeps edges covered as it drifts. */
@@ -119,15 +129,20 @@ img.wv-parallax {
   left: -8%;
   top: -12%;
   background: radial-gradient(circle at 50% 50%, rgba(128, 96, 255, 0.72), transparent 66%);
-  animation: wv-drift-a 20s ease-in-out infinite;
+  animation: wv-drift-a 20s ease-in-out infinite, wv-hue 32s linear infinite;
 }
 .wv-glow.b {
   right: -6%;
   bottom: -14%;
   background: radial-gradient(circle at 50% 50%, rgba(255, 92, 170, 0.62), transparent 66%);
-  animation: wv-drift-b 26s ease-in-out infinite;
+  animation: wv-drift-b 26s ease-in-out infinite, wv-hue 32s linear infinite;
 }
 [data-theme="light"] .wv-glow { opacity: 0.4; mix-blend-mode: multiply; }
+/* Slowly rotate the glow colour through the full spectrum (blur kept intact). */
+@keyframes wv-hue {
+  from { filter: blur(66px) hue-rotate(0deg); }
+  to   { filter: blur(66px) hue-rotate(360deg); }
+}
 @keyframes wv-drift-a {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
   50%      { transform: translate3d(14%, 14%, 0) scale(1.25); }

@@ -1365,6 +1365,7 @@ function enterGame() {
   startMenuEl.hidden = true;
   deviceWrapEl.hidden = false;
   applyWallpaper(loadWallpaper());
+  applyLocationBackground(null);
   AudioEngine.resume();
   AudioEngine.startAmbient();
   AudioEngine.startMusic();
@@ -1666,6 +1667,20 @@ var LOCATION_MAP_POS = {
   alley:     { x: 60,  y: 155 },
   underpass: { x: 208, y: 165 }
 };
+/* One background photo per location, same framing as the default phone-bg
+   portrait (POV hand + cyberarm holding the phone). No art yet for plaza —
+   falls back to the default portrait until one lands. */
+var LOCATION_BACKGROUNDS = {
+  rooftop:   '/apps/static-protocol/location-rooftop.jpg',
+  alley:     '/apps/static-protocol/location-alley.jpg',
+  underpass: '/apps/static-protocol/location-underpass.jpg'
+};
+function applyLocationBackground(id) {
+  var bg = document.querySelector('.phone-bg');
+  if (!bg) return;
+  var url = (id && LOCATION_BACKGROUNDS[id]) || '/apps/static-protocol/phone-bg-portrait.jpg';
+  bg.style.backgroundImage = "url('" + url + "')";
+}
 function locationMapSvg() {
   var nodesHtml = LOCATIONS.map(function (loc) {
     var p = LOCATION_MAP_POS[loc.id];
@@ -1718,6 +1733,7 @@ function renderLocationApp() {
     if (id === state.location) return;
     state.location = id;
     state.locationStale = 0;
+    applyLocationBackground(id);
     AudioEngine.sfx('tap');
     renderLocationApp();
   }

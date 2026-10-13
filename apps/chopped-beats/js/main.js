@@ -3,6 +3,7 @@ import { buildKit } from './drums.js';
 import { detectHits, detectWords, guessBpm } from './analysis.js';
 import * as S from './storage.js';
 import { initPlayer } from './player.js';
+import { initCompact } from './compact.js';
 import { runTour } from './tour.js';
 
 const { ctx, SR } = A;
@@ -47,7 +48,7 @@ function blankProject() {
     metronome: false,
     loop: null,
     loopOn: false,
-    tracks: [newTrack('Voice', 0), newTrack('Clips', 1), newTrack('Beat', 2)],
+    tracks: [newTrack('Voice', 0), newTrack('Clips', 1)],
     clips: [],
     pads,
     pattern: {},
@@ -118,6 +119,7 @@ function modal(title, html, onReady) {
   if (onReady) onReady($('#modalBody'));
 }
 function closeModal() {
+  stopFindPreview();
   $('#modal').hidden = true;
   if (tourPending) { tourPending = false; setTimeout(startTour, 250); }
 }
@@ -226,11 +228,14 @@ async function migrateMemSamples() {
   }
   for (const c of project.clips) if (remap[c.sample]) c.sample = remap[c.sample];
   for (const p of project.pads) if (p && remap[p.sample]) p.sample = remap[p.sample];
+  for (const [from, to] of Object.entries(remap)) if (credits[from]) { credits[to] = credits[from]; delete credits[from]; }
+  await saveCredits();
 }
 
 // Returns the sounds that weren't in the library before this scan.
 async function scanFolder() {
   if (!S.connected()) return [];
+  await loadCredits();
   const names = await S.list('samples');
   const added = [];
   for (const n of names) {
@@ -278,7 +283,7 @@ function libItem(s) {
   return `<li draggable="true" data-id="${esc(s.id)}" title="Drag onto a track or pad">
     <button data-act="play" title="Preview" aria-label="Preview">▶</button>
     <span class="nm">${esc(s.name)}</span><span class="dur">${dur}</span>
-    <button data-act="add" title="Add at the playhead on the selected track" aria-label="Add to timeline">+</button>
+    <button data-act="add" title="${s.kind === 'kit' ? 'Add at the playhead on its own drum track' : 'Add at the playhead on the selected track'}" aria-label="Add to timeline">+</button>
     <button data-act="pad" title="Put on the first empty pad" aria-label="Put on a pad">▦</button>
   </li>`;
 }
@@ -299,7 +304,12 @@ function onLibClick(e) {
   const id = li.dataset.id;
   const act = e.target.dataset.act;
   if (act === 'play') preview(id);
-  else if (act === 'add') addClip(id, selectedTrack || project.tracks[0].id, transport.pos());
+  else if (act === 'add') {
+    // Drum sounds get their own track (the same ones the beat maker uses); your sounds go to the selected track.
+    const s = samples.get(id);
+    const tr = s.kind === 'kit' ? findOrAddTrack(s.name).id : selectedTrack || project.tracks[0].id;
+    addClip(id, tr, transport.pos());
+  }
   else if (act === 'pad') {
     const i = project.pads.findIndex((p) => !p);
     if (i < 0) { toast('No empty pads. Drag the sound onto a pad to replace it.'); return; }
@@ -394,11 +404,21 @@ function deleteClip(id) {
   changed();
 }
 
+// The first start at or after t where a clip of length len fits on the track without covering another.
+function freeSpot(trackId, t, len) {
+  const others = project.clips.filter((x) => x.track === trackId);
+  for (;;) {
+    const hit = others.find((x) => x.start < t + len - 1e-6 && x.start + fullLen(x) > t + 1e-6);
+    if (!hit) return t;
+    t = hit.start + fullLen(hit);
+  }
+}
+
 function duplicateClip(c) {
   checkpoint();
   const b = JSON.parse(JSON.stringify(c));
   b.id = uid();
-  b.start = c.start + fullLen(c);
+  b.start = freeSpot(c.track, c.start + fullLen(c), fullLen(c));
   project.clips.push(b);
   selectedClip = b.id;
   changed();
@@ -472,7 +492,7 @@ function renderTimeline() {
       for (let i = 1; i < c.loops; i++) marks.push(`<span class="loop-mark" style="left:${(i / c.loops) * 100}%"></span>`);
       return `<div class="${cls}" data-id="${c.id}" style="left:${c.start * pps}px;width:${fullLen(c) * pps}px">
         <span class="clip-name">${esc(c.name)}${c.fx.reverse ? ' ⇠' : ''}</span><canvas></canvas>${marks.join('')}
-        <button class="clip-dup" title="Duplicate: put a copy right after this clip (Ctrl+D)" aria-label="Duplicate clip">⧉</button>
+        <button class="clip-dup" title="Duplicate: put a copy in the next free space after this clip (Ctrl+D)" aria-label="Duplicate clip">⧉</button>
         <div class="h h-l"></div><div class="h h-r"></div></div>`;
     }).join('');
     return `<div class="row ${t.id === selectedTrack ? 'selected' : ''}" data-track="${t.id}" style="--tc:${t.colour}">
@@ -491,8 +511,7 @@ function renderTimeline() {
   }).join('');
   $('#tracks').innerHTML = rows +
     (project.clips.length ? '' : `<div class="empty-tl"><h3>Make something.</h3>
-      <p>Drop a TikTok video or any audio file here, or press <strong>●</strong> to record your voice.</p>
-      <p>Then chop it up, drag the pieces around, and add some drums from the pads.</p></div>`);
+      <p>Drop a TikTok video or any audio file here, or press <strong>●</strong> to record your voice.</p></div>`);
 
   for (const el of $('#tracks').querySelectorAll('.clip')) {
     const c = clipById(el.dataset.id);
@@ -570,6 +589,13 @@ function drawRuler() {
 
 function placePlayhead() {
   $('#playhead').style.left = headW() + transport.pos() * pps + 'px';
+}
+// Scroll the timeline so the playhead is on screen (after a jump, or while playing).
+function keepHeadInView() {
+  if (drag) return;
+  const x = transport.pos() * pps;
+  const view = tl.clientWidth - headW();
+  if (x < tl.scrollLeft || x > tl.scrollLeft + view - 40) tl.scrollLeft = Math.max(0, x - 40);
 }
 function placeLoop() {
   const band = $('#loopBand');
@@ -892,22 +918,16 @@ function renderInspector() {
 
   el.innerHTML = `<h2>${esc(c.name)}</h2>
     <p class="meta">${fmtBars(c.start)} · ${bodyLen(c).toFixed(2)}s${c.loops > 1 ? ' × ' + c.loops : ''}${s && s.missing ? ' · sound file missing' : ''}</p>
-    <section><h3>Voice presets</h3><div class="presets">
-      ${Object.keys(PRESETS).map((p) => `<button class="btn small" data-preset="${esc(p)}">${esc(p)}</button>`).join('')}
-      <button class="btn small" data-preset="">Clean</button></div></section>
-    ${sliders}
-    <section><h3>Chop & repeat</h3>
+    <section><h3>Clip</h3><div class="actions">
+      <button class="btn small" id="actSplit" title="Cut at the playhead (S)">Cut at playhead</button>
+      <button class="btn small" id="actDup" title="Duplicate (Ctrl+D)">Duplicate</button>
+      <button class="btn small" id="actPad">Send to pad</button>
+      <button class="btn small" id="actPreview">Preview</button>
+      <button class="btn small danger" id="actDel" title="Delete">Delete</button>
+    </div>
       <div class="inline">
         <label class="check"><input type="checkbox" id="fxReverse" ${fx.reverse ? 'checked' : ''}/> Reverse</label>
         <label class="lbl">Loops <input type="number" id="fxLoops" min="1" max="64" value="${c.loops}" /></label>
-      </div>
-      <div class="fx-row"><label for="fx-stutter">Stutter</label><output id="out-stutter">${fx.stutter ? fx.stutter + '×' : 'Off'}</output>
-        <input id="fx-stutter" data-k="stutter" type="range" min="0" max="8" step="1" value="${fx.stutter}" /></div>
-      <div class="inline"><label class="lbl">Stutter length
-        <select id="fxStutDiv">${STUTTER_DIVS.map(([v, l]) => `<option value="${v}" ${fx.stutterDiv === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label></div>
-      <div class="actions">
-        <button class="btn small" id="actFit" title="Stretch so it lasts a whole number of bars (keeps pitch)">Fit to bars</button>
-        <button class="btn small" id="actBpm" title="Guess the tempo of this clip and set the project BPM">Detect BPM</button>
       </div>
     </section>
     <section><h3>Auto-chop</h3>
@@ -921,13 +941,20 @@ function renderInspector() {
       </div>
       <p class="hint">Words cuts at the pauses. Beats cuts at each hit. Slide right for more pieces.</p>
     </section>
-    <section><h3>Clip</h3><div class="actions">
-      <button class="btn small" id="actSplit" title="Cut at the playhead (S)">Cut at playhead</button>
-      <button class="btn small" id="actDup" title="Duplicate (Ctrl+D)">Duplicate</button>
-      <button class="btn small" id="actPad">Send to pad</button>
-      <button class="btn small" id="actPreview">Preview</button>
-      <button class="btn small danger" id="actDel" title="Delete">Delete</button>
-    </div></section>`;
+    <section><h3>Voice presets</h3><div class="presets">
+      ${Object.keys(PRESETS).map((p) => `<button class="btn small" data-preset="${esc(p)}">${esc(p)}</button>`).join('')}
+      <button class="btn small" data-preset="">Clean</button></div></section>
+    ${sliders}
+    <section><h3>Stutter & tempo</h3>
+      <div class="fx-row"><label for="fx-stutter">Stutter</label><output id="out-stutter">${fx.stutter ? fx.stutter + '×' : 'Off'}</output>
+        <input id="fx-stutter" data-k="stutter" type="range" min="0" max="8" step="1" value="${fx.stutter}" /></div>
+      <div class="inline"><label class="lbl">Stutter length
+        <select id="fxStutDiv">${STUTTER_DIVS.map(([v, l]) => `<option value="${v}" ${fx.stutterDiv === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label></div>
+      <div class="actions">
+        <button class="btn small" id="actFit" title="Stretch so it lasts a whole number of bars (keeps pitch)">Fit to bars</button>
+        <button class="btn small" id="actBpm" title="Guess the tempo of this clip and set the project BPM">Detect BPM</button>
+      </div>
+    </section>`;
   $('#chopMode').value = pref.get('chopMode', 'words');
 }
 
@@ -1103,6 +1130,7 @@ const transport = {
     if (was) this.play();
     placePlayhead();
     updateClock();
+    keepHeadInView();
   },
 
   async play() {
@@ -1190,7 +1218,7 @@ const transport = {
       }
     } else if (!recorder.active && this.pos() >= r.b) {
       this.stop();
-      this.head = 0;
+      this.seek(0);
     }
   },
 };
@@ -1206,9 +1234,7 @@ function frame() {
     const t = transport.pos();
     placePlayhead();
     updateClock();
-    const x = t * pps;
-    const view = tl.clientWidth - headW();
-    if (!drag && (x < tl.scrollLeft || x > tl.scrollLeft + view - 40)) tl.scrollLeft = x - 40;
+    keepHeadInView();
   }
   flair(drawViz());
   seq.tick();
@@ -1586,6 +1612,7 @@ $('#btnSeqStamp').addEventListener('click', async () => {
   toast(`Added ${n} hits over ${project.bars} bar${project.bars > 1 ? 's' : ''} from bar ${Math.round(start / bar()) + 1}.`);
 });
 
+let player = null;
 function togglePads(force) {
   const open = force ?? $('#pads').hidden;
   $('#pads').hidden = !open;
@@ -1593,6 +1620,7 @@ function togglePads(force) {
   pref.set('padsOpen', open);
   if (!open && seq.playing) seq.stop();
   drawRuler();
+  if (player) player.settle();
 }
 $('#btnPads').addEventListener('click', () => togglePads());
 
@@ -1774,7 +1802,7 @@ async function connectFolder(reconnect) {
 }
 function updateFolderBtn() {
   const b = $('#btnFolder');
-  b.textContent = S.connected() ? `Folder: ${S.folderName()}` : 'Choose folder';
+  (b.querySelector('.tx') || b).textContent = S.connected() ? `Folder: ${S.folderName()}` : 'Choose folder';
   b.title = S.connected() ? 'Sounds, projects and exports save here. Click to change.' : 'Pick a folder on your PC to keep everything in';
 }
 $('#btnFolder').addEventListener('click', () => {
@@ -1846,20 +1874,140 @@ async function exportMix(fmt, range, norm) {
   if (norm) out = A.normalise(out, -1);
   const blob = fmt === 'mp3' ? await A.encodeMp3(out, 192) : A.encodeWav(out);
   const name = `${S.safeName(project.name)}.${fmt}`;
-  if (S.connected()) {
-    const saved = await S.writeUnique('exports', name, blob);
-    toast(`Exported to exports/${saved}`);
-    sparks($('#btnExport'));
-  } else {
+  // Freesound sounds that need a credit get a text file next to the export, ready for the caption.
+  const used = new Set(project.clips.filter((c) => c.start < b && c.start + fullLen(c) > a).map((c) => c.sample));
+  const lines = [...used].map((id) => credits[id]).filter((c) => c && c.credit)
+    .map((c) => `"${c.name}" by ${c.user} (${c.licence}) freesound.org/s/${c.id}`);
+  const creditText = lines.length ? `Sounds from Freesound:\n${lines.join('\n')}\n` : '';
+  const download = (blob2, name2) => {
     const a2 = document.createElement('a');
-    a2.href = URL.createObjectURL(blob);
-    a2.download = name;
+    a2.href = URL.createObjectURL(blob2);
+    a2.download = name2;
     a2.click();
     setTimeout(() => URL.revokeObjectURL(a2.href), 10000);
-    toast(`Downloaded ${name}`);
+  };
+  if (S.connected()) {
+    const saved = await S.writeUnique('exports', name, blob);
+    if (creditText) await S.writeUnique('exports', saved.replace(/\.[^.]+$/, '') + ' credits.txt', new Blob([creditText], { type: 'text/plain' }));
+    toast(creditText ? `Exported to exports/${saved}, with a credits file for your caption` : `Exported to exports/${saved}`);
+    sparks($('#btnExport'));
+  } else {
+    download(blob, name);
+    if (creditText) download(new Blob([creditText], { type: 'text/plain' }), `${S.safeName(project.name)} credits.txt`);
+    toast(creditText ? `Downloaded ${name}, with a credits file for your caption` : `Downloaded ${name}`);
     sparks($('#btnExport'));
   }
 }
+
+// ── Freesound: search free sounds and save them into the library ──
+// Searches go through /api/freesound so the API key stays on the server.
+// Sounds that need a credit are remembered (samples/.freesound-credits.json)
+// and listed in a credits file whenever they end up in an export.
+
+let credits = {}; // sample id -> { id, name, user, licence, credit }
+const CREDITS_FILE = '.freesound-credits.json';
+async function loadCredits() {
+  try { credits = JSON.parse(await (await S.read('samples', CREDITS_FILE)).text()) || {}; } catch { /* none yet */ }
+}
+async function saveCredits() {
+  if (!S.connected() || !Object.keys(credits).length) return;
+  try { await S.write('samples', CREDITS_FILE, new Blob([JSON.stringify(credits, null, 1)], { type: 'application/json' })); } catch { /* try again next time */ }
+}
+
+let findAudio = null;
+function stopFindPreview() {
+  if (findAudio) { findAudio.pause(); findAudio = null; }
+  for (const b of document.querySelectorAll('.fs-play.on')) { b.classList.remove('on'); b.textContent = '▶'; }
+}
+
+$('#btnFind').addEventListener('click', () => {
+  const last = pref.get('fsQuery', '');
+  modal('Find sounds', `
+    <form class="fs-search" id="fsForm">
+      <input id="fsQ" type="search" placeholder="Try: vinyl scratch, crowd laugh, bass drop" value="${esc(last)}" aria-label="Search Freesound" />
+      <button class="btn primary" type="submit">Search</button>
+    </form>
+    <label class="check fs-credit"><input type="checkbox" id="fsCredit" ${pref.get('fsCredit', false) ? 'checked' : ''}/> Also show sounds that need a credit</label>
+    <ul id="fsList" class="fs-list"></ul>
+    <p class="hint">From Freesound.org. Free to use in your videos. For sounds marked <strong>Credit</strong>, Chopped Beats writes the credit line for you when you export.</p>
+    <div class="row-btns"><button class="btn" id="fsMore" hidden>More</button><span class="spacer"></span><button class="btn" id="fsClose">Done</button></div>`,
+  (body) => {
+    let page = 1;
+    let results = [];
+    const list = $('#fsList', body);
+    const draw = () => {
+      list.innerHTML = results.length ? results.map((r, i) => `
+        <li data-i="${i}">
+          <button class="btn icon fs-play" title="Listen" aria-label="Listen to ${esc(r.name)}">▶</button>
+          <span class="nm" title="${esc(r.name)} by ${esc(r.user)}">${esc(r.name.replace(/\.[a-z0-9]{2,4}$/i, ''))}<small>${esc(r.user)}</small></span>
+          <span class="dur">${r.duration.toFixed(1)}s</span>
+          <span class="fs-lic ${r.credit ? 'credit' : ''}" title="${r.credit ? 'Free to use with a credit' : 'Free to use, no credit needed'} (${esc(r.licence)})">${r.credit ? 'Credit' : 'Free'}</span>
+          <button class="btn small fs-add" ${r.added ? 'disabled' : ''}>${r.added ? 'Added' : '+ Add'}</button>
+        </li>`).join('') : '';
+    };
+    const search = async (more) => {
+      const q = $('#fsQ', body).value.trim();
+      if (!q) return;
+      pref.set('fsQuery', q);
+      page = more ? page + 1 : 1;
+      if (!more) { stopFindPreview(); results = []; list.innerHTML = '<li class="empty">Searching…</li>'; }
+      $('#fsMore', body).hidden = true;
+      try {
+        const r = await fetch(`/api/freesound?${new URLSearchParams({ q, page, credit: $('#fsCredit', body).checked ? 1 : 0 })}`);
+        const data = await r.json().catch(() => ({}));
+        if (data.error === 'not-set-up') throw new Error('Freesound isn\'t switched on yet. It needs a FREESOUND_API_KEY in Vercel.');
+        if (!r.ok) throw new Error('Freesound didn\'t answer. Try again in a moment.');
+        results = results.concat(data.results);
+        draw();
+        if (!results.length) list.innerHTML = '<li class="empty">Nothing found. Try other words, or tick "Also show sounds that need a credit".</li>';
+        $('#fsMore', body).hidden = !data.more;
+      } catch (e) {
+        list.innerHTML = `<li class="empty">${esc(navigator.onLine ? e.message : 'You\'re offline. Searching needs the internet; your saved sounds still work.')}</li>`;
+      }
+    };
+    $('#fsForm', body).addEventListener('submit', (e) => { e.preventDefault(); search(false); });
+    $('#fsCredit', body).addEventListener('change', (e) => { pref.set('fsCredit', e.target.checked); search(false); });
+    $('#fsMore', body).addEventListener('click', () => search(true));
+    $('#fsClose', body).addEventListener('click', () => { stopFindPreview(); closeModal(); });
+    list.addEventListener('click', async (e) => {
+      const li = e.target.closest('li[data-i]');
+      if (!li) return;
+      const r = results[+li.dataset.i];
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      if (btn.classList.contains('fs-play')) {
+        const was = btn.classList.contains('on');
+        stopFindPreview();
+        if (was) return;
+        findAudio = new Audio(`/api/freesound?id=${r.id}`);
+        findAudio.addEventListener('ended', stopFindPreview);
+        findAudio.play().catch(() => toast('Couldn\'t play that one.', true));
+        btn.classList.add('on');
+        btn.textContent = '■';
+      } else if (btn.classList.contains('fs-add')) {
+        btn.disabled = true;
+        btn.textContent = 'Adding…';
+        try {
+          const res = await fetch(`/api/freesound?id=${r.id}`);
+          if (!res.ok) throw new Error();
+          const file = new File([await res.blob()], S.safeName(r.name.replace(/\.[a-z0-9]{2,4}$/i, '')) + '.mp3', { type: 'audio/mpeg' });
+          const [id] = await importFiles([file]);
+          if (!id) throw new Error();
+          credits[id] = { id: r.id, name: r.name, user: r.user, licence: r.licence, credit: r.credit };
+          await saveCredits();
+          r.added = true;
+          btn.textContent = 'Added';
+          toast(`Added ${prettyName(id)} to your sounds`);
+        } catch {
+          btn.disabled = false;
+          btn.textContent = '+ Add';
+          toast('Couldn\'t get that sound. Try again.', true);
+        }
+      }
+    });
+    if (last) search(false); else $('#fsQ', body).focus();
+  });
+});
 
 // ── Theme & help ──
 
@@ -1951,7 +2099,7 @@ let tourPending = false;
 const TOUR = [
   { title: 'Welcome to Chopped Beats', text: 'A quick tour of the basics. It takes under a minute. Use Next, or the arrow keys.' },
   { target: '#btnFolder', title: 'Your folder', text: 'Pick a folder on your PC once. Your sounds, projects and exports save there automatically. Nothing is uploaded.' },
-  { target: '.library', title: 'Sounds', text: 'Import audio or TikTok videos here, or drop files anywhere on the page. Videos keep only the sound. Drag any sound onto a track.' },
+  { target: '.library', title: 'Sounds', text: 'Import audio or TikTok videos here, or drop files anywhere on the page. Videos keep only the sound. Find searches free sounds on Freesound. Drag any sound onto a track.' },
   { target: '#player', title: 'The player', text: 'Play, go back to the start, and record your voice with ●. Recording goes onto the highlighted track. Drag the ⠿ grip to move this anywhere; double-click it to put it back.' },
   { target: '.timeline-wrap', title: 'The timeline', text: 'Drag clips to move them, between tracks too. Pull a clip\'s edges to trim. Shift-click a clip to cut it. Alt-drag copies. Drag on the ruler to mark a loop.' },
   { target: '#inspector', title: 'Make it weird', text: 'Click a clip and its effects show here: presets like Deep, Robot or Slowed + reverb, plus pitch, speed, warp, echo and more. Auto-chop cuts a clip into words or beats.' },
@@ -1986,7 +2134,8 @@ async function init() {
   renderLibrary();
   changed();
   togglePads(pref.get('padsOpen', false));
-  initPlayer($('#player'), $('#playerGrip'));
+  initCompact($('#btnCompact'), pref);
+  player = initPlayer($('#player'), $('#playerGrip'), () => ($('#pads').hidden ? null : $('#pads')));
   requestAnimationFrame(frame);
   tourPending = !pref.get('toured', false);
 
