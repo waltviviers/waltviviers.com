@@ -180,40 +180,28 @@ img.wv-parallax {
 }
 
 /* ── Pointer interaction (desktop / fine pointer only) ─────────────────────
-   A black 1930s rubber-hose arm reaches in from the bottom-left corner; its
-   white-gloved hand follows the pointer. enhance.js draws the bezier + hand;
-   the arm sits above page content but below the nav and floating buttons. */
-.wv-arm {
+   A soft light that follows the cursor across the whole page. enhance.js sets
+   --wv-mx / --wv-my (px) and toggles .on while the pointer is on the page. */
+.wv-spotlight {
   position: fixed;
   inset: 0;
-  width: 100%; height: 100%;
-  z-index: 95;
+  z-index: 1;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.4s ease;
-  overflow: visible;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(460px circle at var(--wv-mx, 50%) var(--wv-my, 50%),
+              rgba(255, 168, 92, 0.24), rgba(255, 150, 70, 0.11) 40%, transparent 64%);
+  mix-blend-mode: screen;
 }
-.wv-arm.on { opacity: 1; }
-.wv-arm-limb {
-  fill: none;
-  stroke: #0C0C0B;
-  stroke-width: 23;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.wv-spotlight.on { opacity: 1; }
+[data-theme="light"] .wv-spotlight {
+  mix-blend-mode: multiply;
+  background: radial-gradient(460px circle at var(--wv-mx, 50%) var(--wv-my, 50%),
+              rgba(214, 120, 40, 0.18), rgba(214, 120, 40, 0.08) 40%, transparent 64%);
 }
-/* Warm rim so the black limb stays legible on the near-black dark theme
-   (and carries a little of the old warm-glow feel). */
-.wv-arm-rim {
-  fill: none;
-  stroke: rgba(255, 168, 92, 0.55);
-  stroke-width: 29;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-[data-theme="light"] .wv-arm-rim { stroke: rgba(176, 94, 28, 0.34); stroke-width: 28; }
-.wv-arm-glove  { fill: #FAF9F7; stroke: #0C0C0B; stroke-width: 3; }
-.wv-arm-cuff   { fill: #0C0C0B; }
-.wv-arm-stitch { fill: none; stroke: #0C0C0B; stroke-width: 1.6; stroke-linecap: round; }
+/* Over a clickable element the glow throbs slowly instead of the cursor growing. */
+.wv-spotlight.throb { animation: wv-spot-throb 1.7s ease-in-out infinite; }
+@keyframes wv-spot-throb { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
 /* 3D tilt of cards toward the pointer. enhance.js sets --wv-rx / --wv-ry and
    only adds .wv-tilt3d on fine pointers, so this needs no hover/pointer gate
