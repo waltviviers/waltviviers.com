@@ -168,7 +168,7 @@
     '.footer-social .social-icons svg{width:22px;height:22px;}',
     '.footer-social .social-icons a:hover{color:var(--white);}',
     '.footer-copy{font-size:11px;color:var(--stone);letter-spacing:0.06em;text-align:center;}',
-    '.footer-admin{position:absolute;top:50%;transform:translateY(-50%);left:48px;font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);padding:7px 16px;border:1px solid var(--rule);transition:border-color 0.2s,color 0.2s;background:none;cursor:pointer;}',
+    '.footer-admin{position:absolute;top:50%;transform:translateY(-50%);left:64px;font-size:11px;font-weight:500;letter-spacing:0.10em;text-transform:uppercase;color:var(--stone);padding:7px 16px;border:1px solid var(--rule);transition:border-color 0.2s,color 0.2s;background:none;cursor:pointer;}',
     '.footer-admin:hover{border-color:var(--stone);color:var(--ink);}',
     '[data-theme="light"] .footer-admin:hover{color:#0C0C0B;border-color:#6B6560;}',
     /* Light-mode nav */

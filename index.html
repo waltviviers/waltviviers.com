@@ -945,11 +945,11 @@
     .about-bio-btn:hover { background: transparent; color: var(--ink); border-color: var(--ink); }
     [data-theme="light"] .about-bio-btn { color: #FAF9F7; background: #0C0C0B; border-color: #0C0C0B; }
     [data-theme="light"] .about-bio-btn:hover { background: transparent; color: #0C0C0B; border-color: #0C0C0B; }
-    .essays-list { list-style:none; margin:24px 0 0; padding:0; }
-    .essays-list li { border-top:1px solid var(--rule); }
-    .essays-list li:last-child { border-bottom:1px solid var(--rule); }
-    .essays-list a { display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:16px 0; color:var(--ink); transition:opacity 0.2s; }
-    .essays-list a:hover { opacity:0.66; }
+    .essays-list { list-style:none; margin:24px 0 0; padding:0; display:grid; gap:12px; }
+    .essays-list a { display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:18px 24px; color:var(--ink); background:var(--bg2); border:1px solid var(--rule); border-radius:12px; transition:background 0.2s, border-color 0.2s; }
+    .essays-list a:hover { border-color:var(--stone); }
+    [data-theme="light"] .essays-list a { background:#F5F3EF; }
+    [data-theme="light"] .essays-list a:hover { background:#EFEDE8; }
     .essays-list-title { font-family:var(--serif); font-size:1.15rem; line-height:1.2; }
     .essays-list-date { font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--stone); white-space:nowrap; }
 

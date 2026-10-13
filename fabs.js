@@ -38,11 +38,11 @@
 
   var CSS = [
     /* Static Protocol: turquoise glowing prompt */
-    '.game-fab{position:fixed;left:21px;bottom:170px;z-index:150;width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(6,20,18,.55);border:1px solid rgba(34,230,212,.35);box-shadow:0 0 16px rgba(34,230,212,.45),0 0 32px rgba(34,230,212,.25),0 5px 10px rgba(0,0,0,.35);transition:transform .18s ease,bottom .2s ease,box-shadow .2s ease;}',
+    '.game-fab{position:fixed;left:40px;bottom:170px;z-index:150;width:56px;height:56px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(6,20,18,.55);border:1px solid rgba(34,230,212,.35);box-shadow:0 0 16px rgba(34,230,212,.45),0 0 32px rgba(34,230,212,.25),0 5px 10px rgba(0,0,0,.35);transition:transform .18s ease,bottom .2s ease,box-shadow .2s ease;}',
     '.game-fab svg{width:22px;height:22px;}',
     '.game-fab:hover{transform:translateY(-3px) scale(1.07);}',
     /* Image badges with a hover swap (Scritch Scratch, Chopped Beats) */
-    '.scritch-fab,.beat-fab{position:fixed;left:16px;z-index:150;width:66px;height:66px;display:block;transition:transform .18s ease,bottom .2s ease;filter:drop-shadow(0 5px 10px rgba(0,0,0,.35));}',
+    '.scritch-fab,.beat-fab{position:fixed;left:35px;z-index:150;width:66px;height:66px;display:block;transition:transform .18s ease,bottom .2s ease;filter:drop-shadow(0 5px 10px rgba(0,0,0,.35));}',
     '.scritch-fab{bottom:90px;}',
     /* Bottoms are set so the visible circles (not the image boxes) sit ~17px apart */
     '.beat-fab{bottom:240px;}',

@@ -151,7 +151,7 @@
   function applyLift() {
     each(document.querySelectorAll(
       '.disc-card, .digital-card, .digital-sub-card, .work-thumb, .work-card, ' +
-      '.essay-card, .app-card, .blog-card, .post-card, .card, [data-wv-lift]'
+      '.essay-card, .app-card, .blog-card, .post-card, .card, .essays-list a, [data-wv-lift]'
     ), function (el) { el.classList.add('wv-lift'); });
     // Subtle sheen on primary buttons.
     each(document.querySelectorAll(
@@ -267,12 +267,15 @@
       el.style.setProperty('--wv-mx', mx + 'px');
       el.style.setProperty('--wv-my', my + 'px');
     }
+    var CLICKABLE = 'a[href], button, [role="button"], label, select, summary, input[type="submit"], input[type="button"]';
     window.addEventListener('mousemove', function (e) {
       mx = e.clientX; my = e.clientY;
       if (!el.classList.contains('on')) el.classList.add('on');
+      var hot = e.target && e.target.closest && e.target.closest(CLICKABLE);
+      el.classList.toggle('throb', !!hot);
       if (!raf) { raf = true; requestAnimationFrame(apply); }
     }, { passive: true });
-    document.addEventListener('mouseleave', function () { el.classList.remove('on'); });
+    document.addEventListener('mouseleave', function () { el.classList.remove('on'); el.classList.remove('throb'); });
     document.addEventListener('mouseenter', function () { el.classList.add('on'); });
   }
 
