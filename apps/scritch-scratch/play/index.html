@@ -158,6 +158,17 @@
     #trick-btn.pressed .tb-over, #boggle-btn.pressed .tb-over, #trick-btn:hover .tb-over, #boggle-btn:hover .tb-over { opacity: 1; }
     @media (max-width: 900px) { #trick-btn, #boggle-btn { bottom: 120px; } }
 
+    #molt-btn {
+      display: none; position: fixed; left: 16px; bottom: 164px; z-index: 260;
+      width: 66px; height: 66px; padding: 0; background: none; border: none; cursor: pointer;
+      transition: transform 0.18s ease;
+      font-size: 28px; line-height: 66px; text-align: center;
+      color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+    #molt-btn:hover, #molt-btn.pressed { transform: translateY(-3px) scale(1.07); }
+    @media (max-width: 900px) { #molt-btn { bottom: 120px; } }
+
     /* WALT logo — same top-left position as the main site header */
     .walt-logo {
       position: fixed; top: 32px; left: 48px; z-index: 450; display: block; line-height: 0;
@@ -233,6 +244,7 @@
     <button class="mode-btn-pick" data-mode="dog" type="button">Doggo Mode</button>
     <button class="mode-btn-pick" data-mode="rat" type="button">Ratty Mode</button>
     <button class="mode-btn-pick" data-mode="cat" type="button">Cat Lady Mode</button>
+    <button class="mode-btn-pick" data-mode="tarantula" type="button">Tarantula Mode</button>
     <div class="mode-sec-row">
       <button class="mode-btn-sec" id="menu-htp" type="button">How to Play</button>
       <a class="mode-btn-sec" href="https://waltviviers.com">Back to Main Site</a>
@@ -262,6 +274,13 @@
       <div>
         <div class="htp-mode-title">Cat Lady</div>
         <p class="htp-copy">Pure cat-lady bliss. Hold a cat to hear it purr, tap the ground to tease everyone with the laser dot, and press Catnip to send the whole clowder roaming. Roll the wool ball for a chase, and now and then the old lady drops by to crack open a tin. Sit back and let the chaos purr along.</p>
+      </div>
+    </div>
+
+    <div class="htp-mode">
+      <div>
+        <div class="htp-mode-title">Tarantula</div>
+        <p class="htp-copy">A cosy terrarium for your very own bird-eater. Tap the ground to drop a cricket and watch your tarantula stalk and pounce. Tap the spider itself for a gentle threat display. Hit Molt to start a dramatic skin-shedding — your spider will flip onto its back for a while before emerging fresh and glossy. Just sit back and enjoy the eight-legged life.</p>
       </div>
     </div>
 
@@ -303,11 +322,13 @@
   <img class="tb-up"   src="/apps/scritch-scratch/rat_up.png"   alt="Boggle" width="66" height="66" />
   <img class="tb-over" src="/apps/scritch-scratch/rat_over.gif" alt=""       aria-hidden="true" width="66" height="66" />
 </button>
+<button id="molt-btn" aria-label="Molt">🕷️</button>
 <div id="mode-pick">
   <h1>Scritch Scratch</h1>
   <button class="mode-btn-pick" data-mode="dog">Doggo Mode</button>
   <button class="mode-btn-pick" data-mode="rat">Ratty Mode</button>
   <button class="mode-btn-pick" data-mode="cat">Cat Lady Mode</button>
+  <button class="mode-btn-pick" data-mode="tarantula">Tarantula Mode</button>
   <div class="mode-sec-row">
     <button class="mode-btn-sec" id="pick-htp" type="button">How to Play</button>
     <a class="mode-btn-sec" href="https://waltviviers.com">Back to Main Site</a>
@@ -457,6 +478,17 @@ function hitTestItem(placed, px, py) {
 
 // ─── Particles ───────────────────────────────────────────────────────────────
 const hearts = [], dirts = [], labels = [], ripples = [], confettis = [], sparkles = [];
+
+// ─── Tarantula mode ──────────────────────────────────────────────────────────
+const TARA_SC = 3;
+const TARA_W = 15 * TARA_SC, TARA_H = 10 * TARA_SC;  // 45 × 30
+const CRICKET_SC = 2;
+const CRICKET_W = 6 * CRICKET_SC, CRICKET_H = 4 * CRICKET_SC;
+
+const tarantulas = [], crickets = [];
+let tMoltCooldown = 0;
+
+function tarantulaFloorY() { return Math.round(canvas.height * 0.80); }
 
 class Heart {
   constructor(x, y) {
@@ -3151,11 +3183,388 @@ const dog = {
   },
 };
 
+// ─── Tarantula background ─────────────────────────────────────────────────────
+function drawTarantulaBackground() {
+  const W = canvas.width, H = canvas.height;
+  const floorY = tarantulaFloorY();
+
+  // Dark warm air above substrate
+  ctx.fillStyle = '#1a1208';
+  ctx.fillRect(0, 0, W, floorY);
+
+  // Substrate (coco fiber / soil)
+  ctx.fillStyle = '#3d2410';
+  ctx.fillRect(0, floorY, W, H - floorY);
+  // Substrate texture patches
+  ctx.fillStyle = '#2a1608';
+  const subs = [
+    [0.05,0.2,22,6],[0.14,0.6,18,5],[0.28,0.3,24,7],[0.40,0.7,16,5],
+    [0.52,0.15,20,6],[0.63,0.5,22,7],[0.75,0.35,18,5],[0.88,0.65,20,6],
+    [0.10,0.85,16,4],[0.35,0.9,22,5],[0.60,0.8,18,4],[0.82,0.2,14,5],
+  ];
+  for (const [fx, fy, sw, sh] of subs) {
+    ctx.fillRect(Math.round(fx * W), Math.round(floorY + fy * (H - floorY)), sw, sh);
+  }
+  ctx.fillStyle = '#503018';
+  const subs2 = [
+    [0.07,0.45,14,4],[0.22,0.75,18,5],[0.48,0.55,16,4],[0.70,0.25,20,5],[0.90,0.4,14,4],
+  ];
+  for (const [fx, fy, sw, sh] of subs2) {
+    ctx.fillRect(Math.round(fx * W), Math.round(floorY + fy * (H - floorY)), sw, sh);
+  }
+
+  // Glass walls (faint reflection strips)
+  ctx.fillStyle = 'rgba(180,220,255,0.04)';
+  ctx.fillRect(0, 0, 12, H);
+  ctx.fillRect(W - 12, 0, 12, H);
+  ctx.fillStyle = 'rgba(255,255,255,0.035)';
+  ctx.fillRect(2, 20, 3, H - 40);
+  ctx.fillRect(W - 5, 20, 3, H - 40);
+
+  // Cork bark hide (left area)
+  const hx = Math.round(W * 0.06), hy = Math.round(floorY - H * 0.18);
+  const hw = Math.round(W * 0.18), hh = Math.round(H * 0.22 + (H - floorY));
+  ctx.fillStyle = '#6a3c18';
+  ctx.fillRect(hx, hy, hw, hh);
+  ctx.fillStyle = '#7e4a22';
+  ctx.fillRect(hx + 3, hy + 3, hw - 6, hh - 6);
+  ctx.fillStyle = '#5a3010';
+  for (let i = 0; i < 7; i++) {
+    ctx.fillRect(hx + 2, hy + Math.round((hh / 8) * i) + 3, hw - 4, 2);
+  }
+  ctx.fillStyle = '#1e0e04';
+  ctx.fillRect(hx + Math.round(hw * 0.2), hy + hh - 10, Math.round(hw * 0.6), 12);
+
+  // Water dish (right side)
+  const dx = Math.round(W * 0.82), dy = floorY - 6;
+  ctx.fillStyle = '#484840';
+  ctx.beginPath(); ctx.arc(dx, dy, 20, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#3a7eb8';
+  ctx.beginPath(); ctx.arc(dx, dy - 1, 15, 0, Math.PI * 2); ctx.fill();
+  const ws = Math.sin(gameTick * 0.04);
+  ctx.fillStyle = 'rgba(140,200,255,0.35)';
+  ctx.fillRect(dx - 7 + Math.round(ws * 2), dy - 5, 10, 2);
+
+  // Fake succulent (right-center area)
+  const px = Math.round(W * 0.66), py = floorY;
+  ctx.fillStyle = '#5a3820';
+  ctx.fillRect(px - 9, py - 14, 18, 14);
+  ctx.fillStyle = '#6a4828';
+  ctx.fillRect(px - 11, py - 16, 22, 4);
+  const leafDefs = [[-9,-28,7,18],[1,-32,7,18],[9,-26,7,16],[-3,-36,7,17]];
+  for (const [lx, lly, lw, lh] of leafDefs) {
+    ctx.fillStyle = '#256630';
+    ctx.fillRect(px + lx, py + lly, lw, lh);
+    ctx.fillStyle = '#1a4a22';
+    ctx.fillRect(px + lx + Math.floor(lw / 2), py + lly + 3, 2, lh - 7);
+  }
+
+  // Heat lamp warm glow from top
+  const lampG = ctx.createRadialGradient(W / 2, 0, 0, W / 2, 0, W * 0.55);
+  lampG.addColorStop(0, 'rgba(255,150,60,0.10)');
+  lampG.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = lampG;
+  ctx.fillRect(0, 0, W, H * 0.6);
+}
+
+class Cricket {
+  constructor(x, y) {
+    this.x = x; this.y = y;
+    this.vx = (Math.random() - 0.5) * 1.2;
+    this.vy = 0;
+    this.hopTimer = 20 + Math.floor(Math.random() * 40);
+    this.right = this.vx > 0;
+    this.dead = false;
+    this.legPhase = 0;
+  }
+  get cx() { return this.x + CRICKET_W / 2; }
+  get cy() { return this.y + CRICKET_H / 2; }
+  update() {
+    if (this.dead) return;
+    this.x += this.vx;
+    this.vx *= 0.96;
+    if (--this.hopTimer <= 0) {
+      this.hopTimer = 25 + Math.floor(Math.random() * 50);
+      this.vx = (Math.random() - 0.5) * 3.5;
+      this.vy = -(1.5 + Math.random() * 2);
+      this.right = this.vx > 0;
+    }
+    this.vy += 0.18;
+    this.y += this.vy;
+    const floorY = tarantulaFloorY() - CRICKET_H;
+    if (this.y > floorY) { this.y = floorY; this.vy = 0; }
+    this.x = Math.max(20, Math.min(canvas.width - CRICKET_W - 20, this.x));
+    this.legPhase += 0.2;
+  }
+  draw() {
+    if (this.dead) return;
+    const x = Math.round(this.x), y = Math.round(this.y);
+    const sc = CRICKET_SC;
+    ctx.save();
+    if (!this.right) { ctx.translate(x + CRICKET_W, y); ctx.scale(-1, 1); }
+    else ctx.translate(x, y);
+    // Body
+    ctx.fillStyle = '#5a4a20';
+    ctx.fillRect(1*sc, 0,   4*sc, 2*sc);
+    ctx.fillRect(0,    sc,  5*sc, 2*sc);
+    ctx.fillRect(sc,   3*sc, 3*sc, sc);
+    // Head
+    ctx.fillStyle = '#3a3010';
+    ctx.fillRect(4*sc, sc, 2*sc, 2*sc);
+    // Antennae
+    ctx.fillStyle = '#2a2208';
+    ctx.fillRect(5*sc, 0, sc, sc);
+    ctx.fillRect(6*sc - 1, -sc + 1, sc, sc);
+    // Legs (animated)
+    const lsw = Math.round(Math.sin(this.legPhase) * sc);
+    ctx.fillStyle = '#3a3010';
+    ctx.fillRect(sc, 3*sc, sc, sc + lsw);
+    ctx.fillRect(2*sc, 3*sc, sc, sc - lsw);
+    ctx.fillRect(3*sc, 3*sc, sc, sc + lsw);
+    ctx.restore();
+  }
+}
+
+class Tarantula {
+  constructor(x, y) {
+    this.x = x; this.y = y;
+    this.vx = 0; this.vy = 0;
+    this.right = true;
+    this.state = 'idle';
+    this.idleTimer = 60 * 4;
+    this.walkTimer = 0;
+    this.tx = x; this.ty = y;
+    this.legPhase = 0;
+    this.threatTimer = 0;
+    this.moltTimer = 0;
+    this.moltNewTimer = 0;
+    this.eatTimer = 0;
+  }
+  get cx() { return this.x + TARA_W / 2; }
+  get cy() { return this.y + TARA_H / 2; }
+  hitTest(px, py) {
+    return px >= this.x - 6 && px <= this.x + TARA_W + 6 && py >= this.y - 6 && py <= this.y + TARA_H + 6;
+  }
+  update() {
+    if (this.moltTimer > 0) {
+      if (--this.moltTimer === 0) {
+        this.moltNewTimer = 60 * 10;
+        addHappiness(30);
+        labels.push(new Label('Fresh skin!', this.cx, this.y - 14));
+        for (let i = 0; i < 22; i++) confettis.push(new Confetti(this.cx, this.cy));
+        tMoltCooldown = 60 * 90;
+      }
+      return;
+    }
+    if (this.moltNewTimer > 0) this.moltNewTimer--;
+    if (this.threatTimer > 0) { this.threatTimer--; return; }
+    if (this.eatTimer > 0) { this.eatTimer--; return; }
+
+    // Chase crickets nearby
+    if (this.state !== 'pounce') {
+      for (const cr of crickets) {
+        if (cr.dead) continue;
+        const d = Math.hypot(cr.cx - this.cx, cr.cy - this.cy);
+        if (d < 90) { this.state = 'pounce'; break; }
+      }
+    }
+
+    if (this.state === 'idle') {
+      if (--this.idleTimer <= 0) {
+        this.state = 'walk';
+        this.walkTimer = 60 * 2 + Math.floor(Math.random() * 60 * 4);
+        const floorY = tarantulaFloorY();
+        this.tx = 50 + Math.random() * (canvas.width - 100);
+        this.ty = floorY - TARA_H + Math.random() * (canvas.height - floorY);
+      }
+    } else if (this.state === 'walk') {
+      const dx = this.tx - this.cx, dy = this.ty - this.cy;
+      const d = Math.hypot(dx, dy);
+      if (d < 8 || --this.walkTimer <= 0) {
+        this.state = 'idle';
+        this.idleTimer = 60 * 3 + Math.floor(Math.random() * 60 * 5);
+        this.vx = 0; this.vy = 0;
+      } else {
+        const sp = 0.55;
+        this.vx = dx / d * sp; this.vy = dy / d * sp;
+        this.right = dx > 0;
+      }
+      this.legPhase += 0.10;
+    } else if (this.state === 'pounce') {
+      let nearest = null, nd = Infinity;
+      for (const cr of crickets) {
+        if (cr.dead) continue;
+        const d = Math.hypot(cr.cx - this.cx, cr.cy - this.cy);
+        if (d < nd) { nd = d; nearest = cr; }
+      }
+      if (!nearest) { this.state = 'idle'; this.idleTimer = 60; return; }
+      const dx = nearest.cx - this.cx, dy = nearest.cy - this.cy;
+      const d = Math.hypot(dx, dy);
+      this.right = dx > 0;
+      if (d < 16) {
+        nearest.dead = true;
+        this.eatTimer = 70;
+        this.state = 'idle';
+        this.idleTimer = 60 * 4;
+        addHappiness(10);
+        labels.push(new Label('Nom!', this.cx, this.y - 10));
+        hearts.push(new Heart(this.cx, this.y));
+      } else {
+        this.vx = dx / d * 2.2; this.vy = dy / d * 2.2;
+        this.legPhase += 0.22;
+      }
+    }
+
+    this.x += this.vx; this.y += this.vy;
+    const floorY = tarantulaFloorY();
+    this.x = Math.max(22, Math.min(canvas.width - TARA_W - 22, this.x));
+    this.y = Math.max(floorY - TARA_H * 1.5, Math.min(canvas.height - TARA_H - 4, this.y));
+  }
+  scritch() {
+    this.threatTimer = 60 * 2;
+    addHappiness(5);
+    triggerShake(2, 6);
+    labels.push(new Label('Threat pose!', this.cx, this.y - 14));
+  }
+  molt() {
+    if (this.moltTimer > 0 || tMoltCooldown > 0) return;
+    this.moltTimer = 60 * 18;
+    this.vx = 0; this.vy = 0;
+    labels.push(new Label('Molting...', this.cx, this.y - 14));
+    this.state = 'idle';
+    this.idleTimer = 99999;
+  }
+  draw() {
+    const x = Math.round(this.x), y = Math.round(this.y);
+    const sc = TARA_SC;
+    const molting = this.moltTimer > 0;
+    const fresh = this.moltNewTimer > 0;
+    const threatened = this.threatTimer > 0;
+
+    ctx.save();
+
+    if (molting) {
+      // Upside-down on back
+      ctx.translate(x + TARA_W / 2, y + TARA_H / 2);
+      ctx.rotate(Math.PI);
+      ctx.translate(-TARA_W / 2, -TARA_H / 2);
+      ctx.globalAlpha = 0.7;
+    } else if (!this.right) {
+      ctx.translate(x + TARA_W, y);
+      ctx.scale(-1, 1);
+    } else {
+      ctx.translate(x, y);
+    }
+
+    const bodyCol = fresh ? '#6a3818' : (threatened ? '#5a2808' : '#2e1808');
+    const legCol  = fresh ? '#4a2810' : '#1c0e04';
+    const abdCol  = fresh ? '#7e4820' : '#3e2010';
+    const eyeCol  = threatened ? '#ff4400' : '#66dd22';
+
+    // Draw legs first (behind body)
+    ctx.strokeStyle = legCol;
+    ctx.lineWidth = 2;
+    const cephCX = 10 * sc, cephCY = 5 * sc;
+    for (let i = 0; i < 4; i++) {
+      const phase = this.legPhase + i * (Math.PI / 2);
+      const sw = Math.sin(phase);
+      const rootY = cephCY + (i - 1.5) * sc * 2.5;
+      const femAngle = (i < 2 ? -0.6 : 0.6) + sw * 0.15;
+      const femLen = 12 * sc / 3;
+      const femEndX = cephCX - Math.cos(femAngle) * femLen * (threatened ? 1.3 : 1);
+      const femEndY = rootY + Math.sin(femAngle) * femLen;
+      const tibLen = 10 * sc / 3;
+      const tibAngle = femAngle + (i < 2 ? -0.5 : 0.5) + sw * 0.1;
+      const tibEndX = femEndX - Math.cos(tibAngle) * tibLen;
+      const tibEndY = femEndY + Math.sin(tibAngle) * tibLen;
+      ctx.beginPath();
+      ctx.moveTo(cephCX, rootY);
+      ctx.lineTo(femEndX, femEndY);
+      ctx.lineTo(tibEndX, tibEndY);
+      ctx.stroke();
+      // Opposite side visible legs (slightly dimmer)
+      ctx.globalAlpha = 0.35;
+      const rfemEndX = cephCX + Math.cos(femAngle) * femLen * 0.8;
+      const rfemEndY = rootY + Math.sin(femAngle) * femLen;
+      const rtibEndX = rfemEndX + Math.cos(tibAngle) * tibLen * 0.8;
+      const rtibEndY = rfemEndY + Math.sin(tibAngle) * tibLen;
+      ctx.beginPath();
+      ctx.moveTo(cephCX, rootY);
+      ctx.lineTo(rfemEndX, rfemEndY);
+      ctx.lineTo(rtibEndX, rtibEndY);
+      ctx.stroke();
+      ctx.globalAlpha = molting ? 0.7 : 1;
+    }
+
+    // If threat pose — front 2 legs raised
+    if (threatened) {
+      ctx.globalAlpha = molting ? 0.7 : 1;
+      ctx.beginPath();
+      ctx.moveTo(cephCX, cephCY - 1 * sc);
+      ctx.lineTo(cephCX + 6, cephCY - 4 * sc);
+      ctx.lineTo(cephCX + 10, cephCY - 7 * sc);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(cephCX, cephCY - 0.5 * sc);
+      ctx.lineTo(cephCX + 4, cephCY - 5 * sc);
+      ctx.lineTo(cephCX + 7, cephCY - 8 * sc);
+      ctx.stroke();
+    }
+
+    ctx.globalAlpha = molting ? 0.7 : 1;
+
+    // Abdomen (fat oval, left side)
+    ctx.fillStyle = abdCol;
+    ctx.fillRect(0,       sc,      7*sc, 8*sc);
+    ctx.fillRect(sc,      0,       5*sc, 10*sc);
+    ctx.fillRect(0,       3*sc,    8*sc, 4*sc);  // widest
+    // Abdomen highlight/pattern
+    ctx.fillStyle = bodyCol;
+    ctx.fillRect(sc,      2*sc,    5*sc, sc);
+    ctx.fillRect(sc,      5*sc,    5*sc, sc);
+
+    // Pedicel (waist)
+    ctx.fillStyle = bodyCol;
+    ctx.fillRect(7*sc,    3*sc,    2*sc, 2*sc);  // very narrow
+
+    // Cephalothorax
+    ctx.fillStyle = bodyCol;
+    ctx.fillRect(8*sc,    2*sc,    5*sc, 7*sc);
+    ctx.fillRect(9*sc,    sc,      4*sc, 9*sc);
+    ctx.fillRect(10*sc,   sc,      3*sc, 9*sc);
+    // Ceph highlight
+    ctx.fillStyle = fresh ? '#8a4820' : '#3e1e0a';
+    ctx.fillRect(10*sc,   2*sc,    2*sc, 2*sc);
+
+    // Eyes (tiny row on front of ceph)
+    ctx.fillStyle = eyeCol;
+    ctx.fillRect(13*sc,   2*sc,    sc,   sc);
+    ctx.fillRect(13*sc,   4*sc,    sc,   sc);
+    ctx.fillRect(13*sc,   6*sc,    sc,   sc);
+
+    // Chelicerae (fangs at front)
+    ctx.fillStyle = fresh ? '#3a1808' : '#0e0804';
+    ctx.fillRect(14*sc,   3*sc,    sc,   sc);
+    ctx.fillRect(14*sc,   5*sc,    sc,   sc);
+    ctx.fillRect(14*sc+1, 4*sc,    sc,   sc);
+
+    // Post-molt glow overlay
+    if (fresh && !molting) {
+      ctx.globalAlpha = (this.moltNewTimer / (60 * 10)) * 0.28;
+      ctx.fillStyle = '#ffe090';
+      ctx.fillRect(-2, -2, TARA_W + 4, TARA_H + 4);
+    }
+
+    ctx.restore();
+  }
+}
+
 // ─── Mode transitions ─────────────────────────────────────────────────────────
 function updateCatnipBtn() {
   document.getElementById('catnip-btn').style.display = gameMode === 'cat' ? 'block' : 'none';
   document.getElementById('trick-btn').style.display  = gameMode === 'dog' ? 'block' : 'none';
   document.getElementById('boggle-btn').style.display = gameMode === 'rat' ? 'block' : 'none';
+  document.getElementById('molt-btn').style.display   = gameMode === 'tarantula' ? 'block' : 'none';
 }
 
 function updateFab() {
@@ -3179,6 +3588,7 @@ function enterRatMode() {
   visitors.length = 0;
   rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
+  tarantulas.length = 0; crickets.length = 0;
   placedItems.length = 0;
   hearts.length = 0; dirts.length = 0; labels.length = 0; ripples.length = 0; confettis.length = 0; sparkles.length = 0;
   thrownBall = null; marker = null; laserActive = false;
@@ -3204,6 +3614,7 @@ function enterDogMode() {
   visitors.length = 0;
   rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
+  tarantulas.length = 0; crickets.length = 0;
   placedItems.length = 0;
   hearts.length = 0; dirts.length = 0; labels.length = 0; ripples.length = 0; confettis.length = 0; sparkles.length = 0;
   thrownBall = null; marker = null; laserActive = false;
@@ -3232,6 +3643,7 @@ function enterCatMode() {
   happiness = 80;
   visitors.length = 0; rats.length = 0; babies.length = 0; cheeses.length = 0;
   cats.length = 0; kittens.length = 0; catRats.length = 0;
+  tarantulas.length = 0; crickets.length = 0;
   placedItems.length = 0; hearts.length = 0; dirts.length = 0; labels.length = 0; ripples.length = 0; confettis.length = 0; sparkles.length = 0;
   thrownBall = null; marker = null; laserActive = false; interacted = false;
   scritchCat = null;
@@ -3252,6 +3664,31 @@ function enterCatMode() {
     });
   }
   sndCatAmbient();
+  updateCatnipBtn();
+  updateFab();
+  persistSave();
+}
+
+function enterTarantulaMode() {
+  _timeDial.style.display = 'flex';
+  if (gameMode === 'dog') saveDogState();
+  else if (gameMode === 'cat') saveCatState();
+  else if (gameMode === 'rat') saveRatState();
+  gameMode = 'tarantula';
+  happiness = 75;
+  visitors.length = 0; rats.length = 0; babies.length = 0; cheeses.length = 0;
+  cats.length = 0; kittens.length = 0; catRats.length = 0;
+  tarantulas.length = 0; crickets.length = 0;
+  placedItems.length = 0; hearts.length = 0; dirts.length = 0; labels.length = 0;
+  ripples.length = 0; confettis.length = 0; sparkles.length = 0;
+  thrownBall = null; marker = null; laserActive = false; interacted = false;
+  scritchCat = null; tMoltCooldown = 0;
+  // Spawn tarantula in the centre of the terrarium floor
+  const floorY = tarantulaFloorY();
+  tarantulas.push(new Tarantula(
+    canvas.width / 2 - TARA_W / 2,
+    floorY - TARA_H + (canvas.height - floorY) / 2
+  ));
   updateCatnipBtn();
   updateFab();
   persistSave();
@@ -3685,6 +4122,18 @@ canvas.addEventListener('pointerdown', e => {
     }
   }
 
+  if (gameMode === 'tarantula') {
+    for (const t of tarantulas) {
+      if (t.hitTest(px, py)) { t.scritch(); tapFeedback(px, py); return; }
+    }
+    // Tap ground → drop a cricket (max 5 at once)
+    if (crickets.length < 5) {
+      crickets.push(new Cricket(px, tarantulaFloorY() - CRICKET_H));
+      tapFeedback(px, tarantulaFloorY() - CRICKET_H / 2);
+    }
+    return;
+  }
+
   dog.walkTo(px, py);
   if (px < Math.round(canvas.width * 0.65)) dog.digPending = true;
 }, { passive: false });
@@ -4079,6 +4528,10 @@ function drawPetName() {
     const mc = cats.find(c => c.isMain && !c.dead);
     if (!mc) return;
     nx = mc.cx; ny = Math.max(20, mc.y - 14);
+  } else if (gameMode === 'tarantula') {
+    const t = tarantulas[0];
+    if (!t) return;
+    nx = t.cx; ny = Math.max(20, t.y - 14);
   } else {
     const lr = rats.find(r => r.isSeed && !r.dead);
     if (!lr) return;
@@ -4308,6 +4761,32 @@ function loop() {
         canvas.width / 2, canvas.height - 18);
       ctx.restore();
     }
+  } else if (gameMode === 'tarantula') {
+    drawTarantulaBackground();
+
+    if (tMoltCooldown > 0) tMoltCooldown--;
+
+    for (let i = crickets.length - 1; i >= 0; i--) {
+      crickets[i].update();
+      if (crickets[i].dead) crickets.splice(i, 1); else crickets[i].draw();
+    }
+
+    for (let i = tarantulas.length - 1; i >= 0; i--) {
+      tarantulas[i].update();
+      tarantulas[i].draw();
+    }
+
+    tickParticles(hearts);
+    tickParticles(labels);
+    tickParticles(confettis);
+
+    if (!interacted) {
+      ctx.save(); ctx.globalAlpha = 0.25; ctx.fillStyle = '#ffffff';
+      ctx.font = '11px monospace'; ctx.textAlign = 'center';
+      ctx.fillText('tap tarantula to scritch · tap ground to drop a cricket',
+        canvas.width / 2, canvas.height - 18);
+      ctx.restore();
+    }
   } else {
     // Cat mode
     drawCatBackground();
@@ -4436,6 +4915,7 @@ document.querySelectorAll('#game-menu .mode-btn-pick').forEach(btn => {
     const m = btn.dataset.mode;
     if (m === 'dog') enterDogMode();
     else if (m === 'rat') enterRatMode();
+    else if (m === 'tarantula') enterTarantulaMode();
     else enterCatMode();
   });
 });
@@ -4484,6 +4964,7 @@ document.querySelectorAll('#mode-pick .mode-btn-pick').forEach(btn => {
     const m = btn.dataset.mode;
     if (m === 'dog') enterDogMode();
     else if (m === 'rat') enterRatMode();
+    else if (m === 'tarantula') enterTarantulaMode();
     else enterCatMode();
   });
 });
@@ -4494,7 +4975,7 @@ const nameInput   = document.getElementById('name-input');
 const namePrompt  = document.getElementById('name-prompt');
 
 function showNameOverlay() {
-  const modeLabel = gameMode === 'dog' ? 'dog' : gameMode === 'cat' ? 'cat' : 'rat';
+  const modeLabel = gameMode === 'dog' ? 'dog' : gameMode === 'cat' ? 'cat' : gameMode === 'tarantula' ? 'tarantula' : 'rat';
   namePrompt.textContent = 'Name your ' + modeLabel;
   nameInput.value = petNames[gameMode] || '';
   nameOverlay.classList.add('open');
@@ -4544,7 +5025,7 @@ document.getElementById('boggle-btn').addEventListener('click', () => {
 });
 
 // ─── Icon button press state (reliable on touch) ──────────────────────────────
-['trick-btn', 'boggle-btn', 'catnip-btn'].forEach(id => {
+['trick-btn', 'boggle-btn', 'catnip-btn', 'molt-btn'].forEach(id => {
   const btn = document.getElementById(id);
   let pressedTimer = null;
   const on  = () => { clearTimeout(pressedTimer); btn.classList.add('pressed'); };
@@ -4553,6 +5034,12 @@ document.getElementById('boggle-btn').addEventListener('click', () => {
   btn.addEventListener('pointerup',    off);
   btn.addEventListener('pointerleave', off);
   btn.addEventListener('pointercancel',off);
+});
+
+// ─── Molt button ──────────────────────────────────────────────────────────────
+document.getElementById('molt-btn').addEventListener('click', () => {
+  if (gameMode !== 'tarantula') return;
+  for (const t of tarantulas) t.molt();
 });
 
 // ─── Catnip button ────────────────────────────────────────────────────────────
