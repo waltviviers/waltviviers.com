@@ -11,6 +11,21 @@
    under prefers-reduced-motion and when printing.
    ========================================================================== */
 
+/* ── Subtle dark edge vignette (whole viewport, non-interactive) ──────────── */
+.wv-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  background: radial-gradient(135% 125% at 50% 48%,
+              rgba(0,0,0,0) 62%, rgba(0,0,0,0.22) 100%);
+}
+:root[data-theme="light"] .wv-vignette {
+  background: radial-gradient(135% 125% at 50% 48%,
+              rgba(0,0,0,0) 64%, rgba(0,0,0,0.12) 100%);
+}
+@media print { .wv-vignette { display: none !important; } }
+
 /* ── Frosted glass ─────────────────────────────────────────────────────────
    Applied by enhance.js to the nav, mobile menu, modals and the cookie banner
    when backdrop-filter is supported (html.wv-glass). Falls back to the page's
@@ -195,8 +210,7 @@ img.wv-parallax {
 }
 .wv-cursor.on { opacity: 1; }
 .wv-cursor.hide { opacity: 0; }
-.wv-cursor.throb { animation: wv-cursor-throb 2.2s ease-in-out infinite; }
-@keyframes wv-cursor-throb { 0%, 100% { scale: 1; } 50% { scale: 1.2; } }
+.wv-cursor.throb { scale: 1.35; }   /* static 35% bigger over clickables (smoothed by the scale transition) */
 
 /* Hide the native pointer while the DOM cursor is active; text fields keep
    the I-beam so typing stays legible. */
