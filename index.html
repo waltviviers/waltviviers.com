@@ -945,8 +945,9 @@
     .about-bio-btn:hover { background: transparent; color: var(--ink); border-color: var(--ink); }
     [data-theme="light"] .about-bio-btn { color: #FAF9F7; background: #0C0C0B; border-color: #0C0C0B; }
     [data-theme="light"] .about-bio-btn:hover { background: transparent; color: #0C0C0B; border-color: #0C0C0B; }
-    .essays-list { list-style:none; margin:24px 0 0; padding:0; display:grid; gap:12px; }
-    .essays-list a { display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:18px 24px; color:var(--ink); background:var(--bg2); border:1px solid var(--rule); border-radius:12px; transition:background 0.2s, border-color 0.2s; }
+    .essays-list { list-style:none; margin:24px 0 0; padding:0; display:grid; gap:0; }
+    .essays-list li + li { margin-top:-1px; }   /* collapse shared borders so rows touch */
+    .essays-list a { display:flex; justify-content:space-between; align-items:baseline; gap:16px; padding:18px 24px; color:var(--ink); background:var(--bg2); border:1px solid var(--rule); border-radius:0; transition:background 0.2s, border-color 0.2s; }
     .essays-list a:hover { border-color:var(--stone); }
     [data-theme="light"] .essays-list a { background:#F5F3EF; }
     [data-theme="light"] .essays-list a:hover { background:#EFEDE8; }
