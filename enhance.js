@@ -300,7 +300,7 @@
     if (reduce || !fine) return;
     each(document.querySelectorAll(
       '.disc-card, .digital-card, .digital-sub-card, .work-thumb, .work-card, ' +
-      '.photo-card, .essay-card, .app-card, .blog-card, .post-card, [data-wv-tilt]'
+      '.photo-card, .essay-card, .app-card, .blog-card, .post-card, .essays-list a, [data-wv-tilt]'
     ), function (card) {
       if (card.classList.contains('wv-tilt3d')) return;   // already wired
       card.classList.add('wv-tilt3d');
@@ -475,4 +475,6 @@
      tilt on freshly-injected cards. Idempotent — only new cards are bound. */
   window.wvEnhance = window.wvEnhance || {};
   window.wvEnhance.rescanTilt = function () { try { setupTilt3d(); } catch (e) {} };
+  // Re-wire lift + tilt on nodes injected after load (both idempotent).
+  window.wvEnhance.rescan = function () { try { applyLift(); } catch (e) {} try { setupTilt3d(); } catch (e) {} };
 })();

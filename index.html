@@ -2017,6 +2017,7 @@
       ul.innerHTML=list.slice(0,6).map(function(p){
         return '<li><a href="'+p.url+'"><span class="essays-list-title">'+p.title+'</span><span class="essays-list-date">'+p.date+'</span></a></li>';
       }).join('');
+      if(window.wvEnhance&&window.wvEnhance.rescan)window.wvEnhance.rescan();
     }).catch(function(){});
   })();
   </script>
