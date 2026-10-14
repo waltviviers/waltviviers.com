@@ -460,7 +460,16 @@
   } catch (e) {}
 
   /* ── Boot ──────────────────────────────────────────────────────────────── */
+  function setupVignette() {
+    if (document.querySelector('.wv-vignette')) return;
+    var v = document.createElement('div');
+    v.className = 'wv-vignette';
+    v.setAttribute('aria-hidden', 'true');
+    (document.body || document.documentElement).appendChild(v);
+  }
+
   ready(function () {
+    try { setupVignette(); } catch (e) {}
     try { applyGlass(); } catch (e) {}
     try { applyLift(); } catch (e) {}
     var revealed = false;
