@@ -261,7 +261,6 @@
       '<a href="/graphic-design-portfolio/" class="mobile-menu-link">Design &amp; Digital <span class="mobile-menu-arrow">↗</span></a>' +
       '<a href="/apps/" class="mobile-menu-link">Apps &amp; Games <span class="mobile-menu-arrow">↗</span></a>' +
       '<a href="/blog/" class="mobile-menu-link">Creative Writing <span class="mobile-menu-arrow">↗</span></a>' +
-      '<a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>' +
     '</div>' +
     '<div class="mobile-menu-foot">' +
       '<a href="/admin-index/" class="mobile-admin-btn">Admin</a>' +
