@@ -148,6 +148,7 @@ body.compact .top { padding: 6px 12px; }
 body.compact .transport { padding: 5px 12px; gap: 12px; }
 body.compact .transport .group { gap: 4px; }
 body.compact #zoom { width: 90px; }
+body.compact .insp-empty { display: none; }
 body.compact .check { gap: 4px; }
 
 /* Floating player: drag it by the grip; position is remembered. */
@@ -236,9 +237,16 @@ body.compact .check { gap: 4px; }
 .th-name:focus { border-color: var(--rule) !important; }
 .th-btn { border: 1px solid var(--rule); background: none; width: 20px; height: 20px; font-size: 10px; cursor: pointer; border-radius: 2px; color: var(--stone); }
 .th-btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
-/* Delete sits apart from Mute and Solo, and stays quiet until you aim for it. */
-.th-btn.x { margin-left: 10px; border-color: transparent; }
-.th-btn.x:hover { color: var(--accent); border-color: var(--accent); }
+.th-btn.more { border-color: transparent; font-size: 13px; line-height: 1; }
+.th-btn.more:hover, .th-btn.more[aria-expanded="true"] { border-color: var(--rule); color: var(--ink); }
+/* Track options menu */
+.menu { position: fixed; z-index: 60; min-width: 180px; padding: 4px; background: var(--bg); border: 1px solid var(--rule); border-radius: 3px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+.menu button { display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 10px; background: none; border: 0; border-radius: 2px; text-align: left; font-size: 12px; cursor: pointer; color: var(--ink); }
+.menu button:hover, .menu button:focus-visible { background: var(--bg2); outline: none; }
+.menu button.danger:hover { color: var(--accent); }
+.menu button i { width: 8px; height: 8px; border-radius: 50%; flex: 0 0 auto; }
+.menu-sub { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--stone); padding: 8px 10px 3px; border-top: 1px solid var(--rule); margin-top: 4px; }
+.menu .danger { border-top: 1px solid var(--rule); margin-top: 4px; }
 .th input[type="range"] { width: 100%; height: 14px; }
 .th .rec-target { font-size: 9px; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); visibility: hidden; }
 .row.selected .rec-target { visibility: visible; }
@@ -366,8 +374,19 @@ body.compact .check { gap: 4px; }
 .modal-card .opts label { display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
 .proj-list { list-style: none; border-top: 1px solid var(--rule); }
 .proj-list li { border-bottom: 1px solid var(--rule); }
-.proj-list button { width: 100%; text-align: left; padding: 9px 4px; background: none; border: 0; cursor: pointer; font-size: 14px; }
+.proj-list li { display: flex; align-items: center; gap: 2px; }
+.proj-list li.empty { color: var(--stone); padding: 12px 4px; font-size: 13px; }
+.proj-list button { background: none; border: 0; cursor: pointer; color: var(--ink); }
+.proj-open { flex: 1; min-width: 0; text-align: left; padding: 9px 4px; font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.proj-open small { color: var(--stone); font-size: 11px; margin-left: 6px; }
 .proj-list button:hover { background: var(--bg2); }
+.proj-act { width: 30px; height: 30px; flex: 0 0 auto; color: var(--stone) !important; font-size: 13px; border-radius: 2px; }
+.proj-act:hover { color: var(--ink) !important; }
+.proj-act.danger:hover { color: var(--accent) !important; }
+.proj-rename { display: flex; gap: 6px; width: 100%; padding: 6px 0; }
+.proj-rename input { flex: 1; min-width: 0; }
+.proj-rename .btn { border: 1px solid var(--rule); }
+.proj-rename .btn.primary { border-color: var(--ink); }
 .keys { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font-size: 12px; margin: 10px 0; }
 .keys kbd { font-family: var(--sans); border: 1px solid var(--rule); padding: 1px 6px; border-radius: 2px; font-size: 11px; white-space: nowrap; justify-self: start; }
 

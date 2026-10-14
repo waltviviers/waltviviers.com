@@ -498,10 +498,10 @@ function renderTimeline() {
     return `<div class="row ${t.id === selectedTrack ? 'selected' : ''}" data-track="${t.id}" style="--tc:${t.colour}">
       <div class="th">
         <div class="th-top">
-          <input class="th-name" value="${esc(t.name)}" aria-label="Track name" spellcheck="false" />
+          <input class="th-name" value="${esc(t.name)}" title="${esc(t.name)}" aria-label="Track name" spellcheck="false" />
           <button class="th-btn" data-act="mute" aria-pressed="${t.mute}" title="Mute">M</button>
           <button class="th-btn" data-act="solo" aria-pressed="${t.solo}" title="Solo">S</button>
-          <button class="th-btn x" data-act="del" title="Delete track" aria-label="Delete track">×</button>
+          <button class="th-btn more" data-act="menu" title="Duplicate, merge or delete this track" aria-label="Track options" aria-haspopup="menu">⋯</button>
         </div>
         <input type="range" min="0" max="1.2" step="0.01" value="${t.vol}" data-act="vol" aria-label="Track volume" title="Volume" />
         <span class="rec-target">● Records here</span>
@@ -608,23 +608,51 @@ function placeLoop() {
 
 tl.addEventListener('scroll', drawRuler);
 window.addEventListener('resize', () => { drawRuler(); });
+// Zoom. Steps are proportional (the slider is logarithmic), the spot you're
+// looking at stays put, and redraws are batched to one per frame.
+const ZMIN = 15;
+const ZMAX = 400;
+const zoomToSlider = (v) => Math.round((Math.log(v / ZMIN) / Math.log(ZMAX / ZMIN)) * 1000);
+const sliderToZoom = (n) => ZMIN * (ZMAX / ZMIN) ** (n / 1000);
+let zoomFrame = 0;
+let zoomPending = null;
+
+// anchorX: pixels from the left of the lanes that should keep showing the same moment.
+function setZoom(v, anchorX) {
+  const next = clamp(v, ZMIN, ZMAX);
+  if (Math.abs(next - pps) < 0.01) return;
+  const view = tl.clientWidth - headW();
+  if (anchorX == null) {
+    // Keep the playhead still if it's on screen, otherwise the middle of the view.
+    const hx = transport.pos() * pps - tl.scrollLeft;
+    anchorX = hx >= 0 && hx <= view ? hx : view / 2;
+  }
+  // Several zoom steps can land in one frame; anchor them all to the first one's moment.
+  if (!zoomPending) zoomPending = { t: (tl.scrollLeft + anchorX) / pps, x: anchorX };
+  pps = next;
+  $('#zoom').value = zoomToSlider(pps);
+  pref.set('pps', pps);
+  if (!zoomFrame) {
+    zoomFrame = requestAnimationFrame(() => {
+      const { t, x } = zoomPending;
+      zoomFrame = 0;
+      zoomPending = null;
+      renderTimeline();
+      tl.scrollLeft = Math.max(0, t * pps - x);
+      drawRuler();
+    });
+  }
+}
 tl.addEventListener('wheel', (e) => {
   if (!e.ctrlKey) return;
   e.preventDefault();
-  const rect = tl.getBoundingClientRect();
-  const x = e.clientX - rect.left - headW();
-  const t = (tl.scrollLeft + x) / pps;
-  setZoom(pps * (e.deltaY < 0 ? 1.15 : 1 / 1.15));
-  tl.scrollLeft = t * pps - x;
+  // Trackpads send many small steps, mouse wheels a few big ones; scale by the distance.
+  const dy = e.deltaMode === 1 ? e.deltaY * 33 : e.deltaY;
+  const x = e.clientX - tl.getBoundingClientRect().left - headW();
+  setZoom(pps * Math.exp(clamp(-dy, -300, 300) * 0.0018), Math.max(0, x));
 }, { passive: false });
-
-function setZoom(v) {
-  pps = clamp(v, 15, 400);
-  $('#zoom').value = pps;
-  pref.set('pps', pps);
-  renderTimeline();
-}
-$('#zoom').addEventListener('input', (e) => setZoom(+e.target.value));
+$('#zoom').addEventListener('input', (e) => setZoom(sliderToZoom(+e.target.value)));
+$('#zoom').addEventListener('dblclick', () => setZoom(80));
 
 // Song time under a pointer.
 function timeAt(clientX) {
@@ -639,7 +667,7 @@ $('#tracks').addEventListener('input', (e) => {
   if (!row) return;
   const t = track(row.dataset.track);
   if (e.target.dataset.act === 'vol') { beginEdit(); t.vol = +e.target.value; updateTrackGains(); }
-  if (e.target.classList.contains('th-name')) { beginEdit(); t.name = e.target.value; }
+  if (e.target.classList.contains('th-name')) { beginEdit(); t.name = e.target.value; e.target.title = t.name; }
 });
 $('#tracks').addEventListener('change', (e) => { if (e.target.closest('.th')) { endEdit(); } });
 $('#tracks').addEventListener('click', (e) => {
@@ -654,18 +682,84 @@ $('#tracks').addEventListener('click', (e) => {
     changed();
     return;
   }
-  if (act === 'del') {
-    const n = project.clips.filter((c) => c.track === t.id).length;
-    if (project.tracks.length === 1) { toast('You need at least one track.'); return; }
-    if (n && !confirm(`Delete "${t.name}" and its ${n} clip${n > 1 ? 's' : ''}?`)) return;
-    checkpoint();
-    project.tracks = project.tracks.filter((x) => x !== t);
-    project.clips = project.clips.filter((c) => c.track !== t.id);
-    if (selectedTrack === t.id) selectedTrack = project.tracks[0].id;
-    changed();
-    return;
-  }
+  if (act === 'menu') openTrackMenu(t, e.target);
 });
+
+// Track options menu: duplicate, merge into another track, delete.
+function closeTrackMenu() { const m = $('#trackMenu'); if (m) m.remove(); }
+function openTrackMenu(t, btn) {
+  const was = $('#trackMenu');
+  closeTrackMenu();
+  if (was && was.dataset.track === t.id) return;
+  const others = project.tracks.filter((x) => x !== t);
+  const m = document.createElement('div');
+  m.id = 'trackMenu';
+  m.className = 'menu';
+  m.setAttribute('role', 'menu');
+  m.dataset.track = t.id;
+  m.innerHTML = `<button role="menuitem" data-do="dup">Duplicate track</button>
+    ${others.length ? `<p class="menu-sub">Merge into</p>${others.map((o) => `<button role="menuitem" data-do="merge" data-to="${o.id}"><i style="background:${o.colour}"></i>${esc(o.name)}</button>`).join('')}` : ''}
+    <button role="menuitem" class="danger" data-do="del">Delete track</button>`;
+  document.body.appendChild(m);
+  const r = btn.getBoundingClientRect();
+  m.style.left = Math.min(r.left, innerWidth - m.offsetWidth - 8) + 'px';
+  m.style.top = (r.bottom + m.offsetHeight + 8 > innerHeight ? r.top - m.offsetHeight - 4 : r.bottom + 4) + 'px';
+  m.addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-do]');
+    if (!b) return;
+    closeTrackMenu();
+    if (b.dataset.do === 'dup') duplicateTrack(t);
+    if (b.dataset.do === 'merge') mergeTrack(t, track(b.dataset.to));
+    if (b.dataset.do === 'del') deleteTrack(t);
+  });
+  m.querySelector('button').focus();
+}
+document.addEventListener('pointerdown', (e) => {
+  if ($('#trackMenu') && !e.target.closest('#trackMenu, .th-btn.more')) closeTrackMenu();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeTrackMenu(); });
+tl.addEventListener('scroll', closeTrackMenu);
+
+function duplicateTrack(t) {
+  checkpoint();
+  const copy = { ...newTrack(`${t.name} copy`, project.tracks.length), vol: t.vol, mute: t.mute, solo: t.solo };
+  project.tracks.splice(project.tracks.indexOf(t) + 1, 0, copy);
+  for (const c of project.clips.filter((x) => x.track === t.id)) {
+    project.clips.push({ ...JSON.parse(JSON.stringify(c)), id: uid(), track: copy.id });
+  }
+  selectedTrack = copy.id;
+  changed();
+}
+
+// Moves every clip onto the other track and removes this one. Clip volumes are
+// adjusted so each clip sounds as loud as it did with its old track's fader.
+function mergeTrack(t, into) {
+  if (!into) return;
+  checkpoint();
+  const moved = project.clips.filter((c) => c.track === t.id);
+  const db = into.vol > 0 ? (t.vol > 0 ? 20 * Math.log10(t.vol / into.vol) : -24) : 0;
+  for (const c of moved) {
+    c.track = into.id;
+    if (db) c.fx.gain = clamp(Math.round((c.fx.gain + db) * 2) / 2, -24, 12);
+  }
+  project.tracks = project.tracks.filter((x) => x !== t);
+  selectedTrack = into.id;
+  const lane = project.clips.filter((c) => c.track === into.id).sort((a, b) => a.start - b.start);
+  const overlaps = lane.some((c, i) => i && c.start < lane[i - 1].start + fullLen(lane[i - 1]) - 1e-6);
+  changed();
+  toast(`Merged ${t.name} into ${into.name}.${overlaps ? ' Some clips overlap; they all still play.' : ''}`);
+}
+
+function deleteTrack(t) {
+  const n = project.clips.filter((c) => c.track === t.id).length;
+  if (project.tracks.length === 1) { toast('You need at least one track.'); return; }
+  if (n && !confirm(`Delete "${t.name}" and its ${n} clip${n > 1 ? 's' : ''}?`)) return;
+  checkpoint();
+  project.tracks = project.tracks.filter((x) => x !== t);
+  project.clips = project.clips.filter((c) => c.track !== t.id);
+  if (selectedTrack === t.id) selectedTrack = project.tracks[0].id;
+  changed();
+}
 function selectTrack(id) {
   if (selectedTrack === id) return;
   selectedTrack = id;
@@ -901,13 +995,13 @@ function renderInspector() {
   const el = $('#inspector');
   const c = selectedClip && clipById(selectedClip);
   if (!c) {
-    el.innerHTML = `<h2>No clip selected</h2>
+    el.innerHTML = `<div class="insp-empty"><h2>No clip selected</h2>
       <p class="meta">Click a clip to change its sound.</p>
       <section><h3>Quick start</h3>
       <p class="hint">1. Choose a folder (top right) so your sounds, projects and exports save on your PC.</p>
       <p class="hint">2. Drop in a TikTok video or audio file, or press ● to record your voice onto the highlighted track.</p>
       <p class="hint">3. Select a clip, then use Auto-chop to cut it into words or hits.</p>
-      <p class="hint">4. Drag pieces around, add drums from Pads, then Export.</p></section>`;
+      <p class="hint">4. Drag pieces around, add drums from Pads, then Export.</p></section></div>`;
     return;
   }
   const fx = c.fx;
@@ -1680,11 +1774,39 @@ $('#toolMove').addEventListener('click', () => setTool('move'));
 $('#toolChop').addEventListener('click', () => setTool('chop'));
 $('#btnUndo').addEventListener('click', undo);
 $('#btnRedo').addEventListener('click', redo);
-$('#projName').addEventListener('change', (e) => {
-  project.name = S.safeName(e.target.value) || 'Untitled';
-  e.target.value = project.name;
+$('#projName').addEventListener('change', async (e) => {
+  const name = S.safeName(e.target.value) || 'Untitled';
+  if (name === project.name) { e.target.value = name; return; }
+  // Renaming the open song renames its file too, rather than leaving the old one behind.
+  if (S.connected() && !(await renameSongFile(project.name, name))) { e.target.value = project.name; return; }
+  project.name = name;
+  e.target.value = name;
   scheduleSave();
 });
+
+// Renames a saved song file. Returns false (with a message) when it can't.
+async function renameSongFile(from, to) {
+  const names = await S.list('projects');
+  const a = S.safeName(from) + '.json';
+  const b = S.safeName(to) + '.json';
+  if (a.toLowerCase() !== b.toLowerCase() && names.some((n) => n.toLowerCase() === b.toLowerCase())) {
+    toast(`There's already a song called "${to}".`, true);
+    return false;
+  }
+  if (!names.includes(a)) return true; // never saved yet; the next save uses the new name
+  try {
+    const f = await S.read('projects', a);
+    const p = JSON.parse(await f.text());
+    p.name = to;
+    await S.write('projects', b, new Blob([JSON.stringify(p, null, 1)], { type: 'application/json' }));
+    if (a !== b) await S.remove('projects', a);
+    if (pref.get('last', null) === from) pref.set('last', to);
+    return true;
+  } catch (err) {
+    toast(`Couldn't rename it: ${err.message}`, true);
+    return false;
+  }
+}
 
 // ── Saving & projects ──
 
@@ -1754,13 +1876,54 @@ async function loadProject(name) {
 
 $('#btnOpen').addEventListener('click', async () => {
   if (!S.connected()) { toast('Choose your Chopped Beats folder first.'); return; }
-  const names = (await S.list('projects')).filter((n) => n.endsWith('.json'));
-  modal('Open project', names.length
-    ? `<ul class="proj-list">${names.map((n) => `<li><button data-n="${esc(n)}">${esc(n.replace(/\.json$/, ''))}</button></li>`).join('')}</ul>`
-    : '<p>No projects saved yet.</p>', (body) => {
-    body.addEventListener('click', (e) => {
-      const b = e.target.closest('button[data-n]');
-      if (b) { closeModal(); loadProject(b.dataset.n); }
+  modal('Your songs', '<ul class="proj-list"></ul>', (body) => {
+    const list = $('.proj-list', body);
+    const draw = async () => {
+      const names = (await S.list('projects')).filter((n) => n.endsWith('.json'))
+        .sort((x, y) => x.localeCompare(y, undefined, { numeric: true }));
+      const open = S.safeName(project.name) + '.json';
+      list.innerHTML = names.length ? names.map((n) => `<li data-n="${esc(n)}">
+        <button class="proj-open">${esc(n.replace(/\.json$/, ''))}${n === open ? ' <small>open now</small>' : ''}</button>
+        <button class="proj-act" data-do="rename" title="Rename" aria-label="Rename ${esc(n)}">✎</button>
+        <button class="proj-act danger" data-do="del" title="Delete" aria-label="Delete ${esc(n)}">×</button>
+      </li>`).join('') : '<li class="empty">No songs saved yet.</li>';
+    };
+    draw();
+    list.addEventListener('click', async (e) => {
+      const li = e.target.closest('li[data-n]');
+      if (!li) return;
+      const n = li.dataset.n;
+      const title = n.replace(/\.json$/, '');
+      const isOpen = n === S.safeName(project.name) + '.json';
+      if (e.target.closest('.proj-open')) {
+        if (isOpen) { closeModal(); return; }
+        if (S.connected()) { clearTimeout(saveTimer); await saveNow(); }
+        closeModal();
+        loadProject(n);
+      } else if (e.target.closest('[data-do="rename"]')) {
+        li.innerHTML = `<form class="proj-rename"><input value="${esc(title)}" aria-label="New name" spellcheck="false" /><button class="btn small primary">Save</button><button type="button" class="btn small" data-do="cancel">Cancel</button></form>`;
+        const input = $('input', li);
+        input.select();
+        $('[data-do="cancel"]', li).addEventListener('click', draw);
+        $('form', li).addEventListener('submit', async (ev) => {
+          ev.preventDefault();
+          const to = S.safeName(input.value) || title;
+          if (to !== title) {
+            if (isOpen) { clearTimeout(saveTimer); await saveNow(); }
+            if (!(await renameSongFile(title, to))) return;
+            if (isOpen) { project.name = to; $('#projName').value = to; }
+          }
+          draw();
+        });
+      } else if (e.target.closest('[data-do="del"]')) {
+        if (!confirm(`Delete "${title}"? This removes the song file from your folder. Your sounds and exports stay.`)) return;
+        try {
+          await S.remove('projects', n);
+          if (isOpen) { clearTimeout(saveTimer); startNewSong(); }
+          toast(`Deleted ${title}.`);
+        } catch (err) { toast(`Couldn't delete it: ${err.message}`, true); }
+        draw();
+      }
     });
   });
 });
@@ -1768,6 +1931,10 @@ $('#btnOpen').addEventListener('click', async () => {
 $('#btnNew').addEventListener('click', async () => {
   if (project.clips.length && !S.connected() && !confirm('This project is not saved. Start a new one anyway?')) return;
   if (S.connected()) { clearTimeout(saveTimer); await saveNow(); }
+  startNewSong();
+});
+
+async function startNewSong() {
   transport.stop();
   project = blankProject();
   let n = 1;
@@ -1783,7 +1950,7 @@ $('#btnNew').addEventListener('click', async () => {
   syncControls();
   renderPads();
   changed();
-});
+}
 
 async function connectFolder(reconnect) {
   try {
@@ -2125,7 +2292,7 @@ window.addEventListener('beforeunload', (e) => {
 // ── Start-up ──
 
 async function init() {
-  $('#zoom').value = pps;
+  $('#zoom').value = zoomToSlider(pps);
   buildPadGrid();
   const kit = await buildKit();
   for (const k of kit) samples.set('kit:' + k.name, { id: 'kit:' + k.name, name: k.name, kind: 'kit', buffer: k.buffer });
