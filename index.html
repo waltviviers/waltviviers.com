@@ -1984,7 +1984,7 @@
             <span class="digital-sub-cta">Play &#8594;</span>
           </span>
         </a>
-        <a class="digital-sub-card" href="https://chopped-beats.waltviviers.com/">
+        <a class="digital-sub-card" href="/apps/chopped-beats/">
           <span class="digital-sub-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span>
           <span class="digital-sub-body">
             <span class="digital-sub-title">Chopped Beats</span>
@@ -2578,7 +2578,7 @@
       fetch('data/artworks.json')
         .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
         .then(data => {
-          works = (data.artworks || []).filter(w => !w.hidden && w.image.indexOf('cracked-acrylic-canvas-walt-viviers-2010') === -1).map(w => ({
+          works = (data.artworks || []).filter(w => !w.hidden).map(w => ({
             id:         w.title + w.year,
             image:      w.image,
             title:      w.title      || '-',
