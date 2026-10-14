@@ -189,13 +189,13 @@ img.wv-parallax {
   width: 20px; height: 25px;
   pointer-events: none; z-index: 10000;
   opacity: 0;
-  transform-origin: 3px 1px;
+  transform-origin: 50% 50%;   /* pulse grows/shrinks in place, not from the tip */
   will-change: transform, scale;
   transition: scale 0.18s ease, opacity 0.2s ease;
 }
 .wv-cursor.on { opacity: 1; }
 .wv-cursor.hide { opacity: 0; }
-.wv-cursor.throb { animation: wv-cursor-throb 0.9s ease-in-out infinite; }
+.wv-cursor.throb { animation: wv-cursor-throb 2.2s ease-in-out infinite; }
 @keyframes wv-cursor-throb { 0%, 100% { scale: 1; } 50% { scale: 1.2; } }
 
 /* Hide the native pointer while the DOM cursor is active; text fields keep
