@@ -1,5 +1,7 @@
 // Audio core: shared context, decoding, clip processing (effects) and encoding.
 
+import { autotune } from './autotune.js';
+
 export const ctx = new AudioContext({ latencyHint: 'interactive' });
 export const SR = ctx.sampleRate;
 
@@ -19,6 +21,9 @@ export const DEFAULT_FX = {
   reverb: 0,      // 0..1 mix
   fadeIn: 0,      // seconds
   fadeOut: 0,     // seconds
+  tune: 0,        // 0..1 auto-tune amount (0 = off)
+  tuneStyle: 0.5, // 0 natural glide .. 1 hard snap
+  tuneKey: -1,    // -1 detect, -2 any note, 0..11 major keys, 12..23 minor keys
 };
 
 export async function decodeFile(file) {
@@ -294,6 +299,12 @@ export async function renderClip(buffer, clip, bpm) {
   let chs = extract(buffer, clip.srcStart, clip.srcEnd);
   chs = resampleRate(chs, buffer.sampleRate, SR);
   if (fx.reverse) chs = chs.map((x) => x.slice().reverse());
+  let tuneLabel = '';
+  if (fx.tune > 0) {
+    const t = autotune(chs, SR, { amount: fx.tune, style: fx.tuneStyle, key: fx.tuneKey });
+    chs = t.chs;
+    tuneLabel = t.label;
+  }
 
   const r = Math.pow(2, fx.pitch / 12);
   const bodySrc = Math.round((chs[0].length) / fx.speed);
@@ -316,6 +327,7 @@ export async function renderClip(buffer, clip, bpm) {
     if (g !== 1) for (let j = 0; j < x.length; j++) x[j] *= g;
     out.copyToChannel(x, i);
   });
+  out.tuneLabel = tuneLabel; // the key auto-tune used, shown in the clip panel
   return out;
 }
 
