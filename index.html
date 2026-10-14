@@ -1840,7 +1840,7 @@
     <div class="explore-albums" id="explore-albums"></div>
   </section>
 
-  <!-- Photography — editorial copy -->
+  <!-- Photography, editorial copy -->
   <section id="photo-about">
     <div class="about-left">
       <h2 class="about-title" data-i18n-html="photo-about-title-html">
@@ -2437,7 +2437,7 @@
         var schema = {
           '@context': 'https://schema.org',
           '@type': 'ItemList',
-          'name': 'Walt Viviers — Selected Works',
+          'name': 'Walt Viviers: Selected Works',
           'numberOfItems': works.length,
           'itemListElement': works.map(function (w, i) {
             return {
@@ -2562,8 +2562,8 @@
           works = (data.artworks || []).filter(w => !w.hidden).map(w => ({
             id:         w.title + w.year,
             image:      w.image,
-            title:      w.title      || '—',
-            year:       w.year       || '—',
+            title:      w.title      || '-',
+            year:       w.year       || '-',
             medium:     w.medium     || '',
             dimensions: w.dimensions || '',
             available:    w.available === 'available' ? true
@@ -2579,7 +2579,7 @@
 
           works.sort((a, b) => Number(b.year) - Number(a.year));
 
-          if (!works.length) { setHeroState('No artworks yet — add some in the CMS'); return; }
+          if (!works.length) { setHeroState('No artworks yet. Add some in the CMS'); return; }
 
           const fi = works.findIndex(w => w.featured);
           current  = fi >= 0 ? fi : Math.floor(Math.random() * works.length);
@@ -2723,7 +2723,7 @@
         var title = document.getElementById('hero-title').textContent;
         workName.textContent = title;
         document.querySelector('#enquiry-form [name="artwork"]').value = title;
-        document.querySelector('#enquiry-form [name="_subject"]').value = 'Artwork Enquiry — ' + title;
+        document.querySelector('#enquiry-form [name="_subject"]').value = 'Artwork Enquiry: ' + title;
         openModal('enquiry-modal');
       });
       wireForm('enquiry-form', 'enquiry-modal');
@@ -2822,7 +2822,7 @@
       if (!grid) return;
       function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
       var ALBUMS = [
-        { img: '/images/800/garden.webp', hero: '/images/1600/garden.webp', title: 'Manifesto Wellness Africa — Burn Out to Balance Retreat', cap: 'Manifesto Wellness Africa', url: 'https://photos.app.goo.gl/yZNbUvQbBJcjaW2B6' },
+        { img: '/images/800/garden.webp', hero: '/images/1600/garden.webp', title: 'Manifesto Wellness Africa: Burn Out to Balance Retreat', cap: 'Manifesto Wellness Africa', url: 'https://photos.app.goo.gl/yZNbUvQbBJcjaW2B6' },
         { img: '/images/800/chantal.webp', hero: '/images/1600/chantal.webp', title: 'Chantal @ Woodlands Spa', cap: 'Chantal @ Woodlands Spa', url: 'https://photos.app.goo.gl/kvpgbiE5KeBqGsv18' },
         { img: '/images/800/the-farm.webp', hero: '/images/1600/the-farm.webp', pos: '12%', title: 'The Farm', cap: 'The Farm', url: 'https://photos.app.goo.gl/GbPyGQkrKDQKqwgd6' },
         { img: '/images/800/unlimited.webp', hero: '/images/1600/unlimited.webp', title: 'Manifesto Wellness @ Unlimited Events Group', cap: 'Manifesto @ Unlimited Events', url: 'https://photos.app.goo.gl/D4QaKwYNPWjBYhXJ7' },
@@ -2848,7 +2848,7 @@
       grid.innerHTML = ALBUMS.filter(function (a) {
         return (a.hero || a.img) !== headerHero;
       }).slice(0, 4).map(function (a) {
-        return '<a class="explore-album" href="' + esc(a.url) + '" target="_blank" rel="noopener" aria-label="' + esc(a.title) + ' — open album">' +
+        return '<a class="explore-album" href="' + esc(a.url) + '" target="_blank" rel="noopener" aria-label="' + esc(a.title) + ', open album">' +
           '<span class="explore-album-img"><img src="' + a.img + '" alt="' + esc(a.title) + '" loading="lazy" width="1200" height="800" /></span>' +
           '<span class="explore-album-cap">' + esc(a.cap) + '</span></a>';
       }).join('');
@@ -2863,7 +2863,7 @@
     <div class="gx-box">
       <button class="gx-close" type="button" aria-label="Close">&times;</button>
       <h2>Enquire</h2>
-      <p class="gx-sub">Commissions, original artworks, photography &amp; video bookings, gallery representation — tell me what you have in mind and I'll be in touch.</p>
+      <p class="gx-sub">Commissions, original artworks, photography &amp; video bookings, gallery representation. Tell me what you have in mind and I'll be in touch.</p>
       <form id="gx-form">
         <input type="hidden" name="_subject" value="Website Enquiry" />
         <div class="gx-field"><label for="gx-name">Name</label><input id="gx-name" name="name" type="text" required placeholder="Your name" /></div>
