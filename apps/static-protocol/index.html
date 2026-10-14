@@ -1,157 +1,436 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
-<meta name="robots" content="index, follow" />
-<title>Static Protocol</title>
-<meta name="description" content="A cyberpunk interactive story played entirely on your phone. Five decisions, five live SYNC hacking sequences, ten possible endings." />
-<link rel="canonical" href="https://static-protocol.waltviviers.com/" />
-<meta property="og:title" content="Static Protocol" />
-<meta property="og:description" content="A cyberpunk interactive story played entirely on your phone. Five decisions, five live SYNC hacking sequences, ten possible endings." />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://static-protocol.waltviviers.com/" />
-<meta name="theme-color" content="#05050a" />
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' fill='%2305050a'/%3E%3Cpath d='M4 6l6 6-6 6' fill='none' stroke='%2322e6d4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cline x1='12' y1='18' x2='20' y2='18' stroke='%2322e6d4' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Static Protocol — A cyberpunk data-heist on your phone</title>
+  <meta name="description" content="A cyberpunk data-heist story played entirely on your phone. Five jobs, five live SYNC hacking sequences, and ten possible endings. Free, no install, no account." />
+  <link rel="canonical" href="https://static-protocol.waltviviers.com/" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <meta name="robots" content="noindex, follow" />
 
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { width: 100%; height: 100%; overflow: hidden; background: #05050a; }
-  body {
-    font-family: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
-    color: #d9f7f2;
-    -webkit-font-smoothing: antialiased;
-  }
-  button { font: inherit; color: inherit; cursor: pointer; background: none; border: none; }
-  a { color: inherit; }
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://static-protocol.waltviviers.com/" />
+  <meta property="og:title"       content="Static Protocol — A cyberpunk data-heist on your phone" />
+  <meta property="og:description" content="A cyberpunk data-heist story played entirely on your phone. Five jobs, five live SYNC hacking sequences, and ten possible endings." />
+  <meta property="og:site_name"   content="Walt Viviers" />
 
-  :root {
-    --cyan: #22e6d4;
-    --magenta: #ff3d94;
-    --bg: #05050a;
-  }
+  <!-- Twitter / X -->
+  <meta name="twitter:card"        content="summary" />
+  <meta name="twitter:title"       content="Static Protocol — A cyberpunk data-heist on your phone" />
+  <meta name="twitter:description" content="A cyberpunk data-heist story played entirely on your phone. Five jobs, five live SYNC hacking sequences, and ten possible endings." />
 
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "VideoGame",
+        "name": "Static Protocol",
+        "description": "A cyberpunk data-heist story played entirely on your phone. Five jobs, five live SYNC hacking sequences, and ten possible endings. Free, no install, no account required.",
+        "url": "https://static-protocol.waltviviers.com/",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Person", "name": "Walt Viviers", "url": "https://waltviviers.com" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://waltviviers.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Apps", "item": "https://waltviviers.com/apps/" },
+          { "@type": "ListItem", "position": 3, "name": "Static Protocol", "item": "https://waltviviers.com/apps/static-protocol/" }
+        ]
+      }
+    ]
   }
+  </script>
 
-  /* ── Start menu: same full-screen title treatment as the game's own title screen ── */
-  .start-menu { position: fixed; inset: 0; z-index: 200; overflow: hidden; display: flex; align-items: flex-end; justify-content: center; text-align: center; padding: 24px; padding-bottom: 64px; }
-  .site-logo {
-    position: absolute; top: max(32px, env(safe-area-inset-top)); left: max(48px, env(safe-area-inset-left));
-    z-index: 3; opacity: 0.85; transition: opacity 0.2s;
-  }
-  .site-logo:hover, .site-logo:focus-visible { opacity: 1; }
-  .site-logo img { display: block; height: 36px; width: auto; }
-  @media (max-width: 900px) {
-    .site-logo { top: max(11px, env(safe-area-inset-top)); left: max(24px, env(safe-area-inset-left)); }
-    .site-logo img { height: 28px; }
-  }
-  .menu-bg-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
-  .menu-bg-video-blur { display: none; }
-  @media (max-width: 900px) {
-    /* The source video is landscape; on a narrow portrait screen a straight cover crop loses
-       most of the frame off the sides. Show the full frame (contain) over a blurred, cover-fit
-       copy of the same clip so the screen still reads as fully filled edge to edge. */
-    .menu-bg-video-blur {
-      display: block; position: absolute; inset: 0; width: 100%; height: 100%;
-      object-fit: cover; z-index: 0; filter: blur(30px) brightness(0.55); transform: scale(1.15);
+  <script>(function(){var s=localStorage.getItem('wv-theme');document.documentElement.dataset.theme=s||(window.matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; }
+
+    :root {
+      --black:  #0C0C0B;
+      --white:  #FAF9F7;
+      --ink:    #FAF9F7;
+      --stone:  #9A9890;
+      --rule:   #2A2826;
+      --bg:     #000000;
+      --bg2:    #0D0D0D;
+      --accent: #22e6d4;
+      --serif:  'EB Garamond', Georgia, serif;
+      --sans:   'Inter', system-ui, sans-serif;
     }
-    .menu-bg-video {
-      object-fit: contain; object-position: center top; background: #05050a; opacity: 1;
-      transform: scale(1.6); transform-origin: center top;
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
     }
-    /* The video (contain, top-anchored, scale(1.6)) renders at height = 0.9 * viewport width,
-       independent of viewport height. Push the panel to start clear of it instead of centering
-       vertically, or the copy overlaps the footage. */
-    .start-menu { align-items: flex-start; padding-top: calc(90vw + 20px); }
-  }
-  .menu-panel { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 340px; }
-  .menu-panel[hidden] { display: none; }
-  .menu-brand { font-size: 2.1rem; font-weight: 800; letter-spacing: 0.06em; margin-bottom: 8px; }
-  .menu-copy { font-size: 13px; color: rgba(217,247,242,0.65); max-width: 300px; line-height: 1.45; }
-  .menu-howto { max-width: 380px; }
-  .menu-howto .prose { text-align: left; }
-  .menu-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 230px; margin-top: 16px; }
 
-  .glitch {
-    position: relative; font-weight: 800; letter-spacing: 0.02em; color: #eafffb;
-    text-shadow: 0 0 18px rgba(34,230,212,0.35);
-  }
-  .glitch::before, .glitch::after { content: attr(data-text); position: absolute; left: 0; top: 0; width: 100%; overflow: hidden; opacity: 0.7; }
-  .glitch::before { color: var(--cyan); transform: translate(-1px,0); animation: glitch1 3.2s infinite steps(1); clip-path: inset(0 0 55% 0); }
-  .glitch::after  { color: var(--magenta); transform: translate(1px,0); animation: glitch2 3.6s infinite steps(1); clip-path: inset(55% 0 0 0); }
-  @keyframes glitch1 { 0%,90%,100% { transform: translate(-1px,0); } 92% { transform: translate(2px,-1px); } 94% { transform: translate(-3px,1px); } 96% { transform: translate(1px,1px); } }
-  @keyframes glitch2 { 0%,88%,100% { transform: translate(1px,0); } 91% { transform: translate(-2px,1px); } 95% { transform: translate(3px,-1px); } 97% { transform: translate(-1px,-1px); } }
+    /* ── Light mode ── */
+    [data-theme="light"] {
+      --ink: #0C0C0B; --stone: #6B6560; --rule: #D5D1CB;
+      --bg: #F5F3EF; --bg2: #EDEAE5; --accent: #0f9d90;
+    }
+    [data-theme="light"] body { background: #F5F3EF; }
+    [data-theme="light"] nav { background: rgba(245,243,239,0.95); }
+    [data-theme="light"] .nav-logo img { filter: invert(1); opacity: 1; }
+    [data-theme="light"] .nav-links a:hover { color: var(--ink); }
+    [data-theme="light"] .theme-toggle { border-color: #D5D1CB; }
+    [data-theme="light"] .toggle-thumb .icon-moon { display: none; }
+    [data-theme="light"] .toggle-thumb .icon-sun  { display: block; }
+    [data-theme="light"] .nav-cta { color: #0C0C0B !important; border-color: #D5D1CB !important; }
+    [data-theme="light"] .nav-cta:hover { background: #0C0C0B !important; color: #FAF9F7 !important; border-color: #0C0C0B !important; }
+    [data-theme="light"] .footer-admin:hover { color: #0C0C0B; border-color: #6B6560; }
+    [data-theme="light"] .footer-social .social-icons a:hover { color: var(--ink); }
 
-  .eyebrow { font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cyan); margin-bottom: 12px; }
-  .eyebrow.magenta { color: var(--magenta); }
-  .prose p { color: rgba(217,247,242,0.82); font-size: 12.5px; line-height: 1.75; margin-bottom: 14px; }
-  .prose p:last-child { margin-bottom: 0; }
+    /* ── Hero ── */
+    .hero {
+      padding: clamp(120px, 17vh, 180px) 24px clamp(72px, 10vh, 110px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+    }
 
-  .primary-btn {
-    display: flex; width: 100%; align-items: center; justify-content: center;
-    background: var(--cyan); color: #05050a; font-weight: 700; letter-spacing: 0.10em;
-    text-transform: uppercase; font-size: 12px; padding: 14px; border: none; margin-top: 6px;
-    box-shadow: 0 0 20px rgba(34,230,212,0.3); text-decoration: none;
-  }
-  .primary-btn:active { transform: scale(0.98); }
-  .ghost-btn {
-    display: flex; width: 100%; align-items: center; justify-content: center;
-    background: rgba(255,255,255,0.06); border: 1px solid rgba(217,247,242,0.25); color: #d9f7f2;
-    font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 11px; padding: 13px;
-  }
-  .ghost-btn:active { transform: scale(0.98); background: rgba(255,255,255,0.1); }
-  .menu-back-link {
-    margin-top: 8px; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(217,247,242,0.5); text-decoration: none; transition: color 0.2s;
-  }
-  .menu-back-link:hover, .menu-back-link:focus-visible { color: var(--cyan); }
-</style>
+    .app-back {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.10em;
+      text-transform: uppercase; color: var(--stone);
+      transition: color 0.2s; margin-bottom: 22px; display: inline-block;
+    }
+    .app-back:hover { color: var(--ink); }
+
+    .app-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .hero-tagline {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+      color: var(--stone);
+      margin-bottom: 28px;
+    }
+
+    .hero-desc {
+      font-size: clamp(15px, 2vw, 18px);
+      color: var(--stone);
+      line-height: 1.7;
+      max-width: 540px;
+      margin: 0 auto 52px;
+    }
+
+    .app-icon {
+      width: 96px;
+      height: 96px;
+      border-radius: 22px;
+      background: #06100f;
+      border: 1px solid rgba(34,230,212,0.25);
+      box-shadow: 0 0 36px rgba(34,230,212,0.18), 0 8px 32px rgba(0,0,0,0.5);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 40px;
+    }
+    .app-icon svg { width: 46px; height: 46px; display: block; }
+
+    .download-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 24px;
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      text-decoration: none;
+    }
+    .store-btn:hover { border-color: var(--accent); background: var(--bg2); }
+    .store-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+    .store-btn-inner { display: flex; flex-direction: column; gap: 1px; text-align: left; }
+    .store-btn-sub { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); font-weight: 400; }
+    .store-btn-name { font-size: 15px; font-weight: 500; }
+
+    /* ── How it works ── */
+    .how-it-works {
+      padding: 96px 48px;
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+      border-bottom: 1px solid var(--rule);
+    }
+    .how-it-works h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 28px;
+    }
+    .how-it-works p {
+      font-size: clamp(15px, 1.8vw, 18px);
+      color: var(--stone);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+    .how-survive {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ── Features ── */
+    .difficulty-section { border-bottom: 1px solid var(--rule); }
+    .difficulty-header {
+      padding: 64px 48px 0;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+    .difficulty-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .difficulty-card { padding: 48px 56px 64px; border-right: 1px solid var(--rule); }
+    .difficulty-card:last-child { border-right: none; }
+    .diff-icon {
+      width: 44px; height: 44px; margin-bottom: 22px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+    }
+    .diff-icon svg { width: 100%; height: 100%; display: block; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .difficulty-card h3 {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+    .difficulty-card p { font-size: 14px; color: var(--stone); line-height: 1.75; }
+
+    /* ── No nonsense strip ── */
+    .privacy-strip {
+      padding: 80px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      border-bottom: 1px solid var(--rule);
+    }
+    .privacy-tag {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 20px;
+    }
+    .privacy-strip h2 {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3vw, 44px);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+    .privacy-strip p { font-size: 15px; color: var(--stone); line-height: 1.8; margin-bottom: 32px; }
+    .privacy-checklist { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+    .privacy-checklist li { display: flex; align-items: center; gap: 12px; font-size: 15px; color: var(--stone); }
+    .privacy-checklist svg {
+      width: 16px; height: 16px; stroke: var(--accent); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0;
+    }
+
+    /* ── CTA section ── */
+    .cta-section { padding: 96px 48px; text-align: center; }
+    .cta-section h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin-bottom: 40px;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-link-hide { display: none; }
+      .toggle-thumb { position: static; width: auto; height: auto; background: none; border-radius: 0; transform: none !important; }
+      .toggle-thumb .icon-moon,
+      .toggle-thumb .icon-sun { width: 17px; height: 17px; stroke: var(--stone); }
+      .theme-toggle:hover .toggle-thumb .icon-moon,
+      .theme-toggle:hover .toggle-thumb .icon-sun { stroke: var(--ink); }
+
+      .hero { padding-top: calc(50px + 80px); padding-bottom: 80px; }
+      .how-it-works { padding: 64px 24px; }
+      .difficulty-header { padding: 48px 24px 0; }
+      .difficulty-grid { grid-template-columns: 1fr; }
+      .difficulty-card { border-right: none; border-bottom: 1px solid var(--rule); padding: 40px 24px; }
+      .difficulty-card:last-child { border-bottom: none; }
+      .privacy-strip { grid-template-columns: 1fr; gap: 48px; padding: 64px 24px; }
+      .cta-section { padding: 80px 24px; }
+      footer { padding: 40px 24px 88px; flex-direction: column; gap: 28px; }
+      .footer-admin { position: static; transform: none; order: 1; }
+      .footer-social { order: 0; }
+      .footer-mark { position: static; transform: none; order: 2; }
+    }
+
+    @media (max-width: 560px) {
+      .footer-admin { display: none; }
+    }
+    @view-transition { navigation: auto; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+      ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+    }
+  </style>
+  <script defer src="/chrome.js"></script>
 </head>
 <body>
-<div class="start-menu" id="start-menu">
-  <video class="menu-bg-video-blur" autoplay loop muted playsinline aria-hidden="true" src="/apps/static-protocol/magnific_no-moths-way-more-flicker_3zVs6SqREY.mp4"></video>
-  <video class="menu-bg-video" autoplay loop muted playsinline aria-hidden="true" src="/apps/static-protocol/magnific_no-moths-way-more-flicker_3zVs6SqREY.mp4"></video>
-  <a href="https://waltviviers.com/" class="site-logo" aria-label="Walt Viviers — home">
-    <img src="/logo.svg" alt="Walt Viviers" width="379" height="185" />
-  </a>
-  <div class="menu-panel" id="menu-main">
-    <div class="menu-brand glitch" data-text="STATIC PROTOCOL">STATIC PROTOCOL</div>
-    <div class="menu-copy">A cyberpunk data heist, played entirely on the runner's phone. Five jobs tonight — however you handle them is however this goes.</div>
-    <div class="menu-actions">
-      <a href="/play/" class="primary-btn">Play</a>
-      <button class="ghost-btn" id="how-to-play-btn">How To Play</button>
-      <a href="https://waltviviers.com/" class="menu-back-link">Back to Main Page</a>
-    </div>
-  </div>
-  <div class="menu-panel menu-howto" id="menu-howto" hidden>
-    <div class="eyebrow magenta">How To Play</div>
-    <div class="prose">
-      <p>This is the runner's phone. Five jobs come through tonight. Tap a notification to open the app it lands in, then pick how you handle it.</p>
-      <p>Every choice triggers a live <b>SYNC</b> — a short minigame, different for every job. Tap the prompts, or use arrow keys / WASD / Space on desktop. Clean it and your choice plays out exactly as intended; fumble it and the job gets forced sideways.</p>
-      <p>Fumble too many and the heat — the signal bars, top right — climbs. Three strikes and the job ends for you, whatever you decide next.</p>
-      <p>Ten different endings are waiting, built from who you trusted, how you got it done, and how steady your hands were.</p>
-    </div>
-    <div class="menu-actions">
-      <a href="/play/" class="primary-btn">Play</a>
-      <button class="ghost-btn" id="howto-back-btn">Back</button>
-    </div>
-  </div>
-</div>
-<script>
-  var mainPanel = document.getElementById('menu-main');
-  var howtoPanel = document.getElementById('menu-howto');
-  document.getElementById('how-to-play-btn').addEventListener('click', function () {
-    mainPanel.hidden = true; howtoPanel.hidden = false;
-  });
-  document.getElementById('howto-back-btn').addEventListener('click', function () {
-    howtoPanel.hidden = true; mainPanel.hidden = false;
-  });
-</script>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <a href="/apps/" class="app-back">← Back to Apps and Games</a>
+      <p class="app-eyebrow">A cyberpunk data-heist on your phone</p>
+      <div class="app-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 6l6 6-6 6" stroke="#22e6d4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="18" x2="20" y2="18" stroke="#22e6d4" stroke-width="2" stroke-linecap="round"/></svg>
+      </div>
+      <h1>Static Protocol</h1>
+      <p class="hero-tagline">Five jobs tonight. However you handle them is however this goes.</p>
+      <p class="hero-desc">A cyberpunk data-heist told in texts and live hacks, played entirely on your phone. Five decisions, five SYNC sequences, and ten possible endings.</p>
+      <div class="download-row">
+        <a href="/apps/static-protocol/play/" class="store-btn" aria-label="Play Static Protocol in your browser">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l6 6-6 6"/><line x1="12" y1="18" x2="20" y2="18"/></svg>
+          <span class="store-btn-inner">
+            <span class="store-btn-sub">Play in your browser</span>
+            <span class="store-btn-name">Play now</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-it-works">
+      <h2>A heist in your messages</h2>
+      <p>You're the runner's handler for one long night. Jobs arrive over an encrypted phone — texts, maps, and live SYNC windows where you read the pattern and hit it before the trace locks on. Every call you make bends the night a different way.</p>
+      <p class="how-survive">Five jobs. Ten endings. No save scumming.</p>
+    </section>
+
+    <!-- Features -->
+    <section class="difficulty-section">
+      <p class="difficulty-header">What you're in for</p>
+      <div class="difficulty-grid">
+        <div class="difficulty-card">
+          <div class="diff-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/></svg>
+          </div>
+          <h3>Five jobs</h3>
+          <p>Five linked jobs across one cyberpunk night, each with its own target, crew, and way to go sideways.</p>
+        </div>
+        <div class="difficulty-card">
+          <div class="diff-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 6l6 6-6 6"/><line x1="12" y1="18" x2="20" y2="18"/></svg>
+          </div>
+          <h3>Live SYNC hacks</h3>
+          <p>Real-time hacking windows — match the pattern before the trace locks you out. Nerve matters more than speed.</p>
+        </div>
+        <div class="difficulty-card">
+          <div class="diff-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v9l6 3"/></svg>
+          </div>
+          <h3>Ten endings</h3>
+          <p>Your decisions compound. Ten possible endings, from a clean extraction to a total burn — and everything in between.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- No nonsense -->
+    <section class="privacy-strip">
+      <div>
+        <p class="privacy-tag">Just open it and play</p>
+        <h2><span>No install.</span><br/><span>No account.</span><br/><span>No nonsense.</span></h2>
+        <p>It runs entirely in your browser — best on a phone, where the story lives. Nothing to download, nothing to sign up for, nothing to pay.</p>
+      </div>
+      <ul class="privacy-checklist" aria-label="What you get">
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>Runs entirely in your browser</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>No data collected</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>No account required</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>Free forever</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>Best played on your phone</span></li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>Ten endings worth replaying</span></li>
+      </ul>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <h2>Jack in</h2>
+      <div class="download-row">
+        <a href="/apps/static-protocol/play/" class="store-btn" aria-label="Play Static Protocol in your browser">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l6 6-6 6"/><line x1="12" y1="18" x2="20" y2="18"/></svg>
+          <span class="store-btn-inner">
+            <span class="store-btn-sub">Play in your browser</span>
+            <span class="store-btn-name">Play now</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}</script>
 </body>
 </html>
