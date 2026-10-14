@@ -122,22 +122,20 @@
     }
   
 
-    .journal-hero { position: relative; min-height: clamp(500px, 58vh, 520px); display: flex; align-items: center; overflow: hidden; background: #0D0D0D; border-bottom: 1px solid var(--rule); }
-    .journal-hero-img { position: absolute; inset: 0; }
-    .journal-hero-img img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
-    .journal-hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.4) 45%, rgba(0,0,0,0.12) 100%); }
-    /* Copy lines up with the text in the post cards below (column 760px, 24px gutter, card padding 32px + 1px border). */
-    .journal-hero-inner { position: relative; z-index: 2; width: 100%; max-width: 760px; margin: 0 auto; padding: clamp(32px, 5vw, 68px) 57px; }
-    .journal-eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #CDCAC2; margin-bottom: 14px; text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
-    .journal-hero-title { font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 5vw, 3.6rem); line-height: 1.05; letter-spacing: -0.01em; color: #FAF9F7; margin-bottom: 16px; text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
-    .journal-hero-desc { font-size: clamp(15px, 1.6vw, 17px); line-height: 1.7; color: #E7E4DD; max-width: 640px; text-shadow: 0 1px 18px rgba(0,0,0,0.55); }
-    .journal-hero-rss { display: inline-block; margin-top: 22px; font-family: var(--sans); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #E7E4DD; border: 1px solid rgba(250,249,247,0.5); padding: 9px 18px; transition: background 0.2s, color 0.2s; }
-    .journal-hero-rss:hover { background: #FAF9F7; color: #0C0C0B; }
-    .journal-wrap { max-width: 760px; margin: 0 auto; padding: clamp(56px, 7vw, 88px) 24px 96px; }
+    /* Text header — no image band. */
+    .journal-hero { padding: calc(100px + 56px) 24px 40px; border-bottom: 1px solid var(--rule); }
+    .journal-hero-inner { width: 100%; max-width: 1100px; margin: 0 auto; }
+    .journal-eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--stone); margin-bottom: 14px; }
+    .journal-hero-title { font-family: var(--serif); font-weight: 400; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.05; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 16px; max-width: 20ch; }
+    .journal-hero-desc { font-size: clamp(15px, 1.6vw, 17px); line-height: 1.7; color: var(--stone); max-width: 640px; }
+    .journal-hero-rss { display: inline-block; margin-top: 22px; font-family: var(--sans); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); border: 1px solid var(--rule); padding: 9px 18px; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+    .journal-hero-rss:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .journal-wrap { max-width: 1100px; margin: 0 auto; padding: clamp(40px, 5vw, 64px) 24px 96px; }
 
-    .post-list { display: flex; flex-direction: column; gap: 14px; }
+    /* Posts in rows of two. */
+    .post-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
     .post-card { display: block; padding: 26px 32px; background: var(--bg2); border: 1px solid var(--rule); border-radius: 14px; transition: background 0.2s, border-color 0.2s; }
-    .post-card:hover { background: var(--bg2); border-color: var(--stone); }
+    .post-card:hover { border-color: var(--stone); }
     [data-theme="light"] .post-card { background: #F5F3EF; }
     [data-theme="light"] .post-card:hover { background: #EFEDE8; }
     .post-card-date { font-family: var(--sans); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--stone); margin-bottom: 10px; }
@@ -147,15 +145,14 @@
 
     .journal-empty { font-family: var(--serif); font-size: 1.2rem; font-style: italic; color: var(--stone); padding: 40px 0; border-top: 1px solid var(--rule); }
 
-    @media (max-width: 900px) { .journal-wrap { padding: 48px 22px 72px; } .post-card-title { font-size: 1.55rem; } .journal-hero-inner { padding-left: 55px; padding-right: 55px; } }
-    @media (max-width: 600px) { .journal-hero-inner { padding-left: 22px; padding-right: 22px; } }
+    @media (max-width: 900px) { .journal-hero { padding: calc(50px + 40px) 24px 32px; } .journal-wrap { padding: 40px 22px 72px; } .post-card-title { font-size: 1.55rem; } }
+    @media (max-width: 760px) { .post-list { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
 
 
   <section class="journal-hero" aria-label="Essays & Articles">
-    <div class="journal-hero-img"><img src="/images/books-acrylic-canvas-walt-viviers-2010.webp" srcset="/images/800/books-acrylic-canvas-walt-viviers-2010.webp 800w, /images/books-acrylic-canvas-walt-viviers-2010.webp 1600w" sizes="100vw" alt="Walt Viviers — Books, acrylic on canvas" width="1600" height="1067" /></div>
     <div class="journal-hero-inner">
       <p class="journal-eyebrow">Essays &amp; Articles</p>
       <h1 class="journal-hero-title">Words on making, curiosity &amp; the work behind the work</h1>
