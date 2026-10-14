@@ -1,4 +1,4 @@
-/* Walt Viviers — minimal service worker for PWA installability + basic offline */
+/* Walt Viviers - minimal service worker for PWA installability + basic offline */
 const CACHE = 'wv-cache-v3';
 const PRECACHE = ['/', '/offline.html', '/logo.svg', '/icon-192.png', '/icon-512.png'];
 

@@ -1,5 +1,5 @@
 /* ============================================================================
-   chrome.js — shared site header + footer for waltviviers.com
+   chrome.js - shared site header + footer for waltviviers.com
    ----------------------------------------------------------------------------
    Injects the exact home-page navigation (with language switch, theme toggle
    and mobile burger menu) and footer onto every public page, so the chrome is
@@ -444,7 +444,7 @@
       window.location.href = 'https://waltviviers.com/admin-index/';
     });
 
-    /* Enquire — open the global modal if present, else follow the link */
+    /* Enquire - open the global modal if present, else follow the link */
     var enquire = nav.querySelector('#wv-enquire');
     if (enquire) enquire.addEventListener('click', function (e) {
       var m = document.getElementById('gx-enquire');
@@ -456,7 +456,7 @@
       }
     });
 
-    /* Email icon — open the page's contact pop-up where there is one (the
+    /* Email icon - open the page's contact pop-up where there is one (the
        home page), else it stays a plain mailto link */
     nav.querySelectorAll('a[href^="mailto:"]').forEach(function (a) {
       a.addEventListener('click', function (e) {

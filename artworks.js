@@ -3,7 +3,7 @@
  * ───────────────
  * 1. Paste your Behold Feed ID below (from behold.so → your feed → "Feed ID")
  * 2. Use OVERRIDES to manually set title, medium, dimensions, featured, or
- *    available for any post — keyed by Instagram post ID.
+ *    available for any post - keyed by Instagram post ID.
  *    Everything else is pulled live from your Instagram via Behold.
  *
  * Caption convention (optional):
@@ -19,7 +19,7 @@
 const BEHOLD_FEED_ID = "XF2qeG8FeoVkeUAOOjI1";
 
 /**
- * Hashtag filter — only posts whose caption contains this tag will appear.
+ * Hashtag filter - only posts whose caption contains this tag will appear.
  * Leave empty to show all posts.
  *
  * Example: const HASHTAG_FILTER = "#waltviviersgallery";
@@ -35,7 +35,7 @@ const HASHTAG_FILTER = "#waltviviersgallery";
 const FEATURED_POSTS = [];
 
 /**
- * Manual overrides — keyed by Instagram post ID.
+ * Manual overrides - keyed by Instagram post ID.
  * Find a post's ID in the browser console after loading the page
  * (each artwork card logs its ID), or from the Behold dashboard.
  *

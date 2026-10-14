@@ -2270,7 +2270,7 @@
       }
     };
 
-    var lang = 'en'; /* language toggle retired — site is English-only */
+    var lang = 'en'; /* language toggle retired - site is English-only */
 
     window._t = function (key) { return (T[lang] || T.en)[key] || key; };
 
@@ -2421,7 +2421,7 @@
         grid.querySelectorAll('.work-thumb').forEach(card => {
           card.addEventListener('click', e => {
             var _h = document.getElementById('hero');
-            if (!_h) return; // no carousel on this page — let the link navigate
+            if (!_h) return; // no carousel on this page - let the link navigate
             e.preventDefault();
             current = +card.dataset.index;
             renderHero(current);
@@ -2844,7 +2844,7 @@
         heroImg.alt = ALBUMS[0].title;
         heroImg.style.objectPosition = 'center ' + (ALBUMS[0].pos || '30%');
       }
-      // …and show four albums below — never the one currently in the header.
+      // …and show four albums below - never the one currently in the header.
       grid.innerHTML = ALBUMS.filter(function (a) {
         return (a.hero || a.img) !== headerHero;
       }).slice(0, 4).map(function (a) {

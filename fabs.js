@@ -1,5 +1,5 @@
 /* ============================================================================
-   fabs.js — the floating game buttons, shared site-wide.
+   fabs.js - the floating game buttons, shared site-wide.
    ----------------------------------------------------------------------------
    One place for the three game badges in the bottom-left corner:
      • Chopped Beats (beet DJ)   → chopped-beats.waltviviers.com
