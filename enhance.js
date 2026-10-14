@@ -360,7 +360,7 @@
   }
 
   /* ── 9. Background texture + nav picker ─────────────────────────────────── */
-  var TEX = [['none', 'None'], ['grain', 'Film grain'], ['dots', 'Dot grid'],
+  var TEX = [['dots', 'Dot grid'],
              ['hairlines', 'Hairlines'], ['grid', 'Blueprint grid'],
              ['crosshatch', 'Crosshatch'], ['aurora', 'Aurora wash']];
   function texGet() { try { return localStorage.getItem('wv-texture'); } catch (e) { return null; } }
@@ -446,9 +446,9 @@
   // random texture (not "none"), remembered thereafter; the picker overrides it.
   try {
     var savedTex = texGet();
-    if (!savedTex) {
-      var pool = TEX.filter(function (t) { return t[0] !== 'none'; });
-      savedTex = pool[Math.floor(Math.random() * pool.length)][0];
+    var valid = TEX.some(function (t) { return t[0] === savedTex; });
+    if (!valid) {   // unset, or a since-removed option (none / grain)
+      savedTex = TEX[Math.floor(Math.random() * TEX.length)][0];
       texSet(savedTex);
     }
     applyTexture(savedTex);
