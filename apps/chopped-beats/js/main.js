@@ -5,6 +5,7 @@ import * as S from './storage.js';
 import { initPlayer } from './player.js';
 import { initCompact } from './compact.js';
 import { runTour } from './tour.js';
+import { keyLabel } from './autotune.js';
 
 const { ctx, SR } = A;
 const $ = (s, el = document) => el.querySelector(s);
@@ -371,6 +372,8 @@ function getRender(c) {
       entry.buffer = buf;
       const el = document.querySelector(`.clip[data-id="${c.id}"]`);
       if (el) { el.classList.remove('busy'); drawClip(el, c); }
+      const auto = selectedClip === c.id && buf.tuneLabel && document.querySelector('#fxTuneKey option[value="-1"]');
+      if (auto) auto.textContent = `Auto (${buf.tuneLabel})`;
     }
     return buf;
   })().catch((e) => { console.error(e); toast('Could not process a clip: ' + e.message, true); return null; });
@@ -954,6 +957,10 @@ $('.ruler-view').addEventListener('pointerdown', (e) => {
 
 const pct = (v) => Math.round(v * 100) + '%';
 const FX_UI = [
+  ['Auto-tune', [
+    ['tune', 'Amount', 0, 1, 0.01, (v) => (v ? pct(v) : 'Off')],
+    ['tuneStyle', 'Natural / hard', 0, 1, 0.01, (v) => (v < 0.34 ? 'Natural' : v < 0.75 ? 'Tight' : 'Hard (T-Pain)')],
+  ]],
   ['Voice', [
     ['pitch', 'Pitch', -24, 24, 1, (v) => (v > 0 ? '+' : '') + v + ' semitones'],
     ['speed', 'Speed', 0.25, 3, 0.01, (v) => v.toFixed(2) + '×'],
@@ -985,9 +992,21 @@ const PRESETS = {
   Radio: { filter: 0.6, drive: 0.45 },
   'Slowed + reverb': { speed: 0.8, pitch: -4, reverb: 0.5 },
   'Sped up': { speed: 1.25, pitch: 4 },
+  'Auto-tune': { tune: 1, tuneStyle: 0.35 },
+  'T-Pain': { tune: 1, tuneStyle: 1 },
   Underwater: { filter: -0.8, wobble: 0.3, reverb: 0.3 },
   Echoey: { echo: 0.5, reverb: 0.2 },
 };
+
+// Key picker for auto-tune. Shows the key it found when set to auto-detect.
+function tuneKeyUI(c) {
+  const r = renders.get(c.id);
+  const found = c.fx.tune > 0 && c.fx.tuneKey === -1 && r && r.buffer && r.buffer.tuneLabel;
+  const opts = [-1, -2, ...Array.from({ length: 24 }, (_, i) => (i % 2 ? 12 : 0) + Math.floor(i / 2))];
+  return `<div class="inline"><label class="lbl">Key
+    <select id="fxTuneKey">${opts.map((k) => `<option value="${k}" ${c.fx.tuneKey === k ? 'selected' : ''}>${k === -1 && found ? `Auto (${found})` : keyLabel(k)}</option>`).join('')}</select></label></div>
+    <p class="hint">Works best on a clean solo voice. Set every vocal clip in a song to the same key.</p>`;
+}
 
 const STUTTER_DIVS = [[0.125, '1/32'], [0.25, '1/16'], [0.5, '1/8'], [1, '1 beat']];
 
@@ -1008,7 +1027,7 @@ function renderInspector() {
   const s = samples.get(c.sample);
   const sliders = FX_UI.map(([title, rows]) => `<section><h3>${title}</h3>${rows.map(([k, label, min, max, step, fmt]) =>
     `<div class="fx-row"><label for="fx-${k}" title="Double-click to reset">${label}</label><output id="out-${k}">${fmt(fx[k])}</output>
-     <input id="fx-${k}" data-k="${k}" type="range" min="${min}" max="${max}" step="${step}" value="${fx[k]}" /></div>`).join('')}</section>`).join('');
+     <input id="fx-${k}" data-k="${k}" type="range" min="${min}" max="${max}" step="${step}" value="${fx[k]}" /></div>`).join('')}${title === 'Auto-tune' ? tuneKeyUI(c) : ''}</section>`).join('');
 
   el.innerHTML = `<h2>${esc(c.name)}</h2>
     <p class="meta">${fmtBars(c.start)} · ${bodyLen(c).toFixed(2)}s${c.loops > 1 ? ' × ' + c.loops : ''}${s && s.missing ? ' · sound file missing' : ''}</p>
@@ -1078,6 +1097,7 @@ $('#inspector').addEventListener('change', (e) => {
   if (e.target.id === 'fxReverse') { checkpoint(); c.fx.reverse = e.target.checked; changed(); }
   if (e.target.id === 'fxLoops') { checkpoint(); c.loops = clamp(Math.round(+e.target.value) || 1, 1, 64); changed(); }
   if (e.target.id === 'fxStutDiv') { checkpoint(); c.fx.stutterDiv = +e.target.value; changed(); }
+  if (e.target.id === 'fxTuneKey') { checkpoint(); c.fx.tuneKey = +e.target.value; changed(); }
   if (e.target.id === 'chopMode') pref.set('chopMode', e.target.value);
 });
 $('#inspector').addEventListener('dblclick', (e) => {
@@ -1097,6 +1117,8 @@ $('#inspector').addEventListener('click', (e) => {
   if (b.dataset.preset !== undefined) {
     checkpoint();
     const keep = { gain: c.fx.gain, fadeIn: c.fx.fadeIn, fadeOut: c.fx.fadeOut, stutter: c.fx.stutter, stutterDiv: c.fx.stutterDiv, reverse: c.fx.reverse };
+    // Other presets layer on top of auto-tune; Clean switches it off too.
+    if (b.dataset.preset) Object.assign(keep, { tune: c.fx.tune, tuneStyle: c.fx.tuneStyle, tuneKey: c.fx.tuneKey });
     c.fx = { ...A.DEFAULT_FX, ...keep, ...(PRESETS[b.dataset.preset] || {}) };
     changed();
     return;
