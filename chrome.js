@@ -239,7 +239,7 @@
       '<li class="nav-link-hide"><a href="/gallery/" data-i18n="nav-works">Fine Art &amp; Illustration</a></li>' +
       '<li class="nav-link-hide"><a href="/graphic-design-portfolio/">Design &amp; Digital</a></li>' +
       '<li class="nav-link-hide"><a href="/apps/">Apps &amp; Games</a></li>' +
-      '<li class="nav-link-hide"><a href="/blog/">Essays &amp; Articles</a></li>' +
+      '<li class="nav-link-hide"><a href="/blog/">Creative Writing</a></li>' +
       '<li class="nav-link-hide"><a href="/gallery/#commission" class="nav-cta" id="wv-enquire" data-i18n="nav-enquire">Enquire</a></li>' +
       '<li><div class="social-icons">' +
         '<a href="https://instagram.com/waltviviers" target="_blank" rel="noopener" aria-label="Instagram">' + IG + '</a>' +
@@ -260,7 +260,7 @@
       '<a href="/gallery/" class="mobile-menu-link" data-i18n="nav-works">Fine Art &amp; Illustration <span class="mobile-menu-arrow">↗</span></a>' +
       '<a href="/graphic-design-portfolio/" class="mobile-menu-link">Design &amp; Digital <span class="mobile-menu-arrow">↗</span></a>' +
       '<a href="/apps/" class="mobile-menu-link">Apps &amp; Games <span class="mobile-menu-arrow">↗</span></a>' +
-      '<a href="/blog/" class="mobile-menu-link">Essays &amp; Articles <span class="mobile-menu-arrow">↗</span></a>' +
+      '<a href="/blog/" class="mobile-menu-link">Creative Writing <span class="mobile-menu-arrow">↗</span></a>' +
       '<a href="/gallery/#commission" class="mobile-menu-link mobile-menu-link-cta" data-i18n="nav-enquire">Enquire <span class="mobile-menu-arrow">↗</span></a>' +
     '</div>' +
     '<div class="mobile-menu-foot">' +
