@@ -180,28 +180,31 @@ img.wv-parallax {
 }
 
 /* ── Pointer interaction (desktop / fine pointer only) ─────────────────────
-   A soft light that follows the cursor across the whole page. enhance.js sets
-   --wv-mx / --wv-my (px) and toggles .on while the pointer is on the page. */
-.wv-spotlight {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
+   The hand pointer is drawn as a DOM image that follows the cursor and throbs
+   20% bigger over clickable elements. enhance.js positions it (transform) and
+   toggles .on / .throb / .hide, and adds html.wv-domcursor so the native
+   cursor is hidden only while this is active (no-JS keeps the native pointer).*/
+.wv-cursor {
+  position: fixed; top: 0; left: 0;
+  width: 20px; height: 25px;
+  pointer-events: none; z-index: 10000;
   opacity: 0;
-  transition: opacity 0.5s ease;
-  background: radial-gradient(460px circle at var(--wv-mx, 50%) var(--wv-my, 50%),
-              rgba(255, 168, 92, 0.24), rgba(255, 150, 70, 0.11) 40%, transparent 64%);
-  mix-blend-mode: screen;
+  transform-origin: 3px 1px;
+  will-change: transform, scale;
+  transition: scale 0.18s ease, opacity 0.2s ease;
 }
-.wv-spotlight.on { opacity: 1; }
-[data-theme="light"] .wv-spotlight {
-  mix-blend-mode: multiply;
-  background: radial-gradient(460px circle at var(--wv-mx, 50%) var(--wv-my, 50%),
-              rgba(214, 120, 40, 0.18), rgba(214, 120, 40, 0.08) 40%, transparent 64%);
-}
-/* Over a clickable element the glow throbs slowly instead of the cursor growing. */
-.wv-spotlight.throb { animation: wv-spot-throb 1.7s ease-in-out infinite; }
-@keyframes wv-spot-throb { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+.wv-cursor.on { opacity: 1; }
+.wv-cursor.hide { opacity: 0; }
+.wv-cursor.throb { animation: wv-cursor-throb 0.9s ease-in-out infinite; }
+@keyframes wv-cursor-throb { 0%, 100% { scale: 1; } 50% { scale: 1.2; } }
+
+/* Hide the native pointer while the DOM cursor is active; text fields keep
+   the I-beam so typing stays legible. */
+html.wv-domcursor, html.wv-domcursor body, html.wv-domcursor body * { cursor: none !important; }
+html.wv-domcursor body *:active { cursor: none !important; }
+html.wv-domcursor input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]),
+html.wv-domcursor textarea,
+html.wv-domcursor [contenteditable="true"] { cursor: text !important; }
 
 /* 3D tilt of cards toward the pointer. enhance.js sets --wv-rx / --wv-ry and
    only adds .wv-tilt3d on fine pointers, so this needs no hover/pointer gate
@@ -224,7 +227,7 @@ img.wv-parallax {
 
 /* ── Respect user + medium ─────────────────────────────────────────────────*/
 @media (prefers-reduced-motion: reduce) {
-  .wv-spotlight { display: none !important; }
+  .wv-cursor { display: none !important; }
   .wv-tilt3d:hover { transform: translateY(-4px) !important; }
   .wv-magnetic { transform: none !important; }
   html.wv-anim [data-wv-reveal] {
