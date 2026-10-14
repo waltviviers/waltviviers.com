@@ -271,28 +271,33 @@
   }
 
   /* ── 6. Cursor-following spotlight (whole page) ────────────────────────── */
-  function setupSpotlight() {
+  function setupCursor() {
     if (reduce || !fine) return;
-    var el = document.createElement('div');
-    el.className = 'wv-spotlight';
-    el.setAttribute('aria-hidden', 'true');
-    (document.body || document.documentElement).appendChild(el);
-    var raf = false, mx = 0, my = 0;
-    function apply() {
-      raf = false;
-      el.style.setProperty('--wv-mx', mx + 'px');
-      el.style.setProperty('--wv-my', my + 'px');
-    }
+    root.classList.add('wv-domcursor');   // enables native-cursor hiding in CSS
+    var cur = document.createElement('img');
+    cur.className = 'wv-cursor';
+    cur.src = '/images/pointer_up.png';
+    cur.alt = '';
+    cur.setAttribute('aria-hidden', 'true');
+    (document.body || document.documentElement).appendChild(cur);
+    var x = 0, y = 0, raf = false;
+    function apply() { raf = false; cur.style.transform = 'translate(' + (x - 3) + 'px,' + (y - 1) + 'px)'; }
     var CLICKABLE = 'a[href], button, [role="button"], label, select, summary, input[type="submit"], input[type="button"]';
+    var TEXTY = 'input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]), textarea, [contenteditable="true"]';
     window.addEventListener('mousemove', function (e) {
-      mx = e.clientX; my = e.clientY;
-      if (!el.classList.contains('on')) el.classList.add('on');
-      var hot = e.target && e.target.closest && e.target.closest(CLICKABLE);
-      el.classList.toggle('throb', !!hot);
+      x = e.clientX; y = e.clientY;
+      if (!cur.classList.contains('on')) cur.classList.add('on');
+      var t = e.target;
+      var texty = t && t.closest && t.closest(TEXTY);
+      cur.classList.toggle('hide', !!texty);                       // let the native I-beam show over text fields
+      var hot = !texty && t && t.closest && t.closest(CLICKABLE);
+      cur.classList.toggle('throb', !!hot);                        // throb 20% bigger over clickables
       if (!raf) { raf = true; requestAnimationFrame(apply); }
     }, { passive: true });
-    document.addEventListener('mouseleave', function () { el.classList.remove('on'); el.classList.remove('throb'); });
-    document.addEventListener('mouseenter', function () { el.classList.add('on'); });
+    window.addEventListener('mousedown', function () { cur.src = '/images/pointer_down.png'; });
+    window.addEventListener('mouseup', function () { cur.src = '/images/pointer_up.png'; });
+    document.addEventListener('mouseleave', function () { cur.classList.remove('on'); });
+    document.addEventListener('mouseenter', function () { cur.classList.add('on'); });
   }
 
   /* ── 7. Card tilt toward the pointer ───────────────────────────────────── */
@@ -464,7 +469,7 @@
     if (revealed && !reduce) root.classList.add('wv-anim');
     try { setupParallax(); } catch (e) {}
     try { setupPointerDrift(); } catch (e) {}
-    try { setupSpotlight(); } catch (e) {}
+    try { setupCursor(); } catch (e) {}
     try { setupTilt3d(); } catch (e) {}
     try { setupMagnetic(); } catch (e) {}
     try { setupTexture(); } catch (e) {}
