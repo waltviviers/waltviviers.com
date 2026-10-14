@@ -195,22 +195,20 @@ img.wv-parallax {
 }
 
 /* ── Pointer interaction (desktop / fine pointer only) ─────────────────────
-   The hand pointer is drawn as a DOM image that follows the cursor and throbs
-   20% bigger over clickable elements. enhance.js positions it (transform) and
-   toggles .on / .throb / .hide, and adds html.wv-domcursor so the native
+   The hand pointer is drawn as a DOM image that follows the cursor. enhance.js
+   positions it (transform), swaps the icon (finger-down idle, finger-up over
+   clickables), toggles .on / .hide, and adds html.wv-domcursor so the native
    cursor is hidden only while this is active (no-JS keeps the native pointer).*/
 .wv-cursor {
   position: fixed; top: 0; left: 0;
   width: 20px; height: 25px;
   pointer-events: none; z-index: 10000;
   opacity: 0;
-  transform-origin: 50% 50%;   /* pulse grows/shrinks in place, not from the tip */
-  will-change: transform, scale;
-  transition: scale 0.18s ease, opacity 0.2s ease;
+  will-change: transform;
+  transition: opacity 0.2s ease;
 }
 .wv-cursor.on { opacity: 1; }
 .wv-cursor.hide { opacity: 0; }
-.wv-cursor.throb { scale: 1.35; }   /* static 35% bigger over clickables (smoothed by the scale transition) */
 
 /* Hide the native pointer while the DOM cursor is active; text fields keep
    the I-beam so typing stays legible. */

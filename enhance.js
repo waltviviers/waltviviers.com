@@ -276,12 +276,14 @@
     root.classList.add('wv-domcursor');   // enables native-cursor hiding in CSS
     var cur = document.createElement('img');
     cur.className = 'wv-cursor';
-    cur.src = '/images/pointer_up.png';
+    cur.src = '/images/pointer_down.png';   // finger-down is the default (idle) icon
     cur.alt = '';
     cur.setAttribute('aria-hidden', 'true');
     (document.body || document.documentElement).appendChild(cur);
-    var x = 0, y = 0, raf = false;
+    var x = 0, y = 0, raf = false, hot = false, pressed = false;
     function apply() { raf = false; cur.style.transform = 'translate(' + (x - 3) + 'px,' + (y - 1) + 'px)'; }
+    // Finger-up only while hovering a clickable and not pressing; finger-down otherwise (idle + while clicking).
+    function paint() { cur.src = (hot && !pressed) ? '/images/pointer_up.png' : '/images/pointer_down.png'; }
     var CLICKABLE = 'a[href], button, [role="button"], label, select, summary, input[type="submit"], input[type="button"]';
     var TEXTY = 'input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"]), textarea, [contenteditable="true"]';
     window.addEventListener('mousemove', function (e) {
@@ -290,12 +292,12 @@
       var t = e.target;
       var texty = t && t.closest && t.closest(TEXTY);
       cur.classList.toggle('hide', !!texty);                       // let the native I-beam show over text fields
-      var hot = !texty && t && t.closest && t.closest(CLICKABLE);
-      cur.classList.toggle('throb', !!hot);                        // throb 20% bigger over clickables
+      hot = !texty && !!(t && t.closest && t.closest(CLICKABLE));
+      paint();
       if (!raf) { raf = true; requestAnimationFrame(apply); }
     }, { passive: true });
-    window.addEventListener('mousedown', function () { cur.src = '/images/pointer_down.png'; });
-    window.addEventListener('mouseup', function () { cur.src = '/images/pointer_up.png'; });
+    window.addEventListener('mousedown', function () { pressed = true; paint(); });
+    window.addEventListener('mouseup', function () { pressed = false; paint(); });
     document.addEventListener('mouseleave', function () { cur.classList.remove('on'); });
     document.addEventListener('mouseenter', function () { cur.classList.add('on'); });
   }
