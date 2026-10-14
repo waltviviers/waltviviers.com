@@ -1,5 +1,5 @@
 /* ============================================================================
-   enhance.js — frosted glass + motion behaviour for waltviviers.com
+   enhance.js - frosted glass + motion behaviour for waltviviers.com
    ----------------------------------------------------------------------------
    Structure-agnostic progressive enhancement. Pairs with enhance.css. Loaded
    on the homepage directly and on interior pages via chrome.js.
@@ -138,7 +138,7 @@
     }
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    // After images load the layout settles — reveal whatever is now in view.
+    // After images load the layout settles - reveal whatever is now in view.
     window.addEventListener('load', revealInView);
 
     // Safety net: never leave content hidden.
@@ -179,7 +179,7 @@
       wrap.classList.add('wv-parallax');
       parallaxItems.push({ wrap: wrap });
     });
-    // (b) Background-image hero bands (no inner img) — translate the element.
+    // (b) Background-image hero bands (no inner img) - translate the element.
     each(document.querySelectorAll(
       '.cc-hero-bg, .workwith-bg, [data-wv-parallax-bg]'
     ), function (el) {
@@ -477,7 +477,7 @@
   });
 
   /* Pages that build card grids after load (e.g. the gallery) can re-wire the
-     tilt on freshly-injected cards. Idempotent — only new cards are bound. */
+     tilt on freshly-injected cards. Idempotent - only new cards are bound. */
   window.wvEnhance = window.wvEnhance || {};
   window.wvEnhance.rescanTilt = function () { try { setupTilt3d(); } catch (e) {} };
   // Re-wire lift + tilt on nodes injected after load (both idempotent).

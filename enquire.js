@@ -1,5 +1,5 @@
 /* ============================================================================
-   enquire.js — the Enquire pop-up form and the mobile "Enquire Now" button,
+   enquire.js - the Enquire pop-up form and the mobile "Enquire Now" button,
    shared site-wide.
    ----------------------------------------------------------------------------
    Loading: chrome.js injects this file on every page it runs on; pages
